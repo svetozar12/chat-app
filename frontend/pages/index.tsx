@@ -35,7 +35,7 @@ const Home: NextPage = () => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const onMessageSubmit = (e: ChangeEvent<HTMLInputElement>): void => {
+  const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message } = state;
     socketRef.current.emit("message", { name, message });

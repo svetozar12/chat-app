@@ -43,6 +43,8 @@ form {
 
 .container-chat {
     flex-direction: column;
+    height: 60vh;
+    overflow: auto;
 }
 
 form {
@@ -57,7 +59,7 @@ Components styling
 .container-chat {
     background-color: white;
     padding: 1rem;
-    margin: 1rem;
+    margin: 0.2rem;
     box-shadow: 0px 0px 20px #ccc;
 }
 
