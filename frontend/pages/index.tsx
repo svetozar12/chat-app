@@ -1,6 +1,12 @@
 import { NextPage } from "next";
 import Image from "next/image";
-import React, { useState, useEffect, useRef, ChangeEvent } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  ChangeEvent,
+  ReactElement,
+} from "react";
 import { io } from "socket.io-client";
 
 interface IState {
@@ -13,13 +19,13 @@ const Home: NextPage = () => {
     message: "",
     name: "",
   });
-  const [chat, setChat] = useState([]);
+  const [chat, setChat] = useState<string[] | []>([]);
   const socketRef = useRef<React.MutableRefObject>(null);
   console.log(socketRef);
 
   useEffect(() => {
     socketRef.current = io.connect("http://localhost:4000");
-    socketRef.current.on("message", ({ name, message }) => {
+    socketRef.current.on("message", ({ name, message }: any) => {
       setChat([...chat, { name, message }]);
     });
     return () => socketRef.current.disconnect();
@@ -29,7 +35,7 @@ const Home: NextPage = () => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const onMessageSubmit = (e: InputEvent): void => {
+  const onMessageSubmit = (e: ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
     const { name, message } = state;
     socketRef.current.emit("message", { name, message });
@@ -37,12 +43,14 @@ const Home: NextPage = () => {
   };
 
   const renderChat = () => {
-    return chat.map(({ name, message }, index) => (
-      <div key={index}>
-        <h3>{name}: </h3>
-        <p>{message}</p>
-      </div>
-    ));
+    return chat.map(
+      ({ name, message }: any, index): ReactElement => (
+        <div key={index}>
+          <h3>{name}: </h3>
+          <p>{message}</p>
+        </div>
+      ),
+    );
   };
 
   return (
