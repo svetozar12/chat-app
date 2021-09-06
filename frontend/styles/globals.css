@@ -1,3 +1,17 @@
+/* =================
+Global variables
+================= */
+
+
+/* :root {
+
+} */
+
+
+/* =================
+Global styling
+================= */
+
 html,
 body {
     padding: 0;
@@ -7,4 +21,74 @@ body {
 
 * {
     box-sizing: border-box;
+}
+
+
+/* =================
+Layout styling
+================= */
+
+.container {
+    flex-direction: column;
+}
+
+.container-chat,
+.container,
+.container-chat>div,
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-chat {
+    flex-direction: column;
+}
+
+form {
+    flex-direction: column;
+}
+
+
+/* =================
+Components styling
+================= */
+
+.container-chat {
+    background-color: white;
+    padding: 1rem;
+    margin: 1rem;
+    box-shadow: 0px 0px 20px #ccc;
+}
+
+form div>input {
+    outline: none;
+    border-radius: 5px;
+    margin: 1rem;
+    padding: 0.3rem;
+    border: 1px solid black;
+}
+
+form>button {
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+form>button:hover {
+    background-color: white;
+    color: black;
+}
+
+
+/* =================
+Typography styling
+================= */
+
+.container-chat div>h3,
+p {
+    margin: 1rem;
 }
