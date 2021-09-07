@@ -1,7 +1,6 @@
 import { NextPage } from "next";
-import Image from "next/image";
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 interface IProps {
   name: string;
@@ -16,13 +15,24 @@ const Home: NextPage = () => {
 
   const [chat, setChat] = useState<IProps[]>([]);
 
-  const socketRef = useRef<React.MutableRefObject>(null);
+  const [socketRef, setSocketRef] = useState<Socket | null>(null);
   useEffect(() => {
-    socketRef.current = io.connect("http://localhost:4000");
-    socketRef.current.on("message", ({ name, message }: any) => {
+    const socketConnect = io.connect("http://localhost:4000");
+    socketConnect.on("message", ({ name, message }: any) => {
+      // console.log(chat);
       setChat([...chat, { name, message }]);
     });
-    return () => socketRef.current.disconnect();
+    setSocketRef(socketConnect);
+    return () => socketRef && socketRef.disconnect(); //This trigers useEffect random error
+  }, []);
+
+  useEffect(() => {
+    if (socketRef) {
+      socketRef.on("message", ({ name, message }: any) => {
+        console.log(chat);
+        setChat([...chat, { name, message }]);
+      });
+    }
   }, [chat]);
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -32,7 +42,7 @@ const Home: NextPage = () => {
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message } = state;
-    socketRef.current.emit("message", { name, message });
+    socketRef?.emit("message", { name, message });
     setState({ name: name, message: "" });
   };
 
@@ -43,7 +53,7 @@ const Home: NextPage = () => {
           className={name.toLowerCase() === "svetozar" ? "me" : "you"}
           key={index}
         >
-          <h3>{name}: </h3>
+          <h2>{name}: </h2>
           <p>{message}</p>
         </div>
       ),
