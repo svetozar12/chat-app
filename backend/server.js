@@ -1,16 +1,19 @@
+"use strict";
 var app = require("express")();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http, {
     cors: {
-        origin: "*"
-    }
+        origin: "*",
+    },
 });
 io.on("connection", function (socket) {
     socket.on("message", function (_a) {
         var name = _a.name, message = _a.message;
         io.emit("message", { name: name, message: message });
+        console.log(socket.id);
     });
 });
+var port = 4000;
 http.listen(4000, function () {
-    console.log("listening on port 4000");
+    console.log("listening on port " + port);
 });
