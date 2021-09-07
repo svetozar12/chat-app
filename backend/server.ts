@@ -6,12 +6,18 @@ const io = require("socket.io")(http, {
   },
 });
 
-io.on("connection", (socket) => {
-  socket.on("message", ({ name, message }) => {
+interface IProps {
+  name: string;
+  message: string;
+}
+
+io.on("connection", (socket: any): void => {
+  socket.on("message", ({ name, message }: IProps) => {
     io.emit("message", { name, message });
+    console.log(socket.id);
   });
 });
-
-http.listen(4000, function () {
-  console.log("listening on port 4000");
+const port: number = 4000;
+http.listen(4000, function (): void {
+  console.log(`listening on port ${port}`);
 });
