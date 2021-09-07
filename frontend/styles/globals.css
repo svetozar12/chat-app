@@ -2,9 +2,12 @@
 Global variables
 ================= */
 
-/* :root {
-
-} */
+:root {
+  --main-white: rgb(252, 252, 252);
+  --off-white: #ccc;
+  --main-black: #000;
+  --off-black: rgb(51, 51, 51);
+}
 
 /* =================
 Global styling
@@ -42,6 +45,10 @@ form {
   flex-direction: column;
   height: 60vh;
   overflow: auto;
+  background-color: var(--main-white);
+  padding: 1rem;
+  margin: 0.2rem;
+  box-shadow: 0px 0px 20px var(--off-white);
 }
 
 form {
@@ -52,33 +59,43 @@ form {
 Components styling
 ================= */
 
-.container-chat {
-  background-color: white;
-  padding: 1rem;
-  margin: 0.2rem;
-  box-shadow: 0px 0px 20px #ccc;
+input {
+  outline: none;
+}
+
+.container input {
+  width: 20%;
+  height: 2rem;
+  border-radius: 20px;
+  border: none;
+  border: 1px solid;
+  padding: 0 0.9rem;
+}
+
+.container > button {
+  padding: 0.5rem 0.9rem;
+  margin: 1rem;
 }
 
 form div > input {
-  outline: none;
   border-radius: 5px;
   margin: 1rem;
   padding: 0.3rem;
-  border: 1px solid black;
+  border: 1px solid var(--main-black);
 }
 
 form > button {
-  background-color: black;
-  color: white;
-  border: 1px solid black;
+  background-color: var(--main-black);
+  color: var(--main-white);
+  border: 1px solid var(--main-black);
   border-radius: 20px;
   padding: 0.5rem;
   cursor: pointer;
 }
 
 form > button:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--main-white);
+  color: var(--main-black);
 }
 
 /* =================
@@ -90,12 +107,20 @@ p {
   margin: 1rem;
 }
 
+.container h1 {
+  cursor: pointer;
+}
+
+.container h1:hover {
+  border-bottom: 1px solid;
+}
+
 .me {
   text-align: right;
-  color: rgb(0, 0, 0);
+  color: var(--main-black);
 }
 
 .you {
   text-align: left;
-  color: rgb(71, 71, 71);
+  color: var(--off-black);
 }
