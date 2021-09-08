@@ -1,17 +1,42 @@
 import React from "react";
+import * as mongoose from "mongoose";
+import { useRouter } from "next/dist/client/router";
 
-function ImputComponet({ input, username }: any) {
+function ImputComponet({ input, username, register }: any) {
   const [name, setName] = React.useState("");
+  const router = useRouter();
 
-  const handleUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (name.toLocaleLowerCase() !== username.toLocaleLowerCase()) {
-      console.log("no user or wrong account");
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (
+      name.toLocaleLowerCase() !== username.toLocaleLowerCase() &&
+      name === ""
+    ) {
+      setTimeout(() => {
+        router.push("/404");
+      }, 100);
     } else {
-      console.log("welcome");
+      setTimeout(() => {
+        router.push("/chatRoom");
+      }, 100);
     }
     e.preventDefault();
   };
 
+  const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (
+      name.toLocaleLowerCase() !== username.toLocaleLowerCase() &&
+      name !== ""
+    ) {
+      setTimeout(() => {
+        router.push("/chatRoom");
+      }, 100);
+    } else {
+      setTimeout(() => {
+        router.push("/404");
+      }, 100);
+    }
+    e.preventDefault();
+  };
   return (
     <form style={{ height: "100vh" }} className="container">
       <input
@@ -21,7 +46,7 @@ function ImputComponet({ input, username }: any) {
         name="username"
         placeholder="username ..."
       />
-      <button onClick={handleUser} type="submit">
+      <button onClick={register ? handleRegister : handleLogin} type="submit">
         {input}
       </button>
     </form>
