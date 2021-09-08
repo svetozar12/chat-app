@@ -22,7 +22,7 @@ io.on("connection", (socket: any): void => {
 //============================
 // end of websocket connection
 //============================
-const User = require("./User.model");
+const User = require("./models/User.model");
 const connectDb = require("./connection/connection");
 console.log(User);
 

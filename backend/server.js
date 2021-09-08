@@ -55,7 +55,7 @@ io.on("connection", function (socket) {
 //============================
 // end of websocket connection
 //============================
-var User = require("./User.model");
+var User = require("./models/User.model");
 var connectDb = require("./connection/connection");
 console.log(User);
 connectDb().then(function () {
