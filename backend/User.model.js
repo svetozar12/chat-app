@@ -1,3 +1,5 @@
+"use strict";
+exports.__esModule = true;
 var mongoose = require("mongoose");
 var UserSchema = new mongoose.Schema({
     user: {
@@ -5,5 +7,5 @@ var UserSchema = new mongoose.Schema({
         required: true
     }
 });
-var user = mongoose.model("user", UserSchema);
-module.exports = { user: user };
+var User = mongoose.model("User", UserSchema);
+module.exports = User;
