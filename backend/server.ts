@@ -1,6 +1,7 @@
-const app = require("express")();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http, {
+const express = require("express");
+const app = express();
+import { Request, Response } from "express";
+const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
   },
@@ -10,22 +11,43 @@ interface IProps {
   name: string;
   message: string;
 }
-
+//============================
+// start of websocket connection
+//============================
 io.on("connection", (socket: any): void => {
   socket.on("message", ({ name, message }: IProps) => {
     io.emit("message", { name, message });
     console.log(socket.id);
   });
 });
-const port: number = 4000;
-http.listen(4000, function (): void {
+//============================
+// end of websocket connection
+//============================
+// const User = require("./User.model");
+// const connection = "mongodb://localhost:27017/chatDB";
+
+// console.log(User);
+
+// const connectDB = () => {
+//   return db.connect(connection);
+// };
+// connectDB().then(() => {
+//   console.log("Mongodb connected");
+// });
+
+// app.get("/users", async (req: Request, res: Response) => {
+//   const users = await User.find();
+//   res.json(users);
+// });
+
+// app.get("/user-create", async (req: Request, res: Response) => {
+//   const user = new User({ username: "Example" });
+
+//   await user.save().then(() => console.log("user connected"));
+//   res.send("User connected \n");
+// });
+
+const port: number = 4001;
+app.listen(port, function (): void {
   console.log(`listening on port ${port}`);
-});
-
-const db = require("mongoose");
-const Chat = require("./model/model.js").chat;
-const DB_URI = "mongo://mongo:27017:27017/mongo";
-
-mongoose.connect(DB_URI).then(() => {
-  console.log();
 });
