@@ -1,11 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var app = express();
+var cors = require("cors");
 var socketIo = require("./connection/wsConnection");
-var User = require("./models/User.model");
 var connectDb = require("./connection/dbConnection");
 var data = require("./router/router");
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 connectDb().then(function () {
     console.log("Mongodb connected");
 });

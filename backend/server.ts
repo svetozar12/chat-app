@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
 const socketIo = require("./connection/wsConnection");
-const User = require("./models/User.model");
 const connectDb = require("./connection/dbConnection");
-import data = require("./router/router");
+const data = require("./router/router");
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 connectDb().then((): void => {
   console.log("Mongodb connected");
