@@ -35,13 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var app = express();
 var io = require("socket.io")(4000, {
     cors: {
-        origin: "*"
-    }
+        origin: "*",
+    },
 });
 //============================
 // start of websocket connection
@@ -91,3 +91,4 @@ var port = 4001;
 app.listen(port, function () {
     console.log("listening on port " + port);
 });
+// http://localhost:4001/
