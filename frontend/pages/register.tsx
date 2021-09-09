@@ -16,12 +16,10 @@ function register({ data }: AppProps) {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (name) {
-      e.preventDefault();
-      registerPost();
-      console.log("submit");
-      setName("");
-    }
+    e.preventDefault();
+    registerPost();
+    console.log("submit");
+    setName("");
   };
   return (
     <>
