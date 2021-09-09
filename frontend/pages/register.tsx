@@ -27,6 +27,7 @@ function register({ data }: AppProps) {
         style={{ height: "100vh" }}
         className="container"
       >
+        <h1>Register</h1>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -51,7 +52,7 @@ export const getServerSideProps: any = async ({ res }: any) => {
       },
     };
   } catch (error) {
-    return res.satus(400 || 404 || 500);
+    console.log(error);
   }
 };
 export default register;

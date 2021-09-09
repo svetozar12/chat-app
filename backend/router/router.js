@@ -41,6 +41,9 @@ var route = express.Router();
 var User = require("../models/User.model");
 module.exports = route;
 // get
+route.get("/", function (req, res) {
+    res.send("Welcome Home");
+});
 route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users, error_1;
     return __generator(this, function (_a) {
@@ -90,20 +93,21 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
 }); });
 // create new users
 route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, user, error_3;
+    var users, i, user, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, User.findOne({ username: req.body.username }).exec()];
+                return [4 /*yield*/, User.find().exec()];
             case 1:
                 users = _a.sent();
+                for (i = 0; i < users.length; i++) {
+                    if (users[i].username === req.body.username) {
+                        throw Error;
+                    }
+                }
                 user = new User({ type: "POST", username: req.body.username });
-                if (req.body.username === "" || undefined || null)
-                    throw Error;
-                if (req.body.username === User.findOne(req.body.username))
-                    throw Error;
-                if (users.username === req.body.username)
+                if (req.body.username === "")
                     throw Error;
                 return [4 /*yield*/, user.save()];
             case 2:

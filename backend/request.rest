@@ -4,8 +4,8 @@ POST http://localhost:4001/users
 Content-Type: application/json
 
 {
-    "username":"ivan"
+    "username":"dobro utro"
 }
 
 ###
-GET http://localhost:4001/users/i
+GET http://localhost:4001/users/ivan

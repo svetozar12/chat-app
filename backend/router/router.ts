@@ -7,6 +7,9 @@ const User = require("../models/User.model");
 module.exports = route;
 
 // get
+route.get("/", (req: Request, res: Response) => {
+  res.send("Welcome Home");
+});
 
 route.get("/users", async (req: Request, res: Response) => {
   try {
@@ -36,11 +39,14 @@ route.get("/users/:username", async (req: Request, res: Response) => {
 
 route.post("/users", async (req: Request, res: Response) => {
   try {
-    const users = await User.findOne({ username: req.body.username }).exec();
+    const users = await User.find().exec();
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].username === req.body.username) {
+        throw Error;
+      }
+    }
     const user = new User({ type: "POST", username: req.body.username });
-    if (req.body.username === "" || undefined || null) throw Error;
-    if (req.body.username === User.findOne(req.body.username)) throw Error;
-    if (users.username === req.body.username) throw Error;
+    if (req.body.username === "") throw Error;
     await user.save();
     res.json(user);
     res.status(201).send(); //ok response and creating
