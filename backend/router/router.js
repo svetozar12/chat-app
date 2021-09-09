@@ -40,16 +40,17 @@ var express = require("express");
 var route = express.Router();
 var User = require("../models/User.model");
 module.exports = route;
-// get all users
+// get
 route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, User.find()];
+                return [4 /*yield*/, User.find().exec()];
             case 1:
                 users = _a.sent();
+                console.log(users);
                 res.send(users);
                 res.status(200); //ok response
                 return [3 /*break*/, 3];
@@ -62,30 +63,60 @@ route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 
         }
     });
 }); });
-// create new users
-route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, error_2;
+// login auth
+route.get("/users/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, User.findOne({ username: req.params.username }).exec()];
+            case 1:
+                users = _a.sent();
+                if (req.params.username === "")
+                    throw Error;
+                if (users.username !== req.params.username)
+                    throw Error;
+                res.send(users);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                res.status(501);
+                res.json({ message: error_2 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+// create new users
+route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users, user, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, User.findOne({ username: req.body.username }).exec()];
+            case 1:
+                users = _a.sent();
                 user = new User({ type: "POST", username: req.body.username });
                 if (req.body.username === "" || undefined || null)
                     throw Error;
                 if (req.body.username === User.findOne(req.body.username))
                     throw Error;
+                if (users.username === req.body.username)
+                    throw Error;
                 return [4 /*yield*/, user.save()];
-            case 1:
+            case 2:
                 _a.sent();
                 res.json(user);
                 res.status(201).send(); //ok response and creating
-                return [3 /*break*/, 3];
-            case 2:
-                error_2 = _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
                 res.status(501); //implementation error
-                res.json({ message: error_2 });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                res.json({ message: error_3 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

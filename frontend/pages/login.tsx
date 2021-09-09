@@ -1,13 +1,24 @@
 import React from "react";
-import { useRouter } from "next/dist/client/router";
+import axios from "axios";
+// import { useRouter } from "next/dist/client/router";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
 function login({ data }: AppProps) {
   const [name, setName] = React.useState("");
-  const router = useRouter();
+  // const router = useRouter();
+
+  const loginPost = async () => {
+    const res = await axios.post("http://localhost:4001/users/:username", {
+      username: name,
+    });
+  };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    if (name) {
+      loginPost();
+      e.preventDefault();
+      setName("");
+    }
   };
 
   return (

@@ -5,15 +5,29 @@ import { Request, Response } from "express";
 const User = require("../models/User.model");
 
 module.exports = route;
-// get all users
+
+// get
 
 route.get("/users", async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
+    const users = await User.find().exec();
+    console.log(users);
     res.send(users);
     res.status(200); //ok response
   } catch (error) {
     res.status(501); //implementation error
+    res.json({ message: error });
+  }
+});
+// login auth
+route.get("/users/:username", async (req: Request, res: Response) => {
+  try {
+    const users = await User.findOne({ username: req.params.username }).exec();
+    if (req.params.username === "") throw Error;
+    if (users.username !== req.params.username) throw Error;
+    res.send(users);
+  } catch (error) {
+    res.status(501);
     res.json({ message: error });
   }
 });
@@ -22,9 +36,11 @@ route.get("/users", async (req: Request, res: Response) => {
 
 route.post("/users", async (req: Request, res: Response) => {
   try {
+    const users = await User.findOne({ username: req.body.username }).exec();
     const user = new User({ type: "POST", username: req.body.username });
     if (req.body.username === "" || undefined || null) throw Error;
     if (req.body.username === User.findOne(req.body.username)) throw Error;
+    if (users.username === req.body.username) throw Error;
     await user.save();
     res.json(user);
     res.status(201).send(); //ok response and creating

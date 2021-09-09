@@ -5,7 +5,7 @@ import React from "react";
 function register({ data }: AppProps) {
   const [name, setName] = React.useState("");
 
-  const postData = async () => {
+  const registerPost = async () => {
     const res = await axios.post("http://localhost:4001/users", {
       username: name,
     });
@@ -13,7 +13,7 @@ function register({ data }: AppProps) {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (name) {
-      postData();
+      registerPost();
       console.log("submit");
       e.preventDefault();
       setName("");
