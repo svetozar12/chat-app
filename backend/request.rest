@@ -4,5 +4,5 @@ POST http://localhost:4001/users
 Content-Type: application/json
 
 {
-    "username":"Svetozar"
+    "username":""
 }

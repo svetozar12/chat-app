@@ -10,7 +10,6 @@ module.exports = route;
 route.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await User.find();
-
     res.send(users);
     res.status(200); //ok response
   } catch (error) {
@@ -24,8 +23,9 @@ route.get("/users", async (req: Request, res: Response) => {
 route.post("/users", async (req: Request, res: Response) => {
   try {
     const user = new User({ type: "POST", username: req.body.username });
-    if (User.find({ username: req.body.username }) === "Svetozar")
-      await user.save();
+    if (req.body.username === "" || undefined || null) throw Error;
+    if (req.body.username === User.findOne(req.body.username)) throw Error;
+    await user.save();
     res.json(user);
     res.status(201).send(); //ok response and creating
   } catch (error) {

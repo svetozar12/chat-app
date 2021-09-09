@@ -68,23 +68,24 @@ route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 2, , 3]);
                 user = new User({ type: "POST", username: req.body.username });
-                if (!(User.find({ username: req.body.username }) === "Svetozar")) return [3 /*break*/, 2];
+                if (req.body.username === "" || undefined || null)
+                    throw Error;
+                if (req.body.username === User.findOne(req.body.username))
+                    throw Error;
                 return [4 /*yield*/, user.save()];
             case 1:
                 _a.sent();
-                _a.label = 2;
-            case 2:
                 res.json(user);
                 res.status(201).send(); //ok response and creating
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 3];
+            case 2:
                 error_2 = _a.sent();
                 res.status(501); //implementation error
                 res.json({ message: error_2 });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
