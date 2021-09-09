@@ -6,39 +6,49 @@ function ImputComponet({ input, username, register }: any) {
   const [name, setName] = React.useState("");
   const router = useRouter();
 
-  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (
-      name.toLocaleLowerCase() !== username.toLocaleLowerCase() &&
-      name === ""
-    ) {
-      setTimeout(() => {
-        router.push("/404");
-      }, 100);
-    } else {
-      setTimeout(() => {
-        router.push("/chatRoom");
-      }, 100);
-    }
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { username }: any = name;
     e.preventDefault();
   };
 
-  const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (
-      name.toLocaleLowerCase() !== username.toLocaleLowerCase() &&
-      name !== ""
-    ) {
-      setTimeout(() => {
-        router.push("/chatRoom");
-      }, 100);
-    } else {
-      setTimeout(() => {
-        router.push("/404");
-      }, 100);
-    }
-    e.preventDefault();
-  };
+  // const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   if (
+  //     name.toLocaleLowerCase() !== username.toLocaleLowerCase() &&
+  //     name === ""
+  //   ) {
+  //     setTimeout(() => {
+  //       router.push("/404");
+  //     }, 100);
+  //   } else {
+  //     setTimeout(() => {
+  //       router.push("/chatRoom");
+  //     }, 100);
+  //   }
+  //   e.preventDefault();
+  // };
+
+  // const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   if (
+  //     name.toLocaleLowerCase() !== username.toLocaleLowerCase() &&
+  //     name !== ""
+  //   ) {
+  //     setTimeout(() => {
+  //       router.push("/chatRoom");
+  //     }, 100);
+  //   } else {
+  //     setTimeout(() => {
+  //       router.push("/404");
+  //     }, 100);
+  //   }
+  //   e.preventDefault();
+  // };
   return (
-    <form style={{ height: "100vh" }} className="container">
+    <form
+      action="/users"
+      method="POST"
+      style={{ height: "100vh" }}
+      className="container"
+    >
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -46,7 +56,7 @@ function ImputComponet({ input, username, register }: any) {
         name="username"
         placeholder="username ..."
       />
-      <button onClick={register ? handleRegister : handleLogin} type="submit">
+      <button onClick={handleSubmit} type="submit">
         {input}
       </button>
     </form>

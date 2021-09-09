@@ -42,29 +42,49 @@ var User = require("../models/User.model");
 module.exports = route;
 // get all users
 route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, item;
+    var users, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, User.find()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, User.find()];
             case 1:
                 users = _a.sent();
-                item = users[0];
                 res.send(users);
-                return [2 /*return*/];
+                res.status(200); //ok response
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(501); //implementation error
+                res.json({ message: error_1 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
 // create new users
-route.post("/user-create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                user = new User({ type: "POST", username: req.body.name });
+                _a.trys.push([0, 3, , 4]);
+                user = new User({ type: "POST", username: req.body.username });
+                if (!(User.find({ username: req.body.username }) === "Svetozar")) return [3 /*break*/, 2];
                 return [4 /*yield*/, user.save()];
             case 1:
                 _a.sent();
-                return [2 /*return*/];
+                _a.label = 2;
+            case 2:
+                res.json(user);
+                res.status(201).send(); //ok response and creating
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                res.status(501); //implementation error
+                res.json({ message: error_2 });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

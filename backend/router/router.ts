@@ -8,16 +8,30 @@ module.exports = route;
 // get all users
 
 route.get("/users", async (req: Request, res: Response) => {
-  const users = await User.find();
-  const [item] = users;
-  res.send(users);
+  try {
+    const users = await User.find();
+
+    res.send(users);
+    res.status(200); //ok response
+  } catch (error) {
+    res.status(501); //implementation error
+    res.json({ message: error });
+  }
 });
 
 // create new users
 
-route.post("/user-create", async (req: Request, res: Response) => {
-  const user = new User({ type: "POST", username: req.body.name });
-  await user.save();
+route.post("/users", async (req: Request, res: Response) => {
+  try {
+    const user = new User({ type: "POST", username: req.body.username });
+    if (User.find({ username: req.body.username }) === "Svetozar")
+      await user.save();
+    res.json(user);
+    res.status(201).send(); //ok response and creating
+  } catch (error) {
+    res.status(501); //implementation error
+    res.json({ message: error });
+  }
 });
 
 // delete users

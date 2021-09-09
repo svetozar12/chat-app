@@ -1,18 +1,24 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const socketIo = require("./connection/wsConnection");
 const connectDb = require("./connection/dbConnection");
 const data = require("./router/router");
 
+// midleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  }),
+);
 
-connectDb().then((): void => {
-  console.log("Mongodb connected");
-});
+connectDb();
+
 // routes importing
 app.use("/", data);
 

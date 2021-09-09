@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var UserSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true,
     },
