@@ -1,11 +1,11 @@
 GET http://localhost:4001/users
 ###
-POST http://localhost:4001/users
+POST http://localhost:4001/register
 Content-Type: application/json
 
 {
-    "username":"dobro utro"
+    "username":"ivo1"
 }
 
 ###
-GET http://localhost:4001/users/ivan
+GET http://localhost:4001/users/ivo1

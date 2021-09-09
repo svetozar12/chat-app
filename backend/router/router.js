@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var route = express.Router();
+var createError = require("http-errors");
 var User = require("../models/User.model");
 module.exports = route;
 // get
@@ -53,7 +54,6 @@ route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, User.find().exec()];
             case 1:
                 users = _a.sent();
-                console.log(users);
                 res.send(users);
                 res.status(200); //ok response
                 return [3 /*break*/, 3];
@@ -76,23 +76,23 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
                 return [4 /*yield*/, User.findOne({ username: req.params.username }).exec()];
             case 1:
                 users = _a.sent();
-                if (req.params.username === "")
-                    throw Error;
-                if (users.username !== req.params.username)
-                    throw Error;
+                if (req.params.username === "" ||
+                    typeof Number ||
+                    users.username !== req.params.username)
+                    throw createError(400, "Invalid input", "User " + req.params.username + " doesn't exist");
                 res.send(users);
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();
-                res.status(501);
-                res.json({ message: error_2 });
+                res.status(error_2.status);
+                res.json({ errorStatus: error_2.status, message: error_2, stack: error_2.stack });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
 // create new users
-route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.post("/register", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users, i, user, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -103,22 +103,21 @@ route.post("/users", function (req, res) { return __awaiter(void 0, void 0, void
                 users = _a.sent();
                 for (i = 0; i < users.length; i++) {
                     if (users[i].username === req.body.username) {
-                        throw Error;
+                        throw createError(400, "Invalid input", "User " + req.body.username + " already exist");
                     }
                 }
                 user = new User({ type: "POST", username: req.body.username });
-                if (req.body.username === "")
-                    throw Error;
+                if (req.body.username === "" || req.body.username === typeof Number)
+                    throw createError(400, "Invalid input", "User " + req.params.username + " doesn't exist");
                 return [4 /*yield*/, user.save()];
             case 2:
                 _a.sent();
-                res.json(user);
                 res.status(201).send(); //ok response and creating
                 return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
-                res.status(501); //implementation error
-                res.json({ message: error_3 });
+                res.status(error_3.status);
+                res.json({ errorStatus: error_3.status, message: error_3, stack: error_3.stack });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

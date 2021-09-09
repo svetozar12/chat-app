@@ -1,15 +1,12 @@
 import React from "react";
 import axios from "axios";
-// import { useRouter } from "next/dist/client/router";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
 function login({ data }: AppProps) {
   const [name, setName] = React.useState("");
-  const url = `http://localhost:4001/users/${name}`;
-  // const router = useRouter();
 
   const loginPost = async () => {
-    return await axios.post(url, {
+    const res = await axios.post(`http://localhost:4001/users/${name}`, {
       username: name,
     });
   };
@@ -23,7 +20,7 @@ function login({ data }: AppProps) {
   };
 
   return (
-    <form method="GET" style={{ height: "100vh" }} className="container">
+    <form style={{ height: "100vh" }} className="container">
       <h1>Login</h1>
       <input
         value={name}

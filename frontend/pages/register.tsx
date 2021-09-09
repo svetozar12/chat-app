@@ -6,27 +6,26 @@ function register({ data }: AppProps) {
   const [name, setName] = React.useState("");
 
   const registerPost = async () => {
-    const res = await axios.post("http://localhost:4001/users", {
-      username: name,
-    });
+    try {
+      await axios.post("http://localhost:4001/register", {
+        username: name,
+      });
+    } catch (error) {
+      console.log("error");
+    }
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (name) {
+      e.preventDefault();
       registerPost();
       console.log("submit");
-      e.preventDefault();
       setName("");
     }
   };
   return (
     <>
-      <form
-        action="http://localhost:4001/users"
-        method="POST"
-        style={{ height: "100vh" }}
-        className="container"
-      >
+      <form style={{ height: "100vh" }} className="container">
         <h1>Register</h1>
         <input
           value={name}
