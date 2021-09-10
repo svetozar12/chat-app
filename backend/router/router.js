@@ -55,7 +55,7 @@ route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 
             case 1:
                 users = _a.sent();
                 res.send(users);
-                res.status(200); //ok response
+                res.status(200).send(); //ok response
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
@@ -67,7 +67,7 @@ route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); });
 // login auth
-route.get("/users/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.post("/users/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -76,10 +76,8 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
                 return [4 /*yield*/, User.findOne({ username: req.params.username }).exec()];
             case 1:
                 users = _a.sent();
-                if (req.params.username === "" ||
-                    typeof Number ||
-                    users.username !== req.params.username)
-                    throw createError(400, "Invalid input", "User " + req.params.username + " doesn't exist");
+                if (!users || undefined)
+                    throw createError(400, "Invalid input", "User " + req.params.username + " doesnt exist");
                 res.send(users);
                 return [3 /*break*/, 3];
             case 2:
@@ -107,8 +105,8 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
                     }
                 }
                 user = new User({ type: "POST", username: req.body.username });
-                if (req.body.username === "" || req.body.username === typeof Number)
-                    throw createError(400, "Invalid input", "User " + req.params.username + " doesn't exist");
+                if (req.body.username === "")
+                    throw createError(400, "Invalid input", "Please enter valid input");
                 return [4 /*yield*/, user.save()];
             case 2:
                 _a.sent();
@@ -117,7 +115,7 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
             case 3:
                 error_3 = _a.sent();
                 res.status(error_3.status);
-                res.json({ errorStatus: error_3.status, message: error_3, stack: error_3.stack });
+                res.json({ errorStatus: error_3.status, message: error_3 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

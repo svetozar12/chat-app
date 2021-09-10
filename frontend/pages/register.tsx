@@ -7,11 +7,13 @@ function register({ data }: AppProps) {
 
   const registerPost = async () => {
     try {
-      await axios.post("http://localhost:4001/register", {
+      const res = await axios.post("http://localhost:4001/register", {
         username: name,
       });
-    } catch (error) {
-      console.log("error");
+      console.log(res);
+    } catch (error: any) {
+      const temp = error.response.data;
+      console.log(temp.message.message);
     }
   };
 

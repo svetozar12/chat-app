@@ -5,10 +5,15 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 function login({ data }: AppProps) {
   const [name, setName] = React.useState("");
 
-  const loginPost = async (): void => {
-    const res = await axios.post(`http://localhost:4001/users/${name}`, {
-      username: name,
-    });
+  const loginPost = async () => {
+    try {
+      const res = await axios.post(`http://localhost:4001/users/${name}`, {
+        username: name,
+      });
+      console.log(res);
+    } catch (error: any) {
+      console.log(error.response);
+    }
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {

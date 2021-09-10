@@ -16,26 +16,23 @@ route.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await User.find().exec();
     res.send(users);
-    res.status(200); //ok response
+    res.status(200).send(); //ok response
   } catch (error) {
     res.status(501); //implementation error
     res.json({ message: error });
   }
 });
 // login auth
-route.get("/users/:username", async (req: Request, res: Response) => {
+route.post("/users/:username", async (req: Request, res: Response) => {
   try {
     const users = await User.findOne({ username: req.params.username }).exec();
-    if (
-      req.params.username === "" ||
-      typeof Number ||
-      users.username !== req.params.username
-    )
+    if (!users || undefined)
       throw createError(
         400,
         "Invalid input",
-        `User ${req.params.username} doesn't exist`,
+        `User ${req.params.username} doesnt exist`,
       );
+
     res.send(users);
   } catch (error: any) {
     res.status(error.status);
@@ -58,17 +55,13 @@ route.post("/register", async (req: Request, res: Response) => {
       }
     }
     const user = new User({ type: "POST", username: req.body.username });
-    if (req.body.username === "" || req.body.username === typeof Number)
-      throw createError(
-        400,
-        "Invalid input",
-        `User ${req.params.username} doesn't exist`,
-      );
+    if (req.body.username === "")
+      throw createError(400, "Invalid input", `Please enter valid input`);
     await user.save();
     res.status(201).send(); //ok response and creating
   } catch (error: any) {
     res.status(error.status);
-    res.json({ errorStatus: error.status, message: error, stack: error.stack });
+    res.json({ errorStatus: error.status, message: error });
   }
 });
 

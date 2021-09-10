@@ -16,6 +16,11 @@ app.use(bodyParser.urlencoded({
 connectDb();
 // routes importing
 app.use("/", data);
+app.use(function (err, req, res) {
+    res.locals.error = err;
+    var status = err.status || 500;
+    res.status(status);
+});
 var port = 4001;
 app.listen(port, function () {
     console.log("listening on port " + port);
