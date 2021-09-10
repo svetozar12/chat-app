@@ -4,9 +4,9 @@ POST http://localhost:4001/register
 Content-Type: application/json
 
 {
-    "username":"ivo1"
+    "username":"ivo2"
 }
 
 ###
-POST http://localhost:4001/users/giga
+GET http://localhost:4001/users/ivo1
 

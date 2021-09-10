@@ -2,9 +2,9 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import axios from "axios";
 import React from "react";
 
-function register({ data }: AppProps) {
+function register() {
   const [name, setName] = React.useState("");
-
+  const [alert, setAlert] = React.useState("");
   const registerPost = async () => {
     try {
       const res = await axios.post("http://localhost:4001/register", {
@@ -13,7 +13,7 @@ function register({ data }: AppProps) {
       console.log(res);
     } catch (error: any) {
       const temp = error.response.data;
-      console.log(temp.message.message);
+      setAlert(temp.message.message);
     }
   };
 
@@ -22,10 +22,14 @@ function register({ data }: AppProps) {
     registerPost();
     console.log("submit");
     setName("");
+    setTimeout(() => {
+      setAlert("");
+    }, 2000);
   };
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
+        <h1 style={{ color: "red" }}>{alert}</h1>
         <h1>Register</h1>
         <input
           value={name}
@@ -41,17 +45,17 @@ function register({ data }: AppProps) {
     </>
   );
 }
-export const getServerSideProps: any = async ({ res }: any) => {
-  try {
-    const res = await fetch("http://localhost:4001/users");
-    const data = await res.json();
-    return {
-      props: {
-        data: data,
-      },
-    };
-  } catch (error) {
-    console.log(error);
-  }
-};
+// export const getServerSideProps: any = async ({ res }: any) => {
+//   try {
+//     const res = await fetch("http://localhost:4001/users");
+//     const data = await res.json();
+//     return {
+//       props: {
+//         data: data,
+//       },
+//     };
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 export default register;

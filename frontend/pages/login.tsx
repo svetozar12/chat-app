@@ -2,28 +2,38 @@ import React from "react";
 import axios from "axios";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
-function login({ data }: AppProps) {
+function login() {
   const [name, setName] = React.useState("");
+  const [alert, setAlert] = React.useState("");
 
   const loginPost = async () => {
     try {
-      const res = await axios.post(`http://localhost:4001/users/${name}`, {
-        username: name,
-      });
+      const res = await axios.get(`http://localhost:4001/users/${name}`);
       console.log(res);
     } catch (error: any) {
-      console.log(error.response);
+      setAlert(error.response.data.message.message);
     }
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    loginPost();
-    setName("");
+    if (name) {
+      loginPost();
+      setName("");
+      setTimeout(() => {
+        setAlert("");
+      }, 2000);
+    } else {
+      setAlert("No input");
+      setTimeout(() => {
+        setAlert("");
+      }, 2000);
+    }
   };
 
   return (
     <form style={{ height: "100vh" }} className="container">
+      <h1 style={{ color: "red" }}>{alert}</h1>
       <h1>Login</h1>
       <input
         value={name}
@@ -39,18 +49,4 @@ function login({ data }: AppProps) {
   );
 }
 
-export const getServerSideProps: any = async () => {
-  try {
-    const res = await fetch("http://localhost:4001/users");
-    const data = await res.json();
-    return {
-      props: {
-        data: data,
-        statusRegister: res.toString(),
-      },
-    };
-  } catch (error) {
-    console.log(error);
-  }
-};
 export default login;
