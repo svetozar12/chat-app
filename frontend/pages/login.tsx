@@ -4,7 +4,6 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
-import ChatRoom from "../components/ChatRoom";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -29,7 +28,6 @@ function login(props: AppProps) {
     if (name) {
       const result = await loginPost();
       if (result) {
-        // console.log(name);
         cookie.set("name", name);
         router.push("/chatRoom");
       }

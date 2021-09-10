@@ -18,6 +18,7 @@ route.get("/users/:username", async (req: Request, res: Response) => {
         "Invalid input",
         `User ${req.params.username} doesnt exist`,
       );
+    res.json({ message: users });
   } catch (error: any) {
     res.status(error.status);
     res.json({ errorStatus: error.status, message: error, stack: error.stack });

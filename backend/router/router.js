@@ -53,6 +53,7 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
                 users = _a.sent();
                 if (!users || undefined)
                     throw createError(400, "Invalid input", "User " + req.params.username + " doesnt exist");
+                res.json({ message: users });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();

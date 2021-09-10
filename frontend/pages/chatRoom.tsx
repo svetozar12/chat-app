@@ -1,22 +1,24 @@
 import { NextPage } from "next";
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { io, Socket } from "socket.io-client";
+import { useCookie } from "next-cookie";
+import { GetServerSideProps } from "next";
 
 interface IProps {
   name: string;
   message: string;
 }
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
+  const cookie = useCookie(props.cookie);
   const [state, setState] = useState<IProps>({
     message: "",
-    name: "",
+    name: cookie.get("name"),
   });
-
-  const [chat, setChat] = useState<IProps[]>([]);
-
+  const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-  useEffect(() => {
+
+  useEffect((): any => {
     const socketConnect = io.connect("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
       // console.log(chat);
@@ -49,10 +51,7 @@ const Home: NextPage = () => {
   const renderChat = () => {
     return chat.map(
       ({ name, message }, index: number): JSX.Element => (
-        <div
-          className={name.toLowerCase() === "svetozar" ? "me" : "you"}
-          key={index}
-        >
+        <div className={cookie.get("name") ? "true" : "false"} key={index}>
           <h2>{name}: </h2>
           <p>{message}</p>
         </div>
@@ -60,8 +59,9 @@ const Home: NextPage = () => {
     );
   };
   return (
-    <div className="container">
-      <h1>Chat messages</h1>
+    <div style={{ position: "relative", zIndex: "10" }} className="container">
+      <h1>You're logged in as {state.name}</h1>
+      <h2 className="log-out">Log out</h2>
       <div className="container-chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}
@@ -70,18 +70,12 @@ const Home: NextPage = () => {
       <form>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <input
-            type="text"
-            name="name"
-            onChange={(e) => onTextChange(e)}
-            value={state.name}
-            placeholder="Username ..."
-          />
-          <input
+            style={{ width: "100%", textAlign: "center" }}
             type="text"
             name="message"
             onChange={(e) => onTextChange(e)}
             value={state.message}
-            placeholder="Message ..."
+            placeholder="Your Message "
           />
         </div>
         <button onClick={onMessageSubmit}>
@@ -90,6 +84,14 @@ const Home: NextPage = () => {
       </form>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookie = useCookie(context);
+
+  return {
+    props: { cookie: context.req.headers.cookie || "" },
+  };
 };
 
 export default Home;

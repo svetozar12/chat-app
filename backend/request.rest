@@ -1,5 +1,4 @@
-GET http://localhost:4001/users
-###
+
 POST http://localhost:4001/register
 Content-Type: application/json
 
