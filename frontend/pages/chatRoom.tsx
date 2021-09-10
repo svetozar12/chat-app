@@ -62,6 +62,7 @@ const Home: NextPage = (props) => {
     <div style={{ position: "relative", zIndex: "10" }} className="container">
       <h1>You're logged in as {state.name}</h1>
       <h2 className="log-out">Log out</h2>
+      <h2 className="log-out">Delete account</h2>
       <div className="container-chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}

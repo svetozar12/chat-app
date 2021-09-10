@@ -4,32 +4,38 @@ import React from "react";
 
 function register() {
   const [name, setName] = React.useState("");
-  const [alert, setAlert] = React.useState("");
+  const [state, setState] = React.useState<any>({
+    badAlert: "",
+    goodAlert: "",
+  });
   const registerPost = async () => {
     try {
       const res = await axios.post("http://localhost:4001/register", {
         username: name,
       });
-      console.log(res);
+      setState({ goodAlert: res.data.message });
+      return true;
     } catch (error: any) {
       const temp = error.response.data;
-      setAlert(temp.message.message);
+      setState({ badAlert: temp.message.message });
+      return false;
     }
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    registerPost();
-    console.log("submit");
+    await registerPost();
     setName("");
     setTimeout(() => {
-      setAlert("");
+      setState({ badAlert: "", goodAlert: "" });
     }, 2000);
   };
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
-        <h1 style={{ color: "red" }}>{alert}</h1>
+        <h1 style={state.goodAlert ? { color: "green" } : { color: "red" }}>
+          {state.goodAlert || state.badAlert}
+        </h1>
         <h1>Register</h1>
         <input
           value={name}

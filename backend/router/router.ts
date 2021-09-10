@@ -43,7 +43,7 @@ route.post("/register", async (req: Request, res: Response) => {
     if (req.body.username === "")
       throw createError(400, "Invalid input", `Please enter valid input`);
     await user.save();
-    res.status(201).send(); //ok response and creating
+    res.status(201).send({ message: `User ${req.body.username} created` }); //ok response and creating
   } catch (error: any) {
     res.status(error.status);
     res.json({ errorStatus: error.status, message: error });

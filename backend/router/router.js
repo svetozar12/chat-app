@@ -85,7 +85,7 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, user.save()];
             case 2:
                 _a.sent();
-                res.status(201).send(); //ok response and creating
+                res.status(201).send({ message: "User " + req.body.username + " created" }); //ok response and creating
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();
