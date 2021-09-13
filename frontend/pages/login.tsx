@@ -4,6 +4,7 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -14,10 +15,8 @@ function login(props: AppProps) {
   const loginPost = async () => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${name}`);
-      console.log(res);
       return true;
     } catch (error: any) {
-      console.log(error);
       setAlert(error.response.data.message.message);
       return false;
     }
@@ -28,7 +27,7 @@ function login(props: AppProps) {
     if (name) {
       const result = await loginPost();
       if (result) {
-        cookie.set("name", name);
+        cookie.set("name", name, { maxAge: 360 });
         router.push("/chatRoom");
       }
       setTimeout(() => {
@@ -56,6 +55,9 @@ function login(props: AppProps) {
             name="username"
             placeholder="username ..."
           />
+          <Link href="/register">
+            <a>Register</a>
+          </Link>
           <button onClick={handleSubmit} type="submit">
             login
           </button>

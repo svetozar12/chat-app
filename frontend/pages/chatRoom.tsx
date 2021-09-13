@@ -5,6 +5,7 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
+import { Session } from "inspector";
 
 interface IProps {
   name: string;
@@ -20,7 +21,6 @@ const Home: NextPage = (props: AppProps) => {
   });
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-
   useEffect((): any => {
     const socketConnect = io.connect("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
@@ -56,9 +56,17 @@ const Home: NextPage = (props: AppProps) => {
     }
   };
 
-  React.useEffect(() => {
+  const deleteCookies = () => {
+    if (cookie.has("name")) {
+      cookie.remove("name");
+      router.push("/");
+    }
+  };
+
+  useEffect(() => {
     checkForCookies();
-  }, []);
+    // console.log(props.cookie);
+  }, [props.cookie]); //dependecy arr doesnt work atm
 
   const renderChat = () => {
     return chat.map(
@@ -73,7 +81,9 @@ const Home: NextPage = (props: AppProps) => {
   return (
     <div style={{ position: "relative", zIndex: "10" }} className="container">
       <h1>You're logged in as {state.name}</h1>
-      <h2 className="log-out">Log out</h2>
+      <h2 className="log-out" onClick={deleteCookies}>
+        Log out
+      </h2>
       <h2 className="log-out">Delete account</h2>
       <div className="container-chat">
         <h2>Welcome to my chat app</h2>

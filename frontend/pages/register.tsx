@@ -1,19 +1,42 @@
-import { AppProps } from "next/dist/shared/lib/router/router";
 import axios from "axios";
 import React from "react";
+import { useCookie } from "next-cookie";
+import { GetServerSideProps } from "next";
+import { AppProps } from "next/dist/shared/lib/router/router";
+import Link from "next/link";
+function register(props) {
+  const cookie = useCookie(props.cookie);
 
-function register() {
   const [name, setName] = React.useState("");
+  const [loginPrompt, setLoginPrompt] = React.useState(false);
   const [state, setState] = React.useState<any>({
     badAlert: "",
     goodAlert: "",
   });
+
+  const loginPost = async () => {
+    try {
+      const res = await axios.get(`http://localhost:4001/users/${name}`);
+      return true;
+    } catch (error: any) {
+      return false;
+    }
+  };
+
+  const quickLogin = async () => {
+    const result = await loginPost();
+    if (result) {
+      cookie.set("name", "name", { maxAge: 360 });
+    }
+  };
+
   const registerPost = async () => {
     try {
       const res = await axios.post("http://localhost:4001/register", {
         username: name,
       });
       setState({ goodAlert: res.data.message });
+      setLoginPrompt(true);
       return true;
     } catch (error: any) {
       const temp = error.response.data;
@@ -26,6 +49,7 @@ function register() {
     e.preventDefault();
     await registerPost();
     setName("");
+
     setTimeout(() => {
       setState({ badAlert: "", goodAlert: "" });
     }, 2000);
@@ -44,11 +68,30 @@ function register() {
           name="username"
           placeholder="username ..."
         />
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
         <button onClick={handleSubmit} type="submit">
           register
         </button>
+        {loginPrompt && (
+          <div className="container">
+            <h1 onClick={quickLogin} style={{ cursor: "pointer" }}>
+              Click me to Quick login
+            </h1>
+          </div>
+        )}
       </form>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookie = useCookie(context);
+
+  return {
+    props: { cookie: context.req.headers.cookie || "" },
+  };
+};
+
 export default register;
