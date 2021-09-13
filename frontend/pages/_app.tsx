@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
+import { useCookie } from "next-cookie";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -9,4 +10,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
 export default MyApp;

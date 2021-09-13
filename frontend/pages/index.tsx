@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { useCookie } from "next-cookie";
+import { GetServerSideProps } from "next";
+import { AppProps } from "next/dist/shared/lib/router/router";
 
-function index() {
+function index(props: AppProps) {
+  const cookie = useCookie(props.cookie);
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
@@ -16,5 +20,13 @@ function index() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookie = useCookie(context);
+
+  return {
+    props: { cookie: context.req.headers.cookie || "" },
+  };
+};
 
 export default index;

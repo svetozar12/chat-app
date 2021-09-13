@@ -3,13 +3,16 @@ import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { io, Socket } from "socket.io-client";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
+import { AppProps } from "next/dist/shared/lib/router/router";
+import { useRouter } from "next/router";
 
 interface IProps {
   name: string;
   message: string;
 }
 
-const Home: NextPage = (props) => {
+const Home: NextPage = (props: AppProps) => {
+  const router = useRouter();
   const cookie = useCookie(props.cookie);
   const [state, setState] = useState<IProps>({
     message: "",
@@ -21,7 +24,6 @@ const Home: NextPage = (props) => {
   useEffect((): any => {
     const socketConnect = io.connect("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
-      // console.log(chat);
       setChat([...chat, { name, message }]);
     });
     setSocketRef(socketConnect);
@@ -31,7 +33,6 @@ const Home: NextPage = (props) => {
   useEffect(() => {
     if (socketRef) {
       socketRef.on("message", ({ name, message }: any) => {
-        console.log(chat);
         setChat([...chat, { name, message }]);
       });
     }
@@ -47,6 +48,17 @@ const Home: NextPage = (props) => {
     socketRef?.emit("message", { name, message });
     setState({ name: name, message: "" });
   };
+
+  const checkForCookies = () => {
+    if (!cookie.has("name")) {
+      console.log("no cookie");
+      router.push("/");
+    }
+  };
+
+  React.useEffect(() => {
+    checkForCookies();
+  }, []);
 
   const renderChat = () => {
     return chat.map(

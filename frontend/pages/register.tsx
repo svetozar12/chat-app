@@ -51,17 +51,4 @@ function register() {
     </>
   );
 }
-// export const getServerSideProps: any = async ({ res }: any) => {
-//   try {
-//     const res = await fetch("http://localhost:4001/users");
-//     const data = await res.json();
-//     return {
-//       props: {
-//         data: data,
-//       },
-//     };
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 export default register;
