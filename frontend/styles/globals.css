@@ -136,3 +136,14 @@ p {
 .log-out:hover {
   border-bottom: 1px solid;
 }
+
+.link {
+  text-decoration: none;
+  border: 1px solid transparent;
+  margin: 1rem;
+  font-size: 1.2rem;
+}
+
+.link:hover {
+  border-bottom: 1px solid;
+}

@@ -3,8 +3,10 @@ import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
+import { useRouter } from "next/router";
 import Link from "next/link";
-function register(props) {
+function register(props: AppProps) {
+  const router = useRouter();
   const cookie = useCookie(props.cookie);
 
   const [name, setName] = React.useState("");
@@ -14,20 +16,8 @@ function register(props) {
     goodAlert: "",
   });
 
-  const loginPost = async () => {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${name}`);
-      return true;
-    } catch (error: any) {
-      return false;
-    }
-  };
-
   const quickLogin = async () => {
-    const result = await loginPost();
-    if (result) {
-      cookie.set("name", "name", { maxAge: 360 });
-    }
+    cookie.set("name", name, { maxAge: 360 });
   };
 
   const registerPost = async () => {
@@ -40,16 +30,25 @@ function register(props) {
       return true;
     } catch (error: any) {
       const temp = error.response.data;
+      setName("");
       setState({ badAlert: temp.message.message });
       return false;
     }
   };
 
+  const checkForCookies = () => {
+    if (cookie.has("name")) {
+      router.push("/chatRoom");
+    }
+  };
+
+  React.useEffect(() => {
+    checkForCookies();
+  }, [props.cookie]); //dependecy arr doesnt work atm
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await registerPost();
-    setName("");
-
     setTimeout(() => {
       setState({ badAlert: "", goodAlert: "" });
     }, 2000);
@@ -69,7 +68,9 @@ function register(props) {
           placeholder="username ..."
         />
         <Link href="/login">
-          <a>Login</a>
+          <a className="link" style={{ color: "var(--main-blue)" }}>
+            Sign in
+          </a>
         </Link>
         <button onClick={handleSubmit} type="submit">
           register

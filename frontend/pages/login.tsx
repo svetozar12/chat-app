@@ -22,6 +22,17 @@ function login(props: AppProps) {
     }
   };
 
+  const checkForCookies = () => {
+    if (cookie.has("name")) {
+      router.push("/chatRoom");
+    }
+  };
+
+  React.useEffect(() => {
+    checkForCookies();
+    console.log("my cookies", cookie.getAll());
+  }, [props.cookie]); //dependecy arr doesnt work atm
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
@@ -43,27 +54,27 @@ function login(props: AppProps) {
   };
 
   return (
-    <>
-      <h1>
-        <form style={{ height: "100vh" }} className="container">
-          <h1 style={{ color: "red" }}>{alert}</h1>
-          <h1>Login</h1>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            type="text"
-            name="username"
-            placeholder="username ..."
-          />
-          <Link href="/register">
-            <a>Register</a>
-          </Link>
-          <button onClick={handleSubmit} type="submit">
-            login
-          </button>
-        </form>
-      </h1>
-    </>
+    <div>
+      <form style={{ height: "100vh" }} className="container">
+        <h1 style={{ color: "red" }}>{alert}</h1>
+        <h1>Login</h1>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+          name="username"
+          placeholder="username ..."
+        />
+        <Link href="/register">
+          <a className="link" style={{ color: "var(--main-blue)" }}>
+            Sign up
+          </a>
+        </Link>
+        <button onClick={handleSubmit} type="submit">
+          login
+        </button>
+      </form>
+    </div>
   );
 }
 

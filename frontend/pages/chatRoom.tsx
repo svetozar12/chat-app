@@ -1,11 +1,9 @@
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { io, Socket } from "socket.io-client";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
-import { Session } from "inspector";
 
 interface IProps {
   name: string;
