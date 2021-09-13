@@ -22,17 +22,6 @@ function login(props: AppProps) {
     }
   };
 
-  const checkForCookies = () => {
-    if (cookie.has("name")) {
-      router.push("/chatRoom");
-    }
-  };
-
-  React.useEffect(() => {
-    checkForCookies();
-    console.log("my cookies", cookie.getAll());
-  }, [props.cookie]); //dependecy arr doesnt work atm
-
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
@@ -81,8 +70,18 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
 
+  if (cookie.get("name")) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/chatRoom",
+      },
+    };
+  }
   return {
-    props: { cookie: context.req.headers.cookie || "" },
+    props: {
+      cookie: context.req.headers.cookie || "",
+    },
   };
 };
 

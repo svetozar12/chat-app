@@ -3,8 +3,8 @@ import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
 function register(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
@@ -17,6 +17,7 @@ function register(props: AppProps) {
   });
 
   const quickLogin = async () => {
+    router.push("/chatRoom");
     cookie.set("name", name, { maxAge: 360 });
   };
 
@@ -35,16 +36,6 @@ function register(props: AppProps) {
       return false;
     }
   };
-
-  const checkForCookies = () => {
-    if (cookie.has("name")) {
-      router.push("/chatRoom");
-    }
-  };
-
-  React.useEffect(() => {
-    checkForCookies();
-  }, [props.cookie]); //dependecy arr doesnt work atm
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -89,7 +80,14 @@ function register(props: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-
+  if (cookie.get("name")) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/chatRoom",
+      },
+    };
+  }
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };

@@ -110,6 +110,10 @@ form > button:hover {
 /* =================
 Typography styling
 ================= */
+.blue_no_underline {
+  color: var(--main-blue);
+  text-decoration: none;
+}
 
 .container-chat div > h3,
 p {

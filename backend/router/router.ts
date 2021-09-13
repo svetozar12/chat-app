@@ -57,9 +57,10 @@ route.delete("/:username", (req: Request, res: Response) => {
     User.deleteOne({ username: req.params.username }).exec();
     res.json({
       message: `deleted user: ${req.params.username}`,
-      isDeleted: true,
     });
+    res.sendStatus(204);
   } catch (error) {
+    res.sendStatus(501);
     res.json({ error: error });
   }
 });
