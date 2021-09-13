@@ -12,8 +12,8 @@ interface IProps {
 }
 
 io.on("connection", (socket: Socket): void => {
-  socket.on("message", ({ name, message }: IProps) => {
-    io.emit("message", { name, message });
+  socket.on("message", (message: IProps) => {
+    io.emit("message", message);
     console.log(message);
   });
 });

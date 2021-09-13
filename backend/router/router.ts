@@ -55,12 +55,12 @@ route.post("/register", async (req: Request, res: Response) => {
 route.delete("/:username", (req: Request, res: Response) => {
   try {
     User.deleteOne({ username: req.params.username }).exec();
-    res.json({
-      message: `deleted user: ${req.params.username}`,
-    });
-    res.sendStatus(204);
+    res
+      .json({
+        message: `deleted user: ${req.params.username}`,
+      })
+      .sendStatus(204);
   } catch (error) {
-    res.sendStatus(501);
-    res.json({ error: error });
+    res.json({ error: error }).sendStatus(501);
   }
 });

@@ -100,13 +100,13 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
 route.delete("/:username", function (req, res) {
     try {
         User.deleteOne({ username: req.params.username }).exec();
-        res.json({
+        res
+            .json({
             message: "deleted user: " + req.params.username,
-        });
-        res.sendStatus(204);
+        })
+            .sendStatus(204);
     }
     catch (error) {
-        res.sendStatus(501);
-        res.json({ error: error });
+        res.json({ error: error }).sendStatus(501);
     }
 });
