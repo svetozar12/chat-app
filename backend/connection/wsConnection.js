@@ -9,6 +9,7 @@ io.on("connection", function (socket) {
     socket.on("message", function (_a) {
         var name = _a.name, message = _a.message;
         io.emit("message", { name: name, message: message });
+        console.log(message);
     });
 });
 module.exports = io;

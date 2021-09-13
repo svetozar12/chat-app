@@ -1,43 +1,43 @@
-import axios from "axios";
-import { NextPage, GetServerSideProps } from "next";
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  ChangeEvent,
-  CSSProperties,
-} from "react";
+import { NextPage } from "next";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { io, Socket } from "socket.io-client";
 import { useCookie } from "next-cookie";
+import { GetServerSideProps } from "next";
+import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-const Home: NextPage = (props) => {
-  interface IProps {
-    name: string;
-    message: string;
-  }
+interface IProps {
+  name: string;
+  message: string;
+}
 
+const Home: NextPage = (props: AppProps) => {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const [state, setState] = useState<IProps>({
     message: "",
     name: cookie.get("name"),
   });
-
   const [chat, setChat] = useState<string[]>([]);
-
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
 
-  const deleteUser = async () => {
-    try {
-      const res = await axios.delete(`http://localhost:4001/${state.name}`);
-      router.push("/");
-      cookie.remove("name");
-      return true;
-    } catch (error) {
-      return false;
+  useEffect((): any => {
+    const socketConnect = io.connect("http://localhost:4000");
+    socketConnect.on("message", ({ name, message }: IProps) => {
+      setChat([...chat, { name, message }]);
+    });
+    setSocketRef(socketConnect);
+    return () => socketRef && socketRef.disconnect(); //This trigers useEffect random error
+  }, []);
+
+  useEffect(() => {
+    if (socketRef) {
+      socketRef.on("message", ({ name, message }: IProps) => {
+        setChat([...chat, { name, message }]);
+      });
     }
-  };
+  }, [chat]);
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -50,6 +50,28 @@ const Home: NextPage = (props) => {
     setState({ name: name, message: "" });
   };
 
+  const checkForCookies = () => {
+    if (!cookie.has("name")) {
+      console.log("no cookie");
+      router.push("/");
+    }
+  };
+
+  React.useEffect(() => {
+    checkForCookies();
+  }, []);
+
+  const deleteUser = async () => {
+    try {
+      const res = await axios.delete(`http://localhost:4001/${state.name}`);
+      router.push("/");
+      cookie.remove("name");
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const deleteCookies = () => {
     if (cookie.has("name")) {
       cookie.remove("name");
@@ -57,40 +79,16 @@ const Home: NextPage = (props) => {
     }
   };
 
-  useEffect(() => {
-    const socketConnect = io.connect("http://localhost:4000");
-    socketConnect.on("message", ({ name, message }: IProps): void => {
-      setChat([...chat, { name, message }]);
-    });
-    setSocketRef(socketConnect);
-    return () => socketRef && socketRef.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (socketRef) {
-      socketRef.on("message", ({ name, message }: IProps) => {
-        setChat([...chat, { name, message }]);
-      });
-    }
-  }, [chat]);
-
   const renderChat = () => {
-    return chat.map(
-      ({ name, message }, index: number): JSX.Element => (
-        <div
-          className={
-            cookie.get("name") === cookie.get("name") ? "true" : "false"
-          }
-          key={index}
-        >
-          <h2>{name}: </h2>
-          <p>{message}</p>
-        </div>
-      ),
-    );
+    return chat.map(({ name, message }, index: number) => (
+      <div className={cookie.get("name") ? "true" : "false"} key={index}>
+        <h2>{name}: </h2>
+        <p>{message}</p>
+      </div>
+    ));
   };
   return (
-    <div style={{ position: "relative", zIndex: "10" }} className="container">
+    <div style={{ zIndex: "10", position: "relative" }} className="container">
       <h1>You're logged in as {state.name}</h1>
       <h2 className="log-out" onClick={deleteCookies}>
         Log out
@@ -124,14 +122,6 @@ const Home: NextPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  if (!cookie.get("name")) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
 
   return {
     props: { cookie: context.req.headers.cookie || "" },
