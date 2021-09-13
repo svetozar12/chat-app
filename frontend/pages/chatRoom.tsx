@@ -19,24 +19,16 @@ const Home: NextPage = (props: AppProps) => {
     message: "",
     name: cookie.get("name"),
   });
-  const [chat, setChat] = useState<string[]>([]);
-  const [socketRef, setSocketRef] = useState<Socket | null>(null);
-
-  useEffect((): any => {
-    const socketConnect = io.connect("http://localhost:4000");
-    socketConnect.on("message", ({ name, message }: IProps) => {
-      setChat([...chat, { name, message }]);
-    });
-    setSocketRef(socketConnect);
-    return () => socketRef && socketRef.disconnect(); //This trigers useEffect random error
-  }, []);
+  const [chat, setChat] = useState<string[] | []>([]);
+  const socketRef = React.useRef<any>(null);
 
   useEffect(() => {
-    if (socketRef) {
-      socketRef.on("message", ({ name, message }: IProps) => {
-        setChat([...chat, { name, message }]);
-      });
-    }
+    socketRef.current = io.connect("http://localhost:4000");
+    socketRef.current.on("message", ({ name, message }: any) => {
+      setChat([...chat, { name, message }]);
+      console.log(chat);
+    });
+    return () => socketRef.current.disconnect();
   }, [chat]);
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -46,8 +38,8 @@ const Home: NextPage = (props: AppProps) => {
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message } = state;
-    socketRef?.emit("message", { name, message });
-    setState({ name: name, message: "" });
+    socketRef.current.emit("message", { name, message });
+    setState({ message: "", name: name });
   };
 
   const checkForCookies = () => {
