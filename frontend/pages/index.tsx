@@ -9,7 +9,7 @@ function index(props: AppProps) {
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
         <a
-          className="home"
+          className="link"
           style={{ textDecoration: "none", color: "var(--main-blue)" }}
         >
           <h1>Create an account !</h1>
@@ -17,7 +17,7 @@ function index(props: AppProps) {
       </Link>
       <Link href="http://localhost:3000/login">
         <a
-          className="home"
+          className="link"
           style={{ textDecoration: "none", color: "var(--main-blue)" }}
         >
           <h1>Already have a acount ?</h1>

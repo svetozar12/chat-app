@@ -51,4 +51,15 @@ route.post("/register", async (req: Request, res: Response) => {
 });
 
 // delete users
-// ...
+
+route.delete("/:username", (req: Request, res: Response) => {
+  try {
+    User.deleteOne({ username: req.params.username }).exec();
+    res.json({
+      message: `deleted user: ${req.params.username}`,
+      isDeleted: true,
+    });
+  } catch (error) {
+    res.json({ error: error });
+  }
+});

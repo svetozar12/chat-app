@@ -97,4 +97,15 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 // delete users
-// ...
+route.delete("/:username", function (req, res) {
+    try {
+        User.deleteOne({ username: req.params.username }).exec();
+        res.json({
+            message: "deleted user: " + req.params.username,
+            isDeleted: true,
+        });
+    }
+    catch (error) {
+        res.json({ error: error });
+    }
+});

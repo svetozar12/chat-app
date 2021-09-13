@@ -1,11 +1,13 @@
-
+### LOGIN
+GET http://localhost:4001/users/ivo1
+### REGISTER
 POST http://localhost:4001/register
 Content-Type: application/json
 
 {
-    "username":"ivo2"
+    "username":"ivo1"
 }
+### DELETE ACC
+DELETE  http://localhost:4001/dd
 
-###
-GET http://localhost:4001/users/ivo1
 

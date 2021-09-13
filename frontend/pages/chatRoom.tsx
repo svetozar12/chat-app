@@ -1,3 +1,4 @@
+import axios from "axios";
 import { NextPage, GetServerSideProps } from "next";
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { io, Socket } from "socket.io-client";
@@ -19,6 +20,42 @@ const Home: NextPage = (props: AppProps) => {
   });
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
+
+  const deleteUser = async () => {
+    try {
+      const res = await axios.delete(`http://localhost:4001/${state.name}`);
+      cookie.remove("name");
+      router.push("/");
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
+
+  const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    e.preventDefault();
+    const { name, message } = state;
+    socketRef?.emit("message", { name, message });
+    setState({ name: name, message: "" });
+  };
+
+  const checkForCookies = async () => {
+    if (!cookie.has("name")) {
+      router.push("/");
+    }
+  };
+
+  const deleteCookies = () => {
+    if (cookie.has("name")) {
+      cookie.remove("name");
+      router.push("/");
+    }
+  };
+
   useEffect((): any => {
     const socketConnect = io.connect("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
@@ -36,35 +73,9 @@ const Home: NextPage = (props: AppProps) => {
     }
   }, [chat]);
 
-  const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setState({ ...state, [e.target.name]: e.target.value });
-  };
-
-  const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    const { name, message } = state;
-    socketRef?.emit("message", { name, message });
-    setState({ name: name, message: "" });
-  };
-
-  const checkForCookies = () => {
-    if (!cookie.has("name")) {
-      console.log("no cookie");
-      router.push("/");
-    }
-  };
-
-  const deleteCookies = () => {
-    if (cookie.has("name")) {
-      cookie.remove("name");
-      router.push("/");
-    }
-  };
-
   useEffect(() => {
     checkForCookies();
-    // console.log(props.cookie);
-  }, [props.cookie]); //dependecy arr doesnt work atm
+  }, [props.cookie]);
 
   const renderChat = () => {
     return chat.map(
@@ -82,7 +93,9 @@ const Home: NextPage = (props: AppProps) => {
       <h2 className="log-out" onClick={deleteCookies}>
         Log out
       </h2>
-      <h2 className="log-out">Delete account</h2>
+      <h2 className="log-out" onClick={deleteUser}>
+        Delete account
+      </h2>
       <div className="container-chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}
