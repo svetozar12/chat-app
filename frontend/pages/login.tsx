@@ -11,6 +11,8 @@ function login(props: AppProps) {
   const cookie = useCookie(props.cookie);
   const [name, setName] = React.useState("");
   const [alert, setAlert] = React.useState("");
+  const [checked, setChecked] = React.useState(false);
+  console.log(checked);
 
   const loginPost = async () => {
     try {
@@ -27,13 +29,24 @@ function login(props: AppProps) {
     if (name) {
       const result = await loginPost();
       if (result) {
-        cookie.set("name", name, { maxAge: 360 });
+        cookie.set("name", name, {
+          maxAge: 3600,
+          sameSite: "none",
+          secure: true,
+        }); //1hour
         router.push(`/${name}`);
       }
       setTimeout(() => {
         setAlert("");
       }, 2000);
       console.log(name);
+      if (checked) {
+        cookie.set("name", name, {
+          maxAge: 94670777,
+          sameSite: "none",
+          secure: true,
+        }); //3 years
+      }
     } else {
       setAlert("No input");
       setTimeout(() => {
@@ -54,11 +67,24 @@ function login(props: AppProps) {
           name="username"
           placeholder="username ..."
         />
-        <Link href="/register">
-          <a className="link" style={{ color: "var(--main-blue)" }}>
-            Sign up
-          </a>
-        </Link>
+        <div className="clickable">
+          <Link href="/register">
+            <a className="link" style={{ color: "var(--main-blue)" }}>
+              Sign up
+            </a>
+          </Link>
+
+          <label htmlFor="checkbox">
+            {" "}
+            <input
+              type="checkbox"
+              id="checkbox"
+              onChange={(e) => setChecked(e.target.checked)}
+              style={{ width: "20px", height: "40px" }}
+            />
+            Remember me
+          </label>
+        </div>
         <button onClick={handleSubmit} type="submit">
           login
         </button>

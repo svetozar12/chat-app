@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { BooleanLiteral } from "typescript";
+
 function register(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
