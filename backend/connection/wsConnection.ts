@@ -9,12 +9,16 @@ const io = require("socket.io")(4000, {
 interface IProps {
   name: string;
   message: string;
+  timeStamp: number;
 }
 
 io.on("connection", (socket: Socket): void => {
-  socket.on("message", (message: IProps) => {
-    io.emit("message", message);
-    console.log(message);
+  socket.on("message", ({ name, message }: IProps) => {
+    io.emit("message", {
+      name,
+      message,
+      time: new Date().getHours() + ":" + new Date().getMinutes(),
+    });
   });
 });
 

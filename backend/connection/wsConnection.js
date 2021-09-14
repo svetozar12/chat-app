@@ -6,9 +6,13 @@ var io = require("socket.io")(4000, {
     },
 });
 io.on("connection", function (socket) {
-    socket.on("message", function (message) {
-        io.emit("message", message);
-        console.log(message);
+    socket.on("message", function (_a) {
+        var name = _a.name, message = _a.message;
+        io.emit("message", {
+            name: name,
+            message: message,
+            time: new Date().getHours() + ":" + new Date().getMinutes(),
+        });
     });
 });
 module.exports = io;
