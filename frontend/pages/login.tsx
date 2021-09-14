@@ -28,7 +28,7 @@ function login(props: AppProps) {
       const result = await loginPost();
       if (result) {
         cookie.set("name", name, { maxAge: 360 });
-        router.push("/chatRoom");
+        router.push(`/${name}`);
       }
       setTimeout(() => {
         setAlert("");
