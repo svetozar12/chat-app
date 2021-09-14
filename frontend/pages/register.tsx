@@ -18,7 +18,7 @@ function register(props: AppProps) {
   });
 
   const quickLogin = async () => {
-    router.push("/chatRoom");
+    router.push(`/${name}`);
     cookie.set("name", name, { maxAge: 360 });
   };
 

@@ -7,44 +7,41 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-interface IProps {
-  name: string;
-  message: string;
-}
-
 const Home: NextPage = (props: AppProps) => {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const [state, setState] = useState<IProps>({
-    message: "",
-    name: cookie.get("name"),
-  });
-  const [chat, setChat] = useState<string[] | []>([]);
-  const socketRef = React.useRef<any>(null);
+  const [name, setName] = useState<string>(cookie.get("name"));
+  const [message, setMessage] = useState<string>("");
+
+  const [chat, setChat] = useState<string[]>([]);
+  const [socketRef, setSocketRef] = useState<Socket | null>(null);
+
+  useEffect((): any => {
+    const socketConnect = io.connect("http://localhost:4000");
+    socketConnect.on("message", (message: string) => {
+      setChat([...chat, message]);
+    });
+    setSocketRef(socketConnect);
+    return () => socketRef && socketRef.disconnect();
+  }, []);
 
   useEffect(() => {
-    socketRef.current = io.connect("http://localhost:4000");
-    socketRef.current.on("message", ({ name, message }: any) => {
-      setChat([...chat, { name, message }]);
-      console.log(chat);
-    });
-    return () => socketRef.current.disconnect();
+    if (socketRef) {
+      socketRef.on("message", (message) => {
+        console.log([chat]);
+        setChat([...chat, message]);
+      });
+    }
   }, [chat]);
-
-  const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setState({ ...state, [e.target.name]: e.target.value });
-  };
 
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
-    const { name, message } = state;
-    socketRef.current.emit("message", { name, message });
-    setState({ message: "", name: name });
+    socketRef?.emit("message", message);
+    setMessage("");
   };
 
   const checkForCookies = () => {
     if (!cookie.has("name")) {
-      console.log("no cookie");
       router.push("/");
     }
   };
@@ -55,7 +52,7 @@ const Home: NextPage = (props: AppProps) => {
 
   const deleteUser = async () => {
     try {
-      const res = await axios.delete(`http://localhost:4001/${state.name}`);
+      const res = await axios.delete(`http://localhost:4001/${name}`);
       router.push("/");
       cookie.remove("name");
       return true;
@@ -72,8 +69,8 @@ const Home: NextPage = (props: AppProps) => {
   };
 
   const renderChat = () => {
-    return chat.map(({ name, message }, index: number) => (
-      <div className={cookie.get("name") ? "true" : "false"} key={index}>
+    return chat.map((message) => (
+      <div className={cookie.get("name") ? "true" : "false"}>
         <h2>{name}: </h2>
         <p>{message}</p>
       </div>
@@ -81,7 +78,7 @@ const Home: NextPage = (props: AppProps) => {
   };
   return (
     <div style={{ zIndex: "10", position: "relative" }} className="container">
-      <h1>You're logged in as {state.name}</h1>
+      <h1>You're logged in as {name}</h1>
       <h2 className="log-out" onClick={deleteCookies}>
         Log out
       </h2>
@@ -99,8 +96,8 @@ const Home: NextPage = (props: AppProps) => {
             style={{ width: "100%", textAlign: "center" }}
             type="text"
             name="message"
-            onChange={(e) => onTextChange(e)}
-            value={state.message}
+            onChange={(e) => setMessage(e.target.value)}
+            value={message}
             placeholder="Your Message "
           />
         </div>
