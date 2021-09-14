@@ -9,7 +9,7 @@ const io = require("socket.io")(4000, {
 interface IProps {
   name: string;
   message: string;
-  timeStamp: number;
+  timeStamp: string | number;
 }
 
 io.on("connection", (socket: Socket): void => {
