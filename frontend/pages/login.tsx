@@ -30,7 +30,7 @@ function login(props: AppProps) {
       const result = await loginPost();
       if (result) {
         cookie.set("name", name, {
-          maxAge: 3600,
+          maxAge: checked ? 94670777 : 3600,
           sameSite: "none",
           secure: true,
         }); //1hour
@@ -40,13 +40,6 @@ function login(props: AppProps) {
         setAlert("");
       }, 2000);
       console.log(name);
-      if (checked) {
-        cookie.set("name", name, {
-          maxAge: 94670777,
-          sameSite: "none",
-          secure: true,
-        }); //3 years
-      }
     } else {
       setAlert("No input");
       setTimeout(() => {

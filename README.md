@@ -20,9 +20,9 @@ First enter in the frontend and install the dependencies and then repeat in the 
 
   ```cd frontend
     npm install && npm run dev
-    will run on [link](http://localhost:3000)
+    will run on http://localhost:3000
 
     cd backend
     npm install && npm run dev
-    will run on [link](http://localhost:4001)
+    will run on linkhttp://localhost:4001
   ```
