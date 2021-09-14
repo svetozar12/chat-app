@@ -7,10 +7,15 @@
 // import { useRouter } from "next/router";
 // import axios from "axios";
 
+// interface IProps {
+//   name: string;
+//   message: string;
+// }
+
 // const Home: NextPage = (props: AppProps) => {
 //   const router = useRouter();
 //   const cookie = useCookie(props.cookie);
-//   const [state, setState] = useState({
+//   const [state, setState] = useState<IProps>({
 //     name: cookie.get("name"),
 //     message: "",
 //   });
@@ -18,10 +23,9 @@
 //   const [socketRef, setSocketRef] = useState<Socket | null>(null);
 
 //   useEffect(() => {
-//     const socketConnect = io.connect("http://localhost:4000");
+//     const socketConnect: Socket = io.connect("http://localhost:4000");
 //     socketConnect.on("message", ({ name, message }: any) => {
 //       setChat([...chat, { name, message }]);
-//       console.log("First useEffect", chat);
 //     });
 //     setSocketRef(socketConnect);
 //     return () => socketRef && socketRef.disconnect();
@@ -31,7 +35,7 @@
 //     if (socketRef) {
 //       socketRef.on("message", ({ name, message }: any) => {
 //         setChat([...chat, { name, message }]);
-//         // console.log(chat);
+//         console.log(chat);
 //       });
 //     }
 //   }, [chat]);
@@ -136,8 +140,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 interface IProps {
-  name: string;
-  message: string;
+  name: string | string[];
+  message: string | string[];
 }
 
 const Home: NextPage = (props: AppProps) => {
@@ -152,12 +156,13 @@ const Home: NextPage = (props: AppProps) => {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io.connect("http://localhost:4000");
-    socketRef.current.on("message", ({ name, message }: any) => {
+    const ws: Socket = io.connect("http://localhost:4000");
+    socketRef.current = ws;
+    ws.on("message", ({ name, message }) => {
       setChat([...chat, { name, message }]);
       console.log(chat);
     });
-    return () => socketRef.current.disconnect();
+    return () => ws.disconnect();
   }, [chat]);
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -169,7 +174,7 @@ const Home: NextPage = (props: AppProps) => {
     const { name, message } = state;
     if (message) {
       socketRef.current.emit("message", { name, message });
-      setState({ message: "", name: name });
+      setState({ name: name, message: "" });
     }
   };
 
@@ -202,16 +207,28 @@ const Home: NextPage = (props: AppProps) => {
     }
   };
 
-  const renderChat = (): JSX.Element[] => {
-    return chat.map(({ name, message }, index: number) => (
-      <div className={chatRoom === name ? "me" : "you"} key={index}>
-        <h2>{name}: </h2>
-        <p>{message}</p>
+  const renderChat = (): JSX.Element | JSX.Element[] => {
+    let today = new Date();
+    const hours = today.getHours();
+    const minutes = today.getMinutes();
+    console.log(Date.now());
+
+    console.log(hours + "." + minutes);
+
+    return chat.map(({ name, message }, index) => (
+      <div className={chatRoom === name ? "its me" : "its not me"} key={index}>
+        <h2>{name} </h2>
+        <div style={{ display: "flex" }}>
+          <p>{message}</p>
+          <p style={{ float: "right" }}>
+            {hours}:{minutes}
+          </p>
+        </div>
       </div>
     ));
   };
   return (
-    <div style={{ zIndex: "10", position: "relative" }} className="container">
+    <div className="container chat_app">
       <h1>You're logged in as {chatRoom}</h1>
       <h2 className="log-out" onClick={deleteCookies}>
         Log out
