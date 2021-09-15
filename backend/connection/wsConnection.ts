@@ -13,6 +13,7 @@ interface IProps {
 }
 
 io.on("connection", (socket: Socket): void => {
+  // emiting and getting messages
   socket.on("message", ({ name, message }: IProps) => {
     console.log(message);
     io.emit("message", {
@@ -20,6 +21,11 @@ io.on("connection", (socket: Socket): void => {
       message,
       time: new Date().getHours() + ":" + new Date().getMinutes(),
     });
+  });
+  // creating socket rooms
+  socket.on("joinRoom", (room) => {
+    socket.join(room);
+    console.log("joined in room");
   });
 });
 

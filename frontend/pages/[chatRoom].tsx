@@ -24,14 +24,20 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
 
-  const updateChat = (name: string, message: string, time: number | string) => {
-    setChat((prev: any) => [...prev, { name, message, time }]);
-  };
-
   const deleteCookies = () => {
     if (cookie.get("name")) {
       cookie.remove("name");
       router.push("/");
+    }
+  };
+
+  const deleteUser = async () => {
+    try {
+      const res = await axios.delete(`http://localhost:4001/${state.name}`);
+      deleteCookies();
+      return true;
+    } catch (error) {
+      return false;
     }
   };
 
@@ -47,12 +53,18 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     }
   };
 
+  const updateChat = (name: string, message: string, time: number | string) => {
+    setChat((prev: any) => [...prev, { name, message, time }]);
+  };
+
   useEffect(() => {
     validateUser();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message, time }: any) => {
       updateChat(name, message, time);
     });
+
+    socketConnect.emit("joinRoom", "room1");
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
@@ -68,16 +80,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     const { name, message, time } = state;
     socketRef?.emit("message", { name, message, time });
     setState({ name, message: "", time: "" });
-  };
-
-  const deleteUser = async () => {
-    try {
-      const res = await axios.delete(`http://localhost:4001/${state.name}`);
-      deleteCookies();
-      return true;
-    } catch (error) {
-      return false;
-    }
   };
 
   const renderChat = () => {
