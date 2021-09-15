@@ -6,14 +6,17 @@ var io = require("socket.io")(4000, {
     },
 });
 io.on("connection", function (socket) {
+    // console.log(socket.id);
     // emiting and getting messages
     socket.on("message", function (_a) {
-        var name = _a.name, message = _a.message;
+        var name = _a.name, message = _a.message, id = _a.id;
         io.emit("message", {
+            id: id,
             name: name,
             message: message,
             time: new Date().getHours() + ":" + new Date().getMinutes(),
         });
+        console.log(id);
     });
     // creating socket rooms and displaying users
     socket.on("joinRoom", function (room) {

@@ -11,7 +11,9 @@ module.exports = route;
 // login auth
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
-    const users = await User.findOne({ username: req.params.username }).exec();
+    const users = await User.findOne({
+      username: req.params.username,
+    }).exec();
     if (!users || undefined)
       throw createError(
         400,

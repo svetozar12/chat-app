@@ -4,12 +4,12 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { FC } from "react";
 
-const MyApp = ({ Component, pageProps }: AppProps, props) => {
+const MyApp = ({ Component, pageProps }: AppProps, props: string) => {
   const cookie = useCookie(props.cookie);
   return (
     <>
       <div className="BIG"></div>
-      <Component {...pageProps} cookie={cookie} />
+      <Component {...pageProps} Cookie={cookie} />
     </>
   );
 };

@@ -1,1 +1,1 @@
-GET http://localhost:4001/users/svetozar
+GET http://localhost:4001/users/are
