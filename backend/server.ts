@@ -22,11 +22,11 @@ connectDb();
 // routes importing
 app.use("/", data);
 
-app.use((err, req, res) => {
-  res.locals.error = err;
-  const status = err.status || 500;
-  res.status(status);
-});
+// app.use((err, req, res) => {
+//   res.locals.error = err;
+//   const status = err.status || 500;
+//   res.status(status);
+// });
 
 const port: number = 4001;
 app.listen(port, function (): void {

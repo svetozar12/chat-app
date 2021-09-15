@@ -8,6 +8,20 @@ const User = require("../models/User.model");
 
 module.exports = route;
 
+// get all users
+route.get("/users", async (req: Request, res: Response) => {
+  try {
+    const users = await User.find({}).exec();
+    if (!users || undefined) throw createError(404, "No users found");
+    res.json({ users });
+  } catch (error: any) {
+    res.status(error.status);
+    res.json({
+      errorStatus: error.status,
+      message: error,
+    });
+  }
+});
 // login auth
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {

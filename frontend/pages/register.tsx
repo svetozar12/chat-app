@@ -18,8 +18,8 @@ function register(props: AppProps) {
   });
 
   const quickLogin = async () => {
-    router.push(`/messages/${cookie.get("name")}`);
     cookie.set("name", name, { maxAge: 360 });
+    router.push(`/messages/${cookie.get("name")}`);
   };
 
   const registerPost = async () => {

@@ -4,14 +4,21 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 
-import Contacts from "../../components/contacts";
-
 import axios from "axios";
 const index: NextPage<{ cookie: string }> = (props) => {
   const router = useRouter();
 
   const cookie = useCookie(props.cookie);
   const [contacts, setContacts] = React.useState([]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:4001/users");
+      setContacts(response.data.users);
+    } catch (error) {
+      return false;
+    }
+  };
 
   const deleteCookies = () => {
     if (cookie.get("name")) {
@@ -45,7 +52,10 @@ const index: NextPage<{ cookie: string }> = (props) => {
   };
   React.useEffect(() => {
     validateUser();
-  });
+    fetchUsers();
+  }, []);
+
+  console.log("my arr", contacts);
 
   return (
     <div
@@ -59,8 +69,26 @@ const index: NextPage<{ cookie: string }> = (props) => {
       <h2 className="log-out" onClick={deleteUser}>
         Delete account
       </h2>
-      <ul>
-        <Contacts />
+      <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
+        {contacts.map((item) => {
+          const { _id, username } = item;
+          return (
+            <a
+              style={{
+                color: "var(--main-white)",
+                textDecoration: "none",
+              }}
+              href="http://localhost:3000/messages/chatRoom"
+            >
+              {username !== cookie.get("name") && (
+                <div className="contacts">
+                  <h1>{username}</h1>
+                  <p>Messages</p>
+                </div>
+              )}
+            </a>
+          );
+        })}
       </ul>
     </div>
   );

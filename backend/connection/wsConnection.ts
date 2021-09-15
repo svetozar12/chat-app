@@ -23,12 +23,12 @@ io.on("connection", (socket: Socket): void => {
       message,
       time: new Date().getHours() + ":" + new Date().getMinutes(),
     });
-    console.log(id);
+    console.log("id", id);
   });
   // creating socket rooms and displaying users
   socket.on("joinRoom", (room) => {
     socket.join(room);
-    console.log(socket.rooms);
+    // console.log(socket.rooms);
     socket.on("userList", ({ name }) => {
       io.emit("userList", {
         name,

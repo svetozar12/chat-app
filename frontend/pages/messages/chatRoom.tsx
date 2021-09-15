@@ -25,8 +25,11 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:4001/users/are");
+      const res = await axios.get(
+        `http://localhost:4001/users/${cookie.get("name")}`,
+      );
       setId(res.data.message._id);
+      console.log("id", id);
 
       return true;
     } catch (error) {

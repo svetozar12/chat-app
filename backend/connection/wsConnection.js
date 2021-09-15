@@ -16,12 +16,12 @@ io.on("connection", function (socket) {
             message: message,
             time: new Date().getHours() + ":" + new Date().getMinutes(),
         });
-        console.log(id);
+        console.log("id", id);
     });
     // creating socket rooms and displaying users
     socket.on("joinRoom", function (room) {
         socket.join(room);
-        console.log(socket.rooms);
+        // console.log(socket.rooms);
         socket.on("userList", function (_a) {
             var name = _a.name;
             io.emit("userList", {

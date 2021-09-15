@@ -150,7 +150,9 @@ form > button:hover {
   background: var(--main-blue);
   width: 30vw;
   padding: 1rem;
+  margin: 1rem;
   flex-direction: column;
+  cursor: pointer;
 }
 
 /* =================
