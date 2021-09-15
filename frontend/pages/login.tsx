@@ -33,7 +33,7 @@ function login(props: AppProps) {
           sameSite: "none",
           secure: true,
         }); //1hour
-        router.push(`/${cookie.get("name")}`);
+        router.push(`/messages/${cookie.get("name")}`);
       }
       setTimeout(() => {
         setAlert("");
@@ -91,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: `/${cookieName}`,
+        destination: `/messages/${cookieName}`,
       },
     };
   }

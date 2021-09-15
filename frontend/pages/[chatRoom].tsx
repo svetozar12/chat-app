@@ -154,8 +154,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (cookieName) {
     try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
-      console.log("goood");
+      const res = await axios.get(
+        `http://localhost:4001/messages/${cookieName}`,
+      );
     } catch (error) {
       cookie.remove("name");
       return {

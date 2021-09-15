@@ -18,7 +18,7 @@ function register(props: AppProps) {
   });
 
   const quickLogin = async () => {
-    router.push(`/${name}`);
+    router.push(`/messages/${name}`);
     cookie.set("name", name, { maxAge: 360 });
   };
 
@@ -81,11 +81,12 @@ function register(props: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  if (cookie.get("name")) {
+  const cookieName = cookie.get("name");
+  if (cookieName) {
     return {
       redirect: {
         permanent: false,
-        destination: `/${cookie.get("name")}`,
+        destination: `/messages/${cookieName}`,
       },
     };
   }

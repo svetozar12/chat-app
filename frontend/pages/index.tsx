@@ -5,13 +5,8 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
-function index(props: AppProps) {
+function index(props: AppProps, { cookie }) {
   const cookie = useCookie(props.cookie);
-  // React.useEffect(() => {
-  //   if (cookie.get("name")) {
-  //     useRouter().push("/chatRoom");
-  //   }
-  // }, []);
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
@@ -30,18 +25,19 @@ function index(props: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  if (cookie.get("name")) {
+  const cookieName = cookie.get("name");
+  if (cookieName) {
     return {
       redirect: {
         permanent: false,
-        destination: `/${cookie.get("name")}`,
+        destination: `/messages/${cookieName}`,
       },
     };
   }
 
-  return {
-    props: { cookie: context.req.headers.cookie || "" },
-  };
+  // return {
+  //   props: { cookie: context.req.headers.cookie || "" },
+  // };
 };
 
 export default index;
