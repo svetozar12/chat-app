@@ -12,7 +12,6 @@ function login(props: AppProps) {
   const [name, setName] = React.useState("");
   const [alert, setAlert] = React.useState("");
   const [checked, setChecked] = React.useState(false);
-  console.log(checked);
 
   const loginPost = async () => {
     try {
@@ -39,7 +38,6 @@ function login(props: AppProps) {
       setTimeout(() => {
         setAlert("");
       }, 2000);
-      console.log(name);
     } else {
       setAlert("No input");
       setTimeout(() => {
@@ -93,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: "/chatRoom",
+        destination: `/${cookie.get("name")}`,
       },
     };
   }

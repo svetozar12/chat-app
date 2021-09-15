@@ -1,19 +1,17 @@
-import { NextPage } from "next";
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { io, Socket } from "socket.io-client";
+import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps } from "next";
-import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
+// external npms
+import { io, Socket } from "socket.io-client";
 import axios from "axios";
-import { JsxElement } from "typescript";
-
 interface IProps {
   name: string;
   message: string;
+  time: string | number;
 }
 
-const Home: NextPage<{ cookie: string; chatRoom: Parameters }> = (props) => {
+const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const router = useRouter();
   const chatRoom = props.chatRoom.chatRoom;
 
@@ -21,19 +19,39 @@ const Home: NextPage<{ cookie: string; chatRoom: Parameters }> = (props) => {
   const [state, setState] = useState<IProps>({
     name: cookie.get("name"),
     message: "",
+    time: "",
   });
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
 
-  const updateChat = (name: string, message: string) => {
-    setChat((prev: any) => [...prev, { name, message }]);
+  const updateChat = (name: string, message: string, time: number | string) => {
+    setChat((prev: any) => [...prev, { name, message, time }]);
+  };
+
+  const deleteCookies = () => {
+    if (cookie.get("name")) {
+      cookie.remove("name");
+      router.push("/");
+    }
+  };
+
+  const validateUser = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/users/${cookie.get("name")}`,
+      );
+      return true;
+    } catch (error) {
+      deleteCookies();
+      return false;
+    }
   };
 
   useEffect(() => {
+    validateUser();
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ name, message }: any) => {
-      updateChat(name, message);
-      console.log("name", message);
+    socketConnect.on("message", ({ name, message, time }: any) => {
+      updateChat(name, message, time);
     });
     setSocketRef(socketConnect);
     return () => {
@@ -47,48 +65,43 @@ const Home: NextPage<{ cookie: string; chatRoom: Parameters }> = (props) => {
 
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
-    const { name, message } = state;
-    socketRef?.emit("message", { name, message });
-    setState({ name, message: "" });
+    const { name, message, time } = state;
+    socketRef?.emit("message", { name, message, time });
+    setState({ name, message: "", time: "" });
   };
-
-  const checkForCookies = () => {
-    if (!cookie.get("name")) {
-      router.push("/");
-    }
-  };
-  React.useEffect(() => {
-    checkForCookies();
-  }, []);
 
   const deleteUser = async () => {
     try {
       const res = await axios.delete(`http://localhost:4001/${state.name}`);
-      router.push("/");
-      cookie.remove("name");
+      deleteCookies();
       return true;
     } catch (error) {
       return false;
     }
   };
 
-  const deleteCookies = () => {
-    if (cookie.has("name")) {
-      cookie.remove("name");
-      router.push("/");
-    }
-  };
-
-  const renderChat = (): JSX.Element | JSX.Element[] => {
-    return chat.map(({ name, message }, index) => (
+  const renderChat = () => {
+    return chat.map(({ name, message, time }: any, index) => (
       <div className={name === chatRoom ? "me" : "you"} key={index}>
-        <h2>{name}: </h2>
-        <p>{message}</p>
+        <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>{name}</h2>
+        <div
+          style={{
+            background:
+              name === chatRoom ? "var(--main-blue)" : "var(--off-black) ",
+            borderRadius: "10%",
+            width: "35%",
+            overflow: "auto",
+            wordWrap: "break-word",
+          }}
+        >
+          <p>{message}</p>
+          <p>{time}</p>
+        </div>
       </div>
     ));
   };
   return (
-    <div style={{ zIndex: "10", position: "relative" }} className="container">
+    <div className="container chat_home">
       <h1>You're logged in as {state.name}</h1>
       <h2 className="log-out" onClick={deleteCookies}>
         Log out
@@ -122,7 +135,15 @@ const Home: NextPage<{ cookie: string; chatRoom: Parameters }> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const { chatRoom } = context.query; //can be moved to ssp 144
+
+  if (!cookie.get("name")) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
@@ -133,3 +154,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default Home;
+
+// https://avatars.dicebear.com/api/initials/:seed.svg

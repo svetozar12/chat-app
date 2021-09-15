@@ -61,6 +61,6 @@ route.delete("/:username", (req: Request, res: Response) => {
       })
       .sendStatus(204);
   } catch (error) {
-    res.json({ error: error }).sendStatus(501);
+    res.json({ error }).sendStatus(501);
   }
 });

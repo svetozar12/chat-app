@@ -18,6 +18,8 @@ Table of concepts
   --off-black: rgb(51, 51, 51);
   --main-blue: rgb(73, 75, 173);
   --off-blue: rgb(26, 97, 189);
+  --gradient-first: #cfd9df;
+  --gradient-second: #e2ebf0;
 }
 
 /* =================
@@ -38,7 +40,11 @@ body {
 }
 
 .BIG {
-  background: radial-gradient(circle, #cfd9df 0%, #e2ebf0 100%);
+  background: radial-gradient(
+    circle,
+    var(--gradient-first) 0%,
+    var(--gradient-second) 100%
+  );
   position: absolute;
   z-index: -1;
   width: 110vw;
@@ -53,11 +59,17 @@ body {
   flex-direction: column;
 }
 
+.chat_home {
+  position: relative;
+  z-index: 10;
+}
+
 /* .container-chat, */
 .container,
 form,
 .me,
-.you {
+.you,
+.icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,6 +146,13 @@ form > button:hover {
   align-items: center;
 }
 
+.icon {
+  padding: 2rem;
+  border-radius: 50%;
+  font-size: 10px;
+  border: 2.5px solid black;
+}
+
 /* =================
 5.Typography styling
 ================= */
@@ -147,10 +166,15 @@ p {
   margin: 1rem;
 }
 
+.container-chat h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
 .me {
   align-items: flex-end;
   justify-content: center;
-  color: var(--main-blue);
+  color: var(--main-white);
   flex-direction: column;
 }
 

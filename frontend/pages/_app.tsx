@@ -14,14 +14,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  if (cookie.get("name")) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/chatRoom",
-      },
-    };
-  }
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };

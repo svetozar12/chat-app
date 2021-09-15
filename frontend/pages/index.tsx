@@ -7,11 +7,11 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 
 function index(props: AppProps) {
   const cookie = useCookie(props.cookie);
-  React.useEffect(() => {
-    if (cookie.get("name")) {
-      useRouter().push("/chatRoom");
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if (cookie.get("name")) {
+  //     useRouter().push("/chatRoom");
+  //   }
+  // }, []);
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: "/chatRoom",
+        destination: `/${cookie.get("name")}`,
       },
     };
   }

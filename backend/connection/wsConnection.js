@@ -8,6 +8,7 @@ var io = require("socket.io")(4000, {
 io.on("connection", function (socket) {
     socket.on("message", function (_a) {
         var name = _a.name, message = _a.message;
+        console.log(message);
         io.emit("message", {
             name: name,
             message: message,
