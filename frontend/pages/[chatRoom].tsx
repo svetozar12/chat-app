@@ -63,7 +63,11 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     socketConnect.on("message", ({ name, message, time }: any) => {
       updateChat(name, message, time);
     });
-
+    // room users
+    socketConnect.on("userList", ({ users }) => {
+      console.log(users);
+    });
+    // creating room
     socketConnect.emit("joinRoom", "room1");
     setSocketRef(socketConnect);
     return () => {
@@ -79,6 +83,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     e.preventDefault();
     const { name, message, time } = state;
     socketRef?.emit("message", { name, message, time });
+    socketRef?.emit("userList", { name });
     setState({ name, message: "", time: "" });
   };
 
@@ -137,14 +142,29 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-
-  if (!cookie.get("name")) {
+  const cookieName = cookie.get("name");
+  if (!cookieName) {
     return {
       redirect: {
         destination: "/",
         permanent: false,
       },
     };
+  }
+
+  if (cookieName) {
+    try {
+      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+      console.log("goood");
+    } catch (error) {
+      cookie.remove("name");
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
   }
 
   return {

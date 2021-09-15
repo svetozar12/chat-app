@@ -15,17 +15,22 @@ interface IProps {
 io.on("connection", (socket: Socket): void => {
   // emiting and getting messages
   socket.on("message", ({ name, message }: IProps) => {
-    console.log(message);
     io.emit("message", {
       name,
       message,
       time: new Date().getHours() + ":" + new Date().getMinutes(),
     });
   });
-  // creating socket rooms
+  // creating socket rooms and displaying users
   socket.on("joinRoom", (room) => {
     socket.join(room);
-    console.log("joined in room");
+    console.log(socket.rooms);
+    socket.on("userList", ({ name }) => {
+      io.emit("userList", {
+        name,
+      });
+      console.log(name);
+    });
   });
 });
 

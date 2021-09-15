@@ -97,16 +97,26 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 // delete users
-route.delete("/:username", function (req, res) {
-    try {
-        User.deleteOne({ username: req.params.username }).exec();
-        res
-            .json({
-            message: "deleted user: " + req.params.username,
-        })
-            .sendStatus(204);
-    }
-    catch (error) {
-        res.json({ error: error }).sendStatus(501);
-    }
-});
+route.delete("/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, User.deleteOne({ username: req.params.username }).exec()];
+            case 1:
+                _a.sent();
+                res
+                    .json({
+                    message: "deleted user: " + req.params.username,
+                })
+                    .sendStatus(204);
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                res.json({ error: error_3 }).sendStatus(501);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
