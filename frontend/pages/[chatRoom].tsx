@@ -95,7 +95,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           }}
         >
           <p>{message}</p>
-          <p>{time}</p>
+          <p style={{ fontSize: "0.8rem" }}>{time}</p>
         </div>
       </div>
     ));
