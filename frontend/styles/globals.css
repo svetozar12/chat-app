@@ -39,6 +39,13 @@ body {
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+}
+
+/* =================
+3.Layout styling
+================= */
 .BIG {
   background: radial-gradient(
     circle,
@@ -50,10 +57,6 @@ body {
   width: 110vw;
   height: 130vh;
 }
-
-/* =================
-3.Layout styling
-================= */
 
 .container {
   flex-direction: column;

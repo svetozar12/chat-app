@@ -1,7 +1,7 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
-import { useRouter } from "next/router";
+import Link from "next/dist/client/link";
 // external npms
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
@@ -13,8 +13,8 @@ interface IProps {
 
 const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
-
   const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
   const [id, setId] = useState<string | number>("");
   const [state, setState] = useState<IProps>({
     name: cookie.get("name"),
@@ -23,11 +23,14 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   });
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
+
+  //===========================
+  // Updading chat and fetching users to add them to a list
+  //===========================
+
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4001/users/${cookie.get("name")}`,
-      );
+      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
       setId(res.data.message._id);
       console.log("id", id);
 
@@ -37,25 +40,25 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
   const updateChat = (name: string, message: string, time: number | string) => {
     setChat((prev: any) => [...prev, { name, message, time }]);
   };
 
   useEffect(() => {
+    fetchData();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message, time }: any) => {
       updateChat(name, message, time);
     });
-    // creating room
-    socketConnect.emit("joinRoom", "room1");
+
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+  //===========================
+  // Submit and text change functions
+  //===========================
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -68,14 +71,18 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     setState({ name, message: "", time: "" });
   };
 
+  //===========================
+  // Component for chat messages (in the future put this in export component)
+  //===========================
+
   const renderChat = () => {
     return chat.map(({ name, message, time }: any, index) => (
-      <div className={name === chatRoom ? "me" : "you"} key={index}>
+      <div className={name === chatRoom[0] ? "me" : "you"} key={index}>
         <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>{name}</h2>
         <div
           style={{
             background:
-              name === chatRoom ? "var(--main-blue)" : "var(--off-black) ",
+              name === chatRoom[0] ? "var(--main-blue)" : "var(--off-black) ",
             borderRadius: "30% 30% 30% 30%",
             width: "15rem",
             overflow: "auto",
@@ -95,6 +102,9 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     >
       <h1>your Id</h1>
       <h2>{id}</h2>
+      <Link href={`http://localhost:3000/messages/${cookieName}`}>
+        <a>Back to profile page</a>
+      </Link>
       <div className="container-chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}
@@ -122,30 +132,28 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
-  // if (!cookieName) {
-  //   return {
-  //     redirect: {
-  //       destination: "/",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  if (!cookieName) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
-  // if (cookieName) {
-  //   try {
-  //     const res = await axios.get(
-  //       `http://localhost:4001/messages/${cookieName}`,
-  //     );
-  //   } catch (error) {
-  //     cookie.remove("name");
-  //     return {
-  //       redirect: {
-  //         destination: "/",
-  //         permanent: false,
-  //       },
-  //     };
-  //   }
-  // }
+  if (cookieName) {
+    try {
+      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+    } catch (error) {
+      cookie.remove("name");
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+  }
 
   return {
     props: {

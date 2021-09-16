@@ -6,6 +6,8 @@ const io = require("socket.io")(4000, {
   },
 });
 
+const users: string[] = [];
+
 interface IProps {
   id: number | string;
   name: string;
@@ -14,7 +16,9 @@ interface IProps {
 }
 
 io.on("connection", (socket: Socket): void => {
-  // console.log(socket.id);
+  socket.on("sender_reciever", (data) => {
+    console.log(data);
+  });
   // emiting and getting messages
   socket.on("message", ({ name, message, id }: IProps) => {
     io.emit("message", {
@@ -24,17 +28,6 @@ io.on("connection", (socket: Socket): void => {
       time: new Date().getHours() + ":" + new Date().getMinutes(),
     });
     console.log("id", id);
-  });
-  // creating socket rooms and displaying users
-  socket.on("joinRoom", (room) => {
-    socket.join(room);
-    // console.log(socket.rooms);
-    socket.on("userList", ({ name }) => {
-      io.emit("userList", {
-        name,
-      });
-      console.log(name);
-    });
   });
 });
 

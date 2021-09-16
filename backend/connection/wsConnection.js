@@ -5,8 +5,11 @@ var io = require("socket.io")(4000, {
         origin: "*",
     },
 });
+var users = [];
 io.on("connection", function (socket) {
-    // console.log(socket.id);
+    socket.on("sender_reciever", function (data) {
+        console.log(data);
+    });
     // emiting and getting messages
     socket.on("message", function (_a) {
         var name = _a.name, message = _a.message, id = _a.id;
@@ -17,18 +20,6 @@ io.on("connection", function (socket) {
             time: new Date().getHours() + ":" + new Date().getMinutes(),
         });
         console.log("id", id);
-    });
-    // creating socket rooms and displaying users
-    socket.on("joinRoom", function (room) {
-        socket.join(room);
-        // console.log(socket.rooms);
-        socket.on("userList", function (_a) {
-            var name = _a.name;
-            io.emit("userList", {
-                name: name,
-            });
-            console.log(name);
-        });
     });
 });
 module.exports = io;

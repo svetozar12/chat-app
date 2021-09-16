@@ -1,14 +1,16 @@
-import Link from "next/link";
 import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
-
+import { io, Socket } from "socket.io-client";
 import axios from "axios";
 const index: NextPage<{ cookie: string }> = (props) => {
   const router = useRouter();
 
   const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
+  const [reciever, setReciever] = React.useState<string | null>("");
+  const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
   const [contacts, setContacts] = React.useState([]);
 
   const fetchUsers = async () => {
@@ -21,7 +23,7 @@ const index: NextPage<{ cookie: string }> = (props) => {
   };
 
   const deleteCookies = () => {
-    if (cookie.get("name")) {
+    if (cookieName) {
       cookie.remove("name");
       router.push("/");
     }
@@ -29,9 +31,7 @@ const index: NextPage<{ cookie: string }> = (props) => {
 
   const deleteUser = async () => {
     try {
-      const res = await axios.delete(
-        `http://localhost:4001/${cookie.get("name")}`,
-      );
+      const res = await axios.delete(`http://localhost:4001/${cookieName}`);
       deleteCookies();
       return true;
     } catch (error) {
@@ -41,28 +41,49 @@ const index: NextPage<{ cookie: string }> = (props) => {
 
   const validateUser = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4001/users/${cookie.get("name")}`,
-      );
+      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
       return true;
     } catch (error) {
       deleteCookies();
       return false;
     }
   };
+
+  React.useEffect(() => {
+    const socketConnect: Socket = io("http://localhost:4000");
+    // socketConnect.on("user_connected", (username) => {
+    //   setReciever(username);
+    // });
+    console.log(reciever);
+    setSocketRef(socketConnect);
+    return () => {
+      socketRef && socketRef.disconnect();
+    };
+  }, []);
+
+  const emitUsers = () => {
+    socketRef?.emit("sender_reciever", {
+      sender: cookieName,
+      reciever: reciever,
+    });
+  };
+
   React.useEffect(() => {
     validateUser();
     fetchUsers();
   }, []);
 
-  console.log("my arr", contacts);
+  React.useEffect(() => {
+    console.log("render");
+    emitUsers();
+  }, [reciever]);
 
   return (
     <div
       style={{ height: "100vh", justifyContent: "flex-start" }}
       className="container"
     >
-      <h1>You're logged in as {cookie.get("name")}</h1>
+      <h1>You're logged in as {cookieName}</h1>
       <h2 className="log-out" onClick={deleteCookies}>
         Log out
       </h2>
@@ -70,22 +91,27 @@ const index: NextPage<{ cookie: string }> = (props) => {
         Delete account
       </h2>
       <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
-        {contacts.map((item) => {
-          const { _id, username } = item;
+        {contacts.map((item, index) => {
+          const { username } = item;
           return (
             <a
-              style={{
-                color: "var(--main-white)",
-                textDecoration: "none",
-              }}
-              href="http://localhost:3000/messages/chatRoom"
+              onClick={() => setReciever(username)}
+              href={`http://localhost:3000/messages/${cookieName}/chatRoom`}
             >
-              {username !== cookie.get("name") && (
-                <div className="contacts">
-                  <h1>{username}</h1>
-                  <p>Messages</p>
-                </div>
-              )}
+              <p
+                key={index}
+                style={{
+                  color: "var(--main-white)",
+                  textDecoration: "none",
+                }}
+              >
+                {username !== cookieName && (
+                  <div className="contacts">
+                    <h1>{username}</h1>
+                    <p>Messages</p>
+                  </div>
+                )}
+              </p>
             </a>
           );
         })}
@@ -102,6 +128,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
     } catch (error) {
+      console.log("error");
+
       cookie.remove("name");
       return {
         redirect: {

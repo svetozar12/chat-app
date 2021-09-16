@@ -11,22 +11,11 @@ const data = require("./router/router");
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  }),
-);
 
 connectDb();
 
 // routes importing
 app.use("/", data);
-
-// app.use((err, req, res) => {
-//   res.locals.error = err;
-//   const status = err.status || 500;
-//   res.status(status);
-// });
 
 const port: number = 4001;
 app.listen(port, function (): void {

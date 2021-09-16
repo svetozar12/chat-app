@@ -5,8 +5,26 @@ const createError = require("http-errors");
 import { Request, Response } from "express";
 
 const User = require("../models/User.model");
+const Message = require("../models/messages.model");
 
 module.exports = route;
+
+route.post("/test", async (req: Request, res: Response) => {
+  try {
+    const messages = await Message.find().exec();
+    const message = new Message({
+      sender: req.body.sender,
+      reciever: req.body.reciever,
+      message: req.body.message,
+    });
+    console.log("REQUEST", req.body);
+
+    await message.save();
+    res.json({ message: "complete" });
+  } catch (error) {
+    res.json({ error: "error" });
+  }
+});
 
 // get all users
 route.get("/users", async (req: Request, res: Response) => {
@@ -55,6 +73,7 @@ route.post("/register", async (req: Request, res: Response) => {
         );
       }
     }
+
     const user = new User({ type: "POST", username: req.body.username });
     if (req.body.username === "")
       throw createError(400, "Invalid input", `Please enter valid input`);
