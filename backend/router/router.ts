@@ -9,16 +9,12 @@ const Message = require("../models/messages.model");
 
 module.exports = route;
 
-route.post("/test", async (req: Request, res: Response) => {
+route.post("/:sender/:reciever", async (req: Request, res: Response) => {
   try {
-    const messages = await Message.find().exec();
     const message = new Message({
-      sender: req.body.sender,
-      reciever: req.body.reciever,
-      message: req.body.message,
+      sender: req.params.sender,
+      reciever: req.params.reciever,
     });
-    console.log("REQUEST", req.body);
-
     await message.save();
     res.json({ message: "complete" });
   } catch (error) {

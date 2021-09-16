@@ -23,7 +23,6 @@ io.on("connection", (socket: Socket): void => {
   socket.on("sender_reciever", ({ sender, reciever }) => {
     me = sender;
     you = reciever;
-    // console.log(reciever);
   });
 
   socket.emit("send_message", { me, you });

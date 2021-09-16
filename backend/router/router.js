@@ -42,31 +42,26 @@ var createError = require("http-errors");
 var User = require("../models/User.model");
 var Message = require("../models/messages.model");
 module.exports = route;
-route.post("/test", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var messages, message, error_1;
+route.post("/:sender/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var message, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, Message.find().exec()];
-            case 1:
-                messages = _a.sent();
+                _a.trys.push([0, 2, , 3]);
                 message = new Message({
-                    sender: req.body.sender,
-                    reciever: req.body.reciever,
-                    message: req.body.message,
+                    sender: req.params.sender,
+                    reciever: req.params.reciever,
                 });
-                console.log("REQUEST", req.body);
                 return [4 /*yield*/, message.save()];
-            case 2:
+            case 1:
                 _a.sent();
                 res.json({ message: "complete" });
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 3];
+            case 2:
                 error_1 = _a.sent();
                 res.json({ error: "error" });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });

@@ -51,6 +51,9 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     socketConnect.on("message", ({ name, message, time }: any) => {
       updateChat(name, message, time);
     });
+    socketConnect?.on("send_message", ({ me, you }) => {
+      setReciever(you);
+    });
 
     setSocketRef(socketConnect);
     return () => {
@@ -62,24 +65,38 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   // Submit and text change functions
   //===========================
 
-  const submitDataFromEmit = () => {
-    socketRef?.on("send_message", ({ sender, reciever }) => {
-      console.log("render");
-      // setReciever(you);
-      // setMessages(state.message);
-      // console.log("hello", reciever);
-    });
-  };
-
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
+  };
+
+  const submitPrivateConvo = async () => {
+    try {
+      const res = await axios.post(
+        `http://localhost:4001/${cookieName}/${reciever}`,
+        {
+          sender: cookieName,
+          reciever,
+          // messages: state.message,
+        },
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message, time } = state;
-    submitDataFromEmit();
+    submitPrivateConvo();
     socketRef?.emit("message", { name, message, time, id });
+
+    // socketRef?.emit("new_message", {
+    //   sender: cookieName,
+    //   reciever,
+    //   messages: message,
+    // });
+
     setState({ name, message: "", time: "" });
   };
 

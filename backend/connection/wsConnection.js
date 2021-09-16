@@ -15,7 +15,6 @@ io.on("connection", function (socket) {
         var sender = _a.sender, reciever = _a.reciever;
         me = sender;
         you = reciever;
-        // console.log(reciever);
     });
     socket.emit("send_message", { me: me, you: you });
     // emiting and getting messages
