@@ -6,10 +6,16 @@ var io = require("socket.io")(4000, {
     },
 });
 var users = [];
+var me = "";
+var you = "";
 io.on("connection", function (socket) {
-    socket.on("sender_reciever", function (data) {
-        console.log(data);
+    socket.on("sender_reciever", function (_a) {
+        var sender = _a.sender, reciever = _a.reciever;
+        me = sender;
+        you = reciever;
+        // console.log(reciever);
     });
+    socket.emit("send_message", { me: me, you: you });
     // emiting and getting messages
     socket.on("message", function (_a) {
         var name = _a.name, message = _a.message, id = _a.id;
@@ -19,7 +25,6 @@ io.on("connection", function (socket) {
             message: message,
             time: new Date().getHours() + ":" + new Date().getMinutes(),
         });
-        console.log("id", id);
     });
 });
 module.exports = io;

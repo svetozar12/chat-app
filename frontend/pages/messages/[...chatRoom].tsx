@@ -32,7 +32,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
       setId(res.data.message._id);
-      console.log("id", id);
 
       return true;
     } catch (error) {
@@ -49,6 +48,10 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message, time }: any) => {
       updateChat(name, message, time);
+    });
+
+    socketConnect.on("send_message", ({ me, you }) => {
+      console.log(me, "  ", you);
     });
 
     setSocketRef(socketConnect);
