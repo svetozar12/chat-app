@@ -30,8 +30,6 @@ function login(props: AppProps) {
       if (result) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
-          sameSite: "none",
-          secure: true,
         }); //1hour
         router.push(`/messages/${cookie.get("name")}`);
       }

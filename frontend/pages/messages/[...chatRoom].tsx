@@ -76,7 +76,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
         {
           sender: cookieName,
           reciever,
-          // messages: state.message,
+          message: state.message,
         },
       );
       return true;
@@ -90,12 +90,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     const { name, message, time } = state;
     submitPrivateConvo();
     socketRef?.emit("message", { name, message, time, id });
-
-    // socketRef?.emit("new_message", {
-    //   sender: cookieName,
-    //   reciever,
-    //   messages: message,
-    // });
 
     setState({ name, message: "", time: "" });
   };

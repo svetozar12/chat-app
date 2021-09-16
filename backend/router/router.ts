@@ -14,8 +14,22 @@ route.post("/:sender/:reciever", async (req: Request, res: Response) => {
     const message = new Message({
       sender: req.params.sender,
       reciever: req.params.reciever,
+      messages: req.body.message,
     });
     await message.save();
+    res.json({ message: "complete" });
+  } catch (error) {
+    res.json({ error: "error" });
+  }
+});
+
+route.get("/:sender/:reciever", async (req: Request, res: Response) => {
+  try {
+    const messages = await Message.find({
+      sender: req.params.sender,
+      reciever: req.params.reciever,
+    }).exec();
+    await messages.save();
     res.json({ message: "complete" });
   } catch (error) {
     res.json({ error: "error" });

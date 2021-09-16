@@ -18,7 +18,7 @@ function register(props: AppProps) {
   });
 
   const quickLogin = async () => {
-    cookie.set("name", name, { maxAge: 360 });
+    cookie.set("name", name, { maxAge: 3600 });
     router.push(`/messages/${cookie.get("name")}`);
   };
 
