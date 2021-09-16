@@ -90,6 +90,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     const { name, message, time } = state;
     submitPrivateConvo();
     socketRef?.emit("message", { name, message, time, id });
+    console.log(reciever);
 
     setState({ name, message: "", time: "" });
   };
