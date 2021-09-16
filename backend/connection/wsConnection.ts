@@ -6,10 +6,11 @@ const io = require("socket.io")(4000, {
   },
 });
 
-const users: string[] = [];
+let me: string = "";
+let you: string = "";
+let messages: string[] = [];
 
-let me = "";
-let you = "";
+if (messages.length >= 11) messages.shift();
 
 interface IProps {
   id: number | string;
@@ -26,6 +27,7 @@ io.on("connection", (socket: Socket): void => {
   });
 
   socket.emit("send_message", { me, you });
+
   // emiting and getting messages
   socket.on("message", ({ name, message, id }: IProps) => {
     io.emit("message", {

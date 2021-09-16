@@ -5,9 +5,11 @@ var io = require("socket.io")(4000, {
         origin: "*",
     },
 });
-var users = [];
 var me = "";
 var you = "";
+var messages = [];
+if (messages.length >= 11)
+    messages.shift();
 io.on("connection", function (socket) {
     socket.on("sender_reciever", function (_a) {
         var sender = _a.sender, reciever = _a.reciever;

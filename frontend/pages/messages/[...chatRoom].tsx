@@ -15,6 +15,8 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
+  const [reciever, setReciever] = useState<string | null>("");
+  const [messages, setMessages] = useState<string | null>("");
   const [id, setId] = useState<string | number>("");
   const [state, setState] = useState<IProps>({
     name: cookie.get("name"),
@@ -50,18 +52,24 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       updateChat(name, message, time);
     });
 
-    socketConnect.on("send_message", ({ me, you }) => {
-      console.log(me, "  ", you);
-    });
-
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+
   //===========================
   // Submit and text change functions
   //===========================
+
+  const submitDataFromEmit = () => {
+    socketRef?.on("send_message", ({ sender, reciever }) => {
+      console.log("render");
+      // setReciever(you);
+      // setMessages(state.message);
+      // console.log("hello", reciever);
+    });
+  };
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -70,6 +78,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message, time } = state;
+    submitDataFromEmit();
     socketRef?.emit("message", { name, message, time, id });
     setState({ name, message: "", time: "" });
   };
