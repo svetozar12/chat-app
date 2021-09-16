@@ -4,7 +4,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
-const index: NextPage<{ cookie: string }> = (props) => {
+const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const router = useRouter();
 
   const cookie = useCookie(props.cookie);
@@ -51,10 +51,6 @@ const index: NextPage<{ cookie: string }> = (props) => {
 
   React.useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    // socketConnect.on("user_connected", (username) => {
-    //   setReciever(username);
-    // });
-    console.log(reciever);
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
@@ -74,7 +70,6 @@ const index: NextPage<{ cookie: string }> = (props) => {
   }, []);
 
   React.useEffect(() => {
-    console.log("render");
     emitUsers();
   }, [reciever]);
 
@@ -96,22 +91,17 @@ const index: NextPage<{ cookie: string }> = (props) => {
           return (
             <a
               onClick={() => setReciever(username)}
-              href={`http://localhost:3000/messages/${cookieName}/chatRoom`}
+              href={`http://localhost:3000/messages/${cookieName}/${reciever}`}
+              key={index}
             >
-              <p
-                key={index}
-                style={{
-                  color: "var(--main-white)",
-                  textDecoration: "none",
-                }}
-              >
+              <div key={index}>
                 {username !== cookieName && (
                   <div className="contacts">
                     <h1>{username}</h1>
                     <p>Messages</p>
                   </div>
                 )}
-              </p>
+              </div>
             </a>
           );
         })}
@@ -150,7 +140,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { cookie: context.req.headers.cookie || "" },
+    props: {
+      cookie: context.req.headers.cookie || "",
+    },
   };
 };
 

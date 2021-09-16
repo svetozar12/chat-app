@@ -42,8 +42,30 @@ var createError = require("http-errors");
 var User = require("../models/User.model");
 var Message = require("../models/messages.model");
 module.exports = route;
-route.post("/:sender/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.get("/hi/:sender/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var message, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Message.find({
+                        sender: req.params.sender,
+                        reciever: req.params.reciever,
+                    }).exec()];
+            case 1:
+                message = _a.sent();
+                res.json({ message: message });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.json({ error: error_1 });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+route.post("/:sender/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var message, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -56,38 +78,13 @@ route.post("/:sender/:reciever", function (req, res) { return __awaiter(void 0, 
                 return [4 /*yield*/, message.save()];
             case 1:
                 _a.sent();
-                res.json({ message: "complete" });
+                res.json({ message: message });
                 return [3 /*break*/, 3];
             case 2:
-                error_1 = _a.sent();
+                error_2 = _a.sent();
                 res.json({ error: "error" });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
-        }
-    });
-}); });
-route.get("/:sender/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var messages, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, Message.find({
-                        sender: req.params.sender,
-                        reciever: req.params.reciever,
-                    }).exec()];
-            case 1:
-                messages = _a.sent();
-                return [4 /*yield*/, messages.save()];
-            case 2:
-                _a.sent();
-                res.json({ message: "complete" });
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _a.sent();
-                res.json({ error: "error" });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
         }
     });
 }); });

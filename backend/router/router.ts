@@ -9,6 +9,18 @@ const Message = require("../models/messages.model");
 
 module.exports = route;
 
+route.get("/hi/:sender/:reciever", async (req: Request, res: Response) => {
+  try {
+    const message = await Message.find({
+      sender: req.params.sender,
+      reciever: req.params.reciever,
+    }).exec();
+    res.json({ message: message });
+  } catch (error) {
+    res.json({ error: error });
+  }
+});
+
 route.post("/:sender/:reciever", async (req: Request, res: Response) => {
   try {
     const message = new Message({
@@ -17,20 +29,7 @@ route.post("/:sender/:reciever", async (req: Request, res: Response) => {
       messages: req.body.message,
     });
     await message.save();
-    res.json({ message: "complete" });
-  } catch (error) {
-    res.json({ error: "error" });
-  }
-});
-
-route.get("/:sender/:reciever", async (req: Request, res: Response) => {
-  try {
-    const messages = await Message.find({
-      sender: req.params.sender,
-      reciever: req.params.reciever,
-    }).exec();
-    await messages.save();
-    res.json({ message: "complete" });
+    res.json({ message: message });
   } catch (error) {
     res.json({ error: "error" });
   }

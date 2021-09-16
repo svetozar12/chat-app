@@ -17,12 +17,13 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const cookieName = cookie.get("name");
   const [reciever, setReciever] = useState<string | null>("");
   const [messages, setMessages] = useState<string | null>("");
-  const [id, setId] = useState<string | number>("");
+  // const [id, setId] = useState<string | number>("");
   const [state, setState] = useState<IProps>({
     name: cookie.get("name"),
     message: "",
     time: "",
   });
+  const [savedChat, setSavedChat] = useState<string[]>([]);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
 
@@ -30,29 +31,19 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
-      setId(res.data.message._id);
-
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const updateChat = (name: string, message: string, time: number | string) => {
     setChat((prev: any) => [...prev, { name, message, time }]);
   };
 
   useEffect(() => {
-    fetchData();
+    console.log("effect");
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message, time }: any) => {
       updateChat(name, message, time);
     });
     socketConnect?.on("send_message", ({ me, you }) => {
       setReciever(you);
+      return reciever;
     });
 
     setSocketRef(socketConnect);
@@ -89,9 +80,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     e.preventDefault();
     const { name, message, time } = state;
     submitPrivateConvo();
-    socketRef?.emit("message", { name, message, time, id });
-    console.log(reciever);
-
+    socketRef?.emit("message", { name, message, time });
     setState({ name, message: "", time: "" });
   };
 
@@ -119,13 +108,33 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       </div>
     ));
   };
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
+      );
+      // setSavedChat(res.data.message);
+      // console.log(savedChat);
+      console.log(res);
+
+      return true;
+    } catch (error) {
+      console.log("error");
+
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div
       style={{ justifyContent: "center", height: "100vh" }}
       className="container chat_home"
     >
-      <h1>your Id</h1>
-      <h2>{id}</h2>
       <Link href={`http://localhost:3000/messages/${cookieName}`}>
         <a>Back to profile page</a>
       </Link>

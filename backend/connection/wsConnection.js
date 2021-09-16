@@ -19,9 +19,8 @@ io.on("connection", function (socket) {
     socket.emit("send_message", { me: me, you: you });
     // emiting and getting messages
     socket.on("message", function (_a) {
-        var name = _a.name, message = _a.message, id = _a.id;
+        var name = _a.name, message = _a.message;
         io.emit("message", {
-            id: id,
             name: name,
             message: message,
             time: new Date().getHours() + ":" + new Date().getMinutes(),

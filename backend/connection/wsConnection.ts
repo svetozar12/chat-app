@@ -24,13 +24,10 @@ io.on("connection", (socket: Socket): void => {
     me = sender;
     you = reciever;
   });
-
   socket.emit("send_message", { me, you });
-
   // emiting and getting messages
-  socket.on("message", ({ name, message, id }: IProps) => {
+  socket.on("message", ({ name, message }: IProps) => {
     io.emit("message", {
-      id,
       name,
       message,
       time: new Date().getHours() + ":" + new Date().getMinutes(),
