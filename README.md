@@ -6,7 +6,6 @@ This is an chat app which is using websocket for transfering the messages betwee
 
 - [NextJs](https://nextjs.org/)
 - [Express](https://expressjs.com/)
-- [MongoDb](https://www.mongodb.com/)
 
 ## Getting Started
 

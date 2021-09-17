@@ -17,9 +17,9 @@ function register(props: AppProps) {
     goodAlert: "",
   });
 
-  const quickLogin = () => {
-    cookie.set("name", name, { maxAge: 3600 });
-    router.push(`/messages/${cookie.get("name")}`);
+  const quickLogin = async () => {
+    router.push(`/${name}`);
+    cookie.set("name", name, { maxAge: 360 });
   };
 
   const registerPost = async () => {
@@ -68,12 +68,10 @@ function register(props: AppProps) {
           register
         </button>
         {loginPrompt && (
-          <div
-            onClick={quickLogin}
-            style={{ cursor: "pointer" }}
-            className="container"
-          >
-            <h1>Click me to Quick login</h1>
+          <div className="container">
+            <h1 onClick={quickLogin} style={{ cursor: "pointer" }}>
+              Click me to Quick login
+            </h1>
           </div>
         )}
       </form>
@@ -83,16 +81,11 @@ function register(props: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.has("name");
-  console.log("here");
-
-  if (cookieName) {
-    console.log("yes");
-
+  if (cookie.get("name")) {
     return {
       redirect: {
         permanent: false,
-        destination: `/messages/${cookieName}`,
+        destination: `/${cookie.get("name")}`,
       },
     };
   }

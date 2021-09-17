@@ -39,13 +39,6 @@ body {
   box-sizing: border-box;
 }
 
-a {
-  text-decoration: none;
-}
-
-/* =================
-3.Layout styling
-================= */
 .BIG {
   background: radial-gradient(
     circle,
@@ -57,6 +50,10 @@ a {
   width: 110vw;
   height: 130vh;
 }
+
+/* =================
+3.Layout styling
+================= */
 
 .container {
   flex-direction: column;
@@ -72,9 +69,7 @@ a {
 form,
 .me,
 .you,
-.icon,
-.dash_board,
-.active_chats {
+.icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,28 +92,6 @@ form,
 
 form {
   flex-direction: column;
-}
-
-.invite_list {
-  list-style: none;
-  color: var(--main-white);
-  padding: 2rem;
-  background: var(--off-blue);
-}
-
-.active_chats {
-  background: var(--main-blue);
-  color: var(--main-white);
-  height: 100vh;
-  padding: 1rem;
-  height: 100vh;
-  overflow: auto;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.main_section {
-  margin: 1rem;
 }
 
 /* =================
@@ -173,17 +146,11 @@ form > button:hover {
   align-items: center;
 }
 
-.contacts {
-  background: var(--main-blue);
-  width: 30vw;
-  padding: 1rem;
-  margin: 1rem;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.invite_list > main {
-  margin: 2rem 0 2rem 0;
+.icon {
+  padding: 2rem;
+  border-radius: 50%;
+  font-size: 10px;
+  border: 2.5px solid black;
 }
 
 /* =================
@@ -238,34 +205,4 @@ p {
 
 .link:hover {
   border-bottom: 1px solid;
-}
-
-.contacts h1,
-p {
-  color: var(--main-white);
-  text-align: left;
-}
-
-.menu > svg {
-  font-size: 3.8rem;
-  color: var(--main-white);
-  margin: 2rem;
-  padding: 1rem;
-  background: var(--main-black);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.menu_active > svg {
-  font-size: 3.8rem;
-  color: var(--main-black);
-  margin: 2rem;
-  padding: 1rem;
-  background: var(--main-white);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.active_chats > main > a {
-  color: var(--main-white);
 }

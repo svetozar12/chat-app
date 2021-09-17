@@ -30,8 +30,10 @@ function login(props: AppProps) {
       if (result) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
+          sameSite: "none",
+          secure: true,
         }); //1hour
-        router.push(`/messages/${cookie.get("name")}`);
+        router.push(`/${name}`);
       }
       setTimeout(() => {
         setAlert("");
@@ -84,12 +86,12 @@ function login(props: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-  if (cookieName) {
+
+  if (cookie.get("name")) {
     return {
       redirect: {
         permanent: false,
-        destination: `/messages/${cookieName}`,
+        destination: `/${cookie.get("name")}`,
       },
     };
   }

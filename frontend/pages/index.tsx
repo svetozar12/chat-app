@@ -2,11 +2,16 @@ import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
-const index: NextPage<{ cookie: string }> = (props) => {
+function index(props: AppProps) {
   const cookie = useCookie(props.cookie);
+  // React.useEffect(() => {
+  //   if (cookie.get("name")) {
+  //     useRouter().push("/chatRoom");
+  //   }
+  // }, []);
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
@@ -21,16 +26,15 @@ const index: NextPage<{ cookie: string }> = (props) => {
       </Link>
     </div>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-  if (cookieName) {
+  if (cookie.get("name")) {
     return {
       redirect: {
         permanent: false,
-        destination: `/messages/${cookieName}`,
+        destination: `/${cookie.get("name")}`,
       },
     };
   }
