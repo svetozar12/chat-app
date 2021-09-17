@@ -2,6 +2,10 @@ import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
+// components
+import Invites from "../../components/Invites";
+import ActiveChats from "../../components/ActiveChats";
+
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
 const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
@@ -74,38 +78,53 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   }, [reciever]);
 
   return (
-    <div
-      style={{ height: "100vh", justifyContent: "flex-start" }}
-      className="container"
-    >
-      <h1>You're logged in as {cookieName}</h1>
-      <h2 className="log-out" onClick={deleteCookies}>
-        Log out
-      </h2>
-      <h2 className="log-out" onClick={deleteUser}>
-        Delete account
-      </h2>
-      <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
-        {contacts.map((item, index) => {
-          const { username } = item;
-          return (
-            <a
-              onClick={() => setReciever(username)}
-              href={`http://localhost:3000/messages/${cookieName}/${reciever}`}
-              key={index}
-            >
-              <div key={index}>
-                {username !== cookieName && (
-                  <div className="contacts">
-                    <h1>{username}</h1>
-                    <p>Messages</p>
-                  </div>
-                )}
-              </div>
-            </a>
-          );
-        })}
-      </ul>
+    <div style={{ display: "flex" }}>
+      <section>
+        <ActiveChats />
+      </section>
+      <section className="main_section">
+        {" "}
+        <div
+          style={{
+            height: "100vh",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+          className="container"
+        >
+          <h1>You're logged in as {cookieName}</h1>
+          <h2 className="log-out" onClick={deleteCookies}>
+            Log out
+          </h2>
+          <h2 className="log-out" onClick={deleteUser}>
+            Delete account
+          </h2>
+          <div className="dash_board">
+            <Invites />
+            <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
+              {contacts.map((item, index) => {
+                const { username } = item;
+                return (
+                  <a
+                    onClick={() => setReciever(username)}
+                    href={`http://localhost:3000/messages/${cookieName}/${reciever}`}
+                    key={index}
+                  >
+                    <div key={index}>
+                      {username !== cookieName && (
+                        <div className="contacts">
+                          <h1>{username}</h1>
+                          <p>Messages</p>
+                        </div>
+                      )}
+                    </div>
+                  </a>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
@@ -118,8 +137,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
     } catch (error) {
-      console.log("error");
-
       cookie.remove("name");
       return {
         redirect: {

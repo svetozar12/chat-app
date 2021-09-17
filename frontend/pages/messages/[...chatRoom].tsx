@@ -5,6 +5,7 @@ import Link from "next/dist/client/link";
 // external npms
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
+
 interface IProps {
   name: string;
   message: string;
@@ -16,8 +17,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [reciever, setReciever] = useState<string | null>("");
-  const [messages, setMessages] = useState<string | null>("");
-  // const [id, setId] = useState<string | number>("");
   const [state, setState] = useState<IProps>({
     name: cookie.get("name"),
     message: "",
@@ -31,15 +30,15 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const updateChat = (name: string, message: string, time: number | string) => {
-    setChat((prev: any) => [...prev, { name, message, time }]);
+  const updateChat = (name: string, message: string) => {
+    setChat((prev: any) => [...prev, { name, message }]);
   };
 
   useEffect(() => {
     console.log("effect");
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ name, message, time }: any) => {
-      updateChat(name, message, time);
+    socketConnect.on("message", ({ name, message }: any) => {
+      updateChat(name, message);
     });
     socketConnect?.on("send_message", ({ me, you }) => {
       setReciever(you);

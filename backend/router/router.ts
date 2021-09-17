@@ -98,7 +98,7 @@ route.post("/register", async (req: Request, res: Response) => {
 
 route.delete("/:username", async (req: Request, res: Response) => {
   try {
-    await User.deleteOne({ username: req.params.username }).exec();
+    const data = await User.deleteOne({ username: req.params.username }).exec();
     res
       .json({
         message: `deleted user: ${req.params.username}`,
