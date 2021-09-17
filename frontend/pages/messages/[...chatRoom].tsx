@@ -59,26 +59,26 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const submitPrivateConvo = async () => {
-    try {
-      const res = await axios.post(
-        `http://localhost:4001/${cookieName}/${reciever}`,
-        {
-          sender: cookieName,
-          reciever,
-          message: state.message,
-        },
-      );
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const submitPrivateConvo = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       `http://localhost:4001/${cookieName}/${reciever}`,
+  //       {
+  //         sender: cookieName,
+  //         reciever,
+  //         message: state.message,
+  //       },
+  //     );
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message, time } = state;
-    submitPrivateConvo();
+    // submitPrivateConvo();
     socketRef?.emit("message", { name, message, time });
     setState({ name, message: "", time: "" });
   };
@@ -128,21 +128,21 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     ));
   };
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
-      );
-      setSavedChat(res.data.message);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
+  //     );
+  //     setSavedChat(res.data.message);
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   return (
     <div

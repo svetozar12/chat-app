@@ -1,9 +1,4 @@
-POST http://localhost:4001/igor/ivan
-content-type: application/json
-
-{
-    "message":"hello"
-}
-
-### 
-GET http://localhost:4001/hi/Grigor/Ivan
+POST http://localhost:4001/invites/igor/ivan
+###
+ 
+GET http://localhost:4001/invites

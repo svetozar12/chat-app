@@ -4,6 +4,7 @@ function ActiveChats() {
   return (
     <main className="active_chats">
       <h1>Your chats</h1>
+      <input type="text" placeholder="Search user" />
       <a href="http://localhost:3000/messages/invites/dar">
         <div>
           <div

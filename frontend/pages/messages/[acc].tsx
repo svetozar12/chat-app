@@ -107,7 +107,7 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
                 return (
                   <a
                     onClick={() => setReciever(username)}
-                    href={`http://localhost:3000/messages/${cookieName}/${reciever}`}
+                    // href={`http://localhost:3000/messages/${cookieName}/${reciever}`}
                     key={index}
                   >
                     <div key={index}>
