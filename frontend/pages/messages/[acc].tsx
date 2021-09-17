@@ -18,8 +18,10 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:4001/users");
-      setContacts(response.data.users);
+      const res = await axios.get("http://localhost:4001/recieved");
+      setContacts(res.data.invites);
+
+      return true;
     } catch (error) {
       return false;
     }
@@ -72,8 +74,22 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     fetchUsers();
   }, []);
 
+  const updateInviteStatus = async () => {
+    try {
+      console.log(reciever);
+
+      const res = await axios.put(
+        `http://localhost:4001/${reciever}/${cookie.get("name")}`,
+        {
+          status: "accepted",
+        },
+      );
+    } catch (error) {}
+  };
+
   React.useEffect(() => {
     emitUsers();
+    updateInviteStatus();
   }, [reciever]);
 
   return (
@@ -99,24 +115,20 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
             Delete account
           </h2>
           <div className="dash_board">
-            <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
+            <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                const { username } = item;
+                const { inviter, reciever, status } = item;
                 return (
-                  <a
-                    onClick={() => setReciever(username)}
-                    // href={`http://localhost:3000/messages/${cookieName}/${reciever}`}
-                    key={index}
-                  >
-                    <div key={index}>
-                      {username !== cookieName && (
+                  <div key={index} onClick={() => setReciever(inviter)}>
+                    {inviter !== cookie.get("name") &&
+                      reciever === cookie.get("name") &&
+                      status === "recieved" && (
                         <div className="contacts">
-                          <h1>{username}</h1>
+                          <h1>{inviter}</h1>
                           <p>Messages</p>
                         </div>
                       )}
-                    </div>
-                  </a>
+                  </div>
                 );
               })}
             </ul>

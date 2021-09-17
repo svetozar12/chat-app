@@ -22,9 +22,8 @@ const ActiveChats = (cookie: string) => {
 
   const getChats = async () => {
     try {
-      const res = await axios.get("http://localhost:4001/recieved ");
+      const res = await axios.get("http://localhost:4001/accepted ");
       setActiveChats(res.data.invites);
-      console.log(activeChats);
 
       return true;
     } catch (error) {
@@ -53,17 +52,19 @@ const ActiveChats = (cookie: string) => {
         Search
       </button>
       {activeChats.map((item, index) => {
+        const { inviter, reciever, status } = item;
+
         return (
-          <>
-            {item.inviter !== cokie.get("name") &&
-              item.reciever === cokie.get("name") && (
+          <div key={index}>
+            {inviter !== cokie.get("name") &&
+              reciever === cokie.get("name") &&
+              status === "accepted" && (
                 <a
                   style={{
                     margin: "1rem",
                     width: "100%",
                     textAlign: "center",
                   }}
-                  key={index}
                   href="http://localhost:3000/messages/invites/dar"
                 >
                   <div>
@@ -75,12 +76,12 @@ const ActiveChats = (cookie: string) => {
                         color: "var(--main-white)",
                       }}
                     >
-                      <h1>{item.inviter}</h1>
+                      <h1>{inviter}</h1>
                     </div>
                   </div>
                 </a>
               )}
-          </>
+          </div>
         );
       })}
     </main>
