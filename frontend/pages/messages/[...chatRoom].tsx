@@ -5,6 +5,7 @@ import Link from "next/dist/client/link";
 // external npms
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
+
 interface IProps {
   name: string;
   message: string;
@@ -16,8 +17,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [reciever, setReciever] = useState<string | null>("");
-  const [messages, setMessages] = useState<string | null>("");
-  // const [id, setId] = useState<string | number>("");
   const [state, setState] = useState<IProps>({
     name: cookie.get("name"),
     message: "",
@@ -31,15 +30,15 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const updateChat = (name: string, message: string, time: number | string) => {
-    setChat((prev: any) => [...prev, { name, message, time }]);
+  const updateChat = (name: string, message: string) => {
+    setChat((prev: any) => [...prev, { name, message }]);
   };
 
   useEffect(() => {
     console.log("effect");
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ name, message, time }: any) => {
-      updateChat(name, message, time);
+    socketConnect.on("message", ({ name, message }: any) => {
+      updateChat(name, message);
     });
     socketConnect?.on("send_message", ({ me, you }) => {
       setReciever(you);
@@ -60,26 +59,26 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const submitPrivateConvo = async () => {
-    try {
-      const res = await axios.post(
-        `http://localhost:4001/${cookieName}/${reciever}`,
-        {
-          sender: cookieName,
-          reciever,
-          message: state.message,
-        },
-      );
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const submitPrivateConvo = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       `http://localhost:4001/${cookieName}/${reciever}`,
+  //       {
+  //         sender: cookieName,
+  //         reciever,
+  //         message: state.message,
+  //       },
+  //     );
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message, time } = state;
-    submitPrivateConvo();
+    // submitPrivateConvo();
     socketRef?.emit("message", { name, message, time });
     setState({ name, message: "", time: "" });
   };
@@ -129,21 +128,21 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     ));
   };
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
-      );
-      setSavedChat(res.data.message);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
+  //     );
+  //     setSavedChat(res.data.message);
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   return (
     <div
