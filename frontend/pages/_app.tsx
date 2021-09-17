@@ -1,16 +1,18 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import { FC } from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = ({ Component, pageProps }: AppProps, props: string) => {
+  const cookie = useCookie(props.cookie);
   return (
     <>
       <div className="BIG"></div>
-      <Component {...pageProps} />
+      <Component {...pageProps} Cookie={cookie} />
     </>
   );
-}
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);

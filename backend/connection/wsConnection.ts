@@ -6,15 +6,27 @@ const io = require("socket.io")(4000, {
   },
 });
 
+let me: string = "";
+let you: string = "";
+let messages: string[] = [];
+
+if (messages.length >= 11) messages.shift();
+
 interface IProps {
+  id: number | string;
   name: string;
   message: string;
   timeStamp: string | number;
 }
 
 io.on("connection", (socket: Socket): void => {
+  socket.on("sender_reciever", ({ sender, reciever }) => {
+    me = sender;
+    you = reciever;
+  });
+  socket.emit("send_message", { me, you });
+  // emiting and getting messages
   socket.on("message", ({ name, message }: IProps) => {
-    console.log(message);
     io.emit("message", {
       name,
       message,

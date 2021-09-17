@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently --kill-others \"nodemon server.js\" \"tsc --watch\""
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

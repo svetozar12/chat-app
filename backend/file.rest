@@ -1,0 +1,26 @@
+###=============================
+### Users collection endpoints
+###=============================
+GET http://localhost:4001/users
+###
+GET http://localhost:4001/users/user1
+###
+POST http://localhost:4001/register
+Content-Type: application/json
+
+{
+    "username":"user1"
+}
+###
+DELETE http://localhost:4001/user1
+###=============================
+### Invites collection endpoints
+###=============================
+PUT http://localhost:4001/ivan/Ivan
+###
+GET http://localhost:4001/invites 
+###
+POST http://localhost:4001/invites/ivan/Ivan 
+###=============================
+### Messages collection endpoints
+###=============================
