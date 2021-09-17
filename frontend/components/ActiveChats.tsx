@@ -8,10 +8,10 @@ const ActiveChats = (cookie: string) => {
   const sender = cokie.get("name");
 
   const [reciever, setReciever] = React.useState("");
+  const [activeChats, setActiveChats] = React.useState([]);
   const sendInvite = async () => {
     try {
-      console.log(reciever);
-      const rep = axios.post(
+      const res = axios.post(
         `http://localhost:4001/invites/${sender}/${reciever}`,
       );
       return true;
@@ -19,6 +19,21 @@ const ActiveChats = (cookie: string) => {
       return false;
     }
   };
+
+  const getChats = async () => {
+    try {
+      const res = await axios.get("http://localhost:4001/accepted ");
+      setActiveChats(res.data.invites);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  React.useEffect(() => {
+    getChats();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,21 +51,39 @@ const ActiveChats = (cookie: string) => {
       <button type="submit" onClick={handleSubmit}>
         Search
       </button>
-      <a href="http://localhost:3000/messages/invites/dar">
-        <div>
-          <div
-            style={{
-              padding: "2rem",
-              margin: "2rem",
-              background: "var(--off-blue)",
-              color: "var(--main-white)",
-            }}
-          >
-            <h1>username</h1>
-            <p>Messages</p>
+      {activeChats.map((item, index) => {
+        const { inviter, reciever, status } = item;
+
+        return (
+          <div key={index}>
+            {inviter !== cokie.get("name") &&
+              reciever === cokie.get("name") &&
+              status === "accepted" && (
+                <a
+                  style={{
+                    margin: "1rem",
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                  href="http://localhost:3000/messages/invites/dar"
+                >
+                  <div>
+                    <div
+                      style={{
+                        padding: "2rem",
+                        margin: "2rem",
+                        background: "var(--off-blue)",
+                        color: "var(--main-white)",
+                      }}
+                    >
+                      <h1>{inviter}</h1>
+                    </div>
+                  </div>
+                </a>
+              )}
           </div>
-        </div>
-      </a>
+        );
+      })}
     </main>
   );
 };

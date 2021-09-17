@@ -9,18 +9,20 @@ POST http://localhost:4001/register
 Content-Type: application/json
 
 {
-    "username":"user1"
+    "username":"user4"
 }
 ###
 DELETE http://localhost:4001/user1
 ###=============================
 ### Invites collection endpoints
 ###=============================
-PUT http://localhost:4001/ivan/Ivan
+PUT http://localhost:4001/greg2/greg5
+### recieved
+GET http://localhost:4001/recieved 
+### accepted
+GET http://localhost:4001/accepted
 ###
-GET http://localhost:4001/invites 
-###
-POST http://localhost:4001/invites/ivan/Ivan 
+POST http://localhost:4001/invites/greg7/greg5
 ###=============================
 ### Messages collection endpoints
 ###=============================
