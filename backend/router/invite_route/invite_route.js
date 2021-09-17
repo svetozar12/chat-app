@@ -47,28 +47,32 @@ route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Invites.find({}).exec()];
+                return [4 /*yield*/, Invites.find({ status: "recieved" }).exec()];
             case 1:
                 invites = _a.sent();
                 if (!invites || undefined || invites === {}) {
-                    throw createError(400, "Invalid input", "Users doesnt exist");
+                    res.status(404).json({ error: "Not found" });
+                    throw Error;
                 }
                 res.json({ message: invites }).status(201);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                res.json({ error: "error" });
+                res.status(501).json({ error: "error" });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); });
+// accept and ignore put requests
+route.put("");
+// end of accept and ignore put requsts
 route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user1, user2, invites, error_2;
+    var user1, user2, findInvites, invites, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 6, , 7]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.params.inviter,
                     }).exec()];
@@ -79,26 +83,41 @@ route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter
                     }).exec()];
             case 2:
                 user2 = _a.sent();
-                if (!user1 || !user2 || undefined)
+                return [4 /*yield*/, Invites.findOne({
+                        inviter: req.params.inviter,
+                        reciever: req.params.reciever,
+                        status: "recieved",
+                    })];
+            case 3:
+                findInvites = _a.sent();
+                console.log("mario", findInvites);
+                if (findInvites) {
+                    res.status(409).json({ error: "Already sent" });
                     throw Error;
+                }
+                if (!user1 || !user2 || undefined) {
+                    res.status(404).send("404 Not found");
+                    throw Error;
+                }
                 return [4 /*yield*/, new Invites({
                         type: "POST",
                         inviter: req.params.inviter,
                         reciever: req.params.reciever,
+                        status: "recieved",
                     })];
-            case 3:
+            case 4:
                 invites = _a.sent();
                 return [4 /*yield*/, invites.save()];
-            case 4:
+            case 5:
                 _a.sent();
                 res.status(201).json({ message: invites });
                 res.send("hi");
-                return [3 /*break*/, 6];
-            case 5:
+                return [3 /*break*/, 7];
+            case 6:
                 error_2 = _a.sent();
                 res.status(501).send("error");
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); });

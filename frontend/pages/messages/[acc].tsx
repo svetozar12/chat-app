@@ -2,8 +2,7 @@ import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
-// components
-import Invites from "../../components/Invites";
+// componens
 import ActiveChats from "../../components/ActiveChats";
 
 import { io, Socket } from "socket.io-client";
@@ -80,7 +79,7 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section>
-        <ActiveChats />
+        <ActiveChats cookie={cookie} />
       </section>
       <section className="main_section">
         {" "}
@@ -100,7 +99,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
             Delete account
           </h2>
           <div className="dash_board">
-            <Invites />
             <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
                 const { username } = item;
