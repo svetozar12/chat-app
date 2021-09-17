@@ -41,7 +41,7 @@ var route = express.Router();
 var createError = require("http-errors");
 var Invites = require("../../models/Invites.model");
 var Users = require("../../models/User.model");
-route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+route.get("/recieved", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var invites, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -64,9 +64,32 @@ route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); });
+route.get("/accepted", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var invites, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Invites.find({ status: "accepted" }).exec()];
+            case 1:
+                invites = _a.sent();
+                if (!invites || undefined || invites === {}) {
+                    res.status(404).json({ error: "Not found" });
+                    throw Error;
+                }
+                res.json({ invites: invites }).status(201);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                res.status(501).json({ error: "error" });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 // accept and ignore put requests
 route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var inviteInstance, updateStatus, error_2;
+    var inviteInstance, updateStatus, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -78,6 +101,10 @@ route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, 
                     })];
             case 1:
                 inviteInstance = _a.sent();
+                if (!inviteInstance || undefined) {
+                    res.status(404).json({ error: "Not found" });
+                    throw Error;
+                }
                 return [4 /*yield*/, Invites.findByIdAndUpdate(inviteInstance._id, {
                         status: "accepted",
                     }, { new: true })];
@@ -86,7 +113,7 @@ route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, 
                 res.json({ message: updateStatus });
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _a.sent();
+                error_3 = _a.sent();
                 res.status(501).json({ error: "error" });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -95,11 +122,11 @@ route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, 
 }); });
 // end of accept and ignore put requsts
 route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user1, user2, findInvites, invites, error_3;
+    var user1, user2, checkInviteInstance, findInvites, invites, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 6, , 7]);
+                _a.trys.push([0, 7, , 8]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.params.inviter,
                     }).exec()];
@@ -113,17 +140,24 @@ route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter
                 return [4 /*yield*/, Invites.findOne({
                         inviter: req.params.inviter,
                         reciever: req.params.reciever,
-                        status: "recieved",
+                        status: "accepted",
                     })];
             case 3:
+                checkInviteInstance = _a.sent();
+                return [4 /*yield*/, Invites.findOne({
+                        inviter: req.params.inviter,
+                        reciever: req.params.reciever,
+                        status: "recieved",
+                    })];
+            case 4:
                 findInvites = _a.sent();
                 console.log("mario", findInvites);
-                if (findInvites) {
+                if (findInvites || checkInviteInstance) {
                     res.status(409).json({ error: "Already sent" });
                     throw Error;
                 }
                 if (!user1 || !user2 || undefined) {
-                    res.status(404).send("404 Not found");
+                    res.status(404).json({ message: "User Not found" });
                     throw Error;
                 }
                 return [4 /*yield*/, new Invites({
@@ -132,19 +166,19 @@ route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter
                         reciever: req.params.reciever,
                         status: "recieved",
                     })];
-            case 4:
+            case 5:
                 invites = _a.sent();
                 return [4 /*yield*/, invites.save()];
-            case 5:
+            case 6:
                 _a.sent();
                 res.status(201).json({ message: invites });
                 res.send("hi");
-                return [3 /*break*/, 7];
-            case 6:
-                error_3 = _a.sent();
+                return [3 /*break*/, 8];
+            case 7:
+                error_4 = _a.sent();
                 res.status(501).send("error");
-                return [3 /*break*/, 7];
-            case 7: return [2 /*return*/];
+                return [3 /*break*/, 8];
+            case 8: return [2 /*return*/];
         }
     });
 }); });
