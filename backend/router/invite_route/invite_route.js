@@ -54,7 +54,7 @@ route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
                     res.status(404).json({ error: "Not found" });
                     throw Error;
                 }
-                res.json({ message: invites }).status(201);
+                res.json({ invites: invites }).status(201);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
@@ -66,7 +66,7 @@ route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
 }); });
 // accept and ignore put requests
 route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var inviteInstance, test, error_2;
+    var inviteInstance, updateStatus, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -78,15 +78,12 @@ route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, 
                     })];
             case 1:
                 inviteInstance = _a.sent();
-                return [4 /*yield*/, Invites.findOne(inviteInstance._id)];
+                return [4 /*yield*/, Invites.findByIdAndUpdate(inviteInstance._id, {
+                        status: "accepted",
+                    }, { new: true })];
             case 2:
-                test = _a.sent();
-                console.log(test);
-                // const updateStatus = await Invites.replaceOne(inviteInstance._id, {
-                //   status: "accepted",
-                // });
-                // await updateStatus.save();
-                res.json({ test: test });
+                updateStatus = _a.sent();
+                res.json({ message: updateStatus });
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _a.sent();

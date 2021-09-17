@@ -14,7 +14,7 @@ route.get("/invites", async (req: Request, res: Response) => {
       res.status(404).json({ error: "Not found" });
       throw Error;
     }
-    res.json({ message: invites }).status(201);
+    res.json({ invites }).status(201);
   } catch (error) {
     res.status(501).json({ error: "error" });
   }
@@ -29,14 +29,14 @@ route.put("/:inviter/:reciever", async (req: Request, res: Response) => {
       status: "recieved",
     });
 
-    const test = await Invites.findOne(inviteInstance._id);
-    console.log(test);
-
-    // const updateStatus = await Invites.replaceOne(inviteInstance._id, {
-    //   status: "accepted",
-    // });
-    // await updateStatus.save();
-    res.json({ test });
+    const updateStatus = await Invites.findByIdAndUpdate(
+      inviteInstance._id,
+      {
+        status: "accepted",
+      },
+      { new: true },
+    );
+    res.json({ message: updateStatus });
   } catch (error) {
     res.status(501).json({ error: "error" });
   }
