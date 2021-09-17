@@ -5,6 +5,7 @@ const createError = require("http-errors");
 import { Request, Response } from "express";
 
 const Invites = require("../../models/Invites.model");
+const Users = require("../../models/User.model");
 
 route.get("/invites", async (req: Request, res: Response) => {
   try {
@@ -22,24 +23,24 @@ route.post(
   "/invites/:inviter/:reciever",
   async (req: Request, res: Response) => {
     try {
+      const user1 = await Users.findOne({
+        username: req.params.inviter,
+      }).exec();
+      const user2 = await Users.findOne({
+        username: req.params.reciever,
+      }).exec();
+
+      if (!user1 || !user2 || undefined) throw Error;
       const invites = await new Invites({
         type: "POST",
         inviter: req.params.inviter,
         reciever: req.params.reciever,
       });
-
       await invites.save();
-
-      // if (!invites) {
-      //   throw createError(
-      //     404,
-      //     "Invalid input",
-      //     `User ${req.params.reciever} doesnt exist`,
-      //   );
-      // }
-      res.json({ message: invites }).status(204);
+      res.status(201).json({ message: invites });
+      res.send("hi");
     } catch (error) {
-      res.send("error");
+      res.status(501).send("error");
     }
   },
 );

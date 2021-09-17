@@ -40,6 +40,7 @@ var express = require("express");
 var route = express.Router();
 var createError = require("http-errors");
 var Invites = require("../../models/Invites.model");
+var Users = require("../../models/User.model");
 route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var invites, error_1;
     return __generator(this, function (_a) {
@@ -63,35 +64,41 @@ route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
     });
 }); });
 route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var invites, error_2;
+    var user1, user2, invites, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 5, , 6]);
+                return [4 /*yield*/, Users.findOne({
+                        username: req.params.inviter,
+                    }).exec()];
+            case 1:
+                user1 = _a.sent();
+                return [4 /*yield*/, Users.findOne({
+                        username: req.params.reciever,
+                    }).exec()];
+            case 2:
+                user2 = _a.sent();
+                if (!user1 || !user2 || undefined)
+                    throw Error;
                 return [4 /*yield*/, new Invites({
                         type: "POST",
                         inviter: req.params.inviter,
                         reciever: req.params.reciever,
                     })];
-            case 1:
+            case 3:
                 invites = _a.sent();
                 return [4 /*yield*/, invites.save()];
-            case 2:
+            case 4:
                 _a.sent();
-                // if (!invites) {
-                //   throw createError(
-                //     404,
-                //     "Invalid input",
-                //     `User ${req.params.reciever} doesnt exist`,
-                //   );
-                // }
-                res.json({ message: invites }).status(204);
-                return [3 /*break*/, 4];
-            case 3:
+                res.status(201).json({ message: invites });
+                res.send("hi");
+                return [3 /*break*/, 6];
+            case 5:
                 error_2 = _a.sent();
-                res.send("error");
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                res.status(501).send("error");
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); });

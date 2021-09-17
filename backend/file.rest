@@ -1,4 +1,4 @@
-POST http://localhost:4001/invites/igor/ivan
+POST http://localhost:4001/invites/Igor/ivan
 ###
  
 GET http://localhost:4001/invites
