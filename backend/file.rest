@@ -16,6 +16,7 @@ DELETE http://localhost:4001/user1
 ###=============================
 ### Invites collection endpoints
 ###=============================
+PUT http://localhost:4001/ivan/Ivan
 ###
 GET http://localhost:4001/invites 
 ###

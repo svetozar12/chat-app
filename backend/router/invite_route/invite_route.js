@@ -65,10 +65,40 @@ route.get("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
     });
 }); });
 // accept and ignore put requests
-route.put("");
+route.put("/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var inviteInstance, test, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, Invites.findOne({
+                        inviter: req.params.inviter,
+                        reciever: req.params.reciever,
+                        status: "recieved",
+                    })];
+            case 1:
+                inviteInstance = _a.sent();
+                return [4 /*yield*/, Invites.findOne(inviteInstance._id)];
+            case 2:
+                test = _a.sent();
+                console.log(test);
+                // const updateStatus = await Invites.replaceOne(inviteInstance._id, {
+                //   status: "accepted",
+                // });
+                // await updateStatus.save();
+                res.json({ test: test });
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                res.status(501).json({ error: "error" });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 // end of accept and ignore put requsts
 route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user1, user2, findInvites, invites, error_2;
+    var user1, user2, findInvites, invites, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -114,7 +144,7 @@ route.post("/invites/:inviter/:reciever", function (req, res) { return __awaiter
                 res.send("hi");
                 return [3 /*break*/, 7];
             case 6:
-                error_2 = _a.sent();
+                error_3 = _a.sent();
                 res.status(501).send("error");
                 return [3 /*break*/, 7];
             case 7: return [2 /*return*/];

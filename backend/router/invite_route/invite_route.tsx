@@ -21,7 +21,26 @@ route.get("/invites", async (req: Request, res: Response) => {
 });
 
 // accept and ignore put requests
-route.put("");
+route.put("/:inviter/:reciever", async (req: Request, res: Response) => {
+  try {
+    const inviteInstance = await Invites.findOne({
+      inviter: req.params.inviter,
+      reciever: req.params.reciever,
+      status: "recieved",
+    });
+
+    const test = await Invites.findOne(inviteInstance._id);
+    console.log(test);
+
+    // const updateStatus = await Invites.replaceOne(inviteInstance._id, {
+    //   status: "accepted",
+    // });
+    // await updateStatus.save();
+    res.json({ test });
+  } catch (error) {
+    res.status(501).json({ error: "error" });
+  }
+});
 // end of accept and ignore put requsts
 
 route.post(
