@@ -87,6 +87,26 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   //===========================
   // Component for chat messages (in the future put this in export component)
   //===========================
+  // const renderOldChat = () => { now working on invites
+  //   return savedChat.map(({ _id, sender, reciever }: any) => (
+  //     <div className={sender === cookieName ? "me" : "you"} key={_id}>
+  //       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>{name}</h2>
+  //       <div
+  //         style={{
+  //           background:
+  //             name === chatRoom[0] ? "var(--main-blue)" : "var(--off-black) ",
+  //           borderRadius: "30% 30% 30% 30%",
+  //           width: "15rem",
+  //           overflow: "auto",
+  //           wordWrap: "break-word",
+  //         }}
+  //       >
+  //         <p>{message}</p>
+  //         <p style={{ fontSize: "0.8rem" }}>{time}</p>
+  //       </div>
+  //     </div>
+  //   ));
+  // };
 
   const renderChat = () => {
     return chat.map(({ name, message, time }: any, index) => (
@@ -114,14 +134,9 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       const res = await axios.get(
         `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
       );
-      // setSavedChat(res.data.message);
-      // console.log(savedChat);
-      console.log(res);
-
+      setSavedChat(res.data.message);
       return true;
     } catch (error) {
-      console.log("error");
-
       return false;
     }
   };
