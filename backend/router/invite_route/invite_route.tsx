@@ -9,13 +9,24 @@ const Users = require("../../models/User.model");
 route.get("/invites/:id/", async (req: Request, res: Response) => {
   //Doesnt work without query
   try {
-    const id = req.body.id;
-    const status = req.query.status;
+    const name = req.params.id;
+    let status = req.query.status;
+    console.log(status);
 
-    const invites = await Invites.find({
-      reciever: id,
-      status: status,
-    }).exec();
+    if (status === undefined) {
+      status = "z";
+    }
+
+    const invites =
+      status !== undefined
+        ? await Invites.find({
+            reciever: name,
+            status,
+          })
+        : await Invites.find({
+            reciever: name,
+          }).select("status");
+
     if (!invites || invites === {}) {
       return res.status(404).json({ error: "Not found" });
     }
@@ -28,12 +39,12 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
 route.put("/invites", async (req: Request, res: Response) => {
   try {
     const reciever = req.body.reciever;
-    const inviter = req.body.inviter;
+    const id = req.body.id;
     const status = req.body.status;
 
     const inviteInstance = await Invites.findOne({
       reciever,
-      inviter,
+      id,
     }).exec();
 
     if (!inviteInstance || undefined) {
@@ -50,50 +61,42 @@ route.put("/invites", async (req: Request, res: Response) => {
 
     return res.json({ message: updateStatus });
   } catch (error) {
-    return res.status(501).json({ error: "error" });
+    res.status(501).send({ error: "error" });
   }
 });
 // end of accept and ignore put requsts
 
 route.post("/invites", async (req: Request, res: Response) => {
   try {
-    const user1 = await Users.findOne({
-      username: req.body.inviter,
-    }).exec();
-    const user2 = await Users.findOne({
+    const user = await Users.findOne({
       username: req.body.reciever,
-    }).exec();
+    });
 
     const checkInviteInstance = await Invites.findOne({
-      inviter: req.body.inviter,
-      reciever: req.body.reciever,
-      status: "accepted",
-    }).exec();
-
-    const findInvites = await Invites.findOne({
-      inviter: req.body.inviter,
+      id: user._id,
       reciever: req.body.reciever,
       status: "recieved",
     });
-
+    const findInvites = await Invites.findOne({
+      id: user._id,
+      reciever: req.body.reciever,
+      status: "recieved",
+    });
+    //check if findInvites and checkInviteInstance are equal
     if (findInvites || checkInviteInstance) {
-      return res.status(409).json({ error: "Already sent" });
+      res.status(409).json({ error: "Already sent" });
     }
-
-    if (!user1 || !user2) {
-      return res.status(404).json({ message: "User Not found" });
+    if (!user) {
+      res.status(404).json({ message: "User Not found" });
     }
     const invites = await new Invites({
-      type: "POST",
-      inviter: req.body.inviter,
       reciever: req.body.reciever,
-      status: "recieved",
+      inviter: req.body.inviter,
     });
-
     await invites.save();
     return res.status(201).json({ message: invites });
   } catch (error) {
-    return res.status(501).send("error");
+    res.status(501).send("error");
   }
 });
 

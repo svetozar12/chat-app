@@ -4,11 +4,9 @@ var mongoose = require("mongoose");
 var InviteSchema = new mongoose.Schema({
     inviter: {
         type: String,
-        required: true,
     },
     reciever: {
         type: String,
-        required: true,
     },
     status: {
         type: String,
