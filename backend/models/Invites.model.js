@@ -14,7 +14,6 @@ var InviteSchema = new mongoose.Schema({
         type: String,
         enum: ["recieved", "accepted", "declined"],
         default: "recieved",
-        required: true,
     },
 });
 var Invites = mongoose.model("Invites", InviteSchema);

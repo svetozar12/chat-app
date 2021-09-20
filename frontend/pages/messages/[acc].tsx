@@ -18,7 +18,11 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:4001/recieved");
+      const res = await axios.get(
+        `http://localhost:4001/invites/${cookieName}?status=recieved`,
+      );
+      console.log(res);
+
       setContacts(res.data.invites);
 
       return true;
@@ -75,11 +79,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     });
   };
 
-  // React.useEffect(() => {
-  //   fetchUsers();
-  //   console.log("render");
-  // }, [contacts]);
-
   React.useEffect(() => {
     validateUser();
     fetchUsers();
@@ -89,12 +88,11 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     try {
       console.log(reciever);
 
-      const res = await axios.put(
-        `http://localhost:4001/${reciever}/${cookie.get("name")}`,
-        {
-          status: "accepted",
-        },
-      );
+      const res = await axios.put(`http://localhost:4001/invites`, {
+        reciever: cookieName,
+        inviter: "ihoo",
+        status: "accepted", //will change it with state from buttons
+      });
     } catch (error) {}
   };
 

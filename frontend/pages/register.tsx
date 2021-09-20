@@ -25,7 +25,7 @@ function register(props: AppProps) {
 
   const registerPost = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/register", {
+      const res = await axios.post("http://localhost:4001/users/register", {
         username: name,
       });
 

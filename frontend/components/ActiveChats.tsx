@@ -21,7 +21,11 @@ const ActiveChats = (cookie) => {
 
   const getChats = async () => {
     try {
-      const res = await axios.get("http://localhost:4001/accepted ");
+      const res = await axios.get(
+        `http://localhost:4001/invites/${cookie.get("name")}?status=accepted`,
+      );
+      console.log(res);
+
       setActiveChats(res.data.invites);
 
       return true;
@@ -32,8 +36,7 @@ const ActiveChats = (cookie) => {
 
   React.useEffect(() => {
     getChats();
-    console.log("render");
-  }, [activeChats]);
+  }, []);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

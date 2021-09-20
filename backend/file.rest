@@ -1,28 +1,31 @@
-###=============================
-### Users collection endpoints
-###=============================
-GET http://localhost:4001/users
-###
 GET http://localhost:4001/users/user1
 ###
-POST http://localhost:4001/register
+POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"user1"
+    "username":"user3"
 }
 ###
-DELETE http://localhost:4001/user1
-###=============================
-### Invites collection endpoints
-###=============================
-PUT http://localhost:4001/svetozar/ivan
-### recieved
-GET http://localhost:4001/recieved 
-### accepted
-GET http://localhost:4001/accepted
+DELETE http://localhost:4001/users/ivan
+
 ###
-POST http://localhost:4001/invites/ivan/svetozar
-###=============================
-### Messages collection endpoints
-###=============================
+PUT http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "reciever":"user2",
+    "inviter":"user3",
+    "status":"accepted"
+}
+### recieved
+GET http://localhost:4001/invites/user2?status=accepted
+### accepted
+POST http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "reciever":"user3",
+    "inviter":"user1"
+}
+###

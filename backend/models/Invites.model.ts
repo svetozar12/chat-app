@@ -13,7 +13,6 @@ const InviteSchema = new mongoose.Schema({
     type: String,
     enum: ["recieved", "accepted", "declined"],
     default: "recieved",
-    required: true,
   },
 });
 
