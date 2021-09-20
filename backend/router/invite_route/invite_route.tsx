@@ -33,9 +33,6 @@ route.get("/accepted", async (req: Request, res: Response) => {
 });
 
 // accept and ignore put requests
-// ! ================= !
-// ! PROBLEMATIC ROUTE !
-// ! ================= !
 route.put("/:inviter/:reciever", async (req: Request, res: Response) => {
   try {
     const inviteInstance = await Invites.findOne({
@@ -61,11 +58,34 @@ route.put("/:inviter/:reciever", async (req: Request, res: Response) => {
     return res.status(501).json({ error: "error" });
   }
 });
+
+route.put("/ignore/:inviter/:reciever", async (req: Request, res: Response) => {
+  try {
+    const inviteInstance = await Invites.findOne({
+      inviter: req.params.inviter,
+      reciever: req.params.reciever,
+      status: "recieved",
+    }).exec();
+
+    if (!inviteInstance || undefined) {
+      return res.status(404).json({ error: "Not found" });
+    }
+
+    const updateStatus = await Invites.findByIdAndUpdate(
+      inviteInstance._id,
+      {
+        status: "declined",
+      },
+      { new: true },
+    ).exec();
+
+    return res.json({ message: updateStatus });
+  } catch (error) {
+    return res.status(501).json({ error: "error" });
+  }
+});
 // end of accept and ignore put requsts
 
-// ! ================= !
-// ! PROBLEMATIC ROUTE !
-// ! ================= !
 route.post(
   "/invites/:inviter/:reciever",
   async (req: Request, res: Response) => {

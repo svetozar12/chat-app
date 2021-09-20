@@ -6,6 +6,7 @@ import { GetServerSideProps, NextPage } from "next";
 
 const index: NextPage<{ cookie: string }> = (props) => {
   const cookie = useCookie(props.cookie);
+  const router = useRouter();
   const cookieName = cookie.get("name");
 
   return (
@@ -27,10 +28,10 @@ const index: NextPage<{ cookie: string }> = (props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
+
   if (cookieName) {
     return {
       redirect: {
-        permanent: false,
         destination: `/messages/${cookieName}`,
       },
     };

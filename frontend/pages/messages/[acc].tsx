@@ -47,8 +47,10 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const validateUser = async () => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+      if (!cookieName) throw Error;
       return true;
     } catch (error) {
+      router.push("/");
       deleteCookies();
       return false;
     }
@@ -62,6 +64,10 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const emitUsers = () => {
     socketRef?.emit("sender_reciever", {
       sender: cookieName,
@@ -69,19 +75,38 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     });
   };
 
+  // React.useEffect(() => {
+  //   fetchUsers();
+  //   console.log("render");
+  // }, [contacts]);
+
   React.useEffect(() => {
     validateUser();
     fetchUsers();
   }, []);
 
-  const updateInviteStatus = async () => {
+  const updateInviteStatus = async (you: string) => {
     try {
-      console.log(reciever);
+      setReciever(you);
+      console.log(you);
 
       const res = await axios.put(
-        `http://localhost:4001/${reciever}/${cookie.get("name")}`,
+        `http://localhost:4001/${you}/${cookie.get("name")}`,
         {
           status: "accepted",
+        },
+      );
+    } catch (error) {}
+  };
+
+  const updateInviteStatusIgnore = async (you: string) => {
+    try {
+      console.log(you);
+
+      const res = await axios.put(
+        `http://localhost:4001/ignore/${you}/${cookie.get("name")}`,
+        {
+          status: "declined",
         },
       );
     } catch (error) {}
@@ -90,7 +115,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   React.useEffect(() => {
     if (reciever) {
       emitUsers();
-      updateInviteStatus();
     }
   }, [reciever]);
 
@@ -121,13 +145,23 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
               {contacts.map((item, index) => {
                 const { inviter, reciever, status } = item;
                 return (
-                  <div key={index} onClick={() => setReciever(inviter)}>
+                  <div key={index}>
                     {inviter !== cookie.get("name") &&
                       reciever === cookie.get("name") &&
                       status === "recieved" && (
                         <div className="contacts">
                           <h1>{inviter}</h1>
                           <p>Messages</p>
+                          <div>
+                            <button onClick={() => updateInviteStatus(inviter)}>
+                              Accept
+                            </button>
+                            <button
+                              onClick={() => updateInviteStatusIgnore(inviter)}
+                            >
+                              Ignore
+                            </button>
+                          </div>
                         </div>
                       )}
                   </div>
@@ -145,34 +179,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
 
-  if (cookieName) {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
-    } catch (error) {
-      cookie.remove("name");
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-  }
-
   if (!cookieName) {
     return {
       redirect: {
-        permanent: false,
         destination: "/",
+        permanent: false,
       },
     };
-  }
-
-  return {
-    props: {
-      cookie: context.req.headers.cookie || "",
-    },
-  };
+  } else
+    return {
+      props: {
+        cookie: context.req.headers.cookie || "",
+      },
+    };
 };
 
 export default index;

@@ -2,10 +2,11 @@ import React, { MouseEventHandler } from "react";
 import axios from "axios";
 import { useCookie } from "next-cookie";
 
-const ActiveChats = (cookie: string) => {
+const ActiveChats = (cookie) => {
   const cokie = useCookie(cookie);
   const sender = cokie.get("name");
 
+  const [simpleState, setSimpleState] = React.useState(null);
   const [reciever, setReciever] = React.useState("");
   const [activeChats, setActiveChats] = React.useState([]);
   const sendInvite = async () => {
@@ -22,6 +23,7 @@ const ActiveChats = (cookie: string) => {
   const getChats = async () => {
     try {
       const res = await axios.get("http://localhost:4001/accepted ");
+
       setActiveChats(res.data.invites);
 
       return true;
@@ -32,6 +34,7 @@ const ActiveChats = (cookie: string) => {
 
   React.useEffect(() => {
     getChats();
+    console.log("render");
   }, []);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
