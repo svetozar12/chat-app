@@ -88,8 +88,10 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   };
 
   React.useEffect(() => {
-    emitUsers();
-    updateInviteStatus();
+    if (reciever) {
+      emitUsers();
+      updateInviteStatus();
+    }
   }, [reciever]);
 
   return (

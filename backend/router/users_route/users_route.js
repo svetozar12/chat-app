@@ -50,17 +50,14 @@ route.get("/users", function (req, res) { return __awaiter(void 0, void 0, void 
             case 1:
                 users = _a.sent();
                 if (!users || undefined)
-                    throw createError(404, "No users found");
-                res.json({ users: users });
-                return [3 /*break*/, 3];
+                    return [2 /*return*/, res.status(404).json({ message: "No users found" })];
+                return [2 /*return*/, res.json({ users: users })];
             case 2:
                 error_1 = _a.sent();
-                res.status(error_1.status);
-                res.json({
-                    errorStatus: error_1.status,
-                    message: error_1,
-                });
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.status(error_1.status).json({
+                        errorStatus: error_1.status,
+                        message: error_1,
+                    })];
             case 3: return [2 /*return*/];
         }
     });
@@ -77,14 +74,18 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
             case 1:
                 users = _a.sent();
                 if (!users || undefined)
-                    throw createError(400, "Invalid input", "User " + req.params.username + " doesnt exist");
-                res.json({ message: users });
-                return [3 /*break*/, 3];
+                    return [2 /*return*/, res
+                            .status(400)
+                            .json({
+                            ERROR: "Invalid input",
+                            message: "User " + req.params.username + " doesn't exist",
+                        })];
+                return [2 /*return*/, res.json({ message: users })];
             case 2:
                 error_2 = _a.sent();
-                res.status(error_2.status);
-                res.json({ errorStatus: error_2.status, message: error_2, stack: error_2.stack });
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res
+                        .status(error_2.status)
+                        .json({ errorStatus: error_2.status, message: error_2, stack: error_2.stack })];
             case 3: return [2 /*return*/];
         }
     });
@@ -100,21 +101,30 @@ route.post("/register", function (req, res) { return __awaiter(void 0, void 0, v
                 users = _a.sent();
                 for (i = 0; i < users.length; i++) {
                     if (users[i].username === req.body.username) {
-                        throw createError(400, "Invalid input", "User " + req.body.username + " already exist");
+                        res
+                            .status(400)
+                            .json({
+                            ERROR: "Invalid input",
+                            message: "User " + req.body.username + " already exist",
+                        });
                     }
                 }
                 user = new User({ type: "POST", username: req.body.username });
                 if (req.body.username === "")
-                    throw createError(400, "Invalid input", "Please enter valid input");
+                    return [2 /*return*/, res
+                            .status(400)
+                            .json({ Error: "Invalid input", message: "Please enter valid input" })];
                 return [4 /*yield*/, user.save()];
             case 2:
                 _a.sent();
-                res.status(201).send({ message: "User " + req.body.username + " created" }); //ok response and creating
-                return [3 /*break*/, 4];
+                return [2 /*return*/, res
+                        .status(201)
+                        .send({ message: "User " + req.body.username + " created" })];
             case 3:
                 error_3 = _a.sent();
-                res.status(error_3.status);
-                res.json({ errorStatus: error_3.status, message: error_3 });
+                res
+                    .status(error_3.status)
+                    .json({ errorStatus: error_3.status, message: error_3 });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -129,16 +139,10 @@ route.delete("/:username", function (req, res) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, User.deleteOne({ username: req.params.username }).exec()];
             case 1:
                 data_1 = _a.sent();
-                res
-                    .json({
-                    message: "deleted user: " + req.params.username,
-                })
-                    .sendStatus(204);
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.status(204)];
             case 2:
                 error_4 = _a.sent();
-                res.json({ error: error_4 }).sendStatus(501);
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.json({ error: error_4 }).sendStatus(501)];
             case 3: return [2 /*return*/];
         }
     });

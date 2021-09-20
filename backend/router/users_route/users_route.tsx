@@ -9,11 +9,11 @@ const User = require("../../models/User.model");
 route.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await User.find({}).exec();
-    if (!users || undefined) throw createError(404, "No users found");
-    res.json({ users });
+    if (!users || undefined)
+      return res.status(404).json({ message: "No users found" });
+    return res.json({ users });
   } catch (error: any) {
-    res.status(error.status);
-    res.json({
+    return res.status(error.status).json({
       errorStatus: error.status,
       message: error,
     });
@@ -26,15 +26,17 @@ route.get("/users/:username", async (req: Request, res: Response) => {
       username: req.params.username,
     }).exec();
     if (!users || undefined)
-      throw createError(
-        400,
-        "Invalid input",
-        `User ${req.params.username} doesnt exist`,
-      );
-    res.json({ message: users });
+      return res
+        .status(400)
+        .json({
+          ERROR: "Invalid input",
+          message: `User ${req.params.username} doesn't exist`,
+        });
+    return res.json({ message: users });
   } catch (error: any) {
-    res.status(error.status);
-    res.json({ errorStatus: error.status, message: error, stack: error.stack });
+    return res
+      .status(error.status)
+      .json({ errorStatus: error.status, message: error, stack: error.stack });
   }
 });
 
@@ -43,35 +45,38 @@ route.post("/register", async (req: Request, res: Response) => {
     const users = await User.find().exec();
     for (let i = 0; i < users.length; i++) {
       if (users[i].username === req.body.username) {
-        throw createError(
-          400,
-          "Invalid input",
-          `User ${req.body.username} already exist`,
-        );
+        res
+          .status(400)
+          .json({
+            ERROR: "Invalid input",
+            message: `User ${req.body.username} already exist`,
+          });
       }
     }
 
     const user = new User({ type: "POST", username: req.body.username });
     if (req.body.username === "")
-      throw createError(400, "Invalid input", `Please enter valid input`);
+      return res
+        .status(400)
+        .json({ Error: "Invalid input", message: "Please enter valid input" });
+
     await user.save();
-    res.status(201).send({ message: `User ${req.body.username} created` }); //ok response and creating
+    return res
+      .status(201)
+      .send({ message: `User ${req.body.username} created` });
   } catch (error: any) {
-    res.status(error.status);
-    res.json({ errorStatus: error.status, message: error });
+    res
+      .status(error.status)
+      .json({ errorStatus: error.status, message: error });
   }
 });
 
 route.delete("/:username", async (req: Request, res: Response) => {
   try {
     const data = await User.deleteOne({ username: req.params.username }).exec();
-    res
-      .json({
-        message: `deleted user: ${req.params.username}`,
-      })
-      .sendStatus(204);
+    return res.status(204);
   } catch (error) {
-    res.json({ error }).sendStatus(501);
+    return res.json({ error }).sendStatus(501);
   }
 });
 

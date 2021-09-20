@@ -3,10 +3,11 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
-import { AppProps } from "next/dist/shared/lib/router/router";
 
 const index: NextPage<{ cookie: string }> = (props) => {
   const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
+
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">

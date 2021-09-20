@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 function register(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
@@ -19,7 +20,7 @@ function register(props: AppProps) {
 
   const quickLogin = () => {
     cookie.set("name", name, { maxAge: 3600 });
-    router.push(`/messages/${cookie.get("name")}`);
+    router.push(`/messages/${cookieName}`);
   };
 
   const registerPost = async () => {
@@ -45,6 +46,14 @@ function register(props: AppProps) {
       setState({ badAlert: "", goodAlert: "" });
     }, 2000);
   };
+
+  React.useEffect(() => {
+    if (cookie.has("name")) {
+      console.log(cookie.get("name"));
+
+      useRouter().push(`http://localhost:3000/messages/`);
+    }
+  }, []);
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
@@ -84,7 +93,6 @@ function register(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.has("name");
-  console.log("here");
 
   if (cookieName) {
     console.log("yes");
