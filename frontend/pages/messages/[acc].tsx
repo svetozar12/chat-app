@@ -47,8 +47,10 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const validateUser = async () => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+      if (!cookieName) throw Error;
       return true;
     } catch (error) {
+      router.push("/");
       deleteCookies();
       return false;
     }
@@ -145,34 +147,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
 
-  if (cookieName) {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
-    } catch (error) {
-      cookie.remove("name");
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-  }
-
   if (!cookieName) {
     return {
       redirect: {
-        permanent: false,
         destination: "/",
+        permanent: false,
       },
     };
-  }
-
-  return {
-    props: {
-      cookie: context.req.headers.cookie || "",
-    },
-  };
+  } else
+    return {
+      props: {
+        cookie: context.req.headers.cookie || "",
+      },
+    };
 };
 
 export default index;

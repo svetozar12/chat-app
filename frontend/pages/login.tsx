@@ -14,21 +14,27 @@ function login(props: AppProps) {
   const [alert, setAlert] = React.useState("");
   const [checked, setChecked] = React.useState(false);
 
+  React.useEffect(() => {
+    if (router.pathname === "/login" && cookieName) {
+      router.push(`/messages/${cookieName}`);
+    }
+  });
+
   const loginPost = async () => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${name}`);
       return true;
     } catch (error: any) {
-      setAlert(error.response.data.message.message);
+      setAlert(error.response.data.message);
       return false;
     }
   };
 
-  React.useEffect(() => {
-    if (cookie.get("name")) {
-      useRouter().push(`http://localhost:3000/messages/`);
-    }
-  }, []);
+  const Alert = () => {
+    setTimeout(() => {
+      setAlert("");
+    }, 2000);
+  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -37,17 +43,13 @@ function login(props: AppProps) {
       if (result) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
-        }); //1hour
+        });
         router.push(`/messages/${cookieName}`);
       }
-      setTimeout(() => {
-        setAlert("");
-      }, 2000);
+      Alert();
     } else {
       setAlert("No input");
-      setTimeout(() => {
-        setAlert("");
-      }, 2000);
+      Alert();
     }
   };
 
@@ -92,10 +94,10 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
+
   if (cookieName) {
     return {
       redirect: {
-        permanent: false,
         destination: `/messages/${cookieName}`,
       },
     };

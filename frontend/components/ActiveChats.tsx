@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from "react";
 import axios from "axios";
 import { useCookie } from "next-cookie";
 
-const ActiveChats = (cookie: string) => {
+const ActiveChats = (cookie) => {
   const cokie = useCookie(cookie);
   const sender = cokie.get("name");
 

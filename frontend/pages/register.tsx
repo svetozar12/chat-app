@@ -28,13 +28,14 @@ function register(props: AppProps) {
       const res = await axios.post("http://localhost:4001/register", {
         username: name,
       });
+
       setState({ goodAlert: res.data.message });
       setLoginPrompt(true);
       return true;
     } catch (error: any) {
       const temp = error.response.data;
       setName("");
-      setState({ badAlert: temp.message.message });
+      setState({ badAlert: temp.message });
       return false;
     }
   };
@@ -47,13 +48,6 @@ function register(props: AppProps) {
     }, 2000);
   };
 
-  React.useEffect(() => {
-    if (cookie.has("name")) {
-      console.log(cookie.get("name"));
-
-      useRouter().push(`http://localhost:3000/messages/`);
-    }
-  }, []);
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
@@ -95,15 +89,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.has("name");
 
   if (cookieName) {
-    console.log("yes");
-
     return {
       redirect: {
-        permanent: false,
         destination: `/messages/${cookieName}`,
       },
     };
   }
+
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };
