@@ -1,7 +1,6 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import axios from "axios";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps, NextPage } from "next";
 
 const ActiveChats = (cookie: string) => {
   const cokie = useCookie(cookie);
@@ -35,7 +34,7 @@ const ActiveChats = (cookie: string) => {
     getChats();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     sendInvite();
   };

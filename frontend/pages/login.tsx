@@ -9,6 +9,7 @@ import Link from "next/link";
 function login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
   const [name, setName] = React.useState("");
   const [alert, setAlert] = React.useState("");
   const [checked, setChecked] = React.useState(false);
@@ -23,6 +24,12 @@ function login(props: AppProps) {
     }
   };
 
+  React.useEffect(() => {
+    if (cookie.get("name")) {
+      useRouter().push(`http://localhost:3000/messages/`);
+    }
+  }, []);
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
@@ -31,7 +38,7 @@ function login(props: AppProps) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
         }); //1hour
-        router.push(`/messages/${cookie.get("name")}`);
+        router.push(`/messages/${cookieName}`);
       }
       setTimeout(() => {
         setAlert("");

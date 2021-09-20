@@ -1,6 +1,5 @@
 const express = require("express");
 const route = express.Router();
-const createError = require("http-errors");
 
 import { Request, Response } from "express";
 
@@ -34,17 +33,19 @@ route.get("/accepted", async (req: Request, res: Response) => {
 });
 
 // accept and ignore put requests
+// ! ================= !
+// ! PROBLEMATIC ROUTE !
+// ! ================= !
 route.put("/:inviter/:reciever", async (req: Request, res: Response) => {
   try {
     const inviteInstance = await Invites.findOne({
       inviter: req.params.inviter,
       reciever: req.params.reciever,
       status: "recieved",
-    });
+    }).exec();
 
     if (!inviteInstance || undefined) {
-      res.status(404).json({ error: "Not found" });
-      throw Error;
+      return res.status(404).json({ error: "Not found" });
     }
 
     const updateStatus = await Invites.findByIdAndUpdate(
@@ -53,15 +54,18 @@ route.put("/:inviter/:reciever", async (req: Request, res: Response) => {
         status: "accepted",
       },
       { new: true },
-    );
+    ).exec();
 
-    res.json({ message: updateStatus });
+    return res.json({ message: updateStatus });
   } catch (error) {
-    res.status(501).json({ error: "error" });
+    return res.status(501).json({ error: "error" });
   }
 });
 // end of accept and ignore put requsts
 
+// ! ================= !
+// ! PROBLEMATIC ROUTE !
+// ! ================= !
 route.post(
   "/invites/:inviter/:reciever",
   async (req: Request, res: Response) => {
@@ -77,7 +81,7 @@ route.post(
         inviter: req.params.inviter,
         reciever: req.params.reciever,
         status: "accepted",
-      });
+      }).exec();
 
       // const checkInviteInstance = await Invites.findOne({ Not sure
       //   inviter: req.params.inviter,
@@ -90,15 +94,13 @@ route.post(
         reciever: req.params.reciever,
         status: "recieved",
       });
-      console.log("mario", findInvites);
+
       if (findInvites || checkInviteInstance) {
-        res.status(409).json({ error: "Already sent" });
-        throw Error;
+        return res.status(409).json({ error: "Already sent" });
       }
 
-      if (!user1 || !user2 || undefined) {
-        res.status(404).json({ message: "User Not found" });
-        throw Error;
+      if (!user1 || !user2) {
+        return res.status(404).json({ message: "User Not found" });
       }
       const invites = await new Invites({
         type: "POST",
@@ -106,11 +108,11 @@ route.post(
         reciever: req.params.reciever,
         status: "recieved",
       });
+
       await invites.save();
-      res.status(201).json({ message: invites });
-      res.send("hi");
+      return res.status(201).json({ message: invites });
     } catch (error) {
-      res.status(501).send("error");
+      return res.status(501).send("error");
     }
   },
 );
