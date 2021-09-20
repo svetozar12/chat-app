@@ -64,12 +64,21 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const emitUsers = () => {
     socketRef?.emit("sender_reciever", {
       sender: cookieName,
       reciever: reciever,
     });
   };
+
+  // React.useEffect(() => {
+  //   fetchUsers();
+  //   console.log("render");
+  // }, [contacts]);
 
   React.useEffect(() => {
     validateUser();

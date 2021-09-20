@@ -32,7 +32,8 @@ const ActiveChats = (cookie) => {
 
   React.useEffect(() => {
     getChats();
-  }, []);
+    console.log("render");
+  }, [activeChats]);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
