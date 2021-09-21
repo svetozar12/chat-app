@@ -6,20 +6,6 @@ import { Request, Response } from "express";
 
 const User = require("../../models/User.model");
 
-// route.get("/users", async (req: Request, res: Response) => {
-//   try {
-//     const users = await User.find({}).exec();
-//     if (!users || undefined)
-//       return res.status(404).json({ message: "No users found" });
-//     return res.json({ users });
-//   } catch (error: any) {
-//     return res.status(error.status).json({
-//       errorStatus: error.status,
-//       message: error,
-//     });
-//   }
-// });
-
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
     const users = await User.findOne({

@@ -48,10 +48,6 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 _b.trys.push([0, 5, , 6]);
                 name_1 = req.params.id;
                 status_1 = req.query.status;
-                console.log(status_1);
-                if (status_1 === undefined) {
-                    status_1 = "z";
-                }
                 if (!(status_1 !== undefined)) return [3 /*break*/, 2];
                 return [4 /*yield*/, Invites.find({
                         reciever: name_1,
@@ -62,14 +58,18 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 return [3 /*break*/, 4];
             case 2: return [4 /*yield*/, Invites.find({
                     reciever: name_1,
-                }).select("status")];
+                }).select("status  inviter")];
             case 3:
                 _a = _b.sent();
                 _b.label = 4;
             case 4:
                 invites = _a;
-                if (!invites || invites === {}) {
-                    return [2 /*return*/, res.status(404).json({ error: "Not found" })];
+                if (!invites || invites.length <= 0) {
+                    return [2 /*return*/, res
+                            .status(404)
+                            .json({
+                            error: "You dont have invites or this this account doesn't exist.",
+                        })];
                 }
                 res.json({ invites: invites }).status(201);
                 return [3 /*break*/, 6];
@@ -81,24 +81,23 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
     });
 }); });
 route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var reciever, id, status_2, inviteInstance, updateStatus, error_2;
+    var id, status_2, inviteInstance, updateStatus, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                reciever = req.body.reciever;
                 id = req.body.id;
                 status_2 = req.body.status;
                 return [4 /*yield*/, Invites.findOne({
-                        reciever: reciever,
                         id: id,
                     }).exec()];
             case 1:
                 inviteInstance = _a.sent();
+                console.log(inviteInstance);
                 if (!inviteInstance || undefined) {
                     return [2 /*return*/, res.status(404).json({ error: "Not found" })];
                 }
-                return [4 /*yield*/, Invites.findByIdAndUpdate(inviteInstance._id, {
+                return [4 /*yield*/, Invites.findByIdAndUpdate(id, {
                         status: status_2,
                     }, { new: true }).exec()];
             case 2:
@@ -127,6 +126,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
+                        inviter: req.body.inviter,
                         status: "recieved",
                     })];
             case 2:
@@ -134,16 +134,17 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
+                        inviter: req.body.inviter,
                         status: "recieved",
                     })];
             case 3:
                 findInvites = _a.sent();
                 //check if findInvites and checkInviteInstance are equal
-                if (findInvites || checkInviteInstance) {
-                    res.status(409).json({ error: "Already sent" });
+                if (findInvites && checkInviteInstance) {
+                    return [2 /*return*/, res.status(409).json({ ERROR: "Already sent" })];
                 }
                 if (!user) {
-                    res.status(404).json({ message: "User Not found" });
+                    return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
                 }
                 return [4 /*yield*/, new Invites({
                         reciever: req.body.reciever,
@@ -157,8 +158,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 return [2 /*return*/, res.status(201).json({ message: invites })];
             case 6:
                 error_3 = _a.sent();
-                res.status(501).send("error");
-                return [3 /*break*/, 7];
+                return [2 /*return*/, res.status(501).send("error")];
             case 7: return [2 /*return*/];
         }
     });

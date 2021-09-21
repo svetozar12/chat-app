@@ -1,30 +1,30 @@
-GET http://localhost:4001/users/ivo
+GET http://localhost:4001/users/user1
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"user2"
+    "username":"user5"
 }
-###
-DELETE http://localhost:4001/users/ivan
 
 ###
+DELETE http://localhost:4001/users/ivan
+### Updates the status
 PUT http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"ivo",
-    "id":"6148c5032c43d41c59f15b87",
+    "id":"6148a16a4948ebdbd950f252",
     "status":"accepted"
 }
 ### recieved
-GET http://localhost:4001/invites/ivo
+GET http://localhost:4001/invites/user52
 ### accepted
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"user2",
+    "reciever":"user5",
+    "inviter":"user1"
 }
 ###

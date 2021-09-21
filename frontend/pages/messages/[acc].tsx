@@ -12,18 +12,19 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
+  const [status, setStatus] = React.useState<string>("");
   const [reciever, setReciever] = React.useState<string | null>("");
   const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
   const [contacts, setContacts] = React.useState([]);
 
-  const fetchUsers = async () => {
+  const fetchInviteStatus = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/invites/${cookieName}?status=recieved`,
+        `http://localhost:4001/invites/${cookieName}`,
       );
-      console.log(res);
+      const data = res.data.invites;
 
-      setContacts(res.data.invites);
+      setContacts(data);
 
       return true;
     } catch (error) {
@@ -40,7 +41,9 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const deleteUser = async () => {
     try {
-      const res = await axios.delete(`http://localhost:4001/${cookieName}`);
+      const res = await axios.delete(
+        `http://localhost:4001/users/${cookieName}`,
+      );
       deleteCookies();
       return true;
     } catch (error) {
@@ -68,10 +71,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     };
   }, []);
 
-  React.useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const emitUsers = () => {
     socketRef?.emit("sender_reciever", {
       sender: cookieName,
@@ -81,7 +80,7 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   React.useEffect(() => {
     validateUser();
-    fetchUsers();
+    fetchInviteStatus();
   }, []);
 
   const updateInviteStatus = async () => {
@@ -91,22 +90,30 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       const res = await axios.put(`http://localhost:4001/invites`, {
         reciever: cookieName,
         inviter: "ihoo",
-        status: "accepted", //will change it with state from buttons
+        status: status, //will change it with state from buttons
       });
     } catch (error) {}
   };
 
   React.useEffect(() => {
+    if (status) {
+      updateInviteStatus();
+    }
+  }, [status]);
+
+  React.useEffect(() => {
     if (reciever) {
       emitUsers();
-      updateInviteStatus();
     }
   }, [reciever]);
 
   return (
     <div style={{ display: "flex" }}>
       <section>
-        <ActiveChats cookie={cookie} />
+        {contacts.map((item, index) => {
+          const { inviter, status } = item;
+          return <ActiveChats key={index} {...item} cookie={cookie} />;
+        })}
       </section>
       <section className="main_section">
         {" "}
@@ -128,17 +135,28 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                const { inviter, reciever, status } = item;
+                const { inviter, status } = item;
                 return (
-                  <div key={index} onClick={() => setReciever(inviter)}>
-                    {inviter !== cookie.get("name") &&
-                      reciever === cookie.get("name") &&
-                      status === "recieved" && (
-                        <div className="contacts">
-                          <h1>{inviter}</h1>
-                          <p>Messages</p>
+                  <div key={index}>
+                    {status === "recieved" && (
+                      <div className="contacts">
+                        <h1>{inviter}</h1>
+                        <div className="invite_buttons">
+                          <button
+                            onClick={() => setStatus("accepted")}
+                            className="accept"
+                          >
+                            Aceept
+                          </button>
+                          <button
+                            onClick={() => setStatus("declined")}
+                            className="decline"
+                          >
+                            Decline
+                          </button>
                         </div>
-                      )}
+                      </div>
+                    )}
                   </div>
                 );
               })}

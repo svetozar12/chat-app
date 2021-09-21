@@ -40,19 +40,6 @@ var express = require("express");
 var route = express.Router();
 var createError = require("http-errors");
 var User = require("../../models/User.model");
-// route.get("/users", async (req: Request, res: Response) => {
-//   try {
-//     const users = await User.find({}).exec();
-//     if (!users || undefined)
-//       return res.status(404).json({ message: "No users found" });
-//     return res.json({ users });
-//   } catch (error: any) {
-//     return res.status(error.status).json({
-//       errorStatus: error.status,
-//       message: error,
-//     });
-//   }
-// });
 route.get("/users/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users, error_1;
     return __generator(this, function (_a) {

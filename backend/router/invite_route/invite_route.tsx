@@ -11,11 +11,6 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
     let status = req.query.status;
-    console.log(status);
-
-    if (status === undefined) {
-      status = "z";
-    }
 
     const invites =
       status !== undefined
@@ -25,10 +20,14 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
           })
         : await Invites.find({
             reciever: name,
-          }).select("status");
+          }).select("status  inviter");
 
-    if (!invites || invites === {}) {
-      return res.status(404).json({ error: "Not found" });
+    if (!invites || invites.length <= 0) {
+      return res
+        .status(404)
+        .json({
+          error: "You dont have invites or this this account doesn't exist.",
+        });
     }
     res.json({ invites }).status(201);
   } catch (error) {
@@ -38,21 +37,21 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
 
 route.put("/invites", async (req: Request, res: Response) => {
   try {
-    const reciever = req.body.reciever;
     const id = req.body.id;
     const status = req.body.status;
 
     const inviteInstance = await Invites.findOne({
-      reciever,
       id,
     }).exec();
+
+    console.log(inviteInstance);
 
     if (!inviteInstance || undefined) {
       return res.status(404).json({ error: "Not found" });
     }
 
     const updateStatus = await Invites.findByIdAndUpdate(
-      inviteInstance._id,
+      id,
       {
         status,
       },
@@ -75,19 +74,21 @@ route.post("/invites", async (req: Request, res: Response) => {
     const checkInviteInstance = await Invites.findOne({
       id: user._id,
       reciever: req.body.reciever,
+      inviter: req.body.inviter,
       status: "recieved",
     });
     const findInvites = await Invites.findOne({
       id: user._id,
       reciever: req.body.reciever,
+      inviter: req.body.inviter,
       status: "recieved",
     });
     //check if findInvites and checkInviteInstance are equal
-    if (findInvites || checkInviteInstance) {
-      res.status(409).json({ error: "Already sent" });
+    if (findInvites && checkInviteInstance) {
+      return res.status(409).json({ ERROR: "Already sent" });
     }
     if (!user) {
-      res.status(404).json({ message: "User Not found" });
+      return res.status(404).json({ ERROR: "User Not found" });
     }
     const invites = await new Invites({
       reciever: req.body.reciever,
@@ -96,7 +97,7 @@ route.post("/invites", async (req: Request, res: Response) => {
     await invites.save();
     return res.status(201).json({ message: invites });
   } catch (error) {
-    res.status(501).send("error");
+    return res.status(501).send("error");
   }
 });
 
