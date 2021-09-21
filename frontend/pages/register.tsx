@@ -87,7 +87,6 @@ function register(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.has("name");
-
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };

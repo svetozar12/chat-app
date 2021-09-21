@@ -76,6 +76,10 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const emitUsers = () => {
     socketRef?.emit("sender_reciever", {
       sender: cookieName,
@@ -91,13 +95,13 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     validateUser();
     fetchInviteStatus();
   }, []);
-
+  
   React.useEffect(() => {
     if (reciever) {
       emitUsers();
     }
   }, [reciever]);
-
+  // hi
   return (
     <div style={{ display: "flex" }}>
       <section>
@@ -137,12 +141,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
                 return (
-                  <PendingChats
-                    key={index}
-                    {...item}
-                    localStatus={localStatus}
-                    setLocalStatus={setLocalStatus}
-                  />
                 );
               })}
             </ul>
@@ -160,7 +158,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!cookieName) {
     return {
       redirect: {
-        destination: `/`,
+        destination: "/",
         permanent: false,
       },
     };
@@ -171,5 +169,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 };
+
 
 export default index;

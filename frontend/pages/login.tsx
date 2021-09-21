@@ -94,7 +94,6 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
-
   return {
     props: {
       cookie: context.req.headers.cookie || "",
