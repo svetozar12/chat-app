@@ -14,7 +14,7 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const [localStatus, setLocalStatus] = React.useState<string>("");
+  const [localStatus, setLocalStatus] = React.useState<number>(1);
   const [reciever, setReciever] = React.useState<string | null>("");
   const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
   const [contacts, setContacts] = React.useState([]);

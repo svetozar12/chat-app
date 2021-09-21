@@ -12,6 +12,7 @@ function PendingChats({
 }: AppProps) {
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
+  const parentDiv = React.useRef<HTMLDivElement | null>(null);
   const updateInviteStatus = async () => {
     try {
       const res = await axios.put(`http://localhost:4001/invites`, {
@@ -24,7 +25,8 @@ function PendingChats({
 
   const updateStatus = (status: string) => {
     setLocalStatus(`${status}`);
-
+    parentDiv.current;
+    updateInviteStatus();
     setTimeout(() => {
       setLocalStatus("");
     }, 3000);
@@ -45,7 +47,6 @@ function PendingChats({
     if (localStatus) {
       console.log("render");
       console.log(localStatus);
-      updateInviteStatus();
       updateInvites();
     }
   }, [localStatus]);
@@ -53,10 +54,13 @@ function PendingChats({
   return (
     <div>
       {status === "recieved" && (
-        <div className="contacts">
+        <div ref={parentDiv} className="contacts">
           <h1>{inviter}</h1>
           <div className="invite_buttons">
-            <button onClick={() => updateStatus("accepted")} className="accept">
+            <button
+              onClick={(e) => updateStatus("accepted")}
+              className="accept"
+            >
               Aceept
             </button>
             <button

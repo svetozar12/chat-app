@@ -24,10 +24,12 @@ function Error({ cookie }: AppProps) {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setReciever("");
     sendInvite();
   };
   return (
     <div className="active_chats">
+      <h1>Find your first friend</h1>
       <form onSubmit={sendInvite}>
         <input
           onChange={(e) => setReciever(e.target.value)}

@@ -65,19 +65,20 @@ route.post("/invites", async (req: Request, res: Response) => {
   try {
     const user = await Users.findOne({
       username: req.body.reciever,
+      inviter: req.body.inviter,
     });
 
     const checkInviteInstance = await Invites.findOne({
       id: user._id,
       reciever: req.body.reciever,
       inviter: req.body.inviter,
-      status: "recieved",
+      $or: [{ status: "recieved" }, { status: "accepted" }],
     });
     const findInvites = await Invites.findOne({
       id: user._id,
       reciever: req.body.reciever,
       inviter: req.body.inviter,
-      status: "recieved",
+      $or: [{ status: "recieved" }, { status: "accepted" }],
     });
     //check if findInvites and checkInviteInstance are equal
     if (findInvites && checkInviteInstance) {

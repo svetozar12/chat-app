@@ -37,6 +37,11 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+form,
+button {
+  margin: 1rem;
+}
+
 * {
   box-sizing: border-box;
 }

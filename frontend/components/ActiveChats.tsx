@@ -23,6 +23,7 @@ const ActiveChats = ({ cookie, _id, inviter, status }: AppProps) => {
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setReciever("");
     sendInvite();
   };
   return (

@@ -117,6 +117,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 _a.trys.push([0, 6, , 7]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.body.reciever,
+                        inviter: req.body.inviter,
                     })];
             case 1:
                 user = _a.sent();
@@ -124,7 +125,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
-                        status: "recieved",
+                        $or: [{ status: "recieved" }, { status: "accepted" }],
                     })];
             case 2:
                 checkInviteInstance = _a.sent();
@@ -132,7 +133,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
-                        status: "recieved",
+                        $or: [{ status: "recieved" }, { status: "accepted" }],
                     })];
             case 3:
                 findInvites = _a.sent();
