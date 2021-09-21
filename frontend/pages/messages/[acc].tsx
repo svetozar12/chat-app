@@ -4,6 +4,8 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 // componens
 import ActiveChats from "../../components/ActiveChats";
+import PendingChats from "../../components/PendingChats";
+import Error from "../../components/Error";
 
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
@@ -12,17 +14,25 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
+  const [localStatus, setLocalStatus] = React.useState<string>("");
   const [reciever, setReciever] = React.useState<string | null>("");
   const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
   const [contacts, setContacts] = React.useState([]);
+  const [error, setError] = React.useState<string>("");
 
-  const fetchUsers = async () => {
+  const fetchInviteStatus = async () => {
     try {
-      const res = await axios.get("http://localhost:4001/recieved");
-      setContacts(res.data.invites);
+      const res = await axios.get(
+        `http://localhost:4001/invites/${cookieName}`,
+      );
+      const data = res.data.invites;
+      setContacts(data);
 
       return true;
     } catch (error) {
+      const data = error.response.data.error;
+      setError(data);
+
       return false;
     }
   };
@@ -36,7 +46,9 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const deleteUser = async () => {
     try {
-      const res = await axios.delete(`http://localhost:4001/${cookieName}`);
+      const res = await axios.delete(
+        `http://localhost:4001/users/${cookieName}`,
+      );
       deleteCookies();
       return true;
     } catch (error) {
@@ -64,10 +76,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     };
   }, []);
 
-  React.useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const emitUsers = () => {
     socketRef?.emit("sender_reciever", {
       sender: cookieName,
@@ -75,53 +83,38 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     });
   };
 
-  // React.useEffect(() => {
-  //   fetchUsers();
-  //   console.log("render");
-  // }, [contacts]);
+  React.useEffect(() => {
+    if (localStatus) fetchInviteStatus();
+  }, [localStatus]);
 
   React.useEffect(() => {
     validateUser();
-    fetchUsers();
+    fetchInviteStatus();
   }, []);
-
-  const updateInviteStatus = async (you: string) => {
-    try {
-      setReciever(you);
-      console.log(you);
-
-      const res = await axios.put(
-        `http://localhost:4001/${you}/${cookie.get("name")}`,
-        {
-          status: "accepted",
-        },
-      );
-    } catch (error) {}
-  };
-
-  const updateInviteStatusIgnore = async (you: string) => {
-    try {
-      console.log(you);
-
-      const res = await axios.put(
-        `http://localhost:4001/ignore/${you}/${cookie.get("name")}`,
-        {
-          status: "declined",
-        },
-      );
-    } catch (error) {}
-  };
 
   React.useEffect(() => {
     if (reciever) {
       emitUsers();
     }
   }, [reciever]);
-  // hi
+
   return (
     <div style={{ display: "flex" }}>
       <section>
-        <ActiveChats cookie={cookie} />
+        {error ? (
+          <Error cookie={cookie} />
+        ) : (
+          contacts.map((item, index) => {
+            return (
+              <ActiveChats
+                key={index}
+                cookie={cookie}
+                {...item}
+                cookie={cookie}
+              />
+            );
+          })
+        )}
       </section>
       <section className="main_section">
         {" "}
@@ -143,28 +136,13 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                const { inviter, reciever, status } = item;
                 return (
-                  <div key={index}>
-                    {inviter !== cookie.get("name") &&
-                      reciever === cookie.get("name") &&
-                      status === "recieved" && (
-                        <div className="contacts">
-                          <h1>{inviter}</h1>
-                          <p>Messages</p>
-                          <div>
-                            <button onClick={() => updateInviteStatus(inviter)}>
-                              Accept
-                            </button>
-                            <button
-                              onClick={() => updateInviteStatusIgnore(inviter)}
-                            >
-                              Ignore
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                  </div>
+                  <PendingChats
+                    key={index}
+                    {...item}
+                    localStatus={localStatus}
+                    setLocalStatus={setLocalStatus}
+                  />
                 );
               })}
             </ul>
@@ -182,7 +160,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!cookieName) {
     return {
       redirect: {
-        destination: "/",
+        destination: `/`,
         permanent: false,
       },
     };

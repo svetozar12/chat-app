@@ -18,6 +18,8 @@ Table of concepts
   --off-black: rgb(92, 92, 92);
   --main-blue: rgb(73, 75, 173);
   --off-blue: rgb(26, 97, 189);
+  --main-green: rgb(52, 192, 34);
+  --main-red: rgb(231, 10, 10);
   --gradient-first: #cfd9df;
   --gradient-second: #e2ebf0;
 }
@@ -80,7 +82,7 @@ form,
   align-items: center;
 }
 
-.container-chat {
+.container_chat {
   flex-direction: column;
   height: 60vh;
   overflow: auto;
@@ -110,9 +112,11 @@ form {
   background: var(--main-blue);
   color: var(--main-white);
   height: 100vh;
-  padding: 1rem;
+  padding: 0 5rem;
+  text-align: center;
   height: 100vh;
   overflow: auto;
+  max-width: 70%;
   overflow-x: hidden;
   flex-direction: column;
   justify-content: flex-start;
@@ -180,11 +184,50 @@ form > button:hover {
   padding: 1rem;
   margin: 1rem;
   flex-direction: column;
-  cursor: pointer;
 }
 
 .invite_list > main {
   margin: 2rem 0 2rem 0;
+}
+
+.accepted_invite {
+  padding: 2rem;
+  margin: 2rem;
+  background-color: var(--off-blue);
+  color: var(--main-white);
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+.invite_buttons button {
+  margin: 0 0.2rem;
+  cursor: pointer;
+}
+
+.accept,
+.decline {
+  outline: none;
+  border: none;
+  border: 1px solid var(--main-black);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 1.01rem;
+}
+
+.accept {
+  background: var(--main-green);
+  color: var(--main-white);
+}
+
+.decline {
+  background: var(--main-red);
+  color: var(--main-white);
+}
+
+.accept:hover,
+.decline:hover {
+  box-shadow: 2px 2px var(--main-black);
+  transition: 0.2s;
 }
 
 /* =================
@@ -195,7 +238,7 @@ form > button:hover {
   text-decoration: none;
 }
 
-.container-chat div > h3,
+.container_chat div > h3,
 p {
   margin: 1rem;
 }
