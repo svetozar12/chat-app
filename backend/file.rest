@@ -14,11 +14,11 @@ PUT http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "id":"6148a16a4948ebdbd950f252",
+    "id":"61498a301749f7b3b2f07b75",
     "status":"accepted"
 }
 ### recieved
-GET http://localhost:4001/invites/user52
+GET http://localhost:4001/invites/user1
 ### accepted
 POST http://localhost:4001/invites
 Content-Type: application/json

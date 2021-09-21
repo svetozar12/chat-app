@@ -23,11 +23,9 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
           }).select("status  inviter");
 
     if (!invites || invites.length <= 0) {
-      return res
-        .status(404)
-        .json({
-          error: "You dont have invites or this this account doesn't exist.",
-        });
+      return res.status(404).json({
+        error: "You dont have invites or this this account doesn't exist.",
+      });
     }
     res.json({ invites }).status(201);
   } catch (error) {
@@ -44,9 +42,7 @@ route.put("/invites", async (req: Request, res: Response) => {
       id,
     }).exec();
 
-    console.log(inviteInstance);
-
-    if (!inviteInstance || undefined) {
+    if (!inviteInstance || undefined || !status) {
       return res.status(404).json({ error: "Not found" });
     }
 

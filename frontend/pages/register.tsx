@@ -88,14 +88,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.has("name");
 
-  if (cookieName) {
-    return {
-      redirect: {
-        destination: `/messages/${cookieName}`,
-      },
-    };
-  }
-
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };

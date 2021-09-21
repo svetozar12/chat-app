@@ -65,9 +65,7 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
             case 4:
                 invites = _a;
                 if (!invites || invites.length <= 0) {
-                    return [2 /*return*/, res
-                            .status(404)
-                            .json({
+                    return [2 /*return*/, res.status(404).json({
                             error: "You dont have invites or this this account doesn't exist.",
                         })];
                 }
@@ -93,8 +91,7 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
                     }).exec()];
             case 1:
                 inviteInstance = _a.sent();
-                console.log(inviteInstance);
-                if (!inviteInstance || undefined) {
+                if (!inviteInstance || undefined || !status_2) {
                     return [2 /*return*/, res.status(404).json({ error: "Not found" })];
                 }
                 return [4 /*yield*/, Invites.findByIdAndUpdate(id, {

@@ -6,9 +6,9 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 const ActiveChats = ({ cookie, _id, inviter, status }: AppProps) => {
   const cokie = useCookie(cookie);
   const cookieName = cookie.get("name");
-  const sender = cokie.get("name");
 
   const [reciever, setReciever] = React.useState("");
+
   const sendInvite = async () => {
     try {
       const res = axios.post(`http://localhost:4001/invites`, {
@@ -17,8 +17,6 @@ const ActiveChats = ({ cookie, _id, inviter, status }: AppProps) => {
       });
       return true;
     } catch (error) {
-      console.log("sponge", error);
-
       return false;
     }
   };
@@ -63,5 +61,4 @@ const ActiveChats = ({ cookie, _id, inviter, status }: AppProps) => {
     </main>
   );
 };
-
 export default ActiveChats;

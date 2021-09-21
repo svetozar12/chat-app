@@ -4,6 +4,8 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 // componens
 import ActiveChats from "../../components/ActiveChats";
+import PendingChats from "../../components/PendingChats";
+import Error from "../../components/Error";
 
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
@@ -12,10 +14,11 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const [status, setStatus] = React.useState<string>("");
+  const [localStatus, setLocalStatus] = React.useState<string>("");
   const [reciever, setReciever] = React.useState<string | null>("");
   const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
   const [contacts, setContacts] = React.useState([]);
+  const [error, setError] = React.useState<string>("");
 
   const fetchInviteStatus = async () => {
     try {
@@ -23,11 +26,13 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
         `http://localhost:4001/invites/${cookieName}`,
       );
       const data = res.data.invites;
-
       setContacts(data);
 
       return true;
     } catch (error) {
+      const data = error.response.data.error;
+      setError(data);
+
       return false;
     }
   };
@@ -83,23 +88,9 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     fetchInviteStatus();
   }, []);
 
-  const updateInviteStatus = async () => {
-    try {
-      console.log(reciever);
-
-      const res = await axios.put(`http://localhost:4001/invites`, {
-        reciever: cookieName,
-        inviter: "ihoo",
-        status: status, //will change it with state from buttons
-      });
-    } catch (error) {}
-  };
-
   React.useEffect(() => {
-    if (status) {
-      updateInviteStatus();
-    }
-  }, [status]);
+    fetchInviteStatus();
+  }, []);
 
   React.useEffect(() => {
     if (reciever) {
@@ -110,10 +101,13 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section>
-        {contacts.map((item, index) => {
-          const { inviter, status } = item;
-          return <ActiveChats key={index} {...item} cookie={cookie} />;
-        })}
+        {error ? (
+          <Error cookie={cookie} />
+        ) : (
+          contacts.map((item, index) => {
+            return <ActiveChats key={index} {...item} cookie={cookie} />;
+          })
+        )}
       </section>
       <section className="main_section">
         {" "}
@@ -135,29 +129,13 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                const { inviter, status } = item;
                 return (
-                  <div key={index}>
-                    {status === "recieved" && (
-                      <div className="contacts">
-                        <h1>{inviter}</h1>
-                        <div className="invite_buttons">
-                          <button
-                            onClick={() => setStatus("accepted")}
-                            className="accept"
-                          >
-                            Aceept
-                          </button>
-                          <button
-                            onClick={() => setStatus("declined")}
-                            className="decline"
-                          >
-                            Decline
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <PendingChats
+                    key={index}
+                    {...item}
+                    localStatus={localStatus}
+                    setLocalStatus={setLocalStatus}
+                  />
                 );
               })}
             </ul>
@@ -175,7 +153,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!cookieName) {
     return {
       redirect: {
-        destination: "/",
+        destination: `/`,
         permanent: false,
       },
     };
