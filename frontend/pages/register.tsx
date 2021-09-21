@@ -25,7 +25,7 @@ function register(props: AppProps) {
 
   const registerPost = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/users/register", {
+      const res = await axios.post("http://localhost:4001/register", {
         username: name,
       });
 
@@ -87,6 +87,14 @@ function register(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.has("name");
+
+  if (cookieName) {
+    return {
+      redirect: {
+        destination: `/messages/${cookieName}`,
+      },
+    };
+  }
 
   return {
     props: { cookie: context.req.headers.cookie || "" },

@@ -6,16 +6,32 @@ import { Request, Response } from "express";
 
 const User = require("../../models/User.model");
 
+route.get("/users", async (req: Request, res: Response) => {
+  try {
+    const users = await User.find({}).exec();
+    if (!users || undefined)
+      return res.status(404).json({ message: "No users found" });
+    return res.json({ users });
+  } catch (error: any) {
+    return res.status(error.status).json({
+      errorStatus: error.status,
+      message: error,
+    });
+  }
+});
+
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
     const users = await User.findOne({
       username: req.params.username,
     }).exec();
     if (!users || undefined)
-      return res.status(400).json({
-        ERROR: "Invalid input",
-        message: `User ${req.params.username} doesn't exist`,
-      });
+      return res
+        .status(400)
+        .json({
+          ERROR: "Invalid input",
+          message: `User ${req.params.username} doesn't exist`,
+        });
     return res.json({ message: users });
   } catch (error: any) {
     return res
@@ -24,15 +40,17 @@ route.get("/users/:username", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/users/register", async (req: Request, res: Response) => {
+route.post("/register", async (req: Request, res: Response) => {
   try {
     const users = await User.find().exec();
     for (let i = 0; i < users.length; i++) {
       if (users[i].username === req.body.username) {
-        return res.status(400).json({
-          ERROR: "Invalid input",
-          message: `User ${req.body.username} already exist`,
-        });
+        res
+          .status(400)
+          .json({
+            ERROR: "Invalid input",
+            message: `User ${req.body.username} already exist`,
+          });
       }
     }
 
@@ -47,15 +65,13 @@ route.post("/users/register", async (req: Request, res: Response) => {
       .status(201)
       .send({ message: `User ${req.body.username} created` });
   } catch (error: any) {
-    return res
+    res
       .status(error.status)
       .json({ errorStatus: error.status, message: error });
   }
 });
 
-route.delete("/users/:username", async (req: Request, res: Response) => {
-  console.log("hi");
-
+route.delete("/:username", async (req: Request, res: Response) => {
   try {
     const data = await User.deleteOne({ username: req.params.username }).exec();
     return res.status(204);

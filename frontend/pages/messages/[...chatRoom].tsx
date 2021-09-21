@@ -59,6 +59,22 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
+  // const submitPrivateConvo = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       `http://localhost:4001/${cookieName}/${reciever}`,
+  //       {
+  //         sender: cookieName,
+  //         reciever,
+  //         message: state.message,
+  //       },
+  //     );
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
+
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message, time } = state;
@@ -66,6 +82,30 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     socketRef?.emit("message", { name, message, time });
     setState({ name, message: "", time: "" });
   };
+
+  //===========================
+  // Component for chat messages (in the future put this in export component)
+  //===========================
+  // const renderOldChat = () => { now working on invites
+  //   return savedChat.map(({ _id, sender, reciever }: any) => (
+  //     <div className={sender === cookieName ? "me" : "you"} key={_id}>
+  //       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>{name}</h2>
+  //       <div
+  //         style={{
+  //           background:
+  //             name === chatRoom[0] ? "var(--main-blue)" : "var(--off-black) ",
+  //           borderRadius: "30% 30% 30% 30%",
+  //           width: "15rem",
+  //           overflow: "auto",
+  //           wordWrap: "break-word",
+  //         }}
+  //       >
+  //         <p>{message}</p>
+  //         <p style={{ fontSize: "0.8rem" }}>{time}</p>
+  //       </div>
+  //     </div>
+  //   ));
+  // };
 
   const renderChat = () => {
     return chat.map(({ name, message, time }: any, index) => (
@@ -88,6 +128,22 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     ));
   };
 
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:4001/hi/${cookieName}/${chatRoom[1]}`,
+  //     );
+  //     setSavedChat(res.data.message);
+  //     return true;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
   return (
     <div
       style={{ justifyContent: "center", height: "100vh" }}
@@ -96,7 +152,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       <Link href={`http://localhost:3000/messages/${cookieName}`}>
         <a>Back to profile page</a>
       </Link>
-      <div className="container_chat">
+      <div className="container-chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}
       </div>
