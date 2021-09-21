@@ -13,23 +13,14 @@ function PendingChats({
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
   const parentDiv = React.useRef<HTMLDivElement | null>(null);
-  const updateInviteStatus = async () => {
+  const updateInviteStatus = async (data: string) => {
     try {
       const res = await axios.put(`http://localhost:4001/invites`, {
         id: _id,
-        status: localStatus, //will change it with state from buttons
+        status: data, //will change it with state from buttons
       });
       console.log(res);
     } catch (error) {}
-  };
-
-  const updateStatus = (status: string) => {
-    setLocalStatus(`${status}`);
-    parentDiv.current;
-    updateInviteStatus();
-    setTimeout(() => {
-      setLocalStatus("");
-    }, 3000);
   };
 
   const updateInvites = async () => {
@@ -43,13 +34,18 @@ function PendingChats({
     }
   };
 
-  React.useEffect(() => {
-    if (localStatus) {
-      console.log("render");
-      console.log(localStatus);
-      updateInvites();
-    }
-  }, [localStatus]);
+  const updateStatus = (status: string) => {
+    setLocalStatus(`${status}`);
+    console.log(status);
+    parentDiv.current;
+    updateInviteStatus(status);
+    updateInvites();
+    console.log("fetch data");
+
+    setTimeout(() => {
+      setLocalStatus("");
+    }, 3000);
+  };
 
   return (
     <div>
@@ -57,10 +53,7 @@ function PendingChats({
         <div ref={parentDiv} className="contacts">
           <h1>{inviter}</h1>
           <div className="invite_buttons">
-            <button
-              onClick={(e) => updateStatus("accepted")}
-              className="accept"
-            >
+            <button onClick={() => updateStatus("accepted")} className="accept">
               Aceept
             </button>
             <button
