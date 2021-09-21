@@ -84,11 +84,11 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   };
 
   React.useEffect(() => {
-    validateUser();
-    fetchInviteStatus();
-  }, []);
+    if (localStatus) fetchInviteStatus();
+  }, [localStatus]);
 
   React.useEffect(() => {
+    validateUser();
     fetchInviteStatus();
   }, []);
 
@@ -105,7 +105,14 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           <Error cookie={cookie} />
         ) : (
           contacts.map((item, index) => {
-            return <ActiveChats key={index} {...item} cookie={cookie} />;
+            return (
+              <ActiveChats
+                key={index}
+                cookie={cookie}
+                {...item}
+                cookie={cookie}
+              />
+            );
           })
         )}
       </section>

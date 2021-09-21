@@ -1,14 +1,17 @@
 import { AppProps } from "next/dist/shared/lib/router/router";
 import axios from "axios";
 import React from "react";
-
+import { useCookie } from "next-cookie";
 function PendingChats({
   _id,
   inviter,
   status,
   localStatus,
   setLocalStatus,
+  cookie,
 }: AppProps) {
+  const cokie = useCookie(cookie);
+  const cookieName = cokie.get("name");
   const updateInviteStatus = async () => {
     try {
       const res = await axios.put(`http://localhost:4001/invites`, {
@@ -27,11 +30,23 @@ function PendingChats({
     }, 3000);
   };
 
+  const updateInvites = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/invites/${cookieName}`,
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   React.useEffect(() => {
     if (localStatus) {
       console.log("render");
       console.log(localStatus);
       updateInviteStatus();
+      updateInvites();
     }
   }, [localStatus]);
 
