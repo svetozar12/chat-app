@@ -81,7 +81,8 @@ form,
 .you,
 .icon,
 .dash_board,
-.active_chats {
+.active_chats,
+.main_section {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,19 +117,19 @@ form {
 .active_chats {
   background: var(--main-blue);
   color: var(--main-white);
-  height: 100vh;
   padding: 0 5rem;
   text-align: center;
-  height: 100vh;
-  overflow: auto;
-  max-width: 70%;
+  overflow-y: auto;
   overflow-x: hidden;
+  height: 100vh;
+  max-width: 70%;
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .main_section {
   margin: 1rem;
+  width: 100%;
 }
 
 /* =================

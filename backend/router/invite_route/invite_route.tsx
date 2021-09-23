@@ -7,7 +7,6 @@ const Invites = require("../../models/Invites.model");
 const Users = require("../../models/User.model");
 
 route.get("/invites/:id/", async (req: Request, res: Response) => {
-  //Doesnt work without query
   try {
     const name = req.params.id;
     let status = req.query.status;
@@ -27,7 +26,7 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
         error: "You dont have invites or this this account doesn't exist.",
       });
     }
-    res.json({ invites }).status(201);
+    return res.json({ invites }).status(201);
   } catch (error) {
     return res.status(501).json({ error: "error" });
   }

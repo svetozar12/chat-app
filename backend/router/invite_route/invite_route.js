@@ -69,8 +69,7 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                             error: "You dont have invites or this this account doesn't exist.",
                         })];
                 }
-                res.json({ invites: invites }).status(201);
-                return [3 /*break*/, 6];
+                return [2 /*return*/, res.json({ invites: invites }).status(201)];
             case 5:
                 error_1 = _b.sent();
                 return [2 /*return*/, res.status(501).json({ error: "error" })];

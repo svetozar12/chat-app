@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 // componens
 import ActiveChats from "../../components/ActiveChats";
 import PendingChats from "../../components/PendingChats";
-import Error from "../../components/Error";
+import FindFriends from "../../components/FindFriends";
 
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
@@ -29,7 +29,7 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       setContacts(data);
 
       return true;
-    } catch (error) {
+    } catch (error: string[] | any) {
       const data = error.response.data.error;
       setError(data);
 
@@ -98,18 +98,17 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <section>
+      <section className="active_chats">
+        <FindFriends cookie={cookie} />
         {error ? (
-          <Error cookie={cookie} />
+          <div className="active_chats">
+            <h1>You dont have available chats</h1>
+          </div>
         ) : (
           contacts.map((item, index) => {
+            if (item.status !== "accepted") return;
             return (
-              <ActiveChats
-                key={index}
-                cookie={cookie}
-                {...item}
-                cookie={cookie}
-              />
+              <ActiveChats key={index} cookie={cookie} {...item} items={item} />
             );
           })
         )}
@@ -134,10 +133,12 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
+                console.log(item, index);
                 return (
                   <PendingChats
                     key={index}
                     {...item}
+                    items={item}
                     localStatus={localStatus}
                     setLocalStatus={setLocalStatus}
                   />
