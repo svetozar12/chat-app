@@ -38,18 +38,16 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   };
 
   const deleteCookies = () => {
-    if (cookieName) {
-      cookie.remove("name");
-      router.push("/");
-    }
+    cookie.remove("name");
+    router.push("/");
   };
 
   const deleteUser = async () => {
     try {
+      deleteCookies();
       const res = await axios.delete(
         `http://localhost:4001/users/${cookieName}`,
       );
-      deleteCookies();
       return true;
     } catch (error) {
       return false;

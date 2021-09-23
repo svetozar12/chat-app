@@ -108,18 +108,15 @@ route.delete("/users/:username", function (req, res) { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log("hi");
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
+                _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, User.deleteOne({ username: req.params.username }).exec()];
-            case 2:
+            case 1:
                 data_1 = _a.sent();
                 return [2 /*return*/, res.status(204)];
-            case 3:
+            case 2:
                 error_3 = _a.sent();
                 return [2 /*return*/, res.json({ error: error_3 }).sendStatus(501)];
-            case 4: return [2 /*return*/];
+            case 3: return [2 /*return*/];
         }
     });
 }); });

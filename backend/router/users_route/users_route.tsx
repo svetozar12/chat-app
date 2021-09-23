@@ -54,8 +54,6 @@ route.post("/users/register", async (req: Request, res: Response) => {
 });
 
 route.delete("/users/:username", async (req: Request, res: Response) => {
-  console.log("hi");
-
   try {
     const data = await User.deleteOne({ username: req.params.username }).exec();
     return res.status(204);

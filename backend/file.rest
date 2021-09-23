@@ -25,6 +25,6 @@ Content-Type: application/json
 
 {
     "reciever":"user1",
-    "inviter":"user1"
+    "inviter":"user4"
 }
 ###
