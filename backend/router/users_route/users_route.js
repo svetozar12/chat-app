@@ -59,9 +59,10 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
                 return [2 /*return*/, res.json({ message: users })];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, res
-                        .status(error_1.status)
-                        .json({ errorStatus: error_1.status, message: error_1 })];
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
             case 3: return [2 /*return*/];
         }
     });
@@ -96,9 +97,10 @@ route.post("/users/register", function (req, res) { return __awaiter(void 0, voi
                         .send({ message: "User " + req.body.username + " created" })];
             case 3:
                 error_2 = _a.sent();
-                return [2 /*return*/, res
-                        .status(error_2.status)
-                        .json({ errorStatus: error_2.status, message: error_2 })];
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
             case 4: return [2 /*return*/];
         }
     });
@@ -115,7 +117,10 @@ route.delete("/users/:username", function (req, res) { return __awaiter(void 0, 
                 return [2 /*return*/, res.status(204)];
             case 2:
                 error_3 = _a.sent();
-                return [2 /*return*/, res.json({ error: error_3 }).sendStatus(501)];
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
             case 3: return [2 /*return*/];
         }
     });

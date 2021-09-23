@@ -81,13 +81,13 @@ const index: NextPage<IHomeProps> = (props) => {
   }, []);
 
   React.useEffect(() => {
-    if (localStatus) fetchInviteStatus();
-  }, [localStatus]);
-
-  React.useEffect(() => {
     validateUser();
     fetchInviteStatus();
   }, []);
+
+  React.useEffect(() => {
+    if (localStatus) fetchInviteStatus();
+  }, [localStatus]);
 
   React.useEffect(() => {
     if (reciever) {
@@ -153,7 +153,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.get("name");
 
   if (!cookieName) {
-    console.log("bad cookie");
     return {
       redirect: {
         destination: `/`,

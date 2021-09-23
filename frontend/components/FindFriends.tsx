@@ -9,16 +9,12 @@ function FindFriends({ cookie }) {
 
   const sendInvite = async () => {
     try {
-      const res = axios.post(`http://localhost:4001/invites`, {
+      const res = await axios.post(`http://localhost:4001/invites`, {
         reciever,
         inviter: cookieName,
       });
-      console.log("break");
-
       return true;
     } catch (error) {
-      console.log("eror");
-
       return false;
     }
   };

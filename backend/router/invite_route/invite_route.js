@@ -72,7 +72,10 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 return [2 /*return*/, res.json({ invites: invites }).status(201)];
             case 5:
                 error_1 = _b.sent();
-                return [2 /*return*/, res.status(501).json({ error: "error" })];
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
             case 6: return [2 /*return*/];
         }
     });
@@ -101,35 +104,36 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
                 return [2 /*return*/, res.json({ message: updateStatus })];
             case 3:
                 error_2 = _a.sent();
-                res.status(501).send({ error: "error" });
+                res.status(501).json({
+                    Error: "Internal server error",
+                    Message: "Something went wrong",
+                });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var input, user, checkInviteInstance, findInvites, invites, error_3;
+    var user, checkInviteInstance, findInvites, invites, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                input = req.body.reciever;
-                console.log(input === "" || " ");
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 7, , 8]);
+                _a.trys.push([0, 6, , 7]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.body.reciever,
-                        inviter: req.body.inviter,
                     }).exec()];
-            case 2:
+            case 1:
                 user = _a.sent();
+                if (user === null) {
+                    return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
+                }
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
                         $or: [{ status: "recieved" }, { status: "accepted" }],
                     }).exec()];
-            case 3:
+            case 2:
                 checkInviteInstance = _a.sent();
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
@@ -137,34 +141,30 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                         inviter: req.body.inviter,
                         $or: [{ status: "recieved" }, { status: "accepted" }],
                     }).exec()];
-            case 4:
+            case 3:
                 findInvites = _a.sent();
                 //check if findInvites and checkInviteInstance are equal
                 if (findInvites && checkInviteInstance) {
                     return [2 /*return*/, res.status(409).json({ ERROR: "Already sent" })];
                 }
-                if (!user || null || undefined) {
-                    return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
-                }
                 return [4 /*yield*/, new Invites({
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
                     })];
-            case 5:
+            case 4:
                 invites = _a.sent();
                 return [4 /*yield*/, invites.save()];
-            case 6:
+            case 5:
                 _a.sent();
                 return [2 /*return*/, res.status(201).json({ message: invites })];
-            case 7:
+            case 6:
                 error_3 = _a.sent();
-                console.log("hi");
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",
                 });
-                return [3 /*break*/, 8];
-            case 8: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); });

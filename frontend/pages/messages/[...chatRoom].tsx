@@ -17,7 +17,6 @@ const Home: NextPage<IHomeProps> = (props) => {
     message: "",
     time: "",
   });
-  const [savedChat, setSavedChat] = useState<string[]>([]);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
 
@@ -114,15 +113,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
   const cookieRemove = cookie.remove("name");
-  if (!cookieName) {
-    cookieRemove;
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
 
   if (cookieName) {
     try {

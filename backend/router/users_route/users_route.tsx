@@ -18,9 +18,10 @@ route.get("/users/:username", async (req: Request, res: Response) => {
       });
     return res.json({ message: users });
   } catch (error: any) {
-    return res
-      .status(error.status)
-      .json({ errorStatus: error.status, message: error });
+    return res.status(501).json({
+      Error: "Internal server error",
+      Message: "Something went wrong",
+    });
   }
 });
 
@@ -47,9 +48,10 @@ route.post("/users/register", async (req: Request, res: Response) => {
       .status(201)
       .send({ message: `User ${req.body.username} created` });
   } catch (error: any) {
-    return res
-      .status(error.status)
-      .json({ errorStatus: error.status, message: error });
+    return res.status(501).json({
+      Error: "Internal server error",
+      Message: "Something went wrong",
+    });
   }
 });
 
@@ -58,7 +60,10 @@ route.delete("/users/:username", async (req: Request, res: Response) => {
     const data = await User.deleteOne({ username: req.params.username }).exec();
     return res.status(204);
   } catch (error) {
-    return res.json({ error }).sendStatus(501);
+    return res.status(501).json({
+      Error: "Internal server error",
+      Message: "Something went wrong",
+    });
   }
 });
 

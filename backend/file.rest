@@ -18,13 +18,13 @@ Content-Type: application/json
     "status":"accepted"
 }
 ### recieved
-GET http://localhost:4001/invites/user3
+GET http://localhost:4001/invites/user1
 ### accepted
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":" ",
+    "reciever":"",
     "inviter":"user3"
 }
 ###

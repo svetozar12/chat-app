@@ -1,13 +1,7 @@
 import React from "react";
-import { useCookie } from "next-cookie";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
-const ActiveChats = ({ cookie, inviter, status }: AppProps) => {
-  const cokie = useCookie(cookie);
-  const cookieName = cookie.get("name");
-
-  const [reciever, setReciever] = React.useState("");
-
+const ActiveChats = ({ inviter, status }: AppProps) => {
   return (
     <div>
       {status === "accepted" && (
