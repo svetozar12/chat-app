@@ -1,14 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { useRouter } from "next/router";
-import { useCookie } from "next-cookie";
-import { GetServerSideProps, NextPage } from "next";
 
-const index: NextPage<{ cookie: string }> = (props) => {
-  const cookie = useCookie(props.cookie);
-  const router = useRouter();
-  const cookieName = cookie.get("name");
-
+const index = () => {
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
@@ -23,15 +16,6 @@ const index: NextPage<{ cookie: string }> = (props) => {
       </Link>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-
-  return {
-    props: { cookie: context.req.headers.cookie || "" },
-  };
 };
 
 export default index;

@@ -1,17 +1,16 @@
 import React from "react";
-import { useCookie } from "next-cookie";
-import { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
-// componens
 import ActiveChats from "../../components/ActiveChats";
 import PendingChats from "../../components/PendingChats";
 import FindFriends from "../../components/FindFriends";
-
-import { io, Socket } from "socket.io-client";
 import axios from "axios";
-const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
-  const router = useRouter();
+import { useCookie } from "next-cookie";
+import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
+import { io, Socket } from "socket.io-client";
+import { IHomeProps } from "../../interfaces/global";
 
+const index: NextPage<IHomeProps> = (props) => {
+  const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = React.useState<string>("");
@@ -29,7 +28,7 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       setContacts(data);
 
       return true;
-    } catch (error: string[] | any) {
+    } catch (error: any) {
       const data = error.response.data.error;
       setError(data);
 
@@ -66,6 +65,13 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
     }
   };
 
+  const emitUsers = () => {
+    socketRef?.emit("sender_reciever", {
+      sender: cookieName,
+      reciever: reciever,
+    });
+  };
+
   React.useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
     setSocketRef(socketConnect);
@@ -73,13 +79,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
-
-  const emitUsers = () => {
-    socketRef?.emit("sender_reciever", {
-      sender: cookieName,
-      reciever: reciever,
-    });
-  };
 
   React.useEffect(() => {
     if (localStatus) fetchInviteStatus();
@@ -106,10 +105,8 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
           </div>
         ) : (
           contacts.map((item, index) => {
-            if (item.status !== "accepted") return;
-            return (
-              <ActiveChats key={index} cookie={cookie} {...item} items={item} />
-            );
+            if (item["status"] !== "accepted") return;
+            return <ActiveChats key={index} cookie={cookie} {...item} />;
           })
         )}
       </section>
@@ -138,7 +135,6 @@ const index: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
                   <PendingChats
                     key={index}
                     {...item}
-                    items={item}
                     localStatus={localStatus}
                     setLocalStatus={setLocalStatus}
                   />
@@ -157,6 +153,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.get("name");
 
   if (!cookieName) {
+    console.log("bad cookie");
     return {
       redirect: {
         destination: `/`,

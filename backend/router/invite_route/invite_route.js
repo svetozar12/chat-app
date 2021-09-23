@@ -66,7 +66,7 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 invites = _a;
                 if (!invites || invites.length <= 0) {
                     return [2 /*return*/, res.status(404).json({
-                            error: "You dont have invites or this this account doesn't exist.",
+                            error: "You dont have invites .",
                         })];
                 }
                 return [2 /*return*/, res.json({ invites: invites }).status(201)];
@@ -107,56 +107,64 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); });
-// end of accept and ignore put requsts
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, checkInviteInstance, findInvites, invites, error_3;
+    var input, user, checkInviteInstance, findInvites, invites, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 6, , 7]);
+                input = req.body.reciever;
+                console.log(input === "" || " ");
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 7, , 8]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.body.reciever,
                         inviter: req.body.inviter,
-                    })];
-            case 1:
+                    }).exec()];
+            case 2:
                 user = _a.sent();
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
                         $or: [{ status: "recieved" }, { status: "accepted" }],
-                    })];
-            case 2:
+                    }).exec()];
+            case 3:
                 checkInviteInstance = _a.sent();
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
                         $or: [{ status: "recieved" }, { status: "accepted" }],
-                    })];
-            case 3:
+                    }).exec()];
+            case 4:
                 findInvites = _a.sent();
                 //check if findInvites and checkInviteInstance are equal
                 if (findInvites && checkInviteInstance) {
                     return [2 /*return*/, res.status(409).json({ ERROR: "Already sent" })];
                 }
-                if (!user) {
+                if (!user || null || undefined) {
                     return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
                 }
                 return [4 /*yield*/, new Invites({
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
                     })];
-            case 4:
+            case 5:
                 invites = _a.sent();
                 return [4 /*yield*/, invites.save()];
-            case 5:
+            case 6:
                 _a.sent();
                 return [2 /*return*/, res.status(201).json({ message: invites })];
-            case 6:
+            case 7:
                 error_3 = _a.sent();
-                return [2 /*return*/, res.status(501).send("error")];
-            case 7: return [2 /*return*/];
+                console.log("hi");
+                res.status(501).json({
+                    Error: "Internal server error",
+                    Message: "Something went wrong",
+                });
+                return [3 /*break*/, 8];
+            case 8: return [2 /*return*/];
         }
     });
 }); });

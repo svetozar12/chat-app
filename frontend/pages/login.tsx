@@ -10,9 +10,9 @@ function login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const [name, setName] = React.useState("");
-  const [alert, setAlert] = React.useState("");
-  const [checked, setChecked] = React.useState(false);
+  const [name, setName] = React.useState<string>("");
+  const [alert, setAlert] = React.useState<string>("");
+  const [checked, setChecked] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (router.pathname === "/login" && cookieName) {
@@ -43,6 +43,8 @@ function login(props: AppProps) {
       if (result) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
+          sameSite: "strict",
+          path: "/",
         });
         router.push(`/messages/${cookieName}`);
       }
@@ -92,9 +94,6 @@ function login(props: AppProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-
   return {
     props: {
       cookie: context.req.headers.cookie || "",

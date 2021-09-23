@@ -21,7 +21,6 @@ function PendingChats({
         status: word, //will change it with state from buttons
       });
       setLocalStatus("");
-      console.log("PUT :", res);
 
       return true;
     } catch (error) {
@@ -34,7 +33,6 @@ function PendingChats({
       const res = await axios.get(
         `http://localhost:4001/invites/${cookieName}`,
       );
-      console.log("GET :", res);
 
       return true;
     } catch (error) {

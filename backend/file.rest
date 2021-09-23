@@ -1,10 +1,10 @@
-GET http://localhost:4001/users/user5
+GET http://localhost:4001/users/user3
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"user5"
+    "username":"user3"
 }
 
 ###
@@ -18,13 +18,13 @@ Content-Type: application/json
     "status":"accepted"
 }
 ### recieved
-GET http://localhost:4001/invites/user1
+GET http://localhost:4001/invites/user3
 ### accepted
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"user1",
-    "inviter":"user5"
+    "reciever":" ",
+    "inviter":"user3"
 }
 ###

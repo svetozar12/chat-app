@@ -20,7 +20,7 @@ route.get("/users/:username", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res
       .status(error.status)
-      .json({ errorStatus: error.status, message: error, stack: error.stack });
+      .json({ errorStatus: error.status, message: error });
   }
 });
 

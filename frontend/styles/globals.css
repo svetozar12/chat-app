@@ -117,7 +117,7 @@ form {
 .active_chats {
   background: var(--main-blue);
   color: var(--main-white);
-  padding: 0 5rem;
+  padding: 0 1rem;
   text-align: center;
   overflow-y: auto;
   overflow-x: hidden;
@@ -130,6 +130,13 @@ form {
 .main_section {
   margin: 1rem;
   width: 100%;
+}
+
+.rendered_chat {
+  border-radius: 30% 30% 30% 30%;
+  width: 15rem;
+  overflow: auto;
+  word-wrap: break-word;
 }
 
 /* =================

@@ -61,7 +61,7 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
                 error_1 = _a.sent();
                 return [2 /*return*/, res
                         .status(error_1.status)
-                        .json({ errorStatus: error_1.status, message: error_1, stack: error_1.stack })];
+                        .json({ errorStatus: error_1.status, message: error_1 })];
             case 3: return [2 /*return*/];
         }
     });

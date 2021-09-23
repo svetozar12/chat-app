@@ -1,9 +1,8 @@
-import React, { MouseEventHandler } from "react";
-import axios from "axios";
+import React from "react";
 import { useCookie } from "next-cookie";
 import { AppProps } from "next/dist/shared/lib/router/router";
 
-const ActiveChats = ({ cookie, _id, inviter, status, items }: AppProps) => {
+const ActiveChats = ({ cookie, inviter, status }: AppProps) => {
   const cokie = useCookie(cookie);
   const cookieName = cookie.get("name");
 

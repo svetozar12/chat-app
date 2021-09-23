@@ -1,9 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
 import { useCookie } from "next-cookie";
 import axios from "axios";
-import { AppProps } from "next/dist/shared/lib/router/router";
 
-function FindFriends({ cookie }: AppProps) {
+function FindFriends({ cookie }) {
   const [reciever, setReciever] = React.useState("");
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
@@ -14,16 +13,22 @@ function FindFriends({ cookie }: AppProps) {
         reciever,
         inviter: cookieName,
       });
+      console.log("break");
+
       return true;
     } catch (error) {
+      console.log("eror");
+
       return false;
     }
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setReciever("");
-    sendInvite();
+    if (reciever) {
+      setReciever("");
+      sendInvite();
+    }
   };
 
   return (

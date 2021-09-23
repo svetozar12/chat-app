@@ -6,6 +6,8 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { IAlert } from "../interfaces/global";
+
 function register(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
@@ -13,13 +15,23 @@ function register(props: AppProps) {
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
-  const [state, setState] = React.useState<string | any>({
-    badAlert: "",
+  const [state, setState] = React.useState<IAlert>({
     goodAlert: "",
+    badAlert: "",
   });
 
+  React.useEffect(() => {
+    if (cookieName) {
+      router.push(`/messages/${cookieName}`);
+    }
+  }, []);
+
   const quickLogin = () => {
-    cookie.set("name", name, { maxAge: 3600 });
+    cookie.set("name", name, {
+      maxAge: 7200,
+      sameSite: "strict",
+      path: "/",
+    });
     router.push(`/messages/${cookieName}`);
   };
 
@@ -28,14 +40,14 @@ function register(props: AppProps) {
       const res = await axios.post("http://localhost:4001/users/register", {
         username: name,
       });
-
-      setState({ goodAlert: res.data.message });
+      const data = res.data;
+      setState({ goodAlert: data.message });
       setLoginPrompt(true);
       return true;
     } catch (error: any) {
-      const temp = error.response.data;
+      const data = error.response.data;
       setName("");
-      setState({ badAlert: temp.message });
+      setState({ badAlert: data.message });
       return false;
     }
   };
@@ -85,9 +97,6 @@ function register(props: AppProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookie = useCookie(context);
-  const cookieName = cookie.has("name");
-
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };
