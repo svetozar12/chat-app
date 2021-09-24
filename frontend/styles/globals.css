@@ -5,6 +5,7 @@ Table of concepts
   3.Layout styling
   4.Components styling
   5.Typography styling
+  6.Media Query
 ================= */
 
 /* =================
@@ -37,7 +38,6 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-form,
 button {
   margin: 1rem;
 }
@@ -61,12 +61,28 @@ a {
   );
   position: absolute;
   z-index: -1;
-  width: 110vw;
-  height: 130vh;
+  width: 100vw;
+  height: 100vh;
 }
 
 .container {
   flex-direction: column;
+}
+
+.contacts_container {
+  width: 100%;
+  background-color: var(--off-blue);
+  color: var(--main-white);
+  width: 100%;
+  padding: 0 1rem;
+  word-wrap: break-word;
+  border-top: 1px solid var(--main-black);
+  transition: 0.2s;
+}
+
+.contacts_container:hover {
+  opacity: 0.65;
+  transition: 0.2s;
 }
 
 .chat_home {
@@ -82,7 +98,8 @@ form,
 .icon,
 .dash_board,
 .active_chats,
-.main_section {
+.main_section,
+.invite_buttons {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,8 +110,6 @@ form,
   height: 60vh;
   overflow: auto;
   background-color: var(--main-white);
-  padding: 1rem;
-  margin: 0.2rem;
   box-shadow: 0px 0px 20px var(--off-white);
 }
 
@@ -117,12 +132,12 @@ form {
 .active_chats {
   background: var(--main-blue);
   color: var(--main-white);
-  padding: 0 1rem;
   text-align: center;
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
   max-width: 70%;
+  width: 50%;
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -147,8 +162,16 @@ input {
   outline: none;
 }
 
+input:focus {
+  box-shadow: 0 0 5px;
+}
+
+.friendsInput input {
+  width: 90%;
+}
+
 .container input {
-  width: 20%;
+  width: 30%;
   height: 2rem;
   border-radius: 20px;
   border: none;
@@ -174,11 +197,13 @@ form > button {
   border-radius: 20px;
   padding: 0.5rem;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 form > button:hover {
   background-color: var(--main-white);
   color: var(--main-black);
+  transition: 0.2s;
 }
 
 .clickable {
@@ -203,17 +228,8 @@ form > button:hover {
   margin: 2rem 0 2rem 0;
 }
 
-.accepted_invite {
-  padding: 2rem;
-  margin: 2rem;
-  background-color: var(--off-blue);
-  color: var(--main-white);
-  max-width: 90%;
-  word-wrap: break-word;
-}
-
 .invite_buttons button {
-  margin: 0 0.2rem;
+  margin: 0.2rem;
   cursor: pointer;
 }
 
@@ -221,25 +237,22 @@ form > button:hover {
 .decline {
   outline: none;
   border: none;
-  border: 1px solid var(--main-black);
-  border-radius: 10px;
-  padding: 0.5rem 1rem;
-  font-size: 1.01rem;
+  font-size: 3.01rem;
+  background: transparent;
+  transition: 0.2s;
 }
 
 .accept {
-  background: var(--main-green);
-  color: var(--main-white);
+  color: var(--main-green);
 }
 
 .decline {
-  background: var(--main-red);
-  color: var(--main-white);
+  color: var(--main-red);
 }
 
 .accept:hover,
 .decline:hover {
-  box-shadow: 2px 2px var(--main-black);
+  color: var(--main-white);
   transition: 0.2s;
 }
 
@@ -325,4 +338,48 @@ p {
 
 .active_chats > main > a {
   color: var(--main-white);
+}
+
+/* =================
+6.Media Query
+================= */
+@media (max-width: 431px) {
+  .container input {
+    width: 80%;
+  }
+
+  .alert {
+    font-size: 0.9rem;
+  }
+
+  .quick_login {
+    font-size: 0.689rem;
+  }
+
+  .friendsInput input {
+    width: 90%;
+    margin: 0 1rem;
+  }
+}
+/* specific for nokia 8110 */
+@media (max-width: 240px) {
+  .friendsInput input {
+    width: 75%;
+    margin: 0 1rem;
+  }
+  h2 {
+    font-size: 0.9rem;
+  }
+
+  .container h1 {
+    font-size: 0.6rem;
+  }
+
+  .active_chats {
+    padding: 1rem;
+  }
+
+  .active_chats h1 {
+    font-size: 0.65rem;
+  }
 }

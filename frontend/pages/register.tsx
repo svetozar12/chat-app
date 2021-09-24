@@ -63,9 +63,12 @@ function register(props: AppProps) {
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
-        <h1 style={state.goodAlert ? { color: "green" } : { color: "red" }}>
+        <h2
+          className="alert"
+          style={state.goodAlert ? { color: "green" } : { color: "red" }}
+        >
           {state.goodAlert || state.badAlert}
-        </h1>
+        </h2>
         <h1>Register</h1>
         <input
           value={name}
@@ -86,9 +89,9 @@ function register(props: AppProps) {
           <div
             onClick={quickLogin}
             style={{ cursor: "pointer" }}
-            className="container"
+            className="container quick_login"
           >
-            <h1>Click me to Quick login</h1>
+            <h2>Click me to Quick login</h2>
           </div>
         )}
       </form>

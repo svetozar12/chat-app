@@ -2,6 +2,7 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import axios from "axios";
 import React from "react";
 import { useCookie } from "next-cookie";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 function PendingChats({
   _id,
   inviter,
@@ -56,13 +57,13 @@ function PendingChats({
               onClick={() => updateInviteStatus("accepted")}
               className="accept"
             >
-              Aceept
+              <AiFillCheckCircle />
             </button>
             <button
               onClick={() => updateInviteStatus("declined")}
               className="decline"
             >
-              Decline
+              <AiFillCloseCircle />
             </button>
           </div>
         </div>

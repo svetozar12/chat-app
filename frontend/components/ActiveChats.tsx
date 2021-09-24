@@ -4,7 +4,16 @@ import { useCookie } from "next-cookie";
 import axios from "axios";
 const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
   const cokie = useCookie(cookie);
-
+  const [width, setWidth] = React.useState<number | null>(null);
+  React.useEffect(() => {
+    setWidth(window.innerWidth);
+    window.addEventListener("resize", () => {
+      setWidth(window.innerWidth);
+    });
+    return window.removeEventListener("resize", () => {
+      setWidth(window.innerWidth);
+    });
+  }, []);
   const sendInvite = async () => {
     try {
       const res = await axios.post(`http://localhost:4001/invites`, {
@@ -21,24 +30,19 @@ const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
   React.useEffect(() => {
     sendInvite();
   }, []);
+  console.log(width);
 
   return (
-    <div>
-      <a
-        style={{
-          margin: "1rem",
-          width: "100%",
-          textAlign: "center",
-        }}
-        href="http://localhost:3000/messages/invites/dar"
-      >
-        <div>
-          <div className="accepted_invite">
-            <h1>{inviter}</h1>
-          </div>
-        </div>
-      </a>
-    </div>
+    <a
+      className="contacts_container"
+      href="http://localhost:3000/messages/invites/dar"
+    >
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div>logo </div>
+        <h1>{width >= 432 && inviter}</h1>
+      </div>
+      {width >= 432 && <p>Last message...</p>}
+    </a>
   );
 };
 export default ActiveChats;

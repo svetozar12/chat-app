@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ActiveChats from "../../components/ActiveChats";
 import PendingChats from "../../components/PendingChats";
 import FindFriends from "../../components/FindFriends";
@@ -13,11 +13,12 @@ const index: NextPage<IHomeProps> = (props) => {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const [localStatus, setLocalStatus] = React.useState<string>("");
-  const [reciever, setReciever] = React.useState<string | null>("");
-  const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
-  const [contacts, setContacts] = React.useState([]);
-  const [error, setError] = React.useState<string>("");
+
+  const [localStatus, setLocalStatus] = useState<string>("");
+  const [reciever, setReciever] = useState<string | null>("");
+  const [socketRef, setSocketRef] = useState<Socket | null>(null);
+  const [contacts, setContacts] = useState([]);
+  const [error, setError] = useState<string>("");
 
   const fetchInviteStatus = async () => {
     try {

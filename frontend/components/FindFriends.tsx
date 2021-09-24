@@ -29,7 +29,7 @@ function FindFriends({ cookie }) {
   };
 
   return (
-    <form onSubmit={sendInvite}>
+    <form className="friendsInput" onSubmit={sendInvite}>
       <h1>Your chats</h1>
       <input
         onChange={(e) => setReciever(e.target.value)}

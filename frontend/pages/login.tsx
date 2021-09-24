@@ -58,7 +58,9 @@ function login(props: AppProps) {
   return (
     <div>
       <form style={{ height: "100vh" }} className="container">
-        <h1 style={{ color: "red" }}>{alert}</h1>
+        <h1 className="alert" style={{ color: "red" }}>
+          {alert}
+        </h1>
         <h1>Login</h1>
         <input
           value={name}
