@@ -37,32 +37,6 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
   }
 });
 
-route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
-  try {
-    const name = req.params.id;
-
-    const invites = await Invites.find({
-      inviter: name,
-      // status: "accepted",
-    });
-
-    console.log(invites);
-
-    if (!invites || invites.length <= 0) {
-      return res.status(404).json({
-        error: "You dont have accepted invites .",
-      });
-    }
-
-    return res.json({ invites }).status(201);
-  } catch (error) {
-    return res.status(501).json({
-      Error: "Internal server error",
-      Message: "Something went wrong",
-    });
-  }
-});
-
 route.put("/invites", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;
@@ -123,6 +97,7 @@ route.post("/invites", async (req: Request, res: Response) => {
     const invites = await new Invites({
       reciever: req.body.reciever,
       inviter: req.body.inviter,
+      status: req.body.status,
     });
     await invites.save();
     return res.status(201).json({ message: invites });

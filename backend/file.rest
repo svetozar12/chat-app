@@ -20,14 +20,13 @@ Content-Type: application/json
 ### 
 GET http://localhost:4001/invites/user1
 ###
-GET http://localhost:4001/invites/inviter/user3
-###
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
     "reciever":"user1",
-    "inviter":"user3"
+    "inviter":"user3",
+    "status":"accepted"
 }
 ###
 GET http://localhost:4001/

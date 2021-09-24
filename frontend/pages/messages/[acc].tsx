@@ -17,7 +17,6 @@ const index: NextPage<IHomeProps> = (props) => {
   const [reciever, setReciever] = React.useState<string | null>("");
   const [socketRef, setSocketRef] = React.useState<Socket | null>(null);
   const [contacts, setContacts] = React.useState([]);
-  const [inviters, setInviters] = React.useState([]);
   const [error, setError] = React.useState<string>("");
 
   const fetchInviteStatus = async () => {
@@ -35,17 +34,6 @@ const index: NextPage<IHomeProps> = (props) => {
       setError(data);
 
       return false;
-    }
-  };
-
-  const fetchInviters = async () => {
-    try {
-      const resInviter = await axios.get(
-        `http://localhost:4001/invites/inviter/${cookieName}`,
-      );
-      console.log(resInviter);
-    } catch (error) {
-      console.log("error");
     }
   };
 
@@ -96,13 +84,11 @@ const index: NextPage<IHomeProps> = (props) => {
   React.useEffect(() => {
     validateUser();
     fetchInviteStatus();
-    fetchInviters();
   }, []);
 
   React.useEffect(() => {
     if (localStatus) {
       fetchInviteStatus();
-      fetchInviters();
     }
   }, [localStatus]);
 

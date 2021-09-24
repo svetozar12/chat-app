@@ -3,9 +3,24 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useCookie } from "next-cookie";
 import axios from "axios";
 const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
-  console.log("reciever");
-
   const cokie = useCookie(cookie);
+
+  const sendInvite = async () => {
+    try {
+      const res = await axios.post(`http://localhost:4001/invites`, {
+        inviter: reciever,
+        reciever: inviter,
+        status: "accepted",
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  React.useEffect(() => {
+    sendInvite();
+  }, []);
 
   return (
     <div>

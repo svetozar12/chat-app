@@ -12,6 +12,7 @@ function FindFriends({ cookie }) {
       const res = await axios.post(`http://localhost:4001/invites`, {
         reciever,
         inviter: cookieName,
+        status: "recieved",
       });
       return true;
     } catch (error) {
