@@ -58,7 +58,7 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 return [3 /*break*/, 4];
             case 2: return [4 /*yield*/, Invites.find({
                     reciever: name_1,
-                }).select("status  inviter")];
+                }).select("status  inviter reciever")];
             case 3:
                 _a = _b.sent();
                 _b.label = 4;
@@ -80,8 +80,38 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+route.get("/invites/inviter/:id/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var name_2, invites, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                name_2 = req.params.id;
+                return [4 /*yield*/, Invites.find({
+                        inviter: name_2,
+                        // status: "accepted",
+                    })];
+            case 1:
+                invites = _a.sent();
+                console.log(invites);
+                if (!invites || invites.length <= 0) {
+                    return [2 /*return*/, res.status(404).json({
+                            error: "You dont have accepted invites .",
+                        })];
+                }
+                return [2 /*return*/, res.json({ invites: invites }).status(201)];
+            case 2:
+                error_2 = _a.sent();
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, status_2, inviteInstance, updateStatus, error_2;
+    var id, status_2, inviteInstance, updateStatus, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -103,7 +133,7 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
                 updateStatus = _a.sent();
                 return [2 /*return*/, res.json({ message: updateStatus })];
             case 3:
-                error_2 = _a.sent();
+                error_3 = _a.sent();
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",
@@ -114,7 +144,7 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
     });
 }); });
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, checkInviteInstance, findInvites, invites, error_3;
+    var user, checkInviteInstance, findInvites, invites, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -158,7 +188,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 _a.sent();
                 return [2 /*return*/, res.status(201).json({ message: invites })];
             case 6:
-                error_3 = _a.sent();
+                error_4 = _a.sent();
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",

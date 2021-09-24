@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var User = require("../models/User.model");
-var Message = require("../models/messages.model");
+var ChatRoom = require("../models/chatRoom.model");
 var Invite = require("../models/Invites.model");
 var connection = "mongodb://localhost:27017/chatDB";
 var connectDb = function () {

@@ -17,14 +17,17 @@ Content-Type: application/json
     "id":"614c33f4d8687f7baa7632e0",
     "status":"accepted"
 }
-### recieved
+### 
 GET http://localhost:4001/invites/user1
-### accepted
+###
+GET http://localhost:4001/invites/inviter/user3
+###
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"",
+    "reciever":"user1",
     "inviter":"user3"
 }
 ###
+GET http://localhost:4001/

@@ -15,17 +15,45 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
       status !== undefined
         ? await Invites.find({
             reciever: name,
+
             status,
           })
         : await Invites.find({
             reciever: name,
-          }).select("status  inviter");
+          }).select("status  inviter reciever");
 
     if (!invites || invites.length <= 0) {
       return res.status(404).json({
         error: "You dont have invites .",
       });
     }
+
+    return res.json({ invites }).status(201);
+  } catch (error) {
+    return res.status(501).json({
+      Error: "Internal server error",
+      Message: "Something went wrong",
+    });
+  }
+});
+
+route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
+  try {
+    const name = req.params.id;
+
+    const invites = await Invites.find({
+      inviter: name,
+      // status: "accepted",
+    });
+
+    console.log(invites);
+
+    if (!invites || invites.length <= 0) {
+      return res.status(404).json({
+        error: "You dont have accepted invites .",
+      });
+    }
+
     return res.json({ invites }).status(201);
   } catch (error) {
     return res.status(501).json({
