@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-
+import { useCookie } from "next-cookie";
+import { GetServerSideProps } from "next";
 const index = () => {
   return (
     <div style={{ height: "100vh" }} className="container">
@@ -16,6 +17,21 @@ const index = () => {
       </Link>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookie = useCookie(context);
+  const cookieName = cookie.get("name");
+  if (cookieName) {
+    return {
+      redirect: {
+        destination: `messages/${cookieName}`,
+      },
+    };
+  }
+  return {
+    props: { cookie: context.req.headers.cookie || "" },
+  };
 };
 
 export default index;

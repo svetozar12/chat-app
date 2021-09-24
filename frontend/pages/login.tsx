@@ -14,12 +14,6 @@ function login(props: AppProps) {
   const [alert, setAlert] = React.useState<string>("");
   const [checked, setChecked] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    if (router.pathname === "/login" && cookieName) {
-      router.push(`/messages/${cookieName}`);
-    }
-  });
-
   const loginPost = async () => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${name}`);
@@ -36,13 +30,20 @@ function login(props: AppProps) {
     }, 2000);
   };
 
+  const rememberMe = () => {};
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
       const result = await loginPost();
-      if (result) {
+      if (result && checked) {
         cookie.set("name", name, {
-          maxAge: checked ? 94670777 : 3600,
+          maxAge: 94670777,
+          sameSite: "strict",
+          path: "/",
+        });
+      } else if (result && !checked) {
+        cookie.set("name", name, {
           sameSite: "strict",
           path: "/",
         });
@@ -96,6 +97,16 @@ function login(props: AppProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookie = useCookie(context);
+  const cookieName = cookie.get("name");
+
+  if (cookieName) {
+    return {
+      redirect: {
+        destination: `messages/${cookieName}`,
+      },
+    };
+  }
   return {
     props: {
       cookie: context.req.headers.cookie || "",

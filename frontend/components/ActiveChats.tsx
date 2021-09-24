@@ -4,6 +4,7 @@ import { useCookie } from "next-cookie";
 import axios from "axios";
 const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
   const cokie = useCookie(cookie);
+
   const [width, setWidth] = React.useState<number | null>(null);
   React.useEffect(() => {
     setWidth(window.innerWidth);
@@ -35,7 +36,7 @@ const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
   return (
     <a
       className="contacts_container"
-      href="http://localhost:3000/messages/invites/dar"
+      href={`http://localhost:3000/messages/${cokie.get("name")}/chat`}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>logo </div>

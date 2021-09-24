@@ -168,6 +168,11 @@ input:focus {
 
 .friendsInput input {
   width: 90%;
+  border: none;
+  border-radius: 20px;
+  margin: 1rem;
+  padding: 0.3rem;
+  border: 1px solid var(--main-black);
 }
 
 .container input {
@@ -360,6 +365,31 @@ p {
     width: 90%;
     margin: 0 1rem;
   }
+
+  .contacts {
+    background: var(--main-blue);
+    width: 30vw;
+    padding: 0 1rem;
+    margin: 1rem;
+    flex-direction: column;
+  }
+
+  .accept,
+  .decline {
+    outline: none;
+    border: none;
+    font-size: 1.9rem;
+    background: transparent;
+    transition: 0.2s;
+  }
+
+  .accept {
+    color: var(--main-green);
+  }
+
+  .decline {
+    color: var(--main-red);
+  }
 }
 /* specific for nokia 8110 */
 @media (max-width: 240px) {
@@ -381,5 +411,13 @@ p {
 
   .active_chats h1 {
     font-size: 0.65rem;
+  }
+
+  .contacts {
+    background: var(--main-blue);
+    width: 30vw;
+    padding: 1rem;
+    margin: 1rem;
+    flex-direction: column;
   }
 }

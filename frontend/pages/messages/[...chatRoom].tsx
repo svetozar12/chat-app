@@ -10,7 +10,6 @@ const Home: NextPage<IHomeProps> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-
   const [reciever, setReciever] = useState<string | null>("");
   const [state, setState] = useState<IChatProps>({
     name: cookie.get("name"),
@@ -29,6 +28,10 @@ const Home: NextPage<IHomeProps> = (props) => {
   };
 
   useEffect(() => {
+    // if (!cookieName) {
+    //   console.log("cookie");
+    //   cookie.set("name", chatRoom[0]);
+    // }
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
       updateChat(name, message);
@@ -114,18 +117,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.get("name");
   const cookieRemove = cookie.remove("name");
 
-  if (cookieName) {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
-    } catch (error) {
-      cookieRemove;
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
+  if (!cookieName) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
   }
 
   return {
