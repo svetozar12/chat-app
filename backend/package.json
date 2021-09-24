@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "http": "^0.0.1-security",
+    "joi": "^17.4.2",
     "mongoose": "^6.0.5",
     "nodemon": "^2.0.12",
     "socket.io": "^4.2.0"

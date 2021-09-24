@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const createError = require("http-errors");
+const { registerValidation } = require("../../helpers/schema");
 
 import { Request, Response } from "express";
 
@@ -27,6 +27,12 @@ route.get("/users/:username", async (req: Request, res: Response) => {
 
 route.post("/users/register", async (req: Request, res: Response) => {
   try {
+    const { error } = registerValidation(req.body);
+
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
     const users = await User.find().exec();
     for (let i = 0; i < users.length; i++) {
       if (users[i].username === req.body.username) {
@@ -38,10 +44,6 @@ route.post("/users/register", async (req: Request, res: Response) => {
     }
 
     const user = new User({ type: "POST", username: req.body.username });
-    if (req.body.username === "")
-      return res
-        .status(400)
-        .json({ Error: "Invalid input", message: "Please enter valid input" });
 
     await user.save();
     return res
