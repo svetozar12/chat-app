@@ -24,6 +24,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [contacts, setContacts] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
 
+  const [test, setTest] = useState<string | string[]>([]);
+
   const fetchInviteStatus = async () => {
     try {
       const res = await axios.get(
@@ -31,8 +33,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       );
 
       const data = res.data.invites;
-      console.log(data);
-
       setContacts(data);
 
       return true;
@@ -73,15 +73,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const emitUsers = () => {
-    socketRef?.emit("sender_reciever", {
-      sender: cookieName,
-      reciever: reciever,
-    });
-  };
-
   const updateFriends = (
-    invites: string,
+    inviter: string,
     reciever: string,
     status: string,
   ): void => {
@@ -96,8 +89,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   React.useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("friend_request", ({ reciever, inviter, status }) => {
+      console.log(inviter);
+
       updateFriends(reciever, inviter, status);
-      console.log("yohohoho");
     });
     setSocketRef(socketConnect);
     return () => {
@@ -105,14 +99,15 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     };
   }, []);
 
+  const emitUsers = () => {
+    socketRef?.emit("sender_reciever", {
+      sender: cookieName,
+      reciever: reciever,
+    });
+  };
+
   React.useEffect(() => {
     if (localStatus) {
-      socketRef?.emit("friend_request", {
-        reciever: "az",
-        inviter: "ti",
-        status: "to",
-      });
-      console.log("me", reciever, inviter, status);
       fetchInviteStatus();
     }
   }, [localStatus]);
@@ -168,6 +163,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                 return (
                   <PendingChats
                     key={index}
+                    socketRef={socketRef}
                     {...item}
                     localStatus={localStatus}
                     setLocalStatus={setLocalStatus}

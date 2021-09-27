@@ -8,11 +8,21 @@ function PendingChats({
   inviter,
   status,
   localStatus,
+  reciever,
   setLocalStatus,
   cookie,
+  socketRef,
 }: AppProps) {
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
+
+  const emitFriendRequest = () => {
+    socketRef?.emit("friend_request", {
+      reciever,
+      inviter,
+      status: "false",
+    });
+  };
 
   const updateInviteStatus = async (word: string) => {
     try {
@@ -44,7 +54,6 @@ function PendingChats({
   React.useEffect(() => {
     if (localStatus) {
       updateInvites();
-      console.log("status changed");
     }
   }, [localStatus]);
 
@@ -55,7 +64,10 @@ function PendingChats({
           <h1>{inviter}</h1>
           <div className="invite_buttons">
             <button
-              onClick={() => updateInviteStatus("accepted")}
+              onClick={() => {
+                updateInviteStatus("accepted");
+                emitFriendRequest();
+              }}
               className="accept"
             >
               <AiFillCheckCircle />

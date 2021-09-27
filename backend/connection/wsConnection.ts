@@ -30,16 +30,16 @@ io.on("connection", (socket: Socket): void => {
   socket.on(
     "friend_request",
     ({
-      invites,
+      inviter,
       reciever,
       status,
     }: {
-      invites: string;
+      inviter: string;
       reciever: string;
       status: string;
     }) => {
       io.emit("friend_request", {
-        invites,
+        inviter,
         reciever,
         status,
       });

@@ -12,7 +12,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   props,
 ) => {
   const chatRoom = props.chatRoom.chatRoom;
-  console.log(chatRoom);
 
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
@@ -40,8 +39,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
-      console.log(message);
-
       updateChat(name, message);
     });
     socketConnect?.on("send_message", ({ me, you }) => {
@@ -68,7 +65,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
     e.preventDefault();
     const { name, message, time } = state;
     socketRef?.emit("message", { name, message, time });
-    console.log("name", name);
 
     setState({ name });
   };
