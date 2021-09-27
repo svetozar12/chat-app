@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 const index = () => {
@@ -26,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         destination: `messages/${cookieName}`,
+        permanent: false,
       },
     };
   }

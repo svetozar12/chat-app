@@ -1,8 +1,19 @@
 import React from "react";
-import { AppProps } from "next/dist/shared/lib/router/router";
 import { useCookie } from "next-cookie";
 import axios from "axios";
-const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
+const ActiveChats = ({
+  reciever,
+  inviter,
+  status,
+  cookie,
+  get,
+}: {
+  reciever: string;
+  inviter: string;
+  status: string;
+  cookie: string;
+  get: () => void;
+}) => {
   const cokie = useCookie(cookie);
 
   const [width, setWidth] = React.useState<number | null>(null);
@@ -30,8 +41,8 @@ const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
 
   React.useEffect(() => {
     sendInvite();
+    get();
   }, []);
-  console.log(width);
 
   return (
     <a
@@ -40,9 +51,9 @@ const ActiveChats = ({ reciever, inviter, status, cookie }: AppProps) => {
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>logo </div>
-        <h1>{width >= 432 && inviter}</h1>
+        <h1>{width && width >= 432 && inviter}</h1>
       </div>
-      {width >= 432 && <p>Last message...</p>}
+      {width && width >= 432 && <p>Last message...</p>}
     </a>
   );
 };

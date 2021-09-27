@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React from "react";
 import { useCookie } from "next-cookie";
 import axios from "axios";
 
-function FindFriends({ cookie }) {
+function FindFriends({ cookie }: { cookie: string }) {
   const [reciever, setReciever] = React.useState("");
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");

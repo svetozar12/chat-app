@@ -7,9 +7,8 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
-import { IHomeProps } from "../../interfaces/global";
 
-const index: NextPage<IHomeProps> = (props) => {
+const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
@@ -104,13 +103,20 @@ const index: NextPage<IHomeProps> = (props) => {
       <section className="active_chats">
         <FindFriends cookie={cookie} />
         {error ? (
-          <div className="active_chats">
+          <div>
             <h1>You dont have available chats</h1>
           </div>
         ) : (
           contacts.map((item, index) => {
             if (item["status"] !== "accepted") return;
-            return <ActiveChats key={index} cookie={cookie} {...item} />;
+            return (
+              <ActiveChats
+                key={index}
+                cookie={cookie}
+                {...item}
+                get={fetchInviteStatus}
+              />
+            );
           })
         )}
       </section>

@@ -407,6 +407,7 @@ p {
 
   .active_chats {
     padding: 1rem;
+    overflow: hidden;
   }
 
   .active_chats h1 {

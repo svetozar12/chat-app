@@ -2,20 +2,20 @@ import axios from "axios";
 import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import { AppProps } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { IAlert } from "../interfaces/global";
-
-function register(props: AppProps) {
+function register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
-  const [state, setState] = React.useState<IAlert>({
+  const [state, setState] = React.useState<{
+    goodAlert?: string;
+    badAlert?: string;
+  }>({
     goodAlert: "",
     badAlert: "",
   });
@@ -106,6 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         destination: `messages/${cookieName}`,
+        permanent: false,
       },
     };
   }

@@ -36,18 +36,13 @@ function login(props: AppProps) {
     e.preventDefault();
     if (name) {
       const result = await loginPost();
-      if (result && checked) {
+      if (result) {
         cookie.set("name", name, {
-          maxAge: 94670777,
+          maxAge: checked ? 94670777 : 3600,
           sameSite: "strict",
           path: "/",
         });
-      } else if (result && !checked) {
-        cookie.set("name", name, {
-          sameSite: "strict",
-          path: "/",
-        });
-        router.push(`/messages/${cookieName}`);
+        router.push(`messages/${cookieName}`);
       }
       Alert();
     } else {
@@ -104,6 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         destination: `messages/${cookieName}`,
+        permanent: false,
       },
     };
   }

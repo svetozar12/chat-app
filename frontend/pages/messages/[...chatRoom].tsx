@@ -2,16 +2,26 @@ import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
-import { IChatProps, IHomeProps } from "../../interfaces/global";
 import Link from "next/dist/client/link";
-import axios from "axios";
 
-const Home: NextPage<IHomeProps> = (props) => {
+interface IUpdadeFunction {
+  updateChat: (name: string, message: string) => void;
+}
+
+const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
+  props,
+) => {
   const chatRoom = props.chatRoom.chatRoom;
+  console.log(chatRoom);
+
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [reciever, setReciever] = useState<string | null>("");
-  const [state, setState] = useState<IChatProps>({
+  const [state, setState] = useState<{
+    name?: string;
+    message?: string;
+    time?: string | number;
+  }>({
     name: cookie.get("name"),
     message: "",
     time: "",
@@ -23,15 +33,11 @@ const Home: NextPage<IHomeProps> = (props) => {
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const updateChat = (name: string, message: string) => {
+  const updateChat = (name: string, message: string): void => {
     setChat((prev: any) => [...prev, { name, message }]);
   };
 
   useEffect(() => {
-    // if (!cookieName) {
-    //   console.log("cookie");
-    //   cookie.set("name", chatRoom[0]);
-    // }
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
       updateChat(name, message);
@@ -121,6 +127,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         destination: "/",
+        permanent: false,
       },
     };
   }
