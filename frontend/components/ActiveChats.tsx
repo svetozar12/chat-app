@@ -1,37 +1,19 @@
-import React from "react";
-import { useCookie } from "next-cookie";
+import React, { MouseEventHandler } from "react";
 import axios from "axios";
-const ActiveChats = ({
-  reciever,
-  inviter,
-  status,
-  cookie,
-  get,
-}: {
-  reciever: string;
-  inviter: string;
-  status: string;
-  cookie: string;
-  get: () => void;
-}) => {
-  const cokie = useCookie(cookie);
+import { useCookie } from "next-cookie";
+import { AppProps } from "next/dist/shared/lib/router/router";
 
-  const [width, setWidth] = React.useState<number | null>(null);
-  React.useEffect(() => {
-    setWidth(window.innerWidth);
-    window.addEventListener("resize", () => {
-      setWidth(window.innerWidth);
-    });
-    return window.removeEventListener("resize", () => {
-      setWidth(window.innerWidth);
-    });
-  }, []);
+const ActiveChats = ({ cookie, _id, inviter, status }: AppProps) => {
+  const cokie = useCookie(cookie);
+  const cookieName = cookie.get("name");
+
+  const [reciever, setReciever] = React.useState("");
+
   const sendInvite = async () => {
     try {
-      const res = await axios.post(`http://localhost:4001/invites`, {
-        inviter: reciever,
-        reciever: inviter,
-        status: "accepted",
+      const res = axios.post(`http://localhost:4001/invites`, {
+        reciever,
+        inviter: cookieName,
       });
       return true;
     } catch (error) {
@@ -39,22 +21,44 @@ const ActiveChats = ({
     }
   };
 
-  React.useEffect(() => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     sendInvite();
-    get();
-  }, []);
-
+  };
   return (
-    <a
-      className="contacts_container"
-      href={`http://localhost:3000/messages/${cokie.get("name")}/chat`}
-    >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <div>logo </div>
-        <h1>{width && width >= 432 && inviter}</h1>
+    <main onSubmit={sendInvite} className="active_chats">
+      <h1>Your chats</h1>
+      <form>
+        <input
+          onChange={(e) => setReciever(e.target.value)}
+          value={reciever}
+          type="text"
+          placeholder="Search user"
+        />
+        <button type="submit" onClick={handleSubmit}>
+          Search
+        </button>
+      </form>
+
+      <div>
+        {status === "accepted" && (
+          <a
+            style={{
+              margin: "1rem",
+              width: "100%",
+              textAlign: "center",
+            }}
+            href="http://localhost:3000/messages/invites/dar"
+          >
+            <div>
+              <div className="accepted_invite">
+                <h1>{inviter}</h1>
+              </div>
+            </div>
+          </a>
+        )}
       </div>
-      {width && width >= 432 && <p>Last message...</p>}
-    </a>
+    </main>
   );
 };
 export default ActiveChats;

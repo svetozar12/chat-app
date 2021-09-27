@@ -2,7 +2,6 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import axios from "axios";
 import React from "react";
 import { useCookie } from "next-cookie";
-import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 function PendingChats({
   _id,
   inviter,
@@ -13,20 +12,22 @@ function PendingChats({
 }: AppProps) {
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
-
-  const updateInviteStatus = async (word: string) => {
+  const updateInviteStatus = async () => {
     try {
-      setLocalStatus(word);
       const res = await axios.put(`http://localhost:4001/invites`, {
         id: _id,
-        status: word, //will change it with state from buttons
+        status: localStatus, //will change it with state from buttons
       });
-      setLocalStatus("");
+      console.log(res);
+    } catch (error) {}
+  };
 
-      return true;
-    } catch (error) {
-      return false;
-    }
+  const updateStatus = (status: string) => {
+    setLocalStatus(`${status}`);
+
+    setTimeout(() => {
+      setLocalStatus("");
+    }, 3000);
   };
 
   const updateInvites = async () => {
@@ -34,7 +35,6 @@ function PendingChats({
       const res = await axios.get(
         `http://localhost:4001/invites/${cookieName}`,
       );
-
       return true;
     } catch (error) {
       return false;
@@ -43,6 +43,9 @@ function PendingChats({
 
   React.useEffect(() => {
     if (localStatus) {
+      console.log("render");
+      console.log(localStatus);
+      updateInviteStatus();
       updateInvites();
     }
   }, [localStatus]);
@@ -53,17 +56,14 @@ function PendingChats({
         <div className="contacts">
           <h1>{inviter}</h1>
           <div className="invite_buttons">
-            <button
-              onClick={() => updateInviteStatus("accepted")}
-              className="accept"
-            >
-              <AiFillCheckCircle />
+            <button onClick={() => updateStatus("accepted")} className="accept">
+              Aceept
             </button>
             <button
-              onClick={() => updateInviteStatus("declined")}
+              onClick={() => updateStatus("declined")}
               className="decline"
             >
-              <AiFillCloseCircle />
+              Decline
             </button>
           </div>
         </div>
