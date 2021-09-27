@@ -40,10 +40,13 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ name, message }: any) => {
+      console.log(message);
+
       updateChat(name, message);
     });
     socketConnect?.on("send_message", ({ me, you }) => {
       setReciever(you);
+
       return reciever;
     });
 
@@ -65,6 +68,8 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
     e.preventDefault();
     const { name, message, time } = state;
     socketRef?.emit("message", { name, message, time });
+    console.log("name", name);
+
     setState({ name });
   };
 
