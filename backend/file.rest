@@ -1,10 +1,10 @@
-GET http://localhost:4001/users/user3
+GET http://localhost:4001/users/user1
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"dawdawdawdwadawdawdadawdw"
+    "username":"user5"
 }
 
 ###
@@ -14,19 +14,17 @@ PUT http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "id":"614c33f4d8687f7baa7632e0",
+    "id":"61498a301749f7b3b2f07b75",
     "status":"accepted"
 }
-### 
+### recieved
 GET http://localhost:4001/invites/user1
-###
+### accepted
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"user1",
-    "inviter":"user3",
-    "status":"accepted"
+    "reciever":"user5",
+    "inviter":"user1"
 }
 ###
-GET http://localhost:4001/

@@ -6,10 +6,9 @@ import { Request, Response } from "express";
 
 const userRoute = require("./users_route/users_route");
 const inviteRoute = require("./invite_route/invite_route");
-const chatRoute = require("./chatRoom_route/chatRoom_route");
+const Message = require("../models/messages.model");
 
 route.use("/", userRoute);
 route.use("/", inviteRoute);
-route.use("/", chatRoute);
 
 module.exports = route;
