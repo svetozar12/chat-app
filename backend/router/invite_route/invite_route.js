@@ -58,7 +58,7 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 return [3 /*break*/, 4];
             case 2: return [4 /*yield*/, Invites.find({
                     reciever: name_1,
-                }).select("status  inviter")];
+                }).select("status  inviter reciever")];
             case 3:
                 _a = _b.sent();
                 _b.label = 4;
@@ -66,14 +66,16 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 invites = _a;
                 if (!invites || invites.length <= 0) {
                     return [2 /*return*/, res.status(404).json({
-                            error: "You dont have invites or this this account doesn't exist.",
+                            error: "You dont have invites .",
                         })];
                 }
-                res.json({ invites: invites }).status(201);
-                return [3 /*break*/, 6];
+                return [2 /*return*/, res.json({ invites: invites }).status(201)];
             case 5:
                 error_1 = _b.sent();
-                return [2 /*return*/, res.status(501).json({ error: "error" })];
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
             case 6: return [2 /*return*/];
         }
     });
@@ -102,13 +104,15 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
                 return [2 /*return*/, res.json({ message: updateStatus })];
             case 3:
                 error_2 = _a.sent();
-                res.status(501).send({ error: "error" });
+                res.status(501).json({
+                    Error: "Internal server error",
+                    Message: "Something went wrong",
+                });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
-// end of accept and ignore put requsts
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, checkInviteInstance, findInvites, invites, error_3;
     return __generator(this, function (_a) {
@@ -117,35 +121,36 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 _a.trys.push([0, 6, , 7]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.body.reciever,
-                    })];
+                    }).exec()];
             case 1:
                 user = _a.sent();
+                if (user === null) {
+                    return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
+                }
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
-                        status: "recieved",
-                    })];
+                        $or: [{ status: "recieved" }, { status: "accepted" }],
+                    }).exec()];
             case 2:
                 checkInviteInstance = _a.sent();
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
-                        status: "recieved",
-                    })];
+                        $or: [{ status: "recieved" }, { status: "accepted" }],
+                    }).exec()];
             case 3:
                 findInvites = _a.sent();
                 //check if findInvites and checkInviteInstance are equal
                 if (findInvites && checkInviteInstance) {
                     return [2 /*return*/, res.status(409).json({ ERROR: "Already sent" })];
                 }
-                if (!user) {
-                    return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
-                }
                 return [4 /*yield*/, new Invites({
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
+                        status: req.body.status,
                     })];
             case 4:
                 invites = _a.sent();
@@ -155,7 +160,11 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 return [2 /*return*/, res.status(201).json({ message: invites })];
             case 6:
                 error_3 = _a.sent();
-                return [2 /*return*/, res.status(501).send("error")];
+                res.status(501).json({
+                    Error: "Internal server error",
+                    Message: "Something went wrong",
+                });
+                return [3 /*break*/, 7];
             case 7: return [2 /*return*/];
         }
     });

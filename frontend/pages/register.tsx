@@ -2,24 +2,36 @@ import axios from "axios";
 import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import { AppProps } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-function register(props: AppProps) {
+function register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
-  const [state, setState] = React.useState<string | any>({
-    badAlert: "",
+  const [state, setState] = React.useState<{
+    goodAlert?: string;
+    badAlert?: string;
+  }>({
     goodAlert: "",
+    badAlert: "",
   });
 
+  React.useEffect(() => {
+    if (cookieName) {
+      router.push(`/messages/${cookieName}`);
+    }
+  }, []);
+
   const quickLogin = () => {
-    cookie.set("name", name, { maxAge: 3600 });
+    cookie.set("name", name, {
+      maxAge: 7200,
+      sameSite: "strict",
+      path: "/",
+    });
     router.push(`/messages/${cookieName}`);
   };
 
@@ -28,14 +40,14 @@ function register(props: AppProps) {
       const res = await axios.post("http://localhost:4001/users/register", {
         username: name,
       });
-
-      setState({ goodAlert: res.data.message });
+      const data = res.data;
+      setState({ goodAlert: data.message });
       setLoginPrompt(true);
       return true;
     } catch (error: any) {
-      const temp = error.response.data;
+      const data = error.response.data;
       setName("");
-      setState({ badAlert: temp.message });
+      setState({ badAlert: data.message });
       return false;
     }
   };
@@ -51,9 +63,12 @@ function register(props: AppProps) {
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
-        <h1 style={state.goodAlert ? { color: "green" } : { color: "red" }}>
+        <h2
+          className="alert"
+          style={state.goodAlert ? { color: "green" } : { color: "red" }}
+        >
           {state.goodAlert || state.badAlert}
-        </h1>
+        </h2>
         <h1>Register</h1>
         <input
           value={name}
@@ -74,9 +89,9 @@ function register(props: AppProps) {
           <div
             onClick={quickLogin}
             style={{ cursor: "pointer" }}
-            className="container"
+            className="container quick_login"
           >
-            <h1>Click me to Quick login</h1>
+            <h2>Click me to Quick login</h2>
           </div>
         )}
       </form>
@@ -86,8 +101,15 @@ function register(props: AppProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.has("name");
-
+  const cookieName = cookie.get("name");
+  if (cookieName) {
+    return {
+      redirect: {
+        destination: `messages/${cookieName}`,
+        permanent: false,
+      },
+    };
+  }
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };
