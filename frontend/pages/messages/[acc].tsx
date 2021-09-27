@@ -26,23 +26,23 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const [test, setTest] = useState<string | string[]>([]);
 
-  // const fetchInviteStatus = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       `http://localhost:4001/invites/${cookieName}`,
-  //     );
+  const fetchInviteStatus = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/invites/${cookieName}`,
+      );
 
-  //     const data = res.data.invites;
-  //     setContacts(data);
+      const data = res.data.invites;
+      setContacts(data);
 
-  //     return true;
-  //   } catch (error: any) {
-  //     const data = error.response.data.error;
-  //     setError(data);
+      return true;
+    } catch (error: any) {
+      const data = error.response.data.error;
+      setError(data);
 
-  //     return false;
-  //   }
-  // };
+      return false;
+    }
+  };
 
   const deleteCookies = () => {
     cookie.remove("name");
@@ -106,7 +106,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   React.useEffect(() => {
     if (localStatus) {
-      // fetchInviteStatus();
+      fetchInviteStatus();
     }
   }, [localStatus]);
 

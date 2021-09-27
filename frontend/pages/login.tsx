@@ -42,7 +42,9 @@ function login(props: AppProps) {
           sameSite: "strict",
           path: "/",
         });
-        router.push(`messages/${cookieName}`);
+        setTimeout(() => {
+          router.push(`messages/${cookieName}`);
+        }, 100);
       }
       Alert();
     } else {
