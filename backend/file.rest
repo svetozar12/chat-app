@@ -1,10 +1,10 @@
-GET http://localhost:4001/users/user3
+GET http://localhost:4001/users/ivana
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"dawdawdawdwadawdawdadawdw"
+    "username":"huuray"
 }
 
 ###
@@ -24,9 +24,9 @@ POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"user1",
+    "reciever":"ivan",
     "inviter":"user3",
-    "status":"accepted"
+    "status":"recieved"
 }
 ###
 GET http://localhost:4001/

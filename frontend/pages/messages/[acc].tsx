@@ -13,10 +13,15 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
 
+  const [state, setState] = useState<{
+    reciever: string;
+    inviter: string;
+    status: string;
+  }>({ reciever: "", inviter: "", status: "" });
   const [localStatus, setLocalStatus] = useState<string>("");
   const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
 
   const fetchInviteStatus = async () => {
@@ -26,6 +31,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       );
 
       const data = res.data.invites;
+      console.log(data);
+
       setContacts(data);
 
       return true;
@@ -73,13 +80,13 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     });
   };
 
-  React.useEffect(() => {
-    const socketConnect: Socket = io("http://localhost:4000");
-    setSocketRef(socketConnect);
-    return () => {
-      socketRef && socketRef.disconnect();
-    };
-  }, []);
+  const updateFriends = (
+    invites: string,
+    reciever: string,
+    status: string,
+  ): void => {
+    setContacts((prev: any) => [...prev, { reciever, inviter, status }]);
+  };
 
   React.useEffect(() => {
     validateUser();
@@ -87,7 +94,25 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, []);
 
   React.useEffect(() => {
+    const socketConnect: Socket = io("http://localhost:4000");
+    socketConnect.on("friend_request", ({ reciever, inviter, status }) => {
+      updateFriends(reciever, inviter, status);
+      console.log("yohohoho");
+    });
+    setSocketRef(socketConnect);
+    return () => {
+      socketRef && socketRef.disconnect();
+    };
+  }, []);
+
+  React.useEffect(() => {
     if (localStatus) {
+      socketRef?.emit("friend_request", {
+        reciever: "az",
+        inviter: "ti",
+        status: "to",
+      });
+      console.log("me", reciever, inviter, status);
       fetchInviteStatus();
     }
   }, [localStatus]);
@@ -108,7 +133,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           </div>
         ) : (
           contacts.map((item, index) => {
-            if (item["status"] !== "accepted") return;
+            if (item.status !== "accepted") return;
             return (
               <ActiveChats
                 key={index}
@@ -140,7 +165,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                console.log(item, index);
                 return (
                   <PendingChats
                     key={index}

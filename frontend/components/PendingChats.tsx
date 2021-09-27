@@ -44,6 +44,7 @@ function PendingChats({
   React.useEffect(() => {
     if (localStatus) {
       updateInvites();
+      console.log("status changed");
     }
   }, [localStatus]);
 
