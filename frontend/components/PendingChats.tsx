@@ -20,7 +20,7 @@ function PendingChats({
     socketRef?.emit("friend_request", {
       reciever,
       inviter,
-      status: "false",
+      status: "accepted",
     });
   };
 
