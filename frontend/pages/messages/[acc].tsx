@@ -12,12 +12,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-
-  const [state, setState] = useState<{
-    reciever: string;
-    inviter: string;
-    status: string;
-  }>({ reciever: "", inviter: "", status: "" });
   const [localStatus, setLocalStatus] = useState<string>("");
   const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
@@ -95,11 +89,10 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   React.useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("friend_request", ({ reciever, inviter, status }) => {
-      updateFriends(reciever, inviter, status);
-      console.log("yohohoho");
-    });
     setSocketRef(socketConnect);
+    socketConnect.on("friend_request", (arg1, arg2, arg3) => {
+      console.log(arg1, arg2, arg3);
+    });
     return () => {
       socketRef && socketRef.disconnect();
     };
@@ -112,7 +105,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         inviter: "ti",
         status: "to",
       });
-      console.log("me", reciever, inviter, status);
       fetchInviteStatus();
     }
   }, [localStatus]);

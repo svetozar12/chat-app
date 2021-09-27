@@ -27,24 +27,13 @@ io.on("connection", (socket: Socket): void => {
     },
   );
 
-  socket.on(
-    "friend_request",
-    ({
+  socket.on("friend_request", ({ invites, reciever, status }) => {
+    io.emit("friend_request", {
       invites,
       reciever,
       status,
-    }: {
-      invites: string;
-      reciever: string;
-      status: string;
-    }) => {
-      io.emit("friend_request", {
-        invites,
-        reciever,
-        status,
-      });
-    },
-  );
+    });
+  });
 });
 
 module.exports = io;
