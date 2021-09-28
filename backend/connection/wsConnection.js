@@ -14,7 +14,6 @@ io.on("connection", function (socket) {
         you = reciever;
     });
     socket.emit("send_message", { me: me, you: you });
-    // emiting and getting messages
     socket.on("message", function (_a) {
         var name = _a.name, message = _a.message;
         io.emit("message", {
@@ -25,6 +24,7 @@ io.on("connection", function (socket) {
     });
     socket.on("friend_request", function (_a) {
         var inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
+        console.log("status in the backend", status);
         io.emit("friend_request", {
             inviter: inviter,
             reciever: reciever,

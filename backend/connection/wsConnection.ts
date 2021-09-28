@@ -15,7 +15,6 @@ io.on("connection", (socket: Socket): void => {
     you = reciever;
   });
   socket.emit("send_message", { me, you });
-  // emiting and getting messages
   socket.on(
     "message",
     ({ name, message }: { name: string; message: string }) => {
@@ -38,6 +37,7 @@ io.on("connection", (socket: Socket): void => {
       reciever: string;
       status: string;
     }) => {
+      console.log("status in the backend", status);
       io.emit("friend_request", {
         inviter,
         reciever,

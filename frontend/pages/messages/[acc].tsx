@@ -21,12 +21,10 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [localStatus, setLocalStatus] = useState<string>("");
   const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-  const [contacts, setContacts] = useState<string | string[]>([]);
+  const [contacts, setContacts] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
 
-  const [test, setTest] = useState<string | string[]>([]);
-
-  const fetchInviteStatus = async () => {
+  const fetchRecieverStatus = async () => {
     try {
       const res = await axios.get(
         `http://localhost:4001/invites/${cookieName}`,
@@ -40,6 +38,19 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const data = error.response.data.error;
       setError(data);
 
+      return false;
+    }
+  };
+
+  const fetchInviteStatus = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/invites/inviter/${cookieName}?status=accepted`,
+      );
+      const data = res.data.invites;
+      setContacts(data);
+      return true;
+    } catch (error) {
       return false;
     }
   };
@@ -78,12 +89,14 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     reciever: string,
     status: string,
   ): void => {
-    setContacts((prev: any) => [...prev, reciever, inviter, status]);
+    setContacts((prev: any) => [...prev, { reciever, inviter, status }]);
+    console.log(contacts);
   };
 
   React.useEffect(() => {
     validateUser();
-    // fetchInviteStatus();
+    fetchRecieverStatus();
+    fetchInviteStatus();
   }, []);
 
   React.useEffect(() => {
@@ -106,6 +119,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   React.useEffect(() => {
     if (localStatus) {
+      fetchRecieverStatus();
       fetchInviteStatus();
     }
   }, [localStatus]);
@@ -122,13 +136,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         <FindFriends cookie={cookie} />
 
         {contacts.map((item, index) => {
-          // if (item.status !== "accepted") return;
-          console.log("hi");
-          return (
-            <p key={index}>
-              {item.reciever === cookieName ? item.inviter : item.reciever}
-            </p>
-          );
+          if (item.status !== "accepted") return;
+          return <ActiveChats key={index} {...item} cookie={cookie} />;
         })}
       </section>
       <section className="main_section">
@@ -151,8 +160,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                console.log(item);
-
                 return (
                   <PendingChats
                     key={index}

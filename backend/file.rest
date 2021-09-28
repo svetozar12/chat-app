@@ -18,7 +18,9 @@ Content-Type: application/json
     "status":"accepted"
 }
 ### 
-GET http://localhost:4001/invites/user1
+GET http://localhost:4001/invites/igor?status=accepted
+###
+GET http://localhost:4001/invites/inviter/igor?status=accepted
 ###
 POST http://localhost:4001/invites
 Content-Type: application/json

@@ -80,30 +80,70 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
+route.get("/invites/inviter/:id/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var name_2, status_2, invites, _a, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 5, , 6]);
+                name_2 = req.params.id;
+                status_2 = req.query.status;
+                if (!(status_2 !== undefined)) return [3 /*break*/, 2];
+                return [4 /*yield*/, Invites.find({
+                        inviter: name_2,
+                        status: status_2,
+                    })];
+            case 1:
+                _a = _b.sent();
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, Invites.find({
+                    inviter: name_2,
+                }).select("status  inviter reciever")];
+            case 3:
+                _a = _b.sent();
+                _b.label = 4;
+            case 4:
+                invites = _a;
+                if (!invites || invites.length <= 0) {
+                    return [2 /*return*/, res.status(404).json({
+                            error: "You dont have accepted invites .",
+                        })];
+                }
+                return [2 /*return*/, res.json({ invites: invites }).status(201)];
+            case 5:
+                error_2 = _b.sent();
+                return [2 /*return*/, res.status(501).json({
+                        Error: "Internal server error",
+                        Message: "Something went wrong",
+                    })];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); });
 route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, status_2, inviteInstance, updateStatus, error_2;
+    var id, status_3, inviteInstance, updateStatus, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 id = req.body.id;
-                status_2 = req.body.status;
+                status_3 = req.body.status;
                 return [4 /*yield*/, Invites.findOne({
                         id: id,
                     }).exec()];
             case 1:
                 inviteInstance = _a.sent();
-                if (!inviteInstance || undefined || !status_2) {
+                if (!inviteInstance || undefined || !status_3) {
                     return [2 /*return*/, res.status(404).json({ error: "Not found" })];
                 }
                 return [4 /*yield*/, Invites.findByIdAndUpdate(id, {
-                        status: status_2,
+                        status: status_3,
                     }, { new: true }).exec()];
             case 2:
                 updateStatus = _a.sent();
                 return [2 /*return*/, res.json({ message: updateStatus })];
             case 3:
-                error_2 = _a.sent();
+                error_3 = _a.sent();
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",
@@ -114,7 +154,7 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
     });
 }); });
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, checkInviteInstance, findInvites, invites, error_3;
+    var user, checkInviteInstance, findInvites, invites, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -159,7 +199,7 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 _a.sent();
                 return [2 /*return*/, res.status(201).json({ message: invites })];
             case 6:
-                error_3 = _a.sent();
+                error_4 = _a.sent();
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",

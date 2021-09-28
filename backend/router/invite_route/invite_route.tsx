@@ -37,6 +37,36 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
   }
 });
 
+route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
+  try {
+    const name = req.params.id;
+    let status = req.query.status;
+
+    const invites =
+      status !== undefined
+        ? await Invites.find({
+            inviter: name,
+            status,
+          })
+        : await Invites.find({
+            inviter: name,
+          }).select("status  inviter reciever");
+
+    if (!invites || invites.length <= 0) {
+      return res.status(404).json({
+        error: "You dont have accepted invites .",
+      });
+    }
+
+    return res.json({ invites }).status(201);
+  } catch (error) {
+    return res.status(501).json({
+      Error: "Internal server error",
+      Message: "Something went wrong",
+    });
+  }
+});
+
 route.put("/invites", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;

@@ -6,6 +6,7 @@ const ActiveChats = ({
   inviter,
   status,
   cookie,
+  get,
 }: {
   reciever: string;
   inviter: string;
@@ -25,24 +26,26 @@ const ActiveChats = ({
       setWidth(window.innerWidth);
     });
   }, []);
-  // const sendInvite = async () => {
-  //   try {
-  //     const res = await axios.post(`http://localhost:4001/invites`, {
-  //       inviter: reciever,
-  //       reciever: inviter,
-  //       status: "accepted",
-  //     });
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // };
 
   React.useEffect(() => {
-    // sendInvite();
     // get();
   }, []);
 
-  return <p>{inviter === cokie.get("name") ? reciever : inviter}</p>;
+  return (
+    <a
+      className="contacts_container"
+      href={`http://localhost:3000/messages/${cokie.get("name")}/chat`}
+    >
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div>logo </div>
+        <h1>
+          {width && width >= 432 && inviter === cokie.get("name") && reciever}
+          {width && width >= 432 && reciever === cokie.get("name") && inviter}
+        </h1>
+        <h1>{status}</h1>
+      </div>
+      {width && width >= 432 && <p>Last message...</p>}
+    </a>
+  );
 };
 export default ActiveChats;
