@@ -1,5 +1,4 @@
 import { Socket } from "socket.io";
-
 const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
@@ -57,7 +56,7 @@ io.on("connection", (socket: Socket): void => {
       status: string;
     }) => {
       console.log("status in the backend", status);
-      io.emit("send_friend_request", {
+      socket.broadcast.emit("send_friend_request", {
         inviter,
         reciever,
         status,

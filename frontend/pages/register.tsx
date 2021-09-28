@@ -21,8 +21,8 @@ function register(props: { cookie: string }) {
   });
 
   React.useEffect(() => {
-    if (cookieName) {
-      router.push(`/messages/${cookieName}`);
+    if (cookie.get("name")) {
+      router.push(`/messages/${cookie.get("name")}`);
     }
   }, []);
 
@@ -32,7 +32,7 @@ function register(props: { cookie: string }) {
       sameSite: "strict",
       path: "/",
     });
-    router.push(`/messages/${cookieName}`);
+    router.push(`/messages/${cookie.get("name")}`);
   };
 
   const registerPost = async () => {

@@ -38,6 +38,7 @@ function PendingChats({
         status: param,
       });
       emitFriendRequest(param);
+      console.log("here");
       setLocalStatus("");
       return true;
     } catch (error) {

@@ -43,7 +43,7 @@ function login(props: AppProps) {
           path: "/",
         });
         setTimeout(() => {
-          router.push(`messages/${cookieName}`);
+          router.push(`messages/${cookie.get("name")}`);
         }, 100);
       }
       Alert();
