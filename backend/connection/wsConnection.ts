@@ -8,16 +8,6 @@ const io = require("socket.io")(4000, {
 
 let me: string = "";
 let you: string = "";
-let messages: string[] = [];
-
-if (messages.length >= 11) messages.shift();
-
-interface IProps {
-  id: number | string;
-  name: string;
-  message: string;
-  timeStamp: string | number;
-}
 
 io.on("connection", (socket: Socket): void => {
   socket.on("sender_reciever", ({ sender, reciever }) => {
@@ -26,13 +16,35 @@ io.on("connection", (socket: Socket): void => {
   });
   socket.emit("send_message", { me, you });
   // emiting and getting messages
-  socket.on("message", ({ name, message }: IProps) => {
-    io.emit("message", {
-      name,
-      message,
-      time: new Date().getHours() + ":" + new Date().getMinutes(),
-    });
-  });
+  socket.on(
+    "message",
+    ({ name, message }: { name: string; message: string }) => {
+      io.emit("message", {
+        name,
+        message,
+        time: new Date().getHours() + ":" + new Date().getMinutes(),
+      });
+    },
+  );
+
+  socket.on(
+    "friend_request",
+    ({
+      inviter,
+      reciever,
+      status,
+    }: {
+      inviter: string;
+      reciever: string;
+      status: string;
+    }) => {
+      io.emit("friend_request", {
+        inviter,
+        reciever,
+        status,
+      });
+    },
+  );
 });
 
 module.exports = io;
