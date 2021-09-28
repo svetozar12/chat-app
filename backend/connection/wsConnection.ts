@@ -28,15 +28,19 @@ io.on("connection", (socket: Socket): void => {
   socket.on(
     "friend_request",
     ({
+      _id,
       inviter,
       reciever,
       status,
     }: {
+      _id: string;
       inviter: string;
       reciever: string;
       status: string;
     }) => {
+      console.log(_id);
       io.emit("friend_request", {
+        _id,
         inviter,
         reciever,
         status,

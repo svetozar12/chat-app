@@ -23,8 +23,10 @@ io.on("connection", function (socket) {
         });
     });
     socket.on("friend_request", function (_a) {
-        var inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
+        var _id = _a._id, inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
+        console.log(_id);
         io.emit("friend_request", {
+            _id: _id,
             inviter: inviter,
             reciever: reciever,
             status: status,
