@@ -1,8 +1,8 @@
-import { AppProps } from "next/dist/shared/lib/router/router";
 import axios from "axios";
 import React from "react";
 import { useCookie } from "next-cookie";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
+import { Socket } from "socket.io-client";
 function PendingChats({
   _id,
   inviter,
@@ -11,22 +11,16 @@ function PendingChats({
   setLocalStatus,
   cookie,
   socketRef,
-}: AppProps) {
+}: {
+  _id: string;
+  inviter: string;
+  status: string;
+  reciever: string;
+  setLocalStatus: any;
+  cookie: string;
+  socketRef: Socket;
+}) {
   const cokie = useCookie(cookie);
-
-  const updateInviteStatus = async (word: string) => {
-    try {
-      setLocalStatus(word);
-      const res = await axios.put(`http://localhost:4001/invites`, {
-        id: _id,
-        status: word,
-      });
-      setLocalStatus("");
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
 
   const emitFriendRequest = (param: string) => {
     socketRef?.emit("friend_request", {
@@ -36,6 +30,21 @@ function PendingChats({
     });
   };
 
+  const updateInviteStatus = async (param: string) => {
+    try {
+      setLocalStatus(param);
+      const res = await axios.put(`http://localhost:4001/invites`, {
+        id: _id,
+        status: param,
+      });
+      emitFriendRequest(param);
+      setLocalStatus("");
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   return (
     <div>
       {status === "recieved" && (
@@ -43,19 +52,13 @@ function PendingChats({
           <h1>{inviter}</h1>
           <div className="invite_buttons">
             <button
-              onClick={() => {
-                updateInviteStatus("accepted");
-                emitFriendRequest("accepted");
-              }}
+              onClick={() => updateInviteStatus("accepted")}
               className="accept"
             >
               <AiFillCheckCircle />
             </button>
             <button
-              onClick={() => {
-                updateInviteStatus("declined");
-                emitFriendRequest("declined");
-              }}
+              onClick={() => updateInviteStatus("declined")}
               className="decline"
             >
               <AiFillCloseCircle />

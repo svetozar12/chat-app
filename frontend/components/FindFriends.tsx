@@ -1,8 +1,15 @@
 import React from "react";
 import { useCookie } from "next-cookie";
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
-function FindFriends({ cookie }: { cookie: string }) {
+function FindFriends({
+  cookie,
+  socketRef,
+}: {
+  cookie: string;
+  socketRef: Socket;
+}) {
   const [reciever, setReciever] = React.useState("");
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
@@ -23,6 +30,13 @@ function FindFriends({ cookie }: { cookie: string }) {
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (reciever) {
+      socketRef?.emit("send_friend_request", {
+        inviter: cookieName,
+        reciever,
+        status: "recieved",
+      });
+      console.log(reciever);
+
       setReciever("");
       sendInvite();
     }

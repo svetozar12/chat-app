@@ -24,8 +24,16 @@ io.on("connection", function (socket) {
     });
     socket.on("friend_request", function (_a) {
         var inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
-        console.log("status in the backend", status);
         io.emit("friend_request", {
+            inviter: inviter,
+            reciever: reciever,
+            status: status,
+        });
+    });
+    socket.on("send_friend_request", function (_a) {
+        var inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
+        console.log("status in the backend", status);
+        io.emit("send_friend_request", {
             inviter: inviter,
             reciever: reciever,
             status: status,

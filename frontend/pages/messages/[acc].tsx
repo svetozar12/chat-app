@@ -104,6 +104,10 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     socketConnect.on("friend_request", ({ reciever, inviter, status }) => {
       updateFriends(reciever, inviter, status);
     });
+
+    socketConnect.on("send_friend_request", ({ inviter, reciever, status }) => {
+      updateFriends(reciever, inviter, status);
+    });
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
@@ -133,7 +137,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends cookie={cookie} />
+        <FindFriends cookie={cookie} socketRef={socketRef} />
 
         {contacts.map((item, index) => {
           if (item.status !== "accepted") return;
@@ -160,6 +164,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
+                if (item.reciever === cookieName) return;
                 return (
                   <PendingChats
                     key={index}

@@ -37,8 +37,27 @@ io.on("connection", (socket: Socket): void => {
       reciever: string;
       status: string;
     }) => {
-      console.log("status in the backend", status);
       io.emit("friend_request", {
+        inviter,
+        reciever,
+        status,
+      });
+    },
+  );
+
+  socket.on(
+    "send_friend_request",
+    ({
+      inviter,
+      reciever,
+      status,
+    }: {
+      inviter: string;
+      reciever: string;
+      status: string;
+    }) => {
+      console.log("status in the backend", status);
+      io.emit("send_friend_request", {
         inviter,
         reciever,
         status,
