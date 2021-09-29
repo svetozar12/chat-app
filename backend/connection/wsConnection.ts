@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+const Invites = require("../models/Invites.model");
 const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
@@ -38,7 +39,7 @@ io.on("connection", (socket: Socket): void => {
       reciever: string;
       status: string;
     }) => {
-      console.log(_id);
+      console.log("friend request event");
       io.emit("friend_request", {
         _id,
         inviter,
@@ -50,20 +51,16 @@ io.on("connection", (socket: Socket): void => {
 
   socket.on(
     "send_friend_request",
-    ({
-      inviter,
-      reciever,
-      status,
-    }: {
-      inviter: string;
-      reciever: string;
-      status: string;
-    }) => {
-      console.log("status in the backend", status);
-      socket.broadcast.emit("send_friend_request", {
+    async ({ inviter, reciever }: { inviter: string; reciever: string }) => {
+      const invite = await Invites.find({
         inviter,
         reciever,
-        status,
+        status: "recieved",
+      });
+      console.log(invite);
+      console.log("send friend request event");
+      socket.broadcast.emit("send_friend_request", {
+        invite,
       });
     },
   );

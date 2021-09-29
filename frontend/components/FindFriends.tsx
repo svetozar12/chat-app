@@ -30,20 +30,19 @@ function FindFriends({
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (reciever) {
+      sendInvite();
       socketRef?.emit("send_friend_request", {
         inviter: cookieName,
         reciever,
-        status: "recieved",
       });
       console.log(reciever);
 
       setReciever("");
-      sendInvite();
     }
   };
 
   return (
-    <form className="friendsInput" onSubmit={sendInvite}>
+    <form className="friendsInput">
       <h1>Your chats</h1>
       <input
         onChange={(e) => setReciever(e.target.value)}

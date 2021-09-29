@@ -42,7 +42,6 @@ const ActiveChats = ({
           {width && width >= 432 && inviter === cokie.get("name") && reciever}
           {width && width >= 432 && reciever === cokie.get("name") && inviter}
         </h1>
-        <h1>{status}</h1>
       </div>
       {width && width >= 432 && <p>Last message...</p>}
     </a>

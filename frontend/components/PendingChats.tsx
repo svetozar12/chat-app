@@ -21,29 +21,32 @@ function PendingChats({
   socketRef: Socket;
 }) {
   const cokie = useCookie(cookie);
-
-  const emitFriendRequest = (param: string) => {
-    socketRef?.emit("friend_request", {
-      reciever,
-      inviter,
-      status: param,
-    });
-  };
+  console.log(_id);
 
   const updateInviteStatus = async (param: string) => {
     try {
       setLocalStatus(param);
+      console.log(_id, "ID");
+
       const res = await axios.put(`http://localhost:4001/invites`, {
-        id: _id,
+        _id,
         status: param,
       });
-      emitFriendRequest(param);
-      console.log("here");
       setLocalStatus("");
       return true;
     } catch (error) {
       return false;
     }
+  };
+
+  const emitFriendRequest = async (param: string) => {
+    socketRef?.emit("friend_request", {
+      _id,
+      reciever,
+      inviter,
+      status: param,
+    });
+    await updateInviteStatus(param);
   };
 
   return (
@@ -53,13 +56,13 @@ function PendingChats({
           <h1>{inviter}</h1>
           <div className="invite_buttons">
             <button
-              onClick={() => updateInviteStatus("accepted")}
+              onClick={() => emitFriendRequest("accepted")}
               className="accept"
             >
               <AiFillCheckCircle />
             </button>
             <button
-              onClick={() => updateInviteStatus("declined")}
+              onClick={() => emitFriendRequest("declined")}
               className="decline"
             >
               <AiFillCloseCircle />

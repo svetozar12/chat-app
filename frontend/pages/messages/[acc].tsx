@@ -90,7 +90,10 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     status: string,
   ): void => {
     setContacts((prev: any) => [...prev, { inviter, reciever, status }]);
-    console.log(contacts);
+  };
+
+  const updatePending = (invite: string): void => {
+    setContacts((prev: any) => [...prev, invite]);
   };
 
   React.useEffect(() => {
@@ -101,12 +104,14 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   React.useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("friend_request", ({ inviter, reciever, status }) => {
+    socketConnect.on("friend_request", ({ _id, inviter, reciever, status }) => {
       updateFriends(inviter, reciever, status);
     });
 
-    socketConnect.on("send_friend_request", ({ inviter, reciever, status }) => {
-      updateFriends(inviter, reciever, status);
+    socketConnect.on("send_friend_request", ({ invite }) => {
+      console.log(invite, "ws-request");
+      const [newObj] = invite;
+      updatePending(newObj);
     });
     setSocketRef(socketConnect);
     return () => {
@@ -120,13 +125,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       reciever: reciever,
     });
   };
-
-  // React.useEffect(() => {
-  //   if (localStatus) {
-  //     fetchRecieverStatus();
-  //     fetchInviteStatus();
-  //   }
-  // }, [localStatus]);
 
   React.useEffect(() => {
     if (reciever) {
@@ -164,7 +162,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                // if (item.reciever !== cookieName) return;
+                console.log(item, "items");
+
                 return (
                   <PendingChats
                     key={index}
