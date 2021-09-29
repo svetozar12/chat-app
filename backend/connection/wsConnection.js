@@ -61,29 +61,43 @@ io.on("connection", function (socket) {
     });
     socket.on("friend_request", function (_a) {
         var _id = _a._id, inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
-        console.log("friend request event");
-        io.emit("friend_request", {
-            _id: _id,
-            inviter: inviter,
-            reciever: reciever,
-            status: status,
-        });
-    });
-    socket.on("send_friend_request", function (_a) {
-        var inviter = _a.inviter, reciever = _a.reciever;
         return __awaiter(void 0, void 0, void 0, function () {
             var invite;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, Invites.find({
+                            _id: _id,
                             inviter: inviter,
-                            reciever: reciever,
-                            status: "recieved",
+                            status: status,
                         })];
                     case 1:
                         invite = _b.sent();
                         console.log(invite);
-                        console.log("send friend request event");
+                        console.log("friend request event");
+                        io.emit("friend_request", {
+                            invite: invite,
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        });
+    });
+    socket.on("send_friend_request", function (_a) {
+        var inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
+        return __awaiter(void 0, void 0, void 0, function () {
+            var invite;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (inviter === reciever)
+                            return [2 /*return*/];
+                        return [4 /*yield*/, Invites.find({
+                                inviter: inviter,
+                                reciever: reciever,
+                                status: "recieved",
+                            })];
+                    case 1:
+                        invite = _b.sent();
                         socket.broadcast.emit("send_friend_request", {
                             invite: invite,
                         });

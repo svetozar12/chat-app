@@ -28,7 +28,7 @@ io.on("connection", (socket: Socket): void => {
 
   socket.on(
     "friend_request",
-    ({
+    async ({
       _id,
       inviter,
       reciever,
@@ -39,26 +39,37 @@ io.on("connection", (socket: Socket): void => {
       reciever: string;
       status: string;
     }) => {
-      console.log("friend request event");
-      io.emit("friend_request", {
+      const invite = await Invites.find({
         _id,
         inviter,
-        reciever,
         status,
+      });
+      console.log(invite);
+
+      console.log("friend request event");
+      io.emit("friend_request", {
+        invite,
       });
     },
   );
 
   socket.on(
     "send_friend_request",
-    async ({ inviter, reciever }: { inviter: string; reciever: string }) => {
+    async ({
+      inviter,
+      reciever,
+      status,
+    }: {
+      inviter: string;
+      reciever: string;
+      status: string;
+    }) => {
+      if (inviter === reciever) return;
       const invite = await Invites.find({
         inviter,
         reciever,
         status: "recieved",
       });
-      console.log(invite);
-      console.log("send friend request event");
       socket.broadcast.emit("send_friend_request", {
         invite,
       });

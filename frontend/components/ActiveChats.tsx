@@ -4,15 +4,12 @@ import axios from "axios";
 const ActiveChats = ({
   reciever,
   inviter,
-  status,
   cookie,
-  get,
 }: {
   reciever: string;
   inviter: string;
   status: string;
   cookie: string;
-  get: () => void;
 }) => {
   const cokie = useCookie(cookie);
 
@@ -25,10 +22,6 @@ const ActiveChats = ({
     return window.removeEventListener("resize", () => {
       setWidth(window.innerWidth);
     });
-  }, []);
-
-  React.useEffect(() => {
-    // get();
   }, []);
 
   return (

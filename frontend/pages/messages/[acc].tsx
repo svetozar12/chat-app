@@ -13,11 +13,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
 
-  const [state, setState] = useState<{
-    reciever: string;
-    inviter: string;
-    status: string;
-  }>({ reciever: "", inviter: "", status: "" });
   const [localStatus, setLocalStatus] = useState<string>("");
   const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
@@ -84,15 +79,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const updateFriends = (
-    inviter: string,
-    reciever: string,
-    status: string,
-  ): void => {
-    setContacts((prev: any) => [...prev, { inviter, reciever, status }]);
-  };
-
-  const updatePending = (invite: string): void => {
+  const updateFriendRequests = (invite: string): void => {
     setContacts((prev: any) => [...prev, invite]);
   };
 
@@ -104,14 +91,14 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   React.useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("friend_request", ({ _id, inviter, reciever, status }) => {
-      updateFriends(inviter, reciever, status);
+    socketConnect.on("friend_request", ({ invite }) => {
+      const [newObj] = invite;
+      updateFriendRequests(newObj);
     });
 
     socketConnect.on("send_friend_request", ({ invite }) => {
-      console.log(invite, "ws-request");
       const [newObj] = invite;
-      updatePending(newObj);
+      updateFriendRequests(newObj);
     });
     setSocketRef(socketConnect);
     return () => {
@@ -162,8 +149,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                console.log(item, "items");
-
+                if (!item.status === "recieved") return;
                 return (
                   <PendingChats
                     key={index}

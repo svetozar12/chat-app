@@ -114,16 +114,19 @@ route.post("/invites", async (req: Request, res: Response) => {
       $or: [{ status: "recieved" }, { status: "accepted" }],
     }).exec();
 
-    const findInvites = await Invites.findOne({
-      id: user._id,
-      reciever: req.body.reciever,
-      inviter: req.body.inviter,
-      $or: [{ status: "recieved" }, { status: "accepted" }],
-    }).exec();
+    // const findInvites = await Invites.findOne({
+    //   id: user._id,
+    //   reciever: req.body.reciever,
+    //   inviter: req.body.inviter,
+    //   $or: [{ status: "recieved" }, { status: "accepted" }],
+    // }).exec();
     //check if findInvites and checkInviteInstance are equal
-    if (findInvites && checkInviteInstance) {
+    if (checkInviteInstance) {
       return res.status(409).json({ ERROR: "Already sent" });
     }
+
+    if (req.body.reciever === req.body.inviter)
+      return res.status(409).json({ ERROR: "Can't send invites to youurself" });
     const invites = await new Invites({
       reciever: req.body.reciever,
       inviter: req.body.inviter,

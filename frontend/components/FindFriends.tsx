@@ -21,20 +21,24 @@ function FindFriends({
         inviter: cookieName,
         status: "recieved",
       });
+      const data = res.data.message;
+      socketRef?.emit("send_friend_request", {
+        inviter: data.inviter,
+        reciever: data.reciever,
+        status: "recieved",
+      });
+
       return true;
     } catch (error) {
       return false;
     }
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (reciever) {
-      sendInvite();
-      socketRef?.emit("send_friend_request", {
-        inviter: cookieName,
-        reciever,
-      });
+      await sendInvite();
+
       console.log(reciever);
 
       setReciever("");

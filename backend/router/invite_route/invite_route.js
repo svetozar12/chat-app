@@ -154,11 +154,11 @@ route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, voi
     });
 }); });
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, checkInviteInstance, findInvites, invites, error_4;
+    var user, checkInviteInstance, invites, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 6, , 7]);
+                _a.trys.push([0, 5, , 6]);
                 return [4 /*yield*/, Users.findOne({
                         username: req.body.reciever,
                     }).exec()];
@@ -175,37 +175,37 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                     }).exec()];
             case 2:
                 checkInviteInstance = _a.sent();
-                return [4 /*yield*/, Invites.findOne({
-                        id: user._id,
-                        reciever: req.body.reciever,
-                        inviter: req.body.inviter,
-                        $or: [{ status: "recieved" }, { status: "accepted" }],
-                    }).exec()];
-            case 3:
-                findInvites = _a.sent();
+                // const findInvites = await Invites.findOne({
+                //   id: user._id,
+                //   reciever: req.body.reciever,
+                //   inviter: req.body.inviter,
+                //   $or: [{ status: "recieved" }, { status: "accepted" }],
+                // }).exec();
                 //check if findInvites and checkInviteInstance are equal
-                if (findInvites && checkInviteInstance) {
+                if (checkInviteInstance) {
                     return [2 /*return*/, res.status(409).json({ ERROR: "Already sent" })];
                 }
+                if (req.body.reciever === req.body.inviter)
+                    return [2 /*return*/, res.status(409).json({ ERROR: "Can't send invites to youurself" })];
                 return [4 /*yield*/, new Invites({
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
                         status: req.body.status,
                     })];
-            case 4:
+            case 3:
                 invites = _a.sent();
                 return [4 /*yield*/, invites.save()];
-            case 5:
+            case 4:
                 _a.sent();
                 return [2 /*return*/, res.status(201).json({ message: invites })];
-            case 6:
+            case 5:
                 error_4 = _a.sent();
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",
                 });
-                return [3 /*break*/, 7];
-            case 7: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); });

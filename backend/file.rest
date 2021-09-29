@@ -14,8 +14,8 @@ PUT http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "id":"614c33f4d8687f7baa7632e0",
-    "status":"accepted"
+    "id":"61541a045232e654e8f19dce",
+    "status":"declined"
 }
 ### 
 GET http://localhost:4001/invites/igor?status=accepted
