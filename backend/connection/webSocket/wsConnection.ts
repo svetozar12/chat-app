@@ -1,10 +1,10 @@
-import { Socket } from "socket.io";
+// import { Socket } from "socket.io";
 const Invites = require("../models/Invites.model");
-const io = require("socket.io")(4000, {
-  cors: {
-    origin: "*",
-  },
-});
+// const io = require("socket.io")(4000, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
 
 let me: string = "";
 let you: string = "";

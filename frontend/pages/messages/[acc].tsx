@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ActiveChats from "../../components/ActiveChats";
 import PendingChats from "../../components/PendingChats";
 import FindFriends from "../../components/FindFriends";
@@ -24,10 +24,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const res = await axios.get(
         `http://localhost:4001/invites/${cookieName}`,
       );
-
       const data = res.data.invites;
       setContacts(data);
-
       return true;
     } catch (error: any) {
       const data = error.response.data.error;
@@ -83,21 +81,31 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     setContacts((prev: any) => [...prev, invite]);
   };
 
-  React.useEffect(() => {
+  const emitUsers = () => {
+    socketRef?.emit("sender_reciever", {
+      sender: cookieName,
+      reciever: reciever,
+    });
+  };
+
+  useEffect(() => {
     validateUser();
     fetchRecieverStatus();
     fetchInviteStatus();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("friend_request", ({ invite }) => {
       const [newObj] = invite;
+      console.log(newObj);
+
       updateFriendRequests(newObj);
     });
 
     socketConnect.on("send_friend_request", ({ invite }) => {
       const [newObj] = invite;
+
       updateFriendRequests(newObj);
     });
     setSocketRef(socketConnect);
@@ -106,14 +114,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     };
   }, []);
 
-  const emitUsers = () => {
-    socketRef?.emit("sender_reciever", {
-      sender: cookieName,
-      reciever: reciever,
-    });
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (reciever) {
       emitUsers();
     }
@@ -149,15 +150,13 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                if (!item.status === "recieved") return;
                 return (
                   <PendingChats
                     key={index}
                     socketRef={socketRef}
                     {...item}
+                    data={contacts}
                     items={item}
-                    localStatus={localStatus}
-                    setLocalStatus={setLocalStatus}
                   />
                 );
               })}

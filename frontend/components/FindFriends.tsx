@@ -24,7 +24,7 @@ function FindFriends({
       const data = res.data.message;
       socketRef?.emit("send_friend_request", {
         inviter: data.inviter,
-        reciever: data.reciever,
+        reciever,
         status: "recieved",
       });
 

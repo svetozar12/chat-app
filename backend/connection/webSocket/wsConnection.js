@@ -35,13 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+// import { Socket } from "socket.io";
 var Invites = require("../models/Invites.model");
-var io = require("socket.io")(4000, {
-    cors: {
-        origin: "*",
-    },
-});
+// const io = require("socket.io")(4000, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
 var me = "";
 var you = "";
 io.on("connection", function (socket) {

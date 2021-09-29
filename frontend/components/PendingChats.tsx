@@ -8,20 +8,23 @@ function PendingChats({
   inviter,
   status,
   reciever,
-  cookie,
   socketRef,
+  data,
 }: {
   _id: string;
   inviter: string;
   status: string;
   reciever: string;
-  cookie: string;
   socketRef: Socket;
+  data: string[];
 }) {
+  console.log(data);
+
   const emitFriendRequest = async (param: string) => {
     socketRef?.emit("friend_request", {
       _id,
       inviter,
+      reciever,
       status: param,
     });
   };
@@ -33,7 +36,7 @@ function PendingChats({
         status: param,
       });
       emitFriendRequest(param);
-
+      window.location.reload(false);
       return true;
     } catch (error) {
       return false;
