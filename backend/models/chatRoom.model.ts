@@ -2,11 +2,11 @@ import * as mongoose from "mongoose";
 
 const chatRoomSchema = new mongoose.Schema({
   members: {
-    type: [String],
+    type: String,
     required: true,
   },
   messages: {
-    type: [String],
+    type: String,
     required: true,
   },
 });

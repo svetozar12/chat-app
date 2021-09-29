@@ -9,6 +9,7 @@ function PendingChats({
   status,
   reciever,
   socketRef,
+  setLocalStatus,
   data,
 }: {
   _id: string;
@@ -16,27 +17,22 @@ function PendingChats({
   status: string;
   reciever: string;
   socketRef: Socket;
+  setLocalStatus: any;
   data: string[];
 }) {
-  console.log(data);
-
   const emitFriendRequest = async (param: string) => {
-    socketRef?.emit("friend_request", {
-      _id,
-      inviter,
-      reciever,
-      status: param,
-    });
+    socketRef?.emit("friend_request");
   };
 
   const updateInviteStatus = async (param: string) => {
     try {
+      setLocalStatus(param);
       const res = await axios.put(`http://localhost:4001/invites`, {
         id: _id,
         status: param,
       });
       emitFriendRequest(param);
-      window.location.reload(false);
+      setLocalStatus("");
       return true;
     } catch (error) {
       return false;

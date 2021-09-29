@@ -59,28 +59,8 @@ io.on("connection", function (socket) {
             time: new Date().getHours() + ":" + new Date().getMinutes(),
         });
     });
-    socket.on("friend_request", function (_a) {
-        var _id = _a._id, inviter = _a.inviter, reciever = _a.reciever, status = _a.status;
-        return __awaiter(void 0, void 0, void 0, function () {
-            var invite;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, Invites.find({
-                            _id: _id,
-                            inviter: inviter,
-                            status: status,
-                        })];
-                    case 1:
-                        invite = _b.sent();
-                        console.log(invite, "INVITE");
-                        console.log("friend request event");
-                        io.emit("friend_request", {
-                            invite: invite,
-                        });
-                        return [2 /*return*/];
-                }
-            });
-        });
+    socket.on("friend_request", function () {
+        io.emit("friend_request");
     });
     socket.on("send_friend_request", function (_a) {
         var inviter = _a.inviter, reciever = _a.reciever, status = _a.status;

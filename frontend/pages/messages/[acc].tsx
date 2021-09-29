@@ -96,16 +96,15 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("friend_request", ({ invite }) => {
-      const [newObj] = invite;
-      console.log(newObj);
-
-      updateFriendRequests(newObj);
+    socketConnect.on("friend_request", () => {
+      fetchRecieverStatus();
+      fetchInviteStatus();
+      // const [newObj] = invite;
+      // updateFriendRequests(newObj);
     });
 
     socketConnect.on("send_friend_request", ({ invite }) => {
       const [newObj] = invite;
-
       updateFriendRequests(newObj);
     });
     setSocketRef(socketConnect);
@@ -119,6 +118,11 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       emitUsers();
     }
   }, [reciever]);
+
+  useEffect(() => {
+    fetchRecieverStatus();
+    fetchInviteStatus();
+  }, [localStatus]);
 
   return (
     <div style={{ display: "flex" }}>
@@ -154,6 +158,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                   <PendingChats
                     key={index}
                     socketRef={socketRef}
+                    setLocalStatus={setLocalStatus}
                     {...item}
                     data={contacts}
                     items={item}
