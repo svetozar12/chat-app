@@ -15,7 +15,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-First enter in the frontend and install the dependencies and then repeat in the same process in directory backend.
+First enter in the frontend and install the dependencies and then repeat the same process in directory backend.
 
 - npm
 
