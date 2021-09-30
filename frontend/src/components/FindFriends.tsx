@@ -37,9 +37,6 @@ function FindFriends({
     e.preventDefault();
     if (reciever) {
       await sendInvite();
-
-      console.log(reciever);
-
       setReciever("");
     }
   };

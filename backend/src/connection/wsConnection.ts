@@ -8,7 +8,7 @@ const io = require("socket.io")(4000, {
 let me: string = "";
 let you: string = "";
 let recieverId: number | string;
-let senderId: string | string[];
+let senderId: number | string;
 
 io.on("connection", (socket: Socket): void => {
   socket.on("sender_reciever", ({ sender, reciever }) => {
@@ -36,9 +36,6 @@ io.on("connection", (socket: Socket): void => {
 
   socket.on("send_friend_request", ({ inviter, reciever }) => {
     if (inviter === reciever) return;
-    console.log(socket.rooms, "ROOMS");
-    console.log(recieverId, "RECIEVER");
-
     socket.in(recieverId).emit("send_friend_request");
   });
 });
