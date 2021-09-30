@@ -58,11 +58,7 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 return [3 /*break*/, 4];
             case 2: return [4 /*yield*/, Invites.find({
                     reciever: name_1,
-<<<<<<< HEAD
-                }).select("status  inviter")];
-=======
                 }).select("status  inviter reciever")];
->>>>>>> invites-ws-fix
             case 3:
                 _a = _b.sent();
                 _b.label = 4;
@@ -70,16 +66,6 @@ route.get("/invites/:id/", function (req, res) { return __awaiter(void 0, void 0
                 invites = _a;
                 if (!invites || invites.length <= 0) {
                     return [2 /*return*/, res.status(404).json({
-<<<<<<< HEAD
-                            error: "You dont have invites or this this account doesn't exist.",
-                        })];
-                }
-                res.json({ invites: invites }).status(201);
-                return [3 /*break*/, 6];
-            case 5:
-                error_1 = _b.sent();
-                return [2 /*return*/, res.status(501).json({ error: "error" })];
-=======
                             error: "You dont have invites .",
                         })];
                 }
@@ -130,79 +116,43 @@ route.get("/invites/inviter/:id/", function (req, res) { return __awaiter(void 0
                         Error: "Internal server error",
                         Message: "Something went wrong",
                     })];
->>>>>>> invites-ws-fix
             case 6: return [2 /*return*/];
         }
     });
 }); });
 route.put("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-<<<<<<< HEAD
-    var id, status_2, inviteInstance, updateStatus, error_2;
-=======
     var id, status_3, inviteInstance, updateStatus, error_3;
->>>>>>> invites-ws-fix
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 id = req.body.id;
-<<<<<<< HEAD
-                status_2 = req.body.status;
-=======
                 status_3 = req.body.status;
->>>>>>> invites-ws-fix
                 return [4 /*yield*/, Invites.findOne({
                         id: id,
                     }).exec()];
             case 1:
                 inviteInstance = _a.sent();
-<<<<<<< HEAD
-                if (!inviteInstance || undefined || !status_2) {
-                    return [2 /*return*/, res.status(404).json({ error: "Not found" })];
-                }
-                return [4 /*yield*/, Invites.findByIdAndUpdate(id, {
-                        status: status_2,
-=======
                 if (!inviteInstance || undefined || !status_3) {
                     return [2 /*return*/, res.status(404).json({ error: "Not found" })];
                 }
                 return [4 /*yield*/, Invites.findByIdAndUpdate(id, {
                         status: status_3,
->>>>>>> invites-ws-fix
                     }, { new: true }).exec()];
             case 2:
                 updateStatus = _a.sent();
                 return [2 /*return*/, res.json({ message: updateStatus })];
             case 3:
-<<<<<<< HEAD
-                error_2 = _a.sent();
-                res.status(501).send({ error: "error" });
-=======
                 error_3 = _a.sent();
                 res.status(501).json({
                     Error: "Internal server error",
                     Message: "Something went wrong",
                 });
->>>>>>> invites-ws-fix
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
-<<<<<<< HEAD
-// end of accept and ignore put requsts
-route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, checkInviteInstance, findInvites, invites, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 6, , 7]);
-                return [4 /*yield*/, Users.findOne({
-                        username: req.body.reciever,
-                    })];
-            case 1:
-                user = _a.sent();
-=======
 route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user, checkInviteInstance, invites, error_4;
     return __generator(this, function (_a) {
@@ -217,46 +167,10 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 if (user === null) {
                     return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
                 }
->>>>>>> invites-ws-fix
                 return [4 /*yield*/, Invites.findOne({
                         id: user._id,
                         reciever: req.body.reciever,
                         inviter: req.body.inviter,
-<<<<<<< HEAD
-                        status: "recieved",
-                    })];
-            case 2:
-                checkInviteInstance = _a.sent();
-                return [4 /*yield*/, Invites.findOne({
-                        id: user._id,
-                        reciever: req.body.reciever,
-                        inviter: req.body.inviter,
-                        status: "recieved",
-                    })];
-            case 3:
-                findInvites = _a.sent();
-                //check if findInvites and checkInviteInstance are equal
-                if (findInvites && checkInviteInstance) {
-                    return [2 /*return*/, res.status(409).json({ ERROR: "Already sent" })];
-                }
-                if (!user) {
-                    return [2 /*return*/, res.status(404).json({ ERROR: "User Not found" })];
-                }
-                return [4 /*yield*/, new Invites({
-                        reciever: req.body.reciever,
-                        inviter: req.body.inviter,
-                    })];
-            case 4:
-                invites = _a.sent();
-                return [4 /*yield*/, invites.save()];
-            case 5:
-                _a.sent();
-                return [2 /*return*/, res.status(201).json({ message: invites })];
-            case 6:
-                error_3 = _a.sent();
-                return [2 /*return*/, res.status(501).send("error")];
-            case 7: return [2 /*return*/];
-=======
                         $or: [{ status: "recieved" }, { status: "accepted" }],
                     }).exec()];
             case 2:
@@ -292,7 +206,6 @@ route.post("/invites", function (req, res) { return __awaiter(void 0, void 0, vo
                 });
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];
->>>>>>> invites-ws-fix
         }
     });
 }); });

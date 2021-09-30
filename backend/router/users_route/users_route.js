@@ -38,11 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var route = express.Router();
-<<<<<<< HEAD
-var createError = require("http-errors");
-=======
 var registerValidation = require("../../helpers/schema").registerValidation;
->>>>>>> invites-ws-fix
 var User = require("../../models/User.model");
 route.get("/users/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users, error_1;
@@ -63,37 +59,24 @@ route.get("/users/:username", function (req, res) { return __awaiter(void 0, voi
                 return [2 /*return*/, res.json({ message: users })];
             case 2:
                 error_1 = _a.sent();
-<<<<<<< HEAD
-                return [2 /*return*/, res
-                        .status(error_1.status)
-                        .json({ errorStatus: error_1.status, message: error_1, stack: error_1.stack })];
-=======
                 return [2 /*return*/, res.status(501).json({
                         Error: "Internal server error",
                         Message: "Something went wrong",
                     })];
->>>>>>> invites-ws-fix
             case 3: return [2 /*return*/];
         }
     });
 }); });
 route.post("/users/register", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-<<<<<<< HEAD
-    var users, i, user, error_2;
-=======
     var error, users, i, user, error_2;
->>>>>>> invites-ws-fix
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-<<<<<<< HEAD
-=======
                 error = registerValidation(req.body).error;
                 if (error) {
                     return [2 /*return*/, res.status(400).json({ message: error.message })];
                 }
->>>>>>> invites-ws-fix
                 return [4 /*yield*/, User.find().exec()];
             case 1:
                 users = _a.sent();
@@ -106,13 +89,6 @@ route.post("/users/register", function (req, res) { return __awaiter(void 0, voi
                     }
                 }
                 user = new User({ type: "POST", username: req.body.username });
-<<<<<<< HEAD
-                if (req.body.username === "")
-                    return [2 /*return*/, res
-                            .status(400)
-                            .json({ Error: "Invalid input", message: "Please enter valid input" })];
-=======
->>>>>>> invites-ws-fix
                 return [4 /*yield*/, user.save()];
             case 2:
                 _a.sent();
@@ -121,16 +97,10 @@ route.post("/users/register", function (req, res) { return __awaiter(void 0, voi
                         .send({ message: "User " + req.body.username + " created" })];
             case 3:
                 error_2 = _a.sent();
-<<<<<<< HEAD
-                return [2 /*return*/, res
-                        .status(error_2.status)
-                        .json({ errorStatus: error_2.status, message: error_2 })];
-=======
                 return [2 /*return*/, res.status(501).json({
                         Error: "Internal server error",
                         Message: "Something went wrong",
                     })];
->>>>>>> invites-ws-fix
             case 4: return [2 /*return*/];
         }
     });
@@ -140,20 +110,6 @@ route.delete("/users/:username", function (req, res) { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-<<<<<<< HEAD
-                console.log("hi");
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, User.deleteOne({ username: req.params.username }).exec()];
-            case 2:
-                data_1 = _a.sent();
-                return [2 /*return*/, res.status(204)];
-            case 3:
-                error_3 = _a.sent();
-                return [2 /*return*/, res.json({ error: error_3 }).sendStatus(501)];
-            case 4: return [2 /*return*/];
-=======
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, User.deleteOne({ username: req.params.username }).exec()];
             case 1:
@@ -166,7 +122,6 @@ route.delete("/users/:username", function (req, res) { return __awaiter(void 0, 
                         Message: "Something went wrong",
                     })];
             case 3: return [2 /*return*/];
->>>>>>> invites-ws-fix
         }
     });
 }); });

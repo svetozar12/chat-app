@@ -97,13 +97,9 @@ form,
 .you,
 .icon,
 .dash_board,
-<<<<<<< HEAD
-.active_chats {
-=======
 .active_chats,
 .main_section,
 .invite_buttons {
->>>>>>> invites-ws-fix
   display: flex;
   justify-content: center;
   align-items: center;
@@ -136,30 +132,18 @@ form {
 .active_chats {
   background: var(--main-blue);
   color: var(--main-white);
-<<<<<<< HEAD
-  height: 100vh;
-  padding: 0 5rem;
-  text-align: center;
-  height: 100vh;
-  overflow: auto;
-  max-width: 70%;
-  overflow-x: hidden;
-=======
   text-align: center;
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
   max-width: 70%;
   width: 50%;
->>>>>>> invites-ws-fix
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .main_section {
   margin: 1rem;
-<<<<<<< HEAD
-=======
   width: 100%;
 }
 
@@ -168,7 +152,6 @@ form {
   width: 15rem;
   overflow: auto;
   word-wrap: break-word;
->>>>>>> invites-ws-fix
 }
 
 /* =================
@@ -250,22 +233,8 @@ form > button:hover {
   margin: 2rem 0 2rem 0;
 }
 
-<<<<<<< HEAD
-.accepted_invite {
-  padding: 2rem;
-  margin: 2rem;
-  background-color: var(--off-blue);
-  color: var(--main-white);
-  max-width: 90%;
-  word-wrap: break-word;
-}
-
-.invite_buttons button {
-  margin: 0 0.2rem;
-=======
 .invite_buttons button {
   margin: 0.2rem;
->>>>>>> invites-ws-fix
   cursor: pointer;
 }
 
@@ -273,22 +242,6 @@ form > button:hover {
 .decline {
   outline: none;
   border: none;
-<<<<<<< HEAD
-  border: 1px solid var(--main-black);
-  border-radius: 10px;
-  padding: 0.5rem 1rem;
-  font-size: 1.01rem;
-}
-
-.accept {
-  background: var(--main-green);
-  color: var(--main-white);
-}
-
-.decline {
-  background: var(--main-red);
-  color: var(--main-white);
-=======
   font-size: 3.01rem;
   background: transparent;
   transition: 0.2s;
@@ -300,16 +253,11 @@ form > button:hover {
 
 .decline {
   color: var(--main-red);
->>>>>>> invites-ws-fix
 }
 
 .accept:hover,
 .decline:hover {
-<<<<<<< HEAD
-  box-shadow: 2px 2px var(--main-black);
-=======
   color: var(--main-white);
->>>>>>> invites-ws-fix
   transition: 0.2s;
 }
 
@@ -396,8 +344,6 @@ p {
 .active_chats > main > a {
   color: var(--main-white);
 }
-<<<<<<< HEAD
-=======
 
 /* =================
 6.Media Query
@@ -476,4 +422,3 @@ p {
     flex-direction: column;
   }
 }
->>>>>>> invites-ws-fix
