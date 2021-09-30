@@ -5,7 +5,6 @@ Table of concepts
   3.Layout styling
   4.Components styling
   5.Typography styling
-  6.Media Query
 ================= */
 
 /* =================
@@ -38,10 +37,6 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-button {
-  margin: 1rem;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -61,28 +56,12 @@ a {
   );
   position: absolute;
   z-index: -1;
-  width: 100vw;
-  height: 100vh;
+  width: 110vw;
+  height: 130vh;
 }
 
 .container {
   flex-direction: column;
-}
-
-.contacts_container {
-  width: 100%;
-  background-color: var(--off-blue);
-  color: var(--main-white);
-  width: 100%;
-  padding: 0 1rem;
-  word-wrap: break-word;
-  border-top: 1px solid var(--main-black);
-  transition: 0.2s;
-}
-
-.contacts_container:hover {
-  opacity: 0.65;
-  transition: 0.2s;
 }
 
 .chat_home {
@@ -97,13 +76,7 @@ form,
 .you,
 .icon,
 .dash_board,
-<<<<<<< HEAD
 .active_chats {
-=======
-.active_chats,
-.main_section,
-.invite_buttons {
->>>>>>> invites-ws-fix
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,6 +87,8 @@ form,
   height: 60vh;
   overflow: auto;
   background-color: var(--main-white);
+  padding: 1rem;
+  margin: 0.2rem;
   box-shadow: 0px 0px 20px var(--off-white);
 }
 
@@ -136,7 +111,6 @@ form {
 .active_chats {
   background: var(--main-blue);
   color: var(--main-white);
-<<<<<<< HEAD
   height: 100vh;
   padding: 0 5rem;
   text-align: center;
@@ -144,31 +118,12 @@ form {
   overflow: auto;
   max-width: 70%;
   overflow-x: hidden;
-=======
-  text-align: center;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100vh;
-  max-width: 70%;
-  width: 50%;
->>>>>>> invites-ws-fix
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .main_section {
   margin: 1rem;
-<<<<<<< HEAD
-=======
-  width: 100%;
-}
-
-.rendered_chat {
-  border-radius: 30% 30% 30% 30%;
-  width: 15rem;
-  overflow: auto;
-  word-wrap: break-word;
->>>>>>> invites-ws-fix
 }
 
 /* =================
@@ -179,21 +134,8 @@ input {
   outline: none;
 }
 
-input:focus {
-  box-shadow: 0 0 5px;
-}
-
-.friendsInput input {
-  width: 90%;
-  border: none;
-  border-radius: 20px;
-  margin: 1rem;
-  padding: 0.3rem;
-  border: 1px solid var(--main-black);
-}
-
 .container input {
-  width: 30%;
+  width: 20%;
   height: 2rem;
   border-radius: 20px;
   border: none;
@@ -219,13 +161,11 @@ form > button {
   border-radius: 20px;
   padding: 0.5rem;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 form > button:hover {
   background-color: var(--main-white);
   color: var(--main-black);
-  transition: 0.2s;
 }
 
 .clickable {
@@ -250,7 +190,6 @@ form > button:hover {
   margin: 2rem 0 2rem 0;
 }
 
-<<<<<<< HEAD
 .accepted_invite {
   padding: 2rem;
   margin: 2rem;
@@ -262,10 +201,6 @@ form > button:hover {
 
 .invite_buttons button {
   margin: 0 0.2rem;
-=======
-.invite_buttons button {
-  margin: 0.2rem;
->>>>>>> invites-ws-fix
   cursor: pointer;
 }
 
@@ -273,7 +208,6 @@ form > button:hover {
 .decline {
   outline: none;
   border: none;
-<<<<<<< HEAD
   border: 1px solid var(--main-black);
   border-radius: 10px;
   padding: 0.5rem 1rem;
@@ -288,28 +222,11 @@ form > button:hover {
 .decline {
   background: var(--main-red);
   color: var(--main-white);
-=======
-  font-size: 3.01rem;
-  background: transparent;
-  transition: 0.2s;
-}
-
-.accept {
-  color: var(--main-green);
-}
-
-.decline {
-  color: var(--main-red);
->>>>>>> invites-ws-fix
 }
 
 .accept:hover,
 .decline:hover {
-<<<<<<< HEAD
   box-shadow: 2px 2px var(--main-black);
-=======
-  color: var(--main-white);
->>>>>>> invites-ws-fix
   transition: 0.2s;
 }
 
@@ -396,84 +313,3 @@ p {
 .active_chats > main > a {
   color: var(--main-white);
 }
-<<<<<<< HEAD
-=======
-
-/* =================
-6.Media Query
-================= */
-@media (max-width: 431px) {
-  .container input {
-    width: 80%;
-  }
-
-  .alert {
-    font-size: 0.9rem;
-  }
-
-  .quick_login {
-    font-size: 0.689rem;
-  }
-
-  .friendsInput input {
-    width: 90%;
-    margin: 0 1rem;
-  }
-
-  .contacts {
-    background: var(--main-blue);
-    width: 30vw;
-    padding: 0 1rem;
-    margin: 1rem;
-    flex-direction: column;
-  }
-
-  .accept,
-  .decline {
-    outline: none;
-    border: none;
-    font-size: 1.9rem;
-    background: transparent;
-    transition: 0.2s;
-  }
-
-  .accept {
-    color: var(--main-green);
-  }
-
-  .decline {
-    color: var(--main-red);
-  }
-}
-/* specific for nokia 8110 */
-@media (max-width: 240px) {
-  .friendsInput input {
-    width: 75%;
-    margin: 0 1rem;
-  }
-  h2 {
-    font-size: 0.9rem;
-  }
-
-  .container h1 {
-    font-size: 0.6rem;
-  }
-
-  .active_chats {
-    padding: 1rem;
-    overflow: hidden;
-  }
-
-  .active_chats h1 {
-    font-size: 0.65rem;
-  }
-
-  .contacts {
-    background: var(--main-blue);
-    width: 30vw;
-    padding: 1rem;
-    margin: 1rem;
-    flex-direction: column;
-  }
-}
->>>>>>> invites-ws-fix

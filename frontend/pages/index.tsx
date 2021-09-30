@@ -1,6 +1,7 @@
 import Link from "next/link";
+import React from "react";
+import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
-<<<<<<< HEAD
 import { GetServerSideProps, NextPage } from "next";
 
 const index: NextPage<{ cookie: string }> = (props) => {
@@ -8,10 +9,6 @@ const index: NextPage<{ cookie: string }> = (props) => {
   const router = useRouter();
   const cookieName = cookie.get("name");
 
-=======
-import { GetServerSideProps } from "next";
-const index = () => {
->>>>>>> invites-ws-fix
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href="http://localhost:3000/register">
@@ -31,18 +28,7 @@ const index = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
-<<<<<<< HEAD
 
-=======
-  if (cookieName) {
-    return {
-      redirect: {
-        destination: `messages/${cookieName}`,
-        permanent: false,
-      },
-    };
-  }
->>>>>>> invites-ws-fix
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };
