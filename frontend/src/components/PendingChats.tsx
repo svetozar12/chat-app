@@ -20,7 +20,7 @@ function PendingChats({
   setLocalStatus: any;
   data: string[];
 }) {
-  const emitFriendRequest = async (param: string) => {
+  const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
 
@@ -31,7 +31,7 @@ function PendingChats({
         id: _id,
         status: param,
       });
-      emitFriendRequest(param);
+      emitFriendRequest();
       setLocalStatus("");
       return true;
     } catch (error) {

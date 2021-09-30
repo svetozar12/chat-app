@@ -1,4 +1,4 @@
-GET http://localhost:4001/users/ivana
+GET http://localhost:4001/users/svetozar
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:4001/users/ivan
+DELETE http://localhost:4001/users/svetozar
 ### Updates the status
 PUT http://localhost:4001/invites
 Content-Type: application/json

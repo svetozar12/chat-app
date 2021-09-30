@@ -12,11 +12,11 @@ route.get("/users/:username", async (req: Request, res: Response) => {
       username: req.params.username,
     }).exec();
     if (!users || undefined)
-      return res.status(400).json({
+      return res.status(404).json({
         ERROR: "Invalid input",
         message: `User ${req.params.username} doesn't exist`,
       });
-    return res.json({ message: users });
+    return res.status(200).json({ message: users });
   } catch (error: any) {
     return res.status(501).json({
       Error: "Internal server error",
@@ -28,20 +28,13 @@ route.get("/users/:username", async (req: Request, res: Response) => {
 route.post("/users/register", async (req: Request, res: Response) => {
   try {
     const { error } = registerValidation(req.body);
-
+    const username = req.body.username;
     if (error) {
-      return res.status(400).json({ message: error.message });
+      return res.status(409).json({ message: error.message });
     }
 
-    const users = await User.find().exec();
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].username === req.body.username) {
-        return res.status(400).json({
-          ERROR: "Invalid input",
-          message: `User ${req.body.username} already exist`,
-        });
-      }
-    }
+    const users = await User.findOne({ username }).exec();
+    if (users) return res.status(409).json({ message: "user already exist" });
 
     const user = new User({ type: "POST", username: req.body.username });
 
@@ -64,7 +57,7 @@ route.delete("/users/:username", async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong while deleting",
     });
   }
 });

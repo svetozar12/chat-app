@@ -8,7 +8,6 @@ const ActiveChats = ({
 }: {
   reciever: string;
   inviter: string;
-  status: string;
   cookie: string;
 }) => {
   const cokie = useCookie(cookie);
@@ -30,13 +29,18 @@ const ActiveChats = ({
       href={`http://localhost:3000/messages/${cokie.get("name")}/chat`}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div>logo </div>
-        <h1>
-          {width && width >= 432 && inviter === cokie.get("name") && reciever}
-          {width && width >= 432 && reciever === cokie.get("name") && inviter}
-        </h1>
+        <div>LOGO</div>
+        <div className="contacts_info">
+          <h2>
+            {(width &&
+              width >= 432 &&
+              inviter === cokie.get("name") &&
+              reciever) ||
+              (reciever === cokie.get("name") && inviter)}
+          </h2>
+          {width && width >= 432 && <h5>Last message...</h5>}
+        </div>
       </div>
-      {width && width >= 432 && <p>Last message...</p>}
     </a>
   );
 };

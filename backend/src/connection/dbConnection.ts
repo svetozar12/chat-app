@@ -6,6 +6,8 @@ const Invite = require("../models/Invites.model");
 const connection = "mongodb://localhost:27017/chatDB";
 
 const connectDb = () => {
-  return mongoose.connect(connection);
+  return mongoose.connect(connection, {
+    autoIndex: true,
+  });
 };
 module.exports = connectDb;

@@ -21,4 +21,3 @@ const port: number = 4001;
 app.listen(port, function (): void {
   console.log(`listening on port ${port}`);
 });
-// http://localhost:4001/

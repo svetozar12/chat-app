@@ -1,5 +1,4 @@
 import { Socket } from "socket.io";
-const Invites = require("../models/Invites.model");
 const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
@@ -8,6 +7,8 @@ const io = require("socket.io")(4000, {
 
 let me: string = "";
 let you: string = "";
+let recieverId: number | string;
+let senderId: string | string[];
 
 io.on("connection", (socket: Socket): void => {
   socket.on("sender_reciever", ({ sender, reciever }) => {
@@ -25,33 +26,21 @@ io.on("connection", (socket: Socket): void => {
       });
     },
   );
-
+  socket.on("invite_room", (reciever_id) => {
+    recieverId = reciever_id;
+    socket.join(reciever_id);
+  });
   socket.on("friend_request", () => {
     io.emit("friend_request");
   });
 
-  socket.on(
-    "send_friend_request",
-    async ({
-      inviter,
-      reciever,
-      status,
-    }: {
-      inviter: string;
-      reciever: string;
-      status: string;
-    }) => {
-      if (inviter === reciever) return;
-      const invite = await Invites.find({
-        inviter,
-        reciever,
-        status: "recieved",
-      });
-      socket.broadcast.emit("send_friend_request", {
-        invite,
-      });
-    },
-  );
+  socket.on("send_friend_request", ({ inviter, reciever }) => {
+    if (inviter === reciever) return;
+    console.log(socket.rooms, "ROOMS");
+    console.log(recieverId, "RECIEVER");
+
+    socket.in(recieverId).emit("send_friend_request");
+  });
 });
 
 module.exports = io;

@@ -17,12 +17,12 @@ Table of concepts
   --off-white: rgb(221, 221, 221);
   --main-black: rgb(0, 0, 0);
   --off-black: rgb(92, 92, 92);
-  --main-blue: rgb(73, 75, 173);
-  --off-blue: rgb(26, 97, 189);
+  --main-blue: rgb(79, 81, 216);
+  --off-blue: rgb(38, 92, 163);
   --main-green: rgb(52, 192, 34);
   --main-red: rgb(231, 10, 10);
-  --gradient-first: #cfd9df;
-  --gradient-second: #e2ebf0;
+  --gradient-first: #dfdfdf;
+  --gradient-second: #ffffff;
 }
 
 /* =================
@@ -55,8 +55,7 @@ a {
 ================= */
 .BIG {
   background: radial-gradient(
-    circle,
-    var(--gradient-first) 0%,
+    var(--gradient-first) 10%,
     var(--gradient-second) 100%
   );
   position: absolute;
@@ -71,26 +70,29 @@ a {
 
 .contacts_container {
   width: 100%;
-  background-color: var(--off-blue);
   color: var(--main-white);
   width: 100%;
   padding: 0 1rem;
   word-wrap: break-word;
-  border-top: 1px solid var(--main-black);
   transition: 0.2s;
 }
 
 .contacts_container:hover {
-  opacity: 0.65;
+  background: rgba(122, 122, 122, 0.4);
   transition: 0.2s;
+}
+
+.contacts_info {
+  flex-direction: column;
+  text-align: start;
 }
 
 .chat_home {
   position: relative;
   z-index: 10;
 }
-
-/* .container-chat, */
+/* .contacts_info, */
+.contacts_container,
 .container,
 form,
 .me,
@@ -140,6 +142,10 @@ form {
   width: 50%;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+.active_chats div > main > a {
+  color: var(--main-white);
 }
 
 .main_section {
@@ -219,14 +225,6 @@ form > button:hover {
 .clickable label {
   display: flex;
   align-items: center;
-}
-
-.contacts {
-  background: var(--main-blue);
-  width: 30vw;
-  padding: 1rem;
-  margin: 1rem;
-  flex-direction: column;
 }
 
 .invite_list > main {
@@ -315,10 +313,19 @@ p {
   border-bottom: 1px solid;
 }
 
+.contacts {
+  background: var(--main-blue);
+  width: 30vw;
+  padding: 0 2rem;
+  margin: 1rem;
+  border-radius: 1.6rem;
+  flex-direction: column;
+}
+
 .contacts h1,
 p {
   color: var(--main-white);
-  text-align: left;
+  text-align: center;
 }
 
 .menu > svg {
@@ -339,10 +346,6 @@ p {
   background: var(--main-white);
   border-radius: 50%;
   cursor: pointer;
-}
-
-.active_chats > main > a {
-  color: var(--main-white);
 }
 
 /* =================

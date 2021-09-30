@@ -28,11 +28,11 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
       });
     }
 
-    return res.json({ invites }).status(201);
+    return res.status(200).json({ invites });
   } catch (error) {
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong with your invite",
     });
   }
 });
@@ -58,11 +58,11 @@ route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
       });
     }
 
-    return res.json({ invites }).status(201);
+    return res.status(200).json({ invites });
   } catch (error) {
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong with your invite request",
     });
   }
 });
@@ -77,7 +77,7 @@ route.put("/invites", async (req: Request, res: Response) => {
     }).exec();
 
     if (!inviteInstance || undefined || !status) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Invites not found" });
     }
 
     const updateStatus = await Invites.findByIdAndUpdate(
@@ -92,7 +92,7 @@ route.put("/invites", async (req: Request, res: Response) => {
   } catch (error) {
     res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong with the invites",
     });
   }
 });
@@ -114,19 +114,12 @@ route.post("/invites", async (req: Request, res: Response) => {
       $or: [{ status: "recieved" }, { status: "accepted" }],
     }).exec();
 
-    // const findInvites = await Invites.findOne({
-    //   id: user._id,
-    //   reciever: req.body.reciever,
-    //   inviter: req.body.inviter,
-    //   $or: [{ status: "recieved" }, { status: "accepted" }],
-    // }).exec();
-    //check if findInvites and checkInviteInstance are equal
-    if (checkInviteInstance) {
+    if (checkInviteInstance)
       return res.status(409).json({ ERROR: "Already sent" });
-    }
 
     if (req.body.reciever === req.body.inviter)
       return res.status(409).json({ ERROR: "Can't send invites to youurself" });
+
     const invites = await new Invites({
       reciever: req.body.reciever,
       inviter: req.body.inviter,
@@ -137,7 +130,7 @@ route.post("/invites", async (req: Request, res: Response) => {
   } catch (error) {
     res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong while sending invite",
     });
   }
 });

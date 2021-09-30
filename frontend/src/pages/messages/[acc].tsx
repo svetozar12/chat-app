@@ -25,6 +25,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `http://localhost:4001/invites/${cookieName}`,
       );
       const data = res.data.invites;
+      const [newData] = data;
       setContacts(data);
       return true;
     } catch (error: any) {
@@ -42,6 +43,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       );
       const data = res.data.invites;
       setContacts(data);
+      if (data.status === "declined") return false;
       return true;
     } catch (error) {
       return false;
@@ -77,10 +79,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const updateFriendRequests = (invite: string): void => {
-    setContacts((prev: any) => [...prev, invite]);
-  };
-
   const emitUsers = () => {
     socketRef?.emit("sender_reciever", {
       sender: cookieName,
@@ -99,13 +97,16 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     socketConnect.on("friend_request", () => {
       fetchRecieverStatus();
       fetchInviteStatus();
-      // const [newObj] = invite;
-      // updateFriendRequests(newObj);
     });
 
-    socketConnect.on("send_friend_request", ({ invite }) => {
-      const [newObj] = invite;
-      updateFriendRequests(newObj);
+    socketConnect.on("send_friend_request", () => {
+      console.log("emiting send friend request");
+
+      fetchRecieverStatus();
+    });
+
+    socketConnect.emit("invite_room", {
+      reciever_id: Math.random().toString(16).slice(2),
     });
     setSocketRef(socketConnect);
     return () => {
@@ -128,10 +129,12 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     <div style={{ display: "flex" }}>
       <section className="active_chats">
         <FindFriends cookie={cookie} socketRef={socketRef} />
-
+        {error && <h1>You don't have friends</h1>}
         {contacts.map((item, index) => {
           if (item.status !== "accepted") return;
-          return <ActiveChats key={index} {...item} cookie={cookie} />;
+          return (
+            <ActiveChats key={index} {...item} error={error} cookie={cookie} />
+          );
         })}
       </section>
       <section className="main_section">

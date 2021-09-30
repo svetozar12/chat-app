@@ -25,7 +25,6 @@ function FindFriends({
       socketRef?.emit("send_friend_request", {
         inviter: data.inviter,
         reciever,
-        status: "recieved",
       });
 
       return true;
