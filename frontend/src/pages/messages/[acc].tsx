@@ -25,7 +25,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `http://localhost:4001/invites/${cookieName}`,
       );
       const data = res.data.invites;
-      const [newData] = data;
       setContacts(data);
       return true;
     } catch (error: any) {
@@ -101,11 +100,12 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
     socketConnect.on("send_friend_request", () => {
       fetchRecieverStatus();
+      fetchInviteStatus();
+      console.log("sending");
     });
 
-    socketConnect.emit("invite_room", {
-      reciever_id: Math.random().toString(16).slice(2),
-    });
+    socketConnect.emit("room", { user: cookieName });
+
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
@@ -127,7 +127,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     <div style={{ display: "flex" }}>
       <section className="active_chats">
         <FindFriends cookie={cookie} socketRef={socketRef} />
-        {error && <h1>You don't have friends</h1>}
         {contacts.map((item, index) => {
           if (item.status !== "accepted") return;
           return (

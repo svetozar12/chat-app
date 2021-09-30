@@ -7,10 +7,12 @@ const io = require("socket.io")(4000, {
 
 let me: string = "";
 let you: string = "";
-let recieverId: number | string;
-let senderId: number | string;
+let recieverId: string;
+let senderId: string;
 
 io.on("connection", (socket: Socket): void => {
+  recieverId = socket.id;
+
   socket.on("sender_reciever", ({ sender, reciever }) => {
     me = sender;
     you = reciever;
@@ -26,17 +28,18 @@ io.on("connection", (socket: Socket): void => {
       });
     },
   );
-  socket.on("invite_room", (reciever_id) => {
-    recieverId = reciever_id;
-    socket.join(reciever_id);
+
+  socket.on("room", ({ user }) => {
+    socket.join(user);
   });
+
   socket.on("friend_request", () => {
     io.emit("friend_request");
   });
 
   socket.on("send_friend_request", ({ inviter, reciever }) => {
     if (inviter === reciever) return;
-    socket.in(recieverId).emit("send_friend_request");
+    io.to(reciever).emit("send_friend_request");
   });
 });
 
