@@ -1,38 +1,64 @@
-import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import ActiveChats from "../../components/ActiveChats";
+import PendingChats from "../../components/PendingChats";
+import FindFriends from "../../components/FindFriends";
+import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
+import { io, Socket } from "socket.io-client";
 
-import axios from "axios";
-const index: NextPage<{ cookie: string }> = (props) => {
+const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const router = useRouter();
-
   const cookie = useCookie(props.cookie);
-  const [contacts, setContacts] = React.useState([]);
+  const cookieName = cookie.get("name");
 
-  const fetchUsers = async () => {
+  const [localStatus, setLocalStatus] = useState<string>("");
+  const [reciever, setReciever] = useState<string | null>("");
+  const [socketRef, setSocketRef] = useState<Socket | null>(null);
+  const [contacts, setContacts] = useState<string[]>([]);
+  const [error, setError] = useState<string>("");
+
+  const fetchRecieverStatus = async () => {
     try {
-      const response = await axios.get("http://localhost:4001/users");
-      setContacts(response.data.users);
+      const res = await axios.get(
+        `http://localhost:4001/invites/${cookieName}`,
+      );
+      const data = res.data.invites;
+      setContacts(data);
+      return true;
+    } catch (error: any) {
+      const data = error.response.data.error;
+      setError(data);
+
+      return false;
+    }
+  };
+
+  const fetchInviteStatus = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/invites/inviter/${cookieName}?status=accepted`,
+      );
+      const data = res.data.invites;
+      setContacts(data);
+      return true;
     } catch (error) {
       return false;
     }
   };
 
   const deleteCookies = () => {
-    if (cookie.get("name")) {
-      cookie.remove("name");
-      router.push("/");
-    }
+    cookie.remove("name");
+    router.push("/");
   };
 
   const deleteUser = async () => {
     try {
-      const res = await axios.delete(
-        `http://localhost:4001/${cookie.get("name")}`,
-      );
       deleteCookies();
+      const res = await axios.delete(
+        `http://localhost:4001/users/${cookieName}`,
+      );
       return true;
     } catch (error) {
       return false;
@@ -41,55 +67,108 @@ const index: NextPage<{ cookie: string }> = (props) => {
 
   const validateUser = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4001/users/${cookie.get("name")}`,
-      );
+      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+      if (!cookieName) throw Error;
       return true;
     } catch (error) {
+      router.push("/");
       deleteCookies();
       return false;
     }
   };
-  React.useEffect(() => {
+
+  const updateFriendRequests = (invite: string): void => {
+    setContacts((prev: any) => [...prev, invite]);
+  };
+
+  const emitUsers = () => {
+    socketRef?.emit("sender_reciever", {
+      sender: cookieName,
+      reciever: reciever,
+    });
+  };
+
+  useEffect(() => {
     validateUser();
-    fetchUsers();
+    fetchRecieverStatus();
+    fetchInviteStatus();
   }, []);
 
-  console.log("my arr", contacts);
+  useEffect(() => {
+    const socketConnect: Socket = io("http://localhost:4000");
+    socketConnect.on("friend_request", () => {
+      fetchRecieverStatus();
+      fetchInviteStatus();
+      // const [newObj] = invite;
+      // updateFriendRequests(newObj);
+    });
+
+    socketConnect.on("send_friend_request", ({ invite }) => {
+      const [newObj] = invite;
+      updateFriendRequests(newObj);
+    });
+    setSocketRef(socketConnect);
+    return () => {
+      socketRef && socketRef.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reciever) {
+      emitUsers();
+    }
+  }, [reciever]);
+
+  useEffect(() => {
+    fetchRecieverStatus();
+    fetchInviteStatus();
+  }, [localStatus]);
 
   return (
-    <div
-      style={{ height: "100vh", justifyContent: "flex-start" }}
-      className="container"
-    >
-      <h1>You're logged in as {cookie.get("name")}</h1>
-      <h2 className="log-out" onClick={deleteCookies}>
-        Log out
-      </h2>
-      <h2 className="log-out" onClick={deleteUser}>
-        Delete account
-      </h2>
-      <ul style={{ overflowY: "auto", overflowX: "hidden" }}>
-        {contacts.map((item) => {
-          const { _id, username } = item;
-          return (
-            <a
-              style={{
-                color: "var(--main-white)",
-                textDecoration: "none",
-              }}
-              href="http://localhost:3000/messages/chatRoom"
-            >
-              {username !== cookie.get("name") && (
-                <div className="contacts">
-                  <h1>{username}</h1>
-                  <p>Messages</p>
-                </div>
-              )}
-            </a>
-          );
+    <div style={{ display: "flex" }}>
+      <section className="active_chats">
+        <FindFriends cookie={cookie} socketRef={socketRef} />
+
+        {contacts.map((item, index) => {
+          if (item.status !== "accepted") return;
+          return <ActiveChats key={index} {...item} cookie={cookie} />;
         })}
-      </ul>
+      </section>
+      <section className="main_section">
+        {" "}
+        <div
+          style={{
+            height: "100vh",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+          className="container"
+        >
+          <h1>You're logged in as {cookieName}</h1>
+          <h2 className="log-out" onClick={deleteCookies}>
+            Log out
+          </h2>
+          <h2 className="log-out" onClick={deleteUser}>
+            Delete account
+          </h2>
+          <div className="dash_board">
+            <ul style={{ overflow: "auto", overflowX: "hidden" }}>
+              {contacts.map((item, index) => {
+                return (
+                  <PendingChats
+                    key={index}
+                    socketRef={socketRef}
+                    setLocalStatus={setLocalStatus}
+                    {...item}
+                    data={contacts}
+                    items={item}
+                  />
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
@@ -98,32 +177,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
 
-  if (cookieName) {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
-    } catch (error) {
-      cookie.remove("name");
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
-    }
-  }
-
   if (!cookieName) {
     return {
       redirect: {
+        destination: `/`,
         permanent: false,
-        destination: "/",
       },
     };
-  }
-
-  return {
-    props: { cookie: context.req.headers.cookie || "" },
-  };
+  } else
+    return {
+      props: {
+        cookie: context.req.headers.cookie || "",
+      },
+    };
 };
 
 export default index;

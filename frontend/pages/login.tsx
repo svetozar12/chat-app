@@ -9,19 +9,28 @@ import Link from "next/link";
 function login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const [name, setName] = React.useState("");
-  const [alert, setAlert] = React.useState("");
-  const [checked, setChecked] = React.useState(false);
+  const cookieName = cookie.get("name");
+  const [name, setName] = React.useState<string>("");
+  const [alert, setAlert] = React.useState<string>("");
+  const [checked, setChecked] = React.useState<boolean>(false);
 
   const loginPost = async () => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${name}`);
       return true;
     } catch (error: any) {
-      setAlert(error.response.data.message.message);
+      setAlert(error.response.data.message);
       return false;
     }
   };
+
+  const Alert = () => {
+    setTimeout(() => {
+      setAlert("");
+    }, 2000);
+  };
+
+  const rememberMe = () => {};
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -30,26 +39,26 @@ function login(props: AppProps) {
       if (result) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
-          sameSite: "none",
-          secure: true,
-        }); //1hour
-        router.push(`/messages/${cookie.get("name")}`);
+          sameSite: "strict",
+          path: "/",
+        });
+        setTimeout(() => {
+          router.push(`messages/${cookie.get("name")}`);
+        }, 100);
       }
-      setTimeout(() => {
-        setAlert("");
-      }, 2000);
+      Alert();
     } else {
       setAlert("No input");
-      setTimeout(() => {
-        setAlert("");
-      }, 2000);
+      Alert();
     }
   };
 
   return (
     <div>
       <form style={{ height: "100vh" }} className="container">
-        <h1 style={{ color: "red" }}>{alert}</h1>
+        <h1 className="alert" style={{ color: "red" }}>
+          {alert}
+        </h1>
         <h1>Login</h1>
         <input
           value={name}
@@ -87,11 +96,12 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
+
   if (cookieName) {
     return {
       redirect: {
+        destination: `messages/${cookieName}`,
         permanent: false,
-        destination: `/messages/${cookieName}`,
       },
     };
   }

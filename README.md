@@ -6,6 +6,7 @@ This is an chat app which is using websocket for transfering the messages betwee
 
 - [NextJs](https://nextjs.org/)
 - [Express](https://expressjs.com/)
+- [MongoDb](https://www.mongodb.com/)
 
 ## Getting Started
 
@@ -14,7 +15,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-First enter in the frontend and install the dependencies and then repeat in the same process in directory backend.
+First enter in the frontend and install the dependencies and then repeat the same process in directory backend.
 
 - npm
 

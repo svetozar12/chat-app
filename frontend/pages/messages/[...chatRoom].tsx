@@ -1,61 +1,61 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
-import { useRouter } from "next/router";
-// external npms
 import { io, Socket } from "socket.io-client";
-import axios from "axios";
-interface IProps {
-  name: string;
-  message: string;
-  time: string | number;
+import Link from "next/dist/client/link";
+
+interface IUpdadeFunction {
+  updateChat: (name: string, message: string) => void;
 }
 
-const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
+const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
+  props,
+) => {
   const chatRoom = props.chatRoom.chatRoom;
 
   const cookie = useCookie(props.cookie);
-  const [id, setId] = useState<string | number>("");
-  const [state, setState] = useState<IProps>({
+  const cookieName = cookie.get("name");
+  const [reciever, setReciever] = useState<string | null>("");
+  const [state, setState] = useState<{
+    name?: string;
+    message?: string;
+    time?: string | number;
+  }>({
     name: cookie.get("name"),
     message: "",
     time: "",
   });
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:4001/users/${cookie.get("name")}`,
-      );
-      setId(res.data.message._id);
-      console.log("id", id);
 
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  //===========================
+  // Updading chat and fetching users to add them to a list
+  //===========================
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  const updateChat = (name: string, message: string, time: number | string) => {
-    setChat((prev: any) => [...prev, { name, message, time }]);
+  const updateChat = (name: string, message: string): void => {
+    setChat((prev: any) => [...prev, { name, message }]);
   };
 
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ name, message, time }: any) => {
-      updateChat(name, message, time);
+    socketConnect.on("message", ({ name, message }: any) => {
+      updateChat(name, message);
     });
-    // creating room
-    socketConnect.emit("joinRoom", "room1");
+    socketConnect?.on("send_message", ({ me, you }) => {
+      setReciever(you);
+
+      return reciever;
+    });
+
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+
+  //===========================
+  // Submit and text change functions
+  //===========================
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -64,22 +64,20 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
   const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     const { name, message, time } = state;
-    socketRef?.emit("message", { name, message, time, id });
-    setState({ name, message: "", time: "" });
+    socketRef?.emit("message", { name, message, time });
+
+    setState({ name });
   };
 
   const renderChat = () => {
-    return chat.map(({ name, message, time }: any, index) => (
-      <div className={name === chatRoom ? "me" : "you"} key={index}>
+    return chat.map(({ name, message, time }: any, index: number) => (
+      <div className={name === chatRoom[0] ? "me" : "you"} key={index}>
         <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>{name}</h2>
         <div
+          className="rendered_chat "
           style={{
             background:
-              name === chatRoom ? "var(--main-blue)" : "var(--off-black) ",
-            borderRadius: "30% 30% 30% 30%",
-            width: "15rem",
-            overflow: "auto",
-            wordWrap: "break-word",
+              name === chatRoom[0] ? "var(--main-blue)" : "var(--off-black) ",
           }}
         >
           <p>{message}</p>
@@ -88,14 +86,16 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
       </div>
     ));
   };
+
   return (
     <div
       style={{ justifyContent: "center", height: "100vh" }}
       className="container chat_home"
     >
-      <h1>your Id</h1>
-      <h2>{id}</h2>
-      <div className="container-chat">
+      <Link href={`http://localhost:3000/messages/${cookieName}`}>
+        <a>Back to profile page</a>
+      </Link>
+      <div className="container_chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}
       </div>
@@ -122,30 +122,16 @@ const Home: NextPage<{ cookie: string; chatRoom: string | any }> = (props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
-  // if (!cookieName) {
-  //   return {
-  //     redirect: {
-  //       destination: "/",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  const cookieRemove = cookie.remove("name");
 
-  // if (cookieName) {
-  //   try {
-  //     const res = await axios.get(
-  //       `http://localhost:4001/messages/${cookieName}`,
-  //     );
-  //   } catch (error) {
-  //     cookie.remove("name");
-  //     return {
-  //       redirect: {
-  //         destination: "/",
-  //         permanent: false,
-  //       },
-  //     };
-  //   }
-  // }
+  if (!cookieName) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

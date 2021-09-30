@@ -2,38 +2,52 @@ import axios from "axios";
 import React from "react";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import { AppProps } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-function register(props: AppProps) {
+function register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
-  const [state, setState] = React.useState<string | any>({
-    badAlert: "",
+  const [state, setState] = React.useState<{
+    goodAlert?: string;
+    badAlert?: string;
+  }>({
     goodAlert: "",
+    badAlert: "",
   });
 
-  const quickLogin = async () => {
-    cookie.set("name", name, { maxAge: 360 });
+  React.useEffect(() => {
+    if (cookie.get("name")) {
+      router.push(`/messages/${cookie.get("name")}`);
+    }
+  }, []);
+
+  const quickLogin = () => {
+    cookie.set("name", name, {
+      maxAge: 7200,
+      sameSite: "strict",
+      path: "/",
+    });
     router.push(`/messages/${cookie.get("name")}`);
   };
 
   const registerPost = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/register", {
+      const res = await axios.post("http://localhost:4001/users/register", {
         username: name,
       });
-      setState({ goodAlert: res.data.message });
+      const data = res.data;
+      setState({ goodAlert: data.message });
       setLoginPrompt(true);
       return true;
     } catch (error: any) {
-      const temp = error.response.data;
+      const data = error.response.data;
       setName("");
-      setState({ badAlert: temp.message.message });
+      setState({ badAlert: data.message });
       return false;
     }
   };
@@ -45,12 +59,16 @@ function register(props: AppProps) {
       setState({ badAlert: "", goodAlert: "" });
     }, 2000);
   };
+
   return (
     <>
       <form style={{ height: "100vh" }} className="container">
-        <h1 style={state.goodAlert ? { color: "green" } : { color: "red" }}>
+        <h2
+          className="alert"
+          style={state.goodAlert ? { color: "green" } : { color: "red" }}
+        >
           {state.goodAlert || state.badAlert}
-        </h1>
+        </h2>
         <h1>Register</h1>
         <input
           value={name}
@@ -68,10 +86,12 @@ function register(props: AppProps) {
           register
         </button>
         {loginPrompt && (
-          <div className="container">
-            <h1 onClick={quickLogin} style={{ cursor: "pointer" }}>
-              Click me to Quick login
-            </h1>
+          <div
+            onClick={quickLogin}
+            style={{ cursor: "pointer" }}
+            className="container quick_login"
+          >
+            <h2>Click me to Quick login</h2>
           </div>
         )}
       </form>
@@ -85,8 +105,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (cookieName) {
     return {
       redirect: {
+        destination: `messages/${cookieName}`,
         permanent: false,
-        destination: `/messages/${cookieName}`,
       },
     };
   }

@@ -1,0 +1,34 @@
+GET http://localhost:4001/users/ivana
+###
+POST http://localhost:4001/users/register
+Content-Type: application/json
+
+{
+    "username":"svetozar"
+}
+
+###
+DELETE http://localhost:4001/users/ivan
+### Updates the status
+PUT http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "id":"61541a045232e654e8f19dce",
+    "status":"declined"
+}
+### 
+GET http://localhost:4001/invites/igor?status=accepted
+###
+GET http://localhost:4001/invites/inviter/igor?status=accepted
+###
+POST http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "reciever":"ivan",
+    "inviter":"user3",
+    "status":"recieved"
+}
+###
+GET http://localhost:4001/
