@@ -3,6 +3,7 @@ const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
   },
+  transports: ["websocket"],
 });
 
 let me: string = "";
@@ -40,6 +41,10 @@ io.on("connection", (socket: Socket): void => {
   socket.on("send_friend_request", ({ inviter, reciever }) => {
     if (inviter === reciever) return;
     io.to(reciever).emit("send_friend_request");
+  });
+
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
   });
 });
 
