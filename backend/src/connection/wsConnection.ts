@@ -3,7 +3,6 @@ const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
   },
-  transports: ["websocket"],
 });
 
 let me: string = "";

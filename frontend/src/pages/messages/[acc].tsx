@@ -92,7 +92,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, []);
 
   useEffect(() => {
-    const socketConnect: Socket = io("http://localhost:4000");
+    const socketConnect: Socket = io("http://localhost:4000", {
+      transports: ["websocket"],
+    });
     socketConnect.on("friend_request", () => {
       fetchRecieverStatus();
       fetchInviteStatus();
@@ -129,9 +131,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         <FindFriends cookie={cookie} socketRef={socketRef} />
         {contacts.map((item, index) => {
           if (item.status !== "accepted") return;
-          return (
-            <ActiveChats key={index} {...item} error={error} cookie={cookie} />
-          );
+          return <ActiveChats key={index} {...item} cookie={cookie} />;
         })}
       </section>
       <section className="main_section">
