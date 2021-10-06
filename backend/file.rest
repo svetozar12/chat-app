@@ -1,10 +1,10 @@
-GET http://localhost:4001/users/svetozar
+GET http://localhost:4001/users/user1
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"svetozar"
+    "username":"user5"
 }
 
 ###
@@ -14,14 +14,12 @@ PUT http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "id":"61541a045232e654e8f19dce",
-    "status":"declined"
+    "id":"61498a301749f7b3b2f07b75",
+    "status":"accepted"
 }
-### 
-GET http://localhost:4001/invites/igor?status=accepted
-###
-GET http://localhost:4001/invites/inviter/igor?status=accepted
-###
+### recieved
+GET http://localhost:4001/invites/user1
+### accepted
 POST http://localhost:4001/invites
 Content-Type: application/json
 
@@ -31,4 +29,25 @@ Content-Type: application/json
     "status":"recieved"
 }
 ###
-GET http://localhost:4001/
+GET http://localhost:4001/chat-room/users-rooms
+###
+POST http://localhost:4001/chat-room/messages?readBy=ivan
+Content-Type: application/json
+
+{
+    "user1":"ivan",
+    "user2":"igor",
+    "sender":"igor",
+    "message":"it is working my guy"
+}
+###
+POST http://localhost:4001/chat-room/seen_by?readBy=ivan
+Content-Type: application/json
+
+{
+    "id":"615d3e2f77de3b2746d04393"
+}
+###
+DELETE http://localhost:4001/chat-room/dev-delete
+
+
