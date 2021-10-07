@@ -72,6 +72,7 @@ a {
   width: 100%;
   color: var(--main-white);
   width: 100%;
+  cursor: pointer;
   padding: 0 1rem;
   word-wrap: break-word;
   transition: 0.2s;

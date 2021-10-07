@@ -2,11 +2,8 @@ import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
+import axios from "axios";
 import Link from "next/dist/client/link";
-
-interface IUpdadeFunction {
-  updateChat: (name: string, message: string) => void;
-}
 
 const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   props,
@@ -32,19 +29,17 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const updateChat = (name: string, message: string): void => {
-    setChat((prev: any) => [...prev, { name, message }]);
+  const updateChat = (sender: string, message: string): void => {
+    setChat((prev: any) => [
+      ...prev,
+      { name: cookieName === sender ? cookieName : sender, message },
+    ]);
   };
 
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ name, message }: any) => {
-      updateChat(name, message);
-    });
-    socketConnect?.on("send_message", ({ me, you }) => {
-      setReciever(you);
-
-      return reciever;
+    socketConnect.on("message", ({ sender, message }: any) => {
+      updateChat(sender, message);
     });
 
     setSocketRef(socketConnect);
@@ -61,18 +56,43 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const onMessageSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    const { name, message, time } = state;
-    socketRef?.emit("message", { name, message, time });
+  const saveMessage = async () => {
+    try {
+      const res = await axios.post("http://localhost:4001/chat-room/messages", {
+        user1: cookieName,
+        user2: chatRoom[0],
+        sender: cookieName,
+        message: state.message,
+      });
+      console.log(res);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
 
-    setState({ name });
+  const onMessageSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (state.message) {
+      const { name, message, time } = state;
+      await saveMessage();
+      socketRef?.emit("message", {
+        sender: name,
+        reciever: chatRoom[0],
+        message,
+        time,
+      });
+      setState({ name, message: "" });
+    }
   };
 
   const renderChat = () => {
     return chat.map(({ name, message, time }: any, index: number) => (
       <div className={name === chatRoom[0] ? "me" : "you"} key={index}>
-        <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>{name}</h2>
+        <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
+          {cookieName === name ? null : name}
+        </h2>
         <div
           className="rendered_chat "
           style={{
@@ -95,6 +115,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
       <Link href={`http://localhost:3000/messages/${cookieName}`}>
         <a>Back to profile page</a>
       </Link>
+      <h1>Your chat budy is {chatRoom[0]}</h1>
       <div className="container_chat">
         <h2>Welcome to my chat app</h2>
         {renderChat()}
@@ -122,7 +143,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
-  const cookieRemove = cookie.remove("name");
 
   if (!cookieName) {
     return {

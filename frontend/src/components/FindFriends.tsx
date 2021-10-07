@@ -6,11 +6,14 @@ import { Socket } from "socket.io-client";
 function FindFriends({
   cookie,
   socketRef,
+  reciever,
+  setReciever,
 }: {
   cookie: string;
+  reciever: string;
+  setReciever: any;
   socketRef: Socket;
 }) {
-  const [reciever, setReciever] = React.useState("");
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
 

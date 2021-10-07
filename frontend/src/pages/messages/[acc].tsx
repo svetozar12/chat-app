@@ -78,13 +78,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const emitUsers = () => {
-    socketRef?.emit("sender_reciever", {
-      sender: cookieName,
-      reciever: reciever,
-    });
-  };
-
   useEffect(() => {
     validateUser();
     fetchRecieverStatus();
@@ -115,12 +108,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (reciever) {
-      emitUsers();
-    }
-  }, [reciever]);
-
-  useEffect(() => {
     fetchRecieverStatus();
     fetchInviteStatus();
   }, [localStatus]);
@@ -128,10 +115,22 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends cookie={cookie} socketRef={socketRef} />
+        <FindFriends
+          cookie={cookie}
+          socketRef={socketRef}
+          reciever={reciever}
+          setReciever={setReciever}
+        />
         {contacts.map((item, index) => {
           if (item.status !== "accepted") return;
-          return <ActiveChats key={index} {...item} cookie={cookie} />;
+          return (
+            <ActiveChats
+              key={index}
+              {...item}
+              cookie={cookie}
+              socketRef={socketRef}
+            />
+          );
         })}
       </section>
       <section className="main_section">

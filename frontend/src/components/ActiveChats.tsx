@@ -1,15 +1,19 @@
 import React from "react";
 import { useCookie } from "next-cookie";
+import { useRouter } from "next/router";
 import axios from "axios";
 const ActiveChats = ({
   reciever,
   inviter,
   cookie,
+  socketRef,
 }: {
   reciever: string;
   inviter: string;
   cookie: string;
+  socketRef: string;
 }) => {
+  const router = useRouter();
   const cokie = useCookie(cookie);
 
   const [width, setWidth] = React.useState<number | null>(null);
@@ -23,11 +27,17 @@ const ActiveChats = ({
     });
   }, []);
 
+  const joinChat = () => {
+    socketRef?.emit("join_chat", {
+      chat_id: cokie.get("name"),
+    });
+    router.push(
+      `${cokie.get("name") === inviter ? inviter : cokie.get("name")}/chat`,
+    );
+  };
+
   return (
-    <a
-      className="contacts_container"
-      href={`http://localhost:3000/messages/${cokie.get("name")}/chat`}
-    >
+    <div onClick={joinChat} className="contacts_container">
       <div style={{ display: "flex", alignItems: "center" }}>
         <div>LOGO</div>
         <div className="contacts_info">
@@ -41,7 +51,7 @@ const ActiveChats = ({
           {width && width >= 432 && <h5>Last message...</h5>}
         </div>
       </div>
-    </a>
+    </div>
   );
 };
 export default ActiveChats;

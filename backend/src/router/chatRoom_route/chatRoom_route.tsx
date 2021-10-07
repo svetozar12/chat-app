@@ -41,7 +41,7 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
           sender,
           time_stamp: result,
           message,
-          seenBy: [],
+          seenBy: ["dumy data"],
         },
       ],
     });
