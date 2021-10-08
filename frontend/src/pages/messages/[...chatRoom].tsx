@@ -29,19 +29,24 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const updateChat = (sender: string, message: string): void => {
+  const updateChat = (sender: string, time: string, message: string): void => {
     setChat((prev: any) => [
       ...prev,
-      { name: cookieName === sender ? cookieName : sender, message },
+      {
+        name: cookieName === sender ? cookieName : sender,
+        time,
+        message,
+      },
     ]);
   };
 
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ sender, message }: any) => {
+    socketConnect.on("message", ({ sender, time, message }: any) => {
       console.log("send");
+      console.log(time);
 
-      updateChat(sender, message);
+      updateChat(sender, time, message);
     });
 
     socketConnect.emit("joined_chat_room", { user: cookieName });
@@ -80,6 +85,7 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
     e.preventDefault();
     if (state.message) {
       const { name, message, time } = state;
+
       await saveMessage();
       socketRef?.emit("message", {
         sender: name,
@@ -104,8 +110,15 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
               name === chatRoom[0] ? "var(--off-black)" : "var(--main-blue)",
           }}
         >
-          <p>{message}</p>
-          <p style={{ fontSize: "0.8rem" }}>{time}</p>
+          <div
+            style={{
+              wordWrap: "break-word",
+              overflow: "auto",
+            }}
+          >
+            <p>{message}</p>
+            <p style={{ fontSize: "0.65rem" }}>{time}</p>
+          </div>
         </div>
       </div>
     ));

@@ -1,3 +1,4 @@
+import { time } from "console";
 import { Socket } from "socket.io";
 const io = require("socket.io")(4000, {
   cors: {
@@ -24,15 +25,19 @@ io.on("connection", (socket: Socket): void => {
       message: string;
     }) => {
       console.log(socket.rooms);
-
-      io.to(reciever)
-        .to(sender)
-        .emit("message", {
-          sender,
-          reciever,
-          message,
-          time: new Date().getHours() + ":" + new Date().getMinutes(),
-        });
+      const date = new Date();
+      let currentHours: string | number = date.getHours().toString();
+      let currentMinutes: string | number = date.getMinutes().toString();
+      const timeStamp = `${currentHours.padStart(
+        2,
+        "0",
+      )}:${currentMinutes.padStart(2, "0")}`;
+      io.to(reciever).to(sender).emit("message", {
+        sender,
+        reciever,
+        message,
+        time: timeStamp,
+      });
     },
   );
 
