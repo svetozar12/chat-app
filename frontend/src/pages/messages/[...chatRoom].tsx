@@ -107,17 +107,27 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
           className="rendered_chat "
           style={{
             background:
-              name === chatRoom[0] ? "var(--off-black)" : "var(--main-blue)",
+              name === chatRoom[0]
+                ? "var(--me-chat-buble)"
+                : "var(--main-blue)",
           }}
         >
           <div
             style={{
               wordWrap: "break-word",
-              overflow: "auto",
+              textAlign: "center",
             }}
           >
-            <p>{message}</p>
-            <p style={{ fontSize: "0.65rem" }}>{time}</p>
+            <span>{message}</span>
+            <span
+              style={{
+                textAlign: "right",
+                fontSize: "0.65rem",
+                margin: "0 auto",
+              }}
+            >
+              {time}
+            </span>
           </div>
         </div>
       </div>
