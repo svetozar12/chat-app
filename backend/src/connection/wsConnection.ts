@@ -8,6 +8,10 @@ const io = require("socket.io")(4000, {
 let global_reciever: string;
 
 io.on("connection", (socket: Socket): void => {
+  socket.on("joined_chat_room", ({ user }) => {
+    socket.join(user);
+  });
+
   socket.on(
     "message",
     ({
@@ -19,12 +23,16 @@ io.on("connection", (socket: Socket): void => {
       reciever: string;
       message: string;
     }) => {
-      io.emit("message", {
-        sender,
-        reciever,
-        message,
-        time: new Date().getHours() + ":" + new Date().getMinutes(),
-      });
+      console.log(socket.rooms);
+
+      io.to(reciever)
+        .to(sender)
+        .emit("message", {
+          sender,
+          reciever,
+          message,
+          time: new Date().getHours() + ":" + new Date().getMinutes(),
+        });
     },
   );
 
@@ -35,7 +43,6 @@ io.on("connection", (socket: Socket): void => {
   socket.on("join_chat", ({ chat_id }) => {
     socket.join(chat_id);
     global_reciever = chat_id;
-    console.log(socket.rooms); //dont forget to disconnect them from the rooms later
   });
 
   socket.on("friend_request", () => {

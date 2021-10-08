@@ -1,6 +1,7 @@
 import React from "react";
 import { useCookie } from "next-cookie";
 import { useRouter } from "next/router";
+import { Socket } from "socket.io-client";
 import axios from "axios";
 const ActiveChats = ({
   reciever,
@@ -11,7 +12,7 @@ const ActiveChats = ({
   reciever: string;
   inviter: string;
   cookie: string;
-  socketRef: string;
+  socketRef: Socket;
 }) => {
   const router = useRouter();
   const cokie = useCookie(cookie);
@@ -31,9 +32,7 @@ const ActiveChats = ({
     socketRef?.emit("join_chat", {
       chat_id: cokie.get("name"),
     });
-    router.push(
-      `${cokie.get("name") === inviter ? inviter : cokie.get("name")}/chat`,
-    );
+    router.push(`${cokie.get("name") === inviter ? reciever : inviter}/chat`);
   };
 
   return (

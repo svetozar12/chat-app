@@ -24,7 +24,7 @@ POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"test2",
+    "reciever":"ivan",
     "inviter":"anan",
     "status":"recieved"
 }

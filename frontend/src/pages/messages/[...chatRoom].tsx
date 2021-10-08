@@ -39,8 +39,12 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ sender, message }: any) => {
+      console.log("send");
+
       updateChat(sender, message);
     });
+
+    socketConnect.emit("joined_chat_room", { user: cookieName });
 
     setSocketRef(socketConnect);
     return () => {
@@ -89,15 +93,15 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
 
   const renderChat = () => {
     return chat.map(({ name, message, time }: any, index: number) => (
-      <div className={name === chatRoom[0] ? "me" : "you"} key={index}>
+      <div className={name === chatRoom[0] ? "you" : "me"} key={index}>
         <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
-          {cookieName === name ? null : name}
+          {chatRoom[0] === name ? name : null}
         </h2>
         <div
           className="rendered_chat "
           style={{
             background:
-              name === chatRoom[0] ? "var(--main-blue)" : "var(--off-black) ",
+              name === chatRoom[0] ? "var(--off-black)" : "var(--main-blue)",
           }}
         >
           <p>{message}</p>
