@@ -24,12 +24,12 @@ POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"ivan",
+    "reciever":"test",
     "inviter":"anan",
     "status":"recieved"
 }
 ###
-GET http://localhost:4001/chat-room/users-rooms
+GET http://localhost:4001/chat-room/users-rooms/ivan/test
 ###
 POST http://localhost:4001/chat-room/messages
 Content-Type: application/json

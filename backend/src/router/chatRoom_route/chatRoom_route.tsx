@@ -7,19 +7,29 @@ import { read } from "fs";
 
 const Chats = require("../../models/chatRoom.model");
 
-route.get("/chat-room/users-rooms", async (req: Request, res: Response) => {
-  try {
-    const users_rooms = await Chats.find({}).exec();
-    if (!users_rooms || users_rooms.length <= 0)
-      return res.status(404).json({ Message: "User rooms not found" });
-    return res.status(200).json({ Message: users_rooms });
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(501)
-      .json({ Message: "Something went wrong while getting the users" });
-  }
-});
+route.get(
+  "/chat-room/users-rooms/:user1/:user2",
+  async (req: Request, res: Response) => {
+    try {
+      const user1 = req.params.user1;
+      const user2 = req.params.user2;
+      const users_rooms = await Chats.find({
+        "members.user1": user1,
+        "members.user2": user2,
+      }).exec();
+      console.log(users_rooms);
+
+      if (!users_rooms || users_rooms.length <= 0)
+        return res.status(404).json({ Message: "User rooms not found" });
+      return res.status(200).json({ Message: users_rooms });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(501)
+        .json({ Message: "Something went wrong while getting the users" });
+    }
+  },
+);
 
 route.post("/chat-room/messages", async (req: Request, res: Response) => {
   try {

@@ -5,6 +5,8 @@ import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import Link from "next/dist/client/link";
 
+import RenderChat from "../../components/RenderChat";
+
 const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   props,
 ) => {
@@ -29,24 +31,46 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
   // Updading chat and fetching users to add them to a list
   //===========================
 
-  const updateChat = (sender: string, time: string, message: string): void => {
-    setChat((prev: any) => [
-      ...prev,
-      {
-        name: cookieName === sender ? cookieName : sender,
-        time,
-        message,
-      },
-    ]);
+  // const updateChat = (sender: string, time: string, message: string): void => {
+  //   setChat((prev: any) => [
+  //     ...prev,
+  //     {
+  //       name: cookieName === sender ? cookieName : sender,
+  //       time,
+  //       message,
+  //     },
+  //   ]);
+  // };
+
+  const getRecentMessages = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/chat-room/users-rooms/${cookieName}/${chatRoom[0]}`,
+      );
+
+      const res_2 = await axios.get(
+        `http://localhost:4001/chat-room/users-rooms/${chatRoom[0]}/${cookieName}`,
+      );
+      const data = res.data.Message;
+      const data_2 = res_2.data.Message;
+      const dataArr = [...data, ...data_2];
+      console.log(dataArr);
+
+      setChat(dataArr);
+      return true;
+    } catch (error) {
+      console.log(error);
+
+      return false;
+    }
   };
 
   useEffect(() => {
+    getRecentMessages();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ sender, time, message }: any) => {
-      console.log("send");
-      console.log(time);
-
-      updateChat(sender, time, message);
+      // updateChat(sender, time, message);
+      console.log(message);
     });
 
     socketConnect.emit("joined_chat_room", { user: cookieName });
@@ -97,43 +121,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
     }
   };
 
-  const renderChat = () => {
-    return chat.map(({ name, message, time }: any, index: number) => (
-      <div className={name === chatRoom[0] ? "you" : "me"} key={index}>
-        <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
-          {chatRoom[0] === name ? name : null}
-        </h2>
-        <div
-          className="rendered_chat "
-          style={{
-            background:
-              name === chatRoom[0]
-                ? "var(--me-chat-buble)"
-                : "var(--main-blue)",
-          }}
-        >
-          <div
-            style={{
-              wordWrap: "break-word",
-              textAlign: "center",
-            }}
-          >
-            <span>{message}</span>
-            <span
-              style={{
-                textAlign: "right",
-                fontSize: "0.65rem",
-                margin: "0 auto",
-              }}
-            >
-              {time}
-            </span>
-          </div>
-        </div>
-      </div>
-    ));
-  };
-
   return (
     <div
       style={{ justifyContent: "center", height: "100vh" }}
@@ -145,7 +132,18 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
       <h1>Your chat budy is {chatRoom[0]}</h1>
       <div className="container_chat">
         <h2>Welcome to my chat app</h2>
-        {renderChat()}
+        {chat.map((item, index) => {
+          const [users] = item.members;
+          const [message] = item.messages;
+          return (
+            <RenderChat
+              key={index}
+              cookie={cookieName}
+              {...users}
+              {...message}
+            />
+          );
+        })}
       </div>
 
       <form>

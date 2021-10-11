@@ -41,10 +41,6 @@ io.on("connection", (socket: Socket): void => {
     },
   );
 
-  socket.on("room", ({ user }) => {
-    socket.join(user);
-  });
-
   socket.on("join_chat", ({ chat_id }) => {
     socket.join(chat_id);
     global_reciever = chat_id;

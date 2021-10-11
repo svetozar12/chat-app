@@ -99,8 +99,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       console.log("sending");
     });
 
-    socketConnect.emit("room", { user: cookieName });
-
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
