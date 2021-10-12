@@ -4,43 +4,30 @@ import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import Link from "next/dist/client/link";
-
 import RenderChat from "../../components/RenderChat";
 
-const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
-  props,
-) => {
-  const chatRoom = props.chatRoom.chatRoom;
+interface IHome {
+  cookie: string;
+  chatRoom: string | string[] | any;
+}
 
+interface IPropsState {
+  name: string;
+  message?: string;
+  time?: string | number;
+}
+
+const Home: NextPage<IHome> = (props) => {
+  const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const [reciever, setReciever] = useState<string | null>("");
-  const [state, setState] = useState<{
-    name?: string;
-    message?: string;
-    time?: string | number;
-  }>({
+  const [chat, setChat] = useState<string[]>([]);
+  const [socketRef, setSocketRef] = useState<Socket | null>(null);
+  const [state, setState] = useState<IPropsState>({
     name: cookie.get("name"),
     message: "",
     time: "",
   });
-  const [chat, setChat] = useState<string[]>([]);
-  const [socketRef, setSocketRef] = useState<Socket | null>(null);
-
-  //===========================
-  // Updading chat and fetching users to add them to a list
-  //===========================
-
-  // const updateChat = (sender: string, time: string, message: string): void => {
-  //   setChat((prev: any) => [
-  //     ...prev,
-  //     {
-  //       name: cookieName === sender ? cookieName : sender,
-  //       time,
-  //       message,
-  //     },
-  //   ]);
-  // };
 
   const getRecentMessages = async () => {
     try {
@@ -49,6 +36,8 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
       );
 
       const data = res.data.Message;
+      console.log(data);
+
       setChat(data);
       return true;
     } catch (error) {
@@ -56,12 +45,16 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
     }
   };
 
+  const updateChat = (param: any) => {
+    setChat((prev) => [...prev, param]);
+  };
+
   useEffect(() => {
     getRecentMessages();
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ sender, time, message }: any) => {
-      // updateChat(sender, time, message);
-      console.log(message);
+    socketConnect.on("message", ({ members, messages }: any) => {
+      const newObj = { members, messages };
+      updateChat(newObj);
     });
 
     socketConnect.emit("joined_chat_room", { user: cookieName });
@@ -124,7 +117,6 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
       <div className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
-          // console.log(item.members);
           const [user1, user2] = item.members;
           const [users] = item.members;
           const [message] = item.messages;

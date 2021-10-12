@@ -24,20 +24,19 @@ io.on("connection", (socket: Socket): void => {
       reciever: string;
       message: string;
     }) => {
-      console.log(socket.rooms);
       const date = new Date();
       let currentHours: string | number = date.getHours().toString();
       let currentMinutes: string | number = date.getMinutes().toString();
-      const timeStamp = `${currentHours.padStart(
+      const time_stamp = `${currentHours.padStart(
         2,
         "0",
       )}:${currentMinutes.padStart(2, "0")}`;
-      io.to(reciever).to(sender).emit("message", {
-        sender,
-        reciever,
-        message,
-        time: timeStamp,
-      });
+      io.to(reciever)
+        .to(sender)
+        .emit("message", {
+          members: [sender, reciever],
+          messages: [{ send: sender, time_stamp, message }],
+        });
     },
   );
 

@@ -3,7 +3,6 @@ const route = express.Router();
 const createError = require("http-errors");
 
 import { Request, Response } from "express";
-import { read } from "fs";
 
 const Chats = require("../../models/chatRoom.model");
 
@@ -14,11 +13,12 @@ route.get(
       const user1 = req.params.user1;
       const user2 = req.params.user2;
       const users_rooms = await Chats.find({
-        members: user1,
+        members: { $all: [user1, user2] },
       }).exec();
       if (!users_rooms || users_rooms.length <= 0)
         return res.status(404).json({ Message: "User rooms not found" });
-      return res.status(200).json({ Message: users_rooms });
+      const new_users_rooms = users_rooms.slice(-10);
+      return res.status(200).json({ Message: new_users_rooms });
     } catch (error) {
       console.log(error);
       return res
@@ -30,12 +30,13 @@ route.get(
 
 route.post("/chat-room/messages", async (req: Request, res: Response) => {
   try {
-    const today = new Date();
-    const date = today.getHours() + ":" + today.getMinutes();
-    const result = today.toLocaleDateString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const date = new Date();
+    let currentHours: string | number = date.getHours().toString();
+    let currentMinutes: string | number = date.getMinutes().toString();
+    const time_stamp = `${currentHours.padStart(
+      2,
+      "0",
+    )}:${currentMinutes.padStart(2, "0")}`;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
     const sender = req.body.sender;
@@ -46,7 +47,7 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
       messages: [
         {
           sender,
-          time_stamp: result,
+          time_stamp,
           message,
           seenBy: [],
         },

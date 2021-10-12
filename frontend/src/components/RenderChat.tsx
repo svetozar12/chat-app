@@ -1,11 +1,23 @@
 import React from "react";
 
-const RenderChat = ({ user1, user2, time_stamp, message, cookie }) => {
+interface IRenderChat {
+  user1: string;
+  user2: string;
+  time_stamp: string | number;
+  message: string;
+  cookie: string;
+}
+
+const RenderChat = ({
+  user1,
+  user2,
+  time_stamp,
+  message,
+  cookie,
+}: IRenderChat) => {
   const sender = user1;
   const reciever = user2;
   const name = cookie;
-  // console.log(users);
-
   return (
     <div className={name === reciever ? "you" : "me"}>
       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
