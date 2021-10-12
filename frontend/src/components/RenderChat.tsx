@@ -4,6 +4,7 @@ const RenderChat = ({ user1, user2, time_stamp, message, cookie }) => {
   const sender = user1;
   const reciever = user2;
   const name = cookie;
+  // console.log(users);
 
   return (
     <div className={name === reciever ? "you" : "me"}>

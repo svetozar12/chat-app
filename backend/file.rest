@@ -29,14 +29,14 @@ Content-Type: application/json
     "status":"recieved"
 }
 ###
-GET http://localhost:4001/chat-room/users-rooms/ivan/test
+GET http://localhost:4001/chat-room/users-rooms/ivan/igor
 ###
 POST http://localhost:4001/chat-room/messages
 Content-Type: application/json
 
 {
-    "user1":"ivan",
-    "user2":"igor",
+    "user1":"igor",
+    "user2":"ivan",
     "sender":"igor",
     "message":"it is working my guy"
 }

@@ -14,11 +14,8 @@ route.get(
       const user1 = req.params.user1;
       const user2 = req.params.user2;
       const users_rooms = await Chats.find({
-        "members.user1": user1,
-        "members.user2": user2,
+        members: user1,
       }).exec();
-      console.log(users_rooms);
-
       if (!users_rooms || users_rooms.length <= 0)
         return res.status(404).json({ Message: "User rooms not found" });
       return res.status(200).json({ Message: users_rooms });
@@ -45,7 +42,7 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
     const message = req.body.message;
 
     const chat = await new Chats({
-      members: [{ user1, user2 }],
+      members: [user1, user2],
       messages: [
         {
           sender,

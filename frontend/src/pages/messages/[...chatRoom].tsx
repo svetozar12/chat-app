@@ -48,19 +48,10 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
         `http://localhost:4001/chat-room/users-rooms/${cookieName}/${chatRoom[0]}`,
       );
 
-      const res_2 = await axios.get(
-        `http://localhost:4001/chat-room/users-rooms/${chatRoom[0]}/${cookieName}`,
-      );
       const data = res.data.Message;
-      const data_2 = res_2.data.Message;
-      const dataArr = [...data, ...data_2];
-      console.log(dataArr);
-
-      setChat(dataArr);
+      setChat(data);
       return true;
     } catch (error) {
-      console.log(error);
-
       return false;
     }
   };
@@ -133,13 +124,16 @@ const Home: NextPage<{ cookie: string; chatRoom: string | string[] | any }> = (
       <div className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
+          // console.log(item.members);
+          const [user1, user2] = item.members;
           const [users] = item.members;
           const [message] = item.messages;
           return (
             <RenderChat
               key={index}
               cookie={cookieName}
-              {...users}
+              user1={user1}
+              user2={user2}
               {...message}
             />
           );
