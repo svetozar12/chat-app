@@ -5,6 +5,8 @@ const { registerValidation } = require("../../helpers/schema");
 import { Request, Response } from "express";
 
 const User = require("../../models/User.model");
+const Invites = require("../../models/Invites.model");
+const Chats = require("../../models/chatRoom.model");
 
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
@@ -52,7 +54,14 @@ route.post("/users/register", async (req: Request, res: Response) => {
 
 route.delete("/users/:username", async (req: Request, res: Response) => {
   try {
-    const data = await User.deleteOne({ username: req.params.username }).exec();
+    const username = req.params.username;
+    const deleteUser = await User.deleteOne({ username }).exec();
+    const deleteInvites = await Invites.deleteMany({
+      reciever: username,
+    }).exec();
+    const deleteChats = await Chats.deleteMany({
+      members: { $all: [username] },
+    }).exec();
     return res.status(204);
   } catch (error) {
     return res.status(501).json({

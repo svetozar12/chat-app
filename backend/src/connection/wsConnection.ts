@@ -45,6 +45,10 @@ io.on("connection", (socket: Socket): void => {
     global_reciever = chat_id;
   });
 
+  socket.on("room", ({ user }) => {
+    socket.join(user);
+  });
+
   socket.on("friend_request", () => {
     io.emit("friend_request");
   });

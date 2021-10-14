@@ -4,12 +4,24 @@ POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"user5"
+    "username":"user6"
 }
 
 ###
 DELETE http://localhost:4001/users/svetozar
-### Updates the status
+### =======================================
+### =======================================
+GET http://localhost:4001/invites/user6
+### 
+POST http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "reciever":"user6",
+    "inviter":"test1",
+    "status":"recieved"
+}
+### 
 PUT http://localhost:4001/invites
 Content-Type: application/json
 
@@ -17,35 +29,27 @@ Content-Type: application/json
     "id":"61498a301749f7b3b2f07b75",
     "status":"accepted"
 }
-### recieved
-GET http://localhost:4001/invites/user1
-### accepted
-POST http://localhost:4001/invites
-Content-Type: application/json
-
-{
-    "reciever":"test",
-    "inviter":"anan",
-    "status":"recieved"
-}
+### =======================================
+### =======================================
+GET http://localhost:4001/chat-room/list/test1
 ###
-GET http://localhost:4001/chat-room/users-rooms/ivan/test
+GET http://localhost:4001/chat-room/61687adda0e6e2d810154a94
 ###
 POST http://localhost:4001/chat-room/messages
 Content-Type: application/json
 
 {
-    "user1":"dragan",
-    "user2":"igor",
+    "user1":"test1",
+    "user2":"test3",
     "sender":"test",
     "message":"it is working my guy"
 }
 ###
-POST http://localhost:4001/chat-room/seen_by?readBy=ivan
+POST http://localhost:4001/chat-room/61682aa4a5ea89c75a02b600
 Content-Type: application/json
 
 {
-    "id":"615d3e2f77de3b2746d04393"
+    "read_by":"ivan"
 }
 ###
 DELETE http://localhost:4001/chat-room/dev-delete
