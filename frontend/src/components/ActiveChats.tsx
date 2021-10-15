@@ -2,15 +2,16 @@ import React from "react";
 import { useCookie } from "next-cookie";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
-import axios from "axios";
 const ActiveChats = ({
-  reciever,
-  inviter,
+  _id,
+  user1,
+  user2,
   cookie,
   socketRef,
 }: {
-  reciever: string;
-  inviter: string;
+  _id: string;
+  user1: string;
+  user2: string;
   cookie: string;
   socketRef: Socket;
 }) => {
@@ -32,7 +33,7 @@ const ActiveChats = ({
     socketRef?.emit("join_chat", {
       chat_id: cokie.get("name"),
     });
-    router.push(`${cokie.get("name") === inviter ? reciever : inviter}/chat`);
+    router.push(`t/${_id}`);
   };
 
   return (
@@ -41,11 +42,8 @@ const ActiveChats = ({
         <div>LOGO</div>
         <div className="contacts_info">
           <h2>
-            {(width &&
-              width >= 432 &&
-              inviter === cokie.get("name") &&
-              reciever) ||
-              (reciever === cokie.get("name") && inviter)}
+            {(width && width >= 432 && user2 === cokie.get("name") && user1) ||
+              (user1 === cokie.get("name") && user2)}
           </h2>
           {width && width >= 432 && <h5>Last message...</h5>}
         </div>

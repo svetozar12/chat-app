@@ -17,7 +17,24 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<string[]>([]);
+  const [chatRooms, setChatRooms] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
+
+  const getChatRoom = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/chat-room/list/${cookie.get("name")}`,
+      );
+      const data = res.data.contacts;
+      console.log(data);
+
+      setChatRooms(data);
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
 
   const fetchRecieverStatus = async () => {
     try {
@@ -80,6 +97,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   useEffect(() => {
     validateUser();
+    getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
   }, []);
@@ -90,6 +108,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     });
     socketConnect.on("friend_request", () => {
       fetchRecieverStatus();
+      getChatRoom();
       fetchInviteStatus();
     });
 
@@ -98,6 +117,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       fetchInviteStatus();
       console.log("sending");
     });
+
+    socketConnect.emit("room", { user: cookieName });
 
     setSocketRef(socketConnect);
     return () => {
@@ -119,12 +140,17 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           reciever={reciever}
           setReciever={setReciever}
         />
-        {contacts.map((item, index) => {
-          if (item.status !== "accepted") return;
+        {chatRooms.map((item, index) => {
+          const _id = item._id;
+          const [user1, user2] = item.members;
+          console.log(user1);
+
           return (
             <ActiveChats
               key={index}
-              {...item}
+              _id={_id}
+              user1={user1}
+              user2={user2}
               cookie={cookie}
               socketRef={socketRef}
             />

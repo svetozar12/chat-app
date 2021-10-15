@@ -1,6 +1,14 @@
 import * as mongoose from "mongoose";
-
-const chatRoomSchema = new mongoose.Schema({
+interface ChatRoom {
+  members: string[];
+  messages: {
+    sender: string;
+    time_stamp: string;
+    message?: string;
+    seenBy: string[];
+  }[];
+}
+const chatRoomSchema = new mongoose.Schema<ChatRoom>({
   members: [String],
   messages: [
     {
@@ -12,5 +20,6 @@ const chatRoomSchema = new mongoose.Schema({
   ],
 });
 
-const chatRoom = mongoose.model("chatRoom", chatRoomSchema);
-module.exports = chatRoom;
+const chatRoom = mongoose.model<ChatRoom>("chatRoom", chatRoomSchema);
+
+export default chatRoom;

@@ -39,6 +39,20 @@ function PendingChats({
     }
   };
 
+  const createChatRoom = async () => {
+    try {
+      const res = await axios.post("http://localhost:4001/chat-room/messages", {
+        user1: inviter,
+        user2: reciever,
+        sender: inviter,
+        message: "",
+      });
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   return (
     <div>
       {status === "recieved" && (
@@ -46,7 +60,10 @@ function PendingChats({
           <h1>{inviter}</h1>
           <div className="invite_buttons">
             <button
-              onClick={() => updateInviteStatus("accepted")}
+              onClick={() => {
+                createChatRoom();
+                updateInviteStatus("accepted");
+              }}
               className="accept"
             >
               <AiFillCheckCircle />

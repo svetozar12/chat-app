@@ -2,9 +2,8 @@ const express = require("express");
 const route = express.Router();
 
 import { Request, Response } from "express";
-
-const Invites = require("../../models/Invites.model");
-const Users = require("../../models/User.model");
+import Invites from "../../models/Invites.model";
+import Users from "../../models/User.model";
 
 route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {

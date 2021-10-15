@@ -18,6 +18,7 @@ const RenderChat = ({
   const sender = user1;
   const reciever = user2;
   const name = cookie;
+
   return (
     <div className={name === reciever ? "you" : "me"}>
       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>

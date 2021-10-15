@@ -4,11 +4,13 @@ const createError = require("http-errors");
 
 import { Request, Response } from "express";
 
-const Chats = require("../../models/chatRoom.model");
-
+// const Chats = require("../../models/chatRoom.model");
+import Chats from "../../models/chatRoom.model";
 route.get("/chat-room/list/:user_id", async (req: Request, res: Response) => {
   try {
-    const contacts = await Chats.find({ members: req.params.user_id });
+    const contacts = await Chats.find({ members: req.params.user_id }).select([
+      "-messages",
+    ]);
     return res.status(201).json({ contacts });
   } catch (error) {
     return res.status(501).json({
@@ -21,12 +23,15 @@ route.get("/chat-room/list/:user_id", async (req: Request, res: Response) => {
 route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;
-    const users_rooms = await Chats.find({
-      _id: user_id,
-    });
+    const users_rooms = await Chats.find(
+      {
+        _id: user_id,
+      },
+      { messages: { $slice: [0, 10] } },
+    );
+
     if (!users_rooms || users_rooms.length <= 0)
       return res.status(404).json({ Message: "User room not found" });
-    // const new_users_rooms = users_rooms.slice(-10);
     return res.status(200).json({ Message: users_rooms });
   } catch (error) {
     return res.status(501).json({
@@ -36,7 +41,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/chat-room/messages", async (req: Request, res: Response) => {
+route.post("/chat-room/messages/:id", async (req: Request, res: Response) => {
   try {
     const date = new Date();
     let currentHours: string | number = date.getHours().toString();
@@ -45,51 +50,40 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
       2,
       "0",
     )}:${currentMinutes.padStart(2, "0")}`;
-    const user1 = req.body.user1;
-    const user2 = req.body.user2;
+
     const sender = req.body.sender;
     const message = req.body.message;
+    const id = req.params.id;
 
-    const findRoom = await Chats.findOneAndUpdate(
-      { members: { $all: [user1, user2] } },
-      {
-        members: [user1, user2],
-        $push: {
-          messages: [
-            {
-              sender,
-              time_stamp,
-              message,
-              seenBy: [],
-            },
-          ],
-        },
-      },
-    );
+    const findRoom = await Chats.findOne({
+      _id: id,
+    }).exec();
+
+    const user1 = req.body.user1;
+    // const user2 = id ? findRoom.members[1] : req.body.user2;
+    console.log(user2);
 
     if (!findRoom) {
-      console.log("new chat");
       const chat = await new Chats({
         members: [user1, user2],
-        messages: [
-          {
-            sender,
-            time_stamp,
-            message,
-            seenBy: [],
-          },
-        ],
       });
 
       await chat.save();
       return res.json({ Message: chat });
+    } else {
+      findRoom.messages.push({
+        sender,
+        time_stamp,
+        message,
+        seenBy: [],
+      });
+      await findRoom.save();
     }
 
     console.log(findRoom);
-    await findRoom.save();
     return res.status(201).json({ message: findRoom });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
 
     return res.status(501).json({
       Message: "Something went wrong while sending the message",

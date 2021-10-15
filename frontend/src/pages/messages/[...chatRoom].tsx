@@ -32,12 +32,10 @@ const Home: NextPage<IHome> = (props) => {
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/users-rooms/${cookieName}/${chatRoom[0]}`,
+        `http://localhost:4001/chat-room/${chatRoom[1]}`,
       );
 
       const data = res.data.Message;
-      console.log(data);
-
       setChat(data);
       return true;
     } catch (error) {
@@ -75,12 +73,14 @@ const Home: NextPage<IHome> = (props) => {
 
   const saveMessage = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/chat-room/messages", {
-        user1: cookieName,
-        user2: chatRoom[0],
-        sender: cookieName,
-        message: state.message,
-      });
+      const res = await axios.post(
+        `http://localhost:4001/chat-room/messages/${chatRoom[1]}`,
+        {
+          user1: cookieName,
+          sender: cookieName,
+          message: state.message,
+        },
+      );
       console.log(res);
       return true;
     } catch (error) {
@@ -118,16 +118,20 @@ const Home: NextPage<IHome> = (props) => {
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
           const [user1, user2] = item.members;
-          const [users] = item.members;
-          const [message] = item.messages;
           return (
-            <RenderChat
-              key={index}
-              cookie={cookieName}
-              user1={user1}
-              user2={user2}
-              {...message}
-            />
+            <li style={{ listStyle: "none" }} key={index}>
+              {item.messages.map((subItem, index) => {
+                return (
+                  <RenderChat
+                    key={index}
+                    cookie={cookieName}
+                    user1={user1}
+                    user2={user2}
+                    {...subItem}
+                  />
+                );
+              })}
+            </li>
           );
         })}
       </div>

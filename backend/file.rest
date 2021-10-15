@@ -17,8 +17,8 @@ POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"user6",
-    "inviter":"test1",
+    "reciever":"test2",
+    "inviter":"test23",
     "status":"recieved"
 }
 ### 
@@ -31,18 +31,18 @@ Content-Type: application/json
 }
 ### =======================================
 ### =======================================
-GET http://localhost:4001/chat-room/list/test1
+GET http://localhost:4001/chat-room/list/88
 ###
-GET http://localhost:4001/chat-room/61687adda0e6e2d810154a94
+GET http://localhost:4001/chat-room/616973d43f4c1386b1e6ce25
 ###
-POST http://localhost:4001/chat-room/messages
+POST http://localhost:4001/chat-room/messages/616973d43f4c1386b1e2226ce25
 Content-Type: application/json
 
 {
-    "user1":"test1",
-    "user2":"test3",
-    "sender":"test",
-    "message":"it is working my guy"
+    "user1":"88",
+    "user2":"231",
+    "sender":"88",
+    "message":"hello world"
 }
 ###
 POST http://localhost:4001/chat-room/61682aa4a5ea89c75a02b600
