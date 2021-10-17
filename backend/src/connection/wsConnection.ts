@@ -1,12 +1,16 @@
-import { time } from "console";
-import { Socket } from "socket.io";
+import { createServer } from "http";
+import { Server, Socket } from "socket.io";
+// const httpServer = createServer();
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
 const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
   },
 });
-
-let global_reciever: string;
 
 io.on("connection", (socket: Socket): void => {
   socket.on("joined_chat_room", ({ user }) => {
@@ -42,7 +46,6 @@ io.on("connection", (socket: Socket): void => {
 
   socket.on("join_chat", ({ chat_id }) => {
     socket.join(chat_id);
-    global_reciever = chat_id;
   });
 
   socket.on("room", ({ user }) => {
@@ -63,4 +66,5 @@ io.on("connection", (socket: Socket): void => {
   });
 });
 
+// export default io;
 module.exports = io;

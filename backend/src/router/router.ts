@@ -12,4 +12,4 @@ route.use("/", userRoute);
 route.use("/", inviteRoute);
 route.use("/", chatRoute);
 
-module.exports = route;
+export default route;

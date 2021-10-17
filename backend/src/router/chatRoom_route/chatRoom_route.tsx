@@ -1,7 +1,5 @@
-const express = require("express");
+import * as express from "express";
 const route = express.Router();
-const createError = require("http-errors");
-
 import { Request, Response } from "express";
 
 // const Chats = require("../../models/chatRoom.model");
@@ -60,7 +58,7 @@ route.post("/chat-room/messages/:id", async (req: Request, res: Response) => {
     }).exec();
 
     const user1 = req.body.user1;
-    // const user2 = id ? findRoom.members[1] : req.body.user2;
+    const user2 = id ? findRoom.members[1] : req.body.user2;
     console.log(user2);
 
     if (!findRoom) {

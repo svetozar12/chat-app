@@ -1,12 +1,12 @@
-const express = require("express");
+import * as express from "express";
 const route = express.Router();
 const { registerValidation } = require("../../helpers/schema");
 
 import { Request, Response } from "express";
 
-const User = require("../../models/User.model");
-const Invites = require("../../models/Invites.model");
-const Chats = require("../../models/chatRoom.model");
+import User from "../../models/User.model";
+import Invites from "../../models/Invites.model";
+import Chats from "../../models/chatRoom.model";
 
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
@@ -44,7 +44,8 @@ route.post("/users/register", async (req: Request, res: Response) => {
     return res
       .status(201)
       .send({ message: `User ${req.body.username} created` });
-  } catch (error: any) {
+  } catch (error) {
+    console.log(error);
     return res.status(501).json({
       Error: "Internal server error",
       Message: "Something went wrong",

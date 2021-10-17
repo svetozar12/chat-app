@@ -1,4 +1,5 @@
-const express = require("express");
+import * as express from "express";
+
 const route = express.Router();
 
 import { Request, Response } from "express";

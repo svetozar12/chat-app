@@ -115,7 +115,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     socketConnect.on("send_friend_request", () => {
       fetchRecieverStatus();
       fetchInviteStatus();
-      console.log("sending");
     });
 
     socketConnect.emit("room", { user: cookieName });
