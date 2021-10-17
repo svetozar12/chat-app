@@ -59,7 +59,6 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
 
     const user1 = req.body.user1;
     const user2 = id ? findRoom.members[1] : req.body.user2;
-    console.log(user2);
 
     if (!findRoom) {
       const chat = await new Chats({
@@ -77,12 +76,8 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
       });
       await findRoom.save();
     }
-
-    console.log(findRoom);
     return res.status(201).json({ message: findRoom });
   } catch (error) {
-    // console.log(error);
-
     return res.status(501).json({
       Message: "Something went wrong while sending the message",
     });

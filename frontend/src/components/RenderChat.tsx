@@ -1,34 +1,24 @@
 import React from "react";
 
 interface IRenderChat {
-  user1: string;
-  user2: string;
+  sender: string;
   time_stamp: string | number;
   message: string;
   cookie: string;
 }
 
-const RenderChat = ({
-  user1,
-  user2,
-  time_stamp,
-  message,
-  cookie,
-}: IRenderChat) => {
-  const sender = user1;
-  const reciever = user2;
+const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
-
   return (
-    <div className={name === reciever ? "you" : "me"}>
+    <div className={name === sender ? "me" : "you"}>
       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
-        {reciever === sender ? sender : null}
+        {name === sender ? null : sender}
       </h2>
       <div
         className="rendered_chat"
         style={{
           background:
-            name === reciever ? "var(--me-chat-buble)" : "var(--main-blue)",
+            name === sender ? "var(--main-blue)" : "var(--me-chat-buble)",
         }}
       >
         <div

@@ -22,7 +22,7 @@ route.get("/users/:username", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong while loging",
     });
   }
 });
@@ -45,10 +45,9 @@ route.post("/users/register", async (req: Request, res: Response) => {
       .status(201)
       .send({ message: `User ${req.body.username} created` });
   } catch (error) {
-    console.log(error);
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong while registering",
     });
   }
 });

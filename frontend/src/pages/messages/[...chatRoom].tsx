@@ -74,9 +74,8 @@ const Home: NextPage<IHome> = (props) => {
   const saveMessage = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:4001/chat-room/messages/${chatRoom[1]}`,
+        `http://localhost:4001/chat-room/messages?id=${chatRoom[1]}`,
         {
-          user1: cookieName,
           sender: cookieName,
           message: state.message,
         },
@@ -96,8 +95,8 @@ const Home: NextPage<IHome> = (props) => {
 
       await saveMessage();
       socketRef?.emit("message", {
-        sender: name,
-        reciever: chatRoom[0],
+        chatInstance: chatRoom[1],
+        sender: cookieName,
         message,
         time,
       });
@@ -111,22 +110,22 @@ const Home: NextPage<IHome> = (props) => {
       className="container chat_home"
     >
       <Link href={`http://localhost:3000/messages/${cookieName}`}>
-        <a>Back to profile page</a>
+        <a>
+          <h3>Back to profile page</h3>
+        </a>
       </Link>
-      <h1>Your chat budy is {chatRoom[0]}</h1>
       <div className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
-          const [user1, user2] = item.members;
           return (
             <li style={{ listStyle: "none" }} key={index}>
               {item.messages.map((subItem, index) => {
+                const sender = item.sender;
                 return (
                   <RenderChat
                     key={index}
                     cookie={cookieName}
-                    user1={user1}
-                    user2={user2}
+                    sender={sender}
                     {...subItem}
                   />
                 );

@@ -1,5 +1,6 @@
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
+import Chats from "../models/chatRoom.model";
 // const httpServer = createServer();
 // const io = new Server(httpServer, {
 //   cors: {
@@ -19,15 +20,20 @@ io.on("connection", (socket: Socket): void => {
 
   socket.on(
     "message",
-    ({
+    async ({
+      chatInstance,
       sender,
-      reciever,
       message,
     }: {
+      chatInstance: string;
       sender: string;
-      reciever: string;
       message: string;
     }) => {
+      const findChat = await Chats.find({ _id: chatInstance })
+        .select("members")
+        .exec();
+      const [user1, user2] = findChat[0].members;
+
       const date = new Date();
       let currentHours: string | number = date.getHours().toString();
       let currentMinutes: string | number = date.getMinutes().toString();
@@ -35,11 +41,11 @@ io.on("connection", (socket: Socket): void => {
         2,
         "0",
       )}:${currentMinutes.padStart(2, "0")}`;
-      io.to(reciever)
+      io.to(user1)
         .to(sender)
         .emit("message", {
-          members: [sender, reciever],
-          messages: [{ send: sender, time_stamp, message }],
+          members: [user1, user2],
+          messages: [{ sender, time_stamp, message }],
         });
     },
   );
