@@ -72,4 +72,17 @@ route.delete("/users/:username", async (req: Request, res: Response) => {
   }
 });
 
+route.delete("/dev-delete", async (req: Request, res: Response) => {
+  try {
+    const deleteChats = await Chats.deleteMany({});
+    const deleteChatss = await User.deleteMany({});
+    const deleteChatsss = await Invites.deleteMany({});
+    return res.status(204);
+  } catch (error) {
+    res
+      .status(501)
+      .json({ Message: "Something went wrong while deleting the chats" });
+  }
+});
+
 module.exports = route;

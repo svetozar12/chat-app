@@ -33,16 +33,16 @@ Content-Type: application/json
 ### =======================================
 GET http://localhost:4001/chat-room/list/88
 ###
-GET http://localhost:4001/chat-room/616973d43f4c1386b1e6ce25
+GET http://localhost:4001/chat-room/616bfc462e8c745158999064
 ###
-POST http://localhost:4001/chat-room/messages/616973d43f4c1386b1e2226ce25
+POST http://localhost:4001/chat-room/messages?id=616bfc462e8c745158999064
 Content-Type: application/json
 
 {
     "user1":"88",
     "user2":"231",
-    "sender":"88",
-    "message":"hello world"
+    "sender":"rengar",
+    "message":"hello again"
 }
 ###
 POST http://localhost:4001/chat-room/61682aa4a5ea89c75a02b600
@@ -52,6 +52,6 @@ Content-Type: application/json
     "read_by":"ivan"
 }
 ###
-DELETE http://localhost:4001/chat-room/dev-delete
+DELETE http://localhost:4001/dev-delete
 
 

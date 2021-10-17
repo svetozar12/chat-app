@@ -39,7 +39,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/chat-room/messages/:id", async (req: Request, res: Response) => {
+route.post("/chat-room/messages", async (req: Request, res: Response) => {
   try {
     const date = new Date();
     let currentHours: string | number = date.getHours().toString();
@@ -51,7 +51,7 @@ route.post("/chat-room/messages/:id", async (req: Request, res: Response) => {
 
     const sender = req.body.sender;
     const message = req.body.message;
-    const id = req.params.id;
+    const id = req.query.id;
 
     const findRoom = await Chats.findOne({
       _id: id,
@@ -117,17 +117,6 @@ route.post("/chat-room/:id", async (req: Request, res: Response) => {
       Message: "Something went wrong while seeing the message",
       error,
     });
-  }
-});
-
-route.delete("/chat-room/dev-delete", async (req: Request, res: Response) => {
-  try {
-    const deleteChats = await Chats.deleteMany({});
-    return res.status(204);
-  } catch (error) {
-    res
-      .status(501)
-      .json({ Message: "Something went wrong while deleting the chats" });
   }
 });
 

@@ -26,8 +26,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `http://localhost:4001/chat-room/list/${cookie.get("name")}`,
       );
       const data = res.data.contacts;
-      console.log(data);
-
+      console.log(res);
       setChatRooms(data);
       return true;
     } catch (error) {
