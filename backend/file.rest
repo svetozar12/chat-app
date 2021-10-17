@@ -31,9 +31,9 @@ Content-Type: application/json
 }
 ### =======================================
 ### =======================================
-GET http://localhost:4001/chat-room/list/88
+GET http://localhost:4001/chat-room/list/rengar
 ###
-GET http://localhost:4001/chat-room/616bfc462e8c745158999064
+GET http://localhost:4001/chat-room/616c18b220e01ecc6810650d
 ###
 POST http://localhost:4001/chat-room/messages?id=616bfc462e8c745158999064
 Content-Type: application/json

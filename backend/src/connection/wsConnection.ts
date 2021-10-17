@@ -42,7 +42,7 @@ io.on("connection", (socket: Socket): void => {
         "0",
       )}:${currentMinutes.padStart(2, "0")}`;
       io.to(user1)
-        .to(sender)
+        .to(user2)
         .emit("message", {
           members: [user1, user2],
           messages: [{ sender, time_stamp, message }],

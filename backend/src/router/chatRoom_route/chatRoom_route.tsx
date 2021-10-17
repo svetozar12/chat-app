@@ -25,7 +25,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
       {
         _id: user_id,
       },
-      { messages: { $slice: [0, 10] } },
+      { messages: { $slice: -10 } },
     );
 
     if (!users_rooms || users_rooms.length <= 0)
