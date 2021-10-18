@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:4001/users/svetozar
+DELETE http://localhost:4001/users/user6
 ### =======================================
 ### =======================================
 GET http://localhost:4001/invites/user6
@@ -35,12 +35,12 @@ GET http://localhost:4001/chat-room/list/rengar
 ###
 GET http://localhost:4001/chat-room/616c18b220e01ecc6810650d
 ###
-POST http://localhost:4001/chat-room/messages?id=616bfc462e8c745158999064
+POST http://localhost:4001/chat-room/messages
 Content-Type: application/json
 
 {
-    "user1":"88",
-    "user2":"231",
+    "user1":"user1",
+    "user2":"user2",
     "sender":"rengar",
     "message":"hello again"
 }
@@ -51,7 +51,5 @@ Content-Type: application/json
 {
     "read_by":"ivan"
 }
-###
-DELETE http://localhost:4001/dev-delete
 
 

@@ -1,4 +1,3 @@
-import { connect } from "http2";
 import * as mongoose from "mongoose";
 // const User = require("../models/User.model");
 // const ChatRoom = require("../models/chatRoom.model");
