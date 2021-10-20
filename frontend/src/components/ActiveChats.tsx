@@ -2,19 +2,22 @@ import React from "react";
 import { useCookie } from "next-cookie";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
+
+interface IActiveChats {
+  _id: string;
+  user1: string;
+  user2: string;
+  cookie: string;
+  socketRef: Socket;
+}
+
 const ActiveChats = ({
   _id,
   user1,
   user2,
   cookie,
   socketRef,
-}: {
-  _id: string;
-  user1: string;
-  user2: string;
-  cookie: string;
-  socketRef: Socket;
-}) => {
+}: IActiveChats) => {
   const router = useRouter();
   const cokie = useCookie(cookie);
 

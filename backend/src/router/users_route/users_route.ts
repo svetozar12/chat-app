@@ -61,8 +61,6 @@ route.delete("/users/:username", async (req: Request, res: Response) => {
     const deleteChats = await Chats.deleteMany({
       members: { $all: [username] },
     }).exec();
-    if (deleteUser.length <= 0)
-      return res.status(404).json({ message: "User not found" });
     return res.status(204).json({ message: `user ${username} deleted` });
   } catch (error) {
     return res.status(501).json({

@@ -1,8 +1,17 @@
 import axios from "axios";
 import React from "react";
-import { useCookie } from "next-cookie";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
+
+interface IPendingChats {
+  _id: string;
+  inviter: string;
+  status: string;
+  reciever: string;
+  socketRef: Socket;
+  setLocalStatus: any;
+}
+
 function PendingChats({
   _id,
   inviter,
@@ -10,16 +19,7 @@ function PendingChats({
   reciever,
   socketRef,
   setLocalStatus,
-  data,
-}: {
-  _id: string;
-  inviter: string;
-  status: string;
-  reciever: string;
-  socketRef: Socket;
-  setLocalStatus: any;
-  data: string[];
-}) {
+}: IPendingChats) {
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
@@ -48,7 +48,6 @@ function PendingChats({
         message: "",
       });
     } catch (error) {
-      console.log(error);
       return false;
     }
   };

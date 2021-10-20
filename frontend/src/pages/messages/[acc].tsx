@@ -26,11 +26,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `http://localhost:4001/chat-room/list/${cookie.get("name")}`,
       );
       const data = res.data.contacts;
-      console.log(res);
       setChatRooms(data);
       return true;
     } catch (error) {
-      console.log(error);
       return false;
     }
   };
@@ -141,8 +139,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         {chatRooms.map((item, index) => {
           const _id = item._id;
           const [user1, user2] = item.members;
-          console.log(user1);
-
           return (
             <ActiveChats
               key={index}

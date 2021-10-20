@@ -21,6 +21,7 @@ const Home: NextPage<IHome> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
@@ -32,7 +33,7 @@ const Home: NextPage<IHome> = (props) => {
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/${chatRoom[1]}`,
+        `http://localhost:4001/chat-room/${chatRoom[1]}?page_size=10&page_number=1`,
       );
 
       const data = res.data.Message;
@@ -63,10 +64,6 @@ const Home: NextPage<IHome> = (props) => {
     };
   }, []);
 
-  //===========================
-  // Submit and text change functions
-  //===========================
-
   const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -80,10 +77,26 @@ const Home: NextPage<IHome> = (props) => {
           message: state.message,
         },
       );
-      console.log(res);
       return true;
     } catch (error) {
-      console.log(error);
+      return false;
+    }
+  };
+
+  const scrollHandler = async (e: any) => {
+    try {
+      if (e.currentTarget.scrollTop === 0) {
+        setPageNumber(pageNumber + 1);
+        const res = await axios.get(
+          `http://localhost:4001/chat-room/${chatRoom[1]}?page_size=10&page_number=${pageNumber}`,
+        );
+        const data = res.data.Message;
+        setChat(data);
+
+        return true;
+      }
+      return true;
+    } catch (error) {
       return false;
     }
   };
@@ -114,7 +127,7 @@ const Home: NextPage<IHome> = (props) => {
           <h3>Back to profile page</h3>
         </a>
       </Link>
-      <div className="container_chat">
+      <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
           return (

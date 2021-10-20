@@ -134,4 +134,3 @@ route.post("/invites", async (req: Request, res: Response) => {
 });
 
 export { route };
-// module.exports = route;

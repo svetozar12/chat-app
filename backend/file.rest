@@ -9,8 +9,7 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:4001/users/user6
-### =======================================
-### =======================================
+###
 GET http://localhost:4001/invites/user6
 ### 
 POST http://localhost:4001/invites
@@ -29,11 +28,10 @@ Content-Type: application/json
     "id":"61498a301749f7b3b2f07b75",
     "status":"accepted"
 }
-### =======================================
-### =======================================
-GET http://localhost:4001/chat-room/list/rengar
 ###
-GET http://localhost:4001/chat-room/616c18b220e01ecc6810650d
+GET http://localhost:4001/chat-room/list/test1
+###
+GET http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
 ###
 POST http://localhost:4001/chat-room/messages
 Content-Type: application/json

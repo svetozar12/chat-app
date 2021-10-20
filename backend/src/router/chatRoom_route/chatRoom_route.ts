@@ -19,11 +19,18 @@ route.get("/chat-room/list/:user_id", async (req: Request, res: Response) => {
 route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;
+    const page_size = req.query.page_size;
+    const page_number = req.query.page_number;
+
     const users_rooms = await Chats.find(
       {
         _id: user_id,
       },
-      { messages: { $slice: -10 } },
+      {
+        messages: {
+          $slice: ((page_number - 1) * page_size, page_number * page_size),
+        },
+      },
     );
 
     if (!users_rooms || users_rooms.length <= 0)
@@ -56,7 +63,7 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
     }).exec();
 
     const user1 = req.body.user1;
-    const user2 = id ? findRoom.members[1] : req.body.user2;
+    const user2 = id ? findRoom!.members[1] : req.body.user2;
 
     if (!findRoom) {
       const chat = await new Chats({
@@ -114,4 +121,3 @@ route.post("/chat-room/:id", async (req: Request, res: Response) => {
 });
 
 export { route };
-// module.exports = route;

@@ -1,12 +1,5 @@
-import { createServer } from "http";
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
 import Chats from "../models/chatRoom.model";
-// const httpServer = createServer();
-// const io = new Server(httpServer, {
-//   cors: {
-//     origin: "*",
-//   },
-// });
 const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
