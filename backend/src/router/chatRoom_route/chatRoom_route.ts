@@ -2,11 +2,11 @@ import * as express from "express";
 import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
-route.get("/chat-room/list/:user_id", async (req: Request, res: Response) => {
+route.get("/chat-room/list/:user_name", async (req: Request, res: Response) => {
   try {
-    const contacts = await Chats.find({ members: req.params.user_id }).select([
-      "-messages",
-    ]);
+    const contacts = await Chats.find({ members: req.params.user_name }).select(
+      ["-messages"],
+    );
     return res.status(201).json({ contacts });
   } catch (error) {
     return res.status(501).json({
@@ -28,7 +28,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
       },
       {
         messages: {
-          $slice: ((page_number - 1) * page_size, page_number * page_size),
+          $slice: ((page_number - 1) * page_size, -(page_number * page_size)),
         },
       },
     );
@@ -44,7 +44,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/chat-room/messages", async (req: Request, res: Response) => {
+route.post("/chat-room", async (req: Request, res: Response) => {
   try {
     const date = new Date();
     let currentHours: string | number = date.getHours().toString();
@@ -89,7 +89,7 @@ route.post("/chat-room/messages", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/chat-room/:id", async (req: Request, res: Response) => {
+route.put("/chat-room/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const readBy = req.body.read_by;

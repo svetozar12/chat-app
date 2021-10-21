@@ -41,7 +41,7 @@ function PendingChats({
 
   const createChatRoom = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/chat-room/messages", {
+      const res = await axios.post("http://localhost:4001/chat-room", {
         user1: inviter,
         user2: reciever,
         sender: inviter,

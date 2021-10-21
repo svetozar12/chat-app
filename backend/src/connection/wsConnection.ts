@@ -25,8 +25,6 @@ io.on("connection", (socket: Socket): void => {
       const findChat = await Chats.find({ _id: chatInstance })
         .select("members")
         .exec();
-      const [user1, user2] = findChat[0].members;
-
       const date = new Date();
       let currentHours: string | number = date.getHours().toString();
       let currentMinutes: string | number = date.getMinutes().toString();
@@ -34,12 +32,14 @@ io.on("connection", (socket: Socket): void => {
         2,
         "0",
       )}:${currentMinutes.padStart(2, "0")}`;
-      io.to(user1)
-        .to(user2)
-        .emit("message", {
-          members: [user1, user2],
+      const members: string[] = [];
+      findChat[0].members.forEach((element) => {
+        members.push(element);
+        io.to(element).emit("message", {
+          members,
           messages: [{ sender, time_stamp, message }],
         });
+      });
     },
   );
 
@@ -65,5 +65,4 @@ io.on("connection", (socket: Socket): void => {
   });
 });
 
-// export default io;
 module.exports = io;

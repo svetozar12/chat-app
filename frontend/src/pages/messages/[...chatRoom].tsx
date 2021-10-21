@@ -21,6 +21,7 @@ const Home: NextPage<IHome> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
+  const [id, setId] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
@@ -71,12 +72,13 @@ const Home: NextPage<IHome> = (props) => {
   const saveMessage = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:4001/chat-room/messages?id=${chatRoom[1]}`,
+        `http://localhost:4001/chat-room?id=${chatRoom[1]}`,
         {
           sender: cookieName,
           message: state.message,
         },
       );
+
       return true;
     } catch (error) {
       return false;
@@ -87,6 +89,7 @@ const Home: NextPage<IHome> = (props) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         setPageNumber(pageNumber + 1);
+        console.log(id);
         const res = await axios.get(
           `http://localhost:4001/chat-room/${chatRoom[1]}?page_size=10&page_number=${pageNumber}`,
         );
@@ -122,7 +125,7 @@ const Home: NextPage<IHome> = (props) => {
       style={{ justifyContent: "center", height: "100vh" }}
       className="container chat_home"
     >
-      <Link href={`http://localhost:3000/messages/${cookieName}`}>
+      <Link href={`http://localhost:3000/${cookieName}`}>
         <a>
           <h3>Back to profile page</h3>
         </a>

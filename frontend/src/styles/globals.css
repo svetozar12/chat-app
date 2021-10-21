@@ -157,7 +157,7 @@ form {
 }
 
 .rendered_chat {
-  border-radius: 25px;
+  border-radius: 4px;
   width: 10rem;
   padding: 0.5rem 1rem;
   overflow: hidden;

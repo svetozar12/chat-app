@@ -31,9 +31,9 @@ Content-Type: application/json
 ###
 GET http://localhost:4001/chat-room/list/test1
 ###
-GET http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
+GET http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9?page_size=10&page_number=1
 ###
-POST http://localhost:4001/chat-room/messages
+POST http://localhost:4001/chat-room?id=616e7322dfe6725c10bdefc9
 Content-Type: application/json
 
 {
@@ -43,11 +43,11 @@ Content-Type: application/json
     "message":"hello again"
 }
 ###
-POST http://localhost:4001/chat-room/61682aa4a5ea89c75a02b600
+PUT http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
 Content-Type: application/json
 
 {
-    "read_by":"ivan"
+    "read_by":"user2"
 }
 
 
