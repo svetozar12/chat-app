@@ -1,8 +1,17 @@
 import axios from "axios";
 import React from "react";
-import { useCookie } from "next-cookie";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
+
+interface IPendingChats {
+  _id: string;
+  inviter: string;
+  status: string;
+  reciever: string;
+  socketRef: Socket;
+  setLocalStatus: any;
+}
+
 function PendingChats({
   _id,
   inviter,
@@ -10,16 +19,7 @@ function PendingChats({
   reciever,
   socketRef,
   setLocalStatus,
-  data,
-}: {
-  _id: string;
-  inviter: string;
-  status: string;
-  reciever: string;
-  socketRef: Socket;
-  setLocalStatus: any;
-  data: string[];
-}) {
+}: IPendingChats) {
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
@@ -39,6 +39,19 @@ function PendingChats({
     }
   };
 
+  const createChatRoom = async () => {
+    try {
+      const res = await axios.post("http://localhost:4001/chat-room", {
+        user1: inviter,
+        user2: reciever,
+        sender: inviter,
+        message: "",
+      });
+    } catch (error) {
+      return false;
+    }
+  };
+
   return (
     <div>
       {status === "recieved" && (
@@ -46,7 +59,10 @@ function PendingChats({
           <h1>{inviter}</h1>
           <div className="invite_buttons">
             <button
-              onClick={() => updateInviteStatus("accepted")}
+              onClick={() => {
+                createChatRoom();
+                updateInviteStatus("accepted");
+              }}
               className="accept"
             >
               <AiFillCheckCircle />

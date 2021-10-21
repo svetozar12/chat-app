@@ -17,7 +17,21 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<string[]>([]);
+  const [chatRooms, setChatRooms] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
+
+  const getChatRoom = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4001/chat-room/list/${cookie.get("name")}`,
+      );
+      const data = res.data.contacts;
+      setChatRooms(data);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   const fetchRecieverStatus = async () => {
     try {
@@ -78,15 +92,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const emitUsers = () => {
-    socketRef?.emit("sender_reciever", {
-      sender: cookieName,
-      reciever: reciever,
-    });
-  };
-
   useEffect(() => {
     validateUser();
+    getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
   }, []);
@@ -97,13 +105,13 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     });
     socketConnect.on("friend_request", () => {
       fetchRecieverStatus();
+      getChatRoom();
       fetchInviteStatus();
     });
 
     socketConnect.on("send_friend_request", () => {
       fetchRecieverStatus();
       fetchInviteStatus();
-      console.log("sending");
     });
 
     socketConnect.emit("room", { user: cookieName });
@@ -115,12 +123,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (reciever) {
-      emitUsers();
-    }
-  }, [reciever]);
-
-  useEffect(() => {
     fetchRecieverStatus();
     fetchInviteStatus();
   }, [localStatus]);
@@ -128,10 +130,25 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends cookie={cookie} socketRef={socketRef} />
-        {contacts.map((item, index) => {
-          if (item.status !== "accepted") return;
-          return <ActiveChats key={index} {...item} cookie={cookie} />;
+        <FindFriends
+          cookie={cookie}
+          socketRef={socketRef}
+          reciever={reciever}
+          setReciever={setReciever}
+        />
+        {chatRooms.map((item, index) => {
+          const _id = item._id;
+          const [user1, user2] = item.members;
+          return (
+            <ActiveChats
+              key={index}
+              _id={_id}
+              user1={user1}
+              user2={user2}
+              cookie={cookie}
+              socketRef={socketRef}
+            />
+          );
         })}
       </section>
       <section className="main_section">

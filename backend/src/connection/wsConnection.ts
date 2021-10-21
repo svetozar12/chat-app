@@ -1,33 +1,51 @@
 import { Socket } from "socket.io";
+import Chats from "../models/chatRoom.model";
 const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
   },
 });
 
-let me: string = "";
-let you: string = "";
-let recieverId: string;
-let senderId: string;
-
 io.on("connection", (socket: Socket): void => {
-  recieverId = socket.id;
-
-  socket.on("sender_reciever", ({ sender, reciever }) => {
-    me = sender;
-    you = reciever;
+  socket.on("joined_chat_room", ({ user }) => {
+    socket.join(user);
   });
-  socket.emit("send_message", { me, you });
+
   socket.on(
     "message",
-    ({ name, message }: { name: string; message: string }) => {
-      io.emit("message", {
-        name,
-        message,
-        time: new Date().getHours() + ":" + new Date().getMinutes(),
+    async ({
+      chatInstance,
+      sender,
+      message,
+    }: {
+      chatInstance: string;
+      sender: string;
+      message: string;
+    }) => {
+      const findChat = await Chats.find({ _id: chatInstance })
+        .select("members")
+        .exec();
+      const date = new Date();
+      let currentHours: string | number = date.getHours().toString();
+      let currentMinutes: string | number = date.getMinutes().toString();
+      const time_stamp = `${currentHours.padStart(
+        2,
+        "0",
+      )}:${currentMinutes.padStart(2, "0")}`;
+      const members: string[] = [];
+      findChat[0].members.forEach((element) => {
+        members.push(element);
+        io.to(element).emit("message", {
+          members,
+          messages: [{ sender, time_stamp, message }],
+        });
       });
     },
   );
+
+  socket.on("join_chat", ({ chat_id }) => {
+    socket.join(chat_id);
+  });
 
   socket.on("room", ({ user }) => {
     socket.join(user);

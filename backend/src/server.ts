@@ -1,20 +1,16 @@
-const express = require("express");
+import * as express from "express";
+import * as cors from "cors";
 const app = express();
-const cors = require("cors");
-const bodyParser = require("body-parser");
-
 const socketIo = require("./connection/wsConnection");
-const connectDb = require("./connection/dbConnection");
-const data = require("./router/router");
+import connectDb from "./connection/dbConnection";
+import data from "./router/router";
 
-// midleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDb();
 
-// routes importing
 app.use("/", data);
 
 const port: number = 4001;

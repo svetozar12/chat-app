@@ -1,10 +1,8 @@
-const express = require("express");
-const route = express.Router();
-
+import * as express from "express";
 import { Request, Response } from "express";
-
-const Invites = require("../../models/Invites.model");
-const Users = require("../../models/User.model");
+import Invites from "../../models/Invites.model";
+import Users from "../../models/User.model";
+const route = express.Router();
 
 route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
@@ -76,7 +74,7 @@ route.put("/invites", async (req: Request, res: Response) => {
       id,
     }).exec();
 
-    if (!inviteInstance || undefined || !status) {
+    if (!inviteInstance || !status) {
       return res.status(404).json({ error: "Invites not found" });
     }
 
@@ -135,4 +133,4 @@ route.post("/invites", async (req: Request, res: Response) => {
   }
 });
 
-module.exports = route;
+export { route };

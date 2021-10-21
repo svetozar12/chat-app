@@ -1,15 +1,12 @@
-const express = require("express");
+import * as express from "express";
 const route = express.Router();
-const createError = require("http-errors");
 
-import { Request, Response } from "express";
+import { route as users_route } from "./users_route/users_route";
+import { route as invite_route } from "./invite_route/invite_route";
+import { route as chat_route } from "./chatRoom_route/chatRoom_route";
 
-const userRoute = require("./users_route/users_route");
-const inviteRoute = require("./invite_route/invite_route");
-const chatRoute = require("./chatRoom_route/chatRoom_route");
+route.use("/", users_route);
+route.use("/", invite_route);
+route.use("/", chat_route);
 
-route.use("/", userRoute);
-route.use("/", inviteRoute);
-route.use("/", chatRoute);
-
-module.exports = route;
+export default route;

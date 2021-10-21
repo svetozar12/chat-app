@@ -17,6 +17,7 @@ Table of concepts
   --off-white: rgb(221, 221, 221);
   --main-black: rgb(0, 0, 0);
   --off-black: rgb(92, 92, 92);
+  --me-chat-buble: #a5a7ac;
   --main-blue: rgb(79, 81, 216);
   --off-blue: rgb(38, 92, 163);
   --main-green: rgb(52, 192, 34);
@@ -72,8 +73,9 @@ a {
   width: 100%;
   color: var(--main-white);
   width: 100%;
+  cursor: pointer;
   padding: 0 1rem;
-  word-wrap: break-word;
+  /* word-wrap: break-word; */
   transition: 0.2s;
 }
 
@@ -110,6 +112,7 @@ form,
 .container_chat {
   flex-direction: column;
   height: 60vh;
+  padding: 1rem;
   overflow: auto;
   background-color: var(--main-white);
   box-shadow: 0px 0px 20px var(--off-white);
@@ -154,9 +157,10 @@ form {
 }
 
 .rendered_chat {
-  border-radius: 30% 30% 30% 30%;
-  width: 15rem;
-  overflow: auto;
+  border-radius: 4px;
+  width: 10rem;
+  padding: 0.5rem 1rem;
+  overflow: hidden;
   word-wrap: break-word;
 }
 

@@ -1,10 +1,11 @@
-const express = require("express");
-const route = express.Router();
-const { registerValidation } = require("../../helpers/schema");
-
+import * as express from "express";
+import registerValidation from "../../helpers/schema";
 import { Request, Response } from "express";
+const route = express.Router();
 
-const User = require("../../models/User.model");
+import User from "../../models/User.model";
+import Invites from "../../models/Invites.model";
+import Chats from "../../models/chatRoom.model";
 
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
@@ -20,7 +21,7 @@ route.get("/users/:username", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong while loging",
     });
   }
 });
@@ -42,18 +43,25 @@ route.post("/users/register", async (req: Request, res: Response) => {
     return res
       .status(201)
       .send({ message: `User ${req.body.username} created` });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
       Error: "Internal server error",
-      Message: "Something went wrong",
+      Message: "Something went wrong while registering",
     });
   }
 });
 
 route.delete("/users/:username", async (req: Request, res: Response) => {
   try {
-    const data = await User.deleteOne({ username: req.params.username }).exec();
-    return res.status(204);
+    const username = req.params.username;
+    const deleteUser = await User.deleteOne({ username }).exec();
+    const deleteInvites = await Invites.deleteMany({
+      reciever: username,
+    }).exec();
+    const deleteChats = await Chats.deleteMany({
+      members: { $all: [username] },
+    }).exec();
+    return res.status(204).json({ message: `user ${username} deleted` });
   } catch (error) {
     return res.status(501).json({
       Error: "Internal server error",
@@ -62,4 +70,4 @@ route.delete("/users/:username", async (req: Request, res: Response) => {
   }
 });
 
-module.exports = route;
+export { route };

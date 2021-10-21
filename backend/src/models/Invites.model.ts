@@ -1,6 +1,12 @@
 import * as mongoose from "mongoose";
 
-const InviteSchema = new mongoose.Schema({
+interface InviteSchema {
+  inviter: string;
+  reciever: string;
+  status: any;
+}
+
+const InviteSchema = new mongoose.Schema<InviteSchema>({
   inviter: {
     type: String,
     required: true,
@@ -17,5 +23,5 @@ const InviteSchema = new mongoose.Schema({
   },
 });
 
-const Invites = mongoose.model("Invites", InviteSchema);
-module.exports = Invites;
+const Invites = mongoose.model<InviteSchema>("Invites", InviteSchema);
+export default Invites;

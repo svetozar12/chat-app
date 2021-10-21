@@ -3,17 +3,21 @@ import { useCookie } from "next-cookie";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 
+interface IFindFriends {
+  cookie: string;
+  reciever: string;
+  setReciever: any;
+  socketRef: Socket;
+}
+
 function FindFriends({
   cookie,
   socketRef,
-}: {
-  cookie: string;
-  socketRef: Socket;
-}) {
-  const [reciever, setReciever] = React.useState("");
+  reciever,
+  setReciever,
+}: IFindFriends) {
   const cokie = useCookie(cookie);
   const cookieName = cokie.get("name");
-
   const sendInvite = async () => {
     try {
       const res = await axios.post(`http://localhost:4001/invites`, {

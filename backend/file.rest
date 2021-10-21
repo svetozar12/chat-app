@@ -1,34 +1,53 @@
-GET http://localhost:4001/users/svetozar
+GET http://localhost:4001/users/user1
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
 
 {
-    "username":"svetozar"
+    "username":"user6"
 }
 
 ###
-DELETE http://localhost:4001/users/svetozar
-### Updates the status
-PUT http://localhost:4001/invites
-Content-Type: application/json
-
-{
-    "id":"61541a045232e654e8f19dce",
-    "status":"declined"
-}
+DELETE http://localhost:4001/users/user6
+###
+GET http://localhost:4001/invites/user6
 ### 
-GET http://localhost:4001/invites/igor?status=accepted
-###
-GET http://localhost:4001/invites/inviter/igor?status=accepted
-###
 POST http://localhost:4001/invites
 Content-Type: application/json
 
 {
-    "reciever":"ivan",
-    "inviter":"user3",
+    "reciever":"test2",
+    "inviter":"test23",
     "status":"recieved"
 }
+### 
+PUT http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "id":"61498a301749f7b3b2f07b75",
+    "status":"accepted"
+}
 ###
-GET http://localhost:4001/
+GET http://localhost:4001/chat-room/list/test1
+###
+GET http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9?page_size=10&page_number=1
+###
+POST http://localhost:4001/chat-room?id=616e7322dfe6725c10bdefc9
+Content-Type: application/json
+
+{
+    "user1":"user1",
+    "user2":"user2",
+    "sender":"rengar",
+    "message":"hello again"
+}
+###
+PUT http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
+Content-Type: application/json
+
+{
+    "read_by":"user2"
+}
+
+
