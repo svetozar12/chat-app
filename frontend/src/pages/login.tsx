@@ -30,8 +30,6 @@ function login(props: AppProps) {
     }, 2000);
   };
 
-  const rememberMe = () => {};
-
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
