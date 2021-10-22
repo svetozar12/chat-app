@@ -4,25 +4,22 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { actionCreators, State } from "../redux";
 import Link from "next/link";
 
 function login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const cookieName = cookie.get("name");
   const [name, setName] = React.useState<string>("");
   const [alert, setAlert] = React.useState<string>("");
   const [checked, setChecked] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
-  const loginPost = async () => {
-    try {
-      const res = await axios.get(`http://localhost:4001/users/${name}`);
-      return true;
-    } catch (error: any) {
-      setAlert(error.response.data.message);
-      return false;
-    }
-  };
+  const { loginPost } = bindActionCreators(actionCreators, dispatch);
+
+  const alerts = useSelector((state: State) => state);
 
   const Alert = () => {
     setTimeout(() => {
@@ -33,7 +30,7 @@ function login(props: AppProps) {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
-      const result = await loginPost();
+      const result = await loginPost(name);
       if (result) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
@@ -43,8 +40,10 @@ function login(props: AppProps) {
         setTimeout(() => {
           router.push(`messages/${cookie.get("name")}`);
         }, 100);
+      } else {
+        console.log(alerts);
+        Alert();
       }
-      Alert();
     } else {
       setAlert("No input");
       Alert();

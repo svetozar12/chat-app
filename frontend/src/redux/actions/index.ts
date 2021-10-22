@@ -1,15 +1,10 @@
 import { ActionType } from "../action-types/index";
 
-interface Test {
-  type: ActionType.TEST;
-  payload: number;
+interface LoginPost {
+  type: ActionType.LOGIN_POST | ActionType.LOGIN_POST_ERROR;
+  payload?: string;
 }
 
-interface Test1 {
-  type: ActionType.TEST1;
-  payload: number;
-}
-
-type Action = Test | Test1;
+type Action = LoginPost;
 
 export default Action;

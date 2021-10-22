@@ -1,4 +1,4 @@
 export enum ActionType {
-  TEST = "test",
-  TEST1 = "test1",
+  LOGIN_POST = "login_post",
+  LOGIN_POST_ERROR = "login_post_error",
 }

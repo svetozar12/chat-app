@@ -1,21 +1,21 @@
 import { ActionType } from "../action-types";
 import { Dispatch } from "redux";
+import axios from "axios";
 import Action from "../actions";
 
-export const testDispatch = (amount: number) => {
-  return (dispatch: Dispatch<Action>) => {
-    dispatch({
-      type: ActionType.TEST,
-      payload: amount,
-    });
+export const loginPost =
+  (name: string) => async (dispatch: Dispatch<Action>) => {
+    try {
+      const res = await axios.get(`http://localhost:4001/users/${name}`);
+      dispatch({
+        type: ActionType.LOGIN_POST,
+      });
+      return true;
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.LOGIN_POST_ERROR,
+        payload: error.response.data.message,
+      });
+      return false;
+    }
   };
-};
-
-export const test1Dispatch = (amount: number) => {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ActionType.TEST1,
-      payload: amount,
-    });
-  };
-};
