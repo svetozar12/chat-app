@@ -21,6 +21,7 @@ const Home: NextPage<IHome> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
+  const bottomRef = useRef(null);
   const [id, setId] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [chat, setChat] = useState<string[]>([]);
@@ -56,9 +57,7 @@ const Home: NextPage<IHome> = (props) => {
       const newObj = { members, messages };
       updateChat(newObj);
     });
-
     socketConnect.emit("joined_chat_room", { user: cookieName });
-
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
@@ -89,13 +88,11 @@ const Home: NextPage<IHome> = (props) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         setPageNumber(pageNumber + 1);
-        console.log(id);
         const res = await axios.get(
           `http://localhost:4001/chat-room/${chatRoom[1]}?page_size=10&page_number=${pageNumber}`,
         );
         const data = res.data.Message;
         setChat(data);
-
         return true;
       }
       return true;

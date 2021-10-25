@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import Link from "next/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../redux";
-import Link from "next/link";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -15,12 +14,13 @@ function login(props: AppProps) {
   const [name, setName] = React.useState<string>("");
   const [alert, setAlert] = React.useState<string>("");
   const [checked, setChecked] = React.useState<boolean>(false);
+
   const dispatch = useDispatch();
-
   const { loginPost } = bindActionCreators(actionCreators, dispatch);
-
-  const alerts = useSelector((state: State) => state);
-
+  const alerts = useSelector((state: State) => state.userState);
+  React.useEffect(() => {
+    setAlert(alerts);
+  }, [alerts]);
   const Alert = () => {
     setTimeout(() => {
       setAlert("");
@@ -41,7 +41,6 @@ function login(props: AppProps) {
           router.push(`messages/${cookie.get("name")}`);
         }, 100);
       } else {
-        console.log(alerts);
         Alert();
       }
     } else {
@@ -70,7 +69,6 @@ function login(props: AppProps) {
               Sign up
             </a>
           </Link>
-
           <label htmlFor="checkbox">
             {" "}
             <input
