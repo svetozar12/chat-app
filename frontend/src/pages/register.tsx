@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../redux";
+import { actionCreators } from "../redux";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
@@ -13,7 +13,9 @@ function register(props: { cookie: string }) {
 
   const dispatch = useDispatch();
   const { registerPost } = bindActionCreators(actionCreators, dispatch);
-  const alerts = useSelector((state: State) => state.userState);
+  const alerts = useSelector(
+    (state: { userState: { good: string; bad: string } }) => state.userState,
+  );
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
@@ -21,22 +23,20 @@ function register(props: { cookie: string }) {
     goodAlert?: string;
     badAlert?: string;
   }>({
-    goodAlert: alerts,
-    badAlert: alerts,
+    goodAlert: alerts.good,
+    badAlert: alerts.bad,
   });
 
   React.useEffect(() => {
-    console.log(alerts);
-    if (registerPost) {
-      console.log("GOOD");
-      setState({ goodAlert: alerts });
+    if (alerts.good) {
+      setState({ goodAlert: alerts.good });
     } else {
-      console.log("BAD");
-      setState({ badAlert: alerts });
+      setState({ badAlert: alerts.bad });
     }
   }, [alerts]);
 
   React.useEffect(() => {
+    // console.log(window.location.href); use this for dynamic url
     if (cookie.get("name")) {
       router.push(`/${cookie.get("name")}`);
     }
@@ -54,8 +54,8 @@ function register(props: { cookie: string }) {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setName("");
-    const register = await registerPost(name);
-    if (register) {
+    await registerPost(name);
+    if (alerts.good) {
       setLoginPrompt(true);
     }
   };
@@ -102,6 +102,7 @@ function register(props: { cookie: string }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
+
   if (cookieName) {
     return {
       redirect: {

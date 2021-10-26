@@ -2,7 +2,7 @@ import { ActionType } from "../action-types";
 
 interface LoginPost {
   type: ActionType.LOGIN_POST | ActionType.REGISTER_POST;
-  payload: string;
+  payload: string | { good?: string; bad?: string };
 }
 
 interface errLoginPost {
@@ -20,9 +20,9 @@ const reducer = (state: string = initialState, action: Action) => {
     case ActionType.LOGIN_POST_ERROR:
       return action.payload;
     case ActionType.REGISTER_POST:
-      return action.payload;
+      return { good: action.payload };
     case ActionType.REGISTER_POST_ERROR:
-      return action.payload;
+      return { bad: action.payload };
     default:
       return state;
   }
