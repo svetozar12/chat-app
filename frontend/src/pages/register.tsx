@@ -1,14 +1,19 @@
-import axios from "axios";
 import React from "react";
+import Link from "next/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { actionCreators, State } from "../redux";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const cookieName = cookie.get("name");
+
+  const dispatch = useDispatch();
+  const { registerPost } = bindActionCreators(actionCreators, dispatch);
+  const alerts = useSelector((state: State) => state.userState);
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
@@ -16,13 +21,24 @@ function register(props: { cookie: string }) {
     goodAlert?: string;
     badAlert?: string;
   }>({
-    goodAlert: "",
-    badAlert: "",
+    goodAlert: alerts,
+    badAlert: alerts,
   });
 
   React.useEffect(() => {
+    console.log(alerts);
+    if (registerPost) {
+      console.log("GOOD");
+      setState({ goodAlert: alerts });
+    } else {
+      console.log("BAD");
+      setState({ badAlert: alerts });
+    }
+  }, [alerts]);
+
+  React.useEffect(() => {
     if (cookie.get("name")) {
-      router.push(`/messages/${cookie.get("name")}`);
+      router.push(`/${cookie.get("name")}`);
     }
   }, []);
 
@@ -32,32 +48,16 @@ function register(props: { cookie: string }) {
       sameSite: "strict",
       path: "/",
     });
-    router.push(`/messages/${cookie.get("name")}`);
-  };
-
-  const registerPost = async () => {
-    try {
-      const res = await axios.post("http://localhost:4001/users/register", {
-        username: name,
-      });
-      const data = res.data;
-      setState({ goodAlert: data.message });
-      setLoginPrompt(true);
-      return true;
-    } catch (error: any) {
-      const data = error.response.data;
-      setName("");
-      setState({ badAlert: data.message });
-      return false;
-    }
+    router.push(`/${cookie.get("name")}`);
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await registerPost();
-    setTimeout(() => {
-      setState({ badAlert: "", goodAlert: "" });
-    }, 2000);
+    setName("");
+    const register = await registerPost(name);
+    if (register) {
+      setLoginPrompt(true);
+    }
   };
 
   return (
@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (cookieName) {
     return {
       redirect: {
-        destination: `messages/${cookieName}`,
+        destination: `/${cookieName}`,
         permanent: false,
       },
     };

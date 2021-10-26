@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ActiveChats from "../../components/ActiveChats";
-import PendingChats from "../../components/PendingChats";
-import FindFriends from "../../components/FindFriends";
+import ActiveChats from "../components/ActiveChats";
+import PendingChats from "../components/PendingChats";
+import FindFriends from "../components/FindFriends";
 import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
@@ -52,7 +52,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviteStatus = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/invites/inviter/${cookieName}?status=accepted`,
+        `http://localhost:4001/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
       setContacts(data);

@@ -10,7 +10,7 @@ Content-Type: application/json
 ###
 DELETE http://localhost:4001/users/user6
 ###
-GET http://localhost:4001/invites/user6
+GET http://localhost:4001/invites/test1?status=accepted
 ### 
 POST http://localhost:4001/invites
 Content-Type: application/json

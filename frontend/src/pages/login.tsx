@@ -18,34 +18,34 @@ function login(props: AppProps) {
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actionCreators, dispatch);
   const alerts = useSelector((state: State) => state.userState);
+
   React.useEffect(() => {
     setAlert(alerts);
   }, [alerts]);
-  const Alert = () => {
-    setTimeout(() => {
-      setAlert("");
-    }, 2000);
+  const RemoveAlert = () => {
+    setAlert(alerts);
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
-      const result = await loginPost(name);
-      if (result) {
+      setName("");
+      const login = await loginPost(name);
+      if (login) {
         cookie.set("name", name, {
           maxAge: checked ? 94670777 : 3600,
           sameSite: "strict",
           path: "/",
         });
         setTimeout(() => {
-          router.push(`messages/${cookie.get("name")}`);
+          router.push(`/${cookie.get("name")}`);
         }, 100);
       } else {
-        Alert();
+        RemoveAlert();
       }
     } else {
       setAlert("No input");
-      Alert();
+      RemoveAlert();
     }
   };
 
@@ -95,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (cookieName) {
     return {
       redirect: {
-        destination: `messages/${cookieName}`,
+        destination: `/${cookieName}`,
         permanent: false,
       },
     };

@@ -4,7 +4,7 @@ import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import Link from "next/dist/client/link";
-import RenderChat from "../../components/RenderChat";
+import RenderChat from "../components/RenderChat";
 
 interface IHome {
   cookie: string;
@@ -21,7 +21,7 @@ const Home: NextPage<IHome> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const bottomRef = useRef(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const [id, setId] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [chat, setChat] = useState<string[]>([]);
@@ -50,8 +50,17 @@ const Home: NextPage<IHome> = (props) => {
     setChat((prev) => [...prev, param]);
   };
 
+  // const scrollToBottom = () => {
+  //   const bottom = document.getElementById("bottom");
+  //   if (bottom && typeof window !== "undefined") {
+  //     console.log(bottom);
+  //     bottom.scrollIntoView({ block: "start", behavior: "smooth" });
+  //   }
+  // };
+
   useEffect(() => {
     getRecentMessages();
+    // if (getRecentMessages) scrollToBottom();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ members, messages }: any) => {
       const newObj = { members, messages };
@@ -93,7 +102,7 @@ const Home: NextPage<IHome> = (props) => {
         );
         const data = res.data.Message;
         setChat(data);
-        return true;
+        return <div>hi from scroll</div>;
       }
       return true;
     } catch (error) {
@@ -146,6 +155,7 @@ const Home: NextPage<IHome> = (props) => {
             </li>
           );
         })}
+        {/* <div id="bottom" ref={bottomRef}></div> */}
       </div>
 
       <form>
