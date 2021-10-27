@@ -53,11 +53,11 @@ function register(props: { cookie: string }) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setName("");
-    await registerPost(name);
-    if (alerts.good) {
+    const register = await registerPost(name);
+    if (await register) {
       setLoginPrompt(true);
     }
+    setName("");
   };
 
   return (

@@ -29,7 +29,6 @@ function login(props: AppProps) {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (name) {
-      setName("");
       const login = await loginPost(name);
       if (login) {
         cookie.set("name", name, {
@@ -39,7 +38,8 @@ function login(props: AppProps) {
         });
         setTimeout(() => {
           router.push(`/${cookie.get("name")}`);
-        }, 100);
+        });
+        setName("");
       } else {
         RemoveAlert();
       }

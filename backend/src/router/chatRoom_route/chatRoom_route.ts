@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 route.get("/chat-room/list/:user_name", async (req: Request, res: Response) => {
+  // This endpoint should stay this way /chat-room/list/:username because of the endpoint bellow it which is chat-room/:user_id
   try {
     const contacts = await Chats.find({ members: req.params.user_name }).select(
       ["-messages"],
@@ -28,7 +29,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
       },
       {
         messages: {
-          $slice: ((page_number - 1) * page_size, -(page_number * page_size)),
+          $slice: ((page_number - 1) * page_size, -(page_number * page_size)), // some strange typeScript error (don'n know how to fix it)
         },
       },
     );

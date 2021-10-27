@@ -1,4 +1,4 @@
-import { ActionType } from "../action-types";
+import { ActionType } from "./action_types";
 import { Dispatch } from "redux";
 import { Action } from "../reducer/usersReducer";
 import axios from "axios";
@@ -6,7 +6,7 @@ import axios from "axios";
 const loginPostSuccess = (res: string) => {
   return {
     type: ActionType.LOGIN_POST,
-    payload: "",
+    payload: res,
   };
 };
 
@@ -39,7 +39,7 @@ export const loginPost =
   (name: string) => async (dispatch: Dispatch<Action>) => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${name}`);
-      dispatch(loginPostSuccess(res));
+      dispatch(loginPostSuccess(""));
       return true;
     } catch (error: any) {
       const data = error.response.data.message;

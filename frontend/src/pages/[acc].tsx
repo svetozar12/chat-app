@@ -18,7 +18,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<string[]>([]);
   const [chatRooms, setChatRooms] = useState<string[]>([]);
-  const [error, setError] = useState<string>("");
 
   const getChatRoom = async () => {
     try {
@@ -42,9 +41,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       setContacts(data);
       return true;
     } catch (error: any) {
-      const data = error.response.data.error;
-      setError(data);
-
       return false;
     }
   };
