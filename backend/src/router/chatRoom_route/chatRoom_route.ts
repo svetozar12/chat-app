@@ -1,9 +1,10 @@
 import * as express from "express";
+import * as mongoose from "mongoose";
 import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 route.get("/chat-room/list/:user_name", async (req: Request, res: Response) => {
-  // This endpoint should stay this way /chat-room/list/:username because of the endpoint bellow it which is chat-room/:user_id
+  // change param in querry
   try {
     const contacts = await Chats.find({ members: req.params.user_name }).select(
       ["-messages"],
@@ -19,22 +20,30 @@ route.get("/chat-room/list/:user_name", async (req: Request, res: Response) => {
 
 route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   try {
-    const user_id = req.params.user_id;
-    const page_size = req.query.page_size;
-    const page_number = req.query.page_number;
-
-    const users_rooms = await Chats.find(
-      {
-        _id: user_id,
-      },
-      {
-        messages: {
-          $slice: ((page_number - 1) * page_size, -(page_number * page_size)), // some strange typeScript error (don'n know how to fix it)
-        },
-      },
-    );
+    type ObjectIdConstructor = {
+    (str: string): mongoose.Types.ObjectId;
+    new (str: string): mongoose.Types.ObjectId;
+}
+    const user_id: = (mongoose.Types.ObjectId as ObjectIdConstructor)(req.params.user_id);
+    const page_size = parseInt(req.query?.page_size as string) || 10;
+    const page_number = parseInt(req.query?.page_number as string) || 1;
+    // const users_rooms = await Chats.find(
+    //   {
+    //     _id: user_id,
+    //   },
+    //   {
+    //     messages: {
+    //       $limit: "2", // some strange typeScript error (don'n know how to fix it)
+    //     },
+    //   },
+    // );
+    const users_rooms = await Chats.aggregate([
+      { $match: { _id: user_id } },
+    ]).exec();
+    console.log(users_rooms);
 
     if (!users_rooms || users_rooms.length <= 0)
+      // return res.status(404).json({ Message: users_rooms });
       return res.status(404).json({ Message: "User room not found" });
     return res.status(200).json({ Message: users_rooms });
   } catch (error) {
@@ -63,9 +72,9 @@ route.post("/chat-room", async (req: Request, res: Response) => {
       _id: id,
     }).exec();
 
+    console.log("RANDOM", findRoom);
     const user1 = req.body.user1;
     const user2 = id ? findRoom!.members[1] : req.body.user2;
-
     if (!findRoom) {
       const chat = await new Chats({
         members: [user1, user2],
@@ -76,7 +85,6 @@ route.post("/chat-room", async (req: Request, res: Response) => {
     } else {
       findRoom.messages.push({
         sender,
-        time_stamp,
         message,
         seenBy: [],
       });
