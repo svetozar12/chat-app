@@ -139,19 +139,16 @@ const Home: NextPage<IHome> = (props) => {
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
+          const { sender, message, createdAt } = item.messages;
           return (
             <li style={{ listStyle: "none" }} key={index}>
-              {item.messages.map((subItem, index) => {
-                const sender = item.sender;
-                return (
-                  <RenderChat
-                    key={index}
-                    cookie={cookieName}
-                    sender={sender}
-                    {...subItem}
-                  />
-                );
-              })}
+              <RenderChat
+                key={index}
+                cookie={cookieName}
+                sender={sender}
+                time_stamp={createdAt}
+                message={message}
+              />
             </li>
           );
         })}
@@ -199,3 +196,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default Home;
+
+// {
+//   item.messages.map((subItem, index) => {
+//     const sender = item.sender;
+//     return (
+//       <RenderChat
+//         key={index}
+//         cookie={cookieName}
+//         sender={sender}
+//         {...subItem}
+//       />
+//     );
+//   });
+// }

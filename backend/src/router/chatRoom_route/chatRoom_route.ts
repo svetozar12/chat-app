@@ -20,28 +20,18 @@ route.get("/chat-room/list/:user_name", async (req: Request, res: Response) => {
 
 route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   try {
-    type ObjectIdConstructor = {
-    (str: string): mongoose.Types.ObjectId;
-    new (str: string): mongoose.Types.ObjectId;
-}
-    const user_id: = (mongoose.Types.ObjectId as ObjectIdConstructor)(req.params.user_id);
+    const user_id: mongoose.Types.ObjectId = new mongoose.Types.ObjectId(
+      req.params.user_id,
+    );
     const page_size = parseInt(req.query?.page_size as string) || 10;
     const page_number = parseInt(req.query?.page_number as string) || 1;
-    // const users_rooms = await Chats.find(
-    //   {
-    //     _id: user_id,
-    //   },
-    //   {
-    //     messages: {
-    //       $limit: "2", // some strange typeScript error (don'n know how to fix it)
-    //     },
-    //   },
-    // );
+
     const users_rooms = await Chats.aggregate([
       { $match: { _id: user_id } },
+      { $unwind: "$messages" },
+      { $sort: { "messages.createdAt": 1 } },
+      // { $limit: 4 },
     ]).exec();
-    console.log(users_rooms);
-
     if (!users_rooms || users_rooms.length <= 0)
       // return res.status(404).json({ Message: users_rooms });
       return res.status(404).json({ Message: "User room not found" });
