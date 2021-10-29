@@ -22,7 +22,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const getChatRoom = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/list/${cookie.get("name")}`,
+        `http://localhost:4001/chat-room/?user_name=${cookie.get("name")}`,
       );
       const data = res.data.contacts;
       setChatRooms(data);

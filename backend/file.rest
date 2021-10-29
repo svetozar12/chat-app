@@ -29,9 +29,9 @@ Content-Type: application/json
     "status":"accepted"
 }
 ###
-GET http://localhost:4001/chat-room/list/test1
+GET http://localhost:4001/chat-room?user_name=test1
 ###
-GET http://localhost:4001/chat-room/617aa583b580dce525fc07d5?page_size=10&page_number=1
+GET http://localhost:4001/chat-room/617b895325dad624f8922b8d?page_size=10&page_number=1
 ###
 POST http://localhost:4001/chat-room
 Content-Type: application/json
@@ -39,8 +39,6 @@ Content-Type: application/json
 {
     "user1":"test1",
     "user2":"test2",
-    "sender":"rengar",
-    "message":"1"
 }
 ###
 PUT http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
@@ -49,5 +47,13 @@ Content-Type: application/json
 {
     "read_by":"user2"
 }
+###
+GET http://localhost:4001/messages/617b895325dad624f8922b8d
+###
+POST http://localhost:4001/messages/617b895325dad624f8922b8d
+Content-Type: application/json
 
-
+{
+    "sender":"test1",
+    "message":"hello world"
+}

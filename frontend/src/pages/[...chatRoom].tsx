@@ -32,39 +32,28 @@ const Home: NextPage<IHome> = (props) => {
     time: "",
   });
 
+  const updateChat = (param: any) => {
+    setChat((prev) => [...prev, ...param]);
+  };
+
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/${chatRoom[1]}?page_size=10&page_number=1`,
+        `http://localhost:4001/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
-
-      const data = res.data.Message;
-      setChat(data);
+      const data = res.data.reversedArr;
+      updateChat(data);
       return true;
     } catch (error) {
       return false;
     }
   };
 
-  const updateChat = (param: any) => {
-    setChat((prev) => [...prev, param]);
-  };
-
-  // const scrollToBottom = () => {
-  //   const bottom = document.getElementById("bottom");
-  //   if (bottom && typeof window !== "undefined") {
-  //     console.log(bottom);
-  //     bottom.scrollIntoView({ block: "start", behavior: "smooth" });
-  //   }
-  // };
-
   useEffect(() => {
     getRecentMessages();
-    // if (getRecentMessages) scrollToBottom();
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ members, messages }: any) => {
-      const newObj = { members, messages };
-      updateChat(newObj);
+    socketConnect.on("message", ({ messages }: any) => {
+      updateChat(messages);
     });
     socketConnect.emit("joined_chat_room", { user: cookieName });
     setSocketRef(socketConnect);
@@ -80,7 +69,7 @@ const Home: NextPage<IHome> = (props) => {
   const saveMessage = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:4001/chat-room?id=${chatRoom[1]}`,
+        `http://localhost:4001/messages/${chatRoom[1]}`,
         {
           sender: cookieName,
           message: state.message,
@@ -98,11 +87,10 @@ const Home: NextPage<IHome> = (props) => {
       if (e.currentTarget.scrollTop === 0) {
         setPageNumber(pageNumber + 1);
         const res = await axios.get(
-          `http://localhost:4001/chat-room/${chatRoom[1]}?page_size=10&page_number=${pageNumber}`,
+          `http://localhost:4001/messages/${chatRoom[1]}?page_number=${pageNumber}&page_size=10`,
         );
-        const data = res.data.Message;
-        setChat(data);
-        return <div>hi from scroll</div>;
+        const data = res.data.reversedArr;
+        updateChat(data);
       }
       return true;
     } catch (error) {
@@ -139,20 +127,28 @@ const Home: NextPage<IHome> = (props) => {
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
-          const { sender, message, createdAt } = item.messages;
+          console.log(item);
+
+          const { sender, message, createdAt } = item;
+          let date = new Date(createdAt);
+          let currentHours: string | number = date.getHours().toString();
+          let currentMinutes: string | number = date.getMinutes().toString();
+          const time_stamp = `${currentHours.padStart(
+            2,
+            "0",
+          )}:${currentMinutes.padStart(2, "0")}`;
           return (
             <li style={{ listStyle: "none" }} key={index}>
               <RenderChat
                 key={index}
                 cookie={cookieName}
                 sender={sender}
-                time_stamp={createdAt}
+                time_stamp={time_stamp}
                 message={message}
               />
             </li>
           );
         })}
-        {/* <div id="bottom" ref={bottomRef}></div> */}
       </div>
 
       <form>

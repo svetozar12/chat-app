@@ -20,9 +20,9 @@ const reducer = (state: any = initialState, action: Action) => {
     case ActionType.LOGIN_POST_ERROR:
       return action.payload;
     case ActionType.REGISTER_POST:
-      return { ...state, good: action.payload };
+      return action.payload;
     case ActionType.REGISTER_POST_ERROR:
-      return { ...state, bad: action.payload };
+      return action.payload;
     default:
       return state;
   }

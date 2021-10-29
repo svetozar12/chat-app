@@ -56,8 +56,9 @@ function register(props: { cookie: string }) {
     const register = await registerPost(name);
     if (await register) {
       setLoginPrompt(true);
+    } else {
+      setName("");
     }
-    setName("");
   };
 
   return (
