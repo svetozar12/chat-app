@@ -21,9 +21,7 @@ const Home: NextPage<IHome> = (props) => {
   const chatRoom = props.chatRoom.chatRoom;
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const [id, setId] = useState<string>("");
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageNumber, setPageNumber] = useState<number>(2);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
@@ -42,6 +40,8 @@ const Home: NextPage<IHome> = (props) => {
         `http://localhost:4001/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
+      console.log("DB", data);
+
       updateChat(data);
       return true;
     } catch (error) {
@@ -53,6 +53,7 @@ const Home: NextPage<IHome> = (props) => {
     getRecentMessages();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }: any) => {
+      console.log("WS", messages);
       updateChat(messages);
     });
     socketConnect.emit("joined_chat_room", { user: cookieName });
@@ -86,11 +87,13 @@ const Home: NextPage<IHome> = (props) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         setPageNumber(pageNumber + 1);
+        console.log(pageNumber);
+
         const res = await axios.get(
           `http://localhost:4001/messages/${chatRoom[1]}?page_number=${pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
-        updateChat(data);
+        setChat((prev) => [...data, ...prev]);
       }
       return true;
     } catch (error) {
@@ -128,7 +131,6 @@ const Home: NextPage<IHome> = (props) => {
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
           console.log(item);
-
           const { sender, message, createdAt } = item;
           let date = new Date(createdAt);
           let currentHours: string | number = date.getHours().toString();

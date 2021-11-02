@@ -1,7 +1,6 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
-import Messages from "../../models/Message.model";
 const route = express.Router();
 route.get("/chat-room", async (req: Request, res: Response) => {
   try {
@@ -19,8 +18,6 @@ route.get("/chat-room", async (req: Request, res: Response) => {
 route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;
-    // const page_size = parseInt(req.query?.page_size as string) || 10;
-    // const page_number = parseInt(req.query?.page_number as string) || 1;
 
     const users_rooms = await Chats.find({ _id: user_id }).exec();
     if (!users_rooms || users_rooms.length <= 0)
@@ -35,6 +32,8 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
 });
 
 route.post("/chat-room", async (req: Request, res: Response) => {
+  const session = await Chats.startSession();
+  session.startTransaction();
   try {
     const user1 = req.body.user1;
     const user2 = req.body.user2;
@@ -42,8 +41,13 @@ route.post("/chat-room", async (req: Request, res: Response) => {
       members: [user1, user2],
     });
     await chat.save();
+    // throw new Error();
+    await session.commitTransaction();
+    session.endSession();
     return res.json({ Message: chat });
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     return res.status(501).json({
       Message: "Something went wrong while sending the message",
     });

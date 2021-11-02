@@ -96,6 +96,8 @@ route.put("/invites", async (req: Request, res: Response) => {
 });
 
 route.post("/invites", async (req: Request, res: Response) => {
+  const session = await Invites.startSession();
+  session.startTransaction();
   try {
     const user = await Users.findOne({
       username: req.body.reciever,
@@ -123,6 +125,8 @@ route.post("/invites", async (req: Request, res: Response) => {
       inviter: req.body.inviter,
       status: req.body.status,
     });
+    await session.commitTransaction();
+    session.endSession();
     await invites.save();
     return res.status(201).json({ message: invites });
   } catch (error) {

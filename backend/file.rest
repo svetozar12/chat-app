@@ -48,7 +48,7 @@ Content-Type: application/json
     "read_by":"user2"
 }
 ###
-GET http://localhost:4001/messages/617b895325dad624f8922b8d
+GET http://localhost:4001/messages/6180fafdcf62efa63f186517?page_number=1&page_size=10
 ###
 POST http://localhost:4001/messages/617b895325dad624f8922b8d
 Content-Type: application/json

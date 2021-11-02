@@ -26,7 +26,7 @@ io.on("connection", (socket: Socket): void => {
         .select("members")
         .exec();
       const date = new Date();
-      const messages = { sender, message, createdAt: date };
+      const messages = [{ sender, message, createdAt: date }];
       findChat[0].members.forEach((element) => {
         io.to(element).emit("message", {
           messages,
