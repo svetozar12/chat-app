@@ -41,12 +41,14 @@ function PendingChats({
 
   const createChatRoom = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/chat-room", {
+      setLocalStatus("accepted");
+      const res = await axios.put(`http://localhost:4001/test`, {
+        id: _id,
         user1: inviter,
         user2: reciever,
-        sender: inviter,
-        message: "",
       });
+      emitFriendRequest();
+      setLocalStatus("");
     } catch (error) {
       return false;
     }
@@ -61,7 +63,6 @@ function PendingChats({
             <button
               onClick={() => {
                 createChatRoom();
-                updateInviteStatus("accepted");
               }}
               className="accept"
             >
