@@ -1,4 +1,4 @@
-GET http://localhost:4001/users/user1
+GET http://localhost:4001/users/test1
 ###
 POST http://localhost:4001/users/register
 Content-Type: application/json
@@ -8,9 +8,9 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:4001/users/user6
+DELETE http://localhost:4001/users/test1
 ###
-GET http://localhost:4001/invites/test1?status=accepted
+GET http://localhost:4001/invites/test1
 ### 
 POST http://localhost:4001/invites
 Content-Type: application/json
@@ -33,12 +33,13 @@ GET http://localhost:4001/chat-room?user_name=test1
 ###
 GET http://localhost:4001/chat-room/617b895325dad624f8922b8d?page_size=10&page_number=1
 ###
-POST http://localhost:4001/chat-room
+PUT http://localhost:4001/test
 Content-Type: application/json
 
 {
+    "id":"61840e33dd20cfe3356ab02b",
     "user1":"test1",
-    "user2":"test2",
+    "user2":"test2"
 }
 ###
 PUT http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9

@@ -10,7 +10,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDb();
-
 app.use("/", data);
 
 const port: number = 4001;

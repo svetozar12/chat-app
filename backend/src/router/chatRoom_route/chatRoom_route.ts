@@ -9,8 +9,9 @@ route.get("/chat-room", async (req: Request, res: Response) => {
     return res.status(201).json({ contacts });
   } catch (error) {
     return res.status(501).json({
+      ErrorMsg: error.message,
+      Error: "Internal server error",
       Message: "Something went wrong while getting the list of contacts",
-      error,
     });
   }
 });
@@ -25,31 +26,9 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
     return res.status(200).json({ Message: users_rooms });
   } catch (error) {
     return res.status(501).json({
+      ErrorMsg: error.message,
+      Error: "Internal server error",
       Message: "Something went wrong while searching for your chat room",
-      error,
-    });
-  }
-});
-
-route.post("/chat-room", async (req: Request, res: Response) => {
-  const session = await Chats.startSession();
-  session.startTransaction();
-  try {
-    const user1 = req.body.user1;
-    const user2 = req.body.user2;
-    const chat = await new Chats({
-      members: [user1, user2],
-    });
-    await chat.save();
-    // throw new Error();
-    await session.commitTransaction();
-    session.endSession();
-    return res.json({ Message: chat });
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    return res.status(501).json({
-      Message: "Something went wrong while sending the message",
     });
   }
 });
@@ -79,8 +58,9 @@ route.post("/chat-room", async (req: Request, res: Response) => {
 //       .json({ Message: `User ${readBy} saw the message`, chat });
 //   } catch (error) {
 //     return res.status(501).json({
+//       ErrorMsg: error.message,
+//       Error:"Internal server error",
 //       Message: "Something went wrong while seeing the message",
-//       error,
 //     });
 //   }
 // });
