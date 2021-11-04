@@ -123,6 +123,7 @@ route.put("/test", async (req: Request, res: Response) => {
 
       res.status(204).json({ Message: chat });
       await chat.save({ session });
+      throw new Error();
       await session.commitTransaction();
       session.endSession();
       return;

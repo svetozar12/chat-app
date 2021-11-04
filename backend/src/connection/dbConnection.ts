@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 
-const connection = "mongodb://localhost:27000/chatAppDb?replicaSet=rs";
+const connection = "mongodb://localhost:27017/chatAppDb";
 
 const connectDb = () => {
   return mongoose.connect(connection, {
