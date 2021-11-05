@@ -1,28 +1,16 @@
-import { ActionType } from "../action-creators/action_types";
-
-interface LoginPost {
-  type: ActionType.LOGIN_POST | ActionType.REGISTER_POST;
-  payload: string | { good?: string; bad?: string };
-}
-
-interface errLoginPost {
-  type: ActionType.LOGIN_POST_ERROR | ActionType.REGISTER_POST_ERROR;
-  payload: string;
-}
-
-export type Action = LoginPost | errLoginPost;
+import { Action } from "../state";
 
 const initialState = "";
 const reducer = (state: any = initialState, action: Action) => {
   switch (action.type) {
-    case ActionType.LOGIN_POST:
-      return action.payload;
-    case ActionType.LOGIN_POST_ERROR:
-      return action.payload;
-    case ActionType.REGISTER_POST:
-      return action.payload;
-    case ActionType.REGISTER_POST_ERROR:
-      return action.payload;
+    case "LOGIN_POST":
+      return { ...state, payload: action.payload };
+    case "LOGIN_POST_ERROR":
+      return { ...state, payload: action.payload };
+    case "REGISTER_POST":
+      return { ...state, good: action.good };
+    case "REGISTER_POST_ERROR":
+      return { ...state, bad: action.bad };
     default:
       return state;
   }

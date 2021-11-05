@@ -5,17 +5,20 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "../redux";
+import { actions } from "../redux/store";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
 
   const dispatch = useDispatch();
-  const { registerPost } = bindActionCreators(actionCreators, dispatch);
+  const { registerPost } = bindActionCreators(actions, dispatch);
   const alerts = useSelector(
-    (state: { userState: { good: string; bad: string } }) => state.userState,
+    (state: { userState: { good?: string; bad?: string; payload?: string } }) =>
+      state.userState,
   );
+
+  console.log(alerts);
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
@@ -36,7 +39,6 @@ function register(props: { cookie: string }) {
   }, [alerts]);
 
   React.useEffect(() => {
-    // console.log(window.location.href); use this for dynamic url
     if (cookie.get("name")) {
       router.push(`/${cookie.get("name")}`);
     }

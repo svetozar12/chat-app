@@ -6,7 +6,7 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "../redux";
+import { actions } from "../redux/store";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -16,8 +16,10 @@ function login(props: AppProps) {
   const [checked, setChecked] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const { loginPost } = bindActionCreators(actionCreators, dispatch);
-  const alerts = useSelector((state: { userState: string }) => state.userState);
+  const { loginPost } = bindActionCreators(actions, dispatch);
+  const alerts = useSelector(
+    (state: { userState: string }) => state.userState.payload,
+  );
 
   React.useEffect(() => {
     setAlert(alerts);
