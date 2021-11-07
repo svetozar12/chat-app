@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import LoginForm from "../components/LoginForm";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
@@ -11,78 +12,34 @@ import { actions } from "../redux/store";
 function login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const [name, setName] = React.useState<string>("");
-  const [alert, setAlert] = React.useState<string>("");
-  const [checked, setChecked] = React.useState<boolean>(false);
 
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
-  const alerts = useSelector(
-    (state: { authReducer: { bad: string } }) => state.authReducer,
+  const state = useSelector(
+    (state: {
+      authReducer: { input: string; bad: string; remember_me: boolean };
+    }) => state.authReducer,
   );
-
-  const RemoveAlert = () => {
-    setAlert(alerts);
-  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (name) {
-      const login = await loginPost(name);
+    if (state.input) {
+      const login = await loginPost(state.input);
       if (login) {
-        cookie.set("name", name, {
-          maxAge: checked ? 94670777 : 3600,
+        cookie.set("name", state.input, {
+          maxAge: state.remember_me ? 94670777 : 3600,
           sameSite: "strict",
           path: "/",
         });
         setTimeout(() => {
           router.push(`/${cookie.get("name")}`);
         });
-        setName("");
+        dispatch({ type: "SAVE_INPUT", payload: "" });
       }
-    } else {
-      setAlert("No input");
-      RemoveAlert();
     }
   };
 
-  return (
-    <div>
-      <form style={{ height: "100vh" }} className="container">
-        <h1 className="alert" style={{ color: "red" }}>
-          {alerts.bad}
-        </h1>
-        <h1>Login</h1>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          type="text"
-          name="username"
-          placeholder="username ..."
-        />
-        <div className="clickable">
-          <Link href="/register">
-            <a className="link" style={{ color: "var(--main-blue)" }}>
-              Sign up
-            </a>
-          </Link>
-          <label htmlFor="checkbox">
-            {" "}
-            <input
-              type="checkbox"
-              id="checkbox"
-              onChange={(e) => setChecked(e.target.checked)}
-              style={{ width: "20px", height: "40px" }}
-            />
-            Remember me
-          </label>
-        </div>
-        <button onClick={handleSubmit} type="submit">
-          login
-        </button>
-      </form>
-    </div>
-  );
+  return <LoginForm handleSubmit={handleSubmit} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

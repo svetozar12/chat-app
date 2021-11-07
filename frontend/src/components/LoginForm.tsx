@@ -1,20 +1,27 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Link from "next/dist/client/link";
 
-const alerts = useSelector(
-  (state: { authReducer: { bad: string } }) => state.authReducer,
-);
+function LoginForm({ handleSubmit }: { handleSubmit: any }) {
+  const state = useSelector(
+    (state: { authReducer: { input: string; bad: string } }) =>
+      state.authReducer,
+  );
+  console.log(state);
 
-function LoginForm() {
+  const dispatch = useDispatch();
+
   return (
     <div>
       <form style={{ height: "100vh" }} className="container">
         <h1 className="alert" style={{ color: "red" }}>
-          {alerts.bad}
+          {state.bad}
         </h1>
         <h1>Login</h1>
         <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={state.input} //change this in redux
+          onChange={(e) =>
+            dispatch({ type: "SAVE_INPUT", payload: e.target.value })
+          }
           type="text"
           name="username"
           placeholder="username ..."
@@ -30,7 +37,12 @@ function LoginForm() {
             <input
               type="checkbox"
               id="checkbox"
-              onChange={(e) => setChecked(e.target.checked)}
+              onChange={(e) =>
+                dispatch({
+                  type: "REMEMBER_ME_CHECK",
+                  payload: e.target.checked,
+                })
+              }
               style={{ width: "20px", height: "40px" }}
             />
             Remember me
