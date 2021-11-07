@@ -1,31 +1,25 @@
 import { Dispatch } from "redux";
-import { Action } from "./state";
+import { Action } from "../state";
+import { ActionType } from "../state";
 import axios from "axios";
-
-const loginPostSuccess = (res: string) => {
-  return {
-    type: "LOGIN_POST",
-    payload: res,
-  };
-};
 
 const loginPostError = (res: string) => {
   return {
-    type: "LOGIN_POST_ERROR",
+    type: ActionType.LOGIN_POST_ERROR,
     bad: res,
   };
 };
 
 const RegisterPostSuccess = (res: string) => {
   return {
-    type: "REGISTER_POST",
+    type: ActionType.REGISTER_POST,
     good: res,
   };
 };
 
 const RegisterPostError = (res: string) => {
   return {
-    type: "REGISTER_POST_ERROR",
+    type: ActionType.REGISTER_POST_ERROR,
     bad: res,
   };
 };
@@ -38,11 +32,9 @@ export const loginPost =
   (name: string) => async (dispatch: Dispatch<Action>) => {
     try {
       const res = await axios.get(`http://localhost:4001/users/${name}`);
-      dispatch(loginPostSuccess(""));
       return true;
     } catch (error: any) {
-      const data = error.response.data.message;
-      dispatch(loginPostError(data));
+      dispatch(loginPostError(error.response.data.message));
       setTimeout(() => {
         dispatch(loginPostError(""));
       }, 2000);

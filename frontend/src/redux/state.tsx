@@ -11,3 +11,10 @@ interface errLoginPost {
 }
 
 export type Action = LoginPost | errLoginPost;
+
+export enum ActionType {
+  LOGIN_POST = "LOGIN_POST",
+  LOGIN_POST_ERROR = "LOGIN_POST_ERROR",
+  REGISTER_POST = "REGISTER_POST",
+  REGISTER_POST_ERROR = "REGISTER_POST_ERROR",
+}

@@ -18,12 +18,9 @@ function login(props: AppProps) {
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
   const alerts = useSelector(
-    (state: { userState: string }) => state.userState.payload,
+    (state: { authReducer: { bad: string } }) => state.authReducer,
   );
 
-  React.useEffect(() => {
-    setAlert(alerts);
-  }, [alerts]);
   const RemoveAlert = () => {
     setAlert(alerts);
   };
@@ -42,8 +39,6 @@ function login(props: AppProps) {
           router.push(`/${cookie.get("name")}`);
         });
         setName("");
-      } else {
-        RemoveAlert();
       }
     } else {
       setAlert("No input");
@@ -55,7 +50,7 @@ function login(props: AppProps) {
     <div>
       <form style={{ height: "100vh" }} className="container">
         <h1 className="alert" style={{ color: "red" }}>
-          {alert}
+          {alerts.bad}
         </h1>
         <h1>Login</h1>
         <input

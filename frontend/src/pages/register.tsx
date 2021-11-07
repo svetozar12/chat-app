@@ -14,11 +14,10 @@ function register(props: { cookie: string }) {
   const dispatch = useDispatch();
   const { registerPost } = bindActionCreators(actions, dispatch);
   const alerts = useSelector(
-    (state: { userState: { good?: string; bad?: string; payload?: string } }) =>
-      state.userState,
+    (state: {
+      authReducer: { good?: string; bad?: string; payload?: string };
+    }) => state.authReducer,
   );
-
-  console.log(alerts);
 
   const [name, setName] = React.useState<string>("");
   const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);

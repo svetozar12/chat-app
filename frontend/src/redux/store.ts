@@ -8,4 +8,4 @@ export const store = createStore(
   composeWithDevTools(applyMiddleware(thunk)),
 );
 
-export * as actions from "./actions";
+export * as actions from "./actions/authActions";
