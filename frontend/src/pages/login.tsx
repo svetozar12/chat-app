@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import LoginForm from "../components/LoginForm";
+import { InitialState } from "../redux/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { AppProps } from "next/dist/shared/lib/router/router";
@@ -12,13 +12,10 @@ import { actions } from "../redux/store";
 function login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
   const state = useSelector(
-    (state: {
-      authReducer: { input: string; bad: string; remember_me: boolean };
-    }) => state.authReducer,
+    (state: { authReducer: InitialState }) => state.authReducer,
   );
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,9 +28,7 @@ function login(props: AppProps) {
           sameSite: "strict",
           path: "/",
         });
-        setTimeout(() => {
-          router.push(`/${cookie.get("name")}`);
-        });
+        router.push(`/${cookie.get("name")}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
     }

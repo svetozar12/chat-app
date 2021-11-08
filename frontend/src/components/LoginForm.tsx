@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
+import { InitialState } from "../redux/state";
 
 function LoginForm({ handleSubmit }: { handleSubmit: any }) {
   const state = useSelector(
-    (state: { authReducer: { input: string; bad: string } }) =>
-      state.authReducer,
+    (state: { authReducer: InitialState }) => state.authReducer,
   );
   console.log(state);
 

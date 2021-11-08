@@ -1,5 +1,6 @@
 import React from "react";
-import Link from "next/link";
+import RegisterForm from "../components/RegisterForm";
+import { InitialState } from "../redux/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -10,32 +11,11 @@ import { actions } from "../redux/store";
 function register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-
   const dispatch = useDispatch();
   const { registerPost } = bindActionCreators(actions, dispatch);
-  const alerts = useSelector(
-    (state: {
-      authReducer: { good?: string; bad?: string; payload?: string };
-    }) => state.authReducer,
+  const state = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
   );
-
-  const [name, setName] = React.useState<string>("");
-  const [loginPrompt, setLoginPrompt] = React.useState<Boolean>(false);
-  const [state, setState] = React.useState<{
-    goodAlert?: string;
-    badAlert?: string;
-  }>({
-    goodAlert: alerts.good,
-    badAlert: alerts.bad,
-  });
-
-  React.useEffect(() => {
-    if (alerts.good) {
-      setState({ goodAlert: alerts.good });
-    } else {
-      setState({ badAlert: alerts.bad });
-    }
-  }, [alerts]);
 
   React.useEffect(() => {
     if (cookie.get("name")) {
@@ -44,7 +24,7 @@ function register(props: { cookie: string }) {
   }, []);
 
   const quickLogin = () => {
-    cookie.set("name", name, {
+    cookie.set("name", state.input, {
       maxAge: 7200,
       sameSite: "strict",
       path: "/",
@@ -54,51 +34,15 @@ function register(props: { cookie: string }) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const register = await registerPost(name);
+    const register = await registerPost(state.input);
     if (await register) {
-      setLoginPrompt(true);
+      dispatch({ type: "QUICK_LOGIN", payload: true });
     } else {
-      setName("");
+      dispatch({ type: "SAVE_INPUT", payload: "" });
     }
   };
 
-  return (
-    <>
-      <form style={{ height: "100vh" }} className="container">
-        <h2
-          className="alert"
-          style={state.goodAlert ? { color: "green" } : { color: "red" }}
-        >
-          {state.goodAlert || state.badAlert}
-        </h2>
-        <h1>Register</h1>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          type="text"
-          name="username"
-          placeholder="username ..."
-        />
-        <Link href="/login">
-          <a className="link" style={{ color: "var(--main-blue)" }}>
-            Sign in
-          </a>
-        </Link>
-        <button onClick={handleSubmit} type="submit">
-          register
-        </button>
-        {loginPrompt && (
-          <div
-            onClick={quickLogin}
-            style={{ cursor: "pointer" }}
-            className="container quick_login"
-          >
-            <h2>Click me to Quick login</h2>
-          </div>
-        )}
-      </form>
-    </>
-  );
+  return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
