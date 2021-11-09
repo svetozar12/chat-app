@@ -25,6 +25,8 @@ const reducer = (state: InitialState = initialState, action: Action) => {
       return { ...state, remember_me: action.payload };
     case ActionType.QUICK_LOGIN:
       return { ...state, loginPrompt: action.payload };
+    case ActionType.SIGN_IN:
+      return { ...state, cookie: action.payload };
     default:
       return state;
   }

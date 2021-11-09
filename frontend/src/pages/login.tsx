@@ -22,12 +22,13 @@ function login(props: AppProps) {
     e.preventDefault();
     if (state.input) {
       const login = await loginPost(state.input);
-      if (login) {
+      if (await login) {
         cookie.set("name", state.input, {
           maxAge: state.remember_me ? 94670777 : 3600,
           sameSite: "strict",
           path: "/",
         });
+        dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
         router.push(`/${cookie.get("name")}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }

@@ -3,6 +3,8 @@ import ActiveChats from "../components/ActiveChats";
 import PendingChats from "../components/PendingChats";
 import FindFriends from "../components/FindFriends";
 import axios from "axios";
+import { InitialState } from "../redux/state";
+import { useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -11,10 +13,11 @@ import { io, Socket } from "socket.io-client";
 const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const cookieName = cookie.get("name");
-
+  const state = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
+  const cookieName = state.cookie;
   const [localStatus, setLocalStatus] = useState<string>("");
-  const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<string[]>([]);
   const [chatRooms, setChatRooms] = useState<string[]>([]);
@@ -126,12 +129,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends
-          cookie={cookie}
-          socketRef={socketRef}
-          reciever={reciever}
-          setReciever={setReciever}
-        />
+        <FindFriends cookieName={cookieName} socketRef={socketRef} />
         {chatRooms.map((item, index) => {
           const _id = item._id;
           const [user1, user2] = item.members;
@@ -141,7 +139,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               _id={_id}
               user1={user1}
               user2={user2}
-              cookie={cookie}
+              cookieName={cookieName}
               socketRef={socketRef}
             />
           );

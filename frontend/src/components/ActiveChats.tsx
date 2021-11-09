@@ -1,5 +1,4 @@
 import React from "react";
-import { useCookie } from "next-cookie";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 
@@ -7,7 +6,7 @@ interface IActiveChats {
   _id: string;
   user1: string;
   user2: string;
-  cookie: string;
+  cookieName: string;
   socketRef: Socket;
 }
 
@@ -15,11 +14,10 @@ const ActiveChats = ({
   _id,
   user1,
   user2,
-  cookie,
+  cookieName,
   socketRef,
 }: IActiveChats) => {
   const router = useRouter();
-  const cokie = useCookie(cookie);
 
   const [width, setWidth] = React.useState<number | null>(null);
   React.useEffect(() => {
@@ -34,7 +32,7 @@ const ActiveChats = ({
 
   const joinChat = () => {
     socketRef?.emit("join_chat", {
-      chat_id: cokie.get("name"),
+      chat_id: cookieName,
     });
     router.push(`t/${_id}`);
   };
@@ -45,8 +43,8 @@ const ActiveChats = ({
         <div>LOGO</div>
         <div className="contacts_info">
           <h2>
-            {(width && width >= 432 && user2 === cokie.get("name") && user1) ||
-              (user1 === cokie.get("name") && user2)}
+            {(width && width >= 432 && user2 === cookieName && user1) ||
+              (user1 === cookieName && user2)}
           </h2>
           {width && width >= 432 && <h5>Last message...</h5>}
         </div>

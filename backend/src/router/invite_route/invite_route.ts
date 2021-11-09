@@ -99,7 +99,7 @@ route.put("/invites", async (req: Request, res: Response) => {
   }
 });
 
-route.put("/test", async (req: Request, res: Response) => {
+route.put("/chat-room", async (req: Request, res: Response) => {
   const db = await connectDb();
   const session = await db.startSession();
   await session.withTransaction(async () => {
@@ -123,7 +123,6 @@ route.put("/test", async (req: Request, res: Response) => {
 
       res.status(204).json({ Message: chat });
       await chat.save({ session });
-      throw new Error();
       await session.commitTransaction();
       session.endSession();
       return;

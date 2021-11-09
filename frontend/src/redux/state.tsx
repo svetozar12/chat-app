@@ -6,6 +6,8 @@ export enum ActionType {
   SAVE_INPUT = "SAVE_INPUT",
   REMEMBER_ME_CHECK = "REMEMBER_ME_CHECK",
   QUICK_LOGIN = "QUICK_LOGIN",
+  SIGN_IN = "SIGN_IN",
+  SET_RECIEVER = "SET_RECIEVER",
 }
 
 interface LoginPost {
@@ -26,11 +28,16 @@ interface inputs {
 }
 
 interface signIn {
-  type: ActionType.QUICK_LOGIN;
+  type: ActionType.QUICK_LOGIN | ActionType.SIGN_IN;
   payload: string;
 }
 
-export type Action = LoginPost | errLoginPost | inputs | signIn;
+interface Iset {
+  type: ActionType.SET_RECIEVER;
+  payload: string;
+}
+
+export type Action = LoginPost | errLoginPost | inputs | signIn | Iset;
 
 export interface InitialState {
   remember_me: boolean;
@@ -38,4 +45,9 @@ export interface InitialState {
   loginPrompt: boolean;
   good?: string;
   bad?: string;
+  cookie?: string;
+}
+
+export interface InitialState2 {
+  reciever: string;
 }

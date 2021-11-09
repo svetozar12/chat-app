@@ -29,6 +29,7 @@ function register(props: { cookie: string }) {
       sameSite: "strict",
       path: "/",
     });
+    dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
     router.push(`/${cookie.get("name")}`);
   };
 

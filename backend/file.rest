@@ -33,7 +33,7 @@ GET http://localhost:4001/chat-room?user_name=test1
 ###
 GET http://localhost:4001/chat-room/617b895325dad624f8922b8d?page_size=10&page_number=1
 ###
-PUT http://localhost:4001/test
+PUT http://localhost:4001/chat-room
 Content-Type: application/json
 
 {

@@ -40,8 +40,6 @@ const Home: NextPage<IHome> = (props) => {
         `http://localhost:4001/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
-      console.log("DB", data);
-
       updateChat(data);
       return true;
     } catch (error) {
@@ -53,7 +51,6 @@ const Home: NextPage<IHome> = (props) => {
     getRecentMessages();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }: any) => {
-      console.log("WS", messages);
       updateChat(messages);
     });
     socketConnect.emit("joined_chat_room", { user: cookieName });
@@ -87,8 +84,6 @@ const Home: NextPage<IHome> = (props) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         setPageNumber(pageNumber + 1);
-        console.log(pageNumber);
-
         const res = await axios.get(
           `http://localhost:4001/messages/${chatRoom[1]}?page_number=${pageNumber}&page_size=10`,
         );

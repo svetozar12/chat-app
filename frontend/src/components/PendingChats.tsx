@@ -42,7 +42,7 @@ function PendingChats({
   const createChatRoom = async () => {
     try {
       setLocalStatus("accepted");
-      const res = await axios.put(`http://localhost:4001/test`, {
+      const res = await axios.put(`http://localhost:4001/chat-room`, {
         id: _id,
         user1: inviter,
         user2: reciever,

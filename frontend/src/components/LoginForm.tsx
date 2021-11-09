@@ -6,8 +6,6 @@ function LoginForm({ handleSubmit }: { handleSubmit: any }) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
-  console.log(state);
-
   const dispatch = useDispatch();
 
   return (
@@ -18,7 +16,7 @@ function LoginForm({ handleSubmit }: { handleSubmit: any }) {
         </h1>
         <h1>Login</h1>
         <input
-          value={state.input} //change this in redux
+          value={state.input}
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT", payload: e.target.value })
           }
