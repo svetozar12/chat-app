@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
-
 interface IActiveChats {
   _id: string;
   user1: string;
@@ -18,7 +17,6 @@ const ActiveChats = ({
   socketRef,
 }: IActiveChats) => {
   const router = useRouter();
-
   const [width, setWidth] = React.useState<number | null>(null);
   React.useEffect(() => {
     setWidth(window.innerWidth);

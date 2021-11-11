@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc --build",
     "watch": "tsc --watch",
-    "dev": "nodemon dist/server.js"
+    "dev": "nodemon dist/server.js",
+    "mongo-client": " run-rs --keep --portStart 27000"
   },
   "keywords": [],
   "author": "",

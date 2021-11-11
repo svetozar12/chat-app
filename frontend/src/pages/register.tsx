@@ -25,9 +25,7 @@ function register(props: { cookie: string }) {
 
   const quickLogin = () => {
     cookie.set("name", state.input, {
-      maxAge: 7200,
-      sameSite: "strict",
-      path: "/",
+      maxAge: 1000000,
     });
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
     router.push(`/${cookie.get("name")}`);

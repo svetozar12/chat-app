@@ -2,6 +2,10 @@ import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
+import { InitialState } from "../redux/state";
+import { InitialState2 } from "../redux/state";
+
 import axios from "axios";
 import Link from "next/dist/client/link";
 import RenderChat from "../components/RenderChat";
@@ -18,14 +22,22 @@ interface IPropsState {
 }
 
 const Home: NextPage<IHome> = (props) => {
+  const states = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const states2 = useSelector(
+    (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
+  );
+
   const chatRoom = props.chatRoom.chatRoom;
-  const cookie = useCookie(props.cookie);
-  const cookieName = cookie.get("name");
+  const cookieName = states.cookie;
+  const dispatch = useDispatch();
   const [pageNumber, setPageNumber] = useState<number>(2);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
-    name: cookie.get("name"),
+    name: cookieName,
     message: "",
     time: "",
   });
@@ -83,9 +95,12 @@ const Home: NextPage<IHome> = (props) => {
   const scrollHandler = async (e: any) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
-        setPageNumber(pageNumber + 1);
+        dispatch({
+          type: "INCREMENT_PAGE_NUMBER",
+          payload: states2.pageNumber,
+        });
         const res = await axios.get(
-          `http://localhost:4001/messages/${chatRoom[1]}?page_number=${pageNumber}&page_size=10`,
+          `http://localhost:4001/messages/${chatRoom[1]}?page_number=${states2.pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
         setChat((prev) => [...data, ...prev]);
@@ -125,7 +140,6 @@ const Home: NextPage<IHome> = (props) => {
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
-          console.log(item);
           const { sender, message, createdAt } = item;
           let date = new Date(createdAt);
           let currentHours: string | number = date.getHours().toString();

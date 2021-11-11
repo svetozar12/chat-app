@@ -16,6 +16,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
+
   const cookieName = state.cookie;
   const [localStatus, setLocalStatus] = useState<string>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);

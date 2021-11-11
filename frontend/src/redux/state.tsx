@@ -8,6 +8,7 @@ export enum ActionType {
   QUICK_LOGIN = "QUICK_LOGIN",
   SIGN_IN = "SIGN_IN",
   SET_RECIEVER = "SET_RECIEVER",
+  INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
 }
 
 interface LoginPost {
@@ -33,8 +34,8 @@ interface signIn {
 }
 
 interface Iset {
-  type: ActionType.SET_RECIEVER;
-  payload: string;
+  type: ActionType.SET_RECIEVER | ActionType.INCREMENT_PAGE_NUMBER;
+  payload: number;
 }
 
 export type Action = LoginPost | errLoginPost | inputs | signIn | Iset;
@@ -50,4 +51,5 @@ export interface InitialState {
 
 export interface InitialState2 {
   reciever: string;
+  pageNumber?: number;
 }

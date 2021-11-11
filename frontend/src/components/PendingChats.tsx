@@ -33,6 +33,7 @@ function PendingChats({
       });
       emitFriendRequest();
       setLocalStatus("");
+
       return true;
     } catch (error) {
       return false;
@@ -47,6 +48,7 @@ function PendingChats({
         user1: inviter,
         user2: reciever,
       });
+      const id = res.data.Message._id;
       emitFriendRequest();
       setLocalStatus("");
     } catch (error) {
