@@ -1,6 +1,7 @@
 import { Action } from "../state";
 import { ActionType } from "../state";
 import { InitialState } from "../state";
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
   remember_me: false,
@@ -27,8 +28,10 @@ const reducer = (state: InitialState = initialState, action: Action) => {
     case ActionType.QUICK_LOGIN:
       return { ...state, loginPrompt: action.payload };
     case ActionType.SIGN_IN:
-      console.log(action.payload);
       return { ...state, cookie: action.payload };
+    case ActionType.SIGN_OUT:
+      storage.removeItem("persist:root");
+      return { state: undefined };
     default:
       return state;
   }

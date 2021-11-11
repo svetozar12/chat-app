@@ -10,6 +10,7 @@ export enum ActionType {
   SET_RECIEVER = "SET_RECIEVER",
   INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
   MESSAGE_SEND = "MESSAGE_SEND",
+  SIGN_OUT = "SIGN_OUT",
 }
 
 interface LoginPost {
@@ -34,6 +35,10 @@ interface signIn {
   payload: string;
 }
 
+interface signOut {
+  type: ActionType.SIGN_OUT;
+}
+
 interface Iset {
   type: ActionType.SET_RECIEVER | ActionType.INCREMENT_PAGE_NUMBER;
   payload: number;
@@ -49,6 +54,7 @@ export type Action =
   | errLoginPost
   | inputs
   | signIn
+  | signOut
   | Iset
   | IMessages;
 

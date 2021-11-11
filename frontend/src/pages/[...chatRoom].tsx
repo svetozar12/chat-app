@@ -31,12 +31,6 @@ const Home: NextPage<IHome> = (props) => {
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
 
-  const statesMessages = useSelector(
-    (state: { messageReducer: InitialStateMessage }) => state.messageReducer,
-  );
-
-  console.log(states);
-
   const chatRoom = props.chatRoom.chatRoom;
   const cookieName = states.cookie;
   const dispatch = useDispatch();
@@ -67,6 +61,7 @@ const Home: NextPage<IHome> = (props) => {
 
   useEffect(() => {
     getRecentMessages();
+    if (!states.cookie) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }: any) => {
       dispatch({

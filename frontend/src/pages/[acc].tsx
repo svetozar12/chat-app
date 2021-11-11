@@ -9,8 +9,10 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
+import { useDispatch } from "react-redux";
 
 const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const state = useSelector(
@@ -66,6 +68,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   };
 
   const deleteCookies = () => {
+    dispatch({ type: "SIGN_OUT" });
     cookie.remove("name");
     router.push("/");
   };
