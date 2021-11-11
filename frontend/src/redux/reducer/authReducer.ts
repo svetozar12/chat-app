@@ -8,6 +8,7 @@ const initialState = {
   good: "", //good and bad stand for good alert and bad alert
   bad: "",
   loginPrompt: false,
+  cookie: "",
 };
 const reducer = (state: InitialState = initialState, action: Action) => {
   switch (action.type) {
@@ -26,6 +27,7 @@ const reducer = (state: InitialState = initialState, action: Action) => {
     case ActionType.QUICK_LOGIN:
       return { ...state, loginPrompt: action.payload };
     case ActionType.SIGN_IN:
+      console.log(action.payload);
       return { ...state, cookie: action.payload };
     default:
       return state;

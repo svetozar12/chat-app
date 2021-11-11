@@ -9,6 +9,7 @@ export enum ActionType {
   SIGN_IN = "SIGN_IN",
   SET_RECIEVER = "SET_RECIEVER",
   INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
+  MESSAGE_SEND = "MESSAGE_SEND",
 }
 
 interface LoginPost {
@@ -38,7 +39,18 @@ interface Iset {
   payload: number;
 }
 
-export type Action = LoginPost | errLoginPost | inputs | signIn | Iset;
+interface IMessages {
+  type: ActionType.MESSAGE_SEND;
+  payload: { sender: string; message: string };
+}
+
+export type Action =
+  | LoginPost
+  | errLoginPost
+  | inputs
+  | signIn
+  | Iset
+  | IMessages;
 
 export interface InitialState {
   remember_me: boolean;
@@ -52,4 +64,8 @@ export interface InitialState {
 export interface InitialState2 {
   reciever: string;
   pageNumber?: number;
+}
+
+export interface InitialStateMessage {
+  payload: { sender: string; message: string };
 }

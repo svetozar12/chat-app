@@ -5,6 +5,7 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState } from "../redux/state";
 import { InitialState2 } from "../redux/state";
+import { InitialStateMessage } from "../redux/state";
 
 import axios from "axios";
 import Link from "next/dist/client/link";
@@ -16,7 +17,7 @@ interface IHome {
 }
 
 interface IPropsState {
-  name: string;
+  name?: string;
   message?: string;
   time?: string | number;
 }
@@ -30,10 +31,15 @@ const Home: NextPage<IHome> = (props) => {
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
 
+  const statesMessages = useSelector(
+    (state: { messageReducer: InitialStateMessage }) => state.messageReducer,
+  );
+
+  console.log(states);
+
   const chatRoom = props.chatRoom.chatRoom;
   const cookieName = states.cookie;
   const dispatch = useDispatch();
-  const [pageNumber, setPageNumber] = useState<number>(2);
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
@@ -63,6 +69,10 @@ const Home: NextPage<IHome> = (props) => {
     getRecentMessages();
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }: any) => {
+      dispatch({
+        type: "MESSAGE_SEND",
+        payload: { sender: cookieName, message: state.message },
+      });
       updateChat(messages);
     });
     socketConnect.emit("joined_chat_room", { user: cookieName });
@@ -85,6 +95,11 @@ const Home: NextPage<IHome> = (props) => {
           message: state.message,
         },
       );
+
+      dispatch({
+        type: "MESSAGE_SEND",
+        payload: { sender: cookieName, message: state.message },
+      });
 
       return true;
     } catch (error) {
