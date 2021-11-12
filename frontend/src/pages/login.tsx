@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
+import { wrapper } from "../redux/store";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -38,23 +39,24 @@ function login(props: AppProps) {
   return <LoginForm handleSubmit={handleSubmit} />;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-
-  if (cookieName) {
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps((store) => async (context) => {
+    const cookie = useCookie(context);
+    const cookieName = cookie.get("name");
+    store.dispatch({ type: "SIGN_IN", payload: "ivan" });
+    if (cookieName) {
+      return {
+        redirect: {
+          destination: `/${cookieName}`,
+          permanent: false,
+        },
+      };
+    }
     return {
-      redirect: {
-        destination: `/${cookieName}`,
-        permanent: false,
+      props: {
+        cookie: context.req.headers.cookie || "",
       },
     };
-  }
-  return {
-    props: {
-      cookie: context.req.headers.cookie || "",
-    },
-  };
-};
+  });
 
 export default login;

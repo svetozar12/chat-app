@@ -68,9 +68,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   };
 
   const deleteCookies = () => {
-    dispatch({ type: "SIGN_OUT" });
     cookie.remove("name");
     router.push("/");
+    dispatch({ type: "SIGN_OUT" });
   };
 
   const deleteUser = async () => {

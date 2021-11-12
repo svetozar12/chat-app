@@ -1,23 +1,11 @@
-import { createStore, applyMiddleware } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
+import { createStore, applyMiddleware, Store } from "redux";
+import { createWrapper, Context } from "next-redux-wrapper";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import reducers from "./reducer";
-import storage from "redux-persist/lib/storage";
 
-const persistConfig = {
-  key: "root",
-  storage,
-};
+const makeStore = (context: Context) =>
+  createStore(reducers, {}, composeWithDevTools(applyMiddleware(thunk)));
 
-const persistedReducer = persistReducer(persistConfig, reducers);
-
-const store = createStore(
-  persistedReducer,
-  {},
-  composeWithDevTools(applyMiddleware(thunk)),
-);
-const persistor = persistStore(store);
-
+export const wrapper = createWrapper(makeStore, { debug: true });
 export * as actions from "./actions/authActions";
-export { persistor, store };

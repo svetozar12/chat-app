@@ -1,3 +1,5 @@
+import { HYDRATE } from "next-redux-wrapper";
+
 export enum ActionType {
   LOGIN_POST = "LOGIN_POST",
   LOGIN_POST_ERROR = "LOGIN_POST_ERROR",
@@ -49,6 +51,11 @@ interface IMessages {
   payload: { sender: string; message: string };
 }
 
+interface Hydrate {
+  type: typeof HYDRATE;
+  payload: any;
+}
+
 export type Action =
   | LoginPost
   | errLoginPost
@@ -56,7 +63,8 @@ export type Action =
   | signIn
   | signOut
   | Iset
-  | IMessages;
+  | IMessages
+  | Hydrate;
 
 export interface InitialState {
   remember_me: boolean;

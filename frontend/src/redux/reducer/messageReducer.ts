@@ -1,6 +1,6 @@
 import { Action, ActionType } from "../state";
 const initialState = {
-  reciever: "",
+  sender: "",
   message: "",
 };
 const messageReducer = (state = initialState, action: Action) => {

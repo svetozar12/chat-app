@@ -1,7 +1,7 @@
 import { Action } from "../state";
 import { ActionType } from "../state";
 import { InitialState } from "../state";
-import storage from "redux-persist/lib/storage";
+import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   remember_me: false,
@@ -13,6 +13,12 @@ const initialState = {
 };
 const reducer = (state: InitialState = initialState, action: Action) => {
   switch (action.type) {
+    case HYDRATE:
+      console.log("HYDRATE", state);
+      return {
+        ...state,
+        ...action.payload,
+      };
     case ActionType.LOGIN_POST:
       return { ...state, state };
     case ActionType.LOGIN_POST_ERROR:
@@ -30,7 +36,6 @@ const reducer = (state: InitialState = initialState, action: Action) => {
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
     case ActionType.SIGN_OUT:
-      storage.removeItem("persist:root");
       return { state: undefined };
     default:
       return state;
