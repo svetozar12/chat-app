@@ -5,7 +5,6 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState } from "../redux/state";
 import { InitialState2 } from "../redux/state";
-import { InitialStateMessage } from "../redux/state";
 
 import axios from "axios";
 import Link from "next/dist/client/link";
@@ -32,7 +31,8 @@ const Home: NextPage<IHome> = (props) => {
   );
 
   const chatRoom = props.chatRoom.chatRoom;
-  const cookieName = states.cookie;
+  const cookie = useCookie(props.cookie);
+  const cookieName = cookie.get("name");
   const dispatch = useDispatch();
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);

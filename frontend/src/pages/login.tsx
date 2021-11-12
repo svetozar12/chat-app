@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     const cookie = useCookie(context);
     const cookieName = cookie.get("name");
-    store.dispatch({ type: "SIGN_IN", payload: "ivan" });
+    // store.dispatch({ type: "SIGN_IN", payload: "ivan" });
     if (cookieName) {
       return {
         redirect: {
