@@ -33,6 +33,7 @@ function PendingChats({
       });
       emitFriendRequest();
       setLocalStatus("");
+
       return true;
     } catch (error) {
       return false;
@@ -41,12 +42,15 @@ function PendingChats({
 
   const createChatRoom = async () => {
     try {
-      const res = await axios.post("http://localhost:4001/chat-room", {
+      setLocalStatus("accepted");
+      const res = await axios.put(`http://localhost:4001/chat-room`, {
+        id: _id,
         user1: inviter,
         user2: reciever,
-        sender: inviter,
-        message: "",
       });
+      const id = res.data.Message._id;
+      emitFriendRequest();
+      setLocalStatus("");
     } catch (error) {
       return false;
     }
@@ -61,7 +65,6 @@ function PendingChats({
             <button
               onClick={() => {
                 createChatRoom();
-                updateInviteStatus("accepted");
               }}
               className="accept"
             >

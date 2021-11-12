@@ -26,18 +26,10 @@ io.on("connection", (socket: Socket): void => {
         .select("members")
         .exec();
       const date = new Date();
-      let currentHours: string | number = date.getHours().toString();
-      let currentMinutes: string | number = date.getMinutes().toString();
-      const time_stamp = `${currentHours.padStart(
-        2,
-        "0",
-      )}:${currentMinutes.padStart(2, "0")}`;
-      const members: string[] = [];
+      const messages = [{ sender, message, createdAt: date }];
       findChat[0].members.forEach((element) => {
-        members.push(element);
         io.to(element).emit("message", {
-          members,
-          messages: [{ sender, time_stamp, message }],
+          messages,
         });
       });
     },

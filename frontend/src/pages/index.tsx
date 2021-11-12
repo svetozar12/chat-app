@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (cookieName) {
     return {
       redirect: {
-        destination: `messages/${cookieName}`,
+        destination: `/${cookieName}`,
         permanent: false,
       },
     };

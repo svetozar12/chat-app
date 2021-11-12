@@ -1,7 +1,9 @@
+import connectDb from "../../connection/dbConnection";
 import * as express from "express";
 import { Request, Response } from "express";
 import Invites from "../../models/Invites.model";
 import Users from "../../models/User.model";
+import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 
 route.get("/invites/:id/", async (req: Request, res: Response) => {
@@ -29,6 +31,7 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
     return res.status(200).json({ invites });
   } catch (error) {
     return res.status(501).json({
+      ErrorMsg: error.message,
       Error: "Internal server error",
       Message: "Something went wrong with your invite",
     });
@@ -59,6 +62,7 @@ route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
     return res.status(200).json({ invites });
   } catch (error) {
     return res.status(501).json({
+      ErrorMsg: error.message,
       Error: "Internal server error",
       Message: "Something went wrong with your invite request",
     });
@@ -69,7 +73,6 @@ route.put("/invites", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;
     const status = req.body.status;
-
     const inviteInstance = await Invites.findOne({
       id,
     }).exec();
@@ -89,10 +92,49 @@ route.put("/invites", async (req: Request, res: Response) => {
     return res.json({ message: updateStatus });
   } catch (error) {
     res.status(501).json({
+      ErrorMsg: error.message,
       Error: "Internal server error",
       Message: "Something went wrong with the invites",
     });
   }
+});
+
+route.put("/chat-room", async (req: Request, res: Response) => {
+  // const db = await connectDb();
+  // const session = await db.startSession();
+  // await session.withTransaction(async () => {
+  try {
+    const id = req.body.id;
+    const user1 = req.body.user1;
+    const user2 = req.body.user2;
+    const findInvite = await Invites.findByIdAndUpdate(
+      id,
+      { status: "accepted" },
+      { new: true },
+    );
+
+    if (!findInvite) {
+      return res.status(404).json({ Message: "Invite not found" });
+    }
+
+    const chat = await new Chats({
+      members: [user1, user2],
+    });
+
+    await chat.save();
+    return res.status(201).json({ Message: chat });
+    // await session.commitTransaction();
+    // session.endSession();
+  } catch (error) {
+    // await session.abortTransaction();
+    // session.endSession();
+    return res.status(501).json({
+      ErrorMsg: error.message,
+      Error: "Internal server error",
+      Message: "Something went wrong while sending invite",
+    });
+  }
+  // });
 });
 
 route.post("/invites", async (req: Request, res: Response) => {
@@ -110,7 +152,7 @@ route.post("/invites", async (req: Request, res: Response) => {
       reciever: req.body.reciever,
       inviter: req.body.inviter,
       $or: [{ status: "recieved" }, { status: "accepted" }],
-    }).exec();
+    });
 
     if (checkInviteInstance)
       return res.status(409).json({ ERROR: "Already sent" });
@@ -123,10 +165,14 @@ route.post("/invites", async (req: Request, res: Response) => {
       inviter: req.body.inviter,
       status: req.body.status,
     });
+
     await invites.save();
+    // throw new Error();
+
     return res.status(201).json({ message: invites });
   } catch (error) {
     res.status(501).json({
+      ErrorMsg: error.message,
       Error: "Internal server error",
       Message: "Something went wrong while sending invite",
     });

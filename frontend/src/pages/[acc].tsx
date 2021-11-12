@@ -1,29 +1,33 @@
 import React, { useState, useEffect } from "react";
-import ActiveChats from "../../components/ActiveChats";
-import PendingChats from "../../components/PendingChats";
-import FindFriends from "../../components/FindFriends";
+import ActiveChats from "../components/ActiveChats";
+import PendingChats from "../components/PendingChats";
+import FindFriends from "../components/FindFriends";
 import axios from "axios";
+import { InitialState } from "../redux/state";
+import { useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
+import { useDispatch } from "react-redux";
 
 const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
+  const state = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
   const cookieName = cookie.get("name");
-
   const [localStatus, setLocalStatus] = useState<string>("");
-  const [reciever, setReciever] = useState<string | null>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<string[]>([]);
   const [chatRooms, setChatRooms] = useState<string[]>([]);
-  const [error, setError] = useState<string>("");
 
   const getChatRoom = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/list/${cookie.get("name")}`,
+        `http://localhost:4001/chat-room/?user_name=${cookie.get("name")}`,
       );
       const data = res.data.contacts;
       setChatRooms(data);
@@ -42,9 +46,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       setContacts(data);
       return true;
     } catch (error: any) {
-      const data = error.response.data.error;
-      setError(data);
-
       return false;
     }
   };
@@ -52,7 +53,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviteStatus = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/invites/inviter/${cookieName}?status=accepted`,
+        `http://localhost:4001/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
       setContacts(data);
@@ -66,6 +67,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const deleteCookies = () => {
     cookie.remove("name");
     router.push("/");
+    dispatch({ type: "SIGN_OUT" });
   };
 
   const deleteUser = async () => {
@@ -130,12 +132,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends
-          cookie={cookie}
-          socketRef={socketRef}
-          reciever={reciever}
-          setReciever={setReciever}
-        />
+        <FindFriends cookieName={cookieName} socketRef={socketRef} />
         {chatRooms.map((item, index) => {
           const _id = item._id;
           const [user1, user2] = item.members;
@@ -145,7 +142,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               _id={_id}
               user1={user1}
               user2={user2}
-              cookie={cookie}
+              cookieName={cookieName}
               socketRef={socketRef}
             />
           );

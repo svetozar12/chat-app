@@ -43,8 +43,9 @@ route.post("/users/register", async (req: Request, res: Response) => {
     return res
       .status(201)
       .send({ message: `User ${req.body.username} created` });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(501).json({
+      ErrorMsg: error.message,
       Error: "Internal server error",
       Message: "Something went wrong while registering",
     });
