@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc --build",
     "watch": "tsc --watch",
-    "dev": "nodemon dist/server.js \"npm run watch\""
+    "dev": "nodemon dist/server.js \"npm run watch\"",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -19,13 +20,25 @@
     "express-session": "^1.17.2",
     "http": "^0.0.1-security",
     "joi": "^17.4.2",
-    "mongoose": "^6.0.5",
-    "nodemon": "^2.0.12",
-    "socket.io": "^4.2.0"
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.3.2"
   },
   "devDependencies": {
-    "@types/node": "^16.7.12",
-    "concurrently": "^6.2.1",
-    "typescript": "^4.4.3"
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "@types/supertest": "^2.0.11",
+    "babel-jest": "^27.3.1",
+    "concurrently": "^6.3.0",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   }
 }

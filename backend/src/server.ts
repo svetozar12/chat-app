@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as cors from "cors";
-const app = express();
+export const app = express();
 const socketIo = require("./connection/wsConnection");
 import connectDb from "./connection/dbConnection";
 import data from "./router/router";
