@@ -1,9 +1,9 @@
 import * as express from "express";
 import * as cors from "cors";
-export const app = express();
-const socketIo = require("./connection/wsConnection");
 import connectDb from "./connection/dbConnection";
 import data from "./router/router";
+const app = express();
+const socketIo = require("./connection/wsConnection");
 
 app.use(cors());
 app.use(express.json());
@@ -16,3 +16,5 @@ const port: number = 4001;
 app.listen(port, function (): void {
   console.log(`listening on port ${port}`);
 });
+
+export { app };
