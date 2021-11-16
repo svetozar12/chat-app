@@ -1,11 +1,18 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
-import dumy from "../src/components/dumy";
+import { render } from "@testing-library/react";
+import RenderChat from "../src/components/RenderChat";
 
-describe("Index page", () => {
+describe("<RenderChat/>", () => {
   it("should render", () => {
-    render(<dumy />);
-    const main = screen.getByRole("div");
-    expect(main).toBeInTheDocument();
+    const container = render(
+      <RenderChat
+        sender="test1"
+        time_stamp="1111"
+        message="hello"
+        cookie="test2"
+      />,
+    );
+    const test = container.getByTestId("test");
+    expect(test.className).toBe("you");
   });
 });
