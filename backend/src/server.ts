@@ -3,7 +3,6 @@ import * as cors from "cors";
 import connectDb from "./connection/dbConnection";
 import data from "./router/router";
 const app = express();
-const socketIo = require("./connection/wsConnection");
 
 app.use(cors());
 app.use(express.json());
@@ -13,8 +12,11 @@ connectDb();
 app.use("/", data);
 
 const port: number = 4001;
-app.listen(port, function (): void {
-  console.log(`listening on port ${port}`);
-});
+
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, (): void => {
+    console.log(`listening on port ${port}`);
+  });
+}
 
 export { app };

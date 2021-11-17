@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "watch": "tsc --watch",
     "dev": "nodemon dist/server.js \"npm run watch\"",
-    "test": "jest"
+    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
   },
   "keywords": [],
   "author": "",
