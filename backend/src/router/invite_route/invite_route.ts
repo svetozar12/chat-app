@@ -22,7 +22,7 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
 
     if (!invites || invites.length <= 0) {
       return res.status(404).json({
-        error: "You dont have invites .",
+        error: "You dont have invites.",
       });
     }
 

@@ -10,7 +10,6 @@ import Chats from "../../models/chatRoom.model";
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
-    console.log(req.params);
     const params = req.params;
 
     const users = await User.findOne({
