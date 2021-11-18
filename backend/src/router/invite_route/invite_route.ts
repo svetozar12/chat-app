@@ -9,7 +9,7 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
     let status = req.query.status;
-
+    // check if users exist
     const invites =
       status !== undefined
         ? await Invites.find({

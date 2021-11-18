@@ -1,27 +1,76 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
+import User from "../../src/models/User.model";
+import Invites from "../../src/models/Invites.model";
+import { ObjectId } from "mongoose";
 
-describe("Finding invites by username", () => {
-  it("should return 200 OK", async () => {
-    const res = await request(app).get("/invites/test1");
-    expect(res.status).toBe(200);
-    expect(res.body.invites[0].reciever).toBe("test1");
-  });
+const tests = [
+  {
+    describe: "Finding invites by username",
+    request: "/invites/testingUser1",
+  },
+  {
+    describe: "Finding invites by username with status accepted",
+    request: "/invites/testingUser1?status=accepted",
+  },
+  {
+    describe: "Finding invites by username with status declined",
+    request: "/invites/testingUser1?status=declined",
+  },
+];
+
+const invitesDumyData = [
+  { reciever: "testingUser1", inviter: "testingUser2", status: "accepted" },
+  { reciever: "testingUser1", inviter: "testingUser2", status: "declined" },
+  { reciever: "testingUser1", inviter: "testingUser2", status: "recieved" },
+];
+
+interface IElement {
+  reciever: string;
+  inviter: string;
+  status: string;
+  _id?: ObjectId;
+}
+const invitesArr: IElement[] = [];
+
+beforeAll(async () => {
+  try {
+    invitesDumyData.forEach((element) => {
+      const invites = new Invites(element);
+      invitesArr.push(invites);
+    });
+
+    invitesArr.forEach((element: any) => {
+      console.log(element);
+      element.save();
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
 });
 
-describe("Finding invites by username with status accepted", () => {
-  it("should return 200 OK", async () => {
-    const res = await request(app).get("/invites/test1?status=accepted");
-    expect(res.status).toBe(200);
-    expect(res.body.invites[0].reciever).toBe("test1");
-  });
+afterAll(async () => {
+  try {
+    await Invites.deleteOne({
+      reciever: "testingUser1",
+      inviter: "testingUser2",
+      status: "accepted",
+    });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 });
 
-describe("Finding invites by username with status declined", () => {
-  it("should return 200 OK", async () => {
-    const res = await request(app).get("/invites/test1?status=declined");
-    expect(res.status).toBe(200);
-    expect(res.body.invites[0].reciever).toBe("test1");
+tests.forEach((element) => {
+  describe(element.describe, () => {
+    it("should return 200 OK", async () => {
+      const res = await request(app).get(element.request);
+      expect(res.status).toBe(200);
+      expect(res.body.invites[0].reciever).toBe("testingUser1");
+    });
   });
 });
 
