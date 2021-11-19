@@ -6,8 +6,10 @@ route.get("/chat-room", async (req: Request, res: Response) => {
   try {
     const user_name = req.query?.user_name;
     const contacts = await Chats.find({ members: user_name }).exec();
+    if (!contacts)
+      return res.status(400).json({ Message: "the chat room wasn't created" });
     return res.status(201).json({ contacts });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",
@@ -24,7 +26,7 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
     if (!users_rooms || users_rooms.length <= 0)
       return res.status(404).json({ Message: "User room not found !" });
     return res.status(200).json({ Message: users_rooms });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",

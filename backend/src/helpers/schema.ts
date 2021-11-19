@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 
-const registerValidation = (data: string) => {
+const registerValidation = (data: any) => {
   const schema = Joi.object({
     username: Joi.string().min(2).max(20).required().label("Invalid input"),
   });
@@ -8,4 +8,3 @@ const registerValidation = (data: string) => {
 };
 
 export default registerValidation;
-// module.exports.registerValidation = registerValidation;
