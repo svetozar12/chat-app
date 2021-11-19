@@ -1,8 +1,7 @@
-import connectDb from "../../connection/dbConnection";
 import * as express from "express";
 import { Request, Response } from "express";
 import Invites from "../../models/Invites.model";
-import Users from "../../models/User.model";
+import User from "../../models/User.model";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 
@@ -10,12 +9,10 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
     let status = req.query.status;
-
     const invites =
       status !== undefined
         ? await Invites.find({
             reciever: name,
-
             status,
           })
         : await Invites.find({
@@ -24,12 +21,12 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
 
     if (!invites || invites.length <= 0) {
       return res.status(404).json({
-        error: "You dont have invites .",
+        error: "You dont have invites.",
       });
     }
 
     return res.status(200).json({ invites });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",
@@ -60,7 +57,7 @@ route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ invites });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",
@@ -90,7 +87,7 @@ route.put("/invites", async (req: Request, res: Response) => {
     ).exec();
 
     return res.json({ message: updateStatus });
-  } catch (error) {
+  } catch (error: any) {
     res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",
@@ -100,9 +97,6 @@ route.put("/invites", async (req: Request, res: Response) => {
 });
 
 route.put("/chat-room", async (req: Request, res: Response) => {
-  // const db = await connectDb();
-  // const session = await db.startSession();
-  // await session.withTransaction(async () => {
   try {
     const id = req.body.id;
     const user1 = req.body.user1;
@@ -112,6 +106,11 @@ route.put("/chat-room", async (req: Request, res: Response) => {
       { status: "accepted" },
       { new: true },
     );
+
+    const testingUser1 = User.findOne({ username: user1 });
+    const testingUser2 = User.findOne({ username: user2 });
+    if (!testingUser1 || !testingUser2)
+      return res.status(404).json({ error: "User doesn't exist !" });
 
     if (!findInvite) {
       return res.status(404).json({ Message: "Invite not found" });
@@ -123,23 +122,18 @@ route.put("/chat-room", async (req: Request, res: Response) => {
 
     await chat.save();
     return res.status(201).json({ Message: chat });
-    // await session.commitTransaction();
-    // session.endSession();
-  } catch (error) {
-    // await session.abortTransaction();
-    // session.endSession();
+  } catch (error: any) {
     return res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",
       Message: "Something went wrong while sending invite",
     });
   }
-  // });
 });
 
 route.post("/invites", async (req: Request, res: Response) => {
   try {
-    const user = await Users.findOne({
+    const user = await User.findOne({
       username: req.body.reciever,
     }).exec();
 
@@ -165,12 +159,10 @@ route.post("/invites", async (req: Request, res: Response) => {
       inviter: req.body.inviter,
       status: req.body.status,
     });
-
     await invites.save();
-    // throw new Error();
 
     return res.status(201).json({ message: invites });
-  } catch (error) {
+  } catch (error: any) {
     res.status(501).json({
       ErrorMsg: error.message,
       Error: "Internal server error",

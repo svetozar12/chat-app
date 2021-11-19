@@ -9,14 +9,24 @@ import Chats from "../../models/chatRoom.model";
 
 route.get("/users/:username", async (req: Request, res: Response) => {
   try {
+    const username = req.params.username;
+    const params = req.params;
+
     const users = await User.findOne({
-      username: req.params.username,
+      username,
     }).exec();
+    const { error } = registerValidation(params);
+
+    if (error) {
+      return res.status(409).json({ message: error.message });
+    }
+
     if (!users || undefined)
       return res.status(404).json({
-        ERROR: "Invalid input",
+        ERROR: "Not found",
         message: `User ${req.params.username} doesn't exist`,
       });
+
     return res.status(200).json({ message: users });
   } catch (error: any) {
     return res.status(501).json({

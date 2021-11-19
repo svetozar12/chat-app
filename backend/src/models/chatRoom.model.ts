@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 
 interface ChatRoom {
-  members: string[];
+  members: any | [];
 }
 
 const chatRoomSchema = new mongoose.Schema<ChatRoom>({
