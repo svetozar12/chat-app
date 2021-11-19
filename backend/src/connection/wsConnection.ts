@@ -1,10 +1,6 @@
 import { Socket } from "socket.io";
 import Chats from "../models/chatRoom.model";
-let port: any = 4000;
-if (process.env.NODE_ENV !== "test") {
-  port = process.env.PORT;
-}
-const io = require("socket.io")(port, {
+const io = require("socket.io")(4000, {
   cors: {
     origin: "*",
   },

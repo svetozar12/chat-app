@@ -1,7 +1,7 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import Invites from "../../models/Invites.model";
-import Users from "../../models/User.model";
+import User from "../../models/User.model";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 
@@ -9,7 +9,6 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
     let status = req.query.status;
-    // check if users exist
     const invites =
       status !== undefined
         ? await Invites.find({
@@ -108,6 +107,11 @@ route.put("/chat-room", async (req: Request, res: Response) => {
       { new: true },
     );
 
+    const testingUser1 = User.findOne({ username: user1 });
+    const testingUser2 = User.findOne({ username: user2 });
+    if (!testingUser1 || !testingUser2)
+      return res.status(404).json({ error: "User doesn't exist !" });
+
     if (!findInvite) {
       return res.status(404).json({ Message: "Invite not found" });
     }
@@ -129,7 +133,7 @@ route.put("/chat-room", async (req: Request, res: Response) => {
 
 route.post("/invites", async (req: Request, res: Response) => {
   try {
-    const user = await Users.findOne({
+    const user = await User.findOne({
       username: req.body.reciever,
     }).exec();
 
