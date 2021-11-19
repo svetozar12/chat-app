@@ -9,6 +9,7 @@ import { InitialState2 } from "../redux/state";
 import axios from "axios";
 import Link from "next/dist/client/link";
 import RenderChat from "../components/RenderChat";
+import timeStamp from "../utils/timeStamp";
 
 interface IHome {
   cookie: string;
@@ -37,7 +38,7 @@ const Home: NextPage<IHome> = (props) => {
   const [chat, setChat] = useState<string[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
-    name: cookieName,
+    name: cookie.get("name"),
     message: "",
     time: "",
   });
@@ -149,20 +150,16 @@ const Home: NextPage<IHome> = (props) => {
       </Link>
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
-        {chat.map((item, index) => {
+        {chat.map((item: any, index) => {
+          console.log(item);
+
           const { sender, message, createdAt } = item;
-          let date = new Date(createdAt);
-          let currentHours: string | number = date.getHours().toString();
-          let currentMinutes: string | number = date.getMinutes().toString();
-          const time_stamp = `${currentHours.padStart(
-            2,
-            "0",
-          )}:${currentMinutes.padStart(2, "0")}`;
+          const time_stamp = timeStamp(createdAt);
           return (
             <li style={{ listStyle: "none" }} key={index}>
               <RenderChat
                 key={index}
-                cookie={cookieName}
+                cookie={cookie.get("name")}
                 sender={sender}
                 time_stamp={time_stamp}
                 message={message}
