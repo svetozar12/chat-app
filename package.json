@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "client": "yarn workspace @chat-app/frontend dev",
+    "server": "concurrently \"yarn workspace @chat-app/backend watch\" \"yarn workspace @chat-app/backend dev\""
+  },
+  "dependencies": {
+    "concurrently": "^6.4.0"
+  }
+}
