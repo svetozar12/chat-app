@@ -1,7 +1,7 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
-import User from "../../src/models/User.model";
 import Invites from "../../src/models/Invites.model";
+import "@types/jest";
 import { ObjectId } from "mongoose";
 
 const tests = [

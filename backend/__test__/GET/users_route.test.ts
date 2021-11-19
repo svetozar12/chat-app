@@ -1,6 +1,6 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
-
+import "@types/jest";
 describe("Valid input on login", () => {
   it("should return 200 OK", async () => {
     const res = await request(app).get("/users/test1");
