@@ -11,12 +11,4 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 app.use("/", data);
 
-const port: number = 4001;
-
-if (process.env.NODE_ENV !== "test") {
-  app.listen(port, (): void => {
-    console.log(`listening on port ${port}`);
-  });
-}
-
 export { app };

@@ -1,29 +1,9 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
 import Invites from "../../src/models/Invites.model";
-import "@types/jest";
+import "jest";
 import { ObjectId } from "mongoose";
-
-const tests = [
-  {
-    describe: "Finding invites by username",
-    request: "/invites/testingUser1",
-  },
-  {
-    describe: "Finding invites by username with status accepted",
-    request: "/invites/testingUser1?status=accepted",
-  },
-  {
-    describe: "Finding invites by username with status declined",
-    request: "/invites/testingUser1?status=declined",
-  },
-];
-
-const invitesDumyData = [
-  { reciever: "testingUser1", inviter: "testingUser2", status: "accepted" },
-  { reciever: "testingUser1", inviter: "testingUser2", status: "declined" },
-  { reciever: "testingUser1", inviter: "testingUser2", status: "recieved" },
-];
+import { tests, invitesDumyData } from "../test_dumy_data";
 
 interface IElement {
   reciever: string;
@@ -41,7 +21,6 @@ beforeAll(async () => {
     });
 
     invitesArr.forEach((element: any) => {
-      console.log(element);
       element.save();
     });
     return true;

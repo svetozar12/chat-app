@@ -4,7 +4,7 @@
   "description": "",
   "main": "/dist/server.js",
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --build --force",
     "watch": "tsc --watch",
     "dev": "nodemon dist/server.js \"npm run watch\"",
     "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
@@ -31,6 +31,7 @@
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@types/jest": "^27.0.3",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.7",
     "@types/supertest": "^2.0.11",
     "babel-jest": "^27.3.1",

@@ -4,8 +4,9 @@
     "packages/*"
   ],
   "scripts": {
-    "client": "yarn workspace @chat-app/frontend dev",
-    "server": "concurrently \"yarn workspace @chat-app/backend watch\" \"yarn workspace @chat-app/backend dev\"",
+    "build": "lerna run build",
+    "dev": "lerna run dev --no-sort --stream",
+    "test": "lerna run test --stream",
     "diff": "lerna diff"
   },
   "dependencies": {
