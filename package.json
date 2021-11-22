@@ -5,9 +5,14 @@
   ],
   "scripts": {
     "client": "yarn workspace @chat-app/frontend dev",
-    "server": "concurrently \"yarn workspace @chat-app/backend watch\" \"yarn workspace @chat-app/backend dev\""
+    "server": "concurrently \"yarn workspace @chat-app/backend watch\" \"yarn workspace @chat-app/backend dev\"",
+    "diff": "lerna diff"
   },
   "dependencies": {
     "concurrently": "^6.4.0"
-  }
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "name": "chat-app"
 }
