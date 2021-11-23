@@ -4,7 +4,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "dev": "lerna run dev --no-sort --stream",
     "test": "lerna run test --stream",
     "diff": "lerna diff"

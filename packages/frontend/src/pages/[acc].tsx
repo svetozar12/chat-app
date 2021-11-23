@@ -15,7 +15,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = useState<string>("");
-  const [socketRef, setSocketRef] = useState<Socket | null | any>(null);
+  const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<string[]>([]);
   const [chatRooms, setChatRooms] = useState<string[]>([]);
 
@@ -128,7 +128,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     <div style={{ display: "flex" }}>
       <section className="active_chats">
         <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
-        {chatRooms.map((item: any, index) => {
+        {chatRooms.map((item, index) => {
           const _id = item._id;
           const [user1, user2] = item.members;
           return (
