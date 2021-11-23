@@ -16,9 +16,11 @@ route.get("/messages/:chat_id", async (req: Request, res: Response) => {
     return res.status(200).json({ reversedArr });
   } catch (error) {
     console.log(error);
-    return res
-      .status(501)
-      .json({ Message: "Something went wrong while sending the msg" });
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while sending the msg",
+    });
   }
 });
 
@@ -38,6 +40,8 @@ route.post("/messages/:chat_id", async (req: Request, res: Response) => {
     return res.json({ messages });
   } catch (error) {
     return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
       Message: "Something went wrong while sending the message",
     });
   }

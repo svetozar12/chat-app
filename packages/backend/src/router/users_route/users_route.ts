@@ -28,8 +28,9 @@ route.get("/users/:username", async (req: Request, res: Response) => {
       });
 
     return res.status(200).json({ message: users });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while loging",
     });
@@ -53,9 +54,9 @@ route.post("/users/register", async (req: Request, res: Response) => {
     return res
       .status(201)
       .send({ message: `User ${req.body.username} created` });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while registering",
     });
@@ -75,6 +76,7 @@ route.delete("/users/:username", async (req: Request, res: Response) => {
     return res.status(204).json({ message: `user ${username} deleted` });
   } catch (error) {
     return res.status(501).json({
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while deleting",
     });

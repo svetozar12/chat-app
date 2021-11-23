@@ -26,9 +26,9 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ invites });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong with your invite",
     });
@@ -57,9 +57,9 @@ route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ invites });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong with your invite request",
     });
@@ -87,9 +87,9 @@ route.put("/invites", async (req: Request, res: Response) => {
     ).exec();
 
     return res.json({ message: updateStatus });
-  } catch (error: any) {
+  } catch (error) {
     res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong with the invites",
     });
@@ -122,9 +122,9 @@ route.put("/chat-room", async (req: Request, res: Response) => {
 
     await chat.save();
     return res.status(201).json({ Message: chat });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while sending invite",
     });
@@ -162,9 +162,9 @@ route.post("/invites", async (req: Request, res: Response) => {
     await invites.save();
 
     return res.status(201).json({ message: invites });
-  } catch (error: any) {
+  } catch (error) {
     res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while sending invite",
     });

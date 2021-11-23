@@ -9,9 +9,9 @@ route.get("/chat-room", async (req: Request, res: Response) => {
     if (!contacts)
       return res.status(400).json({ Message: "the chat room wasn't created" });
     return res.status(201).json({ contacts });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while getting the list of contacts",
     });
@@ -26,9 +26,9 @@ route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
     if (!users_rooms || users_rooms.length <= 0)
       return res.status(404).json({ Message: "User room not found !" });
     return res.status(200).json({ Message: users_rooms });
-  } catch (error: any) {
+  } catch (error) {
     return res.status(501).json({
-      ErrorMsg: error.message,
+      ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while searching for your chat room",
     });
