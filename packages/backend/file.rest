@@ -1,0 +1,60 @@
+GET http://localhost:4001/users/111aaaa
+###
+POST http://localhost:4001/users/register
+Content-Type: application/json
+
+{
+    "username":"user6"
+}
+
+###
+DELETE http://localhost:4001/users/test1
+###
+GET http://localhost:4001/invites/test1
+### 
+POST http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "reciever":"test2",
+    "inviter":"test23",
+    "status":"recieved"
+}
+### 
+PUT http://localhost:4001/invites
+Content-Type: application/json
+
+{
+    "id":"61498a301749f7b3b2f07b75",
+    "status":"accepted"
+}
+###
+GET http://localhost:4001/chat-room?user_name=test1
+###
+GET http://localhost:4001/chat-room/617b895325dad624f8922b8d?page_size=10&page_number=1
+###
+PUT http://localhost:4001/chat-room
+Content-Type: application/json
+
+{
+    "id":"61840e33dd20cfe3356ab02b",
+    "user1":"test1",
+    "user2":"test2"
+}
+###
+PUT http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
+Content-Type: application/json
+
+{
+    "read_by":"user2"
+}
+###
+GET http://localhost:4001/messages/6180fafdcf62efa63f186517?page_number=1&page_size=10
+###
+POST http://localhost:4001/messages/617b895325dad624f8922b8d
+Content-Type: application/json
+
+{
+    "sender":"test1",
+    "message":"hello world"
+}

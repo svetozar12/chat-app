@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build --stream",
+    "dev": "lerna run dev --no-sort --stream",
+    "test": "lerna run test --stream",
+    "diff": "lerna diff"
+  },
+  "dependencies": {
+    "concurrently": "^6.4.0"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "name": "chat-app"
+}
