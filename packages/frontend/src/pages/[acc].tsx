@@ -3,8 +3,6 @@ import ActiveChats from "../components/ActiveChats";
 import PendingChats from "../components/PendingChats";
 import FindFriends from "../components/FindFriends";
 import axios from "axios";
-import { InitialState } from "../redux/state";
-import { useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -15,12 +13,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = useState<string>("");
-  const [socketRef, setSocketRef] = useState<Socket | null>(null);
+  const [socketRef, setSocketRef] = useState<Socket | null | any>(null);
   const [contacts, setContacts] = useState<string[]>([]);
   const [chatRooms, setChatRooms] = useState<string[]>([]);
 
@@ -100,7 +95,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     fetchRecieverStatus();
     fetchInviteStatus();
   }, []);
-
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
@@ -123,6 +117,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+  console.log(socketRef);
 
   useEffect(() => {
     fetchRecieverStatus();
@@ -132,8 +127,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends cookieName={cookieName} socketRef={socketRef} />
-        {chatRooms.map((item, index) => {
+        <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
+        {chatRooms.map((item: any, index) => {
           const _id = item._id;
           const [user1, user2] = item.members;
           return (
@@ -142,7 +137,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               _id={_id}
               user1={user1}
               user2={user2}
-              cookieName={cookieName}
+              cookieName={cookie.get("name")}
               socketRef={socketRef}
             />
           );

@@ -16,7 +16,6 @@ const InviteSchema = new mongoose.Schema<InviteSchema>({
     required: true,
   },
   status: {
-    type: String,
     enum: ["recieved", "accepted", "declined"],
     default: "recieved",
     required: true,
