@@ -13,13 +13,21 @@ import timeStamp from "../utils/timeStamp";
 
 interface IHome {
   cookie: string;
-  chatRoom: string | string[] | any;
+  chatRoom: {
+    chatRoom: string[];
+  };
 }
 
 interface IPropsState {
   name?: string;
   message?: string;
   time?: string | number;
+}
+
+interface IchatInstance {
+  sender: string;
+  message: string;
+  createdAt: string;
 }
 
 const Home: NextPage<IHome> = (props) => {
@@ -30,12 +38,13 @@ const Home: NextPage<IHome> = (props) => {
   const states2 = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
-
   const chatRoom = props.chatRoom.chatRoom;
+  console.log(props);
+
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
-  const [chat, setChat] = useState<string[]>([]);
+  const [chat, setChat] = useState<IchatInstance[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
     name: cookie.get("name"),
@@ -43,7 +52,7 @@ const Home: NextPage<IHome> = (props) => {
     time: "",
   });
 
-  const updateChat = (param: any) => {
+  const updateChat = (param: IchatInstance[]) => {
     setChat((prev) => [...prev, ...param]);
   };
 
@@ -53,6 +62,8 @@ const Home: NextPage<IHome> = (props) => {
         `http://localhost:4001/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
+      console.log(data);
+
       updateChat(data);
       return true;
     } catch (error) {
@@ -64,7 +75,7 @@ const Home: NextPage<IHome> = (props) => {
     getRecentMessages();
     if (!states.cookie) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ messages }: any) => {
+    socketConnect.on("message", ({ messages }) => {
       dispatch({
         type: "MESSAGE_SEND",
         payload: { sender: cookieName, message: state.message },
@@ -103,7 +114,7 @@ const Home: NextPage<IHome> = (props) => {
     }
   };
 
-  const scrollHandler = async (e: any) => {
+  const scrollHandler = async (e) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         dispatch({
@@ -150,9 +161,7 @@ const Home: NextPage<IHome> = (props) => {
       </Link>
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
-        {chat.map((item: any, index) => {
-          console.log(item);
-
+        {chat.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
           return (
@@ -210,17 +219,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default Home;
-
-// {
-//   item.messages.map((subItem, index) => {
-//     const sender = item.sender;
-//     return (
-//       <RenderChat
-//         key={index}
-//         cookie={cookieName}
-//         sender={sender}
-//         {...subItem}
-//       />
-//     );
-//   });
-// }

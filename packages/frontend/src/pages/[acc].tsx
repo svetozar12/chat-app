@@ -9,6 +9,20 @@ import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 
+//  !Socket ref types errors while prop dillling bellow in components
+//  !In page ...[chatRoom].tsx there is ts error on function scrollHandler()
+interface Ichats {
+  _id: string;
+  members: string[];
+}
+
+interface Iinvites {
+  _id: string;
+  inviter: string;
+  reciever: string;
+  status: string;
+}
+
 const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -16,8 +30,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = useState<string>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-  const [contacts, setContacts] = useState<string[]>([]);
-  const [chatRooms, setChatRooms] = useState<string[]>([]);
+  const [contacts, setContacts] = useState<Iinvites[]>([]);
+  const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
 
   const getChatRoom = async () => {
     try {
@@ -25,6 +39,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `http://localhost:4001/chat-room/?user_name=${cookie.get("name")}`,
       );
       const data = res.data.contacts;
+
       setChatRooms(data);
       return true;
     } catch (error) {
@@ -51,6 +66,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `http://localhost:4001/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
+      console.log(data);
+
       setContacts(data);
       if (data.status === "declined") return false;
       return true;
@@ -117,7 +134,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
-  console.log(socketRef);
 
   useEffect(() => {
     fetchRecieverStatus();

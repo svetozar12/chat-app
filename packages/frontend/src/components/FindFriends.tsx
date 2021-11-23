@@ -14,7 +14,6 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
   const state = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
-  console.log(state);
 
   const sendInvite = async () => {
     try {
