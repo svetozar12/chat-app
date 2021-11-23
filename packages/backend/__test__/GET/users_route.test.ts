@@ -2,6 +2,7 @@ import { app } from "../../src/server";
 import * as request from "supertest";
 import User from "../../src/models/User.model";
 import "jest";
+import "@types/jest";
 
 beforeAll(async () => {
   try {

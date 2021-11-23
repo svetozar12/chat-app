@@ -1,11 +1,12 @@
 {
-  "exclude": ["**/*.test.ts"],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "types": ["node"],
     "skipLibCheck": true,
     "outDir": "dist",
     "typeRoots": ["./node_modules/@types"]

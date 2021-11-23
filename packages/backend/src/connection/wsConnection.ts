@@ -60,9 +60,8 @@ io.on("connection", (socket: Socket): void => {
   });
 });
 
-const port = 4000;
 if (process.env.NODE_ENV !== "test") {
-  server.listen(port);
+  server.listen(4000);
 }
 
 module.exports = io;

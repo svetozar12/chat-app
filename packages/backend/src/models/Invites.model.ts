@@ -1,3 +1,4 @@
+import { kStringMaxLength } from "buffer";
 import * as mongoose from "mongoose";
 
 interface InviteSchema {
@@ -16,6 +17,7 @@ const InviteSchema = new mongoose.Schema<InviteSchema>({
     required: true,
   },
   status: {
+    type: String,
     enum: ["recieved", "accepted", "declined"],
     default: "recieved",
     required: true,
