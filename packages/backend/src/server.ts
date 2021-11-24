@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 app.use("/", data);
 
-const port: number = 4001;
+const port = process.env.PORT || 4001;
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, (): void => {
