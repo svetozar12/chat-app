@@ -7,7 +7,8 @@
     "build": "lerna run build --stream",
     "dev": "lerna run dev --no-sort --stream",
     "test": "lerna run test --stream",
-    "diff": "lerna diff"
+    "diff": "lerna diff",
+    "kill": "npx kill-port 3000 4000 4001 -y"
   },
   "dependencies": {
     "concurrently": "^6.4.0"

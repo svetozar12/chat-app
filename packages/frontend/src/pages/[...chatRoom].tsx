@@ -114,7 +114,7 @@ const Home: NextPage<IHome> = (props) => {
     }
   };
 
-  const scrollHandler = async (e) => {
+  const scrollHandler = async (e: React.UIEvent<HTMLElement>) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         dispatch({

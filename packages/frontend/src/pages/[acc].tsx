@@ -10,7 +10,6 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 
 //  !Socket ref types errors while prop dillling bellow in components
-//  !In page ...[chatRoom].tsx there is ts error on function scrollHandler()
 interface Ichats {
   _id: string;
   members: string[];
@@ -134,6 +133,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+
+  console.log(socketRef);
 
   useEffect(() => {
     fetchRecieverStatus();

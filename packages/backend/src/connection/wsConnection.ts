@@ -9,6 +9,7 @@ const io = require("socket.io")(server, {
   },
 });
 
+// sending message to specific chat room with two users(inviter,reciever)
 io.on("connection", (socket: Socket): void => {
   socket.on("joined_chat_room", ({ user }) => {
     socket.join(user);
@@ -61,7 +62,7 @@ io.on("connection", (socket: Socket): void => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  server.listen(4000);
+  server.listen(process.env.PORT || 4000);
 }
 
 module.exports = io;

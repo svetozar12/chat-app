@@ -1,13 +1,12 @@
-import { kStringMaxLength } from "buffer";
-import * as mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
 interface InviteSchema {
   inviter: string;
   reciever: string;
-  status: any;
+  status: string;
 }
 
-const InviteSchema = new mongoose.Schema<InviteSchema>({
+const InviteSchema = new Schema<InviteSchema>({
   inviter: {
     type: String,
     required: true,
@@ -24,5 +23,5 @@ const InviteSchema = new mongoose.Schema<InviteSchema>({
   },
 });
 
-const Invites = mongoose.model<InviteSchema>("Invites", InviteSchema);
+const Invites = model<InviteSchema>("Invites", InviteSchema);
 export default Invites;
