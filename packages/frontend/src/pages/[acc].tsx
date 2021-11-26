@@ -144,21 +144,24 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
-        {chatRooms.map((item, index) => {
-          const _id = item._id;
-          const [user1, user2] = item.members;
-          return (
-            <ActiveChats
-              key={index}
-              _id={_id}
-              user1={user1}
-              user2={user2}
-              cookieName={cookie.get("name")}
-              socketRef={socketRef}
-            />
-          );
-        })}
+        {socketRef && (
+          <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
+        )}
+        {socketRef &&
+          chatRooms.map((item, index) => {
+            const _id = item._id;
+            const [user1, user2] = item.members;
+            return (
+              <ActiveChats
+                key={index}
+                _id={_id}
+                user1={user1}
+                user2={user2}
+                cookieName={cookie.get("name")}
+                socketRef={socketRef}
+              />
+            );
+          })}
       </section>
       <section className="main_section">
         {" "}
@@ -181,14 +184,16 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
                 return (
-                  <PendingChats
-                    key={index}
-                    socketRef={socketRef}
-                    setLocalStatus={setLocalStatus}
-                    {...item}
-                    data={contacts}
-                    items={item}
-                  />
+                  socketRef && (
+                    <PendingChats
+                      key={index}
+                      socketRef={socketRef}
+                      setLocalStatus={setLocalStatus}
+                      {...item}
+                      data={contacts}
+                      items={item}
+                    />
+                  )
                 );
               })}
             </ul>

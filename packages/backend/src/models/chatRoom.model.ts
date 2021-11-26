@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface ChatRoom {
+export interface ChatRoom {
   members: string[];
 }
 

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface InviteSchema {
+export interface InviteSchema {
   inviter: string;
   reciever: string;
   status: string;

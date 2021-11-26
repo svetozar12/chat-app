@@ -1,22 +1,32 @@
 import * as express from "express";
 import { Request, Response } from "express";
-import Chats from "../../models/chatRoom.model";
+import Chats, { ChatRoom } from "../../models/chatRoom.model";
+import { InviteSchema } from "../../models/Invites.model";
 const route = express.Router();
-route.get("/chat-room", async (req: Request, res: Response) => {
-  try {
-    const user_name = req.query?.user_name;
-    const contacts = await Chats.find({ members: user_name }).exec();
-    if (!contacts)
-      return res.status(400).json({ Message: "the chat room wasn't created" });
-    return res.status(201).json({ contacts });
-  } catch (error) {
-    return res.status(501).json({
-      ErrorMsg: (error as Error).message,
-      Error: "Internal server error",
-      Message: "Something went wrong while getting the list of contacts",
-    });
-  }
-});
+route.get(
+  "/chat-room",
+  async (
+    req: Request<undefined, undefined, undefined, { user_name: string }>,
+    res: Response,
+  ) => {
+    try {
+      // create interface
+      const user_name = req.query?.user_name;
+      const contacts = await Chats.find({ members: user_name }).exec();
+      if (!contacts)
+        return res
+          .status(400)
+          .json({ Message: "the chat room wasn't created" });
+      return res.status(201).json({ contacts });
+    } catch (error) {
+      return res.status(501).json({
+        ErrorMsg: (error as Error).message,
+        Error: "Internal server error",
+        Message: "Something went wrong while getting the list of contacts",
+      });
+    }
+  },
+);
 
 route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
   try {

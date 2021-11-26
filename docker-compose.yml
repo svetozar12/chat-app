@@ -2,11 +2,17 @@ services:
   app:
     container_name: backend
     restart: always
-    build: .
+    build: ./packages/backend
     ports:
       - "4001:4001"
     links:
       - mongo
+  app2:
+    container_name: frontend
+    restart: always
+    build: ./packages/frontend
+    ports:
+      - "3000:3000"
   mongo:
     container_name: mongo
     image: mongo

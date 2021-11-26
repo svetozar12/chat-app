@@ -1,7 +1,0 @@
-services:
-  app:
-    container_name: frontend
-    restart: always
-    build: .
-    ports:
-      - "3000:3000"
