@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
@@ -10,6 +10,7 @@ import axios from "axios";
 import Link from "next/dist/client/link";
 import RenderChat from "../components/RenderChat";
 import timeStamp from "../utils/timeStamp";
+import { hostUrl, requestUrl } from "../utils/hostUrl_requestUrl";
 
 interface IHome {
   cookie: string;
@@ -59,7 +60,7 @@ const Home: NextPage<IHome> = (props) => {
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/messages/${chatRoom[1]}?page_number=1&page_size=10`,
+        `${requestUrl}/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
       console.log(data);
@@ -95,13 +96,10 @@ const Home: NextPage<IHome> = (props) => {
 
   const saveMessage = async () => {
     try {
-      const res = await axios.post(
-        `http://localhost:4001/messages/${chatRoom[1]}`,
-        {
-          sender: cookieName,
-          message: state.message,
-        },
-      );
+      const res = await axios.post(`${requestUrl}/messages/${chatRoom[1]}`, {
+        sender: cookieName,
+        message: state.message,
+      });
 
       dispatch({
         type: "MESSAGE_SEND",
@@ -122,7 +120,7 @@ const Home: NextPage<IHome> = (props) => {
           payload: states2.pageNumber,
         });
         const res = await axios.get(
-          `http://localhost:4001/messages/${chatRoom[1]}?page_number=${states2.pageNumber}&page_size=10`,
+          `${requestUrl}/messages/${chatRoom[1]}?page_number=${states2.pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
         setChat((prev) => [...data, ...prev]);
@@ -154,7 +152,7 @@ const Home: NextPage<IHome> = (props) => {
       style={{ justifyContent: "center", height: "100vh" }}
       className="container chat_home"
     >
-      <Link href={`http://localhost:3000/${cookieName}`}>
+      <Link href={`${hostUrl}/${cookieName}`}>
         <a>
           <h3>Back to profile page</h3>
         </a>

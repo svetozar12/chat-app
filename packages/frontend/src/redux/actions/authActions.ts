@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import { Action } from "../state";
 import { ActionType } from "../state";
 import axios from "axios";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 
 const loginPostError = (res: string) => {
   return {
@@ -31,7 +32,7 @@ const RegisterPostError = (res: string) => {
 export const loginPost =
   (name: string) => async (dispatch: Dispatch<Action>) => {
     try {
-      const res = await axios.get(`http://localhost:4001/users/${name}`);
+      const res = await axios.get(`${requestUrl}/users/${name}`);
       return true;
     } catch (error: any) {
       dispatch(loginPostError(error.response.data.message));
@@ -45,7 +46,7 @@ export const loginPost =
 export const registerPost =
   (name: string) => async (dispatch: Dispatch<Action>) => {
     try {
-      const res = await axios.post("http://localhost:4001/users/register", {
+      const res = await axios.post(`${requestUrl}/users/register`, {
         username: name,
       });
       const data = res.data.message;

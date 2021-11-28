@@ -2,14 +2,14 @@ FROM node:12
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 
 RUN yarn install
 
 COPY . .
 
-ENV PORT=4001
+RUN yarn build
 
-EXPOSE 4001
+EXPOSE 4002
 
 CMD ["yarn","dev"]

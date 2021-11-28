@@ -8,8 +8,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
-
-//  !Socket ref types errors while prop dillling bellow in components
+import { requestUrl } from "../utils/hostUrl_requestUrl";
 interface Ichats {
   _id: string;
   members: string[];
@@ -35,7 +34,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const getChatRoom = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/?user_name=${cookie.get("name")}`,
+        `${requestUrl}/chat-room/?user_name=${cookie.get("name")}`,
       );
       const data = res.data.contacts;
 
@@ -48,9 +47,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const fetchRecieverStatus = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4001/invites/${cookieName}`,
-      );
+      const res = await axios.get(`${requestUrl}/invites/${cookieName}`);
       const data = res.data.invites;
       setContacts(data);
       return true;
@@ -62,7 +59,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviteStatus = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/invites/${cookieName}?status=accepted`,
+        `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
       console.log(data);
@@ -84,9 +81,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const deleteUser = async () => {
     try {
       deleteCookies();
-      const res = await axios.delete(
-        `http://localhost:4001/users/${cookieName}`,
-      );
+      const res = await axios.delete(`${requestUrl}/users/${cookieName}`);
       return true;
     } catch (error) {
       return false;
@@ -95,7 +90,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const validateUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+      const res = await axios.get(`${requestUrl}/users/${cookieName}`);
       if (!cookieName) throw Error;
       return true;
     } catch (error) {
