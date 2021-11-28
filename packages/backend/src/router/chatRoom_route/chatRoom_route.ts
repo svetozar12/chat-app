@@ -1,16 +1,18 @@
+interface IRequest {
+  user_name: string;
+}
+
 import * as express from "express";
 import { Request, Response } from "express";
-import Chats, { ChatRoom } from "../../models/chatRoom.model";
-import { InviteSchema } from "../../models/Invites.model";
+import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 route.get(
   "/chat-room",
   async (
-    req: Request<undefined, undefined, undefined, { user_name: string }>,
+    req: Request<undefined, undefined, undefined, IRequest>,
     res: Response,
   ) => {
     try {
-      // create interface
       const user_name = req.query?.user_name;
       const contacts = await Chats.find({ members: user_name }).exec();
       if (!contacts)
