@@ -14,7 +14,7 @@ interface Ichats {
   members: string[];
 }
 
-interface Iinvites {
+export interface Iinvites {
   _id: string;
   inviter: string;
   reciever: string;
@@ -185,8 +185,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                       socketRef={socketRef}
                       setLocalStatus={setLocalStatus}
                       {...item}
-                      data={contacts}
-                      items={item}
                     />
                   )
                 );

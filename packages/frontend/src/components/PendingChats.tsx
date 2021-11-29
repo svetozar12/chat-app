@@ -3,8 +3,8 @@ import React from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-
-interface IPendingChats {
+import { Iinvites } from "../pages/[acc]";
+interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
   status: string;
