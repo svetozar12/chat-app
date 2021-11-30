@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
 interface IMessage {
   sender: string;
@@ -6,10 +6,10 @@ interface IMessage {
   seenBy: string[];
 }
 
-const messageSchema = new mongoose.Schema(
+const messageSchema = new Schema(
   {
     chatInstance: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "chatRoom",
       required: true,
     },
@@ -20,5 +20,5 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Messages = mongoose.model<IMessage>("messages", messageSchema);
+const Messages = model<IMessage>("messages", messageSchema);
 export default Messages;

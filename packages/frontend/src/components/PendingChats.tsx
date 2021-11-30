@@ -2,8 +2,9 @@ import axios from "axios";
 import React from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
-
-interface IPendingChats {
+import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { Iinvites } from "../pages/[acc]";
+interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
   status: string;
@@ -27,7 +28,7 @@ function PendingChats({
   const updateInviteStatus = async (param: string) => {
     try {
       setLocalStatus(param);
-      const res = await axios.put(`http://localhost:4001/invites`, {
+      const res = await axios.put(`${requestUrl}/invites`, {
         id: _id,
         status: param,
       });
@@ -43,7 +44,7 @@ function PendingChats({
   const createChatRoom = async () => {
     try {
       setLocalStatus("accepted");
-      const res = await axios.put(`http://localhost:4001/chat-room`, {
+      const res = await axios.put(`${requestUrl}/chat-room`, {
         id: _id,
         user1: inviter,
         user2: reciever,

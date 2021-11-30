@@ -8,6 +8,18 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
+import { requestUrl } from "../utils/hostUrl_requestUrl";
+interface Ichats {
+  _id: string;
+  members: string[];
+}
+
+export interface Iinvites {
+  _id: string;
+  inviter: string;
+  reciever: string;
+  status: string;
+}
 
 const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
@@ -16,15 +28,16 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = useState<string>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
-  const [contacts, setContacts] = useState<string[]>([]);
-  const [chatRooms, setChatRooms] = useState<string[]>([]);
+  const [contacts, setContacts] = useState<Iinvites[]>([]);
+  const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
 
   const getChatRoom = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/chat-room/?user_name=${cookie.get("name")}`,
+        `${requestUrl}/chat-room/?user_name=${cookie.get("name")}`,
       );
       const data = res.data.contacts;
+
       setChatRooms(data);
       return true;
     } catch (error) {
@@ -34,9 +47,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const fetchRecieverStatus = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:4001/invites/${cookieName}`,
-      );
+      const res = await axios.get(`${requestUrl}/invites/${cookieName}`);
       const data = res.data.invites;
       setContacts(data);
       return true;
@@ -48,9 +59,11 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviteStatus = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/invites/${cookieName}?status=accepted`,
+        `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
+      console.log(data);
+
       setContacts(data);
       if (data.status === "declined") return false;
       return true;
@@ -68,9 +81,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const deleteUser = async () => {
     try {
       deleteCookies();
-      const res = await axios.delete(
-        `http://localhost:4001/users/${cookieName}`,
-      );
+      const res = await axios.delete(`${requestUrl}/users/${cookieName}`);
       return true;
     } catch (error) {
       return false;
@@ -79,7 +90,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const validateUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:4001/users/${cookieName}`);
+      const res = await axios.get(`${requestUrl}/users/${cookieName}`);
       if (!cookieName) throw Error;
       return true;
     } catch (error) {
@@ -117,6 +128,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+
   console.log(socketRef);
 
   useEffect(() => {
@@ -127,21 +139,24 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex" }}>
       <section className="active_chats">
-        <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
-        {chatRooms.map((item, index) => {
-          const _id = item._id;
-          const [user1, user2] = item.members;
-          return (
-            <ActiveChats
-              key={index}
-              _id={_id}
-              user1={user1}
-              user2={user2}
-              cookieName={cookie.get("name")}
-              socketRef={socketRef}
-            />
-          );
-        })}
+        {socketRef && (
+          <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
+        )}
+        {socketRef &&
+          chatRooms.map((item, index) => {
+            const _id = item._id;
+            const [user1, user2] = item.members;
+            return (
+              <ActiveChats
+                key={index}
+                _id={_id}
+                user1={user1}
+                user2={user2}
+                cookieName={cookie.get("name")}
+                socketRef={socketRef}
+              />
+            );
+          })}
       </section>
       <section className="main_section">
         {" "}
@@ -164,14 +179,14 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
                 return (
-                  <PendingChats
-                    key={index}
-                    socketRef={socketRef}
-                    setLocalStatus={setLocalStatus}
-                    {...item}
-                    data={contacts}
-                    items={item}
-                  />
+                  socketRef && (
+                    <PendingChats
+                      key={index}
+                      socketRef={socketRef}
+                      setLocalStatus={setLocalStatus}
+                      {...item}
+                    />
+                  )
                 );
               })}
             </ul>

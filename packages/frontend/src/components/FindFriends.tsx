@@ -3,6 +3,7 @@ import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState2 } from "../redux/state";
+import { requestUrl } from "../utils/hostUrl_requestUrl";
 
 interface IFindFriends {
   cookieName: string;
@@ -14,11 +15,10 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
   const state = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
-  console.log(state);
 
   const sendInvite = async () => {
     try {
-      const res = await axios.post(`http://localhost:4001/invites`, {
+      const res = await axios.post(`${requestUrl}/invites`, {
         reciever: state.reciever,
         inviter: cookieName,
         status: "recieved",

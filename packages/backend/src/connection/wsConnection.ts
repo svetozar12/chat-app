@@ -2,13 +2,14 @@ import { Socket } from "socket.io";
 import Chats from "../models/chatRoom.model";
 import * as http from "http";
 
-const server = http.createServer();
-const io = require("socket.io")(server, {
+// const server = http.createServer();
+const io = require("socket.io")(4001, {
   cors: {
     origin: "*",
   },
 });
 
+// sending message to specific chat room with two users(inviter,reciever)
 io.on("connection", (socket: Socket): void => {
   socket.on("joined_chat_room", ({ user }) => {
     socket.join(user);
@@ -60,8 +61,8 @@ io.on("connection", (socket: Socket): void => {
   });
 });
 
-if (process.env.NODE_ENV !== "test") {
-  server.listen(4000);
-}
+// if (process.env.NODE_ENV !== "test") {
+//   server.listen(process.env.PORT || 4000);
+// }
 
 module.exports = io;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { NextPage, GetServerSideProps } from "next";
 import { useCookie } from "next-cookie";
 import { io, Socket } from "socket.io-client";
@@ -10,16 +10,25 @@ import axios from "axios";
 import Link from "next/dist/client/link";
 import RenderChat from "../components/RenderChat";
 import timeStamp from "../utils/timeStamp";
+import { hostUrl, requestUrl } from "../utils/hostUrl_requestUrl";
 
 interface IHome {
   cookie: string;
-  chatRoom: string | string[] | any;
+  chatRoom: {
+    chatRoom: string[];
+  };
 }
 
 interface IPropsState {
   name?: string;
   message?: string;
   time?: string | number;
+}
+
+interface IchatInstance {
+  sender: string;
+  message: string;
+  createdAt: string;
 }
 
 const Home: NextPage<IHome> = (props) => {
@@ -30,12 +39,13 @@ const Home: NextPage<IHome> = (props) => {
   const states2 = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
-
   const chatRoom = props.chatRoom.chatRoom;
+  console.log(props);
+
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
-  const [chat, setChat] = useState<string[]>([]);
+  const [chat, setChat] = useState<IchatInstance[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
     name: cookie.get("name"),
@@ -43,16 +53,18 @@ const Home: NextPage<IHome> = (props) => {
     time: "",
   });
 
-  const updateChat = (param: any) => {
+  const updateChat = (param: IchatInstance[]) => {
     setChat((prev) => [...prev, ...param]);
   };
 
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4001/messages/${chatRoom[1]}?page_number=1&page_size=10`,
+        `${requestUrl}/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
+      console.log(data);
+
       updateChat(data);
       return true;
     } catch (error) {
@@ -64,7 +76,7 @@ const Home: NextPage<IHome> = (props) => {
     getRecentMessages();
     if (!states.cookie) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
-    socketConnect.on("message", ({ messages }: any) => {
+    socketConnect.on("message", ({ messages }) => {
       dispatch({
         type: "MESSAGE_SEND",
         payload: { sender: cookieName, message: state.message },
@@ -84,13 +96,10 @@ const Home: NextPage<IHome> = (props) => {
 
   const saveMessage = async () => {
     try {
-      const res = await axios.post(
-        `http://localhost:4001/messages/${chatRoom[1]}`,
-        {
-          sender: cookieName,
-          message: state.message,
-        },
-      );
+      const res = await axios.post(`${requestUrl}/messages/${chatRoom[1]}`, {
+        sender: cookieName,
+        message: state.message,
+      });
 
       dispatch({
         type: "MESSAGE_SEND",
@@ -103,7 +112,7 @@ const Home: NextPage<IHome> = (props) => {
     }
   };
 
-  const scrollHandler = async (e: any) => {
+  const scrollHandler = async (e: React.UIEvent<HTMLElement>) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         dispatch({
@@ -111,7 +120,7 @@ const Home: NextPage<IHome> = (props) => {
           payload: states2.pageNumber,
         });
         const res = await axios.get(
-          `http://localhost:4001/messages/${chatRoom[1]}?page_number=${states2.pageNumber}&page_size=10`,
+          `${requestUrl}/messages/${chatRoom[1]}?page_number=${states2.pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
         setChat((prev) => [...data, ...prev]);
@@ -143,16 +152,14 @@ const Home: NextPage<IHome> = (props) => {
       style={{ justifyContent: "center", height: "100vh" }}
       className="container chat_home"
     >
-      <Link href={`http://localhost:3000/${cookieName}`}>
+      <Link href={`${hostUrl}/${cookieName}`}>
         <a>
           <h3>Back to profile page</h3>
         </a>
       </Link>
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
-        {chat.map((item: any, index) => {
-          console.log(item);
-
+        {chat.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
           return (
@@ -210,17 +217,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default Home;
-
-// {
-//   item.messages.map((subItem, index) => {
-//     const sender = item.sender;
-//     return (
-//       <RenderChat
-//         key={index}
-//         cookie={cookieName}
-//         sender={sender}
-//         {...subItem}
-//       />
-//     );
-//   });
-// }

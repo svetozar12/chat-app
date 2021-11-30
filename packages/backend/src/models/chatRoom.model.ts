@@ -1,12 +1,12 @@
-import * as mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-interface ChatRoom {
-  members: any[];
+export interface ChatRoom {
+  members: string[];
 }
 
-const chatRoomSchema = new mongoose.Schema<ChatRoom>({
+const chatRoomSchema = new Schema<ChatRoom>({
   members: [String],
 });
 
-const chatRoom = mongoose.model<ChatRoom>("chatRoom", chatRoomSchema);
+const chatRoom = model<ChatRoom>("chatRoom", chatRoomSchema);
 export default chatRoom;
