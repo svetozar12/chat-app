@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RenderChat/> should create snapshot 1`] = `
+<div
+  className="you"
+  data-testid="test"
+>
+  <h2
+    style={
+      Object {
+        "color": "var(--main-black)",
+        "fontSize": "15px",
+      }
+    }
+  >
+    test1
+  </h2>
+  <div
+    className="rendered_chat"
+    style={
+      Object {
+        "background": "var(--me-chat-buble)",
+      }
+    }
+  >
+    <div
+      style={
+        Object {
+          "textAlign": "center",
+          "wordWrap": "break-word",
+        }
+      }
+    >
+      <span>
+        hello
+      </span>
+    </div>
+    <span
+      style={
+        Object {
+          "fontSize": "0.65rem",
+        }
+      }
+    >
+      1111
+    </span>
+  </div>
+</div>
+`;
