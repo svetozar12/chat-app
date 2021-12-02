@@ -1,6 +1,6 @@
-GET http://localhost:4001/users/test1
+GET http://localhost:4002/users/test1
 ###
-POST http://localhost:4001/users/register
+POST http://localhost:4002/users/register
 Content-Type: application/json
 
 {
@@ -8,11 +8,11 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:4001/users/test1
+DELETE http://localhost:4002/users/test1
 ###
-GET http://localhost:4001/invites/test1
+GET http://localhost:4002/invites/test1
 ### 
-POST http://localhost:4001/invites
+POST http://localhost:4002/invites
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
     "status":"recieved"
 }
 ### 
-PUT http://localhost:4001/invites
+PUT http://localhost:4002/invites
 Content-Type: application/json
 
 {
@@ -29,11 +29,11 @@ Content-Type: application/json
     "status":"accepted"
 }
 ###
-GET http://localhost:4001/chat-room?user_name=test1
+GET http://localhost:4002/chat-room?user_name=test1
 ###
-GET http://localhost:4001/chat-room/617b895325dad624f8922b8d?page_size=10&page_number=1
+GET http://localhost:4002/chat-room/617b895325dad624f8922b8d?page_size=10&page_number=1
 ###
-PUT http://localhost:4001/chat-room
+PUT http://localhost:4002/chat-room
 Content-Type: application/json
 
 {
@@ -42,16 +42,16 @@ Content-Type: application/json
     "user2":"test2"
 }
 ###
-PUT http://localhost:4001/chat-room/616e7322dfe6725c10bdefc9
+PUT http://localhost:4002/chat-room/616e7322dfe6725c10bdefc9
 Content-Type: application/json
 
 {
     "read_by":"user2"
 }
 ###
-GET http://localhost:4001/messages/6180fafdcf62efa63f186517?page_number=1&page_size=10
+GET http://localhost:4002/messages/6180fafdcf62efa63f186517?page_number=1&page_size=10
 ###
-POST http://localhost:4001/messages/617b895325dad624f8922b8d
+POST http://localhost:4002/messages/617b895325dad624f8922b8d
 Content-Type: application/json
 
 {
