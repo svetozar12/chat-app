@@ -1,8 +1,7 @@
 import * as express from "express";
-import registerValidation from "../../helpers/schema";
+import { registerValidation } from "../../helpers/schema";
 import { Request, Response } from "express";
 const route = express.Router();
-
 import User from "../../models/User.model";
 import Invites from "../../models/Invites.model";
 import Chats from "../../models/chatRoom.model";

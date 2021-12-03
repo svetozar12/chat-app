@@ -1,8 +1,9 @@
 import { Schema, model } from "mongoose";
 import * as bcrypt from "bcrypt";
-interface UserSchema {
+export interface UserSchema {
   username: string;
   password: string;
+  isValidPassword: any;
 }
 
 const UserSchema = new Schema<UserSchema>({
@@ -25,9 +26,17 @@ UserSchema.pre("save", async function (next) {
     this.password = hashedPassword;
     next();
   } catch (error) {
-    next(error);
+    next(error as Error);
   }
 });
+
+UserSchema.methods.isValidPassword = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    return false;
+  }
+};
 
 const User = model<UserSchema>("User", UserSchema);
 export default User;

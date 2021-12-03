@@ -1,11 +1,12 @@
 import * as Joi from "joi";
 
-const registerValidation = (data: any) => {
-  const schema = Joi.object({
-    username: Joi.string().min(2).max(20).required().label("Invalid input"),
-    password: Joi.string().min(2).max(20).required().label("Invalid input"),
-  });
-  return schema.validate(data);
-};
+const authSchema = Joi.object({
+  username: Joi.string().min(2).required(),
+  password: Joi.string().min(2).required(),
+});
 
-export default registerValidation;
+const registerValidation = (data: any) => {
+  return authSchema.validate(data);
+};
+export { registerValidation };
+export default authSchema;
