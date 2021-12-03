@@ -48,7 +48,11 @@ route.post("/users/register", async (req: Request, res: Response) => {
     const users = await User.findOne({ username }).exec();
     if (users) return res.status(409).json({ message: "user already exist" });
 
-    const user = new User({ type: "POST", username: req.body.username });
+    const user = new User({
+      type: "POST",
+      username: req.body.username,
+      password: req.body.password,
+    });
 
     await user.save();
     return res
