@@ -1,25 +1,14 @@
+import "dotenv/config";
 import * as express from "express";
-import { Request, Response } from "express";
-import type { RequestHandler } from "express";
 import * as jwt from "jsonwebtoken";
 import User from "../models/User.model";
-require("dotenv").config();
 import authSchema from "../helpers/schema";
+import { Request, Response } from "express";
+import { Secret, GetPublicKeyOrSecret } from "jsonwebtoken";
+import { verifyToken } from "../helpers/jwt_helper";
 const route = express.Router();
 
-const verifyToken: RequestHandler = (req: any, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-    //if bearer Header isn't undefined seperates JWT from Bearer and later on use method jwt.verify() to verify the jwt
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-};
-const secretKey: jwt.Secret = process.env.JWT_SECRET;
+const secretKey: Secret | GetPublicKeyOrSecret = process.env.JWT_SECRET;
 
 route.get("/user", verifyToken, async (req: any, res: Response) => {
   try {
