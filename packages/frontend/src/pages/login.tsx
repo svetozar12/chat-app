@@ -10,6 +10,7 @@ import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
 import { wrapper } from "../redux/store";
 import { loginAuth } from "../utils/authRoutes";
+import { checkJWT } from "../utils/authRoutes";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -51,6 +52,16 @@ export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     const cookie = useCookie(context);
     const cookieName = cookie.get("name");
+    const user = await checkJWT(cookie.get("token"));
+
+    if (user) {
+      return {
+        redirect: {
+          destination: `/${user}`,
+          permanent: false,
+        },
+      };
+    }
     if (cookieName) {
       return {
         redirect: {

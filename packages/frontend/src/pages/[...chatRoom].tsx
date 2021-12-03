@@ -5,6 +5,7 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState } from "../redux/state";
 import { InitialState2 } from "../redux/state";
+import { checkJWT } from "../utils/authRoutes";
 
 import axios from "axios";
 import Link from "next/dist/client/link";
@@ -198,7 +199,16 @@ const Home: NextPage<IHome> = (props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
+  const user = await checkJWT(cookie.get("token"));
 
+  if (user) {
+    return {
+      redirect: {
+        destination: `/${user}`,
+        permanent: false,
+      },
+    };
+  }
   if (!cookieName) {
     return {
       redirect: {

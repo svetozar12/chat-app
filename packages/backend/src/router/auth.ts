@@ -2,9 +2,8 @@ import * as express from "express";
 import { Request, Response } from "express";
 import type { RequestHandler } from "express";
 import * as jwt from "jsonwebtoken";
-import registerValidation from "../helpers/schema";
-import User from "../models/User.model";
-
+import * as dotenv from "dotenv";
+require("dotenv").config();
 const route = express.Router();
 
 const verifyToken: RequestHandler = (req: any, res, next) => {
@@ -19,10 +18,11 @@ const verifyToken: RequestHandler = (req: any, res, next) => {
     res.sendStatus(403);
   }
 };
+const secretKey: jwt.Secret = process.env.JWT_SECRET;
 
 route.get("/user", verifyToken, async (req: any, res: Response) => {
   try {
-    jwt.verify(req.token, "secretKey", (err: any, authData: any) => {
+    jwt.verify(req.token, secretKey, (err: any, authData: any) => {
       if (err) {
         return res.sendStatus(403);
       } else {
@@ -45,19 +45,25 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
 route.post("/login", async (req: Request, res: Response) => {
   try {
     const username = req.body.username;
+    const rememberMe = req.query.rememberMe;
     console.log(req.body);
 
     const user = {
       username,
     };
-    jwt.sign({ user }, "secretKey", { expiresIn: "30s" }, (err, token) => {
-      if (err) res.status(403); //Unauthorized 403
-      return res
-        .json({
-          token,
-        })
-        .status(201);
-    });
+    jwt.sign(
+      { user },
+      secretKey,
+      { expiresIn: rememberMe ? "3y" : "1h" },
+      (err, token) => {
+        if (err) res.status(403); //Unauthorized 403
+        return res
+          .json({
+            token,
+          })
+          .status(201);
+      },
+    );
   } catch (error) {
     return res.status(403).json({
       //Unauthorized 403
