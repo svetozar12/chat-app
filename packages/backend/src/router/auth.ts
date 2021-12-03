@@ -10,6 +10,7 @@ const route = express.Router();
 const verifyToken: RequestHandler = (req: any, res, next) => {
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
+    //if bearer Header isn't undefined seperates JWT from Bearer and later on use method jwt.verify() to verify the jwt
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
     req.token = bearerToken;
@@ -23,8 +24,6 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
   try {
     jwt.verify(req.token, "secretKey", (err: any, authData: any) => {
       if (err) {
-        console.log(err);
-
         return res.sendStatus(403);
       } else {
         return res.json({
@@ -51,7 +50,7 @@ route.post("/login", async (req: Request, res: Response) => {
     const user = {
       username,
     };
-    jwt.sign({ user }, "secretKey", { expiresIn: "1hr" }, (err, token) => {
+    jwt.sign({ user }, "secretKey", { expiresIn: "30s" }, (err, token) => {
       if (err) res.status(403); //Unauthorized 403
       return res
         .json({

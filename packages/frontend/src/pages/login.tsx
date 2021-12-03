@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
 import { wrapper } from "../redux/store";
+import { loginAuth } from "../utils/authRoutes";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -22,9 +23,16 @@ function login(props: AppProps) {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (state.input) {
+      const JWT = await loginAuth(state.input);
       const login = await loginPost(state.input);
       if (await login) {
         cookie.set("name", state.input, {
+          maxAge: state.remember_me ? 94670777 : 3600,
+          sameSite: "strict",
+          path: "/",
+        });
+
+        cookie.set("token", JWT, {
           maxAge: state.remember_me ? 94670777 : 3600,
           sameSite: "strict",
           path: "/",

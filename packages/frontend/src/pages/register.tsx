@@ -1,12 +1,14 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
 import { InitialState } from "../redux/state";
-import { useCookie } from "next-cookie";
+import { Cookie, useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
+import { checkJWT } from "../utils/authRoutes";
+import cookies from "next-cookies";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
@@ -47,16 +49,17 @@ function register(props: { cookie: string }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
+  const user = await checkJWT(cookie.get("token"));
 
-  if (cookieName) {
+  if (user) {
     return {
       redirect: {
-        destination: `/${cookieName}`,
+        destination: `/${user}`,
         permanent: false,
       },
     };
   }
+
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };
