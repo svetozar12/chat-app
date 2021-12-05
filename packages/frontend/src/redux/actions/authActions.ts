@@ -30,9 +30,13 @@ const RegisterPostError = (res: string) => {
 // =========
 
 export const loginPost =
-  (name: string) => async (dispatch: Dispatch<Action>) => {
+  (username: string, password: string) =>
+  async (dispatch: Dispatch<Action>) => {
     try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
+      const res = await axios.post(`${requestUrl}/auth/login`, {
+        username,
+        password,
+      });
       return true;
     } catch (error: any) {
       dispatch(loginPostError(error.response.data.message));
@@ -44,10 +48,12 @@ export const loginPost =
   };
 
 export const registerPost =
-  (name: string) => async (dispatch: Dispatch<Action>) => {
+  (username: string, password: string) =>
+  async (dispatch: Dispatch<Action>) => {
     try {
       const res = await axios.post(`${requestUrl}/users/register`, {
-        username: name,
+        username,
+        password,
       });
       const data = res.data.message;
 

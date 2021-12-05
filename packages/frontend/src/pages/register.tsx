@@ -1,14 +1,13 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
 import { InitialState } from "../redux/state";
-import { Cookie, useCookie } from "next-cookie";
+import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
 import { checkJWT } from "../utils/authRoutes";
-import cookies from "next-cookies";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
@@ -26,7 +25,7 @@ function register(props: { cookie: string }) {
   }, []);
 
   const quickLogin = () => {
-    cookie.set("name", state.input, {
+    cookie.set("name", state.input_username, {
       sameSite: "strict",
       path: "/",
     });
@@ -36,11 +35,15 @@ function register(props: { cookie: string }) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const register = await registerPost(state.input);
+    const register = await registerPost(
+      state.input_username,
+      state.input_password,
+    );
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
     } else {
-      dispatch({ type: "SAVE_INPUT", payload: "" });
+      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
+      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
     }
   };
 

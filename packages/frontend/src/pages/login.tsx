@@ -23,11 +23,11 @@ function login(props: AppProps) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (state.input) {
-      const JWT = await loginAuth(state.input);
-      const login = await loginPost(state.input);
+    if (state.input_username) {
+      const JWT = await loginAuth(state.input_username, state.input_password);
+      const login = await loginPost(state.input_username, state.input_password);
       if (await login) {
-        cookie.set("name", state.input, {
+        cookie.set("name", state.input_username, {
           maxAge: state.remember_me ? 94670777 : 3600,
           sameSite: "strict",
           path: "/",

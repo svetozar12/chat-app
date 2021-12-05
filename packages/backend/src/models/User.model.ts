@@ -19,6 +19,7 @@ const UserSchema = new Schema<UserSchema>({
   },
 });
 
+// this is middleware which is executed before mongoose method save to hash the password
 UserSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -30,6 +31,7 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
+//This is custom method which compares password input and hashed password
 UserSchema.methods.isValidPassword = async function (password) {
   try {
     return await bcrypt.compare(password, this.password);

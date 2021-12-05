@@ -16,13 +16,22 @@ function LoginForm({ handleSubmit }: { handleSubmit: any }) {
         </h1>
         <h1>Login</h1>
         <input
-          value={state.input}
+          value={state.input_username}
           onChange={(e) =>
-            dispatch({ type: "SAVE_INPUT", payload: e.target.value })
+            dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
           }
           type="text"
           name="username"
           placeholder="username ..."
+        />
+        <input
+          value={state.input_password}
+          onChange={(e) =>
+            dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
+          }
+          type="text"
+          name="password"
+          placeholder="password ..."
         />
         <div className="clickable">
           <Link href="/register">

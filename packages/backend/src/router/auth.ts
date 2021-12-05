@@ -35,15 +35,18 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
 route.post("/login", async (req: Request, res: Response) => {
   try {
     const result = await authSchema.validateAsync(req.body);
-    const userr = await User.findOne({ username: result.username });
+    const user_db = await User.findOne({ username: result.username });
     const username = req.body.username;
     const password = req.body.password;
     const rememberMe = req.query.rememberMe;
-    if (!userr) return res.status(400).json({ message: "User not registered" });
+    if (!user_db)
+      //check if user doesnt exist in the db
+      return res.status(400).json({ message: "User not registered" });
 
-    const isMatch = await userr.isValidPassword(result.password);
+    const isMatch = await user_db.isValidPassword(result.password);
 
     if (!isMatch)
+      //check if password of the user is valid doesnt exist in the db
       return res.status(401).json({ message: "Username/password not valid" });
 
     const user = {
