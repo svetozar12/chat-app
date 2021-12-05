@@ -22,21 +22,12 @@ const index = () => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
   const user = await checkJWT(cookie.get("token"));
 
-  if (user) {
+  if (user && cookie.get("name")) {
     return {
       redirect: {
         destination: `/${user}`,
-        permanent: false,
-      },
-    };
-  }
-  if (cookieName) {
-    return {
-      redirect: {
-        destination: `/${cookieName}`,
         permanent: false,
       },
     };

@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
-import { checkJWT } from "../utils/authRoutes";
+import { checkJWT, loginAuth } from "../utils/authRoutes";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
@@ -24,8 +24,13 @@ function register(props: { cookie: string }) {
     }
   }, []);
 
-  const quickLogin = () => {
+  const quickLogin = async () => {
+    const JWT = await loginAuth(state.input_username, state.input_password);
     cookie.set("name", state.input_username, {
+      sameSite: "strict",
+      path: "/",
+    });
+    cookie.set("token", JWT, {
       sameSite: "strict",
       path: "/",
     });
@@ -54,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const user = await checkJWT(cookie.get("token"));
 
-  if (user) {
+  if (cookie.get("name") && user) {
     return {
       redirect: {
         destination: `/${user}`,

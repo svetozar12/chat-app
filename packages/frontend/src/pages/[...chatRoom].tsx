@@ -41,8 +41,6 @@ const Home: NextPage<IHome> = (props) => {
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
   const chatRoom = props.chatRoom.chatRoom;
-  console.log(props);
-
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
@@ -64,8 +62,6 @@ const Home: NextPage<IHome> = (props) => {
         `${requestUrl}/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
-      console.log(data);
-
       updateChat(data);
       return true;
     } catch (error) {
@@ -201,15 +197,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.get("name");
   const user = await checkJWT(cookie.get("token"));
 
-  if (user) {
-    return {
-      redirect: {
-        destination: `/${user}`,
-        permanent: false,
-      },
-    };
-  }
-  if (!cookieName) {
+  if (!cookieName && !user) {
     return {
       redirect: {
         destination: "/",

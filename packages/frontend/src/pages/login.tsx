@@ -9,8 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
 import { wrapper } from "../redux/store";
-import { loginAuth } from "../utils/authRoutes";
-import { checkJWT } from "../utils/authRoutes";
+import { checkJWT, loginAuth } from "../utils/authRoutes";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -51,21 +50,12 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     const cookie = useCookie(context);
-    const cookieName = cookie.get("name");
     const user = await checkJWT(cookie.get("token"));
 
-    if (user) {
+    if (cookie.get("name") && user) {
       return {
         redirect: {
           destination: `/${user}`,
-          permanent: false,
-        },
-      };
-    }
-    if (cookieName) {
-      return {
-        redirect: {
-          destination: `/${cookieName}`,
           permanent: false,
         },
       };

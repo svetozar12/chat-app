@@ -10,6 +10,8 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { checkJWT } from "../utils/authRoutes";
+import { useSelector } from "react-redux";
+import { InitialState } from "../redux/state";
 
 interface Ichats {
   _id: string;
@@ -32,6 +34,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
+  const state = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
 
   const getChatRoom = async () => {
     try {
@@ -64,8 +69,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
-      console.log(data);
-
       setContacts(data);
       if (data.status === "declined") return false;
       return true;
@@ -76,6 +79,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const deleteCookies = () => {
     cookie.remove("name");
+    cookie.remove("token");
     router.push("/");
     dispatch({ type: "SIGN_OUT" });
   };
@@ -92,7 +96,14 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const validateUser = async () => {
     try {
-      const res = await axios.get(`${requestUrl}/users/${cookieName}`);
+      const res = await axios.get(
+        `${requestUrl}/auth/user?rememberMe=${state.remember_me}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie.get("token")}`,
+          },
+        },
+      );
       if (!cookieName) throw Error;
       return true;
     } catch (error) {
@@ -130,8 +141,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
-
-  console.log(socketRef);
 
   useEffect(() => {
     fetchRecieverStatus();
@@ -205,15 +214,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const user = await checkJWT(cookie.get("token"));
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: `/${user}`,
-        permanent: false,
-      },
-    };
-  }
-  if (!cookieName) {
+  if (!cookieName && !user) {
     return {
       redirect: {
         destination: `/`,
