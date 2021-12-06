@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
-
+import * as jwt from "jsonwebtoken";
+import * as createError from "http-errors";
 export const verifyToken: RequestHandler = (req: any, res, next) => {
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
@@ -11,4 +12,22 @@ export const verifyToken: RequestHandler = (req: any, res, next) => {
   } else {
     res.sendStatus(403);
   }
+};
+
+export const signToken = (
+  data: {
+    username: string;
+    password: string;
+  },
+  secret: string,
+  expires: string,
+) => {
+  return new Promise((resolve, reject) => {
+    jwt.sign(data, secret, { expiresIn: expires }, (err, token) => {
+      if (err) {
+        return reject(createError.InternalServerError);
+      }
+      return resolve(token);
+    });
+  });
 };

@@ -9,7 +9,7 @@ function LoginForm({ handleSubmit }: { handleSubmit: any }) {
   const dispatch = useDispatch();
 
   return (
-    <div>
+    <div className="login-box">
       <form style={{ height: "100vh" }} className="container">
         <h1 className="alert" style={{ color: "red" }}>
           {state.bad}
@@ -29,14 +29,14 @@ function LoginForm({ handleSubmit }: { handleSubmit: any }) {
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
           }
-          type="text"
+          type="password"
           name="password"
           placeholder="password ..."
         />
         <div className="clickable">
           <Link href="/register">
             <a className="link" style={{ color: "var(--main-blue)" }}>
-              Sign up
+              Create an account.
             </a>
           </Link>
           <label htmlFor="checkbox">

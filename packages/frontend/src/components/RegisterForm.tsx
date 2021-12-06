@@ -38,13 +38,13 @@ function RegisterForm({
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
           }
-          type="text"
+          type="password"
           name="password"
           placeholder="password ..."
         />
         <Link href="/login">
           <a className="link" style={{ color: "var(--main-blue)" }}>
-            Sign in
+            Log In.
           </a>
         </Link>
         <button onClick={handleSubmit} type="submit">
