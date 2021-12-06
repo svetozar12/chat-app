@@ -96,6 +96,7 @@ route.put("/invites", async (req: Request, res: Response) => {
   }
 });
 
+//finds chat room by 2 users
 route.put("/chat-room", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;

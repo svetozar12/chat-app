@@ -1,4 +1,13 @@
-GET http://localhost:4002/users/test1
+POST http://localhost:4002/auth/login 
+Content-Type: application/json
+
+{
+    "username":"sergei",
+    "password":"123"
+}
+###
+GET http://localhost:4002/auth/user?rememberMe=true
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoic2VyZ2VpIiwicGFzc3dvcmQiOiIxMjMifSwiaWF0IjoxNjM4NzQ0MTYzLCJleHAiOjE2Mzg3NDc3NjN9.a-bSHt8CQnbLFd35qpYyK4l4Ti0UQ8RIP5T62m1SAOM"
 ###
 POST http://localhost:4002/users/register
 Content-Type: application/json
@@ -9,7 +18,7 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:4002/users/test1
-###
+############################################
 GET http://localhost:4002/invites/test1
 ### 
 POST http://localhost:4002/invites
@@ -37,9 +46,9 @@ PUT http://localhost:4002/chat-room
 Content-Type: application/json
 
 {
-    "id":"61840e33dd20cfe3356ab02b",
-    "user1":"test1",
-    "user2":"test2"
+    "id":"61ad42eafe6f5448d5de2b73",
+    "user1":"sergei",
+    "user2":"go60"
 }
 ###
 PUT http://localhost:4002/chat-room/616e7322dfe6725c10bdefc9
