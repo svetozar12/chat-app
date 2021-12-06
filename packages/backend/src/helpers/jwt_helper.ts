@@ -8,13 +8,15 @@ export const verifyToken: RequestHandler = (req: any, res, next) => {
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
     req.token = bearerToken;
+    console.log(req.token);
+
     next();
   } else {
     res.sendStatus(403);
   }
 };
 
-export const signToken = (
+export const signTokens = (
   data: {
     username: string;
     password: string;
@@ -25,7 +27,19 @@ export const signToken = (
   return new Promise((resolve, reject) => {
     jwt.sign(data, secret, { expiresIn: expires }, (err, token) => {
       if (err) {
-        return reject(createError.InternalServerError);
+        return reject(createError(403, "Token has expired"));
+      }
+      return resolve(token);
+    });
+  });
+};
+
+export const verifyTokens = (token: string, secret: string) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, (err, token) => {
+      if (err) {
+        console.log(err.message);
+        return reject(createError(403, "Token has expired"));
       }
       return resolve(token);
     });
