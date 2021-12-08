@@ -45,7 +45,7 @@ function login(props: AppProps) {
 
         cookie.set("refresh_token", tokens.refreshJWT, {
           sameSite: "strict",
-          maxAge: rememberMe,
+          maxAge: 31556952,
           path: "/",
         });
 

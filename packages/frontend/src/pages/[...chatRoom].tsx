@@ -71,7 +71,8 @@ const Home: NextPage<IHome> = (props) => {
 
   useEffect(() => {
     getRecentMessages();
-    if (!states.cookie) dispatch({ type: "SIGN_OUT" });
+    if (cookie.get("token") && cookie.get("refresh_token"))
+      dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }) => {
       dispatch({
@@ -197,7 +198,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.get("name");
   const user = await checkJWT(cookie.get("token"));
 
-  if (!cookieName && !user) {
+  if (!cookieName && !user && !cookie.get("refresh_token")) {
     return {
       redirect: {
         destination: "/",

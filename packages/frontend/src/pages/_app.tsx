@@ -19,33 +19,38 @@ const MyApp = (
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
+
   useEffect(() => {
-    const res = checkRefreshToken(cookie.get("refresh_token"));
     const response = checkJWT(cookie.get("token"));
-    if (!res && !response) {
+    if (!cookie.get("refresh_token") && !response) {
       cookie.remove("name");
       cookie.remove("token");
       cookie.remove("refresh_token");
       return dispatch({ type: "SIGN_OUT" });
     }
-    if (cookie.has("refresh_token") && !response) {
-      cookie.set("name", state.input_username, {
-        maxAge: state.remember_me ? 31556952 : 3600,
-        sameSite: "strict",
-        path: "/",
-      });
-
-      cookie.set("token", res.Access_token, {
-        maxAge: 3600,
-        sameSite: "strict",
-        path: "/",
-      });
-
-      cookie.set("refresh_token", res.Refresh_token, {
-        maxAge: 31556952,
-        sameSite: "strict",
-        path: "/",
-      });
+    console.log("expired", cookie.get("name"));
+    if (cookie.get("refresh_token") && !cookie.get("token")) {
+      const res = async () => {
+        const res = await checkRefreshToken(cookie.get("refresh_token"));
+        if (res) {
+          cookie.set("name", res.name, {
+            maxAge: state.remember_me ? 31556952 : 3600,
+            sameSite: "strict",
+            path: "/",
+          });
+          cookie.set("token", res.JWT, {
+            maxAge: 3600,
+            sameSite: "strict",
+            path: "/",
+          });
+          cookie.set("refresh_token", res.refreshJWT, {
+            maxAge: 31556952,
+            sameSite: "strict",
+            path: "/",
+          });
+        }
+      };
+      res();
     }
   }, [router.asPath]);
   return (

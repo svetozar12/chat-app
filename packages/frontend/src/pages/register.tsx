@@ -34,6 +34,11 @@ function register(props: { cookie: string }) {
       sameSite: "strict",
       path: "/",
     });
+    cookie.set("refresh_token", JWT, {
+      sameSite: "strict",
+      path: "/",
+      maxAge: 31556952,
+    });
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
     router.push(`/${cookie.get("name")}`);
   };

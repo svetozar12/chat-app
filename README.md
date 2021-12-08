@@ -8,18 +8,16 @@ This is an chat app which is using websocket for transfering the messages betwee
 - [Redux](https://redux.js.org/)
 - [Express](https://expressjs.com/)
 - [MongoDb](https://www.mongodb.com/)
+- [JWT](https://jwt.io/)
 
 ### Prerequisites
 
 First enter in the frontend and install the dependencies and then repeat the same process in directory backend.
 
-- npm
+- yarn
 
-  ```cd frontend
-    npm install && npm run dev
-    will run on http://localhost:3000
-
-    cd backend
-    npm install && npm run dev
-    will run on linkhttp://localhost:4001
+  ```in root dir
+        yarn add
+        yarn kill && yarn build
+        yarn dev
   ```

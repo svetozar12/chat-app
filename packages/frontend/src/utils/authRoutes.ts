@@ -1,6 +1,7 @@
 import { requestUrl } from "./hostUrl_requestUrl";
 import axios from "axios";
 export interface ITokens {
+  name?: string;
   JWT: string;
   refreshJWT: string;
 }
@@ -27,15 +28,20 @@ export const checkRefreshToken = async (refresh_token: string) => {
     const refreshToken = await axios.post(`${requestUrl}/auth/refresh`, {
       refresh_token: refresh_token,
     });
+    const username = refreshToken.data.username;
     const JWT = refreshToken.data.Access_token;
     const refreshJWT = refreshToken.data.Refresh_token;
     const tokens: ITokens = {
+      name: username,
       JWT,
       refreshJWT,
     };
+    console.log(tokens);
 
     return tokens;
   } catch (error) {
+    console.log(error);
+
     return false;
   }
 };

@@ -95,27 +95,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const validateUser = async () => {
-    try {
-      const res = await axios.get(
-        `${requestUrl}/auth/user?rememberMe=${state.remember_me}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie.get("token")}`,
-          },
-        },
-      );
-      if (!res) throw Error;
-      return true;
-    } catch (error) {
-      deleteCookies();
-      router.push("/");
-      return false;
-    }
-  };
-
   useEffect(() => {
-    validateUser();
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
@@ -180,7 +160,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
-          <h1>You're logged in as {cookieName}</h1>
+          <h1>Logged in as {cookieName}</h1>
           <h2 className="log-out" onClick={deleteCookies}>
             Log out
           </h2>
@@ -216,7 +196,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!cookie.get("name") && cookie.get("token") && !user) {
     cookie.remove("name");
     cookie.remove("token");
-    cookie.remove("refresh_token");
     return {
       redirect: {
         destination: `/`,

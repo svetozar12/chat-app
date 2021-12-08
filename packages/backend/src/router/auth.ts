@@ -68,9 +68,11 @@ route.post("/refresh", async (req: any, res) => {
       };
       const accessToken = await signTokens(user, ACCESS_TOKEN, "1h");
       const refreshToken = await signTokens(user, REFRESH_TOKEN, "1y");
-      return res
-        .status(201)
-        .json({ Access_token: accessToken, Refresh_token: refreshToken });
+      return res.status(201).json({
+        username: refresh.username,
+        Access_token: accessToken,
+        Refresh_token: refreshToken,
+      });
     }
   } catch (error) {
     return res.status(501).json({
