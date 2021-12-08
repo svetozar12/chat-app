@@ -9,6 +9,7 @@ const REFRESH_TOKEN: any = process.env.JWT_REFRESH_SECRET;
 route.get("/user", verifyToken, async (req: any, res: Response) => {
   try {
     const response = await verifyTokens(req.token, ACCESS_TOKEN);
+    if (!response) res.json({ message: "BAD" }).status(403);
     return res.status(200).json({ authData: response });
   } catch (error) {
     return res.status(501).json({
@@ -32,13 +33,11 @@ route.post("/login", async (req: Request, res: Response) => {
     };
 
     if (!user_db)
-      //check if user doesnt exist in the db
       return res.status(400).json({ message: "User not registered" });
 
     const isMatch = await user_db.isValidPassword(result.password);
 
     if (!isMatch)
-      //check if password of the user is valid doesnt exist in the db
       return res.status(401).json({ message: "Username/password not valid" });
 
     const access = await signTokens(user, ACCESS_TOKEN, "1h");

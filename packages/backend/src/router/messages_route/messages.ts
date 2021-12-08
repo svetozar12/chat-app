@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import Messages from "../../models/Message.model";
 const route = express.Router();
 
-route.get("/messages/:chat_id", async (req: Request, res: Response) => {
+route.get("/:chat_id", async (req: Request, res: Response) => {
   try {
     const page_size = Number(req.query.page_size);
     const page_number = Number(req.query.page_number);
@@ -24,7 +24,7 @@ route.get("/messages/:chat_id", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/messages/:chat_id", async (req: Request, res: Response) => {
+route.post("/:chat_id", async (req: Request, res: Response) => {
   try {
     const chat_id = req.params.chat_id;
     const sender = req.body.sender;

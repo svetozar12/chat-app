@@ -38,8 +38,7 @@ export const verifyTokens = (token: string, secret: string) => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, secret, (err, token) => {
       if (err) {
-        console.log(err.message);
-        return reject(createError(403, "Token has expired"));
+        reject(createError(403, "Token has expired"));
       }
       return resolve(token);
     });

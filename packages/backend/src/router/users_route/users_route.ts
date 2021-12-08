@@ -6,7 +6,7 @@ import User from "../../models/User.model";
 import Invites from "../../models/Invites.model";
 import Chats from "../../models/chatRoom.model";
 
-route.post("/users/register", async (req: Request, res: Response) => {
+route.post("/register", async (req: Request, res: Response) => {
   try {
     const { error } = registerValidation(req.body);
     const username = req.body.username;
@@ -36,7 +36,7 @@ route.post("/users/register", async (req: Request, res: Response) => {
   }
 });
 
-route.delete("/users/:username", async (req: Request, res: Response) => {
+route.delete("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     await User.deleteOne({ username }).exec();

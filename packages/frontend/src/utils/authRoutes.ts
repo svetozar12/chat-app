@@ -1,14 +1,40 @@
 import { requestUrl } from "./hostUrl_requestUrl";
 import axios from "axios";
-
+export interface ITokens {
+  JWT: string;
+  refreshJWT: string;
+}
 const createJWT = async (input_username: string, input_password: string) => {
   try {
     const res = await axios.post(`${requestUrl}/auth/login`, {
       username: input_username,
       password: input_password,
     });
-    const JWT = res.data.token;
-    return JWT;
+    const JWT = res.data.Access_token;
+    const refreshJWT = res.data.Refresh_token;
+    const tokens: ITokens = {
+      JWT,
+      refreshJWT,
+    };
+    return tokens;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const checkRefreshToken = async (refresh_token: string) => {
+  try {
+    const refreshToken = await axios.post(`${requestUrl}/auth/refresh`, {
+      refresh_token: refresh_token,
+    });
+    const JWT = refreshToken.data.Access_token;
+    const refreshJWT = refreshToken.data.Refresh_token;
+    const tokens: ITokens = {
+      JWT,
+      refreshJWT,
+    };
+
+    return tokens;
   } catch (error) {
     return false;
   }
@@ -21,7 +47,7 @@ export const checkJWT = async (JWT: string) => {
         Authorization: `Bearer ${JWT}`,
       },
     });
-    const user = authRoute.data.authData.user;
+    const user = authRoute.data.authData.username;
 
     return user.username;
   } catch (error) {
@@ -34,9 +60,9 @@ export const loginAuth = async (
   input_password: string,
 ) => {
   try {
-    const JWT = await createJWT(input_username, input_password);
-    await checkJWT(JWT);
-    return JWT;
+    const tokens = await createJWT(input_username, input_password);
+    await checkJWT(tokens.JWT);
+    return tokens;
   } catch (error) {
     return false;
   }

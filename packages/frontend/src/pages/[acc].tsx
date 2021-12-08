@@ -80,6 +80,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const deleteCookies = () => {
     cookie.remove("name");
     cookie.remove("token");
+    cookie.remove("refresh_token");
     router.push("/");
     dispatch({ type: "SIGN_OUT" });
   };
@@ -104,11 +105,11 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           },
         },
       );
-      if (!cookieName) throw Error;
+      if (!res) throw Error;
       return true;
     } catch (error) {
-      router.push("/");
       deleteCookies();
+      router.push("/");
       return false;
     }
   };
@@ -210,11 +211,12 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
 
   const user = await checkJWT(cookie.get("token"));
-
-  if (!cookieName && !user) {
+  if (!cookie.get("name") && cookie.get("token") && !user) {
+    cookie.remove("name");
+    cookie.remove("token");
+    cookie.remove("refresh_token");
     return {
       redirect: {
         destination: `/`,

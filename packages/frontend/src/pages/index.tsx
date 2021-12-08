@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { hostUrl } from "../utils/hostUrl_requestUrl";
-import { checkJWT } from "../utils/authRoutes";
+import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
 const index = () => {
   return (
     <div style={{ height: "100vh" }} className="container">
