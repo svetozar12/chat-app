@@ -1,14 +1,15 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
 import User from "../../src/models/User.model";
-import "jest";
-import "@types/jest";
-
+let jwt: string;
 beforeAll(async () => {
   try {
-    const users = new User({ username: "TestUser" });
+    const dumyUser = { username: "TestUser", password: "TestUser" };
+    const users = new User(dumyUser);
+    const res: any = await request(app).post("/auth/login").send(dumyUser);
+    jwt = res.Access_token;
     users.save();
-    return true;
+    return jwt;
   } catch (error) {
     return false;
   }
@@ -23,26 +24,34 @@ afterAll(async () => {
   }
 });
 
-describe("Valid input on login", () => {
+describe("Return user and password", () => {
   it("should return 200 OK", async () => {
-    const res = await request(app).get("/users/TestUser");
-    expect(res.status).toBe(200);
-    expect(res.body.message.username).toBe("TestUser");
+    try {
+      console.log(jwt);
+
+      const res = await request(app)
+        .get("/auth/user")
+        .set("Authorization", `Bearer ${jwt}`)
+        .expect(200);
+      return true;
+    } catch (error) {
+      return false;
+    }
   });
 });
 
-describe("Invalid input too short input", () => {
-  it("should return 409 Conflict", async () => {
-    const res = await request(app).get("/users/a");
-    expect(res.status).toBe(409);
-  });
-});
+// describe("Invalid input too short input", () => {
+//   it("should return 409 Conflict", async () => {
+//     const res = await request(app).get("/users/a");
+//     expect(res.status).toBe(409);
+//   });
+// });
 
-describe("Invalid input too long input", () => {
-  it("should return 409 Conflict", async () => {
-    const res = await request(app).get(
-      "/users/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    );
-    expect(res.status).toBe(409);
-  });
-});
+// describe("Invalid input too long input", () => {
+//   it("should return 409 Conflict", async () => {
+//     const res = await request(app).get(
+//       "/users/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+//     );
+//     expect(res.status).toBe(409);
+//   });
+// });

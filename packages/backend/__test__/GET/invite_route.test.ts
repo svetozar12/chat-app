@@ -1,8 +1,6 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
 import Invites from "../../src/models/Invites.model";
-import "jest";
-import "@types/jest";
 import { ObjectId } from "mongoose";
 import { tests, invitesDumyData } from "../test_dumy_data";
 

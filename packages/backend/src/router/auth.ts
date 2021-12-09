@@ -32,6 +32,8 @@ route.post("/login", async (req: Request, res: Response) => {
       password,
     };
 
+    if (!result) return res.status(409);
+
     if (!user_db)
       return res.status(400).json({ message: "User not registered" });
 
@@ -57,9 +59,7 @@ route.post("/login", async (req: Request, res: Response) => {
 route.post("/refresh", async (req: any, res) => {
   try {
     const refresh_token = req.body.refresh_token;
-    const refresh:
-      | { username: string; password: string; iat: number; exp: number }
-      | undefined = await verifyTokens(refresh_token, REFRESH_TOKEN);
+    const refresh: any = await verifyTokens(refresh_token, REFRESH_TOKEN);
 
     if (refresh) {
       const user = {

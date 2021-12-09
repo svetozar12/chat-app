@@ -1,6 +1,9 @@
 import { Socket } from "socket.io";
 import Chats from "../models/chatRoom.model";
-const io = require("socket.io")(4000, {
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const server = createServer();
+const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
@@ -58,8 +61,8 @@ io.on("connection", (socket: Socket): void => {
   });
 });
 
-// if (process.env.NODE_ENV !== "test") {
-//   server.listen(process.env.PORT || 4000);
-// }
+if (process.env.NODE_ENV !== "test") {
+  server.listen(process.env.PORT || 4000);
+}
 
 module.exports = io;

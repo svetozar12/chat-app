@@ -18,7 +18,7 @@ function login(props: AppProps) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
-  const rememberMe = state.remember_me ? 31556952 : 3600;
+  const rememberMe = state.remember_me ? 31556952 : 10;
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

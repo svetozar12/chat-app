@@ -6,7 +6,7 @@
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "types": ["node"],
+    "types": ["node", "@types/jest"],
     "skipLibCheck": true,
     "outDir": "dist",
     "typeRoots": ["./node_modules/@types"]

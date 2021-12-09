@@ -8,8 +8,6 @@ export const verifyToken: RequestHandler = (req: any, res, next) => {
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
     req.token = bearerToken;
-    console.log(req.token);
-
     next();
   } else {
     res.sendStatus(403);
