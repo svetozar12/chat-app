@@ -2,7 +2,11 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState } from "../redux/state";
 
-function LoginForm({ handleSubmit }: { handleSubmit: any }) {
+function LoginForm({
+  handleSubmit,
+}: {
+  handleSubmit(e: React.MouseEvent<HTMLButtonElement>): Promise<void>;
+}) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );

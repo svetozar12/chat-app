@@ -10,7 +10,7 @@ interface IPendingChats extends Iinvites {
   status: string;
   reciever: string;
   socketRef: Socket;
-  setLocalStatus: any;
+  setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function PendingChats({

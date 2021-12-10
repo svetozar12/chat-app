@@ -6,8 +6,8 @@ function RegisterForm({
   quickLogin,
   handleSubmit,
 }: {
-  quickLogin: any;
-  handleSubmit: any;
+  quickLogin(): void;
+  handleSubmit(e: React.MouseEvent<HTMLButtonElement>): Promise<void>;
 }) {
   const dispatch = useDispatch();
   const state = useSelector(

@@ -26,7 +26,7 @@ const MyApp = (
       cookie.remove("name");
       cookie.remove("token");
       cookie.remove("refresh_token");
-      return dispatch({ type: "SIGN_OUT" });
+      dispatch({ type: "SIGN_OUT" });
     }
     console.log("expired", cookie.get("name"));
     if (cookie.get("refresh_token") && !cookie.get("token")) {

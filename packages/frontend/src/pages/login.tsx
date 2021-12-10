@@ -23,11 +23,11 @@ function login(props: AppProps) {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (state.input_username) {
-      const tokens = await loginAuth(
+      const tokens: any = await loginAuth(
+        // !fix the any
         state.input_username,
         state.input_password,
       );
-      console.log(tokens.refreshJWT);
 
       const login = await loginPost(state.input_username, state.input_password);
       if (await login) {

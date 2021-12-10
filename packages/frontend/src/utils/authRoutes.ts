@@ -2,10 +2,13 @@ import { requestUrl } from "./hostUrl_requestUrl";
 import axios from "axios";
 export interface ITokens {
   name?: string;
-  JWT: string;
-  refreshJWT: string;
+  JWT: string | false;
+  refreshJWT: string | false;
 }
-const createJWT = async (input_username: string, input_password: string) => {
+const createJWT = async (
+  input_username: string,
+  input_password: string,
+): Promise<ITokens | false> => {
   try {
     const res = await axios.post(`${requestUrl}/auth/login`, {
       username: input_username,
@@ -36,17 +39,13 @@ export const checkRefreshToken = async (refresh_token: string) => {
       JWT,
       refreshJWT,
     };
-    console.log(tokens);
-
     return tokens;
   } catch (error) {
-    console.log(error);
-
     return false;
   }
 };
 
-export const checkJWT = async (JWT: string) => {
+export const checkJWT = async (JWT: string): Promise<string | false> => {
   try {
     const authRoute = await axios.get(`${requestUrl}/auth/user`, {
       headers: {

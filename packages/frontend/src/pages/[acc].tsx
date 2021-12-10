@@ -58,7 +58,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const data = res.data.invites;
       setContacts(data);
       return true;
-    } catch (error: any) {
+    } catch (error) {
       return false;
     }
   };
