@@ -18,12 +18,6 @@ function register(props: { cookie: string }) {
     (state: { authReducer: InitialState }) => state.authReducer,
   );
 
-  React.useEffect(() => {
-    if (cookie.get("name")) {
-      router.push(`/${cookie.get("name")}`);
-    }
-  }, []);
-
   const quickLogin = async () => {
     const JWT = await loginAuth(state.input_username, state.input_password);
     cookie.set("name", state.input_username, {
@@ -37,7 +31,7 @@ function register(props: { cookie: string }) {
     cookie.set("refresh_token", JWT, {
       sameSite: "strict",
       path: "/",
-      maxAge: 31556952,
+      maxAge: 7200,
     });
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
     router.push(`/${cookie.get("name")}`);
@@ -62,12 +56,11 @@ function register(props: { cookie: string }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const user = await checkJWT(cookie.get("token"));
 
-  if (cookie.get("name") && user) {
+  if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {
-        destination: `/${user}`,
+        destination: `/${cookie.get("name")}`,
         permanent: false,
       },
     };

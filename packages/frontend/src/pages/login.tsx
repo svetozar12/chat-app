@@ -18,7 +18,8 @@ function login(props: AppProps) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
-  const rememberMe = state.remember_me ? 31556952 : 10;
+  const rememberMe = state.remember_me ? 31556952 : 3600;
+  const refreshRememberMe = state.remember_me ? 63113904 : 7200;
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -45,7 +46,7 @@ function login(props: AppProps) {
 
         cookie.set("refresh_token", tokens.refreshJWT, {
           sameSite: "strict",
-          maxAge: 31556952,
+          maxAge: refreshRememberMe,
           path: "/",
         });
 
@@ -64,10 +65,10 @@ export const getServerSideProps: GetServerSideProps =
     const cookie = useCookie(context);
     const user = await checkJWT(cookie.get("token"));
 
-    if (cookie.get("name") && user) {
+    if (cookie.has("name") && cookie.has("token")) {
       return {
         redirect: {
-          destination: `/${user}`,
+          destination: `/${cookie.get("name")}`,
           permanent: false,
         },
       };

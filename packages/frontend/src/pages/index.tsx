@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { hostUrl } from "../utils/hostUrl_requestUrl";
-import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
 const index = () => {
   return (
     <div style={{ height: "100vh" }} className="container">
@@ -22,12 +21,11 @@ const index = () => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const user = await checkJWT(cookie.get("token"));
 
-  if (user && cookie.get("name") && cookie.get("refresh_token")) {
+  if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {
-        destination: `/${user}`,
+        destination: `/${cookie.get("name")}`,
         permanent: false,
       },
     };

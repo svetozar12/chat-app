@@ -24,12 +24,18 @@ route.post("/login", async (req: Request, res: Response) => {
   try {
     const result = await authSchema.validateAsync(req.body);
     const user_db = await User.findOne({ username: result.username });
+    const remember_me: boolean = req.query.remember_me === `true`;
     const username = req.body.username;
     const password = req.body.password;
 
     const user: { username: string; password: string } = {
       username,
       password,
+    };
+
+    const expire = {
+      access: remember_me ? "1y" : "1h",
+      refresh: remember_me ? "2y" : "2h",
     };
 
     if (!result) return res.status(409);
@@ -42,8 +48,8 @@ route.post("/login", async (req: Request, res: Response) => {
     if (!isMatch)
       return res.status(401).json({ message: "Username/password not valid" });
 
-    const access = await signTokens(user, ACCESS_TOKEN, "1h");
-    const refresh = await signTokens(user, REFRESH_TOKEN, "1y");
+    const access = await signTokens(user, ACCESS_TOKEN, expire.access);
+    const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);
     return res
       .status(201)
       .json({ Access_token: access, Refresh_token: refresh });
@@ -59,15 +65,28 @@ route.post("/login", async (req: Request, res: Response) => {
 route.post("/refresh", async (req: any, res) => {
   try {
     const refresh_token = req.body.refresh_token;
+    const remember_me: boolean = req.query.remember_me === `true`;
     const refresh: any = await verifyTokens(refresh_token, REFRESH_TOKEN);
+
+    console.log(remember_me);
 
     if (refresh) {
       const user = {
         username: refresh.username,
         password: refresh.password,
       };
-      const accessToken = await signTokens(user, ACCESS_TOKEN, "1h");
-      const refreshToken = await signTokens(user, REFRESH_TOKEN, "1y");
+
+      const expire = {
+        access: remember_me ? "1y" : "1h",
+        refresh: remember_me ? "2y" : "2h",
+      };
+
+      const accessToken = await signTokens(user, ACCESS_TOKEN, expire.access);
+      const refreshToken = await signTokens(
+        user,
+        REFRESH_TOKEN,
+        expire.refresh,
+      );
       return res.status(201).json({
         username: refresh.username,
         Access_token: accessToken,

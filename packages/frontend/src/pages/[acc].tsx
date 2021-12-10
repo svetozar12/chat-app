@@ -191,23 +191,20 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-
-  const user = await checkJWT(cookie.get("token"));
-  if (!cookie.get("name") && cookie.get("token") && !user) {
-    cookie.remove("name");
-    cookie.remove("token");
+  if (!cookie.has("name") && !cookie.has("token")) {
     return {
       redirect: {
         destination: `/`,
         permanent: false,
       },
     };
-  } else
-    return {
-      props: {
-        cookie: context.req.headers.cookie || "",
-      },
-    };
+  }
+
+  return {
+    props: {
+      cookie: context.req.headers.cookie || "",
+    },
+  };
 };
 
 export default index;

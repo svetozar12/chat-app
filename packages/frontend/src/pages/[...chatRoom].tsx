@@ -198,7 +198,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookieName = cookie.get("name");
   const user = await checkJWT(cookie.get("token"));
 
-  if (!cookieName && !user && !cookie.get("refresh_token")) {
+  if (!cookieName && !user && !cookie.has("refresh_token")) {
     return {
       redirect: {
         destination: "/",
