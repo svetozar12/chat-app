@@ -2,8 +2,8 @@ import { app } from "../../src/server";
 import * as request from "supertest";
 import User from "../../src/models/User.model";
 import { dumyUser } from "../test_dumy_data";
-let jwt: string;
 
+let refresh_token: string;
 beforeAll(async () => {
   try {
     const users = new User(dumyUser);
@@ -12,8 +12,7 @@ beforeAll(async () => {
     const res: any = await request(app)
       .post("/auth/login")
       .send({ username, password });
-    jwt = res.body.Access_token;
-
+    refresh_token = res.body.Refresh_token;
     return true;
   } catch (error) {
     return false;
@@ -24,30 +23,20 @@ afterAll(async () => {
   await request(app).delete("/users/TestingUser");
 });
 
-afterAll(async () => {
-  try {
-    await User.deleteMany({ username: "TestUser" });
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-});
-
-describe("Return user and password", () => {
-  it("should return 501 server error", async () => {
+describe("Passing valid refresh-token", () => {
+  it("should return 201 Created", async () => {
     await request(app)
-      .get("/auth/user")
-      .set("Authorization", `Bearer ${jwt}`)
-      .expect(200);
+      .post("/auth/refresh")
+      .send({ refresh_token })
+      .expect(201);
   });
 });
 
-describe("Passing invalid jwt", () => {
-  it("should return 200 OK", async () => {
+describe("Passing invalid refresh-token", () => {
+  it("should return 201 Created", async () => {
     await request(app)
-      .get("/auth/user")
-      .set("Authorization", `Bearer invalidjwt`)
+      .post("/auth/refresh")
+      .send({ refresh_token: "invalid" })
       .expect(501);
   });
 });
