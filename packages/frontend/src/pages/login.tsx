@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InitialState } from "../redux/state";
 import { actions, wrapper } from "../redux/store";
 import LoginForm from "../components/LoginForm";
-import { checkJWT, loginAuth, ITokens } from "../utils/authRoutes";
+import { checkJWT, loginAuth } from "../utils/authRoutes";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -25,7 +25,6 @@ function login(props: AppProps) {
     e.preventDefault();
     if (state.input_username) {
       const tokens: any = await loginAuth(
-        // !fix the any
         state.input_username,
         state.input_password,
       );

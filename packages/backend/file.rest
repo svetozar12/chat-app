@@ -13,7 +13,7 @@ POST http://localhost:4002/users/register
 Content-Type: application/json
 
 {
-    "username":"user6"
+    "username":"segei","password":"123"
 }
 
 ###
