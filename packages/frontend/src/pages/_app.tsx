@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
-import { redirect } from "next/dist/server/api-utils";
 const MyApp = (
   { Component, pageProps }: AppProps,
   props: { cookie: string },
@@ -31,15 +30,6 @@ const MyApp = (
       cookie.remove("refresh_token");
       dispatch({ type: "SIGN_OUT" });
     }
-    // if (
-    //   cookie.get("name") &&
-    //   cookie.get("token") &&
-    //   cookie.get("refresh_token")
-    // ) {
-    //   console.log("trigger");
-
-    //   router.push(`/${cookie.get("name")}`);
-    // }
     if (cookie.get("refresh_token") && !cookie.get("token")) {
       //if refresh token isnt expired but jwt is,The refresh token will refresh jwt
       const res = async () => {
@@ -77,15 +67,6 @@ const MyApp = (
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  // if (cookie.has("name")) {
-  //   console.log("hi from if");
-  //   return {
-  //     redirect: {
-  //       destination: `/${cookie.get("name")}`,
-  //       permanent: false,
-  //     },
-  //   };
-  // }
   if (!cookie.has("name")) {
     return {
       redirect: {
