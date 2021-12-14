@@ -5,7 +5,7 @@ export interface ITokens {
   JWT: string | false;
   refreshJWT: string | false;
 }
-const createJWT = async (
+export const createJWT = async (
   input_username: string,
   input_password: string,
 ): Promise<ITokens | false> => {

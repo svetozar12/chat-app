@@ -5,12 +5,13 @@ import { InitialState } from "../redux/state";
 function LoginForm({
   handleSubmit,
 }: {
-  handleSubmit(e: React.MouseEvent<HTMLButtonElement>): Promise<void>;
+  handleSubmit?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
   const dispatch = useDispatch();
+  console.log(state.bad);
 
   return (
     <div className="login-box">

@@ -45,3 +45,4 @@ const reducer = (state: InitialState = initialState, action: Action) => {
 };
 
 export default reducer;
+export { initialState as AuthState };

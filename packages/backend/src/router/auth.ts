@@ -68,8 +68,6 @@ route.post("/refresh", async (req: any, res) => {
     const remember_me: boolean = req.query.remember_me === `true`;
     const refresh: any = await verifyTokens(refresh_token, REFRESH_TOKEN);
 
-    console.log(remember_me);
-
     if (refresh) {
       const user = {
         username: refresh.username,
