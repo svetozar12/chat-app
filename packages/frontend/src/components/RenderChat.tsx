@@ -11,7 +11,7 @@ const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
 
   return (
-    <div data-testid="test" className={name === sender ? "me" : "you"}>
+    <div className={name === sender ? "me" : "you"}>
       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
         {name === sender ? null : sender}
       </h2>

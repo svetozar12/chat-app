@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Render connected React-redux page should render with given state  from Redux state 1`] = `
+exports[`Render connected React-redux page should create snapshot for <LoginForm/> 1`] = `
 <div
   className="login-box"
 >

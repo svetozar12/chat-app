@@ -11,8 +11,6 @@ function LoginForm({
     (state: { authReducer: InitialState }) => state.authReducer,
   );
   const dispatch = useDispatch();
-  console.log(state.bad);
-
   return (
     <div className="login-box">
       <form style={{ height: "100vh" }} className="container">

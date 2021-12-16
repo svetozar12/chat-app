@@ -3,7 +3,6 @@
 exports[`<RenderChat/> should create snapshot 1`] = `
 <div
   className="you"
-  data-testid="test"
 >
   <h2
     style={

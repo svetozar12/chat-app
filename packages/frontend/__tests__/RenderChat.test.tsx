@@ -26,7 +26,7 @@ describe("<RenderChat/>", () => {
         cookie="test2"
       />,
     );
-    const test = container.getByTestId("test");
-    expect(test.className).toBe("you");
+    const test = container.getByText("hello");
+    expect(test).toBeInTheDocument();
   });
 });

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll -u"
   },
   "dependencies": {
     "@testing-library/dom": "^8.11.1",
