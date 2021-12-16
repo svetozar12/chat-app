@@ -74,7 +74,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       </label>
     </div>
     <button
-      onClick={[Function]}
+      onClick={[MockFunction]}
       type="submit"
     >
       login

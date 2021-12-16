@@ -2,15 +2,17 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import LoginForm from "../src/components/LoginForm";
 import renderer from "react-test-renderer";
+import userEvent from "@testing-library/user-event";
 import { AuthState } from "../src/redux/reducer/authReducer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
+import { render, screen, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
-const Mock = jest.fn();
-const handleSubmit = Mock.bind({});
+const submit = jest.fn();
+submit.mockReturnValue("default");
+console.log(submit());
 
 beforeEach(() => {
   const mockStore = configureStore([]);
@@ -21,14 +23,14 @@ beforeEach(() => {
   component = renderer
     .create(
       <Provider store={store}>
-        <LoginForm handleSubmit={handleSubmit} />
+        <LoginForm handleSubmit={submit} />
       </Provider>,
     )
     .toJSON();
 
   container = render(
     <Provider store={store}>
-      <LoginForm handleSubmit={handleSubmit} />
+      <LoginForm handleSubmit={submit} />
     </Provider>,
   );
 });
@@ -41,8 +43,16 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <LoginForm/>", () => {
-    const test = container.getByText("Login");
-    expect(test).toBeInTheDocument();
+    const renderedComponent = container.getByText("Login");
+    expect(renderedComponent).toBeInTheDocument();
   });
-  it("should call handleSubmit when button is clicked", () => {});
+  test("click checkBox for remember me", () => {
+    userEvent.click(screen.getByText("Remember me"));
+    expect(screen.getByLabelText("Remember me")).toBeChecked();
+  });
+  test("click login button and call function handleSubmit", () => {
+    const button = screen.getByText("login");
+    userEvent.click(button);
+    expect(submit).toHaveBeenCalled();
+  });
 });
