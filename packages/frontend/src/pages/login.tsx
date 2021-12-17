@@ -1,14 +1,14 @@
 import React from "react";
-import LoginForm from "../components/LoginForm";
-import { InitialState } from "../redux/state";
-import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
+import { useCookie } from "next-cookie";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actions } from "../redux/store";
-import { wrapper } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { InitialState } from "../redux/state";
+import { actions, wrapper } from "../redux/store";
+import LoginForm from "../components/LoginForm";
+import { checkJWT, loginAuth } from "../utils/authRoutes";
 
 function login(props: AppProps) {
   const router = useRouter();
@@ -18,17 +18,37 @@ function login(props: AppProps) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
+  const rememberMe = state.remember_me ? 31556952 : 3600;
+  const refreshRememberMe = state.remember_me ? 63113904 : 7200;
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (state.input) {
-      const login = await loginPost(state.input);
+    if (state.input_username) {
+      const tokens: any = await loginAuth(
+        state.input_username,
+        state.input_password,
+      );
+
+      const login = await loginPost(state.input_username, state.input_password);
       if (await login) {
-        cookie.set("name", state.input, {
-          maxAge: state.remember_me ? 94670777 : 3600,
+        cookie.set("name", state.input_username, {
           sameSite: "strict",
+          maxAge: rememberMe,
           path: "/",
         });
+
+        cookie.set("token", tokens.JWT, {
+          sameSite: "strict",
+          maxAge: rememberMe,
+          path: "/",
+        });
+
+        cookie.set("refresh_token", tokens.refreshJWT, {
+          sameSite: "strict",
+          maxAge: refreshRememberMe,
+          path: "/",
+        });
+
         dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
         router.push(`/${cookie.get("name")}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
@@ -42,11 +62,12 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     const cookie = useCookie(context);
-    const cookieName = cookie.get("name");
-    if (cookieName) {
+    const user = await checkJWT(cookie.get("token"));
+
+    if (cookie.has("name") && cookie.has("token")) {
       return {
         redirect: {
-          destination: `/${cookieName}`,
+          destination: `/${cookie.get("name")}`,
           permanent: false,
         },
       };

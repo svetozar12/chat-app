@@ -6,8 +6,8 @@ function RegisterForm({
   quickLogin,
   handleSubmit,
 }: {
-  quickLogin: any;
-  handleSubmit: any;
+  quickLogin(): void;
+  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) {
   const dispatch = useDispatch();
   const state = useSelector(
@@ -25,17 +25,26 @@ function RegisterForm({
         </h2>
         <h1>Register</h1>
         <input
-          value={state.input}
+          value={state.input_username}
           onChange={(e) =>
-            dispatch({ type: "SAVE_INPUT", payload: e.target.value })
+            dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
           }
           type="text"
           name="username"
           placeholder="username ..."
         />
+        <input
+          value={state.input_password}
+          onChange={(e) =>
+            dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
+          }
+          type="password"
+          name="password"
+          placeholder="password ..."
+        />
         <Link href="/login">
           <a className="link" style={{ color: "var(--main-blue)" }}>
-            Sign in
+            Log In.
           </a>
         </Link>
         <button onClick={handleSubmit} type="submit">

@@ -5,7 +5,8 @@ export enum ActionType {
   LOGIN_POST_ERROR = "LOGIN_POST_ERROR",
   REGISTER_POST = "REGISTER_POST",
   REGISTER_POST_ERROR = "REGISTER_POST_ERROR",
-  SAVE_INPUT = "SAVE_INPUT",
+  SAVE_INPUT_USERNAME = "SAVE_INPUT_USERNAME",
+  SAVE_INPUT_PASSWORD = "SAVE_INPUT_PASSWORD",
   REMEMBER_ME_CHECK = "REMEMBER_ME_CHECK",
   QUICK_LOGIN = "QUICK_LOGIN",
   SIGN_IN = "SIGN_IN",
@@ -28,7 +29,10 @@ interface errLoginPost {
 }
 
 interface inputs {
-  type: ActionType.SAVE_INPUT | ActionType.REMEMBER_ME_CHECK;
+  type:
+    | ActionType.SAVE_INPUT_USERNAME
+    | ActionType.SAVE_INPUT_PASSWORD
+    | ActionType.REMEMBER_ME_CHECK;
   payload: string;
 }
 
@@ -68,7 +72,8 @@ export type Action =
 
 export interface InitialState {
   remember_me: boolean;
-  input: string;
+  input_username: string;
+  input_password: string;
   loginPrompt: boolean;
   good?: string;
   bad?: string;

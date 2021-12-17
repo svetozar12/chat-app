@@ -9,6 +9,10 @@ import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { checkJWT } from "../utils/authRoutes";
+import { useSelector } from "react-redux";
+import { InitialState } from "../redux/state";
+
 interface Ichats {
   _id: string;
   members: string[];
@@ -30,6 +34,9 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
+  const state = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
 
   const getChatRoom = async () => {
     try {
@@ -51,7 +58,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const data = res.data.invites;
       setContacts(data);
       return true;
-    } catch (error: any) {
+    } catch (error) {
       return false;
     }
   };
@@ -62,8 +69,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
       const data = res.data.invites;
-      console.log(data);
-
       setContacts(data);
       if (data.status === "declined") return false;
       return true;
@@ -74,6 +79,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const deleteCookies = () => {
     cookie.remove("name");
+    cookie.remove("token");
+    cookie.remove("refresh_token");
     router.push("/");
     dispatch({ type: "SIGN_OUT" });
   };
@@ -88,20 +95,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const validateUser = async () => {
-    try {
-      const res = await axios.get(`${requestUrl}/users/${cookieName}`);
-      if (!cookieName) throw Error;
-      return true;
-    } catch (error) {
-      router.push("/");
-      deleteCookies();
-      return false;
-    }
-  };
-
   useEffect(() => {
-    validateUser();
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
@@ -128,8 +122,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
-
-  console.log(socketRef);
 
   useEffect(() => {
     fetchRecieverStatus();
@@ -168,7 +160,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
-          <h1>You're logged in as {cookieName}</h1>
+          <h1>Logged in as {cookieName}</h1>
           <h2 className="log-out" onClick={deleteCookies}>
             Log out
           </h2>
@@ -199,21 +191,20 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-
-  if (!cookieName) {
+  if (!cookie.has("name") && !cookie.has("token")) {
     return {
       redirect: {
         destination: `/`,
         permanent: false,
       },
     };
-  } else
-    return {
-      props: {
-        cookie: context.req.headers.cookie || "",
-      },
-    };
+  }
+
+  return {
+    props: {
+      cookie: context.req.headers.cookie || "",
+    },
+  };
 };
 
 export default index;

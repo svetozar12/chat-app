@@ -2,32 +2,44 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState } from "../redux/state";
 
-function LoginForm({ handleSubmit }: { handleSubmit: any }) {
+function LoginForm({
+  handleSubmit,
+}: {
+  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+}) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
   const dispatch = useDispatch();
-
   return (
-    <div>
+    <div className="login-box">
       <form style={{ height: "100vh" }} className="container">
         <h1 className="alert" style={{ color: "red" }}>
           {state.bad}
         </h1>
         <h1>Login</h1>
         <input
-          value={state.input}
+          value={state.input_username}
           onChange={(e) =>
-            dispatch({ type: "SAVE_INPUT", payload: e.target.value })
+            dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
           }
           type="text"
           name="username"
           placeholder="username ..."
         />
+        <input
+          value={state.input_password}
+          onChange={(e) =>
+            dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
+          }
+          type="password"
+          name="password"
+          placeholder="password ..."
+        />
         <div className="clickable">
           <Link href="/register">
             <a className="link" style={{ color: "var(--main-blue)" }}>
-              Sign up
+              Create an account.
             </a>
           </Link>
           <label htmlFor="checkbox">

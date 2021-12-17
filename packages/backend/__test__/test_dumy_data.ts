@@ -19,4 +19,6 @@ const invitesDumyData = [
   { reciever: "testingUser1", inviter: "testingUser2", status: "recieved" },
 ];
 
-export { tests, invitesDumyData };
+const dumyUser = { username: "TestUser", password: "TestUser" };
+
+export { tests, invitesDumyData, dumyUser };

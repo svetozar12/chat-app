@@ -21,11 +21,11 @@ const index = () => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-  if (cookieName) {
+
+  if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {
-        destination: `/${cookieName}`,
+        destination: `/${cookie.get("name")}`,
         permanent: false,
       },
     };

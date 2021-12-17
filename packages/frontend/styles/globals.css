@@ -22,8 +22,10 @@ Table of concepts
   --off-blue: rgb(38, 92, 163);
   --main-green: rgb(52, 192, 34);
   --main-red: rgb(231, 10, 10);
+  /* main background gradient */
   --gradient-first: #dfdfdf;
   --gradient-second: #ffffff;
+  /* login form background gradient */
 }
 
 /* =================
@@ -185,12 +187,24 @@ input:focus {
   border: 1px solid var(--main-black);
 }
 
+.container {
+  padding: 3rem;
+  border-radius: 5px;
+}
+
 .container input {
   width: 30%;
   height: 2rem;
-  border-radius: 20px;
+  margin: 0.5rem;
+  border-radius: 5px;
+  transition: 0.3s;
   border: none;
   padding: 0 0.9rem;
+}
+
+.container input:focus {
+  width: 35%;
+  transition: 0.3s;
 }
 
 .container > button {
@@ -357,7 +371,11 @@ p {
 ================= */
 @media (max-width: 431px) {
   .container input {
-    width: 80%;
+    width: 90%;
+  }
+
+  .container input:focus {
+    width: 100%;
   }
 
   .alert {

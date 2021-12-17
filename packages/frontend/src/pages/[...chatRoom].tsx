@@ -5,6 +5,7 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState } from "../redux/state";
 import { InitialState2 } from "../redux/state";
+import { checkJWT } from "../utils/authRoutes";
 
 import axios from "axios";
 import Link from "next/dist/client/link";
@@ -40,8 +41,6 @@ const Home: NextPage<IHome> = (props) => {
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
   const chatRoom = props.chatRoom.chatRoom;
-  console.log(props);
-
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
@@ -63,8 +62,6 @@ const Home: NextPage<IHome> = (props) => {
         `${requestUrl}/messages/${chatRoom[1]}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
-      console.log(data);
-
       updateChat(data);
       return true;
     } catch (error) {
@@ -74,7 +71,8 @@ const Home: NextPage<IHome> = (props) => {
 
   useEffect(() => {
     getRecentMessages();
-    if (!states.cookie) dispatch({ type: "SIGN_OUT" });
+    if (cookie.get("token") && cookie.get("refresh_token"))
+      dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }) => {
       dispatch({
@@ -198,8 +196,9 @@ const Home: NextPage<IHome> = (props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
   const cookieName = cookie.get("name");
+  const user = await checkJWT(cookie.get("token"));
 
-  if (!cookieName) {
+  if (!cookieName && !user && !cookie.has("refresh_token")) {
     return {
       redirect: {
         destination: "/",

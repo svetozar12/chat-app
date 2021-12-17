@@ -7,7 +7,7 @@ import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
 route.get(
-  "/chat-room",
+  "/",
   async (
     req: Request<undefined, undefined, undefined, IRequest>,
     res: Response,
@@ -30,7 +30,7 @@ route.get(
   },
 );
 
-route.get("/chat-room/:user_id", async (req: Request, res: Response) => {
+route.get("/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;
 

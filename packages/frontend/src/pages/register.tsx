@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
+import { loginAuth } from "../utils/authRoutes";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
@@ -17,16 +18,20 @@ function register(props: { cookie: string }) {
     (state: { authReducer: InitialState }) => state.authReducer,
   );
 
-  React.useEffect(() => {
-    if (cookie.get("name")) {
-      router.push(`/${cookie.get("name")}`);
-    }
-  }, []);
-
-  const quickLogin = () => {
-    cookie.set("name", state.input, {
+  const quickLogin = async () => {
+    const JWT = await loginAuth(state.input_username, state.input_password);
+    cookie.set("name", state.input_username, {
       sameSite: "strict",
       path: "/",
+    });
+    cookie.set("token", JWT, {
+      sameSite: "strict",
+      path: "/",
+    });
+    cookie.set("refresh_token", JWT, {
+      sameSite: "strict",
+      path: "/",
+      maxAge: 7200,
     });
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
     router.push(`/${cookie.get("name")}`);
@@ -34,11 +39,15 @@ function register(props: { cookie: string }) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const register = await registerPost(state.input);
+    const register = await registerPost(
+      state.input_username,
+      state.input_password,
+    );
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
     } else {
-      dispatch({ type: "SAVE_INPUT", payload: "" });
+      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
+      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
     }
   };
 
@@ -47,16 +56,16 @@ function register(props: { cookie: string }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
 
-  if (cookieName) {
+  if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {
-        destination: `/${cookieName}`,
+        destination: `/${cookie.get("name")}`,
         permanent: false,
       },
     };
   }
+
   return {
     props: { cookie: context.req.headers.cookie || "" },
   };

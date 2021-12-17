@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 import RenderChat from "../src/components/RenderChat";
 import renderer from "react-test-renderer";
+
+afterAll(cleanup);
 
 describe("<RenderChat/>", () => {
   it("should create snapshot", () => {
@@ -26,7 +28,7 @@ describe("<RenderChat/>", () => {
         cookie="test2"
       />,
     );
-    const test = container.getByTestId("test");
-    expect(test.className).toBe("you");
+    const test = container.getByText("hello");
+    expect(test).toBeInTheDocument();
   });
 });
