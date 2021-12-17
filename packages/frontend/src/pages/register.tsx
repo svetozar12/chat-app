@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
-import { checkJWT, loginAuth } from "../utils/authRoutes";
+import { loginAuth } from "../utils/authRoutes";
 
 function register(props: { cookie: string }) {
   const router = useRouter();

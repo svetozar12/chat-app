@@ -7,21 +7,21 @@ import { requestUrl } from "../../utils/hostUrl_requestUrl";
 const loginPostError = (res: string) => {
   return {
     type: ActionType.LOGIN_POST_ERROR,
-    // bad: res,
+    bad: res,
   };
 };
 
 const RegisterPostSuccess = (res: string) => {
   return {
     type: ActionType.REGISTER_POST,
-    // good: res,
+    good: res,
   };
 };
 
 const RegisterPostError = (res: string) => {
   return {
     type: ActionType.REGISTER_POST_ERROR,
-    // bad: res,
+    bad: res,
   };
 };
 
@@ -40,6 +40,8 @@ export const loginPost =
       return true;
     } catch (error: any) {
       dispatch(loginPostError(error.response.data.message));
+      console.log(error.response.data.message);
+
       setTimeout(() => {
         dispatch(loginPostError(""));
       }, 2000);
