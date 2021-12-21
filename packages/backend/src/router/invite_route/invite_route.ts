@@ -100,25 +100,21 @@ route.put("/invites", async (req: Request, res: Response) => {
 route.put("/chat-room", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;
-    const user1 = req.body.user1;
-    const user2 = req.body.user2;
+    const userData: string[] = req.body.userData;
     const findInvite = await Invites.findByIdAndUpdate(
       id,
       { status: "accepted" },
       { new: true },
     );
 
-    const testingUser1 = User.findOne({ username: user1 });
-    const testingUser2 = User.findOne({ username: user2 });
-    if (!testingUser1 || !testingUser2)
-      return res.status(404).json({ error: "User doesn't exist !" });
+    //toDo Have to check if the user exists
 
     if (!findInvite) {
       return res.status(404).json({ Message: "Invite not found" });
     }
 
     const chat = await new Chats({
-      members: [user1, user2],
+      members: userData,
     });
 
     await chat.save();
@@ -153,7 +149,7 @@ route.post("/invites", async (req: Request, res: Response) => {
       return res.status(409).json({ ERROR: "Already sent" });
 
     if (req.body.reciever === req.body.inviter)
-      return res.status(409).json({ ERROR: "Can't send invites to youurself" });
+      return res.status(409).json({ ERROR: "Can't send invites to yourself" });
 
     const invites = await new Invites({
       reciever: req.body.reciever,

@@ -170,12 +170,15 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
+                const { inviter, reciever } = item;
+                const users = [inviter, reciever];
                 return (
                   socketRef && (
                     <PendingChats
                       key={index}
                       socketRef={socketRef}
                       setLocalStatus={setLocalStatus}
+                      users={users}
                       {...item}
                     />
                   )

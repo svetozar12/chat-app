@@ -9,6 +9,7 @@ interface IPendingChats extends Iinvites {
   inviter: string;
   status: string;
   reciever: string;
+  users: string[];
   socketRef: Socket;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -18,6 +19,7 @@ function PendingChats({
   inviter,
   status,
   reciever,
+  users,
   socketRef,
   setLocalStatus,
 }: IPendingChats) {
@@ -44,12 +46,10 @@ function PendingChats({
   const createChatRoom = async () => {
     try {
       setLocalStatus("accepted");
-      const res = await axios.put(`${requestUrl}/chat-room`, {
+      await axios.put(`${requestUrl}/chat-room`, {
         id: _id,
-        user1: inviter,
-        user2: reciever,
+        userData: users,
       });
-      const id = res.data.Message._id;
       emitFriendRequest();
       setLocalStatus("");
     } catch (error) {
