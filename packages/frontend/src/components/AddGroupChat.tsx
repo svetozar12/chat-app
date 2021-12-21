@@ -3,17 +3,17 @@ import axios from "axios";
 
 function AddGroupChat() {
   const [user, setUser] = React.useState<string>("");
-  const [userData, setUserData] = React.useState<string[]>([]);
+  const [usersData, setUsersData] = React.useState<string[]>([]);
 
   const addToGroup = (user: string, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUserData((prev) => [...prev, user]);
+    setUsersData((prev) => [...prev, user]);
     setUser("");
   };
   const handleSumbit = async () => {
     try {
-      await axios.put("http://localhost:4002/chat-room", {
-        userData,
+      await axios.post("http://localhost:4002/group-chat", {
+        usersData,
       });
       return true;
     } catch (error) {
@@ -34,7 +34,7 @@ function AddGroupChat() {
         </button>
       </form>
       <div className="group_chat_users">
-        {userData.map((element, index) => {
+        {usersData.map((element, index) => {
           return (
             <p style={{ color: "black" }} key={index}>
               {element}
