@@ -51,7 +51,7 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
           dispatch({ type: "SET_RECIEVER", payload: e.target.value })
         }
         value={state.reciever}
-        type="text"
+        type="search"
         placeholder="Search user"
       />
     </form>

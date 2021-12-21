@@ -11,6 +11,7 @@ const initialState = {
   bad: "",
   loginPrompt: false,
   cookie: "",
+  showCreateGroup: false,
 };
 const reducer = (state: InitialState = initialState, action: Action) => {
   switch (action.type) {
@@ -37,6 +38,8 @@ const reducer = (state: InitialState = initialState, action: Action) => {
       return { ...state, loginPrompt: action.payload };
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
+    case ActionType.SHOW_CREATE_GROUP:
+      return { ...state, showCreateGroup: action.payload };
     case ActionType.SIGN_OUT:
       return { state: undefined };
     default:

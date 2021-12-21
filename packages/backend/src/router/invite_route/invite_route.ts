@@ -96,25 +96,54 @@ route.put("/invites", async (req: Request, res: Response) => {
   }
 });
 
-//finds chat room by 2 users
+route.post("/group-chat", async (req: Request, res: Response) => {
+  try {
+    const usersData = req.body.usersData;
+    for (const userData of usersData) {
+      console.log(usersData);
+
+      if ((await User.findOne({ username: userData })) === null) {
+        return res.status(404).json({ error: `User ${userData} not found` });
+      }
+    }
+    const chat = await new Chats({
+      members: usersData,
+    });
+
+    await chat.save();
+    return res.status(201).json({ Message: chat });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while sending invite",
+    });
+  }
+});
+
 route.put("/chat-room", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;
-    const userData: string[] = req.body.userData;
+    const user1 = req.body.user1;
+    const user2 = req.body.user2;
     const findInvite = await Invites.findByIdAndUpdate(
       id,
       { status: "accepted" },
       { new: true },
     );
 
-    //toDo Have to check if the user exists
+    const testingUser1 = await User.findOne({ username: user1 });
+    const testingUser2 = await User.findOne({ username: user2 });
+
+    if (!testingUser1 || !testingUser2)
+      return res.status(404).json({ error: "User doesn't exist !" });
 
     if (!findInvite) {
       return res.status(404).json({ Message: "Invite not found" });
     }
 
     const chat = await new Chats({
-      members: userData,
+      members: [user1, user2],
     });
 
     await chat.save();

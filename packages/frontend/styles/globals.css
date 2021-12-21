@@ -295,6 +295,10 @@ p {
   text-align: center;
 }
 
+.group_chat_users {
+  display: flex;
+}
+
 .me {
   align-items: flex-end;
   justify-content: center;

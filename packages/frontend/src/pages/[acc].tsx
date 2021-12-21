@@ -9,9 +9,7 @@ import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-import { checkJWT } from "../utils/authRoutes";
-import { useSelector } from "react-redux";
-import { InitialState } from "../redux/state";
+import AddGroupChat from "../components/AddGroupChat";
 
 interface Ichats {
   _id: string;
@@ -34,9 +32,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
 
   const getChatRoom = async () => {
     try {
@@ -160,6 +155,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
+          <AddGroupChat />
           <h1>Logged in as {cookieName}</h1>
           <h2 className="log-out" onClick={deleteCookies}>
             Log out
@@ -170,15 +166,12 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, index) => {
-                const { inviter, reciever } = item;
-                const users = [inviter, reciever];
                 return (
                   socketRef && (
                     <PendingChats
                       key={index}
                       socketRef={socketRef}
                       setLocalStatus={setLocalStatus}
-                      users={users}
                       {...item}
                     />
                   )
