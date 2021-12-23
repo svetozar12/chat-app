@@ -14,7 +14,7 @@ export enum ActionType {
   INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
   MESSAGE_SEND = "MESSAGE_SEND",
   SIGN_OUT = "SIGN_OUT",
-  SHOW_CREATE_GROUP = "SHOW_CREATE_GROUP",
+  TOGGLE_CREATE_GROUP = "TOGGLE_CREATE_GROUP",
 }
 
 interface LoginPost {
@@ -61,8 +61,8 @@ interface Hydrate {
   payload: any;
 }
 
-interface show_create_group {
-  type: ActionType.SHOW_CREATE_GROUP;
+interface toggle_create_group {
+  type: ActionType.TOGGLE_CREATE_GROUP;
   payload: boolean;
 }
 
@@ -75,7 +75,7 @@ export type Action =
   | Iset
   | IMessages
   | Hydrate
-  | show_create_group;
+  | toggle_create_group;
 
 export interface InitialState {
   remember_me: boolean;
@@ -85,7 +85,7 @@ export interface InitialState {
   good?: string;
   bad?: string;
   cookie?: string;
-  showCreateGroup: boolean;
+  toggleCreateGroup: boolean;
 }
 
 export interface InitialState2 {

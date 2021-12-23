@@ -2,8 +2,9 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../redux/state";
+import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { BsFillPeopleFill } from "react-icons/bs";
 
 interface IFindFriends {
   cookieName: string;
@@ -15,6 +16,17 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
   const state = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
+
+  const authState = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const toggleGroupCreate = () => {
+    dispatch({
+      type: "TOGGLE_CREATE_GROUP",
+      payload: !authState.toggleCreateGroup,
+    });
+  };
 
   const sendInvite = async () => {
     try {
@@ -44,16 +56,26 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
   };
 
   return (
-    <form className="friendsInput" onSubmit={handleSubmit}>
+    <form
+      className="friendsInput"
+      onSubmit={handleSubmit}
+      style={{ marginBottom: "1rem", alignItems: "center" }}
+    >
       <h1>Your chats</h1>
-      <input
-        onChange={(e) =>
-          dispatch({ type: "SET_RECIEVER", payload: e.target.value })
-        }
-        value={state.reciever}
-        type="search"
-        placeholder="Search user"
-      />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <input
+          onChange={(e) =>
+            dispatch({ type: "SET_RECIEVER", payload: e.target.value })
+          }
+          value={state.reciever}
+          type="search"
+          placeholder="Search user"
+        />
+        <BsFillPeopleFill
+          onClick={toggleGroupCreate}
+          style={{ width: "2rem", height: "2rem", cursor: "pointer" }}
+        />
+      </div>
     </form>
   );
 }

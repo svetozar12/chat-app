@@ -144,7 +144,7 @@ form {
   overflow-x: hidden;
   height: 100vh;
   max-width: 70%;
-  width: 50%;
+  width: 40%;
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -170,6 +170,11 @@ form {
 4.Components styling
 ================= */
 
+.user-logo {
+  width: 4rem;
+  height: 4rem;
+}
+
 input {
   outline: none;
 }
@@ -181,10 +186,9 @@ input:focus {
 .friendsInput input {
   width: 90%;
   border: none;
-  border-radius: 20px;
+  border-radius: 5px;
   margin: 1rem;
   padding: 0.3rem;
-  border: 1px solid var(--main-black);
 }
 
 .container {

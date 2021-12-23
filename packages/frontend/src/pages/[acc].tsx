@@ -7,7 +7,8 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { InitialState } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import AddGroupChat from "../components/AddGroupChat";
 
@@ -32,6 +33,10 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
+
+  const state = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
 
   const getChatRoom = async () => {
     try {
@@ -83,7 +88,7 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const deleteUser = async () => {
     try {
       deleteCookies();
-      const res = await axios.delete(`${requestUrl}/users/${cookieName}`);
+      await axios.delete(`${requestUrl}/users/${cookieName}`);
       return true;
     } catch (error) {
       return false;
@@ -155,7 +160,8 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
-          <AddGroupChat />
+          {console.log(state.toggleCreateGroup)}
+          {state.toggleCreateGroup && <AddGroupChat />}
           <h1>Logged in as {cookieName}</h1>
           <h2 className="log-out" onClick={deleteCookies}>
             Log out

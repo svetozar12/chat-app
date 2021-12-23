@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
+import { FaUserCircle } from "react-icons/fa";
 interface IActiveChats {
   _id: string;
   user1: string;
@@ -38,13 +39,10 @@ const ActiveChats = ({
   return (
     <div onClick={joinChat} className="contacts_container">
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div>LOGO</div>
+        <FaUserCircle className="user-logo" />
         <div className="contacts_info">
-          <h2>
-            {(width && width >= 432 && user2 === cookieName && user1) ||
-              (user1 === cookieName && user2)}
-          </h2>
-          {width && width >= 432 && <h5>Last message...</h5>}
+          <h2>{width && width >= 605 && user1 === cookieName && user2}</h2>
+          {width && width >= 605 && <h5>Last message...</h5>}
         </div>
       </div>
     </div>
