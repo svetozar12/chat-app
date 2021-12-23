@@ -6,7 +6,7 @@ import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { BsFillPeopleFill } from "react-icons/bs";
 
-interface IFindFriends {
+export interface IFindFriends {
   cookieName: string;
   socketRef: Socket;
 }

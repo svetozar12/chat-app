@@ -12,7 +12,6 @@ let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const submit = jest.fn();
 submit.mockReturnValue("default");
-console.log(submit());
 
 beforeEach(() => {
   const mockStore = configureStore([]);

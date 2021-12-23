@@ -29,7 +29,6 @@ function AddGroupChat({
       await axios.post("http://localhost:4002/group-chat", {
         usersData,
       });
-      console.log(usersData);
 
       emitFriendRequest();
       setUsersData([]);
