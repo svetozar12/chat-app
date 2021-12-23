@@ -1,9 +1,20 @@
 import React from "react";
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
-function AddGroupChat() {
+function AddGroupChat({
+  cookieName,
+  socketRef,
+}: {
+  cookieName: string;
+  socketRef: Socket;
+}) {
   const [user, setUser] = React.useState<string>("");
   const [usersData, setUsersData] = React.useState<string[]>([]);
+
+  const emitFriendRequest = async () => {
+    socketRef?.emit("friend_request");
+  };
 
   const addToGroup = (user: string, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -12,11 +23,19 @@ function AddGroupChat() {
   };
   const handleSumbit = async () => {
     try {
+      const result = usersData.includes(cookieName);
+
+      if (!result) usersData.push(cookieName);
       await axios.post("http://localhost:4002/group-chat", {
         usersData,
       });
+      console.log(usersData);
+
+      emitFriendRequest();
+      setUsersData([]);
       return true;
     } catch (error) {
+      setUsersData([]);
       return false;
     }
   };

@@ -28,7 +28,7 @@ function PendingChats({
   const updateInviteStatus = async (param: string) => {
     try {
       setLocalStatus(param);
-      const res = await axios.put(`${requestUrl}/invites`, {
+      await axios.put(`${requestUrl}/invites`, {
         id: _id,
         status: param,
       });

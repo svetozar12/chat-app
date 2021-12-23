@@ -161,7 +161,12 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           className="container"
         >
           {console.log(state.toggleCreateGroup)}
-          {state.toggleCreateGroup && <AddGroupChat />}
+          {state.toggleCreateGroup && socketRef && (
+            <AddGroupChat
+              socketRef={socketRef}
+              cookieName={cookie.get("name")}
+            />
+          )}
           <h1>Logged in as {cookieName}</h1>
           <h2 className="log-out" onClick={deleteCookies}>
             Log out
