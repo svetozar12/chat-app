@@ -24,7 +24,7 @@ export interface Iinvites {
   status: string;
 }
 
-const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
+const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
@@ -135,12 +135,12 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
         )}
         {socketRef &&
-          chatRooms.map((item, index) => {
+          chatRooms.map((item, homePage) => {
             const _id = item._id;
             const [user1, user2] = item.members;
             return (
               <ActiveChats
-                key={index}
+                key={homePage}
                 _id={_id}
                 user1={user1}
                 user2={user2}
@@ -160,7 +160,6 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
-          {console.log(state.toggleCreateGroup)}
           {state.toggleCreateGroup && socketRef && (
             <AddGroupChat
               socketRef={socketRef}
@@ -176,11 +175,11 @@ const index: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           </h2>
           <div className="dash_board">
             <ul style={{ overflow: "auto", overflowX: "hidden" }}>
-              {contacts.map((item, index) => {
+              {contacts.map((item, homePage) => {
                 return (
                   socketRef && (
                     <PendingChats
-                      key={index}
+                      key={homePage}
                       socketRef={socketRef}
                       setLocalStatus={setLocalStatus}
                       {...item}
@@ -214,4 +213,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default index;
+export default homePage;

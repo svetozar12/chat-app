@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { cleanup, render } from "@testing-library/react";
-import RenderChat from "../src/components/RenderChat";
+import RenderChat from "../../src/components/RenderChat";
 import renderer from "react-test-renderer";
 
 afterAll(cleanup);

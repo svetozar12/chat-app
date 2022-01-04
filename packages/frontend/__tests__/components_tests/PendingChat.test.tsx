@@ -1,5 +1,4 @@
-import configureStore from "redux-mock-store";
-import ActiveChats from "../src/components/ActiveChats";
+import PendingChats from "../../src/components/PendingChats";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
@@ -8,27 +7,30 @@ import "@testing-library/jest-dom";
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const socketRef: any = jest.fn();
+const setLocalStatus = jest.fn();
 
 beforeEach(() => {
   component = renderer
     .create(
-      <ActiveChats
+      <PendingChats
         _id="61c4957b735b579e5442dfe8"
-        user1="ivan"
-        user2="gerg"
-        cookieName="ivan"
+        inviter="ivan"
+        reciever="gosho"
         socketRef={socketRef}
+        setLocalStatus={setLocalStatus}
+        status="recieved"
       />,
     )
     .toJSON();
 
   container = render(
-    <ActiveChats
+    <PendingChats
       _id="61c4957b735b579e5442dfe8"
-      user1="ivan"
-      user2="gerg"
-      cookieName="ivan"
+      inviter="ivan"
+      reciever="gosho"
       socketRef={socketRef}
+      setLocalStatus={setLocalStatus}
+      status="recieved"
     />,
   );
 });
@@ -36,12 +38,12 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("Render connected React-redux page", () => {
-  it("should create snapshot for <ActiveChats/>", () => {
+  it("should create snapshot for <PendingChats/>", () => {
     expect(component).toMatchSnapshot();
   });
 
-  it("should render <ActiveChats/>", () => {
-    const renderedComponent = container.getByText("gerg");
+  it("should render <PendingChats/>", () => {
+    const renderedComponent = container.getByText("ivan");
     expect(renderedComponent).toBeInTheDocument();
   });
 });
