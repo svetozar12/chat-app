@@ -41,7 +41,10 @@ const ActiveChats = ({
       <div style={{ display: "flex", alignItems: "center" }}>
         <FaUserCircle className="user-logo" />
         <div className="contacts_info">
-          <h2>{width && width >= 605 && user1 === cookieName && user2}</h2>
+          <h2>
+            {(width && width >= 432 && user2 === cookieName && user1) ||
+              (user1 === cookieName && user2)}
+          </h2>
           {width && width >= 605 && <h5>Last message...</h5>}
         </div>
       </div>

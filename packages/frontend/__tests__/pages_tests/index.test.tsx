@@ -1,5 +1,5 @@
 import { screen, render, RenderResult } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import "@iting-library/jest-dom";
 import Home from "../../src/pages/index";
 import Router from "next/router";
 
@@ -19,7 +19,7 @@ describe("index page", () => {
     const headingElement = screen.getByText("Create an account !");
     expect(headingElement).toBeInTheDocument();
   });
-  test("click on link create account and redirect", async () => {
+  it("register link should have href with http://localhost:3000/register", async () => {
     const register_href = container
       .getByText("Create an account !")
       .closest("a");
@@ -29,7 +29,7 @@ describe("index page", () => {
     );
   });
 
-  test("click on link login into account and redirect", async () => {
+  it("login link should have href with http://localhost:3000/login", async () => {
     const login_href = container
       .getByText("Already have a acount ?")
       .closest("a");
