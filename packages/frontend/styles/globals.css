@@ -111,6 +111,10 @@ form,
   align-items: center;
 }
 
+.contacts_container {
+  justify-content: start;
+}
+
 .container_chat {
   flex-direction: column;
   height: 60vh;
@@ -173,6 +177,11 @@ form {
 .user-logo {
   width: 4rem;
   height: 4rem;
+}
+
+.invite-userName span,
+h5 {
+  font-size: 1.4vw;
 }
 
 input {

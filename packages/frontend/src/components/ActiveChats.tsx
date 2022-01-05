@@ -44,21 +44,32 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
       <div style={{ display: "flex", alignItems: "center" }}>
         <FaUserCircle className="user-logo" />
         <div className="contacts_info">
-          <h2 style={{ display: "flex", flexDirection: "row" }}>
-            {members.length > 2
-              ? members.map((element, index) => {
-                  if (index === 3) return;
-                  return (
-                    <p>
-                      {element}
-                      {element[members.length - 1] === element[index]
-                        ? ""
-                        : ","}
-                    </p>
-                  );
-                })
-              : (width && width >= 432 && user2 === cookieName && user1) ||
-                (user1 === cookieName && user2)}
+          <h2
+            className="invite-userName"
+            style={{
+              display: width && width >= 708 ? "flex" : "none",
+            }}
+          >
+            <span>
+              {members.length > 2
+                ? members.map((element, index) => {
+                    if (index === 3) return;
+                    return (
+                      <>
+                        {width && width >= 708 && element}
+                        {width && width >= 708
+                          ? element[members.length - 1] === element[index]
+                            ? element && ""
+                            : ","
+                          : null}
+                      </>
+                    );
+                  })
+                : (width && width >= 708 && user2 === cookieName && (
+                    <p>user1</p>
+                  )) ||
+                  (user1 === cookieName && <p>user2</p>)}
+            </span>
           </h2>
           {width && width >= 605 && <h5>Last message...</h5>}
         </div>
