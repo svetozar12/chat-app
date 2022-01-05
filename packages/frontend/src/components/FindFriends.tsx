@@ -4,7 +4,7 @@ import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-import { BsFillPeopleFill } from "react-icons/bs";
+import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
 
 export interface IFindFriends {
   cookieName: string;
@@ -63,14 +63,16 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
     >
       <h1>Your chats</h1>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <input
-          onChange={(e) =>
-            dispatch({ type: "SET_RECIEVER", payload: e.target.value })
-          }
-          value={state.reciever}
-          type="search"
-          placeholder="Search user"
-        />
+        <div className="search-bar">
+          <BsSearch style={{ color: "black" }} />
+          <input
+            onChange={(e) =>
+              dispatch({ type: "SET_RECIEVER", payload: e.target.value })
+            }
+            value={state.reciever}
+            type="search"
+          />
+        </div>
         <BsFillPeopleFill
           onClick={toggleGroupCreate}
           style={{ width: "2rem", height: "2rem", cursor: "pointer" }}
