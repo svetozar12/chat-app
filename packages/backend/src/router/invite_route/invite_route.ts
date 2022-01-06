@@ -96,7 +96,7 @@ route.put("/invites", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/group-chat", async (req: Request, res: Response) => {
+route.post("/invites/group-chat", async (req: Request, res: Response) => {
   try {
     const usersData = req.body.usersData;
     console.log(usersData);

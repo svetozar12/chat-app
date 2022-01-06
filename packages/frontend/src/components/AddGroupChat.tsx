@@ -26,7 +26,7 @@ function AddGroupChat({
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);
-      await axios.post("http://localhost:4002/group-chat", {
+      await axios.post("http://localhost:4002/invites/group-chat", {
         usersData,
       });
 

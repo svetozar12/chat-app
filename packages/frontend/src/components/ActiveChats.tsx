@@ -42,7 +42,14 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
   return (
     <div onClick={joinChat} className="contacts_container">
       <div style={{ display: "flex", alignItems: "center" }}>
-        <FaUserCircle className="user-logo" />
+        {members.length > 2 ? (
+          <div className="group_logo_container">
+            <FaUserCircle className="user-logo logo" />
+            <FaUserCircle className="user-logo logo overlay" />
+          </div>
+        ) : (
+          <FaUserCircle className="user-logo" />
+        )}
         <div className="contacts_info">
           <h2
             className="invite-userName"
@@ -51,25 +58,25 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
             }}
           >
             <span>
-              {/* have to fix the conditional rendering mess bellow */}
+              {/* renders max 3 usernames(group-chat) or render 2usernames(one on one chat) ,if(width is less than 708 only icons will be rendered)*/}
               {members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return;
                     return (
                       <>
                         {width && width >= 708 && element}
-                        {width && width >= 708
-                          ? element[members.length - 1] === element[index]
-                            ? element && " ..."
-                            : ","
-                          : null}
+                        {width &&
+                        width >= 708 &&
+                        element[members.length - 1] === element[index]
+                          ? " ..."
+                          : ","}
                       </>
                     );
                   })
                 : (width && width >= 708 && user2 === cookieName && (
-                    <p>user1</p>
+                    <p>{user1}</p>
                   )) ||
-                  (user1 === cookieName && <p>user2</p>)}
+                  (user1 === cookieName && <p>{user1}</p>)}
             </span>
           </h2>
           {width && width >= 605 && <h5>Last message...</h5>}
