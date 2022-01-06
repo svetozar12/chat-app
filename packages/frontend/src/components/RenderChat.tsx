@@ -1,14 +1,15 @@
 import React from "react";
-
 interface IRenderChat {
   sender: string;
   time_stamp: string | number;
   message: string;
+  chatId: string;
   cookie: string;
 }
 
 const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
+
   return (
     <div className={name === sender ? "me" : "you"}>
       <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>

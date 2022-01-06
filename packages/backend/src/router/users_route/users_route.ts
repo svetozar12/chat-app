@@ -10,6 +10,7 @@ route.post("/register", async (req: Request, res: Response) => {
   try {
     const { error } = registerValidation(req.body);
     const username = req.body.username;
+    const password = req.body.password;
     if (error) {
       return res.status(409).json({ message: error.message });
     }
@@ -19,11 +20,16 @@ route.post("/register", async (req: Request, res: Response) => {
 
     const user = new User({
       type: "POST",
-      username: req.body.username,
-      password: req.body.password,
+      username,
+      password,
+    });
+
+    const chat = await new Chats({
+      members: username,
     });
 
     await user.save();
+    await chat.save();
     return res
       .status(201)
       .send({ message: `User ${req.body.username} created` });

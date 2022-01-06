@@ -13,8 +13,6 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
   const router = useRouter();
   const [width, setWidth] = React.useState<number | null>(null);
   const [user1, user2] = [members[0], members[1]];
-  const [count, setCount] = React.useState(0);
-  console.log(user1, user2);
 
   React.useEffect(() => {
     setWidth(window.innerWidth);
@@ -26,17 +24,11 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     });
   }, []);
 
-  console.log(
-    members.map((element) => {
-      console.log(element);
-    }),
-  );
-
   const joinChat = () => {
     socketRef?.emit("join_chat", {
       chat_id: cookieName,
     });
-    router.push(`t/${_id}`);
+    router.push(`${_id}`);
   };
 
   return (

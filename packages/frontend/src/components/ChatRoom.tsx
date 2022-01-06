@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { InitialState2 } from "../redux/state";
 
 import axios from "axios";
-import Link from "next/dist/client/link";
 import RenderChat from "../components/RenderChat";
 import timeStamp from "../utils/timeStamp";
-import { hostUrl, requestUrl } from "../utils/hostUrl_requestUrl";
+import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { useRouter } from "next/router";
 
 interface IHome {
   cookie: any;
@@ -28,6 +28,7 @@ interface IchatInstance {
 }
 
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
+  const route = useRouter();
   const states2 = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
@@ -51,17 +52,21 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         `${requestUrl}/messages/${chatId}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
+      console.log(data);
 
       updateChat(data);
       return true;
     } catch (error) {
-      console.log(error);
       return false;
     }
   };
 
   useEffect(() => {
+    setChat([]);
     getRecentMessages();
+  }, [route.asPath]);
+
+  useEffect(() => {
     if (!cookie.get("token") && !cookie.get("refresh_token"))
       dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
@@ -112,6 +117,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
           `${requestUrl}/messages/${chatId}?page_number=${states2.pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
+
         setChat((prev) => [...data, ...prev]);
       }
       return true;
@@ -142,7 +148,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       className="container chat_home"
     >
       <div onScroll={scrollHandler} className="container_chat">
-        <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
@@ -150,6 +155,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             <li style={{ listStyle: "none" }} key={index}>
               <RenderChat
                 key={index}
+                chatId={chatId}
                 cookie={cookie.get("name")}
                 sender={sender}
                 time_stamp={time_stamp}

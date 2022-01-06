@@ -1,5 +1,6 @@
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
+import React from "react";
 import { wrapper } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";

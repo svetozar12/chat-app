@@ -36,6 +36,7 @@ function register(props: { cookie: string }) {
     });
     const chatInstance: any = await getFirstChat(cookie.get("name"));
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
+
     router.push(`/${chatInstance._id}`);
   };
 
