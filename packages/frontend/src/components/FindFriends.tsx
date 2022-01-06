@@ -47,7 +47,9 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
     }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
+  ) => {
     e.preventDefault();
     if (state.reciever) {
       await sendInvite();
@@ -64,7 +66,10 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
       <h1>Your chats</h1>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div className="search-bar">
-          <BsSearch style={{ color: "black" }} />
+          <BsSearch
+            style={{ cursor: "pointer", color: "black" }}
+            onClick={handleSubmit}
+          />
           <input
             onChange={(e) =>
               dispatch({ type: "SET_RECIEVER", payload: e.target.value })

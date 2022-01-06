@@ -51,6 +51,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
             }}
           >
             <span>
+              {/* have to fix the conditional rendering mess bellow */}
               {members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return;
@@ -59,7 +60,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
                         {width && width >= 708 && element}
                         {width && width >= 708
                           ? element[members.length - 1] === element[index]
-                            ? element && ""
+                            ? element && " ..."
                             : ","
                           : null}
                       </>
