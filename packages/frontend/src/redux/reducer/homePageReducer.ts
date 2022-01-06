@@ -1,7 +1,7 @@
 import { Action, ActionType } from "../state";
 import { InitialState2 } from "../state";
 import { HYDRATE } from "next-redux-wrapper";
-const initialState = {
+export const initialState = {
   reciever: "",
   pageNumber: 2,
 };

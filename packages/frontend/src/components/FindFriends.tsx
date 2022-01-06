@@ -2,10 +2,11 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../redux/state";
+import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
 
-interface IFindFriends {
+export interface IFindFriends {
   cookieName: string;
   socketRef: Socket;
 }
@@ -15,6 +16,17 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
   const state = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
+
+  const authState = useSelector(
+    (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const toggleGroupCreate = () => {
+    dispatch({
+      type: "TOGGLE_CREATE_GROUP",
+      payload: !authState.toggleCreateGroup,
+    });
+  };
 
   const sendInvite = async () => {
     try {
@@ -35,7 +47,9 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
     }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
+  ) => {
     e.preventDefault();
     if (state.reciever) {
       await sendInvite();
@@ -44,16 +58,31 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
   };
 
   return (
-    <form className="friendsInput" onSubmit={handleSubmit}>
+    <form
+      className="friendsInput"
+      onSubmit={handleSubmit}
+      style={{ marginBottom: "1rem", alignItems: "center" }}
+    >
       <h1>Your chats</h1>
-      <input
-        onChange={(e) =>
-          dispatch({ type: "SET_RECIEVER", payload: e.target.value })
-        }
-        value={state.reciever}
-        type="text"
-        placeholder="Search user"
-      />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div className="search-bar">
+          <BsSearch
+            style={{ cursor: "pointer", color: "black" }}
+            onClick={handleSubmit}
+          />
+          <input
+            onChange={(e) =>
+              dispatch({ type: "SET_RECIEVER", payload: e.target.value })
+            }
+            value={state.reciever}
+            type="search"
+          />
+        </div>
+        <BsFillPeopleFill
+          onClick={toggleGroupCreate}
+          style={{ width: "2rem", height: "2rem", cursor: "pointer" }}
+        />
+      </div>
     </form>
   );
 }

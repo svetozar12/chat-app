@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watchAll -u"
+    "test": "jest --watchAll"
   },
   "dependencies": {
     "@types/jest": "^27.0.2",

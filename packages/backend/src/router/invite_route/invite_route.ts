@@ -96,7 +96,33 @@ route.put("/invites", async (req: Request, res: Response) => {
   }
 });
 
-//finds chat room by 2 users
+route.post("/invites/group-chat", async (req: Request, res: Response) => {
+  try {
+    const usersData = req.body.usersData;
+    console.log(usersData);
+
+    for (const userData of usersData) {
+      console.log(usersData);
+
+      if ((await User.findOne({ username: userData })) === null) {
+        return res.status(404).json({ error: `User ${userData} not found` });
+      }
+    }
+    const chat = await new Chats({
+      members: usersData,
+    });
+
+    await chat.save();
+    return res.status(201).json({ Message: chat });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while sending invite",
+    });
+  }
+});
+
 route.put("/chat-room", async (req: Request, res: Response) => {
   try {
     const id = req.body.id;
@@ -108,8 +134,9 @@ route.put("/chat-room", async (req: Request, res: Response) => {
       { new: true },
     );
 
-    const testingUser1 = User.findOne({ username: user1 });
-    const testingUser2 = User.findOne({ username: user2 });
+    const testingUser1 = await User.findOne({ username: user1 });
+    const testingUser2 = await User.findOne({ username: user2 });
+
     if (!testingUser1 || !testingUser2)
       return res.status(404).json({ error: "User doesn't exist !" });
 
@@ -153,7 +180,7 @@ route.post("/invites", async (req: Request, res: Response) => {
       return res.status(409).json({ ERROR: "Already sent" });
 
     if (req.body.reciever === req.body.inviter)
-      return res.status(409).json({ ERROR: "Can't send invites to youurself" });
+      return res.status(409).json({ ERROR: "Can't send invites to yourself" });
 
     const invites = await new Invites({
       reciever: req.body.reciever,

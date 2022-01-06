@@ -1,9 +1,9 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import LoginForm from "../src/components/LoginForm";
+import LoginForm from "../../src/components/LoginForm";
 import renderer from "react-test-renderer";
 import userEvent from "@testing-library/user-event";
-import { AuthState } from "../src/redux/reducer/authReducer";
+import { AuthState } from "../../src/redux/reducer/authReducer";
 import { render, screen, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
@@ -12,7 +12,6 @@ let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const submit = jest.fn();
 submit.mockReturnValue("default");
-console.log(submit());
 
 beforeEach(() => {
   const mockStore = configureStore([]);
@@ -46,6 +45,15 @@ describe("Render connected React-redux page", () => {
     const renderedComponent = container.getByText("Login");
     expect(renderedComponent).toBeInTheDocument();
   });
+  // test("input some data", () => {
+  //   const username = screen.getByPlaceholderText("username ...");
+  //   const password = screen.getByPlaceholderText("password ...");
+  //   const text = "test";
+  //   userEvent.paste(username, text);
+  //   userEvent.paste(password, text);
+
+  //   expect(username && password).toHaveValue(text);
+  // });
   test("click checkBox for remember me", () => {
     userEvent.click(screen.getByText("Remember me"));
     expect(screen.getByLabelText("Remember me")).toBeChecked();

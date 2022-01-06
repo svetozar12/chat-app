@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { hostUrl } from "../utils/hostUrl_requestUrl";
-const index = () => {
+const Home = () => {
   return (
     <div style={{ height: "100vh" }} className="container">
       <Link href={`${hostUrl}/register`}>
@@ -35,4 +35,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default index;
+export default Home;
