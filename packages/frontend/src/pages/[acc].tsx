@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ActiveChats from "../components/ActiveChats";
 import PendingChats from "../components/PendingChats";
 import FindFriends from "../components/FindFriends";
+import ChatRoom from "../components/ChatRoom";
 import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
@@ -166,15 +167,15 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               cookieName={cookie.get("name")}
             />
           )}
-          <h1>Logged in as {cookieName}</h1>
+          {/* <h1>Logged in as {cookieName}</h1>
           <h2 className="log-out" onClick={deleteCookies}>
             Log out
           </h2>
           <h2 className="log-out" onClick={deleteUser}>
             Delete account
-          </h2>
+          </h2> */}
           <div className="dash_board">
-            <ul style={{ overflow: "auto", overflowX: "hidden" }}>
+            {/* <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, homePage) => {
                 return (
                   socketRef && (
@@ -187,7 +188,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                   )
                 );
               })}
-            </ul>
+            </ul> */}
+            <ChatRoom cookie={cookie} chatId={props.chatRoom} />
           </div>
         </div>
       </section>
@@ -209,6 +211,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       cookie: context.req.headers.cookie || "",
+      chatRoom: context.query.acc,
     },
   };
 };

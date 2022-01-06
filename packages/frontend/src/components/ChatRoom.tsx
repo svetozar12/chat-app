@@ -1,11 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { NextPage, GetServerSideProps } from "next";
-import { useCookie } from "next-cookie";
+import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState } from "../redux/state";
 import { InitialState2 } from "../redux/state";
-import { checkJWT } from "../utils/authRoutes";
 
 import axios from "axios";
 import Link from "next/dist/client/link";
@@ -14,10 +11,8 @@ import timeStamp from "../utils/timeStamp";
 import { hostUrl, requestUrl } from "../utils/hostUrl_requestUrl";
 
 interface IHome {
-  cookie: string;
-  chatRoom: {
-    chatRoom: string[];
-  };
+  cookie: any;
+  chatId: any;
 }
 
 interface IPropsState {
@@ -32,16 +27,10 @@ interface IchatInstance {
   createdAt: string;
 }
 
-const Home: NextPage<IHome> = (props) => {
-  const states = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
-
+const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const states2 = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
-  const chatRoom = props.chatRoom.chatRoom;
-  const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
   const [chat, setChat] = useState<IchatInstance[]>([]);
@@ -59,19 +48,21 @@ const Home: NextPage<IHome> = (props) => {
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(
-        `${requestUrl}/messages/${chatRoom[1]}?page_number=1&page_size=10`,
+        `${requestUrl}/messages/${chatId}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
+
       updateChat(data);
       return true;
     } catch (error) {
+      console.log(error);
       return false;
     }
   };
 
   useEffect(() => {
     getRecentMessages();
-    if (cookie.get("token") && cookie.get("refresh_token"))
+    if (!cookie.get("token") && !cookie.get("refresh_token"))
       dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }) => {
@@ -94,7 +85,7 @@ const Home: NextPage<IHome> = (props) => {
 
   const saveMessage = async () => {
     try {
-      const res = await axios.post(`${requestUrl}/messages/${chatRoom[1]}`, {
+      const res = await axios.post(`${requestUrl}/messages/${chatId}`, {
         sender: cookieName,
         message: state.message,
       });
@@ -118,7 +109,7 @@ const Home: NextPage<IHome> = (props) => {
           payload: states2.pageNumber,
         });
         const res = await axios.get(
-          `${requestUrl}/messages/${chatRoom[1]}?page_number=${states2.pageNumber}&page_size=10`,
+          `${requestUrl}/messages/${chatId}?page_number=${states2.pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
         setChat((prev) => [...data, ...prev]);
@@ -136,7 +127,7 @@ const Home: NextPage<IHome> = (props) => {
 
       await saveMessage();
       socketRef?.emit("message", {
-        chatInstance: chatRoom[1],
+        chatInstance: chatId,
         sender: cookieName,
         message,
         time,
@@ -150,11 +141,6 @@ const Home: NextPage<IHome> = (props) => {
       style={{ justifyContent: "center", height: "100vh" }}
       className="container chat_home"
     >
-      <Link href={`${hostUrl}/${cookieName}`}>
-        <a>
-          <h3>Back to profile page</h3>
-        </a>
-      </Link>
       <div onScroll={scrollHandler} className="container_chat">
         <h2>Welcome to my chat app</h2>
         {chat.map((item, index) => {
@@ -193,26 +179,4 @@ const Home: NextPage<IHome> = (props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookie = useCookie(context);
-  const cookieName = cookie.get("name");
-  const user = await checkJWT(cookie.get("token"));
-
-  if (!cookieName && !user && !cookie.has("refresh_token")) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      cookie: context.req.headers.cookie || "",
-      chatRoom: context.query,
-    },
-  };
-};
-
-export default Home;
+export default ChatRoom;

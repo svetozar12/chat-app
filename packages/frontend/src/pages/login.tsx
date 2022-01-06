@@ -7,6 +7,7 @@ import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState } from "../redux/state";
 import { actions, wrapper } from "../redux/store";
+import { getFirstChat } from "../utils/getFirstChat";
 import LoginForm from "../components/LoginForm";
 import { checkJWT, loginAuth } from "../utils/authRoutes";
 
@@ -50,7 +51,8 @@ function login(props: AppProps) {
         });
 
         dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
-        router.push(`/${cookie.get("name")}`);
+        const chatInstance: any = await getFirstChat(cookie.get("name"));
+        router.push(`/${chatInstance._id}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
     }
@@ -62,12 +64,12 @@ function login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     const cookie = useCookie(context);
-    const user = await checkJWT(cookie.get("token"));
-
+    await checkJWT(cookie.get("token"));
+    const chatInstance: any = await getFirstChat(cookie.get("name"));
     if (cookie.has("name") && cookie.has("token")) {
       return {
         redirect: {
-          destination: `/${cookie.get("name")}`,
+          destination: `/${chatInstance._id}`,
           permanent: false,
         },
       };

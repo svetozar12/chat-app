@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../redux/store";
 import { loginAuth } from "../utils/authRoutes";
+import { getFirstChat } from "../utils/getFirstChat";
 
 function register(props: { cookie: string }) {
   const router = useRouter();
@@ -33,8 +34,9 @@ function register(props: { cookie: string }) {
       path: "/",
       maxAge: 7200,
     });
+    const chatInstance: any = await getFirstChat(cookie.get("name"));
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
-    router.push(`/${cookie.get("name")}`);
+    router.push(`/${chatInstance._id}`);
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -56,11 +58,12 @@ function register(props: { cookie: string }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
+  const chatInstance: any = await getFirstChat(cookie.get("name"));
 
   if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {
-        destination: `/${cookie.get("name")}`,
+        destination: `/${chatInstance._id}`,
         permanent: false,
       },
     };

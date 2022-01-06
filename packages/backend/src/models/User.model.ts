@@ -23,7 +23,9 @@ const UserSchema = new Schema<UserSchema>({
 UserSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
+    // @ts-ignore
     const hashedPassword = await bcrypt.hash(this.password, salt);
+    // @ts-ignore
     this.password = hashedPassword;
     next();
   } catch (error) {
@@ -32,7 +34,7 @@ UserSchema.pre("save", async function (next) {
 });
 
 //This is custom method which compares password input and hashed password
-UserSchema.methods.isValidPassword = async function (password) {
+UserSchema.methods.isValidPassword = async function (password: string) {
   try {
     return await bcrypt.compare(password, this.password);
   } catch (error) {

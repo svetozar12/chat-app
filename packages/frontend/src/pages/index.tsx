@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { hostUrl } from "../utils/hostUrl_requestUrl";
+import { getFirstChat } from "../utils/getFirstChat";
 const Home = () => {
   return (
     <div style={{ height: "100vh" }} className="container">
@@ -21,11 +22,11 @@ const Home = () => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-
+  const chatInstance: any = await getFirstChat(cookie.get("name"));
   if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {
-        destination: `/${cookie.get("name")}`,
+        destination: `/${chatInstance._id}`,
         permanent: false,
       },
     };
