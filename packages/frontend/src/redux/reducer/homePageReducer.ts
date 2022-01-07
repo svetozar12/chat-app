@@ -6,6 +6,7 @@ export const initialState = {
   pageNumber: 2,
   setUserSettings: false,
   setFriendRequest: false,
+  toggleCreateGroup: false,
 };
 const homePageReducer = (
   state: InitialState2 = initialState,
@@ -25,6 +26,8 @@ const homePageReducer = (
       return { ...state, setFriendRequest: action.payload };
     case ActionType.SET_USER_SETTINGS:
       return { ...state, setUserSettings: action.payload };
+    case ActionType.TOGGLE_CREATE_GROUP:
+      return { ...state, toggleCreateGroup: action.payload };
     default:
       return state;
   }

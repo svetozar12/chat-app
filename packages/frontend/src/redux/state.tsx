@@ -90,7 +90,6 @@ export interface InitialState {
   good?: string;
   bad?: string;
   cookie?: string;
-  toggleCreateGroup: boolean;
 }
 
 export interface InitialState2 {
@@ -98,6 +97,7 @@ export interface InitialState2 {
   pageNumber?: number;
   setUserSettings: boolean;
   setFriendRequest: boolean;
+  toggleCreateGroup: boolean;
 }
 
 export interface InitialStateMessage {

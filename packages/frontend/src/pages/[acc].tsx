@@ -7,10 +7,9 @@ import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-import AddGroupChat from "../components/AddGroupChat";
 
 interface Ichats {
   _id: string;
@@ -31,10 +30,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
+  const [shown, isShown] = useState<boolean>(false);
 
   const state1 = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
@@ -114,7 +110,10 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <section className="active_chats">
+      <section
+        style={{ width: shown ? "50rem" : "0rem" }}
+        className="active_chats"
+      >
         {socketRef && (
           <FindFriends
             cookie={cookie}
@@ -138,7 +137,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             );
           })}
       </section>
-      <section className="main_section">
+      <section className={`main_section ${shown && "show"}`}>
         {" "}
         <div
           style={{
@@ -150,12 +149,9 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
-          {state.toggleCreateGroup && socketRef && (
-            <AddGroupChat
-              socketRef={socketRef}
-              cookieName={cookie.get("name")}
-            />
-          )}
+          {/* {state.toggleCreateGroup && socketRef && (
+            
+          )} */}
           <div className="dash_board">
             {state1.setFriendRequest && (
               <div className="fRequests_modal">

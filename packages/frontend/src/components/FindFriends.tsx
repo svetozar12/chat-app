@@ -27,7 +27,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   const toggleGroupCreate = () => {
     dispatch({
       type: "TOGGLE_CREATE_GROUP",
-      payload: !authState.toggleCreateGroup,
+      payload: !state.toggleCreateGroup,
     });
   };
 

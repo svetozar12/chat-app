@@ -9,6 +9,7 @@ import RenderChat from "../components/RenderChat";
 import timeStamp from "../utils/timeStamp";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { useRouter } from "next/router";
+import ChatHeader from "./ChatHeader";
 
 interface IHome {
   cookie: any;
@@ -155,6 +156,23 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       }}
       className="container  chat_home"
     >
+      {chat.map((item, index) => {
+        const { sender } = item;
+        if (index > 1) return;
+        return (
+          <>
+            {socketRef && (
+              <ChatHeader
+                key={index}
+                sender={sender}
+                socketRef={socketRef}
+                cookieName={cookie.get("name")}
+              />
+            )}
+          </>
+        );
+      })}
+
       <div onScroll={scrollHandler} className="container_chat">
         {chat.map((item, index) => {
           const { sender, message, createdAt } = item;
