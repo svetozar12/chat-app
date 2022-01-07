@@ -174,10 +174,10 @@ form {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
-  max-width: 40%;
-  width: 40%;
+  width: 50rem;
   flex-direction: column;
   justify-content: flex-start;
+  flex-shrink: unset;
 }
 
 .active_chats div > main > a {
@@ -238,6 +238,12 @@ form {
 4.Components styling
 ================= */
 
+.chat_header {
+  box-shadow: 0 0 5px;
+  position: relative;
+  width: 100%;
+}
+
 .user-logo {
   width: 4rem;
   height: 4rem;
@@ -254,6 +260,7 @@ input {
 
 .friendsInput {
   width: 90%;
+  margin: 1rem;
 }
 
 .group_logo_container {
@@ -508,6 +515,15 @@ p {
 /* =================
 6.Media Query
 ================= */
+@media only screen and (max-width: 800px) {
+  .main_section {
+    width: 100%;
+  }
+
+  .show {
+    width: 80%;
+  }
+}
 @media (max-width: 431px) {
   .container input {
     width: 90%;
@@ -549,36 +565,5 @@ p {
 
   .decline {
     color: var(--main-red);
-  }
-}
-/* specific for nokia 8110 */
-@media (max-width: 240px) {
-  .friendsInput input {
-    width: 75%;
-    margin: 0 1rem;
-  }
-  h2 {
-    font-size: 0.9rem;
-  }
-
-  .container h1 {
-    font-size: 0.6rem;
-  }
-
-  .active_chats {
-    padding: 1rem;
-    overflow: hidden;
-  }
-
-  .active_chats h1 {
-    font-size: 0.65rem;
-  }
-
-  .contacts {
-    background: var(--main-blue);
-    width: 30vw;
-    padding: 1rem;
-    margin: 1rem;
-    flex-direction: column;
   }
 }
