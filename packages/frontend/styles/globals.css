@@ -56,6 +56,23 @@ a {
 /* =================
 3.Layout styling
 ================= */
+.fRequests_modal {
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: !important start;
+  z-index: 9999;
+  width: 40%;
+  height: 50vh;
+  background: var(--off-white);
+  overflow-x: hidden;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 5px;
+}
 .BIG {
   background: radial-gradient(
     var(--gradient-first) 10%,

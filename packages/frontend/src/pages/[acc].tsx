@@ -6,10 +6,9 @@ import ChatRoom from "../components/ChatRoom";
 import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState } from "../redux/state";
+import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import AddGroupChat from "../components/AddGroupChat";
 
@@ -26,8 +25,6 @@ export interface Iinvites {
 }
 
 const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = useState<string>("");
@@ -37,6 +34,10 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const state1 = useSelector(
+    (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
 
   const getChatRoom = async () => {
@@ -156,20 +157,22 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             />
           )}
           <div className="dash_board">
-            {/* <ul style={{ overflow: "auto", overflowX: "hidden" }}>
-              {contacts.map((item, homePage) => {
-                return (
-                  socketRef && (
-                    <PendingChats
-                      key={homePage}
-                      socketRef={socketRef}
-                      setLocalStatus={setLocalStatus}
-                      {...item}
-                    />
-                  )
-                );
-              })}
-            </ul> */}
+            {state1.setFriendRequest && (
+              <div className="fRequests_modal">
+                {contacts.map((item, homePage) => {
+                  return (
+                    socketRef && (
+                      <PendingChats
+                        key={homePage}
+                        socketRef={socketRef}
+                        setLocalStatus={setLocalStatus}
+                        {...item}
+                      />
+                    )
+                  );
+                })}
+              </div>
+            )}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
           </div>
         </div>
