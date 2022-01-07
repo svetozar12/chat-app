@@ -10,6 +10,7 @@ import { io, Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
+import HamburgerMenu from "../components/HamburgerMenu";
 
 interface Ichats {
   _id: string;
@@ -110,6 +111,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex" }}>
+      <HamburgerMenu shown={shown} isShown={isShown} />
       <section
         style={{ width: shown ? "50rem" : "0rem" }}
         className="active_chats"
