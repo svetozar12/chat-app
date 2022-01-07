@@ -31,7 +31,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [shown, isShown] = useState<boolean>(false);
+  const [isShown, setIsShown] = useState<boolean>(false);
 
   const state1 = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
@@ -111,9 +111,9 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <HamburgerMenu shown={shown} isShown={isShown} />
+      <HamburgerMenu isShown={isShown} setIsShown={setIsShown} />
       <section
-        style={{ width: shown ? "50rem" : "0rem" }}
+        style={{ width: isShown ? "50rem" : "0rem" }}
         className="active_chats"
       >
         {socketRef && (
@@ -139,7 +139,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             );
           })}
       </section>
-      <section className={`main_section ${shown && "show"}`}>
+      <section className={`main_section ${isShown && "show"}`}>
         {" "}
         <div
           style={{
@@ -151,9 +151,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
           className="container"
         >
-          {/* {state.toggleCreateGroup && socketRef && (
-            
-          )} */}
           <div className="dash_board">
             {state1.setFriendRequest && (
               <div className="fRequests_modal">

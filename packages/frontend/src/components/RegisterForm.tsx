@@ -42,6 +42,25 @@ function RegisterForm({
           name="password"
           placeholder="password ..."
         />
+        <input
+          value={state.input_password}
+          onChange={(e) =>
+            dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
+          }
+          type="email"
+          name="email"
+          placeholder="email ..."
+        />
+        <div className="input_gender">
+          <span>
+            <label htmlFor="Male">Male</label>
+            <input type="radio" name="gender" id="Male" value="Male" />
+          </span>
+          <span>
+            <label htmlFor="Female">Female</label>
+            <input type="radio" name="gender" id="Female" value="Female" />
+          </span>
+        </div>
         <Link href="/login">
           <a className="link" style={{ color: "var(--main-blue)" }}>
             Log In.

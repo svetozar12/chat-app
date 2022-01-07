@@ -1,16 +1,16 @@
 import React from "react";
 
 function HamburgerMenu({
-  shown,
   isShown,
+  setIsShown,
 }: {
-  shown: boolean;
-  isShown: React.Dispatch<React.SetStateAction<boolean>>;
+  isShown: boolean;
+  setIsShown: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <div
-      className={`hamburger ${shown && "change"}`}
-      onClick={() => isShown(!shown)}
+      className={`hamburger ${isShown && "change"}`}
+      onClick={() => setIsShown(!isShown)}
     >
       <div className="bar1"></div>
       <div className="bar2"></div>

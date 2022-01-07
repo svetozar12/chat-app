@@ -11,6 +11,8 @@ route.post("/register", async (req: Request, res: Response) => {
     const { error } = registerValidation(req.body);
     const username = req.body.username;
     const password = req.body.password;
+    const email = req.body.email;
+    const gender = req.body.gender;
     if (error) {
       return res.status(409).json({ message: error.message });
     }
@@ -22,6 +24,8 @@ route.post("/register", async (req: Request, res: Response) => {
       type: "POST",
       username,
       password,
+      email,
+      gender,
     });
 
     const chat = await new Chats({

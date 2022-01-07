@@ -3,6 +3,8 @@ import * as bcrypt from "bcrypt";
 export interface UserSchema {
   username: string;
   password: string;
+  email: string;
+  gender: string;
   isValidPassword: any;
 }
 
@@ -15,6 +17,14 @@ const UserSchema = new Schema<UserSchema>({
   },
   password: {
     type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  gender: {
+    enum: ["male", "female"],
     required: true,
   },
 });
