@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { InitialState, InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
+import { FaUserCircle, FaUserFriends } from "react-icons/fa";
+import UserSettings from "./UserSettings";
 
 export interface IFindFriends {
   cookieName: string;
   socketRef: Socket;
+  cookie: any;
 }
 
-function FindFriends({ cookieName, socketRef }: IFindFriends) {
+function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   const dispatch = useDispatch();
   const state = useSelector(
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
@@ -63,7 +66,29 @@ function FindFriends({ cookieName, socketRef }: IFindFriends) {
       onSubmit={handleSubmit}
       style={{ marginBottom: "1rem", alignItems: "center" }}
     >
-      <h1>Your chats</h1>
+      <div className="profile" style={{ display: "flex" }}>
+        <div>
+          <FaUserCircle
+            onClick={() =>
+              dispatch({
+                type: "SET_USER_SETTINGS",
+                payload: !state.setUserSettings,
+              })
+            }
+          />
+          {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
+        </div>
+        <div>
+          <FaUserFriends
+            onClick={() =>
+              dispatch({
+                type: "SET_FRIEND_REQUEST",
+                payload: !state.setFriendRequest,
+              })
+            }
+          />
+        </div>
+      </div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div className="search-bar">
           <BsSearch

@@ -157,7 +157,7 @@ form {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
-  max-width: 70%;
+  max-width: 40%;
   width: 40%;
   flex-direction: column;
   justify-content: flex-start;
@@ -168,7 +168,45 @@ form {
 }
 
 .main_section {
-  width: 60%;
+  width: 80%;
+}
+
+.profile {
+  position: relative;
+}
+
+.profile svg {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 1rem;
+  cursor: pointer;
+}
+
+.user_settings {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--main-white);
+  padding: 1rem 0.9rem;
+  /* top: 0; */
+  left: 0;
+  box-shadow: 0 0 10px black;
+}
+
+.user_settings a {
+  color: black;
+  margin: 0.5rem 0;
+  padding: 1rem;
+}
+
+.user_settings a:hover {
+  background: var(--off-white);
+  border-radius: 5px;
+}
+
+.user_settings a:active {
+  background: var(--me-chat-buble);
+  border-radius: 5px;
 }
 
 .rendered_chat {
@@ -354,6 +392,7 @@ form > button:hover {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.3rem;
+  padding: 0.1rem;
 }
 
 /* =================

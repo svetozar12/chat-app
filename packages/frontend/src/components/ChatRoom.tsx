@@ -126,7 +126,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
 
-  const onMessageSubmit = async (e: React.MouseEvent<SVGAElement>) => {
+  const onMessageSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
+  ) => {
     e.preventDefault();
     if (state.message) {
       const { name, message, time } = state;
@@ -172,7 +174,11 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         })}
       </div>
 
-      <form className="message_form" style={{ width: "100%" }}>
+      <form
+        onSubmit={onMessageSubmit}
+        className="message_form"
+        style={{ width: "100%" }}
+      >
         <div className="message_input_container">
           <input
             type="text"

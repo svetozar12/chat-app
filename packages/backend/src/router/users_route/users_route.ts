@@ -49,7 +49,7 @@ route.delete("/:username", async (req: Request, res: Response) => {
     await Invites.deleteMany({
       reciever: username,
     }).exec();
-    const deleteChats = await Chats.deleteMany({
+    await Chats.deleteMany({
       members: { $all: [username] },
     }).exec();
     return res.status(204).json({ message: `user ${username} deleted` });

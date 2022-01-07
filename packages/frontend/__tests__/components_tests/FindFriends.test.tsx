@@ -11,7 +11,7 @@ import "@testing-library/jest-dom";
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const socketRef: any = jest.fn();
-
+const cookie: any = jest.fn();
 beforeEach(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
@@ -22,14 +22,14 @@ beforeEach(() => {
   component = renderer
     .create(
       <Provider store={store}>
-        <FindFriends cookieName="ivan" socketRef={socketRef} />
+        <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
       </Provider>,
     )
     .toJSON();
 
   container = render(
     <Provider store={store}>
-      <FindFriends cookieName="ivan" socketRef={socketRef} />
+      <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
     </Provider>,
   );
 });
@@ -42,7 +42,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <FindFriends/>", () => {
-    const renderedComponent = container.getByText("Your chats");
+    const renderedComponent = container.getByText("ivan");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

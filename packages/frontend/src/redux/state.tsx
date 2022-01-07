@@ -15,6 +15,8 @@ export enum ActionType {
   MESSAGE_SEND = "MESSAGE_SEND",
   SIGN_OUT = "SIGN_OUT",
   TOGGLE_CREATE_GROUP = "TOGGLE_CREATE_GROUP",
+  SET_FRIEND_REQUEST = "SET_FRIEND_REQUEST",
+  SET_USER_SETTINGS = "SET_USER_SETTINGS",
 }
 
 interface LoginPost {
@@ -62,7 +64,10 @@ interface Hydrate {
 }
 
 interface toggle_create_group {
-  type: ActionType.TOGGLE_CREATE_GROUP;
+  type:
+    | ActionType.TOGGLE_CREATE_GROUP
+    | ActionType.SET_USER_SETTINGS
+    | ActionType.SET_FRIEND_REQUEST;
   payload: boolean;
 }
 
@@ -91,6 +96,8 @@ export interface InitialState {
 export interface InitialState2 {
   reciever: string;
   pageNumber?: number;
+  setUserSettings: boolean;
+  setFriendRequest: boolean;
 }
 
 export interface InitialStateMessage {

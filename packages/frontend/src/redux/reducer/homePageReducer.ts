@@ -4,6 +4,8 @@ import { HYDRATE } from "next-redux-wrapper";
 export const initialState = {
   reciever: "",
   pageNumber: 2,
+  setUserSettings: false,
+  setFriendRequest: false,
 };
 const homePageReducer = (
   state: InitialState2 = initialState,
@@ -19,6 +21,10 @@ const homePageReducer = (
       return { ...state, reciever: action.payload };
     case ActionType.INCREMENT_PAGE_NUMBER:
       return { ...state, pageNumber: ++action.payload };
+    case ActionType.SET_FRIEND_REQUEST:
+      return { ...state, setFriendRequest: action.payload };
+    case ActionType.SET_USER_SETTINGS:
+      return { ...state, setUserSettings: action.payload };
     default:
       return state;
   }

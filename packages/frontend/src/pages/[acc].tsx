@@ -78,24 +78,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
-  const deleteCookies = () => {
-    cookie.remove("name");
-    cookie.remove("token");
-    cookie.remove("refresh_token");
-    router.push("/");
-    dispatch({ type: "SIGN_OUT" });
-  };
-
-  const deleteUser = async () => {
-    try {
-      deleteCookies();
-      await axios.delete(`${requestUrl}/users/${cookieName}`);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   useEffect(() => {
     getChatRoom();
     fetchRecieverStatus();
@@ -133,7 +115,11 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     <div style={{ display: "flex" }}>
       <section className="active_chats">
         {socketRef && (
-          <FindFriends cookieName={cookie.get("name")} socketRef={socketRef} />
+          <FindFriends
+            cookie={cookie}
+            cookieName={cookie.get("name")}
+            socketRef={socketRef}
+          />
         )}
         {socketRef &&
           chatRooms.map((item, homePage) => {
@@ -156,10 +142,10 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         <div
           style={{
             width: "100%",
-            height: "100vh",
-            padding: "0",
-            justifyContent: "flex-start",
+            height: "90vh",
+            justifyContent: "center",
             alignItems: "center",
+            padding: "0",
           }}
           className="container"
         >
@@ -169,13 +155,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               cookieName={cookie.get("name")}
             />
           )}
-          {/* <h1>Logged in as {cookieName}</h1>
-          <h2 className="log-out" onClick={deleteCookies}>
-            Log out
-          </h2>
-          <h2 className="log-out" onClick={deleteUser}>
-            Delete account
-          </h2> */}
           <div className="dash_board">
             {/* <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, homePage) => {
