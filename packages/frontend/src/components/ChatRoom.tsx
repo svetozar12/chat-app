@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState2 } from "../redux/state";
-
+import { MdSend } from "react-icons/md";
 import axios from "axios";
 import RenderChat from "../components/RenderChat";
 import timeStamp from "../utils/timeStamp";
@@ -126,7 +126,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
 
-  const onMessageSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onMessageSubmit = async (e: React.MouseEvent<SVGAElement>) => {
     e.preventDefault();
     if (state.message) {
       const { name, message, time } = state;
@@ -144,8 +144,14 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   return (
     <div
-      style={{ justifyContent: "center", height: "100vh" }}
-      className="container chat_home"
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+        padding: "0",
+      }}
+      className="container  chat_home"
     >
       <div onScroll={scrollHandler} className="container_chat">
         {chat.map((item, index) => {
@@ -166,20 +172,17 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         })}
       </div>
 
-      <form>
-        <div style={{ display: "flex", justifyContent: "center" }}>
+      <form className="message_form" style={{ width: "100%" }}>
+        <div className="message_input_container">
           <input
-            style={{ width: "100%", textAlign: "center" }}
             type="text"
             name="message"
             onChange={(e) => onTextChange(e)}
             value={state.message}
             placeholder="Your Message "
           />
+          <MdSend onClick={onMessageSubmit} />
         </div>
-        <button onClick={onMessageSubmit}>
-          <strong>Send message</strong>
-        </button>
       </form>
     </div>
   );

@@ -56,22 +56,19 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
                     if (index === 3) return;
                     return (
                       <>
-                        {width && width >= 708 && element}
-                        {width &&
-                        width >= 708 &&
-                        element[members.length - 1] === element[index]
+                        {element}
+                        {element[members.length - 1] === element[index]
                           ? " ..."
                           : ","}
                       </>
                     );
                   })
-                : (width && width >= 708 && user2 === cookieName && (
-                    <p>{user1}</p>
-                  )) ||
-                  (user1 === cookieName && <p>{user1}</p>)}
+                : (members.length === 1 && <p>{user1}</p>) ||
+                  (user2 === cookieName && <p>{user1}</p>) ||
+                  (user1 === cookieName && <p>{user2}</p>)}
             </span>
           </h2>
-          {width && width >= 605 && <h5>Last message...</h5>}
+          {width && width >= 708 && <h5>Last message...</h5>}
         </div>
       </div>
     </div>

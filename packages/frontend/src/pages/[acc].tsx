@@ -155,7 +155,9 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         {" "}
         <div
           style={{
+            width: "100%",
             height: "100vh",
+            padding: "0",
             justifyContent: "flex-start",
             alignItems: "center",
           }}
@@ -175,7 +177,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             Delete account
           </h2> */}
           <div className="dash_board">
-            <ul style={{ overflow: "auto", overflowX: "hidden" }}>
+            {/* <ul style={{ overflow: "auto", overflowX: "hidden" }}>
               {contacts.map((item, homePage) => {
                 return (
                   socketRef && (
@@ -188,7 +190,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                   )
                 );
               })}
-            </ul>
+            </ul> */}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
           </div>
         </div>

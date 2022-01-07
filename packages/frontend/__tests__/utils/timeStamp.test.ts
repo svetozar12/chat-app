@@ -6,6 +6,7 @@ describe("runs function timeStamp()", () => {
     expect(result).toBe("09:58");
   });
   it("Running the function with invalid input", () => {
+    //@ts-ignore
     const result = timeStamp(true);
     expect(result).toBe("Bad input");
   });

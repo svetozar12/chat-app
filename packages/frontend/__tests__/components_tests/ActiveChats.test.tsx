@@ -7,14 +7,13 @@ import "@testing-library/jest-dom";
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const socketRef: any = jest.fn();
-
+const dumy: string[] = ["ivan", "gerg"];
 beforeEach(() => {
   component = renderer
     .create(
       <ActiveChats
         _id="61c4957b735b579e5442dfe8"
-        user1="ivan"
-        user2="gerg"
+        members={dumy}
         cookieName="ivan"
         socketRef={socketRef}
       />,
@@ -24,8 +23,7 @@ beforeEach(() => {
   container = render(
     <ActiveChats
       _id="61c4957b735b579e5442dfe8"
-      user1="ivan"
-      user2="gerg"
+      members={dumy}
       cookieName="ivan"
       socketRef={socketRef}
     />,
