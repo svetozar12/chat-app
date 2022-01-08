@@ -5,7 +5,7 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState } from "../redux/state";
+import { InitialState, InitialState3 } from "../redux/state";
 import { actions, wrapper } from "../redux/store";
 import { getFirstChat } from "../utils/getFirstChat";
 import LoginForm from "../components/LoginForm";
@@ -17,10 +17,15 @@ function login(props: AppProps) {
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
   const state = useSelector(
+    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
+  );
+
+  const authState = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
-  const rememberMe = state.remember_me ? 31556952 : 3600;
-  const refreshRememberMe = state.remember_me ? 63113904 : 7200;
+
+  const rememberMe = authState.remember_me ? 31556952 : 3600;
+  const refreshRememberMe = authState.remember_me ? 63113904 : 7200;
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

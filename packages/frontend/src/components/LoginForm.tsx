@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
-import { InitialState } from "../redux/state";
+import { InitialState, InitialState3 } from "../redux/state";
 
 function LoginForm({
   handleSubmit,
@@ -9,6 +9,10 @@ function LoginForm({
 }) {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const inputState = useSelector(
+    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
   const dispatch = useDispatch();
   return (
@@ -19,7 +23,7 @@ function LoginForm({
         </h1>
         <h1>Login</h1>
         <input
-          value={state.input_username}
+          value={inputState.input_username}
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
           }
@@ -28,7 +32,7 @@ function LoginForm({
           placeholder="username ..."
         />
         <input
-          value={state.input_password}
+          value={inputState.input_password}
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
           }

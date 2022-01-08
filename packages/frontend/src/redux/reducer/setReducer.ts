@@ -8,10 +8,7 @@ export const initialState = {
   setFriendRequest: false,
   toggleCreateGroup: false,
 };
-const homePageReducer = (
-  state: InitialState2 = initialState,
-  action: Action,
-) => {
+const setReducer = (state: InitialState2 = initialState, action: Action) => {
   switch (action.type) {
     case HYDRATE:
       return {
@@ -33,4 +30,4 @@ const homePageReducer = (
   }
 };
 
-export default homePageReducer;
+export default setReducer;

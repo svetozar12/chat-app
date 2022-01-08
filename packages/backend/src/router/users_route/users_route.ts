@@ -19,6 +19,7 @@ route.post("/register", async (req: Request, res: Response) => {
 
     const users = await User.findOne({ username }).exec();
     if (users) return res.status(409).json({ message: "user already exist" });
+    console.log(gender);
 
     const user = new User({
       type: "POST",
@@ -27,6 +28,8 @@ route.post("/register", async (req: Request, res: Response) => {
       email,
       gender,
     });
+
+    console.log(user);
 
     const chat = await new Chats({
       members: username,

@@ -133,7 +133,8 @@ form,
 .message_input_container,
 .message_form,
 .input_gender,
-.input_gender span {
+.input_gender span,
+.register_form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -244,16 +245,20 @@ form {
 4.Components styling
 ================= */
 
-.input_gender {
+.register_form form {
   width: 50%;
+}
+
+.input_gender {
+  width: 60%;
   flex-direction: row;
 }
 .input_gender span {
   border: 1px solid;
   padding: 0.5rem;
   border-radius: 5px;
-  margin: 1rem;
-  width: 40%;
+  margin: 0 1rem;
+  width: 60%;
 }
 .input_gender input[type="radio"] {
   height: 1rem;
@@ -332,7 +337,7 @@ input {
 }
 
 .container input {
-  width: 30%;
+  width: 60%;
   height: 2rem;
   margin: 0.5rem;
   border-radius: 5px;
@@ -538,6 +543,15 @@ p {
 6.Media Query
 ================= */
 @media only screen and (max-width: 800px) {
+  .input_gender input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .register_form form {
+    width: 100%;
+  }
+
   .hide {
     transition: 0.6s ease-in;
     width: 0;

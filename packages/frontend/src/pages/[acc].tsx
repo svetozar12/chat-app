@@ -8,7 +8,7 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
-import { InitialState, InitialState2 } from "../redux/state";
+import { InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import HamburgerMenu from "../components/HamburgerMenu";
 
@@ -34,7 +34,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [isShown, setIsShown] = useState<boolean>(false);
 
   const state1 = useSelector(
-    (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
+    (state: { setReducer: InitialState2 }) => state.setReducer,
   );
 
   const getChatRoom = async () => {

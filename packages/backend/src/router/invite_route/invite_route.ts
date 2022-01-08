@@ -99,11 +99,7 @@ route.put("/invites", async (req: Request, res: Response) => {
 route.post("/invites/group-chat", async (req: Request, res: Response) => {
   try {
     const usersData = req.body.usersData;
-    console.log(usersData);
-
     for (const userData of usersData) {
-      console.log(usersData);
-
       if ((await User.findOne({ username: userData })) === null) {
         return res.status(404).json({ error: `User ${userData} not found` });
       }

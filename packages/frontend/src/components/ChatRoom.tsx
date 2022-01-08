@@ -31,7 +31,7 @@ interface IchatInstance {
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const route = useRouter();
   const states2 = useSelector(
-    (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
+    (state: { setReducer: InitialState2 }) => state.setReducer,
   );
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();

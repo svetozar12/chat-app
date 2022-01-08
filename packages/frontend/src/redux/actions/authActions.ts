@@ -50,12 +50,14 @@ export const loginPost =
   };
 
 export const registerPost =
-  (username: string, password: string) =>
+  (username: string, password: string, email: string, gender: string) =>
   async (dispatch: Dispatch<Action>) => {
     try {
       const res = await axios.post(`${requestUrl}/users/register`, {
         username,
         password,
+        email,
+        gender,
       });
       const data = res.data.message;
 

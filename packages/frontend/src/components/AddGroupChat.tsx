@@ -14,7 +14,7 @@ function AddGroupChat({
   const [usersData, setUsersData] = React.useState<string[]>([]);
 
   const state1 = useSelector(
-    (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
+    (state: { setReducer: InitialState2 }) => state.setReducer,
   );
 
   const emitFriendRequest = async () => {

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
-import { InitialState } from "../redux/state";
+import { InitialState, InitialState3 } from "../redux/state";
 
 function RegisterForm({
   quickLogin,
@@ -14,8 +14,12 @@ function RegisterForm({
     (state: { authReducer: InitialState }) => state.authReducer,
   );
 
+  const inputState = useSelector(
+    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
+  );
+
   return (
-    <div>
+    <div className="register_form">
       <form style={{ height: "100vh" }} className="container">
         <h2
           className="alert"
@@ -25,7 +29,7 @@ function RegisterForm({
         </h2>
         <h1>Register</h1>
         <input
-          value={state.input_username}
+          value={inputState.input_username}
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
           }
@@ -34,7 +38,7 @@ function RegisterForm({
           placeholder="username ..."
         />
         <input
-          value={state.input_password}
+          value={inputState.input_password}
           onChange={(e) =>
             dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
           }
@@ -43,9 +47,9 @@ function RegisterForm({
           placeholder="password ..."
         />
         <input
-          value={state.input_password}
+          value={inputState.input_email}
           onChange={(e) =>
-            dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
+            dispatch({ type: "SAVE_INPUT_EMAIL", payload: e.target.value })
           }
           type="email"
           name="email"
@@ -54,11 +58,33 @@ function RegisterForm({
         <div className="input_gender">
           <span>
             <label htmlFor="Male">Male</label>
-            <input type="radio" name="gender" id="Male" value="Male" />
+            <input
+              onChange={(e) =>
+                dispatch({
+                  type: "SAVE_INPUT_GENDER",
+                  payload: e.target.value,
+                })
+              }
+              type="radio"
+              name="gender"
+              id="Male"
+              value="Male"
+            />
           </span>
           <span>
             <label htmlFor="Female">Female</label>
-            <input type="radio" name="gender" id="Female" value="Female" />
+            <input
+              onChange={(e) =>
+                dispatch({
+                  type: "SAVE_INPUT_GENDER",
+                  payload: e.target.value,
+                })
+              }
+              type="radio"
+              name="gender"
+              id="Female"
+              value="Female"
+            />
           </span>
         </div>
         <Link href="/login">

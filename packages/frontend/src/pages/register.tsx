@@ -1,6 +1,6 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
-import { InitialState } from "../redux/state";
+import { InitialState3 } from "../redux/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -16,7 +16,7 @@ function register(props: { cookie: string }) {
   const dispatch = useDispatch();
   const { registerPost } = bindActionCreators(actions, dispatch);
   const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
+    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
   const quickLogin = async () => {
@@ -45,6 +45,8 @@ function register(props: { cookie: string }) {
     const register = await registerPost(
       state.input_username,
       state.input_password,
+      state.input_email,
+      state.input_gender,
     );
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });

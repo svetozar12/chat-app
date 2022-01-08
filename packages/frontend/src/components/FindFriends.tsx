@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState, InitialState2 } from "../redux/state";
+import { InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
@@ -17,7 +17,7 @@ export interface IFindFriends {
 function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   const dispatch = useDispatch();
   const state = useSelector(
-    (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
+    (state: { setReducer: InitialState2 }) => state.setReducer,
   );
 
   const toggleGroupCreate = () => {
