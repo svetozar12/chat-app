@@ -46,11 +46,10 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
           <h2
             className="invite-userName"
             style={{
-              display: width && width >= 708 ? "flex" : "none",
+              display: "flex",
             }}
           >
             <span>
-              {/* renders max 3 usernames(group-chat) or render 2usernames(one on one chat) ,if(width is less than 708 only icons will be rendered)*/}
               {members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return;
@@ -68,7 +67,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
                   (user1 === cookieName && <p>{user2}</p>)}
             </span>
           </h2>
-          {width && width >= 708 && <h5>Last message...</h5>}
+          <h5>Last message...</h5>
         </div>
       </div>
     </div>
