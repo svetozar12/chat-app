@@ -110,12 +110,9 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, [localStatus]);
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", height: "100vh" }}>
       <HamburgerMenu isShown={isShown} setIsShown={setIsShown} />
-      <section
-        style={{ width: isShown ? "50rem" : "0rem" }}
-        className="active_chats"
-      >
+      <section className={`active_chats ${!isShown && "hide"}`}>
         {socketRef && (
           <FindFriends
             cookie={cookie}
@@ -139,7 +136,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             );
           })}
       </section>
-      <section className={`main_section ${isShown && "show"}`}>
+      <section className="main_section">
         {" "}
         <div
           style={{

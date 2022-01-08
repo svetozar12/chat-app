@@ -20,10 +20,6 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     (state: { homePageReducer: InitialState2 }) => state.homePageReducer,
   );
 
-  const authState = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
-
   const toggleGroupCreate = () => {
     dispatch({
       type: "TOGGLE_CREATE_GROUP",

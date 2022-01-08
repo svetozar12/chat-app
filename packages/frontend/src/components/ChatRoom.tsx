@@ -158,7 +158,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     >
       {chat.map((item, index) => {
         const { sender } = item;
-        if (index > 1) return;
+        if (index === 1) return;
         return (
           <>
             {socketRef && (

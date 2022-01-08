@@ -25,7 +25,6 @@ const UserSchema = new Schema<UserSchema>({
   },
   gender: {
     enum: ["male", "female"],
-    required: true,
   },
 });
 
