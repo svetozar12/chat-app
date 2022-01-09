@@ -31,7 +31,7 @@ const RegisterPostError = (res: string) => {
 
 export const loginPost =
   (username: string, password: string) =>
-  async (dispatch: Dispatch<Action>) => {
+  async (dispatch: Dispatch<Action | any>) => {
     try {
       const res = await axios.post(`${requestUrl}/auth/login`, {
         username,
@@ -39,9 +39,9 @@ export const loginPost =
       });
       return true;
     } catch (error: any) {
+      username = "";
+      password = "";
       dispatch(loginPostError(error.response.data.message));
-      console.log(error.response.data.message);
-
       setTimeout(() => {
         dispatch(loginPostError(""));
       }, 2000);
@@ -51,7 +51,7 @@ export const loginPost =
 
 export const registerPost =
   (username: string, password: string, email: string, gender: string) =>
-  async (dispatch: Dispatch<Action>) => {
+  async (dispatch: Dispatch<Action | any>) => {
     try {
       const res = await axios.post(`${requestUrl}/users/register`, {
         username,
@@ -68,7 +68,6 @@ export const registerPost =
       return true;
     } catch (error: any) {
       const data = error.response.data.message;
-
       dispatch(RegisterPostError(data));
       setTimeout(() => {
         dispatch(RegisterPostError(""));

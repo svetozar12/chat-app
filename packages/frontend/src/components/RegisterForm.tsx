@@ -99,7 +99,7 @@ function RegisterForm({
           <div
             onClick={quickLogin}
             style={{ cursor: "pointer" }}
-            className="container quick_login"
+            className="quick_login"
           >
             <h2>Click me to Quick login</h2>
           </div>

@@ -57,7 +57,11 @@ function AddGroupChat({
               style={{ width: "70%" }}
               type="search"
             />
-            <button onClick={handleSumbit} type="button">
+            <button
+              className="addGroup_button"
+              onClick={handleSumbit}
+              type="button"
+            >
               Create room
             </button>
           </form>

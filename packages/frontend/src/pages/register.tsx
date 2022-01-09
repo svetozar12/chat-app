@@ -29,12 +29,17 @@ function register(props: { cookie: string }) {
       sameSite: "strict",
       path: "/",
     });
+    const chatInstance: any = await getFirstChat(cookie.get("name"));
+    cookie.set("first_chat_id", chatInstance._id, {
+      sameSite: "strict",
+      path: "/",
+    });
     cookie.set("refresh_token", JWT, {
       sameSite: "strict",
       path: "/",
       maxAge: 7200,
     });
-    const chatInstance: any = await getFirstChat(cookie.get("name"));
+
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
 
     router.push(`/${chatInstance._id}`);
@@ -53,6 +58,8 @@ function register(props: { cookie: string }) {
     } else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
       dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
+      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
+      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
     }
   };
 

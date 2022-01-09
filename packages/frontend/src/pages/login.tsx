@@ -42,6 +42,12 @@ function login(props: AppProps) {
           maxAge: rememberMe,
           path: "/",
         });
+        const chatInstance: any = await getFirstChat(cookie.get("name"));
+        cookie.set("first_chat_id", chatInstance._id, {
+          sameSite: "strict",
+          maxAge: rememberMe,
+          path: "/",
+        });
 
         cookie.set("token", tokens.JWT, {
           sameSite: "strict",
@@ -56,7 +62,6 @@ function login(props: AppProps) {
         });
 
         dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
-        const chatInstance: any = await getFirstChat(cookie.get("name"));
         router.push(`/${chatInstance._id}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }

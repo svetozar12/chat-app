@@ -3,6 +3,7 @@ import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Link from "next/link";
 function UserSettings({ cookie }: { cookie: any }) {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -32,13 +33,15 @@ function UserSettings({ cookie }: { cookie: any }) {
 
   return (
     <div className="user_settings">
-      <a href="#">User settings</a>
-      <a href="#" onClick={deleteCookies}>
-        Log out
-      </a>
-      <a href="#" onClick={deleteUser}>
-        Delete user
-      </a>
+      <Link href="/settings/profile">
+        <a>User settings</a>
+      </Link>
+      <Link href="#">
+        <a onClick={deleteCookies}>Log out</a>
+      </Link>
+      <Link href="#">
+        <a onClick={deleteUser}>Delete user</a>
+      </Link>
     </div>
   );
 }

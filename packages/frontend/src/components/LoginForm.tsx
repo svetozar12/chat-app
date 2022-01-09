@@ -49,19 +49,19 @@ function LoginForm({
               Sign up for chatApp
             </a>
           </Link>
-          <label htmlFor="checkbox">
+          <input
+            type="checkbox"
+            id="checkbox"
+            onChange={(e) =>
+              dispatch({
+                type: "REMEMBER_ME_CHECK",
+                payload: e.target.checked,
+              })
+            }
+            style={{ width: "20px", height: "40px" }}
+          />
+          <label style={{ marginLeft: ".25rem" }} htmlFor="checkbox">
             {" "}
-            <input
-              type="checkbox"
-              id="checkbox"
-              onChange={(e) =>
-                dispatch({
-                  type: "REMEMBER_ME_CHECK",
-                  payload: e.target.checked,
-                })
-              }
-              style={{ width: "20px", height: "40px" }}
-            />
             Remember me
           </label>
         </div>

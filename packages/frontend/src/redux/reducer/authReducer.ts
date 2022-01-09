@@ -34,7 +34,7 @@ const reducer = (state: InitialState = initialState, action: Action) => {
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
     case ActionType.SIGN_OUT:
-      return { state: undefined };
+      return { state: initialState };
     default:
       return state;
   }
