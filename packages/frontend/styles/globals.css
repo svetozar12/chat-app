@@ -133,7 +133,8 @@ form,
 .message_form,
 .input_gender,
 .input_gender span,
-.register_form {
+.register_form,
+.login_form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -243,6 +244,12 @@ form {
 4.Components styling
 ================= */
 
+.alert {
+  height: 4rem;
+  margin: 0;
+  margin-top: 1rem;
+}
+
 .register_form form {
   width: 40%;
   padding: 0;
@@ -259,7 +266,7 @@ register_form from input {
 }
 .input_gender span {
   border: 1px solid var(--input-border-color);
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   border-radius: 5px;
   margin: 0 1rem;
   width: 60%;
@@ -336,7 +343,7 @@ input {
 }
 
 .container {
-  height: 60vh;
+  height: 70vh;
   margin: 1rem 0;
   padding: 3rem;
   border-radius: 5px;
@@ -347,17 +354,25 @@ input {
 .container input {
   width: 60%;
   height: 2rem;
-  margin: 0.5rem;
+  margin: 0.5rem 0;
   border: 1px solid var(--input-border-color);
   border-radius: 5px;
   transition: 0.3s;
-  /* border: none; */
-  padding: 0 0.9rem;
+  padding: 1.3rem 0.9rem;
 }
 
 .container > button {
-  padding: 0.5rem 0.9rem;
   margin-top: 2rem;
+  border-radius: 5px;
+  width: 60%;
+  background-color: var(--main-black);
+  color: var(--main-white);
+  border: 1px solid var(--input-border-color);
+  padding: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
 form div > input {
@@ -365,16 +380,6 @@ form div > input {
   margin: 1rem;
   padding: 0.3rem;
   border: 1px solid var(--main-black);
-}
-
-form > button {
-  background-color: var(--main-black);
-  color: var(--main-white);
-  border: 1px solid var(--main-black);
-  border-radius: 20px;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: 0.2s;
 }
 
 form > button:hover {
@@ -560,6 +565,10 @@ p {
     width: 70%;
   }
 
+  .login_form form {
+    width: 70%;
+  }
+
   .hide {
     transition: 0.6s ease-in;
     width: 0;
@@ -607,6 +616,7 @@ p {
   }
 
   .alert {
+    margin-top: 1rem;
     font-size: 0.9rem;
   }
 

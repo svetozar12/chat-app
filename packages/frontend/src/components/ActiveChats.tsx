@@ -11,18 +11,7 @@ interface IActiveChats {
 
 const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
   const router = useRouter();
-  const [width, setWidth] = React.useState<number | null>(null);
   const [user1, user2] = [members[0], members[1]];
-
-  React.useEffect(() => {
-    setWidth(window.innerWidth);
-    window.addEventListener("resize", () => {
-      setWidth(window.innerWidth);
-    });
-    return window.removeEventListener("resize", () => {
-      setWidth(window.innerWidth);
-    });
-  }, []);
 
   const joinChat = () => {
     socketRef?.emit("join_chat", {

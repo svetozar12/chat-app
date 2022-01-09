@@ -88,7 +88,7 @@ function RegisterForm({
           </span>
         </div>
         <button onClick={handleSubmit} type="submit">
-          register
+          Register
         </button>
         <Link href="/login">
           <a className="link" style={{ color: "var(--main-blue)" }}>

@@ -16,8 +16,8 @@ function LoginForm({
   );
   const dispatch = useDispatch();
   return (
-    <div className="login-box">
-      <form style={{ height: "100vh" }} className="container">
+    <div style={{ height: "100vh" }} className="login_form">
+      <form className="container">
         <h1 className="alert" style={{ color: "red" }}>
           {state.bad}
         </h1>
@@ -40,10 +40,13 @@ function LoginForm({
           name="password"
           placeholder="password ..."
         />
+        <button onClick={handleSubmit} type="submit">
+          Log In
+        </button>
         <div className="clickable">
           <Link href="/register">
             <a className="link" style={{ color: "var(--main-blue)" }}>
-              Create an account.
+              Sign up for chatApp
             </a>
           </Link>
           <label htmlFor="checkbox">
@@ -62,9 +65,6 @@ function LoginForm({
             Remember me
           </label>
         </div>
-        <button onClick={handleSubmit} type="submit">
-          login
-        </button>
       </form>
     </div>
   );
