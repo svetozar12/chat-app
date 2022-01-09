@@ -19,8 +19,8 @@ function RegisterForm({
   );
 
   return (
-    <div className="register_form">
-      <form style={{ height: "100vh" }} className="container">
+    <div style={{ height: "100vh" }} className="register_form">
+      <form className="container">
         <h2
           className="alert"
           style={state.good ? { color: "green" } : { color: "red" }}
@@ -87,14 +87,14 @@ function RegisterForm({
             />
           </span>
         </div>
-        <Link href="/login">
-          <a className="link" style={{ color: "var(--main-blue)" }}>
-            Log In.
-          </a>
-        </Link>
         <button onClick={handleSubmit} type="submit">
           register
         </button>
+        <Link href="/login">
+          <a className="link" style={{ color: "var(--main-blue)" }}>
+            Already have an account?
+          </a>
+        </Link>
         {state.loginPrompt && (
           <div
             onClick={quickLogin}

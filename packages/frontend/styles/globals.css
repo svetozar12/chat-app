@@ -24,6 +24,7 @@ Table of concepts
   --main-red: rgb(231, 10, 10);
   --gradient-first: #dfdfdf;
   --gradient-second: #ffffff;
+  --input-border-color: #ccd0d5;
 }
 
 /* =================
@@ -243,15 +244,21 @@ form {
 ================= */
 
 .register_form form {
-  width: 50%;
+  width: 40%;
+  padding: 0;
+}
+
+register_form from input {
+  margin: 0 1rem;
 }
 
 .input_gender {
   width: 60%;
   flex-direction: row;
+  margin-top: 0.5rem;
 }
 .input_gender span {
-  border: 1px solid;
+  border: 1px solid var(--input-border-color);
   padding: 0.5rem;
   border-radius: 5px;
   margin: 0 1rem;
@@ -329,23 +336,28 @@ input {
 }
 
 .container {
+  height: 60vh;
+  margin: 1rem 0;
   padding: 3rem;
   border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 0 15px black;
 }
 
 .container input {
   width: 60%;
   height: 2rem;
   margin: 0.5rem;
+  border: 1px solid var(--input-border-color);
   border-radius: 5px;
   transition: 0.3s;
-  border: none;
+  /* border: none; */
   padding: 0 0.9rem;
 }
 
 .container > button {
   padding: 0.5rem 0.9rem;
-  margin: 1rem;
+  margin-top: 2rem;
 }
 
 form div > input {
@@ -497,10 +509,6 @@ p {
   font-size: 1.2rem;
 }
 
-.link:hover {
-  border-bottom: 1px solid;
-}
-
 .contacts {
   background: var(--main-blue);
   width: 30vw;
@@ -549,7 +557,7 @@ p {
   }
 
   .register_form form {
-    width: 100%;
+    width: 70%;
   }
 
   .hide {
