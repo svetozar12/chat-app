@@ -24,11 +24,10 @@ function profile(props: { cookie: string }) {
         email: state.input_email,
         gender: state.input_gender,
       });
-      console.log(res);
-
+      const data = res.data.message;
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
       dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
-      return true;
+      return data;
     } catch (error) {
       console.log(error);
 
