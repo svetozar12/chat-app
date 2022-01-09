@@ -21,6 +21,8 @@ const UserSchema = new Schema<UserSchema>({
   },
   email: {
     type: String,
+    unique: true,
+    index: true,
     required: true,
   },
   gender: {

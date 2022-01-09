@@ -1,6 +1,6 @@
 import * as express from "express";
 import User from "../models/User.model";
-import authSchema from "../helpers/schema";
+import { updateFormSchema } from "../helpers/schema";
 import { Request, Response } from "express";
 import { verifyToken, signTokens, verifyTokens } from "../helpers/jwt_helper";
 const route = express.Router();
@@ -22,7 +22,7 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
 
 route.post("/login", async (req: Request, res: Response) => {
   try {
-    const result = await authSchema.validateAsync(req.body);
+    const result = await updateFormSchema.validateAsync(req.body);
     const user_db = await User.findOne({ username: result.username });
     const remember_me: boolean = req.query.remember_me === `true`;
     const username = req.body.username;

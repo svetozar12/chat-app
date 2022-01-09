@@ -1,5 +1,8 @@
 import * as express from "express";
-import { registerValidation } from "../../helpers/schema";
+import {
+  registerValidation,
+  update_formValidation,
+} from "../../helpers/schema";
 import { Request, Response } from "express";
 const route = express.Router();
 import User from "../../models/User.model";
@@ -19,7 +22,6 @@ route.post("/register", async (req: Request, res: Response) => {
 
     const users = await User.findOne({ username }).exec();
     if (users) return res.status(409).json({ message: "user already exist" });
-    console.log(gender);
 
     const user = new User({
       type: "POST",
@@ -28,8 +30,6 @@ route.post("/register", async (req: Request, res: Response) => {
       email,
       gender,
     });
-
-    console.log(user);
 
     const chat = await new Chats({
       members: username,
@@ -40,6 +40,33 @@ route.post("/register", async (req: Request, res: Response) => {
     return res
       .status(201)
       .send({ message: `User ${req.body.username} created` });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while registering",
+    });
+  }
+});
+
+route.put("/update", async (req: Request, res: Response) => {
+  try {
+    const { error } = update_formValidation(req.body);
+    const username = req.body.username;
+    const email = req.body.email;
+    const gender = req.body.gender;
+    const users = await User.findOne({ username }).exec();
+    const user_id = users?._id;
+
+    if (error) {
+      return res.status(409).json({ message: error.message });
+    }
+
+    console.log(users);
+
+    if (!users) return res.status(404).json({ message: "User not found" });
+    const new_user = await User.findByIdAndUpdate(user_id, { email, gender });
+    return res.status(200).send({ message: `User ${username} info updated` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

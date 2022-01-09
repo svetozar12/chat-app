@@ -4,6 +4,8 @@ import Link from "next/dist/client/link";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { InitialState3 } from "../../redux/state";
+import axios from "axios";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 function profile(props: { cookie: string }) {
   const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
@@ -11,15 +13,27 @@ function profile(props: { cookie: string }) {
     (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const email = state.input_email;
-    const gender = state.input_gender;
-    if (!email && !gender) {
-      return;
+  const handleSubmit = async (e: any) => {
+    try {
+      e.preventDefault();
+      const email = state.input_email;
+      const gender = state.input_gender;
+      if (!email && !gender) return;
+      const res = await axios.put(`${requestUrl}/users/update`, {
+        username: cookie.get("name"),
+        email: state.input_email,
+        gender: state.input_gender,
+      });
+      console.log(res);
+
+      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
+      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+      return true;
+    } catch (error) {
+      console.log(error);
+
+      return false;
     }
-    dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
-    dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
   };
 
   return (
