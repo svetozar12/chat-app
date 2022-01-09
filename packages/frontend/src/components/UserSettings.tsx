@@ -20,7 +20,6 @@ function UserSettings({ cookie }: { cookie: any }) {
       const res = await axios.delete(
         `${requestUrl}/users/${cookie.get("name")}`,
       );
-      console.log(res);
 
       deleteCookies();
       return true;
@@ -34,10 +33,10 @@ function UserSettings({ cookie }: { cookie: any }) {
   return (
     <div className="user_settings">
       <a href="#">User settings</a>
-      <a href="" onClick={deleteCookies}>
+      <a href="#" onClick={deleteCookies}>
         Log out
       </a>
-      <a href="" onClick={deleteUser}>
+      <a href="#" onClick={deleteUser}>
         Delete user
       </a>
     </div>

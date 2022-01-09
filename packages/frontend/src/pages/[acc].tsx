@@ -121,13 +121,13 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           />
         )}
         {socketRef &&
-          chatRooms.map((item, homePage) => {
+          chatRooms.map((item, index) => {
             const _id = item._id;
             const members = item.members;
 
             return (
               <ActiveChats
-                key={homePage}
+                key={index}
                 _id={_id}
                 members={members}
                 cookieName={cookie.get("name")}

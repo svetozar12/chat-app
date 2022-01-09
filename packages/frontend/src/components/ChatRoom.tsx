@@ -158,19 +158,21 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     >
       {chat.map((item, index) => {
         const { sender } = item;
-        if (index === 1) return;
-        return (
-          <>
-            {socketRef && (
-              <ChatHeader
-                key={index}
-                sender={sender}
-                socketRef={socketRef}
-                cookieName={cookie.get("name")}
-              />
-            )}
-          </>
-        );
+        console.log(index);
+
+        if (index == 0)
+          return (
+            <>
+              {socketRef && (
+                <ChatHeader
+                  key={index}
+                  sender={sender}
+                  socketRef={socketRef}
+                  cookieName={cookie.get("name")}
+                />
+              )}
+            </>
+          );
       })}
 
       <div onScroll={scrollHandler} className="container_chat">
