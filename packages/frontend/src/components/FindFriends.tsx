@@ -16,6 +16,30 @@ export interface IFindFriends {
 
 function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   const dispatch = useDispatch();
+  const [hasAvatar, setHasAvatar] = React.useState(false);
+  const [image, setImage] = React.useState("");
+
+  const getUserImage = async (name: string) => {
+    try {
+      const res = await axios.get(`${requestUrl}/users/${name}`);
+      const userAvatar = res.data.user.userAvatar;
+      if (userAvatar === "") {
+        setHasAvatar(false);
+        return true;
+      }
+      setHasAvatar(true);
+      const requestString = `${requestUrl}/${userAvatar}`;
+      setImage(requestString);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  React.useEffect(() => {
+    getUserImage(cookieName);
+  }, []);
+
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
@@ -64,17 +88,31 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     >
       <div className="profile" style={{ display: "flex" }}>
         <div>
-          <FaUserCircle
-            onClick={() =>
-              dispatch({
-                type: "SET_USER_SETTINGS",
-                payload: !state.setUserSettings,
-              })
-            }
-          />
+          {hasAvatar ? (
+            <img
+              src={image}
+              onClick={() =>
+                dispatch({
+                  type: "SET_USER_SETTINGS",
+                  payload: !state.setUserSettings,
+                })
+              }
+              className="user-logo"
+              style={{ borderRadius: "50px", cursor: "pointer" }}
+            />
+          ) : (
+            <FaUserCircle
+              onClick={() =>
+                dispatch({
+                  type: "SET_USER_SETTINGS",
+                  payload: !state.setUserSettings,
+                })
+              }
+            />
+          )}
           {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
         </div>
-        <div>
+        <div className="flex">
           <FaUserFriends
             onClick={() =>
               dispatch({

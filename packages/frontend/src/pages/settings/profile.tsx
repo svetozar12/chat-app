@@ -61,7 +61,6 @@ function profile(props: { cookie: string }) {
               })
             }
           />
-
           <div className="input_gender">
             <span>
               <label htmlFor="Male">Male</label>

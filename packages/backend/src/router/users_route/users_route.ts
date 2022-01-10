@@ -32,6 +32,23 @@ const upload = multer({
   fileFilter,
 });
 
+route.get("/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    console.log(username);
+
+    const users = await User.findOne({ username }).exec();
+
+    return res.status(200).send({ user: users });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while registering",
+    });
+  }
+});
+
 route.post("/register", async (req: Request, res: Response) => {
   try {
     const { error } = registerValidation(req.body);
@@ -85,7 +102,7 @@ route.put(
       const username = req.body.username;
       const email = req.body.email;
       const gender = req.body.gender;
-      const userAvatar = req.file?.path;
+      const userAvatar = req.file?.filename;
       const users = await User.findOne({ username }).exec();
       console.log(users);
 
@@ -96,7 +113,7 @@ route.put(
       // }
 
       // if (!users) return res.status(404).json({ message: "User not found" });
-      const new_user = await User.findByIdAndUpdate(user_id, {
+      await User.findByIdAndUpdate(user_id, {
         email,
         gender,
         userAvatar,
