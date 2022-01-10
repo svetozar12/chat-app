@@ -7,6 +7,7 @@ import { InitialState3 } from "../../redux/state";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 function profile(props: { cookie: string }) {
+  const [image, setImage] = React.useState("");
   const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
   const state = useSelector(
@@ -15,19 +16,28 @@ function profile(props: { cookie: string }) {
 
   const handleSubmit = async (e: any) => {
     try {
+      const formData = new FormData();
+      formData.append("username", cookie.get("name"));
+      formData.append("email", state.input_email);
+      formData.append("gender", state.input_gender);
+      //@ts-ignore
+      formData.append("userAvatar", image);
+
       e.preventDefault();
       const email = state.input_email;
       const gender = state.input_gender;
-      if (!email && !gender) return;
-      const res = await axios.put(`${requestUrl}/users/update`, {
-        username: cookie.get("name"),
-        email: state.input_email,
-        gender: state.input_gender,
-      });
-      const data = res.data.message;
+      if (!email && !gender && !image) return;
+
+      axios
+        .put(`${requestUrl}/users/update`, formData)
+        .then((res) => {
+          return true;
+        })
+        .catch((err) => {
+          return false;
+        });
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
       dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
-      return data;
     } catch (error) {
       console.log(error);
 
@@ -84,6 +94,13 @@ function profile(props: { cookie: string }) {
               />
             </span>
           </div>
+          <input
+            type="file"
+            name="userAvatar"
+            // formEncType="multipart/form-data"
+            // @ts-ignore
+            onChange={(e) => setImage(e.target.files[0])}
+          />
           <button onClick={handleSubmit} type="submit">
             Update
           </button>

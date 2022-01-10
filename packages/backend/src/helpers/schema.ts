@@ -21,6 +21,7 @@ const updateFormSchema = Joi.object({
   password: Joi.string().min(2),
   email: Joi.string().min(2),
   gender: Joi.string(),
+  userAvatar: Joi.string(),
 });
 
 const update_formValidation = (data: {
@@ -28,6 +29,7 @@ const update_formValidation = (data: {
   password: string;
   email: string;
   gender: string;
+  userAvatar: string;
 }) => {
   return updateFormSchema.validate(data);
 };

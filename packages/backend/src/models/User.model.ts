@@ -5,6 +5,7 @@ export interface UserSchema {
   password: string;
   email: string;
   gender: string;
+  userAvatar: string;
   isValidPassword: any;
 }
 
@@ -31,6 +32,7 @@ const UserSchema = new Schema<UserSchema>({
     default: "Others",
     required: true,
   },
+  userAvatar: String,
 });
 
 // this is middleware which is executed before mongoose method save to hash the password
