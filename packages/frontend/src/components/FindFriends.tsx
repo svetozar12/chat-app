@@ -23,7 +23,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     try {
       const res = await axios.get(`${requestUrl}/users/${name}`);
       const userAvatar = res.data.user.userAvatar;
-      if (userAvatar === "") {
+      if (!userAvatar) {
         setHasAvatar(false);
         return true;
       }

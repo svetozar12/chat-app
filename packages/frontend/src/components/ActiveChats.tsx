@@ -17,11 +17,14 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
 
-  const getUserImage = async (name: string) => {
+  const getUserImage = async (name: string | undefined) => {
     try {
       const res = await axios.get(`${requestUrl}/users/${name}`);
       const userAvatar = res.data.user.userAvatar;
-      if (userAvatar === "") {
+
+      if (!userAvatar) {
+        console.log("avatar false");
+
         setHasAvatar(false);
         return true;
       }
@@ -40,6 +43,8 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
       (element) => element === cookieName,
     );
     notMe.forEach((element) => {
+      console.log(element);
+
       getUserImage(element);
     });
     getUserImage(me);
