@@ -14,17 +14,22 @@ function Avatar({
   return (
     <>
       {members.length > 2 ? (
-        <div className="group_logo_container">
+        <div
+          style={{ width: "4rem", marginRight: "2rem" }}
+          className="group_logo_container"
+        >
           {hasAvatar ? (
             images.map((element, index) => {
-              console.log(element, "ivan");
-
-              if (index === 1) return;
+              if (index === 2) return;
               return (
                 <>
                   <img
                     src={element}
-                    style={{ borderRadius: "50px" }}
+                    style={{
+                      borderRadius: "50px",
+                      width: "2rem",
+                      height: "2rem",
+                    }}
                     className={`user-logo ${index === 1 && "overlay"}`}
                   />
                 </>
@@ -32,8 +37,14 @@ function Avatar({
             })
           ) : (
             <div className="group_logo_container">
-              <FaUserCircle className="user-logo logo" />
-              <FaUserCircle className="user-logo logo overlay" />
+              <FaUserCircle
+                style={{ width: "2rem" }}
+                className="user-logo logo"
+              />
+              <FaUserCircle
+                style={{ width: "2rem" }}
+                className="user-logo logo overlay"
+              />
             </div>
           )}
         </div>

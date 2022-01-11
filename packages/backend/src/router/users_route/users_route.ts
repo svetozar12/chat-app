@@ -35,8 +35,6 @@ const upload = multer({
 route.get("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
-    console.log(username);
-
     const users = await User.findOne({ username }).exec();
 
     return res.status(200).send({ user: users });
@@ -95,17 +93,12 @@ route.put(
   upload.single("userAvatar"),
   async (req: Request, res: Response) => {
     try {
-      console.log(req.file);
-      console.log(req.body);
-
       const { error } = update_formValidation(req.body);
       const username = req.body.username;
       const email = req.body.email;
       const gender = req.body.gender;
       const userAvatar = req.file?.filename;
       const users = await User.findOne({ username }).exec();
-      console.log(users);
-
       const user_id = users?._id;
 
       // if (error) {

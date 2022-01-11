@@ -23,17 +23,15 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     try {
       const res = await axios.get(`${requestUrl}/users/${name}`);
       const userAvatar = res.data.user.userAvatar;
-      console.log(name, userAvatar);
-
       if (!userAvatar) {
-        console.log(name);
-
         setHasAvatar(false);
         return true;
       }
       setHasAvatar(true);
       const requestString = `${requestUrl}/${userAvatar}`;
       setImage(requestString);
+      console.log(requestString, "hello");
+
       setImages((prev) => [...prev, requestString]);
       return true;
     } catch (error) {
@@ -46,8 +44,10 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     const me: string | undefined = members.find(
       (element) => element === cookieName,
     );
-    notMe.forEach((element) => {
+    notMe.forEach((element, index) => {
+      if (index == 2) return;
       getUserImage(element);
+      console.log(images[index], index);
     });
     getUserImage(me);
   }, []);
