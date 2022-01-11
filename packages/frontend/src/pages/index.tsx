@@ -5,7 +5,7 @@ import { hostUrl } from "../utils/hostUrl_requestUrl";
 import { getFirstChat } from "../utils/getFirstChat";
 const Home = () => {
   return (
-    <div style={{ height: "100vh" }} className="container">
+    <div style={{ height: "100vh", margin: "0" }} className="container">
       <Link href={`${hostUrl}/register`}>
         <a className="link blue_no_underline">
           <h2>Create an account !</h2>
