@@ -69,6 +69,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       return false;
     }
   };
+  console.log(state.setUserSettings);
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,

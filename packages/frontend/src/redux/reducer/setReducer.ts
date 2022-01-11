@@ -8,7 +8,10 @@ export const initialState = {
   setFriendRequest: false,
   toggleCreateGroup: false,
 };
-const setReducer = (state: InitialState2 = initialState, action: Action) => {
+const setReducer = (
+  state: InitialState2 | undefined = initialState,
+  action: Action,
+) => {
   switch (action.type) {
     case HYDRATE:
       return {
@@ -25,6 +28,8 @@ const setReducer = (state: InitialState2 = initialState, action: Action) => {
       return { ...state, setUserSettings: action.payload };
     case ActionType.TOGGLE_CREATE_GROUP:
       return { ...state, toggleCreateGroup: action.payload };
+    case ActionType.SIGN_OUT:
+      return initialState;
     default:
       return state;
   }

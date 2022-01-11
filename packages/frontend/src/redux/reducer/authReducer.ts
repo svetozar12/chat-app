@@ -12,7 +12,10 @@ const initialState = {
   loginPrompt: false,
   cookie: "",
 };
-const reducer = (state: InitialState = initialState, action: Action) => {
+const reducer = (
+  state: InitialState | undefined = initialState,
+  action: Action,
+) => {
   switch (action.type) {
     case HYDRATE:
       return {
@@ -33,8 +36,6 @@ const reducer = (state: InitialState = initialState, action: Action) => {
       return { ...state, loginPrompt: action.payload };
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
-    case ActionType.SIGN_OUT:
-      return { state: initialState };
     default:
       return state;
   }

@@ -6,11 +6,6 @@ const initialState = {
 };
 const messageReducer = (state = initialState, action: Action) => {
   switch (action.type) {
-    case HYDRATE:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case ActionType.MESSAGE_SEND:
       return {
         ...state,
