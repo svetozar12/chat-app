@@ -120,7 +120,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             socketRef={socketRef}
           />
         )}
-        <div style={{ overflow: "auto", width: "100%" }}>
+        <div style={{ overflow: "auto", width: "100%", height: "100%" }}>
           {socketRef &&
             chatRooms.map((item, index) => {
               const _id = item._id;

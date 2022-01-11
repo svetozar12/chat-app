@@ -1,9 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
-import { FaUserCircle } from "react-icons/fa";
+
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import axios from "axios";
+import Avatar from "./Avatar";
 interface IActiveChats {
   _id: string;
   members: string[];
@@ -22,9 +23,10 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     try {
       const res = await axios.get(`${requestUrl}/users/${name}`);
       const userAvatar = res.data.user.userAvatar;
+      console.log(name, userAvatar);
 
       if (!userAvatar) {
-        console.log("avatar false");
+        console.log(name);
 
         setHasAvatar(false);
         return true;
@@ -45,8 +47,6 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
       (element) => element === cookieName,
     );
     notMe.forEach((element) => {
-      console.log(element);
-
       getUserImage(element);
     });
     getUserImage(me);
@@ -62,44 +62,12 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
   return (
     <div onClick={joinChat} className="contacts_container">
       <div style={{ display: "flex", alignItems: "center" }}>
-        {members.length > 2 ? (
-          <div>
-            {hasAvatar ? (
-              images.map((element, index) => {
-                console.log(element);
-
-                return (
-                  <div>
-                    <div className="group_logo_container">
-                      <img
-                        src={element}
-                        style={{ borderRadius: "50px" }}
-                        className={`user-logo ${index === 1 && "overlay"}`}
-                      />
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="group_logo_container">
-                <FaUserCircle className="user-logo logo" />
-                <FaUserCircle className="user-logo logo overlay" />
-              </div>
-            )}
-          </div>
-        ) : (
-          <>
-            {hasAvatar ? (
-              <img
-                src={image}
-                style={{ borderRadius: "50px" }}
-                className="user-logo"
-              />
-            ) : (
-              <FaUserCircle className="user-logo" />
-            )}
-          </>
-        )}
+        <Avatar
+          members={members}
+          image={image}
+          images={images}
+          hasAvatar={hasAvatar}
+        />
         <div className="contacts_info">
           <h2
             className="invite-userName"
