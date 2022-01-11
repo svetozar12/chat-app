@@ -34,12 +34,16 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     }
   };
 
-  // React.useEffect(() => {
-  //   const notMe: any = members.find((element) => element === cookieName);
-  //   console.log(notMe);
-
-  //   getUserImage(notMe);
-  // }, []);
+  React.useEffect(() => {
+    const notMe: string[] = members.filter((element) => element !== cookieName);
+    const me: string | undefined = members.find(
+      (element) => element === cookieName,
+    );
+    notMe.forEach((element) => {
+      getUserImage(element);
+    });
+    getUserImage(me);
+  }, []);
 
   const joinChat = () => {
     socketRef?.emit("join_chat", {
