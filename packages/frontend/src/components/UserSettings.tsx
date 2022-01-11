@@ -1,12 +1,17 @@
 import React from "react";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { InitialState2 } from "../redux/state";
 function UserSettings({ cookie }: { cookie: any }) {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const state = useSelector(
+    (state: { setReducer: InitialState2 }) => state.setReducer,
+  );
 
   const deleteCookies = () => {
     cookie.remove("name");
@@ -18,9 +23,7 @@ function UserSettings({ cookie }: { cookie: any }) {
 
   const deleteUser = async () => {
     try {
-      const res = await axios.delete(
-        `${requestUrl}/users/${cookie.get("name")}`,
-      );
+      await axios.delete(`${requestUrl}/users/${cookie.get("name")}`);
 
       deleteCookies();
       return true;
@@ -34,7 +37,13 @@ function UserSettings({ cookie }: { cookie: any }) {
   return (
     <div className="user_settings">
       <Link href="/settings/profile">
-        <a>User settings</a>
+        <a
+          onClick={() => {
+            dispatch({ type: "SET_USER_SETTINGS", payload: false });
+          }}
+        >
+          User settings
+        </a>
       </Link>
       <Link href="#">
         <a onClick={deleteCookies}>Log out</a>

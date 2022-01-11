@@ -120,21 +120,22 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             socketRef={socketRef}
           />
         )}
-        {socketRef &&
-          chatRooms.map((item, index) => {
-            const _id = item._id;
-            const members = item.members;
-
-            return (
-              <ActiveChats
-                key={index}
-                _id={_id}
-                members={members}
-                cookieName={cookie.get("name")}
-                socketRef={socketRef}
-              />
-            );
-          })}
+        <div style={{ overflow: "auto", width: "100%" }}>
+          {socketRef &&
+            chatRooms.map((item, index) => {
+              const _id = item._id;
+              const members = item.members;
+              return (
+                <ActiveChats
+                  key={index}
+                  _id={_id}
+                  members={members}
+                  cookieName={cookie.get("name")}
+                  socketRef={socketRef}
+                />
+              );
+            })}
+        </div>
       </section>
       <section className="main_section">
         {" "}
