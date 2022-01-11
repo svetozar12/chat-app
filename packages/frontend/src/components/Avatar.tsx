@@ -14,10 +14,7 @@ function Avatar({
   return (
     <>
       {members.length > 2 ? (
-        <div
-          style={{ width: "4rem", marginRight: "2rem" }}
-          className="group_logo_container"
-        >
+        <div style={{ marginRight: "2rem" }} className="group_logo_container">
           {hasAvatar ? (
             images.map((element, index) => {
               if (index === 2) return;

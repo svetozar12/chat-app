@@ -96,10 +96,16 @@ function profile(props: { cookie: string }) {
           <input
             type="file"
             name="userAvatar"
-            // formEncType="multipart/form-data"
+            placeholder="Select file"
+            className="input_file"
+            id="file"
+            style={{ display: "none" }}
             // @ts-ignore
             onChange={(e) => setImage(e.target.files[0])}
           />
+          <label className="input_file" htmlFor="file">
+            Add file
+          </label>
           <button onClick={handleSubmit} type="submit">
             Update
           </button>

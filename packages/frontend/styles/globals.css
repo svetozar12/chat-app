@@ -380,6 +380,22 @@ input {
   padding: 1.3rem 0.9rem;
 }
 
+.input_file {
+  background: var(--main-black);
+  color: var(--main-white);
+  border: 1px solid var(--input-border-color);
+  transition: 0.3s;
+  margin-top: 2rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.input_file:hover {
+  background: var(--main-white);
+  transition: 0.3s;
+  color: var(--main-black);
+}
+
 .container > button {
   margin-top: 2rem;
   border-radius: 5px;
