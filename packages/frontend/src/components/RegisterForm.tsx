@@ -86,6 +86,21 @@ function RegisterForm({
               value="Female"
             />
           </span>
+          <span>
+            <label htmlFor="Others">Others</label>
+            <input
+              onChange={(e) =>
+                dispatch({
+                  type: "SAVE_INPUT_GENDER",
+                  payload: e.target.value,
+                })
+              }
+              type="radio"
+              name="gender"
+              id="Others"
+              value="Others"
+            />
+          </span>
         </div>
         <button onClick={handleSubmit} type="submit">
           Register

@@ -703,3 +703,10 @@ p {
     color: var(--main-red);
   }
 }
+
+@media (max-width: 1000px) {
+  .input_gender input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+  }
+}

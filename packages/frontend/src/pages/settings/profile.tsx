@@ -46,8 +46,11 @@ function profile(props: { cookie: string }) {
 
   return (
     <main style={{ height: "100vh" }} className="flex">
-      <section style={{ width: "50%" }}>
-        <form style={{ width: "100%" }} className="container">
+      <section style={{ width: "59%" }}>
+        <form
+          style={{ width: "100%", minWidth: "342px" }}
+          className="container"
+        >
           <h2 style={{ fontSize: "2vw" }}>Update your profile info</h2>
           <label htmlFor="">Email</label>
           <input
@@ -91,6 +94,21 @@ function profile(props: { cookie: string }) {
                 value="Female"
               />
             </span>
+            <span>
+              <label htmlFor="Others">Others</label>
+              <input
+                onChange={(e) =>
+                  dispatch({
+                    type: "SAVE_INPUT_GENDER",
+                    payload: e.target.value,
+                  })
+                }
+                type="radio"
+                name="gender"
+                id="Others"
+                value="Others"
+              />
+            </span>
           </div>
           <input
             type="file"
@@ -104,7 +122,11 @@ function profile(props: { cookie: string }) {
           <label className="input_file" htmlFor="file">
             Add file
           </label>
-          <button onClick={handleSubmit} type="submit">
+          <button
+            style={{ fontSize: "3vw", textAlign: "center" }}
+            onClick={handleSubmit}
+            type="submit"
+          >
             Update
           </button>
           <Link href={`/${cookie.get("first_chat_id")}`}>
