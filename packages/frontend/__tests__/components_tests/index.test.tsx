@@ -1,20 +1,13 @@
 import { screen, render, RenderResult } from "@testing-library/react";
-import "@iting-library/jest-dom";
+import "@testing-library/jest-dom";
 import Home from "../../src/pages/index";
-import Router from "next/router";
 
 describe("index page", () => {
-  const spies: any = {};
   let container: RenderResult;
   beforeEach(() => {
     container = render(<Home />);
-    spies.routerChangeStart = jest.fn();
-    Router.events.on("routeChangeStart", spies.routerChangeStart);
   });
 
-  afterEach(() => {
-    Router.events.off("routeChangeStart", spies.routerChangeStart);
-  });
   it("renders index page", async () => {
     const headingElement = screen.getByText("Create an account !");
     expect(headingElement).toBeInTheDocument();

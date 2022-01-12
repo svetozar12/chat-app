@@ -15,7 +15,6 @@ const combReducers = (state: any, action: any) => {
   if (action.type === ActionType.SIGN_OUT) {
     return undefined;
   }
-  //@ts-ignore
   return combiReducers(state, action);
 };
 

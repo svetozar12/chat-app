@@ -5,8 +5,6 @@ import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   remember_me: false,
-  input_username: "",
-  input_password: "",
   good: "", //good and bad stand for good alert and bad alert
   bad: "",
   loginPrompt: false,

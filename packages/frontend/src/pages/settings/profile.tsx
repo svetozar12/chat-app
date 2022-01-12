@@ -1,10 +1,10 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { InitialState3 } from "../../redux/state";
-import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 function profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
@@ -20,7 +20,6 @@ function profile(props: { cookie: string }) {
       formData.append("username", cookie.get("name"));
       formData.append("email", state.input_email);
       formData.append("gender", state.input_gender);
-      //@ts-ignore
       formData.append("userAvatar", image);
 
       e.preventDefault();
@@ -100,8 +99,7 @@ function profile(props: { cookie: string }) {
             className="input_file"
             id="file"
             style={{ display: "none" }}
-            // @ts-ignore
-            onChange={(e) => setImage(e.target.files[0])}
+            onChange={(e: any) => setImage(e.target.files[0])}
           />
           <label className="input_file" htmlFor="file">
             Add file

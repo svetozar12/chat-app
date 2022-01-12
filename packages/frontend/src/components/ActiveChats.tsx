@@ -30,8 +30,6 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
       setHasAvatar(true);
       const requestString = `${requestUrl}/${userAvatar}`;
       setImage(requestString);
-      console.log(requestString, "hello");
-
       setImages((prev) => [...prev, requestString]);
       return true;
     } catch (error) {
@@ -47,7 +45,6 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     notMe.forEach((element, index) => {
       if (index == 2) return;
       getUserImage(element);
-      console.log(images[index], index);
     });
     getUserImage(me);
   }, []);

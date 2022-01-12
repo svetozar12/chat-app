@@ -44,9 +44,9 @@ function AddGroupChat({
     }
   };
   return (
-    <>
+    <div data-testid="form">
       {state1.toggleCreateGroup && (
-        <div>
+        <div data-test>
           <form
             style={{ display: "flex", flexDirection: "row" }}
             onSubmit={(e) => addToGroup(user, e)}
@@ -55,6 +55,7 @@ function AddGroupChat({
               onChange={(e) => setUser(e.target.value)}
               value={user}
               style={{ width: "70%" }}
+              placeholder="Add user ..."
               type="search"
             />
             <button
@@ -76,7 +77,7 @@ function AddGroupChat({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

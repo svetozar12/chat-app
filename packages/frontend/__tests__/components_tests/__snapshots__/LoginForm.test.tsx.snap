@@ -2,15 +2,15 @@
 
 exports[`Render connected React-redux page should create snapshot for <LoginForm/> 1`] = `
 <div
-  className="login-box"
+  className="login_form"
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
 >
   <form
     className="container"
-    style={
-      Object {
-        "height": "100vh",
-      }
-    }
   >
     <h1
       className="alert"
@@ -39,6 +39,12 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       type="password"
       value=""
     />
+    <button
+      onClick={[MockFunction]}
+      type="submit"
+    >
+      Log In
+    </button>
     <div
       className="clickable"
     >
@@ -53,32 +59,31 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
           }
         }
       >
-        Create an account.
+        Sign up for chatApp
       </a>
+      <input
+        id="checkbox"
+        onChange={[Function]}
+        style={
+          Object {
+            "height": "40px",
+            "width": "20px",
+          }
+        }
+        type="checkbox"
+      />
       <label
         htmlFor="checkbox"
+        style={
+          Object {
+            "marginLeft": ".25rem",
+          }
+        }
       >
          
-        <input
-          id="checkbox"
-          onChange={[Function]}
-          style={
-            Object {
-              "height": "40px",
-              "width": "20px",
-            }
-          }
-          type="checkbox"
-        />
         Remember me
       </label>
     </div>
-    <button
-      onClick={[MockFunction]}
-      type="submit"
-    >
-      login
-    </button>
   </form>
 </div>
 `;

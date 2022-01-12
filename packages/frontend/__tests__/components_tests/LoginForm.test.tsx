@@ -5,6 +5,7 @@ import renderer from "react-test-renderer";
 import userEvent from "@testing-library/user-event";
 import { AuthState } from "../../src/redux/reducer/authReducer";
 import { render, screen, cleanup, RenderResult } from "@testing-library/react";
+import { initialState as inputState } from "../../src/redux/reducer/save_inputReducer";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
@@ -17,6 +18,7 @@ beforeEach(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
     authReducer: AuthState,
+    saveInputReducer: inputState,
   });
 
   component = renderer
@@ -42,7 +44,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <LoginForm/>", () => {
-    const renderedComponent = container.getByText("Login");
+    const renderedComponent = container.getByText("Log In");
     expect(renderedComponent).toBeInTheDocument();
   });
   // test("input some data", () => {
@@ -59,7 +61,7 @@ describe("Render connected React-redux page", () => {
     expect(screen.getByLabelText("Remember me")).toBeChecked();
   });
   test("click login button and call function handleSubmit", () => {
-    const button = screen.getByText("login");
+    const button = screen.getByText("Log In");
     userEvent.click(button);
     expect(submit).toHaveBeenCalled();
   });

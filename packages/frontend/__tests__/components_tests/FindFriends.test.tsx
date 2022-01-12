@@ -2,9 +2,9 @@ import configureStore from "redux-mock-store";
 import FindFriends from "../../src/components/FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { initialState } from "../../src/redux/reducer/setReducer";
+import { initialState as setState } from "../../src/redux/reducer/setReducer";
 import { AuthState } from "../../src/redux/reducer/authReducer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
+import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
@@ -16,7 +16,7 @@ beforeEach(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
     authReducer: AuthState,
-    setReducer: initialState,
+    setReducer: setState,
   });
 
   component = renderer
@@ -42,7 +42,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <FindFriends/>", () => {
-    const renderedComponent = container.getByText("ivan");
+    const renderedComponent = container.getByRole("searchbox");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

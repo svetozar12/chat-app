@@ -35,7 +35,23 @@ exports[`Render connected React-redux page should create snapshot for <ActiveCha
     <div
       className="contacts_info"
     >
-      <h2 />
+      <h2
+        className="invite-userName"
+        style={
+          Object {
+            "display": "flex",
+          }
+        }
+      >
+        <span>
+          <p>
+            gerg
+          </p>
+        </span>
+      </h2>
+      <h5>
+        Last message...
+      </h5>
     </div>
   </div>
 </div>

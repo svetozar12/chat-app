@@ -4,7 +4,7 @@ import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import { initialState } from "../../src/redux/reducer/setReducer";
 import { AuthState } from "../../src/redux/reducer/authReducer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
+import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
@@ -42,7 +42,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <AddGroupChat/>", () => {
-    const renderedComponent = container.getByText("Create room");
+    const renderedComponent = container.getByTestId("form");
     expect(renderedComponent).toBeInTheDocument();
   });
 });
