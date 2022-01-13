@@ -20,6 +20,7 @@ export enum ActionType {
   SET_FRIEND_REQUEST = "SET_FRIEND_REQUEST",
   SET_USER_SETTINGS = "SET_USER_SETTINGS",
   SET_MOBILE_NAV = "SET_MOBILE_NAV",
+  SET_IS_MATCH = "SET_IS_MATCH",
 }
 
 interface LoginPost {
@@ -73,7 +74,8 @@ interface toggle_create_group {
     | ActionType.TOGGLE_CREATE_GROUP
     | ActionType.SET_USER_SETTINGS
     | ActionType.SET_FRIEND_REQUEST
-    | ActionType.SET_MOBILE_NAV;
+    | ActionType.SET_MOBILE_NAV
+    | ActionType.SET_IS_MATCH;
   payload: boolean;
 }
 
@@ -103,6 +105,7 @@ export interface InitialState2 {
   setFriendRequest: boolean;
   toggleCreateGroup: boolean;
   setMobileNav: boolean;
+  setIsMatch: boolean;
 }
 
 export interface InitialState3 {

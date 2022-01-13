@@ -139,6 +139,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                   members={members}
                   cookieName={cookie.get("name")}
                   socketRef={socketRef}
+                  chatId={props.chatRoom}
                 />
               );
             })}

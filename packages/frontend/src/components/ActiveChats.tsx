@@ -1,24 +1,35 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import axios from "axios";
 import Avatar from "./Avatar";
+import { InitialState2 } from "../redux/state";
 interface IActiveChats {
   _id: string;
   members: string[];
   cookieName: string;
   socketRef: Socket;
+  chatId: string;
 }
 
-const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
+const ActiveChats = ({
+  _id,
+  members,
+  cookieName,
+  socketRef,
+  chatId,
+}: IActiveChats) => {
   const router = useRouter();
   const [user1, user2] = [members[0], members[1]];
   const [image, setImage] = React.useState<string>("");
   const [images, setImages] = React.useState<string[]>([]);
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
   const dispatch = useDispatch();
+  const state = useSelector(
+    (state: { setReducer: InitialState2 }) => state.setReducer,
+  );
 
   const getUserImage = async (name: string | undefined) => {
     try {
@@ -70,12 +81,15 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
 
   return (
     <div
-      style={{ whiteSpace: "nowrap", overflow: "hidden" }}
+      style={{
+        whiteSpace: state.setMobileNav ? "nowrap" : "normal",
+        overflow: "hidden",
+      }}
       onClick={() => {
         joinChat();
         dispatching();
       }}
-      className="contacts_container"
+      className={`contacts_container ${_id === chatId && "active_contact"} `}
     >
       <div style={{ display: "flex", alignItems: "center" }}>
         <Avatar

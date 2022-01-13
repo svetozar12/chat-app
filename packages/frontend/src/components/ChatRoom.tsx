@@ -2,12 +2,12 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState, InitialState2 } from "../redux/state";
+import { InitialState2 } from "../redux/state";
 import { MdSend } from "react-icons/md";
 import axios from "axios";
 import RenderChat from "../components/RenderChat";
 import timeStamp from "../utils/timeStamp";
-import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { hostUrl, requestUrl } from "../utils/hostUrl_requestUrl";
 import { useRouter } from "next/router";
 import ChatHeader from "./ChatHeader";
 
@@ -65,6 +65,10 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   useEffect(() => {
     setChat([]);
+    dispatch({ type: "SET_IS_MATCH", payload: false });
+    if (location.href === hostUrl + "/" + chatId)
+      dispatch({ type: "SET_IS_MATCH", payload: true });
+
     getRecentMessages();
   }, [route.asPath]);
 

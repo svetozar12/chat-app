@@ -102,9 +102,13 @@ a {
   transition: 0.2s;
 }
 
+.active_contact {
+  border-radius: 15px;
+  background: rgba(122, 122, 122, 0.4);
+}
+
 .contacts_container:hover {
   border-radius: 15px;
-  /* width: 10%; */
   background: rgba(122, 122, 122, 0.4);
   transition: 0.2s;
 }
@@ -214,19 +218,21 @@ form {
 }
 
 .user_settings {
+  width: auto;
   position: absolute;
   display: flex;
-  align-self: stretch;
+  justify-content: center;
+  align-items: flex-start;
   flex-direction: column;
   background: var(--main-white);
-  padding: 2rem;
+  text-align: left;
   left: 0;
   box-shadow: 0 0 10px black;
 }
 
 .user_settings a {
   color: black;
-  margin-bottom: 1rem;
+  margin: 1rem;
   width: 100%;
   font-size: 1.2vw;
 }
