@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../redux/state";
+import { InitialState, InitialState2 } from "../redux/state";
 import { MdSend } from "react-icons/md";
 import axios from "axios";
 import RenderChat from "../components/RenderChat";
@@ -30,9 +30,10 @@ interface IchatInstance {
 
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const route = useRouter();
-  const states2 = useSelector(
+  const statess = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
+
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
   const [chat, setChat] = useState<IchatInstance[]>([]);
@@ -85,7 +86,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     };
   }, []);
 
-  const onTextChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
@@ -112,10 +113,10 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       if (e.currentTarget.scrollTop === 0) {
         dispatch({
           type: "INCREMENT_PAGE_NUMBER",
-          payload: states2.pageNumber,
+          payload: statess.pageNumber,
         });
         const res = await axios.get(
-          `${requestUrl}/messages/${chatId}?page_number=${states2.pageNumber}&page_size=10`,
+          `${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`,
         );
         const data = res.data.reversedArr;
 
@@ -145,6 +146,14 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
 
+  const handleKeyPress = (e: any) => {
+    console.log(e.key);
+
+    if (e.key === "Enter") {
+      onMessageSubmit(e);
+    }
+  };
+
   return (
     <div
       style={{
@@ -156,7 +165,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       }}
       className="container  chat_home"
     >
-      {socketRef && (
+      {socketRef && statess.toggleCreateGroup && (
         <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />
       )}
 
@@ -185,15 +194,16 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         style={{ width: "100%" }}
       >
         <div className="message_input_container">
-          <input
-            style={{ border: "none" }}
-            type="text"
+          <textarea
+            rows={1}
             name="message"
             onChange={(e) => onTextChange(e)}
-            value={state.message}
+            style={{ border: "none", resize: "none" }}
             placeholder="Your Message "
-          />
-          <MdSend onClick={onMessageSubmit} />
+            value={state.message}
+            onKeyPress={(e: any) => handleKeyPress(e)}
+          ></textarea>
+          <MdSend type="submit" onClick={onMessageSubmit} />
         </div>
       </form>
     </div>

@@ -31,9 +31,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [isShown, setIsShown] = useState<boolean>(false);
 
-  const state1 = useSelector(
+  const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
 
@@ -111,8 +110,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <HamburgerMenu isShown={isShown} setIsShown={setIsShown} />
-      <section className={`active_chats ${!isShown && "hide"}`}>
+      <HamburgerMenu />
+      <section className={`active_chats ${!state.setMobileNav && "hide"}`}>
         {socketRef && (
           <FindFriends
             cookie={cookie}
@@ -120,7 +119,15 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             socketRef={socketRef}
           />
         )}
-        <div style={{ overflow: "auto", width: "100%", height: "100%" }}>
+        <div
+          className="flex"
+          style={{
+            overflow: "auto",
+            width: "95%",
+            height: "100%",
+            flexDirection: "column",
+          }}
+        >
           {socketRef &&
             chatRooms.map((item, index) => {
               const _id = item._id;
@@ -150,7 +157,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           className="container"
         >
           <div className="dash_board">
-            {state1.setFriendRequest && (
+            {state.setFriendRequest && (
               <div className="fRequests_modal">
                 {contacts.map((item, homePage) => {
                   return (

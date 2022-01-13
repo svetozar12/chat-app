@@ -97,12 +97,13 @@ a {
   width: 97%;
   cursor: pointer;
   padding: 0 1rem;
+  width: 100%;
   /* word-wrap: break-word; */
   transition: 0.2s;
 }
 
 .contacts_container:hover {
-  border-radius: 15px 0 0 15px;
+  border-radius: 15px;
   /* width: 10%; */
   background: rgba(122, 122, 122, 0.4);
   transition: 0.2s;
@@ -110,7 +111,7 @@ a {
 
 .contacts_info {
   flex-direction: column;
-  text-align: start;
+  align-items: flex-start;
 }
 
 .chat_home {
@@ -179,7 +180,7 @@ form {
   text-align: center;
   overflow: hidden;
   height: 100vh;
-  width: 45%;
+  width: 35%;
   z-index: 20;
   flex-direction: column;
   justify-content: flex-start;
@@ -191,11 +192,14 @@ form {
 }
 
 .main_section {
-  width: 80%;
+  width: 65%;
 }
 
 .profile {
   position: relative;
+  width: 95%;
+  justify-content: space-between;
+  margin: 0 1rem;
 }
 
 .profile svg {
@@ -205,26 +209,30 @@ form {
   cursor: pointer;
 }
 
+.find_friends_icons svg:hover {
+  color: rgba(122, 122, 122, 1);
+}
+
 .user_settings {
   position: absolute;
   display: flex;
+  align-self: stretch;
   flex-direction: column;
   background: var(--main-white);
-  padding: 1rem 0.9rem;
-  /* top: 0; */
+  padding: 2rem;
   left: 0;
   box-shadow: 0 0 10px black;
 }
 
 .user_settings a {
   color: black;
-  margin: 0.5rem 0;
-  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  font-size: 1.2vw;
 }
 
 .user_settings a:hover {
-  background: var(--off-white);
-  border-radius: 5px;
+  color: rgba(122, 122, 122, 1);
 }
 
 .user_settings a:active {
@@ -299,9 +307,14 @@ register_form from input {
 .user-logo {
   width: 4rem;
   height: 4rem;
+  margin-right: 1rem;
 }
 
-.invite-userName span,
+.user-logo:hover {
+  color: rgba(122, 122, 122, 0.4);
+}
+
+.invite-userName p,
 h5 {
   font-size: 1.4vw;
 }
@@ -311,8 +324,9 @@ input {
 }
 
 .friendsInput {
-  width: 90%;
-  margin: 1rem;
+  width: 100%;
+  padding: 1rem;
+  justify: flex-start;
 }
 
 .group_logo_container {
@@ -347,12 +361,15 @@ input {
   outline: none;
 }
 
-.search-bar {
-  width: 90%;
-  border: 1px solid;
+.search_container {
   width: 100%;
+}
+
+.search-bar {
+  border: 1px solid;
+  width: 95%;
   border-radius: 5px;
-  margin: 1rem;
+  margin: 1rem 0;
   padding: 0.3rem;
   background: white;
 }
@@ -476,15 +493,17 @@ form > button:hover {
   border-radius: 25px;
   width: 60%;
   margin: 0.5rem 0;
+  overflow-wrap: break-word;
 }
 
-.message_input_container input {
-  background: transparent;
-  padding: 0;
-}
-
-.message_input_container input {
+.message_input_container textarea {
   width: 90%;
+  padding: 0.5rem;
+  background: transparent;
+}
+
+.message_input_container textarea:focus {
+  outline: none;
 }
 
 .message_input_container svg {
@@ -594,6 +613,7 @@ p {
   }
 
   .active_chats {
+    width: 50%;
     position: absolute;
   }
   .input_gender input[type="radio"] {
@@ -648,6 +668,9 @@ p {
 
   .show {
     width: 80%;
+  }
+  .user_settings a {
+    font-size: 2vw;
   }
 }
 @media (max-width: 431px) {

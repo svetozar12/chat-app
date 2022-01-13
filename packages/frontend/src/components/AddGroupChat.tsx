@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { InitialState2 } from "../redux/state";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 function AddGroupChat({
   cookieName,
   socketRef,
@@ -12,6 +12,8 @@ function AddGroupChat({
 }) {
   const [user, setUser] = React.useState<string>("");
   const [usersData, setUsersData] = React.useState<string[]>([]);
+
+  const dispatch = useDispatch();
 
   const state1 = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
@@ -34,9 +36,12 @@ function AddGroupChat({
       await axios.post("http://localhost:4002/invites/group-chat", {
         usersData,
       });
-
       emitFriendRequest();
       setUsersData([]);
+      dispatch({
+        type: "TOGGLE_CREATE_GROUP",
+        payload: !state1.toggleCreateGroup,
+      });
       return true;
     } catch (error) {
       setUsersData([]);

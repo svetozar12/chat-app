@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
-
+import { useDispatch } from "react-redux";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import axios from "axios";
 import Avatar from "./Avatar";
@@ -18,6 +18,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
   const [image, setImage] = React.useState<string>("");
   const [images, setImages] = React.useState<string[]>([]);
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const getUserImage = async (name: string | undefined) => {
     try {
@@ -56,8 +57,26 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
     router.push(`${_id}`);
   };
 
+  const dispatching = () => {
+    dispatch({
+      type: "TOGGLE_CREATE_GROUP",
+      payload: false,
+    });
+    dispatch({
+      type: "SET_MOBILE_NAV",
+      payload: false,
+    });
+  };
+
   return (
-    <div onClick={joinChat} className="contacts_container">
+    <div
+      style={{ whiteSpace: "nowrap", overflow: "hidden" }}
+      onClick={() => {
+        joinChat();
+        dispatching();
+      }}
+      className="contacts_container"
+    >
       <div style={{ display: "flex", alignItems: "center" }}>
         <Avatar
           members={members}
@@ -72,7 +91,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
               display: "flex",
             }}
           >
-            <span>
+            <>
               {members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return;
@@ -85,10 +104,16 @@ const ActiveChats = ({ _id, members, cookieName, socketRef }: IActiveChats) => {
                       </>
                     );
                   })
-                : (members.length === 1 && <p>{user1}</p>) ||
-                  (user2 === cookieName && <p>{user1}</p>) ||
-                  (user1 === cookieName && <p>{user2}</p>)}
-            </span>
+                : (members.length === 1 && (
+                    <p style={{ margin: "0" }}>{user1}</p>
+                  )) ||
+                  (user2 === cookieName && (
+                    <p style={{ margin: "0" }}>{user1}</p>
+                  )) ||
+                  (user1 === cookieName && (
+                    <p style={{ margin: "0" }}>{user2}</p>
+                  ))}
+            </>
           </h2>
           <h5>Last message...</h5>
         </div>

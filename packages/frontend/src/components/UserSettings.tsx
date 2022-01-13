@@ -1,17 +1,12 @@
 import React from "react";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { InitialState2 } from "../redux/state";
 function UserSettings({ cookie }: { cookie: any }) {
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
 
   const deleteCookies = () => {
     cookie.remove("name");

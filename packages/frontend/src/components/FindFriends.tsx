@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
+import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import UserSettings from "./UserSettings";
 
@@ -48,6 +49,10 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     dispatch({
       type: "TOGGLE_CREATE_GROUP",
       payload: !state.toggleCreateGroup,
+    });
+    dispatch({
+      type: "SET_MOBILE_NAV",
+      payload: !state.setMobileNav,
     });
   };
 
@@ -111,18 +116,23 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           )}
           {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
         </div>
-        <div className="flex">
-          <FaUserFriends
-            onClick={() =>
+        <div className="flex find_friends_icons">
+          <IoNotifications
+            style={{ width: "2rem", height: "2rem" }}
+            onClick={() => {
               dispatch({
                 type: "SET_FRIEND_REQUEST",
                 payload: !state.setFriendRequest,
-              })
-            }
+              });
+            }}
+          />
+          <BsFillPeopleFill
+            onClick={toggleGroupCreate}
+            style={{ width: "2rem", height: "2rem", cursor: "pointer" }}
           />
         </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div className="flex search_container">
         <div className="search-bar">
           <BsSearch
             style={{ cursor: "pointer", color: "black" }}
@@ -136,10 +146,6 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             type="search"
           />
         </div>
-        <BsFillPeopleFill
-          onClick={toggleGroupCreate}
-          style={{ width: "2rem", height: "2rem", cursor: "pointer" }}
-        />
       </div>
     </form>
   );

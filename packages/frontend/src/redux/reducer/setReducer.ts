@@ -7,6 +7,7 @@ export const initialState = {
   setUserSettings: false,
   setFriendRequest: false,
   toggleCreateGroup: false,
+  setMobileNav: false,
 };
 const setReducer = (
   state: InitialState2 | undefined = initialState,
@@ -28,6 +29,8 @@ const setReducer = (
       return { ...state, setUserSettings: action.payload };
     case ActionType.TOGGLE_CREATE_GROUP:
       return { ...state, toggleCreateGroup: action.payload };
+    case ActionType.SET_MOBILE_NAV:
+      return { ...state, setMobileNav: action.payload };
     case ActionType.SIGN_OUT:
       return initialState;
     default:
