@@ -118,6 +118,10 @@ a {
   align-items: flex-start;
 }
 
+.contacts_info h5 {
+  margin: 0 0 1rem 0;
+}
+
 .chat_home {
   position: relative;
   z-index: 10;
@@ -209,7 +213,7 @@ form {
 .profile svg {
   width: 3rem;
   height: 3rem;
-  margin: 0 1rem;
+  margin: 0;
   cursor: pointer;
 }
 
@@ -241,9 +245,38 @@ form {
   color: rgba(122, 122, 122, 1);
 }
 
-.user_settings a:active {
-  background: var(--me-chat-buble);
-  border-radius: 5px;
+.chat_settings {
+  width: 2rem;
+  height: 2rem;
+  background: var(--main-white);
+  color: var(--main-black);
+  border-radius: 25px;
+  box-shadow: 0 0 5px var(--main-black);
+}
+
+.chat_settings_nav {
+  position: absolute;
+  z-index: 11;
+  right: 0;
+  width: 25%;
+  height: 100vh;
+  background: var(--main-blue);
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.remove_user {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.remove_user:hover {
+  color: red;
+}
+
+.chat_settings:hover {
+  color: rgba(122, 122, 122, 1);
 }
 
 .rendered_chat {
@@ -316,8 +349,8 @@ register_form from input {
   margin-right: 1rem;
 }
 
-.user-logo:hover {
-  color: rgba(122, 122, 122, 0.4);
+.click:hover {
+  background: rgba(122, 122, 122, 0.4);
 }
 
 .invite-userName p,

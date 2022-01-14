@@ -20,7 +20,7 @@ function RegisterForm({
 
   return (
     <div style={{ height: "100vh" }} className="register_form">
-      <form className="container">
+      <form className="container" style={{ height: "90vh" }}>
         <h2
           className="alert"
           style={state.good ? { color: "green" } : { color: "red" }}

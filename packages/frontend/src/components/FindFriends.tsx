@@ -54,6 +54,10 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       type: "SET_MOBILE_NAV",
       payload: !state.setMobileNav,
     });
+    dispatch({
+      type: "SET_CHAT_SETTINGS",
+      payload: false,
+    });
   };
 
   const sendInvite = async () => {
@@ -101,7 +105,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
                   payload: !state.setUserSettings,
                 })
               }
-              className="user-logo"
+              className="user-logo click"
               style={{ borderRadius: "50px", cursor: "pointer" }}
             />
           ) : (
@@ -118,7 +122,6 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
         </div>
         <div className="flex find_friends_icons">
           <IoNotifications
-            style={{ width: "2rem", height: "2rem" }}
             onClick={() => {
               dispatch({
                 type: "SET_FRIEND_REQUEST",
@@ -128,7 +131,10 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           />
           <BsFillPeopleFill
             onClick={toggleGroupCreate}
-            style={{ width: "2rem", height: "2rem", cursor: "pointer" }}
+            style={{
+              cursor: "pointer",
+              marginLeft: "1rem",
+            }}
           />
         </div>
       </div>

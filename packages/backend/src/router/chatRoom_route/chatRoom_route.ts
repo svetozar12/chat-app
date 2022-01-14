@@ -47,6 +47,43 @@ route.get("/:user_id", async (req: Request, res: Response) => {
   }
 });
 
+route.put("/:user_id", async (req: Request, res: Response) => {
+  try {
+    const user_id = req.params.user_id;
+    const added_user = req.body.usernames;
+    const deleted_user = req.query.username;
+    const users_rooms = await Chats.findOne({ _id: user_id }).exec();
+    const users_array = users_rooms!.members;
+
+    if (!users_rooms)
+      return res.status(404).json({ Message: "User room not found !" });
+    let updated_array;
+    if (deleted_user) {
+      updated_array = users_array.filter((item) => item !== deleted_user);
+      if (updated_array.length === 2) {
+        await Chats.deleteOne({ _id: user_id }).exec();
+        return res.status(200).json({ message: "deleted chat-room" });
+      }
+    }
+
+    const updated = await Chats.findByIdAndUpdate(
+      { _id: user_id },
+      {
+        members: updated_array || added_user,
+      },
+    );
+    console.log(updated);
+
+    return res.status(200).json({ Message: updated });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while searching for your chat room",
+    });
+  }
+});
+
 // route.put("/chat-room/:id", async (req: Request, res: Response) => {
 //   try {
 //     const id = req.params.id;

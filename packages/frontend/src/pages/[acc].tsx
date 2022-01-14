@@ -10,6 +10,7 @@ import { io, Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
+import ChatSettings from "../components/ChatSettings";
 import HamburgerMenu from "../components/HamburgerMenu";
 
 interface Ichats {
@@ -38,6 +39,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const getChatRoom = async () => {
     try {
+      setChatRooms([]);
       const res = await axios.get(
         `${requestUrl}/chat-room/?user_name=${cookie.get("name")}`,
       );
@@ -52,6 +54,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const fetchRecieverStatus = async () => {
     try {
+      setContacts([]);
       const res = await axios.get(`${requestUrl}/invites/${cookieName}`);
       const data = res.data.invites;
       setContacts(data);
@@ -63,6 +66,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const fetchInviteStatus = async () => {
     try {
+      setContacts([]);
       const res = await axios.get(
         `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
@@ -76,6 +80,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   };
 
   useEffect(() => {
+    setContacts([]);
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
@@ -85,6 +90,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       transports: ["websocket"],
     });
     socketConnect.on("friend_request", () => {
+      console.log("hi");
+
       fetchRecieverStatus();
       getChatRoom();
       fetchInviteStatus();
@@ -111,6 +118,13 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <HamburgerMenu />
+      {state.setChatSettings && socketRef && (
+        <ChatSettings
+          socketRef={socketRef}
+          chatId={props.chatRoom}
+          setLocalStatus={setLocalStatus}
+        />
+      )}
       <section className={`active_chats ${!state.setMobileNav && "hide"}`}>
         {socketRef && (
           <FindFriends
@@ -126,17 +140,15 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             width: "95%",
             height: "100%",
             flexDirection: "column",
+            justifyContent: "flex-start",
           }}
         >
           {socketRef &&
             chatRooms.map((item, index) => {
-              const _id = item._id;
-              const members = item.members;
               return (
                 <ActiveChats
                   key={index}
-                  _id={_id}
-                  members={members}
+                  {...item}
                   cookieName={cookie.get("name")}
                   socketRef={socketRef}
                   chatId={props.chatRoom}
@@ -161,6 +173,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             {state.setFriendRequest && (
               <div className="fRequests_modal">
                 {contacts.map((item, homePage) => {
+                  console.log(item);
+
                   return (
                     socketRef && (
                       <PendingChats

@@ -1,5 +1,4 @@
 import { Action, ActionType } from "../state";
-import { HYDRATE } from "next-redux-wrapper";
 const initialState = {
   sender: "",
   message: "",

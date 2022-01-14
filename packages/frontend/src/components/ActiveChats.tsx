@@ -6,6 +6,8 @@ import { requestUrl } from "../utils/hostUrl_requestUrl";
 import axios from "axios";
 import Avatar from "./Avatar";
 import { InitialState2 } from "../redux/state";
+import { BsThreeDots } from "react-icons/bs";
+import ChatSettings from "../components/ChatSettings";
 interface IActiveChats {
   _id: string;
   members: string[];
@@ -37,7 +39,7 @@ const ActiveChats = ({
       const userAvatar = res.data.user.userAvatar;
       if (!userAvatar) {
         setHasAvatar(false);
-        return true;
+        return false;
       }
       setHasAvatar(true);
       const requestString = `${requestUrl}/${userAvatar}`;
@@ -51,15 +53,21 @@ const ActiveChats = ({
 
   React.useEffect(() => {
     const notMe: string[] = members.filter((element) => element !== cookieName);
-    const me: string | undefined = members.find(
-      (element) => element === cookieName,
-    );
     notMe.forEach((element, index) => {
       if (index == 2) return;
       getUserImage(element);
     });
-    getUserImage(me);
+    getUserImage(cookieName);
   }, []);
+
+  React.useEffect(() => {
+    members.forEach((element) => {
+      dispatch({
+        type: "SET_ROOM_MEMBERS",
+        payload: element,
+      });
+    });
+  }, [router.asPath]);
 
   const joinChat = () => {
     socketRef?.emit("join_chat", {
@@ -78,11 +86,17 @@ const ActiveChats = ({
       payload: false,
     });
   };
+  const chatSettings = () => {
+    dispatch({
+      type: "SET_CHAT_SETTINGS",
+      payload: !state.setChatSettings,
+    });
+  };
 
   return (
     <div
       style={{
-        whiteSpace: state.setMobileNav ? "nowrap" : "normal",
+        whiteSpace: "nowrap",
         overflow: "hidden",
       }}
       onClick={() => {
@@ -91,46 +105,58 @@ const ActiveChats = ({
       }}
       className={`contacts_container ${_id === chatId && "active_contact"} `}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Avatar
-          members={members}
-          image={image}
-          images={images}
-          hasAvatar={hasAvatar}
-        />
-        <div className="contacts_info">
-          <h2
-            className="invite-userName"
-            style={{
-              display: "flex",
-            }}
-          >
-            <>
-              {members.length > 2
-                ? members.map((element, index) => {
-                    if (index === 3) return;
-                    return (
-                      <>
-                        {element}
-                        {element[members.length - 1] === element[index]
-                          ? " ..."
-                          : ","}
-                      </>
-                    );
-                  })
-                : (members.length === 1 && (
-                    <p style={{ margin: "0" }}>{user1}</p>
-                  )) ||
-                  (user2 === cookieName && (
-                    <p style={{ margin: "0" }}>{user1}</p>
-                  )) ||
-                  (user1 === cookieName && (
-                    <p style={{ margin: "0" }}>{user2}</p>
-                  ))}
-            </>
-          </h2>
-          <h5>Last message...</h5>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <section style={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            members={members}
+            image={image}
+            images={images}
+            hasAvatar={hasAvatar}
+          />
+          <div className="contacts_info">
+            <h2
+              className="invite-userName"
+              style={{
+                display: "flex",
+              }}
+            >
+              <>
+                {members.length > 2
+                  ? members.map((element, index) => {
+                      if (index === 3) return;
+                      return (
+                        <>
+                          {element}
+                          {element[members.length - 1] === element[index]
+                            ? " ..."
+                            : ","}
+                        </>
+                      );
+                    })
+                  : (members.length === 1 && (
+                      <p style={{ margin: "0" }}>{user1}</p>
+                    )) ||
+                    (user2 === cookieName && (
+                      <p style={{ margin: "0" }}>{user1}</p>
+                    )) ||
+                    (user1 === cookieName && (
+                      <p style={{ margin: "0" }}>{user2}</p>
+                    ))}
+              </>
+            </h2>
+            <h5>Last message...</h5>
+          </div>
+        </section>
+        {_id === chatId && (
+          <BsThreeDots className="chat_settings" onClick={chatSettings} />
+        )}
       </div>
     </div>
   );
