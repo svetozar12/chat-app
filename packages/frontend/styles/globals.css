@@ -25,6 +25,7 @@ Table of concepts
   --gradient-first: #dfdfdf;
   --gradient-second: #ffffff;
   --input-border-color: #ccd0d5;
+  --main-logo-color: #bfc2c6;
 }
 
 /* =================
@@ -96,7 +97,7 @@ a {
   color: var(--main-white);
   width: 97%;
   cursor: pointer;
-  padding: 0 1rem;
+  padding: 1rem 1rem;
   width: 100%;
   /* word-wrap: break-word; */
   transition: 0.2s;
@@ -104,21 +105,24 @@ a {
 
 .active_contact {
   border-radius: 15px;
-  background: rgba(122, 122, 122, 0.4);
+  background: rgba(122, 122, 122, 0.1);
 }
 
 .contacts_container:hover {
   border-radius: 15px;
-  background: rgba(122, 122, 122, 0.4);
+  background: rgba(122, 122, 122, 0.1);
   transition: 0.2s;
 }
 
 .contacts_info {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
 }
 
-.contacts_info h5 {
+.contacts_info h5,
+p {
   margin: 0 0 1rem 0;
 }
 
@@ -183,12 +187,13 @@ form {
 .active_chats {
   transition-timing-function: ease-out;
   transition: 0.6s ease-out;
-  background: var(--main-blue);
-  color: var(--main-white);
+  background: var(--main-white);
+  color: var(--main-black);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
   text-align: center;
   overflow: hidden;
   height: 100vh;
-  width: 35%;
+  width: 25%;
   z-index: 20;
   flex-direction: column;
   justify-content: flex-start;
@@ -200,13 +205,14 @@ form {
 }
 
 .main_section {
-  width: 65%;
+  width: 75%;
 }
 
 .profile {
   position: relative;
   width: 95%;
   justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 1rem;
 }
 
@@ -215,6 +221,12 @@ form {
   height: 3rem;
   margin: 0;
   cursor: pointer;
+}
+
+.find_friends_icons svg {
+  padding: 0.7rem;
+  background: rgba(122, 122, 122, 0.1);
+  border-radius: 50px;
 }
 
 .find_friends_icons svg:hover {
@@ -260,7 +272,8 @@ form {
   right: 0;
   width: 25%;
   height: 100vh;
-  background: var(--main-blue);
+  background: var(--main-white);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -346,6 +359,7 @@ register_form from input {
 .user-logo {
   width: 4rem;
   height: 4rem;
+  color: var(--main-logo-color);
   margin-right: 1rem;
 }
 
@@ -353,8 +367,15 @@ register_form from input {
   background: rgba(122, 122, 122, 0.4);
 }
 
+.invite-userName {
+  justify-content: flex-start;
+  align-items: center;
+  margin: 1rem 0;
+}
+
 .invite-userName p,
 h5 {
+  color: var(--main-black);
   font-size: 1.4vw;
 }
 
@@ -370,22 +391,35 @@ input {
 
 .group_logo_container {
   position: relative;
-  width: 2rem;
-  height: 2rem;
+  width: 4rem;
+  height: 4rem;
+}
+
+.group_logo_container svg {
+  position: absolute;
+  color: var(--main-logo-color);
+}
+
+.contacts_info h2,
+p {
+  color: black;
+}
+
+.contacts_info > p > p {
+  margin: 0;
+  color: #050505;
+}
+
+.group_logo {
+  width: 2.6rem;
+  height: 2.6rem;
 }
 
 .logo {
   width: 100%;
   height: 100%;
-  left: 0;
+  /* left: 0; */
   position: absolute;
-}
-
-.overlay {
-  position: absolute;
-  left: 0;
-  z-index: 1;
-  margin: 15px;
 }
 
 .friendsInput input {
@@ -405,12 +439,15 @@ input {
 }
 
 .search-bar {
-  border: 1px solid;
   width: 95%;
-  border-radius: 5px;
+  border-radius: 25px;
   margin: 1rem 0;
   padding: 0.3rem;
-  background: white;
+  background: rgba(122, 122, 122, 0.1);
+}
+
+.search-bar input {
+  padding: 0.3rem;
 }
 
 .search-bar:focus-within {
@@ -616,8 +653,7 @@ p {
   flex-direction: column;
 }
 
-.contacts h1,
-p {
+.contacts h1 {
   color: var(--main-white);
   text-align: center;
 }
@@ -642,6 +678,10 @@ p {
   cursor: pointer;
 }
 
+.hamburger {
+  display: none;
+}
+
 /* =================
 6.Media Query
 ================= */
@@ -652,7 +692,7 @@ p {
   }
 
   .active_chats {
-    width: 50%;
+    width: 60%;
     position: absolute;
   }
   .input_gender input[type="radio"] {
@@ -675,33 +715,43 @@ p {
   .hamburger {
     display: inline-block;
     cursor: pointer;
-    position: fixed;
-    z-index: 22;
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    left: 0;
+    z-index: 11;
+    border: 1px solid transparent;
+    padding: 0.5rem;
+  }
+
+  .hamburger:active {
+    /* border: 1px solid var(--main-black); */
+    background: var(--gradient-first);
+    border-radius: 25px;
+    padding: 0.5rem;
+  }
+
+  .hambruger_out_of_nav {
+    width: 50%;
+    height: 100vh;
+    position: absolute;
+    z-index: 11;
+  }
+
+  .div_out_of_nav {
+    position: relative;
+    width: 95%;
+    height: 3rem;
     margin: 1rem;
-    right: 0;
   }
 
-  .change .bar1 {
-    transform: rotate(-45deg) translate(-9px, 6.5px);
+  .close_hamburger {
+    width: 95%;
+    height: 3rem;
+    margin-bottom: 1rem;
+    position: relative;
   }
 
-  .change .bar2 {
-    opacity: 0;
-  }
-
-  .change .bar3 {
-    transform: rotate(45deg) translate(-8px, -8px);
-  }
-
-  .bar1,
-  .bar2,
-  .bar3 {
-    width: 35px;
-    height: 5px;
-    background-color: #333;
-    margin: 6px 0;
-    transition: 0.4s;
-  }
   .main_section {
     width: 100%;
   }
@@ -771,5 +821,12 @@ p {
   .input_gender input[type="radio"] {
     width: 1rem;
     height: 1rem;
+  }
+  .chat_settings_nav h1 {
+    font-size: 2vw;
+  }
+
+  .chat_settings_nav h2 {
+    font-size: 2vw;
   }
 }

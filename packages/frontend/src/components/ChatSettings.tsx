@@ -5,13 +5,17 @@ import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
 import { Socket } from "socket.io-client";
+import { getFirstChat } from "../utils/getFirstChat";
+
 function ChatSettings({
   chatId,
   socketRef,
   setLocalStatus,
+  cookieName,
 }: {
   chatId: string;
   socketRef: Socket;
+  cookieName: string;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [username, setUsername] = React.useState<string>("");
@@ -25,7 +29,6 @@ function ChatSettings({
       const res = await axios.get(`${requestUrl}/chat-room/${chatId}`);
       const data = res.data.Message[0].members;
       setUsers(data);
-      console.log(data);
       return true;
     } catch (error) {
       return false;
@@ -34,7 +37,6 @@ function ChatSettings({
 
   const addMembers = async (usernames: string[]) => {
     try {
-      console.log(username);
       const res = await axios.put(`${requestUrl}/chat-room/${chatId}`, {
         usernames,
       });
@@ -65,7 +67,6 @@ function ChatSettings({
     setUsers([]);
     getMembers();
   }, [route.asPath]);
-  console.log(users);
   const handleKeyPress = (e: any) => {
     console.log(e.key);
 
@@ -76,13 +77,14 @@ function ChatSettings({
   };
   return (
     <div className="chat_settings_nav flex">
-      <h1>Members in chat</h1>
+      <h1 style={{ color: "var(--main-black)" }}>Members in chat</h1>
       {users.map((item) => {
-        console.log(item, "d");
-
         return (
           <div className="flex">
-            <h2 style={{ flexDirection: "column" }} className="flex">
+            <h2
+              style={{ flexDirection: "column", color: "var(--main-black)" }}
+              className="flex"
+            >
               {item}
             </h2>
             <AiOutlineUserDelete
@@ -112,7 +114,11 @@ function ChatSettings({
           onChange={(e) => setUsername(e.target.value)}
           type="search"
           onKeyPress={handleKeyPress}
-          style={{ border: "none", width: "100%" }}
+          style={{
+            border: "none",
+            width: "100%",
+            background: "none",
+          }}
         />
       </div>
     </div>

@@ -81,10 +81,6 @@ const ActiveChats = ({
       type: "TOGGLE_CREATE_GROUP",
       payload: false,
     });
-    dispatch({
-      type: "SET_MOBILE_NAV",
-      payload: false,
-    });
   };
   const chatSettings = () => {
     dispatch({
@@ -113,7 +109,12 @@ const ActiveChats = ({
           width: "100%",
         }}
       >
-        <section style={{ display: "flex", alignItems: "center" }}>
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Avatar
             members={members}
             image={image}
@@ -121,37 +122,36 @@ const ActiveChats = ({
             hasAvatar={hasAvatar}
           />
           <div className="contacts_info">
-            <h2
-              className="invite-userName"
+            <p
               style={{
+                margin: "0",
+                color: "black",
                 display: "flex",
               }}
             >
-              <>
-                {members.length > 2
-                  ? members.map((element, index) => {
-                      if (index === 3) return;
-                      return (
-                        <>
-                          {element}
-                          {element[members.length - 1] === element[index]
-                            ? " ..."
-                            : ","}
-                        </>
-                      );
-                    })
-                  : (members.length === 1 && (
-                      <p style={{ margin: "0" }}>{user1}</p>
-                    )) ||
-                    (user2 === cookieName && (
-                      <p style={{ margin: "0" }}>{user1}</p>
-                    )) ||
-                    (user1 === cookieName && (
-                      <p style={{ margin: "0" }}>{user2}</p>
-                    ))}
-              </>
-            </h2>
-            <h5>Last message...</h5>
+              {members.length > 2
+                ? members.map((element, index) => {
+                    if (index === 3) return;
+                    return (
+                      <p>
+                        {element}
+                        {element[members.length - 1] === element[index]
+                          ? " ..."
+                          : ","}
+                      </p>
+                    );
+                  })
+                : (members.length === 1 && <p>{user1}</p>) ||
+                  (user2 === cookieName && <p>{user1}</p>) ||
+                  (user1 === cookieName && <p>{user2}</p>)}
+            </p>
+
+            <p
+              style={{ margin: "0", color: "#65676b" }}
+              className="invite-userName"
+            >
+              Last message...
+            </p>
           </div>
         </section>
         {_id === chatId && (

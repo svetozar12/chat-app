@@ -14,7 +14,7 @@ function Avatar({
   return (
     <>
       {members.length > 2 ? (
-        <div style={{ marginRight: "2rem" }} className="group_logo_container">
+        <div style={{ marginRight: "1rem" }} className="group_logo_container">
           {hasAvatar ? (
             images.map((element, index) => {
               if (index === 2) return;
@@ -35,12 +35,12 @@ function Avatar({
           ) : (
             <div className="group_logo_container">
               <FaUserCircle
-                style={{ width: "2rem" }}
-                className="user-logo logo"
+                style={{ top: "0", right: "0" }}
+                className="group_logo"
               />
               <FaUserCircle
-                style={{ width: "2rem" }}
-                className="user-logo logo overlay"
+                style={{ bottom: "0", left: "0", zIndex: "1" }}
+                className="group_logo"
               />
             </div>
           )}

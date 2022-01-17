@@ -117,12 +117,17 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <HamburgerMenu />
+      <section className="hambruger_out_of_nav">
+        <div className="div_out_of_nav">
+          <HamburgerMenu />
+        </div>
+      </section>
       {state.setChatSettings && socketRef && (
         <ChatSettings
           socketRef={socketRef}
           chatId={props.chatRoom}
           setLocalStatus={setLocalStatus}
+          cookieName={cookie.get("name")}
         />
       )}
       <section className={`active_chats ${!state.setMobileNav && "hide"}`}>

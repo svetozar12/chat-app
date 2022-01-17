@@ -8,6 +8,7 @@ import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import UserSettings from "./UserSettings";
+import HamburgerMenu from "./HamburgerMenu";
 
 export interface IFindFriends {
   cookieName: string;
@@ -94,6 +95,9 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       onSubmit={handleSubmit}
       style={{ marginBottom: "1rem", alignItems: "center" }}
     >
+      <div className="close_hamburger">
+        <HamburgerMenu />
+      </div>
       <div className="profile" style={{ display: "flex" }}>
         <div>
           {hasAvatar ? (
@@ -110,6 +114,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             />
           ) : (
             <FaUserCircle
+              style={{ color: "var(--main-logo-color)" }}
               onClick={() =>
                 dispatch({
                   type: "SET_USER_SETTINGS",

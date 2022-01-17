@@ -6,6 +6,7 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { InitialState3 } from "../../redux/state";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
+
 function profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
   const dispatch = useDispatch();
