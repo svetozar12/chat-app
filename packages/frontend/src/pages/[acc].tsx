@@ -90,8 +90,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       transports: ["websocket"],
     });
     socketConnect.on("friend_request", () => {
-      console.log("hi");
-
       fetchRecieverStatus();
       getChatRoom();
       fetchInviteStatus();
@@ -178,8 +176,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             {state.setFriendRequest && (
               <div className="fRequests_modal">
                 {contacts.map((item, homePage) => {
-                  console.log(item);
-
                   return (
                     socketRef && (
                       <PendingChats

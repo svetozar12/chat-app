@@ -53,8 +53,6 @@ function ChatSettings({
       const res = await axios.put(
         `${requestUrl}/chat-room/${chatId}?username=${user}`,
       );
-      const data = res.data.Message[0].members;
-      setUsers(data);
       setLocalStatus(user);
       setLocalStatus("");
       return true;
@@ -68,12 +66,21 @@ function ChatSettings({
     getMembers();
   }, [route.asPath]);
   const handleKeyPress = (e: any) => {
-    console.log(e.key);
-
     if (e.key === "Enter") {
       setUsers([...users, username]);
       setUsername("");
     }
+  };
+  const redirect = async (user: string) => {
+    const updated_users = users.filter((element) => element !== user);
+    setUsers(updated_users);
+    if (updated_users.length === 2) {
+      const redirect = await getFirstChat(cookieName);
+
+      route.push(`/${redirect._id}`);
+    }
+    setLocalStatus(user);
+    setLocalStatus("");
   };
   return (
     <div className="chat_settings_nav flex">
@@ -91,6 +98,7 @@ function ChatSettings({
               onClick={() => {
                 deleteMember(item);
                 emitFriendRequest();
+                redirect(item);
               }}
               className="remove_user"
             />

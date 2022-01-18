@@ -199,14 +199,19 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       >
         <div className="message_input_container">
           <textarea
-            rows={1}
+            className="input_msg"
             name="message"
             onChange={(e) => onTextChange(e)}
-            style={{ border: "none", resize: "none" }}
+            style={{
+              border: "none",
+              resize: "none",
+              padding: "0",
+              wordBreak: "break-all",
+            }}
             placeholder="Your Message "
             value={state.message}
             onKeyPress={(e: any) => handleKeyPress(e)}
-          ></textarea>
+          />
           <MdSend type="submit" onClick={onMessageSubmit} />
         </div>
       </form>

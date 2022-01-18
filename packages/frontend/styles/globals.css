@@ -569,20 +569,24 @@ form > button:hover {
 
 .message_input_container {
   flex-direction: row;
+  justify-content: space-between;
   background: #d9d9d9;
   border-radius: 25px;
   width: 60%;
   margin: 0.5rem 0;
+  padding: 0 1rem;
   overflow-wrap: break-word;
 }
 
-.message_input_container textarea {
+.input_msg {
   width: 90%;
-  padding: 0.5rem;
+  padding: 0;
   background: transparent;
+  height: 2rem;
+  line-height: calc(32 * 7.5%);
 }
 
-.message_input_container textarea:focus {
+.input_msg:focus {
   outline: none;
 }
 

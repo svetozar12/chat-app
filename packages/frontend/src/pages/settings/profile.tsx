@@ -39,8 +39,6 @@ function profile(props: { cookie: string }) {
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
       dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
     } catch (error) {
-      console.log(error);
-
       return false;
     }
   };
@@ -65,7 +63,7 @@ function profile(props: { cookie: string }) {
             }
           />
           <div className="input_gender">
-            <span>
+            <div>
               <label htmlFor="Male">Male</label>
               <input
                 onChange={(e) =>
@@ -79,8 +77,8 @@ function profile(props: { cookie: string }) {
                 id="Male"
                 value="Male"
               />
-            </span>
-            <span>
+            </div>
+            <div>
               <label htmlFor="Female">Female</label>
               <input
                 onChange={(e) =>
@@ -94,8 +92,8 @@ function profile(props: { cookie: string }) {
                 id="Female"
                 value="Female"
               />
-            </span>
-            <span>
+            </div>
+            <div>
               <label htmlFor="Others">Others</label>
               <input
                 onChange={(e) =>
@@ -109,7 +107,7 @@ function profile(props: { cookie: string }) {
                 id="Others"
                 value="Others"
               />
-            </span>
+            </div>
           </div>
           <input
             type="file"
@@ -124,7 +122,7 @@ function profile(props: { cookie: string }) {
             Add file
           </label>
           <button
-            style={{ fontSize: "3vw", textAlign: "center" }}
+            style={{ fontSize: "1vw", textAlign: "center" }}
             onClick={handleSubmit}
             type="submit"
           >
