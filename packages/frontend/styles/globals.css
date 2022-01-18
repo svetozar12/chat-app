@@ -212,6 +212,7 @@ form {
   position: relative;
   width: 95%;
   justify-content: space-between;
+  padding-bottom: 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 1rem;
 }
@@ -338,15 +339,17 @@ register_form from input {
   flex-direction: row;
   margin-top: 0.5rem;
 }
-.input_gender span {
+
+.input_gender div {
   border: 1px solid var(--input-border-color);
-  padding: 0.5rem 0;
+  padding: 0.5rem;
   border-radius: 5px;
-  margin: 0 1rem;
-  width: 60%;
+  margin: 0 0.1rem;
+  width: 33%;
 }
-.input_gender input[type="radio"] {
-  height: 1rem;
+
+.input_gender span label {
+  font-size: 0.8rem;
 }
 
 .chat_header {
@@ -385,6 +388,7 @@ input {
 
 .friendsInput {
   width: 100%;
+  margin: 0;
   padding: 1rem;
   justify: flex-start;
 }
@@ -681,7 +685,11 @@ p {
 .hamburger {
   display: none;
 }
-
+.input_gender input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.1rem;
+}
 /* =================
 6.Media Query
 ================= */
@@ -762,15 +770,22 @@ p {
   .user_settings a {
     font-size: 2vw;
   }
+
+  .input_gender span label {
+    font-size: 2.5vw;
+  }
+  .clickable {
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 @media (max-width: 431px) {
   .container input {
     width: 90%;
   }
 
-  .clickable {
-    flex-direction: column;
-    justify-content: center;
+  .input_gender {
+    width: 95%;
   }
 
   .clickable a {

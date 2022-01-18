@@ -56,7 +56,7 @@ function RegisterForm({
           placeholder="email ..."
         />
         <div className="input_gender">
-          <span>
+          <div>
             <label htmlFor="Male">Male</label>
             <input
               onChange={(e) =>
@@ -70,8 +70,8 @@ function RegisterForm({
               id="Male"
               value="Male"
             />
-          </span>
-          <span>
+          </div>
+          <div>
             <label htmlFor="Female">Female</label>
             <input
               onChange={(e) =>
@@ -85,8 +85,8 @@ function RegisterForm({
               id="Female"
               value="Female"
             />
-          </span>
-          <span>
+          </div>
+          <div>
             <label htmlFor="Others">Others</label>
             <input
               onChange={(e) =>
@@ -100,7 +100,7 @@ function RegisterForm({
               id="Others"
               value="Others"
             />
-          </span>
+          </div>
         </div>
         <button onClick={handleSubmit} type="submit">
           Register
