@@ -7,7 +7,6 @@ import axios from "axios";
 import Avatar from "./Avatar";
 import { InitialState2 } from "../redux/state";
 import { BsThreeDots } from "react-icons/bs";
-import ChatSettings from "../components/ChatSettings";
 interface IActiveChats {
   _id: string;
   members: string[];

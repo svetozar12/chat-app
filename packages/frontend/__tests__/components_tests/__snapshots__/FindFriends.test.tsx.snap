@@ -12,6 +12,30 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
   }
 >
   <div
+    className="close_hamburger"
+  >
+    <svg
+      className="hamburger"
+      fill="currentColor"
+      height="1em"
+      onClick={[Function]}
+      stroke="currentColor"
+      strokeWidth="0"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+      viewBox="0 0 512 512"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"
+      />
+    </svg>
+  </div>
+  <div
     className="profile"
     style={
       Object {
@@ -28,7 +52,7 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
         strokeWidth="0"
         style={
           Object {
-            "color": undefined,
+            "color": "var(--main-logo-color)",
           }
         }
         viewBox="0 0 496 512"
@@ -41,7 +65,7 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
       </svg>
     </div>
     <div
-      className="flex"
+      className="flex find_friends_icons"
     >
       <svg
         fill="currentColor"
@@ -54,23 +78,46 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
             "color": undefined,
           }
         }
-        viewBox="0 0 640 512"
+        viewBox="0 0 512 512"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M192 256c61.9 0 112-50.1 112-112S253.9 32 192 32 80 82.1 80 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C51.6 288 0 339.6 0 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zM480 256c53 0 96-43 96-96s-43-96-96-96-96 43-96 96 43 96 96 96zm48 32h-3.8c-13.9 4.8-28.6 8-44.2 8s-30.3-3.2-44.2-8H432c-20.4 0-39.2 5.9-55.7 15.4 24.4 26.3 39.7 61.2 39.7 99.8v38.4c0 2.2-.5 4.3-.6 6.4H592c26.5 0 48-21.5 48-48 0-61.9-50.1-112-112-112z"
+          d="M440.08 341.31c-1.66-2-3.29-4-4.89-5.93-22-26.61-35.31-42.67-35.31-118 0-39-9.33-71-27.72-95-13.56-17.73-31.89-31.18-56.05-41.12a3 3 0 01-.82-.67C306.6 51.49 282.82 32 256 32s-50.59 19.49-59.28 48.56a3.13 3.13 0 01-.81.65c-56.38 23.21-83.78 67.74-83.78 136.14 0 75.36-13.29 91.42-35.31 118-1.6 1.93-3.23 3.89-4.89 5.93a35.16 35.16 0 00-4.65 37.62c6.17 13 19.32 21.07 34.33 21.07H410.5c14.94 0 28-8.06 34.19-21a35.17 35.17 0 00-4.61-37.66zM256 480a80.06 80.06 0 0070.44-42.13 4 4 0 00-3.54-5.87H189.12a4 4 0 00-3.55 5.87A80.06 80.06 0 00256 480z"
+        />
+      </svg>
+      <svg
+        fill="currentColor"
+        height="1em"
+        onClick={[Function]}
+        stroke="currentColor"
+        strokeWidth="0"
+        style={
+          Object {
+            "color": undefined,
+            "cursor": "pointer",
+            "marginLeft": "1rem",
+          }
+        }
+        viewBox="0 0 16 16"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+        />
+        <path
+          d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"
+          fillRule="evenodd"
+        />
+        <path
+          d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"
         />
       </svg>
     </div>
   </div>
   <div
-    style={
-      Object {
-        "alignItems": "center",
-        "display": "flex",
-      }
-    }
+    className="flex search_container"
   >
     <div
       className="search-bar"
@@ -101,35 +148,6 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
         value=""
       />
     </div>
-    <svg
-      fill="currentColor"
-      height="1em"
-      onClick={[Function]}
-      stroke="currentColor"
-      strokeWidth="0"
-      style={
-        Object {
-          "color": undefined,
-          "cursor": "pointer",
-          "height": "2rem",
-          "width": "2rem",
-        }
-      }
-      viewBox="0 0 16 16"
-      width="1em"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
-      />
-      <path
-        d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"
-        fillRule="evenodd"
-      />
-      <path
-        d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"
-      />
-    </svg>
   </div>
 </form>
 `;

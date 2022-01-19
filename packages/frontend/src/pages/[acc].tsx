@@ -7,12 +7,13 @@ import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { InitialState2 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import ChatSettings from "../components/ChatSettings";
 import HamburgerMenu from "../components/HamburgerMenu";
-
+import { GrClose } from "react-icons/gr";
+import UserSettings from "../components/UserSettings";
 interface Ichats {
   _id: string;
   members: string[];
@@ -26,6 +27,7 @@ export interface Iinvites {
 }
 
 const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
+  const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
   const [localStatus, setLocalStatus] = useState<string>("");
@@ -120,14 +122,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <HamburgerMenu />
         </div>
       </section>
-      {state.setChatSettings && socketRef && (
-        <ChatSettings
-          socketRef={socketRef}
-          chatId={props.chatRoom}
-          setLocalStatus={setLocalStatus}
-          cookieName={cookie.get("name")}
-        />
-      )}
       <section className={`active_chats ${!state.setMobileNav && "hide"}`}>
         {socketRef && (
           <FindFriends
@@ -146,6 +140,40 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             justifyContent: "flex-start",
           }}
         >
+          <div
+            style={{
+              alignItems: "flex-start",
+              padding: "0",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+            }}
+            className={`chat-settings flex ${
+              state.setChatSettings && "chat-settings-open"
+            }`}
+          >
+            <div
+              style={{ justifyContent: "flex-end" }}
+              className={`chat-settings-close flex`}
+            >
+              <GrClose
+                onClick={() =>
+                  dispatch({
+                    type: "SET_CHAT_SETTINGS",
+                    payload: !state.setChatSettings,
+                  })
+                }
+              />
+            </div>
+            {state.setChatSettings && socketRef && (
+              <ChatSettings
+                socketRef={socketRef}
+                chatId={props.chatRoom}
+                setLocalStatus={setLocalStatus}
+                cookieName={cookie.get("name")}
+              />
+            )}
+          </div>
+
           {socketRef &&
             chatRooms.map((item, index) => {
               return (
