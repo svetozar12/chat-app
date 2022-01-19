@@ -13,7 +13,7 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
     return res.status(200).json({ authData: response });
   } catch (error) {
     return res.status(501).json({
-      ErrorMsg: (error as Error).message,
+      ErrorMsg: error as Error,
       Error: "Internal server error",
       Message: "Something went wrong while loging",
     });

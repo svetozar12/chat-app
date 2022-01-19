@@ -11,6 +11,7 @@ export enum ActionType {
   SAVE_INPUT_GENDER = "SAVE_INPUT_GENDER",
   INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
   MESSAGE_SEND = "MESSAGE_SEND",
+  CHAT_INVITER = "CHAT_INVITER",
   REMEMBER_ME_CHECK = "REMEMBER_ME_CHECK",
   QUICK_LOGIN = "QUICK_LOGIN",
   SIGN_IN = "SIGN_IN",
@@ -43,7 +44,8 @@ interface inputs {
     | ActionType.SAVE_INPUT_PASSWORD
     | ActionType.SAVE_INPUT_EMAIL
     | ActionType.SAVE_INPUT_GENDER
-    | ActionType.REMEMBER_ME_CHECK;
+    | ActionType.REMEMBER_ME_CHECK
+    | ActionType.CHAT_INVITER;
   payload: string;
 }
 
@@ -104,6 +106,7 @@ export interface InitialState {
 
 export interface InitialState2 {
   reciever: string;
+  chat_inviter: string;
   pageNumber?: number;
   setUserSettings: boolean;
   setFriendRequest: boolean;

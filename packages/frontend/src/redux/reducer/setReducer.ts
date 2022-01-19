@@ -3,6 +3,7 @@ import { InitialState2 } from "../state";
 import { HYDRATE } from "next-redux-wrapper";
 export const initialState = {
   reciever: "",
+  chat_inviter: "",
   pageNumber: 2,
   setUserSettings: false,
   setFriendRequest: false,
@@ -24,6 +25,8 @@ const setReducer = (
       };
     case ActionType.SET_RECIEVER:
       return { ...state, reciever: action.payload };
+    case ActionType.CHAT_INVITER:
+      return { ...state, chat_inviter: action.payload };
     case ActionType.INCREMENT_PAGE_NUMBER:
       return { ...state, pageNumber: ++action.payload };
     case ActionType.SET_FRIEND_REQUEST:

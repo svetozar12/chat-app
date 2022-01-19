@@ -13,7 +13,6 @@ import { requestUrl } from "../utils/hostUrl_requestUrl";
 import ChatSettings from "../components/ChatSettings";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { GrClose } from "react-icons/gr";
-import UserSettings from "../components/UserSettings";
 interface Ichats {
   _id: string;
   members: string[];
@@ -176,6 +175,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
           {socketRef &&
             chatRooms.map((item, index) => {
+              console.log(item.members);
+
               return (
                 <ActiveChats
                   key={index}
@@ -203,6 +204,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             {state.setFriendRequest && (
               <div className="fRequests_modal">
+                <h1>Notifications</h1>
                 {contacts.map((item, homePage) => {
                   return (
                     socketRef && (

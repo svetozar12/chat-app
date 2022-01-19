@@ -24,39 +24,15 @@ const ActiveChats = ({
 }: IActiveChats) => {
   const router = useRouter();
   const [user1, user2] = [members[0], members[1]];
-  const [image, setImage] = React.useState<string>("");
-  const [images, setImages] = React.useState<string[]>([]);
-  const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
+  const [inviter, setInviter] = React.useState<string>("");
   const dispatch = useDispatch();
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
 
-  const getUserImage = async (name: string | undefined) => {
-    try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
-      const userAvatar = res.data.user.userAvatar;
-      if (!userAvatar) {
-        setHasAvatar(false);
-        return false;
-      }
-      setHasAvatar(true);
-      const requestString = `${requestUrl}/${userAvatar}`;
-      setImage(requestString);
-      setImages((prev) => [...prev, requestString]);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   React.useEffect(() => {
     const notMe: string[] = members.filter((element) => element !== cookieName);
-    notMe.forEach((element, index) => {
-      if (index == 2) return;
-      getUserImage(element);
-    });
-    getUserImage(cookieName);
+    setInviter(notMe[0]);
   }, []);
 
   React.useEffect(() => {
@@ -114,12 +90,7 @@ const ActiveChats = ({
             alignItems: "center",
           }}
         >
-          <Avatar
-            members={members}
-            image={image}
-            images={images}
-            hasAvatar={hasAvatar}
-          />
+          <Avatar inviter={inviter} cookieName={cookieName} />
           <div className="contacts_info">
             <p
               style={{
