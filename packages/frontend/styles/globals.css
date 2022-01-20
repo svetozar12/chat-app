@@ -303,6 +303,7 @@ form {
   position: relative;
   bottom: 0;
   width: 100%;
+  z-index: 11;
   height: 80vh;
   background: var(--main-white);
   border-left: 1px solid rgba(0, 0, 0, 0.1);
@@ -335,7 +336,16 @@ form {
 /* =================
 4.Components styling
 ================= */
+.logo_pos {
+  top: 0;
+  right: 0;
+}
 
+.logo_pos_overlay {
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
 .addGroup_button {
   border-radius: 5px;
   border: none;
@@ -428,6 +438,12 @@ input {
   position: relative;
   width: 4rem;
   height: 4rem;
+  margin-right: 1rem;
+}
+
+.group_logo_container img {
+  position: absolute;
+  border-radius: 50px;
 }
 
 .group_logo_container svg {

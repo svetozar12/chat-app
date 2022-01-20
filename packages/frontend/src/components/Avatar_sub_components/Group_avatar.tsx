@@ -5,10 +5,14 @@ import { requestUrl } from "../../utils/hostUrl_requestUrl";
 function Single_avatar({
   inviter,
   cookieName,
+  members,
 }: {
   inviter: string;
   cookieName: string;
+  members: string[];
 }) {
+  console.log(members);
+
   const [images, setImages] = React.useState<string[]>([]);
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
 
@@ -20,27 +24,46 @@ function Single_avatar({
         setHasAvatar(false);
         return false;
       }
+      console.log(userAvatar, name);
+
       setHasAvatar(true);
       const requestString = `${requestUrl}/${userAvatar}`;
-      setImages((prev) => [...prev, requestString]);
+      setImages([...images, requestString]);
       return true;
     } catch (error) {
       return false;
     }
   };
-
-  //   (() => {
-  //     getUserImage(inviter || cookieName);
-  //   })();
+  React.useEffect(() => {
+    members.forEach((element, index) => {
+      getUserImage(element);
+    });
+  }, []);
   return (
-    <div>
-      <p style={{ color: "black" }}>{inviter || cookieName}</p>
+    <div className="group_logo_container">
       {hasAvatar ? (
-        console.log(images)
+        images.map((element, index) => {
+          console.log(element, index);
+
+          return (
+            <img
+              src={element}
+              className={`group_logo ${
+                index === 0 ? "logo_pos" : "logo_pos_overlay"
+              }`}
+            />
+          );
+        })
       ) : (
         <>
-          <FaUserCircle className="user-logo" />
-          <FaUserCircle className="user-logo" />
+          <FaUserCircle
+            style={{ top: "0", right: "0" }}
+            className="group_logo"
+          />
+          <FaUserCircle
+            style={{ bottom: "0", left: "0", zIndex: "1" }}
+            className="group_logo"
+          />
         </>
       )}
     </div>

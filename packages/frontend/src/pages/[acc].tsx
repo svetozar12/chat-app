@@ -152,7 +152,9 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           >
             <div
               style={{ justifyContent: "flex-end" }}
-              className={`chat-settings-close flex`}
+              className={`chat-settings-close flex ${
+                !state.setChatSettings && "hide"
+              }`}
             >
               <GrClose
                 onClick={() =>

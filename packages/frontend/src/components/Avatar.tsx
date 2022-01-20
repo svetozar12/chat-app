@@ -15,7 +15,11 @@ function Avatar({
       {members.length <= 2 ? (
         <Single_avatar inviter={inviter} cookieName={cookieName} />
       ) : (
-        <Group_avatar inviter={inviter} cookieName={cookieName} />
+        <Group_avatar
+          inviter={inviter}
+          members={members}
+          cookieName={cookieName}
+        />
       )}
     </>
   );

@@ -34,7 +34,6 @@ function Single_avatar({
   })();
   return (
     <div>
-      <p style={{ color: "black" }}>{inviter || cookieName}</p>
       {hasAvatar ? (
         <img
           src={image}

@@ -50,9 +50,7 @@ function ChatSettings({
 
   const deleteMember = async (user: string) => {
     try {
-      const res = await axios.put(
-        `${requestUrl}/chat-room/${chatId}?username=${user}`,
-      );
+      await axios.put(`${requestUrl}/chat-room/${chatId}?username=${user}`);
       setLocalStatus(user);
       setLocalStatus("");
       return true;

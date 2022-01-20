@@ -2,8 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { requestUrl } from "../utils/hostUrl_requestUrl";
-import axios from "axios";
 import Avatar from "./Avatar";
 import { InitialState2 } from "../redux/state";
 import { BsThreeDots } from "react-icons/bs";
