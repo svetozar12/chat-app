@@ -12,6 +12,7 @@ export const initialState = {
   setIsMatch: false,
   setChatSettings: false,
   setRoomMembers: [],
+  setModalInvite: false,
 };
 const setReducer = (
   state: InitialState2 | any | InitialState2[] = initialState,
@@ -41,6 +42,8 @@ const setReducer = (
       return { ...state, setChatSettings: action.payload };
     case ActionType.SET_IS_MATCH:
       return { ...state, setIsMatch: action.payload };
+    case ActionType.SET_MODAL_INVITE:
+      return { ...state, setModalInvite: action.payload };
     case ActionType.SET_ROOM_MEMBERS:
       return {
         ...state,

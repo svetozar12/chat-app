@@ -24,6 +24,7 @@ export enum ActionType {
   SET_IS_MATCH = "SET_IS_MATCH",
   SET_CHAT_SETTINGS = "SET_CHAT_SETTINGS",
   SET_ROOM_MEMBERS = "SET_ROOM_MEMBERS",
+  SET_MODAL_INVITE = "SET_MODAL_INVITE",
 }
 
 interface LoginPost {
@@ -81,7 +82,8 @@ interface toggle_create_group {
     | ActionType.SET_MOBILE_NAV
     | ActionType.SET_IS_MATCH
     | ActionType.SET_CHAT_SETTINGS
-    | ActionType.SET_ROOM_MEMBERS;
+    | ActionType.SET_ROOM_MEMBERS
+    | ActionType.SET_MODAL_INVITE;
   payload: boolean | string[];
 }
 
@@ -110,6 +112,7 @@ export interface InitialState2 {
   pageNumber?: number;
   setUserSettings: boolean;
   setFriendRequest: boolean;
+  setModalInvite: boolean;
   toggleCreateGroup: boolean;
   setMobileNav: boolean;
   setIsMatch: boolean;

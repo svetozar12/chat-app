@@ -6,7 +6,9 @@ import { AiOutlineUserDelete } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
 import { Socket } from "socket.io-client";
 import { getFirstChat } from "../utils/getFirstChat";
-
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
+import { InitialState2 } from "../redux/state";
 function ChatSettings({
   chatId,
   socketRef,
@@ -18,6 +20,11 @@ function ChatSettings({
   cookieName: string;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const dispatch = useDispatch();
+  const state = useSelector(
+    (state: { setReducer: InitialState2 }) => state.setReducer,
+  );
+
   const [username, setUsername] = React.useState<string>("");
   const [users, setUsers] = React.useState<string[]>([]);
   const route = useRouter();
@@ -103,6 +110,22 @@ function ChatSettings({
           </div>
         );
       })}
+      <div style={{ width: "95%", height: "2rem" }} className="flex">
+        <h2 style={{ color: "var(--main-black)" }}>Add more users</h2>
+        <div>
+          <AiOutlinePlusCircle
+            className="add_users"
+            onClick={() => {
+              console.log(state.setModalInvite);
+
+              dispatch({
+                type: "SET_MODAL_INVITE",
+                payload: !state.setModalInvite,
+              });
+            }}
+          />
+        </div>
+      </div>
 
       <div className="search-bar" style={{ border: "none", width: "70%" }}>
         <BsSearch

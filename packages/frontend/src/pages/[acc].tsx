@@ -115,7 +115,10 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, [localStatus]);
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div
+      onClick={() => console.log("click")}
+      style={{ display: "flex", height: "100vh" }}
+    >
       <section className="hambruger_out_of_nav">
         <div className="div_out_of_nav">
           <HamburgerMenu />
@@ -205,6 +208,49 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             {state.setFriendRequest && (
               <div className="fRequests_modal">
                 <h1>Notifications</h1>
+                {contacts.map((item, homePage) => {
+                  return (
+                    socketRef && (
+                      <PendingChats
+                        key={homePage}
+                        socketRef={socketRef}
+                        setLocalStatus={setLocalStatus}
+                        {...item}
+                      />
+                    )
+                  );
+                })}
+              </div>
+            )}
+
+            {state.setModalInvite && (
+              <div className="fRequests_modal">
+                <section
+                  style={{ position: "relative", textAlign: "center" }}
+                  className="modal_heading flex"
+                >
+                  {" "}
+                  <div
+                    style={{
+                      width: "4rem",
+                      height: "4rem",
+                      visibility: "hidden",
+                    }}
+                  ></div>
+                  <h1 style={{ padding: "0 25%" }}>Add people</h1>
+                  <div
+                    onClick={() => {
+                      dispatch({
+                        type: "SET_MODAL_INVITE",
+                        payload: !state.setModalInvite,
+                      });
+                    }}
+                    style={{ width: "4rem", height: "4rem" }}
+                    className="circle_border absolute_top_right flex"
+                  >
+                    <GrClose style={{ width: "4rem", height: "4rem" }} />
+                  </div>
+                </section>
                 {contacts.map((item, homePage) => {
                   return (
                     socketRef && (

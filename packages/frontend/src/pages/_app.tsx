@@ -5,7 +5,7 @@ import { wrapper } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { InitialState } from "../redux/state";
+import { InitialState, InitialState2 } from "../redux/state";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
@@ -16,6 +16,10 @@ const MyApp = (
 ) => {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const setState = useSelector(
+    (state: { setReducer: InitialState2 }) => state.setReducer,
   );
   const dispatch = useDispatch();
   const router = useRouter();
@@ -60,7 +64,12 @@ const MyApp = (
   }, [router.asPath]);
   return (
     <>
-      <div className="BIG"></div>
+      <div
+        className={`BIG ${
+          setState.setFriendRequest ||
+          (setState.setModalInvite && "BIG_OVERLAY")
+        }`}
+      ></div>
       <Component {...pageProps} />
     </>
   );

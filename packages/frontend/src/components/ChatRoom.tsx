@@ -33,7 +33,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const statess = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
-
+  const inputTextArea = React.useRef<any>(null);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
   const [chat, setChat] = useState<IchatInstance[]>([]);
@@ -73,6 +73,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   }, [route.asPath]);
 
   useEffect(() => {
+    inputTextArea.current.focus();
     if (!cookie.get("token") && !cookie.get("refresh_token"))
       dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
@@ -89,10 +90,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       socketRef && socketRef.disconnect();
     };
   }, []);
-
-  const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>): void => {
-    setState({ ...state, [e.target.name]: e.target.value });
-  };
 
   const saveMessage = async () => {
     try {
@@ -151,13 +148,23 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   };
 
   const handleKeyPress = (e: any) => {
-    console.log(e.key);
+    const target = e.target as HTMLTextAreaElement;
+    inputTextArea.current.style.height = "15px";
+    inputTextArea.current.style.height = `${target.scrollHeight}px`;
+    inputTextArea.current.style.height = `${Math.min(
+      e.target.scrollHeight,
+      60,
+    )}px`;
 
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = (e: any) => {
     if (e.key === "Enter") {
+      console.log("hi");
+
       onMessageSubmit(e);
     }
   };
-
   return (
     <div
       style={{
@@ -199,9 +206,11 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       >
         <div className="message_input_container">
           <textarea
+            ref={inputTextArea}
             className="input_msg"
             name="message"
-            onChange={(e) => onTextChange(e)}
+            onKeyDown={(e) => handleSubmit(e)}
+            onChange={(e) => handleKeyPress(e)}
             style={{
               border: "none",
               resize: "none",
@@ -210,7 +219,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             }}
             placeholder="Your Message "
             value={state.message}
-            onKeyPress={(e: any) => handleKeyPress(e)}
           />
           <MdSend type="submit" onClick={onMessageSubmit} />
         </div>
