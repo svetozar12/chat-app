@@ -90,7 +90,7 @@ const ActiveChats = ({
             alignItems: "center",
           }}
         >
-          <Avatar inviter={inviter} cookieName={cookieName} />
+          <Avatar members={members} inviter={inviter} cookieName={cookieName} />
           <div className="contacts_info">
             <p
               style={{

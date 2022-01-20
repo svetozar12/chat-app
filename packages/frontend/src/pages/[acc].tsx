@@ -175,8 +175,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
           {socketRef &&
             chatRooms.map((item, index) => {
-              console.log(item.members);
-
               return (
                 <ActiveChats
                   key={index}
