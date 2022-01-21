@@ -2,14 +2,13 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../redux/state";
+import { InitialState2, InitialState3 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import UserSettings from "./UserSettings";
 import HamburgerMenu from "./HamburgerMenu";
-import { MdHeight } from "react-icons/md";
 
 export interface IFindFriends {
   cookieName: string;
@@ -45,6 +44,10 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
 
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
+  );
+
+  const notifState = useSelector(
+    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
   const toggleGroupCreate = () => {
@@ -96,9 +99,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       onSubmit={handleSubmit}
       style={{ marginBottom: "1rem", alignItems: "center" }}
     >
-      <div className="close_hamburger">
-        <HamburgerMenu />
-      </div>
+      <div className="close_hamburger">{/* <HamburgerMenu /> */}</div>
       <div className="profile" style={{ display: "flex" }}>
         <div>
           {hasAvatar ? (
@@ -141,6 +142,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
         </div>
         <div className="flex find_friends_icons">
           <div
+            className="notifications"
             style={{ cursor: "pointer" }}
             onClick={() => {
               dispatch({
@@ -150,6 +152,9 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             }}
           >
             <IoNotifications />
+            {notifState.notification_number != 0 && (
+              <div className="flex">{notifState.notification_number}</div>
+            )}
           </div>
           <div
             style={{

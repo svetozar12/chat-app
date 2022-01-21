@@ -25,6 +25,7 @@ export enum ActionType {
   SET_CHAT_SETTINGS = "SET_CHAT_SETTINGS",
   SET_ROOM_MEMBERS = "SET_ROOM_MEMBERS",
   SET_MODAL_INVITE = "SET_MODAL_INVITE",
+  NOTIFICATION_NUMBER = "NOTIFICATION_NUMBER",
 }
 
 interface LoginPost {
@@ -60,7 +61,10 @@ interface signOut {
 }
 
 interface Iset {
-  type: ActionType.SET_RECIEVER | ActionType.INCREMENT_PAGE_NUMBER;
+  type:
+    | ActionType.SET_RECIEVER
+    | ActionType.INCREMENT_PAGE_NUMBER
+    | ActionType.NOTIFICATION_NUMBER;
   payload: number;
 }
 
@@ -125,6 +129,7 @@ export interface InitialState3 {
   input_password: string;
   input_email: string;
   input_gender: string;
+  notification_number: number;
 }
 
 export interface InitialStateMessage {

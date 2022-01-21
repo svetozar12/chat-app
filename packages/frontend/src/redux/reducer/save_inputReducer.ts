@@ -6,6 +6,7 @@ export const initialState = {
   input_password: "",
   input_email: "",
   input_gender: "",
+  notification_number: 0,
 };
 const saveInputReducer = (
   state: InitialState3 = initialState,
@@ -25,6 +26,8 @@ const saveInputReducer = (
       return { ...state, input_email: action.payload };
     case ActionType.SAVE_INPUT_GENDER:
       return { ...state, input_gender: action.payload };
+    case ActionType.NOTIFICATION_NUMBER:
+      return { ...state, notification_number: action.payload };
     default:
       return state;
   }

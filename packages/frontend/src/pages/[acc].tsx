@@ -9,7 +9,7 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2 } from "../redux/state";
+import { InitialState2, InitialState3 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import ChatSettings from "../components/ChatSettings";
 import HamburgerMenu from "../components/HamburgerMenu";
@@ -44,6 +44,10 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
+  );
+
+  const inputState = useSelector(
+    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
   const getUsersList = async (name: string) => {
@@ -107,13 +111,37 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     }
   };
 
+  const checkNotification = async () => {
+    try {
+      setContacts([]);
+      const res = await axios.get(
+        `${requestUrl}/invites/${cookieName}?status=recieved`,
+      );
+      const data = res.data.invites;
+      console.log(data, "data");
+      dispatch({ type: "NOTIFICATION_NUMBER", payload: data.length });
+      setContacts(data);
+      if (data.status === "declined") return false;
+      return true;
+    } catch (error) {
+      dispatch({ type: "NOTIFICATION_NUMBER", payload: 0 });
+      return false;
+    }
+  };
+
   useEffect(() => {
+    checkNotification();
     setContacts([]);
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
     getUsersList(cookie.get("name"));
   }, []);
+
+  React.useEffect(() => {
+    fetchRecieverStatus();
+  }, [inputState.notification_number]);
+
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
@@ -122,11 +150,13 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       fetchRecieverStatus();
       getChatRoom();
       fetchInviteStatus();
+      checkNotification();
     });
 
     socketConnect.on("send_friend_request", () => {
       fetchRecieverStatus();
       fetchInviteStatus();
+      checkNotification();
     });
 
     socketConnect.emit("room", { user: cookieName });
@@ -140,6 +170,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   useEffect(() => {
     fetchRecieverStatus();
     fetchInviteStatus();
+    checkNotification();
   }, [localStatus]);
 
   return (
@@ -147,7 +178,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       onClick={() => console.log("click")}
       style={{ display: "flex", height: "100vh" }}
     >
-      <section className="hambruger_out_of_nav">
+      <section style={{ height: "30vh" }} className="hambruger_out_of_nav">
         <div className="div_out_of_nav">
           <HamburgerMenu />
         </div>

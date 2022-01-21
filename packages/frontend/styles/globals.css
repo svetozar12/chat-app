@@ -247,7 +247,6 @@ form {
 }
 
 .profile {
-  position: relative;
   width: 95%;
   justify-content: space-between;
   padding-bottom: 1rem;
@@ -359,6 +358,22 @@ form {
 4.Components styling
 ================= */
 
+.notifications {
+  position: relative;
+}
+
+.notifications div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50px;
+  background: #e73553;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: 0;
+  padding: 0;
+}
+
 .modal_heading {
   padding: 1rem 0;
   width: 95%;
@@ -431,8 +446,8 @@ register_form from input {
 }
 
 .user-logo {
-  width: 4rem;
-  height: 4rem;
+  width: 3.5rem;
+  height: 3.5rem;
   color: var(--main-logo-color);
   margin-right: 1rem;
 }
@@ -655,13 +670,15 @@ form > button:hover {
 
 .message_input_container {
   cursor: text;
+  position: relative;
+  z-index: 1000;
   flex-direction: row;
   justify-content: space-between;
   background: #d9d9d9;
   border-radius: 25px;
-  width: 60%;
+  width: 70%;
   margin: 0.5rem 0;
-  padding: 0.5rem 3rem;
+  padding: 0.5rem 2rem;
   overflow-wrap: break-word;
 }
 
@@ -827,7 +844,6 @@ p {
   .hide {
     transition: 0.4s ease-in;
     width: 0;
-    height: 0;
   }
   .hamburger {
     display: inline-block;
@@ -836,7 +852,7 @@ p {
     width: 3rem;
     height: 3rem;
     left: 0;
-    z-index: 11;
+    z-index: -11;
     border: 1px solid transparent;
     padding: 0.5rem;
   }
@@ -852,7 +868,7 @@ p {
     width: 50%;
     height: 100vh;
     position: absolute;
-    z-index: 11;
+    z-index: 9999;
   }
 
   .div_out_of_nav {
@@ -860,6 +876,7 @@ p {
     width: 95%;
     height: 3rem;
     margin: 1rem;
+    z-index: 100;
   }
 
   .close_hamburger {
