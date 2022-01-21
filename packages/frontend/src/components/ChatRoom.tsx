@@ -204,7 +204,10 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         className="message_form"
         style={{ width: "100%" }}
       >
-        <div className="message_input_container">
+        <div
+          onClick={() => inputTextArea.current.focus()}
+          className="message_input_container"
+        >
           <textarea
             ref={inputTextArea}
             className="input_msg"
@@ -220,7 +223,16 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             placeholder="Your Message "
             value={state.message}
           />
-          <MdSend type="submit" onClick={onMessageSubmit} />
+          <div
+            className="flex message_submit"
+            style={{
+              padding: ".3rem 0 .3rem .5rem",
+              border: "1px transperant",
+              borderRadius: "50px",
+            }}
+          >
+            <MdSend type="submit" onClick={onMessageSubmit} />
+          </div>
         </div>
       </form>
     </div>

@@ -19,7 +19,7 @@ const registerValidation = (data: {
 const updateFormSchema = Joi.object({
   username: Joi.string().min(2),
   password: Joi.string().min(2),
-  email: Joi.string().min(2),
+  email: Joi.string(),
   gender: Joi.string(),
   userAvatar: Joi.string(),
 });

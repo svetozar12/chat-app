@@ -110,11 +110,20 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
                 })
               }
               className="user-logo click"
-              style={{ borderRadius: "50px", cursor: "pointer" }}
+              style={{
+                borderRadius: "50px",
+                cursor: "pointer",
+                position: "relative",
+                zIndex: "10",
+              }}
             />
           ) : (
             <FaUserCircle
-              style={{ color: "var(--main-logo-color)" }}
+              style={{
+                color: "var(--main-logo-color)",
+                position: "relative",
+                zIndex: "10",
+              }}
               onClick={() =>
                 dispatch({
                   type: "SET_USER_SETTINGS",

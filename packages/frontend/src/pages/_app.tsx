@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
+import Head from "next/head";
 const MyApp = (
   { Component, pageProps }: AppProps,
   props: { cookie: string },
@@ -73,6 +74,9 @@ const MyApp = (
   };
   return (
     <>
+      <Head>
+        <title>Chat what</title>
+      </Head>
       <div
         onClick={closeModals}
         className={`BIG ${

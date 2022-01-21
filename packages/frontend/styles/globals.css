@@ -61,6 +61,7 @@ a {
   top: 0;
   left: 0;
   position: absolute;
+  z-index: 11;
   width: 0;
   height: 100vh;
   background: var(--main-white);
@@ -76,7 +77,6 @@ a {
 .chat-settings-close {
   position: relative;
   width: 95%;
-  height: 4rem;
   margin: 1rem;
   padding: 0 1rem;
 }
@@ -644,7 +644,17 @@ form > button:hover {
   background: var(--main-white);
 }
 
+.message_submit {
+  cursor: pointer;
+}
+
+.message_submit:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+}
+
 .message_input_container {
+  cursor: text;
   flex-direction: row;
   justify-content: space-between;
   background: #d9d9d9;
@@ -817,6 +827,7 @@ p {
   .hide {
     transition: 0.4s ease-in;
     width: 0;
+    height: 0;
   }
   .hamburger {
     display: inline-block;

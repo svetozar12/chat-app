@@ -95,21 +95,22 @@ route.put(
     try {
       const { error } = update_formValidation(req.body);
       const username = req.body.username;
-      const email = req.body.email;
+      let email = req.body.email;
       const gender = req.body.gender;
       const userAvatar = req.file?.filename;
       const users = await User.findOne({ username }).exec();
+      if (!email) email = users?.email;
       const user_id = users?._id;
 
-      // if (error) {
-      //   return res.status(409).json({ message: error.message });
-      // }
+      if (error) {
+        return res.status(409).json({ message: error.message });
+      }
 
-      // if (!users) return res.status(404).json({ message: "User not found" });
+      if (!users) return res.status(404).json({ message: "User not found" });
       await User.findByIdAndUpdate(user_id, {
-        email,
-        gender,
-        userAvatar,
+        email: email ? email : users.email,
+        gender: gender ? gender : users.gender,
+        userAvatar: email ? userAvatar : users.userAvatar,
       });
       return res.status(200).send({ message: `User ${username} info updated` });
     } catch (error) {

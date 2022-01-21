@@ -19,14 +19,11 @@ function profile(props: { cookie: string }) {
     try {
       const formData = new FormData();
       formData.append("username", cookie.get("name"));
-      formData.append("email", state.input_email);
-      formData.append("gender", state.input_gender);
-      formData.append("userAvatar", image);
+      if (state.input_email) formData.append("email", state.input_email);
+      if (state.input_gender) formData.append("gender", state.input_gender);
+      if (image) formData.append("userAvatar", image);
 
       e.preventDefault();
-      const email = state.input_email;
-      const gender = state.input_gender;
-      if (!email && !gender && !image) return;
 
       axios
         .put(`${requestUrl}/users/update`, formData)
