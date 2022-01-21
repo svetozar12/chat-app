@@ -2,9 +2,8 @@ import "../../styles/globals.css";
 import type { AppProps } from "next/app";
 import React from "react";
 import { wrapper } from "../redux/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { InitialState, InitialState2 } from "../redux/state";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
@@ -62,11 +61,22 @@ const MyApp = (
       res();
     }
   }, [router.asPath]);
+  const closeModals = () => {
+    dispatch({
+      type: "SET_FRIEND_REQUEST",
+      payload: false,
+    });
+    dispatch({
+      type: "SET_MODAL_INVITE",
+      payload: false,
+    });
+  };
   return (
     <>
       <div
+        onClick={closeModals}
         className={`BIG ${
-          setState.setFriendRequest ||
+          (setState.setFriendRequest && "BIG_OVERLAY") ||
           (setState.setModalInvite && "BIG_OVERLAY")
         }`}
       ></div>

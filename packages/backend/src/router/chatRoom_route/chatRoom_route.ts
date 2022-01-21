@@ -14,6 +14,8 @@ route.get(
   ) => {
     try {
       const user_name = req.query?.user_name;
+      console.log(user_name);
+
       const contacts = await Chats.find({ members: user_name }).exec();
       if (!contacts)
         return res

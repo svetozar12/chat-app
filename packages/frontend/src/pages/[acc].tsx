@@ -4,6 +4,7 @@ import PendingChats from "../components/PendingChats";
 import FindFriends from "../components/FindFriends";
 import ChatRoom from "../components/ChatRoom";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
@@ -13,6 +14,7 @@ import { requestUrl } from "../utils/hostUrl_requestUrl";
 import ChatSettings from "../components/ChatSettings";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { GrClose } from "react-icons/gr";
+import User_list from "../components/User_list";
 interface Ichats {
   _id: string;
   members: string[];
@@ -25,6 +27,11 @@ export interface Iinvites {
   status: string;
 }
 
+interface IUsers {
+  _id: string;
+  members: string[];
+}
+
 const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
@@ -33,10 +40,30 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
+  const [users, setUsers] = useState<IUsers[]>([]);
 
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
+
+  const getUsersList = async (name: string) => {
+    try {
+      const res = await axios(
+        `${requestUrl}/chat-room/${props.chatRoom}?username=${name}`,
+      );
+      const data = res.data.Message;
+      setUsers(data);
+      console.log(data);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  React.useEffect(() => {
+    getUsersList(cookie.get("name"));
+  }, [useRouter().asPath]);
 
   const getChatRoom = async () => {
     try {
@@ -85,6 +112,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
+    getUsersList(cookie.get("name"));
   }, []);
   useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000", {
@@ -207,7 +235,31 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <div className="dash_board">
             {state.setFriendRequest && (
               <div className="fRequests_modal">
-                <h1>Notifications</h1>
+                <section
+                  style={{ position: "relative", textAlign: "center" }}
+                  className="modal_heading flex"
+                >
+                  <div
+                    style={{
+                      width: "4rem",
+                      height: "4rem",
+                      visibility: "hidden",
+                    }}
+                  ></div>
+                  <h1 style={{ padding: "0 25%" }}>Notifications</h1>
+                  <div
+                    onClick={() => {
+                      dispatch({
+                        type: "SET_FRIEND_REQUEST",
+                        payload: !state.setFriendRequest,
+                      });
+                    }}
+                    style={{ width: "4rem", height: "4rem" }}
+                    className="circle_border absolute_top_right flex"
+                  >
+                    <GrClose style={{ width: "4rem", height: "4rem" }} />
+                  </div>
+                </section>
                 {contacts.map((item, homePage) => {
                   return (
                     socketRef && (
@@ -229,7 +281,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                   style={{ position: "relative", textAlign: "center" }}
                   className="modal_heading flex"
                 >
-                  {" "}
                   <div
                     style={{
                       width: "4rem",
@@ -251,16 +302,16 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                     <GrClose style={{ width: "4rem", height: "4rem" }} />
                   </div>
                 </section>
-                {contacts.map((item, homePage) => {
+                {users.map((item, index) => {
+                  const newMembers = item.members.filter(
+                    (element) => element != cookieName,
+                  );
                   return (
-                    socketRef && (
-                      <PendingChats
-                        key={homePage}
-                        socketRef={socketRef}
-                        setLocalStatus={setLocalStatus}
-                        {...item}
-                      />
-                    )
+                    <User_list
+                      key={index}
+                      _id={item._id}
+                      members={newMembers}
+                    />
                   );
                 })}
               </div>

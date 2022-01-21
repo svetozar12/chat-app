@@ -48,7 +48,8 @@ route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
           })
         : await Invites.find({
             inviter: name,
-          }).select("status  inviter reciever");
+          }).select("status inviter reciever");
+    console.log(invites);
 
     if (!invites || invites.length <= 0) {
       return res.status(404).json({

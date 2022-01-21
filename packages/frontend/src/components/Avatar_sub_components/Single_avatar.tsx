@@ -5,10 +5,20 @@ import { requestUrl } from "../../utils/hostUrl_requestUrl";
 function Single_avatar({
   inviter,
   cookieName,
+  width,
+  height,
+  overlay,
+  group,
 }: {
   inviter: string;
   cookieName: string;
+  width?: string;
+  height?: string;
+  overlay?: boolean;
+  group?: boolean;
 }) {
+  console.log(overlay, "comp");
+
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
 
@@ -37,11 +47,18 @@ function Single_avatar({
       {hasAvatar ? (
         <img
           src={image}
-          style={{ borderRadius: "50px" }}
-          className="user-logo"
+          style={{ borderRadius: "50px", width: width, height: height }}
+          className={`${group ? "group-logo" : "user-logo"} ${
+            overlay && "logo_pos_overlay"
+          }`}
         />
       ) : (
-        <FaUserCircle className="user-logo" />
+        <FaUserCircle
+          style={{ width: width, height: height }}
+          className={`${group ? "group-logo" : "user-logo"} ${
+            overlay && "logo_pos_overlay"
+          }`}
+        />
       )}
     </div>
   );

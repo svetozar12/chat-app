@@ -70,7 +70,7 @@ a {
 
 .chat-settings-open {
   width: 100%;
-  transition: 0.4s;
+  /* transition: 0.4s; */
 }
 
 .chat-settings-close {
@@ -262,10 +262,16 @@ form {
   cursor: pointer;
 }
 
-.find_friends_icons svg {
-  padding: 0.7rem;
-  background: rgba(122, 122, 122, 0.1);
+.find_friends_icons div {
+  padding: 0.5rem;
   border-radius: 50px;
+  background: rgba(122, 122, 122, 0.1);
+  margin-left: 1rem;
+}
+
+.find_friends_icons div svg {
+  width: 2rem;
+  height: 2rem;
 }
 
 .find_friends_icons svg:hover {
@@ -460,8 +466,8 @@ input {
 
 .group_logo_container {
   position: relative;
-  width: 4rem;
-  height: 4rem;
+  width: 3.5rem;
+  height: 3.5rem;
   margin-right: 1rem;
 }
 

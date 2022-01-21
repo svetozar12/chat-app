@@ -111,13 +111,16 @@ function ChatSettings({
         );
       })}
       <div style={{ width: "95%", height: "2rem" }} className="flex">
-        <h2 style={{ color: "var(--main-black)" }}>Add more users</h2>
-        <div>
+        <h2
+          className="flex"
+          style={{ color: "var(--main-black)", margin: "0" }}
+        >
+          Add more users
+        </h2>
+        <div className="flex">
           <AiOutlinePlusCircle
             className="add_users"
             onClick={() => {
-              console.log(state.setModalInvite);
-
               dispatch({
                 type: "SET_MODAL_INVITE",
                 payload: !state.setModalInvite,

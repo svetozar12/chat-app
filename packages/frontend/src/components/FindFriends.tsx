@@ -126,21 +126,23 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
         </div>
         <div className="flex find_friends_icons">
-          <IoNotifications
+          <div
             onClick={() => {
               dispatch({
                 type: "SET_FRIEND_REQUEST",
                 payload: !state.setFriendRequest,
               });
             }}
-          />
-          <BsFillPeopleFill
-            onClick={toggleGroupCreate}
-            style={{
-              cursor: "pointer",
-              marginLeft: "1rem",
-            }}
-          />
+          >
+            <IoNotifications />
+          </div>
+          <div onClick={toggleGroupCreate}>
+            <BsFillPeopleFill
+              style={{
+                cursor: "pointer",
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="flex search_container">

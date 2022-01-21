@@ -2,7 +2,8 @@ import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
-function Single_avatar({
+import Single_avatar from "./Single_avatar";
+function Group_avatar({
   inviter,
   cookieName,
   members,
@@ -11,8 +12,6 @@ function Single_avatar({
   cookieName: string;
   members: string[];
 }) {
-  console.log(members);
-
   const [images, setImages] = React.useState<string[]>([]);
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
 
@@ -41,33 +40,23 @@ function Single_avatar({
   }, []);
   return (
     <div className="group_logo_container">
-      {hasAvatar ? (
-        images.map((element, index) => {
-          console.log(element, index);
+      {members.map((element, index) => {
+        console.log(index);
+        if (index === 2) return;
 
-          return (
-            <img
-              src={element}
-              className={`group_logo ${
-                index === 0 ? "logo_pos" : "logo_pos_overlay"
-              }`}
-            />
-          );
-        })
-      ) : (
-        <>
-          <FaUserCircle
-            style={{ top: "0", right: "0" }}
-            className="group_logo"
+        return (
+          <Single_avatar
+            inviter={element}
+            cookieName={cookieName}
+            width="2.25rem"
+            height="2.25rem"
+            group={true}
+            overlay={index === 1 ? true : false}
           />
-          <FaUserCircle
-            style={{ bottom: "0", left: "0", zIndex: "1" }}
-            className="group_logo"
-          />
-        </>
-      )}
+        );
+      })}
     </div>
   );
 }
 
-export default Single_avatar;
+export default Group_avatar;

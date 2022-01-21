@@ -93,7 +93,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   const saveMessage = async () => {
     try {
-      const res = await axios.post(`${requestUrl}/messages/${chatId}`, {
+      await axios.post(`${requestUrl}/messages/${chatId}`, {
         sender: cookieName,
         message: state.message,
       });
