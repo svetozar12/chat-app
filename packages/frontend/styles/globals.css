@@ -274,7 +274,7 @@ form {
   height: 2rem;
 }
 
-.find_friends_icons svg:hover {
+.find_friends_icons div:hover {
   color: rgba(122, 122, 122, 1);
 }
 

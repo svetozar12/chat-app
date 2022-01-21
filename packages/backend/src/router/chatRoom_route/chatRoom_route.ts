@@ -5,6 +5,7 @@ interface IRequest {
 import * as express from "express";
 import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
+import Invites from "../../models/Invites.model";
 const route = express.Router();
 route.get(
   "/",
@@ -14,8 +15,6 @@ route.get(
   ) => {
     try {
       const user_name = req.query?.user_name;
-      console.log(user_name);
-
       const contacts = await Chats.find({ members: user_name }).exec();
       if (!contacts)
         return res
@@ -40,6 +39,24 @@ route.get("/:user_id", async (req: Request, res: Response) => {
     if (!users_rooms || users_rooms.length <= 0)
       return res.status(404).json({ Message: "User room not found !" });
     return res.status(200).json({ Message: users_rooms });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while searching for your chat room",
+    });
+  }
+});
+
+route.get("/add-users/:chat_id", async (req: Request, res: Response) => {
+  try {
+    const data = req.params.chat_id;
+    const chat_room = await Chats.findOne({ _id: data }).exec();
+    const me = await Invites.findOne({ inviter: chat_room?.members[0] });
+    console.log(chat_room);
+    res.json({ me });
+
+    console.log(data);
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

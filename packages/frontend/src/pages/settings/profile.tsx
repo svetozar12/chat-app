@@ -6,15 +6,22 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { InitialState3 } from "../../redux/state";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
+import { getFirstChat } from "../../utils/getFirstChat";
 
 function profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
+  const [url, setUrl] = React.useState("");
   const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
   const state = useSelector(
     (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
-
+  React.useEffect(() => {
+    (async () => {
+      const first_id = await getFirstChat(cookie.get("name"));
+      setUrl(first_id._id);
+    })();
+  }, []);
   const handleSubmit = async (e: any) => {
     try {
       const formData = new FormData();
@@ -125,7 +132,7 @@ function profile(props: { cookie: string }) {
           >
             Update
           </button>
-          <Link href={`/${cookie.get("first_chat_id")}`}>
+          <Link href={`/${url}`}>
             <a className="link" style={{ color: "var(--main-blue)" }}>
               Go back
             </a>

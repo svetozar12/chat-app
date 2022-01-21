@@ -9,6 +9,7 @@ import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import UserSettings from "./UserSettings";
 import HamburgerMenu from "./HamburgerMenu";
+import { MdHeight } from "react-icons/md";
 
 export interface IFindFriends {
   cookieName: string;
@@ -111,6 +112,8 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
               }
               className="user-logo click"
               style={{
+                width: "3rem",
+                height: "3.25rem",
                 borderRadius: "50px",
                 cursor: "pointer",
                 position: "relative",
@@ -123,6 +126,8 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
                 color: "var(--main-logo-color)",
                 position: "relative",
                 zIndex: "10",
+                width: "3rem",
+                height: "3.25rem",
               }}
               onClick={() =>
                 dispatch({
@@ -136,6 +141,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
         </div>
         <div className="flex find_friends_icons">
           <div
+            style={{ cursor: "pointer" }}
             onClick={() => {
               dispatch({
                 type: "SET_FRIEND_REQUEST",
@@ -145,12 +151,13 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           >
             <IoNotifications />
           </div>
-          <div onClick={toggleGroupCreate}>
-            <BsFillPeopleFill
-              style={{
-                cursor: "pointer",
-              }}
-            />
+          <div
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={toggleGroupCreate}
+          >
+            <BsFillPeopleFill />
           </div>
         </div>
       </div>
