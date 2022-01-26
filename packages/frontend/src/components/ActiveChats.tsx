@@ -66,7 +66,6 @@ const ActiveChats = ({
     <div
       style={{
         whiteSpace: "nowrap",
-        overflow: "hidden",
       }}
       onClick={() => {
         joinChat();
@@ -101,7 +100,7 @@ const ActiveChats = ({
                 ? members.map((element, index) => {
                     if (index === 3) return;
                     return (
-                      <p>
+                      <p key={index}>
                         {element}
                         {element[members.length - 1] === element[index]
                           ? " ..."

@@ -96,13 +96,14 @@ a {
   z-index: 9999;
   width: 40%;
   height: 50vh;
-  background: var(--off-white);
+  background: var(--main-white);
   overflow-x: hidden;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 0 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
 }
 .BIG {
   background: radial-gradient(
@@ -310,6 +311,13 @@ form {
   box-shadow: 0 0 5px var(--main-black);
 }
 
+.chat_settings_nav h1 {
+  padding: 0 0.5rem;
+  width: 70%;
+  display: flex;
+  justify-content: flex-start;
+}
+
 .chat_settings_nav {
   position: relative;
   bottom: 0;
@@ -322,14 +330,40 @@ form {
   justify-content: flex-start;
 }
 
+.chat_settings_members {
+  width: 70%;
+  padding: 0 0.5rem;
+  justify-content: space-between;
+}
+
+.chat_settings_members h1 {
+  margin: 0;
+}
+
 .add_users {
+  position: relative;
+  z-index: 101;
   width: 2rem;
   height: 2rem;
   cursor: pointer;
+  padding: 2rem 0.5rem;
+  border-radius: 5px;
+  justify-content: space-between;
+}
+
+.add_users_checkBox {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.add_users_checkBox input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 1rem;
 }
 
 .add_users:hover {
-  color: green;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .remove_user {
@@ -375,10 +409,14 @@ form {
 }
 
 .modal_heading {
-  padding: 1rem 0;
-  width: 95%;
+  width: 100%;
   position: relative;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal_footer {
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .logo_pos {
@@ -599,6 +637,26 @@ p {
   font-size: 1rem;
 }
 
+.button {
+  border-radius: 5px;
+  width: 20%;
+  background-color: var(--main-black);
+  color: var(--main-white);
+  border: 1px solid var(--input-border-color);
+  padding: 0.7rem 0;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.button:hover {
+  background-color: var(--main-white);
+  color: var(--main-black);
+  transition: 0.2s;
+}
+
 form div > input {
   border-radius: 5px;
   margin: 1rem;
@@ -803,6 +861,7 @@ p {
   padding: 0.7rem;
   cursor: pointer;
   width: 20%;
+  background: rgba(122, 122, 122, 0.09);
 }
 
 .circle_border:hover {
@@ -815,10 +874,25 @@ p {
   top: 0;
   right: 0;
 }
+
+.absolute_top_right {
+  position: absolute;
+  margin-right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+}
 /* =================
 6.Media Query
 ================= */
-@media only screen and (max-width: 800px) {
+
+@media only screen and (max-width: 1344px) {
+  .add_users_button {
+    font-size: 1.5vw;
+    word-break: keep-all;
+  }
+}
+@media only screen and (max-width: 1010px) {
   .clickable {
     align-items: center;
     font-size: 3vw;
@@ -865,7 +939,6 @@ p {
   }
 
   .hambruger_out_of_nav {
-    width: 50%;
     height: 100vh;
     position: absolute;
     z-index: 9999;

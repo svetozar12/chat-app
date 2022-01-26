@@ -23,7 +23,6 @@ function Group_avatar({
         setHasAvatar(false);
         return false;
       }
-      console.log(userAvatar, name);
 
       setHasAvatar(true);
       const requestString = `${requestUrl}/${userAvatar}`;
@@ -41,11 +40,11 @@ function Group_avatar({
   return (
     <div className="group_logo_container">
       {members.map((element, index) => {
-        console.log(index);
         if (index === 2) return;
 
         return (
           <Single_avatar
+            key={index}
             inviter={element}
             cookieName={cookieName}
             width="2.25rem"

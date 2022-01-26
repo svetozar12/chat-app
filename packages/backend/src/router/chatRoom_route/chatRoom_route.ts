@@ -48,24 +48,6 @@ route.get("/:user_id", async (req: Request, res: Response) => {
   }
 });
 
-route.get("/add-users/:chat_id", async (req: Request, res: Response) => {
-  try {
-    const data = req.params.chat_id;
-    const chat_room = await Chats.findOne({ _id: data }).exec();
-    const me = await Invites.findOne({ inviter: chat_room?.members[0] });
-    console.log(chat_room);
-    res.json({ me });
-
-    console.log(data);
-  } catch (error) {
-    return res.status(501).json({
-      ErrorMsg: (error as Error).message,
-      Error: "Internal server error",
-      Message: "Something went wrong while searching for your chat room",
-    });
-  }
-});
-
 route.put("/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;

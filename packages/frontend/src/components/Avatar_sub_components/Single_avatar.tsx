@@ -17,8 +17,6 @@ function Single_avatar({
   overlay?: boolean;
   group?: boolean;
 }) {
-  console.log(overlay, "comp");
-
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
 

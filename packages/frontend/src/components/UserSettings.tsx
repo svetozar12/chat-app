@@ -23,8 +23,6 @@ function UserSettings({ cookie }: { cookie: any }) {
       deleteCookies();
       return true;
     } catch (error) {
-      console.log(error);
-
       return false;
     }
   };

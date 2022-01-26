@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ActiveChats from "../components/ActiveChats";
-import PendingChats from "../components/PendingChats";
 import FindFriends from "../components/FindFriends";
 import ChatRoom from "../components/ChatRoom";
 import axios from "axios";
@@ -14,7 +13,8 @@ import { requestUrl } from "../utils/hostUrl_requestUrl";
 import ChatSettings from "../components/ChatSettings";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { GrClose } from "react-icons/gr";
-import User_list from "../components/User_list";
+import Notifications_Modal from "../components/Notifications_Modal";
+import { AddUsers_Modal } from "../components/AddUsers_Modal";
 interface Ichats {
   _id: string;
   members: string[];
@@ -27,11 +27,6 @@ export interface Iinvites {
   status: string;
 }
 
-interface IUsers {
-  _id: string;
-  members: string[];
-}
-
 const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
@@ -40,8 +35,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [users, setUsers] = useState<IUsers[]>([]);
-
+  const [users, setUsers] = useState<any[]>([]);
+  const route = useRouter();
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
@@ -50,24 +45,43 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
-  const getUsersList = async (name: string) => {
+  const getMembersSuggestions = async () => {
     try {
-      const res = await axios(
-        `${requestUrl}/chat-room/${props.chatRoom}?username=${name}`,
+      const res = await axios.get(
+        `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
-      const data = res.data.Message;
-      setUsers(data);
-      console.log(data);
 
+      const res_inviter = await axios.get(
+        `${requestUrl}/invites/inviter/${cookieName}?status=accepted`,
+      );
+      const res_chat = await axios.get(
+        `http://localhost:4002/chat-room${window.location.pathname}`,
+      );
+      const members_in_chat = res_chat.data.Message[0].members;
+      const data1 = res.data.invites;
+      const data2 = res_inviter.data.invites;
+      const data = [...data1, ...data2];
+      const usersArr: string[] = [];
+
+      data.forEach((element) => {
+        usersArr.push(element.inviter);
+        usersArr.push(element.reciever);
+      });
+      let uniqueUsers: string[] = [];
+      usersArr.forEach((element) => {
+        if (!uniqueUsers.includes(element)) {
+          uniqueUsers.push(element);
+        }
+      });
+      uniqueUsers = uniqueUsers.filter(
+        (element) => !members_in_chat.includes(element),
+      );
+      setUsers(uniqueUsers);
       return true;
     } catch (error) {
       return false;
     }
   };
-
-  React.useEffect(() => {
-    getUsersList(cookie.get("name"));
-  }, [useRouter().asPath]);
 
   const getChatRoom = async () => {
     try {
@@ -118,7 +132,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         `${requestUrl}/invites/${cookieName}?status=recieved`,
       );
       const data = res.data.invites;
-      console.log(data, "data");
       dispatch({ type: "NOTIFICATION_NUMBER", payload: data.length });
       setContacts(data);
       if (data.status === "declined") return false;
@@ -130,19 +143,19 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   };
 
   useEffect(() => {
+    fetchRecieverStatus();
+  }, [inputState.notification_number]);
+
+  useEffect(() => {
+    getMembersSuggestions();
+  }, [route.asPath]);
+
+  useEffect(() => {
     checkNotification();
     setContacts([]);
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
-    getUsersList(cookie.get("name"));
-  }, []);
-
-  React.useEffect(() => {
-    fetchRecieverStatus();
-  }, [inputState.notification_number]);
-
-  useEffect(() => {
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
     });
@@ -174,10 +187,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, [localStatus]);
 
   return (
-    <div
-      onClick={() => console.log("click")}
-      style={{ display: "flex", height: "100vh" }}
-    >
+    <div style={{ display: "flex", height: "100vh" }}>
       <section style={{ height: "30vh" }} className="hambruger_out_of_nav">
         <div className="div_out_of_nav">
           <HamburgerMenu />
@@ -192,7 +202,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           />
         )}
         <div
-          className="flex"
+          className="flex "
           style={{
             overflow: "auto",
             width: "95%",
@@ -265,88 +275,14 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         >
           <div className="dash_board">
             {state.setFriendRequest && (
-              <div className="fRequests_modal">
-                <section
-                  style={{ position: "relative", textAlign: "center" }}
-                  className="modal_heading flex"
-                >
-                  <div
-                    style={{
-                      width: "4rem",
-                      height: "4rem",
-                      visibility: "hidden",
-                    }}
-                  ></div>
-                  <h1 style={{ padding: "0 25%" }}>Notifications</h1>
-                  <div
-                    onClick={() => {
-                      dispatch({
-                        type: "SET_FRIEND_REQUEST",
-                        payload: !state.setFriendRequest,
-                      });
-                    }}
-                    style={{ width: "4rem", height: "4rem" }}
-                    className="circle_border absolute_top_right flex"
-                  >
-                    <GrClose style={{ width: "4rem", height: "4rem" }} />
-                  </div>
-                </section>
-                {contacts.map((item, homePage) => {
-                  return (
-                    socketRef && (
-                      <PendingChats
-                        key={homePage}
-                        socketRef={socketRef}
-                        setLocalStatus={setLocalStatus}
-                        {...item}
-                      />
-                    )
-                  );
-                })}
-              </div>
+              <Notifications_Modal
+                contacts={contacts}
+                socketRef={socketRef}
+                setLocalStatus={setLocalStatus}
+              />
             )}
 
-            {state.setModalInvite && (
-              <div className="fRequests_modal">
-                <section
-                  style={{ position: "relative", textAlign: "center" }}
-                  className="modal_heading flex"
-                >
-                  <div
-                    style={{
-                      width: "4rem",
-                      height: "4rem",
-                      visibility: "hidden",
-                    }}
-                  ></div>
-                  <h1 style={{ padding: "0 25%" }}>Add people</h1>
-                  <div
-                    onClick={() => {
-                      dispatch({
-                        type: "SET_MODAL_INVITE",
-                        payload: !state.setModalInvite,
-                      });
-                    }}
-                    style={{ width: "4rem", height: "4rem" }}
-                    className="circle_border absolute_top_right flex"
-                  >
-                    <GrClose style={{ width: "4rem", height: "4rem" }} />
-                  </div>
-                </section>
-                {users.map((item, index) => {
-                  const newMembers = item.members.filter(
-                    (element) => element != cookieName,
-                  );
-                  return (
-                    <User_list
-                      key={index}
-                      _id={item._id}
-                      members={newMembers}
-                    />
-                  );
-                })}
-              </div>
-            )}
+            {state.setModalInvite && <AddUsers_Modal users={users} />}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
           </div>
         </div>

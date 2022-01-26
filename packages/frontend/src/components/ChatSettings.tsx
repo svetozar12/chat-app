@@ -31,7 +31,7 @@ function ChatSettings({
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
-  const getMembers = async () => {
+  const getMembersSuggestions = async () => {
     try {
       const res = await axios.get(`${requestUrl}/chat-room/${chatId}`);
       const data = res.data.Message[0].members;
@@ -68,7 +68,7 @@ function ChatSettings({
 
   React.useEffect(() => {
     setUsers([]);
-    getMembers();
+    getMembersSuggestions();
   }, [route.asPath]);
   const handleKeyPress = (e: any) => {
     if (e.key === "Enter") {
@@ -92,9 +92,12 @@ function ChatSettings({
       <h1 style={{ color: "var(--main-black)" }}>Members in chat</h1>
       {users.map((item) => {
         return (
-          <div className="flex">
+          <div className="flex chat_settings_members">
             <h2
-              style={{ flexDirection: "column", color: "var(--main-black)" }}
+              style={{
+                flexDirection: "column",
+                color: "var(--main-black)",
+              }}
               className="flex"
             >
               {item}
@@ -110,48 +113,28 @@ function ChatSettings({
           </div>
         );
       })}
-      <div style={{ width: "95%", height: "2rem" }} className="flex">
+      <div
+        onClick={() => {
+          dispatch({
+            type: "SET_MODAL_INVITE",
+            payload: !state.setModalInvite,
+          });
+        }}
+        style={{ width: "70%", height: "2rem" }}
+        className="flex add_users"
+      >
         <h2
-          className="flex"
-          style={{ color: "var(--main-black)", margin: "0" }}
+          className="add_users_button"
+          style={{
+            color: "var(--main-black)",
+            margin: "0",
+          }}
         >
           Add more users
         </h2>
         <div className="flex">
-          <AiOutlinePlusCircle
-            className="add_users"
-            onClick={() => {
-              dispatch({
-                type: "SET_MODAL_INVITE",
-                payload: !state.setModalInvite,
-              });
-            }}
-          />
+          <AiOutlinePlusCircle style={{ width: "2rem", height: "2rem" }} />
         </div>
-      </div>
-
-      <div className="search-bar" style={{ border: "none", width: "70%" }}>
-        <BsSearch
-          onClick={() => {
-            addMembers(users);
-            emitFriendRequest();
-          }}
-          style={{
-            cursor: "pointer",
-            color: "black",
-          }}
-        />
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          type="search"
-          onKeyPress={handleKeyPress}
-          style={{
-            border: "none",
-            width: "100%",
-            background: "none",
-          }}
-        />
       </div>
     </div>
   );

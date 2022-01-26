@@ -54,8 +54,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         `${requestUrl}/messages/${chatId}?page_number=1&page_size=10`,
       );
       const data = res.data.reversedArr;
-      console.log(data);
-
       updateChat(data);
       return true;
     } catch (error) {
@@ -160,8 +158,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   };
   const handleSubmit = (e: any) => {
     if (e.key === "Enter") {
-      console.log("hi");
-
       onMessageSubmit(e);
     }
   };
