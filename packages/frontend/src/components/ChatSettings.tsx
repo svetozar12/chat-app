@@ -31,22 +31,9 @@ function ChatSettings({
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
-  const getMembersSuggestions = async () => {
+  const getMembers = async () => {
     try {
       const res = await axios.get(`${requestUrl}/chat-room/${chatId}`);
-      const data = res.data.Message[0].members;
-      setUsers(data);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const addMembers = async (usernames: string[]) => {
-    try {
-      const res = await axios.put(`${requestUrl}/chat-room/${chatId}`, {
-        usernames,
-      });
       const data = res.data.Message[0].members;
       setUsers(data);
       return true;
@@ -68,7 +55,7 @@ function ChatSettings({
 
   React.useEffect(() => {
     setUsers([]);
-    getMembersSuggestions();
+    getMembers();
   }, [route.asPath]);
   const handleKeyPress = (e: any) => {
     if (e.key === "Enter") {
@@ -88,15 +75,28 @@ function ChatSettings({
     setLocalStatus("");
   };
   return (
-    <div className="chat_settings_nav flex">
-      <h1 style={{ color: "var(--main-black)" }}>Members in chat</h1>
+    <div
+      style={{ overflow: !state.setChatSettings ? "hidden" : "normal" }}
+      className={`chat_settings_nav flex`}
+    >
+      <h1
+        style={{
+          color: "var(--main-black)",
+          justifyContent: "center",
+          whiteSpace: "nowrap",
+        }}
+      >
+        Members in chat
+      </h1>
       {users.map((item) => {
         return (
           <div className="flex chat_settings_members">
             <h2
               style={{
+                width: "100%",
                 flexDirection: "column",
                 color: "var(--main-black)",
+                whiteSpace: "nowrap",
               }}
               className="flex"
             >
@@ -120,7 +120,7 @@ function ChatSettings({
             payload: !state.setModalInvite,
           });
         }}
-        style={{ width: "70%", height: "2rem" }}
+        style={{ width: "70%", height: "2rem", whiteSpace: "nowrap" }}
         className="flex add_users"
       >
         <h2

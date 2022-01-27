@@ -95,9 +95,8 @@ a {
   justify-content: !important start;
   z-index: 9999;
   width: 40%;
-  height: 50vh;
   background: var(--main-white);
-  overflow-x: hidden;
+  overflow: hidden;
   left: 0;
   right: 0;
   margin-left: auto;
@@ -288,6 +287,7 @@ form {
   background: var(--main-white);
   text-align: left;
   left: 0;
+  margin: 0 1rem;
   box-shadow: 0 0 10px black;
 }
 
@@ -588,6 +588,12 @@ p {
   box-shadow: 0 0 5px;
 }
 
+.search-bar svg {
+  margin-left: 0.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
 .container {
   height: 70vh;
   margin: 1rem 0;
@@ -685,7 +691,7 @@ form > button:hover {
 }
 
 .invite_buttons button {
-  margin: 0.2rem;
+  margin: 0 0.2rem;
   cursor: pointer;
 }
 
@@ -698,17 +704,26 @@ form > button:hover {
   transition: 0.2s;
 }
 
+.accept svg,
+.decline svg {
+  width: 2rem;
+  height: 2rem;
+}
+
 .accept {
-  color: var(--main-green);
+  color: var(--main-black);
 }
 
 .decline {
-  color: var(--main-red);
+  color: var(--main-black);
 }
 
-.accept:hover,
+.accept:hover {
+  color: var(--main-green);
+}
 .decline:hover {
-  color: var(--main-white);
+  color: var(--main-red);
+
   transition: 0.2s;
 }
 
@@ -813,17 +828,33 @@ p {
 }
 
 .contacts {
-  background: var(--main-blue);
-  width: 30vw;
-  padding: 0 2rem;
-  margin: 1rem;
-  border-radius: 1.6rem;
-  flex-direction: column;
+  border-top: 2px solid rgba(0, 0, 0, 0.3);
+  background: var(--main-white);
+  width: 95%;
+  margin: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .contacts h1 {
-  color: var(--main-white);
+  color: var(--main-black);
   text-align: center;
+}
+
+.contacts img,
+svg {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 100%;
+}
+
+.user_info svg,
+img {
+  margin-right: 1rem;
+}
+
+.user_info svg {
+  color: var(--main-logo-color);
 }
 
 .menu > svg {
@@ -859,6 +890,7 @@ p {
 .circle_border {
   border-radius: 50px;
   padding: 0.7rem;
+  /* margin: 1rem; */
   cursor: pointer;
   width: 20%;
   background: rgba(122, 122, 122, 0.09);
@@ -917,6 +949,7 @@ p {
 
   .hide {
     transition: 0.4s ease-in;
+    overflow: hidden;
     width: 0;
   }
   .hamburger {
@@ -977,6 +1010,9 @@ p {
     flex-direction: column;
     justify-content: center;
   }
+  .fRequests_modal {
+    width: 70%;
+  }
 }
 @media (max-width: 431px) {
   .container input {
@@ -1005,14 +1041,6 @@ p {
     margin: 0 1rem;
   }
 
-  .contacts {
-    background: var(--main-blue);
-    width: 30vw;
-    padding: 0 1rem;
-    margin: 1rem;
-    flex-direction: column;
-  }
-
   .accept,
   .decline {
     outline: none;
@@ -1020,14 +1048,6 @@ p {
     font-size: 1.9rem;
     background: transparent;
     transition: 0.2s;
-  }
-
-  .accept {
-    color: var(--main-green);
-  }
-
-  .decline {
-    color: var(--main-red);
   }
 }
 
@@ -1037,10 +1057,10 @@ p {
     height: 1rem;
   }
   .chat_settings_nav h1 {
-    font-size: 2vw;
+    font-size: 4vw;
   }
 
   .chat_settings_nav h2 {
-    font-size: 2vw;
+    font-size: 2.6vw;
   }
 }

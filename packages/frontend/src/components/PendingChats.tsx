@@ -4,6 +4,7 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { Iinvites } from "../pages/[acc]";
+import { FaUserCircle } from "react-icons/fa";
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
@@ -21,8 +22,25 @@ function PendingChats({
   socketRef,
   setLocalStatus,
 }: IPendingChats) {
+  const [image, setImage] = React.useState<string>("");
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
+  };
+
+  const getUserImage = async (name: string) => {
+    try {
+      const res = await axios.get(`${requestUrl}/users/${name}`);
+      const userAvatar = res.data.user.userAvatar;
+      if (!userAvatar) {
+        setImage("");
+        return false;
+      }
+      const requestString = `${requestUrl}/${userAvatar}`;
+      setImage(requestString);
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   const updateInviteStatus = async (param: string) => {
@@ -56,23 +74,30 @@ function PendingChats({
     }
   };
 
+  React.useEffect(() => {
+    getUserImage(inviter);
+  }, []);
+
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       {status === "recieved" && (
         <div className="contacts">
-          <h1>{inviter}</h1>
+          <div className="user_info flex">
+            {image ? <img src={image} alt="user_avatar" /> : <FaUserCircle />}
+            <h1 className="flex">{inviter}</h1>
+          </div>
           <div className="invite_buttons">
             <button
               onClick={() => {
                 createChatRoom();
               }}
-              className="accept"
+              className="accept flex"
             >
               <AiFillCheckCircle />
             </button>
             <button
               onClick={() => updateInviteStatus("declined")}
-              className="decline"
+              className="decline flex"
             >
               <AiFillCloseCircle />
             </button>

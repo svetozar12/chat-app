@@ -33,13 +33,14 @@ function Notifications({
               payload: !state.setFriendRequest,
             });
           }}
-          style={{ width: "3rem", height: "3rem", margin: "0" }}
+          style={{ width: "3rem", height: "3rem", margin: "0 1rem" }}
           className="circle_border absolute_top_right flex"
         >
           <GrClose style={{ width: "2rem", height: "2rem" }} />
         </div>
       </section>
-      <div style={{ overflowY: "scroll" }}>
+      <div style={{ overflowY: "auto", width: "100%" }}>
+        {contacts.length === 0 && <h1>No Chat suggestions</h1>}
         {contacts.map((item, index) => {
           return (
             socketRef && (

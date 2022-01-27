@@ -237,7 +237,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                 }
               />
             </div>
-            {state.setChatSettings && socketRef && (
+            {socketRef && (
               <ChatSettings
                 socketRef={socketRef}
                 chatId={props.chatRoom}
@@ -282,7 +282,13 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               />
             )}
 
-            {state.setModalInvite && <AddUsers_Modal users={users} />}
+            {state.setModalInvite && (
+              <AddUsers_Modal
+                setLocalStatus={setLocalStatus}
+                users={users}
+                chatId={props.chatRoom}
+              />
+            )}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
           </div>
         </div>

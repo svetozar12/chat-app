@@ -58,7 +58,7 @@ route.put("/:user_id", async (req: Request, res: Response) => {
 
     if (!users_rooms)
       return res.status(404).json({ Message: "User room not found !" });
-    let updated_array;
+    let updated_array: string[] = [];
     if (deleted_user) {
       updated_array = users_array.filter((item) => item !== deleted_user);
       if (updated_array.length === 2) {
@@ -66,14 +66,22 @@ route.put("/:user_id", async (req: Request, res: Response) => {
         return res.status(200).json({ message: "deleted chat-room" });
       }
     }
-
-    const updated = await Chats.findByIdAndUpdate(
+    let updated;
+    if (deleted_user) {
+      updated = await Chats.findByIdAndUpdate(
+        { _id: user_id },
+        {
+          members: updated_array,
+        },
+      );
+    }
+    updated = await Chats.findByIdAndUpdate(
       { _id: user_id },
       {
-        members: updated_array || added_user,
+        $push: { members: added_user },
       },
     );
-    console.log(updated);
+    console.log(added_user, "  ", updated);
 
     return res.status(200).json({ Message: updated });
   } catch (error) {

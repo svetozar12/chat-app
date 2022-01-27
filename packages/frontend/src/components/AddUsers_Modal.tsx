@@ -2,11 +2,47 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState2 } from "../redux/state";
 import { GrClose } from "react-icons/gr";
-export const AddUsers_Modal = ({ users }: { users: string[] }) => {
+import { CheckBox_component } from "./CheckBox_component";
+import { requestUrl } from "../utils/hostUrl_requestUrl";
+import axios from "axios";
+export const AddUsers_Modal = ({
+  users,
+  setLocalStatus,
+  chatId,
+}: {
+  users: string[];
+  setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
+  chatId: string;
+}) => {
+  const [invited, setInvited] = React.useState<string[]>([]);
+  const [allChecked, setAllChecked] = React.useState(false);
   const dispatch = useDispatch();
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
+
+  const addMembers = async (user: string[]) => {
+    try {
+      setLocalStatus("d");
+      await axios.put(`${requestUrl}/chat-room/${chatId}`, {
+        usernames: user,
+      });
+      setLocalStatus("");
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await addMembers(invited);
+      setAllChecked(true);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   return (
     <div className="fRequests_modal">
@@ -30,26 +66,23 @@ export const AddUsers_Modal = ({ users }: { users: string[] }) => {
       </section>
       <div
         className="flex"
-        style={{ overflowY: "scroll", width: "100%", flexDirection: "column" }}
+        style={{ overflowY: "auto", width: "100%", flexDirection: "column" }}
       >
+        {users.length === 0 && <h1>No Chat suggestions</h1>}
         {users.map((item, index) => {
-          const [isChecked, setIsChecked] = React.useState(false);
-
           return (
-            <div
-              onClick={() => setIsChecked(!isChecked)}
-              className="flex add_users_checkBox"
-            >
-              <p style={{ fontSize: "1.3rem" }} key={index}>
-                {item}
-              </p>
-              <input type="checkbox" checked={isChecked} value={item} />
-            </div>
+            <CheckBox_component
+              allChecked={allChecked}
+              key={index}
+              invited={invited}
+              setInvited={setInvited}
+              item={item}
+            />
           );
         })}
       </div>
       <div className="modal_footer flex">
-        <button className="button" type="submit">
+        <button onClick={handleSubmit} className="button" type="submit">
           submit
         </button>
       </div>

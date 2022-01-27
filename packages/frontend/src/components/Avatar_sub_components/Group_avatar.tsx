@@ -33,7 +33,7 @@ function Group_avatar({
     }
   };
   React.useEffect(() => {
-    members.forEach((element, index) => {
+    members.forEach((element) => {
       getUserImage(element);
     });
   }, []);
