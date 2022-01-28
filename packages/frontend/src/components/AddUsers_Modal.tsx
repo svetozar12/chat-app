@@ -11,11 +11,13 @@ export const AddUsers_Modal = ({
   socketRef,
   setLocalStatus,
   chatId,
+  setUsers,
 }: {
   users: string[];
   socketRef: Socket;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
   chatId: string;
+  setUsers: React.Dispatch<React.SetStateAction<any[]>>;
 }) => {
   const [invited, setInvited] = React.useState<string[]>([]);
   const [allChecked, setAllChecked] = React.useState(false);
@@ -42,9 +44,11 @@ export const AddUsers_Modal = ({
     try {
       if (invited.length <= 0) return;
       await addMembers(invited);
+      setUsers(users.filter((element) => !invited.includes(element)));
       setAllChecked(true);
       socketRef.emit("inviting_multiple_users", { users: invited });
       setInvited([]);
+
       return true;
     } catch (error) {
       return false;
@@ -79,7 +83,6 @@ export const AddUsers_Modal = ({
         {users.map((item, index) => {
           return (
             <CheckBox_component
-              allChecked={allChecked}
               key={index}
               invited={invited}
               setInvited={setInvited}
