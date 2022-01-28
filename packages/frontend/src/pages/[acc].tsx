@@ -45,24 +45,49 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
-  const getMembersSuggestions = async () => {
+  const fetchInviteStatus = async () => {
     try {
+      setContacts([]);
       const res = await axios.get(
         `${requestUrl}/invites/${cookieName}?status=accepted`,
       );
+      const data = res.data.invites;
+      setContacts(data);
+      return data;
+    } catch (error) {
+      return false;
+    }
+  };
 
-      const res_inviter = await axios.get(
+  const fetchInviterStatus = async () => {
+    try {
+      setContacts([]);
+      const res = await axios.get(
         `${requestUrl}/invites/inviter/${cookieName}?status=accepted`,
       );
+      const data = res.data.invites;
+      setContacts(data);
+      return data;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const getMembersSuggestions = async () => {
+    try {
+      const res = await fetchInviteStatus();
+      const res_inviter = await fetchInviterStatus();
+
       const res_chat = await axios.get(
         `http://localhost:4002/chat-room${window.location.pathname}`,
       );
-      const members_in_chat = res_chat.data.Message[0].members;
-      const data1 = res.data.invites;
-      const data2 = res_inviter.data.invites;
-      const data = [...data1, ...data2];
-      const usersArr: string[] = [];
 
+      const members_in_chat = res_chat.data.Message[0].members;
+
+      let data = res_inviter ? [...res, ...res_inviter] : [...res];
+      console.log(data, "data");
+
+      const usersArr: string[] = [];
       data.forEach((element) => {
         usersArr.push(element.inviter);
         usersArr.push(element.reciever);
@@ -76,9 +101,13 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       uniqueUsers = uniqueUsers.filter(
         (element) => !members_in_chat.includes(element),
       );
+      console.log(uniqueUsers, "sugestions");
+
       setUsers(uniqueUsers);
       return true;
     } catch (error) {
+      console.log(error);
+
       return false;
     }
   };
@@ -104,21 +133,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const res = await axios.get(`${requestUrl}/invites/${cookieName}`);
       const data = res.data.invites;
       setContacts(data);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const fetchInviteStatus = async () => {
-    try {
-      setContacts([]);
-      const res = await axios.get(
-        `${requestUrl}/invites/${cookieName}?status=accepted`,
-      );
-      const data = res.data.invites;
-      setContacts(data);
-      if (data.status === "declined") return false;
       return true;
     } catch (error) {
       return false;
@@ -156,6 +170,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     getChatRoom();
     fetchRecieverStatus();
     fetchInviteStatus();
+    getMembersSuggestions();
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
     });
@@ -282,9 +297,10 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               />
             )}
 
-            {state.setModalInvite && (
+            {state.setModalInvite && socketRef && (
               <AddUsers_Modal
                 setLocalStatus={setLocalStatus}
+                socketRef={socketRef}
                 users={users}
                 chatId={props.chatRoom}
               />

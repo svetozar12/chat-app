@@ -33,15 +33,6 @@ const ActiveChats = ({
     setInviter(notMe[0]);
   }, []);
 
-  React.useEffect(() => {
-    members.forEach((element) => {
-      dispatch({
-        type: "SET_ROOM_MEMBERS",
-        payload: element,
-      });
-    });
-  }, [router.asPath]);
-
   const joinChat = () => {
     socketRef?.emit("join_chat", {
       chat_id: cookieName,
@@ -89,7 +80,7 @@ const ActiveChats = ({
         >
           <Avatar members={members} inviter={inviter} cookieName={cookieName} />
           <div className="contacts_info">
-            <p
+            <div
               style={{
                 margin: "0",
                 color: "black",
@@ -111,7 +102,7 @@ const ActiveChats = ({
                 : (members.length === 1 && <p>{user1}</p>) ||
                   (user2 === cookieName && <p>{user1}</p>) ||
                   (user1 === cookieName && <p>{user2}</p>)}
-            </p>
+            </div>
 
             <p
               style={{ margin: "0", color: "#65676b" }}

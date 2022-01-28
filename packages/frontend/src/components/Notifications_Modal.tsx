@@ -19,6 +19,8 @@ function Notifications({
   );
 
   const dispatch = useDispatch();
+  const checkSize = contacts.filter((element) => element.status != "accepted");
+
   return (
     <div className="fRequests_modal">
       <section
@@ -40,7 +42,9 @@ function Notifications({
         </div>
       </section>
       <div style={{ overflowY: "auto", width: "100%" }}>
-        {contacts.length === 0 && <h1>No Chat suggestions</h1>}
+        {checkSize.length === 0 && (
+          <h1 className="flex">No Chat suggestions</h1>
+        )}
         {contacts.map((item, index) => {
           return (
             socketRef && (

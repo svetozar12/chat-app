@@ -88,7 +88,7 @@ a {
 }
 
 .fRequests_modal {
-  position: absolute;
+  position: fixed;
   flex-direction: column;
   display: flex;
   align-items: center;
@@ -158,16 +158,15 @@ a {
   justify-content: center;
 }
 
-.contacts_info h5,
-p {
-  margin: 0 0 1rem 0;
+.contacts_info p {
+  margin: 0;
 }
 
 .chat_home {
   position: relative;
   z-index: 10;
 }
-/* .contacts_info, */
+
 .contacts_container,
 .container,
 form,
@@ -352,8 +351,16 @@ form {
 }
 
 .add_users_checkBox {
-  width: 100%;
+  width: 95%;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
   justify-content: space-between;
+  cursor: pointer;
+}
+
+.add_users_checkBox:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid transparent;
+  border-radius: 5px;
 }
 
 .add_users_checkBox input[type="checkbox"] {
@@ -484,8 +491,8 @@ register_form from input {
 }
 
 .user-logo {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3.2rem;
+  height: 3.2rem;
   color: var(--main-logo-color);
   margin-right: 1rem;
 }
@@ -519,8 +526,8 @@ input {
 
 .group_logo_container {
   position: relative;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3.2rem;
+  height: 3.2rem;
   margin-right: 1rem;
 }
 
@@ -531,6 +538,8 @@ input {
 
 .group_logo_container svg {
   position: absolute;
+  top: 0;
+  right: 0;
   color: var(--main-logo-color);
 }
 

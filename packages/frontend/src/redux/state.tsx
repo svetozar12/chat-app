@@ -23,7 +23,6 @@ export enum ActionType {
   SET_MOBILE_NAV = "SET_MOBILE_NAV",
   SET_IS_MATCH = "SET_IS_MATCH",
   SET_CHAT_SETTINGS = "SET_CHAT_SETTINGS",
-  SET_ROOM_MEMBERS = "SET_ROOM_MEMBERS",
   SET_MODAL_INVITE = "SET_MODAL_INVITE",
   NOTIFICATION_NUMBER = "NOTIFICATION_NUMBER",
 }
@@ -86,9 +85,8 @@ interface toggle_create_group {
     | ActionType.SET_MOBILE_NAV
     | ActionType.SET_IS_MATCH
     | ActionType.SET_CHAT_SETTINGS
-    | ActionType.SET_ROOM_MEMBERS
     | ActionType.SET_MODAL_INVITE;
-  payload: boolean | string[];
+  payload: boolean | string[] | string;
 }
 
 export type Action =
@@ -121,7 +119,6 @@ export interface InitialState2 {
   setMobileNav: boolean;
   setIsMatch: boolean;
   setChatSettings: boolean;
-  setRoomMembers: string[];
 }
 
 export interface InitialState3 {

@@ -50,6 +50,9 @@ io.on("connection", (socket: Socket): void => {
     io.emit("friend_request");
   });
 
+  socket.on("inviting_multiple_users", ({ users }) => {
+    io.emit("inviting_multiple_users", { users });
+  });
   socket.on("send_friend_request", ({ inviter, reciever }) => {
     if (inviter === reciever) return;
     io.to(reciever).emit("send_friend_request");

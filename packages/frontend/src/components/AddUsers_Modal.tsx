@@ -4,13 +4,16 @@ import { InitialState2 } from "../redux/state";
 import { GrClose } from "react-icons/gr";
 import { CheckBox_component } from "./CheckBox_component";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { Socket } from "socket.io-client";
 import axios from "axios";
 export const AddUsers_Modal = ({
   users,
+  socketRef,
   setLocalStatus,
   chatId,
 }: {
   users: string[];
+  socketRef: Socket;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
   chatId: string;
 }) => {
@@ -24,6 +27,7 @@ export const AddUsers_Modal = ({
   const addMembers = async (user: string[]) => {
     try {
       setLocalStatus("d");
+      setAllChecked(false);
       await axios.put(`${requestUrl}/chat-room/${chatId}`, {
         usernames: user,
       });
@@ -36,8 +40,11 @@ export const AddUsers_Modal = ({
 
   const handleSubmit = async () => {
     try {
+      if (invited.length <= 0) return;
       await addMembers(invited);
       setAllChecked(true);
+      socketRef.emit("inviting_multiple_users", { users: invited });
+      setInvited([]);
       return true;
     } catch (error) {
       return false;

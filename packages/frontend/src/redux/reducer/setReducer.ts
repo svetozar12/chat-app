@@ -11,7 +11,6 @@ export const initialState = {
   setMobileNav: false,
   setIsMatch: false,
   setChatSettings: false,
-  setRoomMembers: [],
   setModalInvite: false,
 };
 const setReducer = (
@@ -44,11 +43,6 @@ const setReducer = (
       return { ...state, setIsMatch: action.payload };
     case ActionType.SET_MODAL_INVITE:
       return { ...state, setModalInvite: action.payload };
-    case ActionType.SET_ROOM_MEMBERS:
-      return {
-        ...state,
-        setRoomMembers: [...state.setRoomMembers, action.payload],
-      };
     case ActionType.SIGN_OUT:
       return initialState;
     default:

@@ -1,5 +1,6 @@
 import React from "react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { InitialState2 } from "../redux/state";
 export const CheckBox_component = ({
   item,
   invited,
@@ -27,11 +28,8 @@ export const CheckBox_component = ({
       className="flex add_users_checkBox"
     >
       <p style={{ fontSize: "1.3rem" }}>{item}</p>
-      <input
-        type="checkbox"
-        checked={(allChecked && false) || isChecked}
-        value={item}
-      />
+      <p>{!allChecked && "ivan"}</p>
+      <input type="checkbox" checked={allChecked && false} value={item} />
     </div>
   );
 };

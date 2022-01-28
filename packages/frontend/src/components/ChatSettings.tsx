@@ -3,12 +3,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { AiOutlineUserDelete } from "react-icons/ai";
-import { BsSearch } from "react-icons/bs";
 import { Socket } from "socket.io-client";
 import { getFirstChat } from "../utils/getFirstChat";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { InitialState2 } from "../redux/state";
+import { AddUsers_Modal } from "./AddUsers_Modal";
 function ChatSettings({
   chatId,
   socketRef,
@@ -25,7 +25,6 @@ function ChatSettings({
     (state: { setReducer: InitialState2 }) => state.setReducer,
   );
 
-  const [username, setUsername] = React.useState<string>("");
   const [users, setUsers] = React.useState<string[]>([]);
   const route = useRouter();
   const emitFriendRequest = async () => {
@@ -56,13 +55,11 @@ function ChatSettings({
   React.useEffect(() => {
     setUsers([]);
     getMembers();
+    socketRef.on("inviting_multiple_users", ({ users }) => {
+      setUsers((prev) => [...prev, ...users]);
+    });
   }, [route.asPath]);
-  const handleKeyPress = (e: any) => {
-    if (e.key === "Enter") {
-      setUsers([...users, username]);
-      setUsername("");
-    }
-  };
+
   const redirect = async (user: string) => {
     const updated_users = users.filter((element) => element !== user);
     setUsers(updated_users);
@@ -75,68 +72,68 @@ function ChatSettings({
     setLocalStatus("");
   };
   return (
-    <div
-      style={{ overflow: !state.setChatSettings ? "hidden" : "normal" }}
-      className={`chat_settings_nav flex`}
-    >
-      <h1
-        style={{
-          color: "var(--main-black)",
-          justifyContent: "center",
-          whiteSpace: "nowrap",
-        }}
-      >
-        Members in chat
-      </h1>
-      {users.map((item) => {
-        return (
-          <div className="flex chat_settings_members">
-            <h2
-              style={{
-                width: "100%",
-                flexDirection: "column",
-                color: "var(--main-black)",
-                whiteSpace: "nowrap",
-              }}
-              className="flex"
-            >
-              {item}
-            </h2>
-            <AiOutlineUserDelete
-              onClick={() => {
-                deleteMember(item);
-                emitFriendRequest();
-                redirect(item);
-              }}
-              className="remove_user"
-            />
-          </div>
-        );
-      })}
-      <div
-        onClick={() => {
-          dispatch({
-            type: "SET_MODAL_INVITE",
-            payload: !state.setModalInvite,
-          });
-        }}
-        style={{ width: "70%", height: "2rem", whiteSpace: "nowrap" }}
-        className="flex add_users"
-      >
-        <h2
-          className="add_users_button"
+    <>
+      <div style={{ overflowY: "auto" }} className={`chat_settings_nav flex`}>
+        <h1
           style={{
             color: "var(--main-black)",
-            margin: "0",
+            justifyContent: "center",
+            whiteSpace: "nowrap",
           }}
         >
-          Add more users
-        </h2>
-        <div className="flex">
-          <AiOutlinePlusCircle style={{ width: "2rem", height: "2rem" }} />
-        </div>
+          Members in chat
+        </h1>
+        {users.map((item, index) => {
+          return (
+            <div key={index} className="flex chat_settings_members">
+              <h2
+                style={{
+                  flexDirection: "column",
+                  color: "var(--main-black)",
+                  whiteSpace: "nowrap",
+                }}
+                className="flex"
+              >
+                {item}
+              </h2>
+              <AiOutlineUserDelete
+                onClick={() => {
+                  deleteMember(item);
+                  emitFriendRequest();
+                  redirect(item);
+                }}
+                className="remove_user"
+              />
+            </div>
+          );
+        })}
+        {users.length > 2 && (
+          <div
+            onClick={() => {
+              dispatch({
+                type: "SET_MODAL_INVITE",
+                payload: !state.setModalInvite,
+              });
+            }}
+            style={{ width: "70%", height: "2rem", whiteSpace: "nowrap" }}
+            className="flex add_users"
+          >
+            <h2
+              className="add_users_button"
+              style={{
+                color: "var(--main-black)",
+                margin: "0",
+              }}
+            >
+              Add more users
+            </h2>
+            <div className="flex">
+              <AiOutlinePlusCircle style={{ width: "2rem", height: "2rem" }} />
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 }
 
