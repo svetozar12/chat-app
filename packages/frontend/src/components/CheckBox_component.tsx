@@ -1,16 +1,12 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { InitialState2 } from "../redux/state";
 export const CheckBox_component = ({
   item,
   invited,
   setInvited,
-  allChecked,
 }: {
   item: string;
   invited: string[];
   setInvited: React.Dispatch<React.SetStateAction<string[]>>;
-  allChecked: boolean;
 }) => {
   const [isChecked, setIsChecked] = React.useState(false);
   React.useEffect(() => {
@@ -28,8 +24,7 @@ export const CheckBox_component = ({
       className="flex add_users_checkBox"
     >
       <p style={{ fontSize: "1.3rem" }}>{item}</p>
-      <p>{!allChecked && "ivan"}</p>
-      <input type="checkbox" checked={allChecked && false} value={item} />
+      <input type="checkbox" checked={isChecked} value={item} />
     </div>
   );
 };

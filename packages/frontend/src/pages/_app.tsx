@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
+import { Global } from "@emotion/react";
+import styled from "@emotion/styled";
 import Head from "next/head";
 const MyApp = (
   { Component, pageProps }: AppProps,
@@ -72,18 +74,38 @@ const MyApp = (
       payload: false,
     });
   };
+
+  const BIG = styled.div`
+    position: absolute;
+    z-index: ${setState.setFriendRequest || setState.setModalInvite
+      ? "100"
+      : "-1"};
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.7;
+    background: radial-gradient(
+      var(--gradient-first) 10%,
+      var(--gradient-second) 100%
+    );
+  `;
+
   return (
     <>
+      <Global
+        styles={{
+          body: {
+            margin: 0,
+            padding: 0,
+          },
+          a: {
+            textDecoration: "none",
+          },
+        }}
+      />
       <Head>
         <title>Chat what</title>
       </Head>
-      <div
-        onClick={closeModals}
-        className={`BIG ${
-          (setState.setFriendRequest && "BIG_OVERLAY") ||
-          (setState.setModalInvite && "BIG_OVERLAY")
-        }`}
-      ></div>
+      <BIG onClick={closeModals}></BIG>
       <Component {...pageProps} />
     </>
   );

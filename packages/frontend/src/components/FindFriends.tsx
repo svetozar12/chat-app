@@ -177,6 +177,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             onChange={(e) =>
               dispatch({ type: "SET_RECIEVER", payload: e.target.value })
             }
+            placeholder="Search for chats"
             value={state.reciever}
             type="search"
           />

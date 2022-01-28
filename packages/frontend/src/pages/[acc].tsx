@@ -302,6 +302,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                 setLocalStatus={setLocalStatus}
                 socketRef={socketRef}
                 users={users}
+                setUsers={setUsers}
                 chatId={props.chatRoom}
               />
             )}
