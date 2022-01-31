@@ -1,3 +1,6 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from "@emotion/react";
 import React, { useState, useEffect } from "react";
 import ActiveChats from "../components/ActiveChats";
 import FindFriends from "../components/FindFriends";
@@ -15,6 +18,8 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import { GrClose } from "react-icons/gr";
 import Notifications_Modal from "../components/Notifications_Modal";
 import { AddUsers_Modal } from "../components/AddUsers_Modal";
+import styled from "@emotion/styled";
+import { css } from "@emotion/css";
 interface Ichats {
   _id: string;
   members: string[];
@@ -26,6 +31,61 @@ export interface Iinvites {
   reciever: string;
   status: string;
 }
+
+const Container = styled.div`
+  width: 100%;
+  height: 90vh;
+  justify-content: center;
+  alignitems: center;
+  padding: 0;
+`;
+
+const Chat_settings = styled.div`
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 11;
+  width: 0;
+  height: 100vh;
+  background: var(--main-white);
+  padding: 1rem;
+  transition: 0.4s;
+  align-items: flex-start;
+  padding: 0;
+  flex-direction: column;
+  justify-content: flex-start;
+`;
+
+const Active_chats = styled.section`
+  position: relative;
+  transition-timing-function: ease-out;
+  transition: 0.6s ease-out;
+  background: var(--main-white);
+  color: var(--main-black);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+  overflow: hidden;
+  height: 100vh;
+  z-index: 20;
+  width: 25%;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-shrink: unset;
+  display: flex;
+  align-items: center;
+`;
+
+const Dashborad = styled.div`
+  width: 100%;
+  height: 100vh;
+`;
+
+const Hambruger_out_of_nav = styled.section`
+  height: 100vh;
+  position: absolute;
+  z-index: 9999;
+  height: 30vh;
+`;
 
 const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
@@ -203,12 +263,23 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <section style={{ height: "30vh" }} className="hambruger_out_of_nav">
+      <Hambruger_out_of_nav>
         <div className="div_out_of_nav">
           <HamburgerMenu />
         </div>
-      </section>
-      <section className={`active_chats ${!state.setMobileNav && "hide"}`}>
+      </Hambruger_out_of_nav>
+      <Active_chats
+        style={{ width: !state.setMobileNav && "0" }}
+        className={
+          state.setMobileNav &&
+          css`
+            @media (max-width: 1008px) {
+              ${state.setMobileNav && "width:60%"};
+              position: absolute;
+            }
+          `
+        }
+      >
         {socketRef && (
           <FindFriends
             cookie={cookie}
@@ -226,16 +297,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             justifyContent: "flex-start",
           }}
         >
-          <div
-            style={{
-              alignItems: "flex-start",
-              padding: "0",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-            }}
-            className={`chat-settings flex ${
-              state.setChatSettings && "chat-settings-open"
-            }`}
+          <Chat_settings
+            className={` flex ${state.setChatSettings && "chat-settings-open"}`}
           >
             <div
               style={{ justifyContent: "flex-end" }}
@@ -260,7 +323,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                 cookieName={cookie.get("name")}
               />
             )}
-          </div>
+          </Chat_settings>
 
           {socketRef &&
             chatRooms.map((item, index) => {
@@ -275,20 +338,11 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               );
             })}
         </div>
-      </section>
-      <section className="main_section">
+      </Active_chats>
+      <section className="main_section flex">
         {" "}
-        <div
-          style={{
-            width: "100%",
-            height: "90vh",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "0",
-          }}
-          className="container"
-        >
-          <div className="dash_board">
+        <Container className="container">
+          <Dashborad className="flex">
             {state.setFriendRequest && (
               <Notifications_Modal
                 contacts={contacts}
@@ -307,8 +361,8 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               />
             )}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
-          </div>
-        </div>
+          </Dashborad>
+        </Container>
       </section>
     </div>
   );

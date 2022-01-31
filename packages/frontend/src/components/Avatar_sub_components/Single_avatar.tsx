@@ -57,11 +57,16 @@ function Single_avatar({
   })();
 
   return (
-    <div>
+    <div style={{ marginRight: "1rem" }}>
       {hasAvatar ? (
         <img
           src={image}
-          style={{ borderRadius: "50px", width: width, height: height }}
+          style={{
+            borderRadius: "50px",
+            width: width,
+            height: height,
+            margin: "0",
+          }}
           className={`${
             group
               ? group_logo
@@ -69,21 +74,20 @@ function Single_avatar({
                   width: 3.2rem;
                   height: 3.2rem;
                   color: var(--main-logo-color);
-                  margin-right: 1rem;
+                  marginright: "1rem";
                 `
           } ${overlay && logo_post_overlay}`}
         />
       ) : (
         <FaUserCircle
           style={{ width: width, height: height }}
-          className={`${group ? group_logo : logo_post_overlay} ${
-            overlay &&
-            css`
-              bottom: 0;
-              left: 0;
-              z-index: 1;
-            `
-          }`}
+          className={`${group ? group_logo : logo_post_overlay} ${css`
+            ${overlay && "bottom: 0;"}
+            ${overlay && "left: 0;"}
+            z-index: 1;
+            ${!group_logo && "margin-right: 1rem;"}
+            color: var(--main-logo-color);
+          `}`}
         />
       )}
     </div>

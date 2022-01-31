@@ -42,15 +42,17 @@ function Group_avatar({
         if (index === 2) return;
 
         return (
-          <Single_avatar
-            key={index}
-            inviter={element}
-            cookieName={cookieName}
-            width="2.25rem"
-            height="2.25rem"
-            group={true}
-            overlay={index === 1 ? true : false}
-          />
+          <div>
+            <Single_avatar
+              key={index}
+              inviter={element}
+              cookieName={cookieName}
+              width="2.25rem"
+              height="2.25rem"
+              group={true}
+              overlay={index === 1 ? true : false}
+            />
+          </div>
         );
       })}
     </div>

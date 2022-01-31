@@ -13,13 +13,17 @@ function Avatar({
   return (
     <>
       {members.length <= 2 ? (
-        <Single_avatar inviter={inviter} cookieName={cookieName} />
+        <div>
+          <Single_avatar inviter={inviter} cookieName={cookieName} />
+        </div>
       ) : (
-        <Group_avatar
-          inviter={inviter}
-          members={members}
-          cookieName={cookieName}
-        />
+        <div>
+          <Group_avatar
+            inviter={inviter}
+            members={members}
+            cookieName={cookieName}
+          />
+        </div>
       )}
     </>
   );
