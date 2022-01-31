@@ -1,7 +1,22 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from "@emotion/react";
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
+import { css } from "@emotion/css";
+
+const logo_post_overlay = css`
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+`;
+
+const group_logo = css`
+  width: 2.6rem;
+  height: 2.6rem;
+`;
 function Single_avatar({
   inviter,
   cookieName,
@@ -40,21 +55,34 @@ function Single_avatar({
   (() => {
     getUserImage(inviter || cookieName);
   })();
+
   return (
     <div>
       {hasAvatar ? (
         <img
           src={image}
           style={{ borderRadius: "50px", width: width, height: height }}
-          className={`${group ? "group-logo" : "user-logo"} ${
-            overlay && "logo_pos_overlay"
-          }`}
+          className={`${
+            group
+              ? group_logo
+              : css`
+                  width: 3.2rem;
+                  height: 3.2rem;
+                  color: var(--main-logo-color);
+                  margin-right: 1rem;
+                `
+          } ${overlay && logo_post_overlay}`}
         />
       ) : (
         <FaUserCircle
           style={{ width: width, height: height }}
-          className={`${group ? "group-logo" : "user-logo"} ${
-            overlay && "logo_pos_overlay"
+          className={`${group ? group_logo : logo_post_overlay} ${
+            overlay &&
+            css`
+              bottom: 0;
+              left: 0;
+              z-index: 1;
+            `
           }`}
         />
       )}

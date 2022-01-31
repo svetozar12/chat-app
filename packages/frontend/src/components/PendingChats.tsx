@@ -5,6 +5,9 @@ import { Socket } from "socket.io-client";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { Iinvites } from "../pages/[acc]";
 import { FaUserCircle } from "react-icons/fa";
+import styled from "@emotion/styled";
+import { css } from "@emotion/css";
+
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
@@ -13,6 +16,41 @@ interface IPendingChats extends Iinvites {
   socketRef: Socket;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }
+
+const Contacts = styled.div`
+  border-top: 2px solid rgba(0, 0, 0, 0.3);
+  background: var(--main-white);
+  width: 95%;
+  margin: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Accept = styled.button`
+  color: var(--main-black);
+  outline: none;
+  border: none;
+  font-size: 3.01rem;
+  background: transparent;
+  transition: 0.2s;
+  &:hover {
+    color: var(--main-green);
+    transition: 0.2s;
+  }
+`;
+
+const Decline = styled.button`
+  color: var(--main-black);
+  outline: none;
+  border: none;
+  font-size: 3.01rem;
+  background: transparent;
+  transition: 0.2s;
+  &:hover {
+    color: var(--main-red);
+    transition: 0.2s;
+  }
+`;
 
 function PendingChats({
   _id,
@@ -81,28 +119,38 @@ function PendingChats({
   return (
     <div style={{ width: "100%" }}>
       {status === "recieved" && (
-        <div className="contacts">
+        <Contacts className="contacts">
           <div className="user_info flex">
             {image ? <img src={image} alt="user_avatar" /> : <FaUserCircle />}
             <h1 className="flex">{inviter}</h1>
           </div>
           <div className="invite_buttons">
-            <button
+            <Accept
               onClick={() => {
                 createChatRoom();
               }}
               className="accept flex"
             >
-              <AiFillCheckCircle />
-            </button>
-            <button
+              <AiFillCheckCircle
+                className={css`
+                  width: 2rem;
+                  height: 2rem;
+                `}
+              />
+            </Accept>
+            <Decline
               onClick={() => updateInviteStatus("declined")}
               className="decline flex"
             >
-              <AiFillCloseCircle />
-            </button>
+              <AiFillCloseCircle
+                className={css`
+                  width: 2rem;
+                  height: 2rem;
+                `}
+              />
+            </Decline>
           </div>
-        </div>
+        </Contacts>
       )}
     </div>
   );

@@ -1,10 +1,15 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from "@emotion/react";
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "./Avatar";
+import styled from "@emotion/styled";
 import { InitialState2 } from "../redux/state";
 import { BsThreeDots } from "react-icons/bs";
+import { css } from "@emotion/css";
 interface IActiveChats {
   _id: string;
   members: string[];
@@ -12,6 +17,51 @@ interface IActiveChats {
   socketRef: Socket;
   chatId: string;
 }
+
+const Space_between = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const Space_between_child = styled.div`
+  margin: 0;
+  color: black;
+  display: flex;
+`;
+
+const Contacts_info = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+`;
+
+const Contacts_container = styled.div`
+  color: var(--main-white);
+  width: 97%;
+  cursor: pointer;
+  padding: 1rem 1rem;
+  width: 100%;
+  white-space: nowrap;
+  transition: 0.2s;
+  border-radius: 15px;
+  white-space: nowrap;
+  &:hover {
+    border-radius: 15px;
+    background: rgba(122, 122, 122, 0.1);
+    transition: 0.2s;
+  }
+`;
+
+const Last_message = styled.p`
+  margin: 0;
+  color: #65676b;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 1rem 0;
+`;
 
 const ActiveChats = ({
   _id,
@@ -54,24 +104,20 @@ const ActiveChats = ({
   };
 
   return (
-    <div
-      style={{
-        whiteSpace: "nowrap",
-      }}
+    <Contacts_container
       onClick={() => {
         joinChat();
         dispatching();
       }}
-      className={`contacts_container ${_id === chatId && "active_contact"} `}
+      className={`${
+        _id === chatId &&
+        css`
+          border-radius: 15px;
+          background: rgba(122, 122, 122, 0.1);
+        `
+      } `}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-        }}
-      >
+      <Space_between>
         <section
           style={{
             display: "flex",
@@ -79,19 +125,13 @@ const ActiveChats = ({
           }}
         >
           <Avatar members={members} inviter={inviter} cookieName={cookieName} />
-          <div className="contacts_info">
-            <div
-              style={{
-                margin: "0",
-                color: "black",
-                display: "flex",
-              }}
-            >
+          <Contacts_info>
+            <Space_between_child>
               {members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return;
                     return (
-                      <p key={index}>
+                      <p style={{ margin: 0 }} key={index}>
                         {element}
                         {element[members.length - 1] === element[index]
                           ? " ..."
@@ -99,24 +139,38 @@ const ActiveChats = ({
                       </p>
                     );
                   })
-                : (members.length === 1 && <p>{user1}</p>) ||
-                  (user2 === cookieName && <p>{user1}</p>) ||
-                  (user1 === cookieName && <p>{user2}</p>)}
-            </div>
+                : (members.length === 1 && (
+                    <p style={{ margin: 0 }}>{user1}</p>
+                  )) ||
+                  (user2 === cookieName && (
+                    <p style={{ margin: 0 }}>{user1}</p>
+                  )) ||
+                  (user1 === cookieName && (
+                    <p style={{ margin: 0 }}>{user2}</p>
+                  ))}
+            </Space_between_child>
 
-            <p
-              style={{ margin: "0", color: "#65676b" }}
-              className="invite-userName"
-            >
-              Last message...
-            </p>
-          </div>
+            <Last_message>Last message...</Last_message>
+          </Contacts_info>
         </section>
         {_id === chatId && (
-          <BsThreeDots className="chat_settings" onClick={chatSettings} />
+          <BsThreeDots
+            className={css`
+              width: 2rem;
+              height: 2rem;
+              background: var(--main-white);
+              color: var(--main-black);
+              border-radius: 25px;
+              box-shadow: 0 0 5px var(--main-black);
+              &:hover {
+                color: rgba(122, 122, 122, 1);
+              }
+            `}
+            onClick={chatSettings}
+          />
         )}
-      </div>
-    </div>
+      </Space_between>
+    </Contacts_container>
   );
 };
 export default ActiveChats;

@@ -5,6 +5,12 @@ import { Socket } from "socket.io-client";
 import PendingChats from "./PendingChats";
 import { InitialState2 } from "../redux/state";
 import { Iinvites } from "../pages/[acc]";
+import styled from "@emotion/styled";
+
+const Notification_items = styled.div`
+  overflow-y: auto;
+  width: 100%;
+`;
 function Notifications({
   contacts,
   socketRef,
@@ -41,7 +47,7 @@ function Notifications({
           <GrClose style={{ width: "2rem", height: "2rem" }} />
         </div>
       </section>
-      <div style={{ overflowY: "auto", width: "100%" }}>
+      <Notification_items>
         {checkSize.length === 0 && (
           <h1 className="flex">No Chat suggestions</h1>
         )}
@@ -57,7 +63,7 @@ function Notifications({
             )
           );
         })}
-      </div>
+      </Notification_items>
     </div>
   );
 }

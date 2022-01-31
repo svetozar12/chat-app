@@ -10,6 +10,71 @@ import timeStamp from "../utils/timeStamp";
 import { hostUrl, requestUrl } from "../utils/hostUrl_requestUrl";
 import { useRouter } from "next/router";
 import ChatHeader from "./ChatHeader";
+import styled from "@emotion/styled";
+import { css } from "@emotion/css";
+
+const Container = styled.div`
+  position: relative;
+  z-index: 10;
+  justifycontent: center;
+  alignitems: center;
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+`;
+
+const Container_chat = styled.div`
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  padding: 1rem;
+  overflow: auto;
+  background-color: var(--main-white);
+  box-shadow: 0px 0px 20px var(--off-white);
+`;
+
+const Message_form = styled.form`
+  width: 100%;
+  background: var(--main-white);
+`;
+
+const Message_input_container = styled.div`
+  cursor: text;
+  position: relative;
+  z-index: 1000;
+  flex-direction: row;
+  justify-content: space-between;
+  background: #d9d9d9;
+  border-radius: 25px;
+  width: 70%;
+  margin: 0.5rem 0;
+  padding: 0.5rem 2rem;
+  overflow-wrap: break-word;
+`;
+
+const Message_submit = styled.div`
+  cursor: pointer;
+  padding: 0.3rem 0 0.3rem 0.5rem;
+  border: 1px transperant;
+  border-radius: 50px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+  }
+`;
+
+const Input_msg = styled.textarea`
+  border: none;
+  resize: none;
+  padding: 0;
+  wordbreak: break-all;
+  width: 90%;
+  background: transparent;
+  height: 0.9375rem;
+  &:focus {
+    outline: none;
+  }
+`;
 
 interface IHome {
   cookie: any;
@@ -162,21 +227,12 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
   return (
-    <div
-      style={{
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100vh",
-        padding: "0",
-      }}
-      className="container  chat_home"
-    >
+    <Container className="container">
       {socketRef && statess.toggleCreateGroup && (
         <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />
       )}
 
-      <div onScroll={scrollHandler} className="container_chat">
+      <Container_chat onScroll={scrollHandler}>
         {chat.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
@@ -193,45 +249,37 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             </li>
           );
         })}
-      </div>
+      </Container_chat>
 
-      <form
-        onSubmit={onMessageSubmit}
-        className="message_form"
-        style={{ width: "100%" }}
-      >
-        <div
+      <Message_form onSubmit={onMessageSubmit} className="flex">
+        <Message_input_container
+          className="flex"
           onClick={() => inputTextArea.current.focus()}
-          className="message_input_container"
         >
-          <textarea
+          <Input_msg
             ref={inputTextArea}
-            className="input_msg"
             name="message"
             onKeyDown={(e) => handleSubmit(e)}
             onChange={(e) => handleKeyPress(e)}
-            style={{
-              border: "none",
-              resize: "none",
-              padding: "0",
-              wordBreak: "break-all",
-            }}
             placeholder="Your Message "
             value={state.message}
           />
-          <div
-            className="flex message_submit"
-            style={{
-              padding: ".3rem 0 .3rem .5rem",
-              border: "1px transperant",
-              borderRadius: "50px",
-            }}
-          >
-            <MdSend type="submit" onClick={onMessageSubmit} />
-          </div>
-        </div>
-      </form>
-    </div>
+          <Message_submit className="flex ">
+            <MdSend
+              className={css`
+                cursor: pointer;
+                width: 1.5rem;
+                height: 1.5rem;
+                margin-right: 0.3rem;
+                padding: 0.1rem;
+              `}
+              type="submit"
+              onClick={onMessageSubmit}
+            />
+          </Message_submit>
+        </Message_input_container>
+      </Message_form>
+    </Container>
   );
 };
 

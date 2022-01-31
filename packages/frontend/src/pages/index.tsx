@@ -3,20 +3,32 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { hostUrl } from "../utils/hostUrl_requestUrl";
 import { getFirstChat } from "../utils/getFirstChat";
+import styled from "@emotion/styled";
+
+const Container = styled.div`
+  height: 100vh;
+  margin: 0;
+  flex-direction: column;
+`;
+const LinkA = styled.a`
+  color: var(--main-blue);
+  text-decoration: none;
+  cursor: pointer;
+`;
 const Home = () => {
   return (
-    <div style={{ height: "100vh", margin: "0" }} className="container">
+    <Container className="flex">
       <Link href={`${hostUrl}/register`}>
-        <a className="link blue_no_underline">
+        <LinkA>
           <h2>Create an account !</h2>
-        </a>
+        </LinkA>
       </Link>
       <Link href={`${hostUrl}/login`}>
-        <a className="link blue_no_underline">
+        <LinkA>
           <h2>Already have a acount ?</h2>
-        </a>
+        </LinkA>
       </Link>
-    </div>
+    </Container>
   );
 };
 

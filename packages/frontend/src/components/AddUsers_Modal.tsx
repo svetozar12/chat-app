@@ -20,7 +20,6 @@ export const AddUsers_Modal = ({
   setUsers: React.Dispatch<React.SetStateAction<any[]>>;
 }) => {
   const [invited, setInvited] = React.useState<string[]>([]);
-  const [allChecked, setAllChecked] = React.useState(false);
   const dispatch = useDispatch();
   const state = useSelector(
     (state: { setReducer: InitialState2 }) => state.setReducer,
@@ -29,7 +28,6 @@ export const AddUsers_Modal = ({
   const addMembers = async (user: string[]) => {
     try {
       setLocalStatus("d");
-      setAllChecked(false);
       await axios.put(`${requestUrl}/chat-room/${chatId}`, {
         usernames: user,
       });
@@ -45,7 +43,6 @@ export const AddUsers_Modal = ({
       if (invited.length <= 0) return;
       await addMembers(invited);
       setUsers(users.filter((element) => !invited.includes(element)));
-      setAllChecked(true);
       socketRef.emit("inviting_multiple_users", { users: invited });
       setInvited([]);
 

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import styled from "@emotion/styled";
 function UserSettings({ cookie }: { cookie: any }) {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -27,24 +28,53 @@ function UserSettings({ cookie }: { cookie: any }) {
     }
   };
 
+  const User_settings = styled.div`
+    width: auto;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    background: var(--main-white);
+    text-align: left;
+    left: 0;
+    margin: 0 1rem;
+    box-shadow: 0 0 10px black;
+  `;
+
+  const User_settings_anchor = styled.a`
+    color: black;
+    margin: 1rem;
+    width: 100%;
+    font-size: 1.2vw;
+    cursor: pointer;
+    &:hover {
+      color: rgba(122, 122, 122, 1);
+    }
+  `;
+
   return (
-    <div className="user_settings">
+    <User_settings>
       <Link href="/settings/profile">
-        <a
+        <User_settings_anchor
           onClick={() => {
             dispatch({ type: "SET_USER_SETTINGS", payload: false });
           }}
         >
           User settings
-        </a>
+        </User_settings_anchor>
       </Link>
       <Link href="#">
-        <a onClick={deleteCookies}>Log out</a>
+        <User_settings_anchor onClick={deleteCookies}>
+          Log out
+        </User_settings_anchor>
       </Link>
       <Link href="#">
-        <a onClick={deleteUser}>Delete user</a>
+        <User_settings_anchor onClick={deleteUser}>
+          Delete user
+        </User_settings_anchor>
       </Link>
-    </div>
+    </User_settings>
   );
 }
 

@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import React from "react";
 interface IRenderChat {
   sender: string;
@@ -9,27 +10,32 @@ interface IRenderChat {
 
 const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
+  const Header2 = styled.h2`
+    font-size: 15px;
+    color: var(--main-black);
+  `;
 
+  const Rendered_chat = styled.div`
+    border-radius: 4px;
+    max-width: 80%;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+    word-wrap: break-word;
+    background: ${name === sender
+      ? "var(--main-blue)"
+      : "var(--me-chat-buble)"};
+  `;
+
+  const Message_bubble = styled.div`word-wrap: break-word,
+            text-align: center,
+  `;
   return (
-    <div className={name === sender ? "me" : "you"}>
-      <h2 style={{ fontSize: "15px", color: "var(--main-black)" }}>
-        {name === sender ? null : sender}
-      </h2>
-      <div
-        className="rendered_chat"
-        style={{
-          background:
-            name === sender ? "var(--main-blue)" : "var(--me-chat-buble)",
-        }}
-      >
-        <div
-          style={{
-            wordWrap: "break-word",
-            textAlign: "center",
-          }}
-        >
+    <div className={`${name === sender ? "me" : "you"} flex`}>
+      <Header2>{name === sender ? null : sender}</Header2>
+      <Rendered_chat>
+        <Message_bubble>
           <span>{message}</span>
-        </div>
+        </Message_bubble>
         <span
           style={{
             fontSize: "0.65rem",
@@ -37,7 +43,7 @@ const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
         >
           {time_stamp}
         </span>
-      </div>
+      </Rendered_chat>
     </div>
   );
 };

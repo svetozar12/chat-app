@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 export const CheckBox_component = ({
   item,
   invited,
@@ -18,13 +19,30 @@ export const CheckBox_component = ({
     setInvited(newArr);
   }, [isChecked]);
 
+  const Add_users_checkBox = styled.div`
+    width: 95%;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    justify-content: space-between;
+    cursor: pointer;
+  `;
+
+  const Check_box = styled.input`
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0 1rem;
+  `;
+
+  const Suggested_user = styled.p`
+    font-size: 1.3rem;
+  `;
+
   return (
-    <div
+    <Add_users_checkBox
       onClick={() => setIsChecked(!isChecked)}
-      className="flex add_users_checkBox"
+      className="flex"
     >
-      <p style={{ fontSize: "1.3rem" }}>{item}</p>
-      <input type="checkbox" checked={isChecked} value={item} />
-    </div>
+      <Suggested_user>{item}</Suggested_user>
+      <Check_box type="checkbox" checked={isChecked} value={item} />
+    </Add_users_checkBox>
   );
 };

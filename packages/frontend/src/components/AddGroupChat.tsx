@@ -3,6 +3,7 @@ import axios from "axios";
 import { Socket } from "socket.io-client";
 import { InitialState2 } from "../redux/state";
 import { useSelector, useDispatch } from "react-redux";
+import styled from "@emotion/styled";
 function AddGroupChat({
   cookieName,
   socketRef,
@@ -48,30 +49,43 @@ function AddGroupChat({
       return false;
     }
   };
+  const Search_bar = styled.input`
+    width: 70%;
+    height: 2rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    transition: 0.3s;
+    padding: 1.3rem 0.9rem;
+  `;
+
+  const Button = styled.button`
+    border-radius: 5px;
+    border: none;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: 0.4s;
+  `;
+  const Form = styled.form`
+    display: flex;
+    flex-direction: row;
+  `;
   return (
-    <div data-testid="form">
+    <>
       {state1.toggleCreateGroup && (
-        <div data-test>
-          <form
-            style={{ display: "flex", flexDirection: "row" }}
-            onSubmit={(e) => addToGroup(user, e)}
-          >
-            <input
+        <div>
+          <Form onSubmit={(e) => addToGroup(user, e)}>
+            <Search_bar
               onChange={(e) => setUser(e.target.value)}
               value={user}
-              style={{ width: "70%" }}
               placeholder="Add user ..."
               type="search"
             />
-            <button
-              className="addGroup_button"
-              onClick={handleSumbit}
-              type="button"
-            >
+            <Button onClick={handleSumbit} type="button">
               Create room
-            </button>
-          </form>
-          <div className="group_chat_users">
+            </Button>
+          </Form>
+          <div style={{ display: "flex" }}>
             {usersData.map((element, index) => {
               return (
                 <p style={{ color: "black" }} key={index}>
@@ -82,7 +96,7 @@ function AddGroupChat({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

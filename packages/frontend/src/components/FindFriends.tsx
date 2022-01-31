@@ -6,9 +6,53 @@ import { InitialState2, InitialState3 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { BsFillPeopleFill, BsSearch } from "react-icons/bs";
 import { IoNotifications } from "react-icons/io5";
-import { FaUserCircle, FaUserFriends } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import UserSettings from "./UserSettings";
+import styled from "@emotion/styled";
+import { css } from "@emotion/css";
+const Form = styled.form`
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+  justify: flex-start;
+`;
 
+const Form_input = styled.input`
+  width: 90%;
+  margin: 0 1rem;
+  background: transparent;
+  border: none;
+`;
+
+const Closed_hamburger = styled.div`
+  width: 95%;
+  height: 3rem;
+  margin-bottom: 1rem;
+  position: relative;
+`;
+
+const Profile = styled.div`
+  display: flex;
+  width: 95%;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0 1rem;
+`;
+
+const User_logo = styled.img`
+  width: 3.2rem;
+  height: 3.2rem;
+  color: var(--main-logo-color);
+  margin-right: 1rem;
+  border-radius: 100px;
+  cursor: pointer;
+  position: relative;
+  zindex: 10;
+  &:hover {
+    background: rgba(122, 122, 122, 0.4);
+  }
+`;
 export interface IFindFriends {
   cookieName: string;
   socketRef: Socket;
@@ -93,18 +137,17 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   };
 
   return (
-    <form
-      className="friendsInput"
+    <Form
       onSubmit={handleSubmit}
       style={{ marginBottom: "1rem", alignItems: "center" }}
     >
-      <div className="close_hamburger">
+      <Closed_hamburger>
         <h1 style={{ whiteSpace: "nowrap" }}>Your chats</h1>
-      </div>
-      <div className="profile" style={{ display: "flex" }}>
+      </Closed_hamburger>
+      <Profile>
         <div>
           {hasAvatar ? (
-            <img
+            <User_logo
               src={image}
               onClick={() =>
                 dispatch({
@@ -112,25 +155,19 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
                   payload: !state.setUserSettings,
                 })
               }
-              className="user-logo click"
-              style={{
-                width: "3rem",
-                height: "3.25rem",
-                borderRadius: "100px",
-                cursor: "pointer",
-                position: "relative",
-                zIndex: "10",
-              }}
+              className="click"
             />
           ) : (
             <FaUserCircle
-              style={{
-                color: "var(--main-logo-color)",
-                position: "relative",
-                zIndex: "10",
-                width: "3rem",
-                height: "3.25rem",
-              }}
+              className={css`
+                width: 3.25rem;
+                height: 3.25rem;
+                margin: 0;
+                cursor: pointer;
+                color: var(--main-logo-color);
+                position: relative;
+                z-index: 10;
+              `}
               onClick={() =>
                 dispatch({
                   type: "SET_USER_SETTINGS",
@@ -166,14 +203,14 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             <BsFillPeopleFill />
           </div>
         </div>
-      </div>
-      <div className="flex search_container">
+      </Profile>
+      <div className="flex" style={{ width: "95%" }}>
         <div className="search-bar">
           <BsSearch
             style={{ cursor: "pointer", color: "black" }}
             onClick={handleSubmit}
           />
-          <input
+          <Form_input
             onChange={(e) =>
               dispatch({ type: "SET_RECIEVER", payload: e.target.value })
             }
@@ -183,7 +220,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           />
         </div>
       </div>
-    </form>
+    </Form>
   );
 }
 

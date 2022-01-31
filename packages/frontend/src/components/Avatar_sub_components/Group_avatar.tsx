@@ -1,10 +1,9 @@
 import React from "react";
-import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import Single_avatar from "./Single_avatar";
+
 function Group_avatar({
-  inviter,
   cookieName,
   members,
 }: {
