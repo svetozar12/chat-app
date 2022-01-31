@@ -547,7 +547,7 @@ img {
   .hide {
     transition: 0.4s ease-in;
     overflow: hidden;
-    width: 0 !important;
+    width: 0;
     display: none;
   }
 }

@@ -73,6 +73,10 @@ const Active_chats = styled.section`
   flex-shrink: unset;
   display: flex;
   align-items: center;
+  @media (max-width: 1008px) {
+    width: 60%;
+    position: absolute;
+  }
 `;
 
 const Dashborad = styled.div`
@@ -268,18 +272,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <HamburgerMenu />
         </div>
       </Hambruger_out_of_nav>
-      <Active_chats
-        style={{ width: !state.setMobileNav && "0" }}
-        className={
-          state.setMobileNav &&
-          css`
-            @media (max-width: 1008px) {
-              ${state.setMobileNav && "width:60%"};
-              position: absolute;
-            }
-          `
-        }
-      >
+      <Active_chats style={{ width: !state.setMobileNav && "0" }}>
         {socketRef && (
           <FindFriends
             cookie={cookie}

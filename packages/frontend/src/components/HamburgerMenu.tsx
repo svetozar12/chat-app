@@ -26,6 +26,9 @@ function HamburgerMenu() {
           borderRadius: "25px",
           padding: "0.5rem",
         },
+        "@media (min-width: 1008px)": {
+          display: "none",
+        },
       }}
       className="hide"
       onClick={() =>
