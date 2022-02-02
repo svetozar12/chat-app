@@ -2,33 +2,18 @@
 
 exports[`<RenderChat/> should create snapshot 1`] = `
 <div
-  className="you"
+  className="you flex"
 >
   <h2
-    style={
-      Object {
-        "color": "var(--main-black)",
-        "fontSize": "15px",
-      }
-    }
+    className="css-1ijsx8l"
   >
     test1
   </h2>
   <div
-    className="rendered_chat"
-    style={
-      Object {
-        "background": "var(--me-chat-buble)",
-      }
-    }
+    className="css-wf8gkx"
   >
     <div
-      style={
-        Object {
-          "textAlign": "center",
-          "wordWrap": "break-word",
-        }
-      }
+      className="css-yaes2l"
     >
       <span>
         hello

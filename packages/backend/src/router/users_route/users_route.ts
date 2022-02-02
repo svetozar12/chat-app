@@ -130,6 +130,9 @@ route.delete("/:username", async (req: Request, res: Response) => {
     await Invites.deleteMany({
       reciever: username,
     }).exec();
+    await Invites.deleteMany({
+      inviter: username,
+    }).exec();
     await Chats.deleteMany({
       members: { $all: [username] },
     }).exec();

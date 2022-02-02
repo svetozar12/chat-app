@@ -47,18 +47,9 @@ describe("Render connected React-redux page", () => {
     const renderedComponent = container.getByText("Log In");
     expect(renderedComponent).toBeInTheDocument();
   });
-  // test("input some data", () => {
-  //   const username = screen.getByPlaceholderText("username ...");
-  //   const password = screen.getByPlaceholderText("password ...");
-  //   const text = "test";
-  //   userEvent.paste(username, text);
-  //   userEvent.paste(password, text);
-
-  //   expect(username && password).toHaveValue(text);
-  // });
   test("click checkBox for remember me", () => {
-    userEvent.click(screen.getByText("Remember me"));
-    expect(screen.getByLabelText("Remember me")).toBeChecked();
+    userEvent.click(container.getByTestId("Remember me"));
+    expect(container.getByTestId("checkbox")).toBeChecked();
   });
   test("click login button and call function handleSubmit", () => {
     const button = screen.getByText("Log In");

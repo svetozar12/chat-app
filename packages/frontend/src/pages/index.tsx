@@ -14,20 +14,15 @@ const LinkA = styled.a`
   color: var(--main-blue);
   text-decoration: none;
   cursor: pointer;
+  margin: 1rem;
+  font-weight: bold;
+  font-size: 2.5rem;
 `;
 const Home = () => {
   return (
     <Container className="flex">
-      <Link href={`${hostUrl}/register`}>
-        <LinkA>
-          <h2>Create an account !</h2>
-        </LinkA>
-      </Link>
-      <Link href={`${hostUrl}/login`}>
-        <LinkA>
-          <h2>Already have a acount ?</h2>
-        </LinkA>
-      </Link>
+      <LinkA href={`${hostUrl}/register`}>Create an account !</LinkA>
+      <LinkA href={`${hostUrl}/login`}>Already have a acount ?</LinkA>
     </Container>
   );
 };

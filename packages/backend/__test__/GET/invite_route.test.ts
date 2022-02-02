@@ -31,7 +31,7 @@ beforeAll(async () => {
 afterAll(async () => {
   try {
     await Invites.deleteOne({
-      reciever: "testingUser1",
+      reciever: "TestingUser1",
       inviter: "testingUser2",
       status: "accepted",
     });
@@ -44,18 +44,36 @@ afterAll(async () => {
 
 tests.forEach((element) => {
   describe(element.describe, () => {
-    it("should return 200 OK", async () => {
+    it("should return 200 OK :/invites/:id/", async () => {
       const res = await request(app).get(element.request);
       expect(res.status).toBe(200);
-      expect(res.body.invites[0].reciever).toBe("testingUser1");
+      expect(res.body.invites[0].reciever).toBe("TestingUser1");
     });
   });
 });
 
-describe("Bad input/Non existing invites for user", () => {
+describe("Bad input/Non existing invites for user :/invites/:id/", () => {
   it("should return 404 Not Found", async () => {
     const res = await request(app).get("/invites/nonExistent");
     expect(res.status).toBe(404);
     expect(res.body.error).toBe("You dont have invites.");
+  });
+});
+
+tests.forEach((element) => {
+  describe(element.describe, () => {
+    it("should return 200 OK :/invites/inviter/:id/", async () => {
+      const res = await request(app).get(element.request);
+      expect(res.status).toBe(200);
+      expect(res.body.invites[0].reciever).toBe("TestingUser1");
+    });
+  });
+});
+
+describe("Bad input/Non existing invites for user :/invites/inviter/:id/", () => {
+  it("should return 404 Not Found", async () => {
+    const res = await request(app).get("/invites/inviter/nonExistent");
+    expect(res.status).toBe(404);
+    expect(res.body.error).toBe("You dont have accepted invites .");
   });
 });

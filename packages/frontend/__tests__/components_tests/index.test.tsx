@@ -13,9 +13,7 @@ describe("index page", () => {
     expect(headingElement).toBeInTheDocument();
   });
   it("register link should have href with http://localhost:3000/register", async () => {
-    const register_href = container
-      .getByText("Create an account !")
-      .closest("a");
+    const register_href = container.getByText("Create an account !");
     expect(register_href).toHaveAttribute(
       "href",
       "http://localhost:3000/register",
@@ -23,9 +21,7 @@ describe("index page", () => {
   });
 
   it("login link should have href with http://localhost:3000/login", async () => {
-    const login_href = container
-      .getByText("Already have a acount ?")
-      .closest("a");
+    const login_href = container.getByText("Already have a acount ?");
     expect(login_href).toHaveAttribute("href", "http://localhost:3000/login");
   });
 });

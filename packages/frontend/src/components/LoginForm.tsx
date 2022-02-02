@@ -111,6 +111,7 @@ function LoginForm({
             </Link_anchor>
           </Link>
           <CheckBox
+            data-testid="checkbox"
             type="checkbox"
             id="checkbox"
             checked={state.remember_me}

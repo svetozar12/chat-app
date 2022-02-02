@@ -31,13 +31,15 @@ beforeEach(() => {
     .toJSON();
 
   container = render(
-    <ActiveChats
-      _id="61c4957b735b579e5442dfe8"
-      chatId="61c4957b735b579e5442dfe8"
-      members={dumy}
-      cookieName="ivan"
-      socketRef={socketRef}
-    />,
+    <Provider store={store}>
+      <ActiveChats
+        _id="61c4957b735b579e5442dfe8"
+        chatId="61c4957b735b579e5442dfe8"
+        members={dumy}
+        cookieName="ivan"
+        socketRef={socketRef}
+      />
+    </Provider>,
   );
 });
 
@@ -49,8 +51,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <ActiveChats/>", () => {
-    const renderedComponent = container.getByText("ivan");
-    screen.getByRole("");
-    // expect(renderedComponent).toBeInTheDocument();
+    const renderedComponent = container.getByText("gerg");
+    expect(renderedComponent).toBeInTheDocument();
   });
 });

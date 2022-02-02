@@ -2,7 +2,7 @@
 
 exports[`Render connected React-redux page should create snapshot for <LoginForm/> 1`] = `
 <div
-  className="login_form"
+  className="flex"
   style={
     Object {
       "height": "100vh",
@@ -10,22 +10,18 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
   }
 >
   <form
-    className="container"
+    className="css-1vddxqp"
   >
-    <h1
-      className="alert"
-      style={
-        Object {
-          "color": "red",
-        }
-      }
+    <h2
+      className="css-1fp0cp4"
     >
       
-    </h1>
+    </h2>
     <h1>
       Login
     </h1>
     <input
+      className="css-cdjbnr"
       name="username"
       onChange={[Function]}
       placeholder="username ..."
@@ -33,6 +29,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       value=""
     />
     <input
+      className="css-cdjbnr"
       name="password"
       onChange={[Function]}
       placeholder="password ..."
@@ -40,17 +37,17 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       value=""
     />
     <button
+      className="css-5qywa"
       onClick={[MockFunction]}
       type="submit"
     >
       Log In
     </button>
     <div
-      className="clickable"
+      className="css-1sg2lsz"
     >
       <a
-        className="link"
-        href="/register"
+        className="link css-mrgxj7"
         onClick={[Function]}
         onMouseEnter={[Function]}
         style={
@@ -62,14 +59,10 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
         Sign up for chatApp
       </a>
       <input
+        checked={false}
+        className="css-18woaps"
         id="checkbox"
         onChange={[Function]}
-        style={
-          Object {
-            "height": "40px",
-            "width": "20px",
-          }
-        }
         type="checkbox"
       />
       <label

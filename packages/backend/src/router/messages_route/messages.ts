@@ -12,8 +12,10 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
       .limit(page_size)
       .skip((page_number - 1) * page_size)
       .sort({ createdAt: "desc" });
+    if (messages.length <= 0 || !messages)
+      return res.status(404).json({ message: "You don't have messages." });
     const reversedArr = messages.reverse();
-    return res.status(200).json({ reversedArr });
+    return res.status(200).json({ message: "You have messages.", reversedArr });
   } catch (error) {
     console.log(error);
     return res.status(501).json({
@@ -36,8 +38,26 @@ route.post("/:chat_id", async (req: Request, res: Response) => {
       message: message,
       seenBy: [],
     });
+    if (!message) return res.status(400).json({ message });
     await messages.save();
-    return res.json({ messages });
+    return res.status(201).json({ messages });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while sending the message",
+    });
+  }
+});
+
+route.delete("/:chat_id", async (req: Request, res: Response) => {
+  try {
+    const chat_id = req.params.chat_id;
+    const isMessages = await Messages.findOne({ chatInstance: chat_id });
+    if (!isMessages)
+      return res.status(404).json({ message: "Message not found" });
+    await Messages.deleteOne({ chatInstance: chat_id });
+    return res.json({ message: "Message has been deleted" });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

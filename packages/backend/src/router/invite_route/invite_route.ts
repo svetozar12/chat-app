@@ -125,6 +125,7 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     const id = req.body.id;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
+    if (!id) return res.status(404).json({ message: "Invite not found" });
     const findInvite = await Invites.findByIdAndUpdate(
       id,
       { status: "accepted" },
@@ -162,7 +163,7 @@ route.post("/invites", async (req: Request, res: Response) => {
       username: req.body.reciever,
     }).exec();
 
-    if (user === null) {
+    if (!user) {
       return res.status(404).json({ ERROR: "User Not found" });
     }
 

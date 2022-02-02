@@ -5,7 +5,6 @@ interface IRequest {
 import * as express from "express";
 import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
-import Invites from "../../models/Invites.model";
 const route = express.Router();
 route.get(
   "/",
@@ -16,11 +15,11 @@ route.get(
     try {
       const user_name = req.query?.user_name;
       const contacts = await Chats.find({ members: user_name }).exec();
-      if (!contacts)
-        return res
-          .status(400)
-          .json({ Message: "the chat room wasn't created" });
-      return res.status(201).json({ contacts });
+      if (contacts.length <= 0)
+        return res.status(400).json({ Message: "You don't have chat rooms" });
+      return res
+        .status(200)
+        .json({ message: `You have active chat-rooms`, contacts });
     } catch (error) {
       return res.status(501).json({
         ErrorMsg: (error as Error).message,
@@ -84,6 +83,25 @@ route.put("/:user_id", async (req: Request, res: Response) => {
     console.log(added_user, "  ", updated);
 
     return res.status(200).json({ Message: updated });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while searching for your chat room",
+    });
+  }
+});
+
+route.delete("/delete_chat/:chat_id", async (req: Request, res: Response) => {
+  try {
+    const chat_id = req.params.chat_id;
+    const added_user = req.body.usernames;
+    const deleted_user = req.query.username;
+    const chat_room = await Chats.findOne({ _id: chat_id }).exec();
+
+    if (!chat_room)
+      return res.status(404).json({ Message: "Chat room not found !" });
+    return res.status(200).json({ Message: `Chat_room ${chat_id} is deleted` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

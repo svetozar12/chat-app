@@ -39,7 +39,9 @@ const UserSchema = new Schema<UserSchema>({
 UserSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
+    //@ts-ignore
     const hashedPassword = await bcrypt.hash(this.password, salt);
+    //@ts-ignore
     this.password = hashedPassword;
     next();
   } catch (error) {
