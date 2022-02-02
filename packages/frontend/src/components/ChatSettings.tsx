@@ -129,7 +129,7 @@ function ChatSettings({
             padding: 0 0.5rem;
             width: 70%;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             @media (max-width: 1000px) {
               font-size: 4vw;
             }

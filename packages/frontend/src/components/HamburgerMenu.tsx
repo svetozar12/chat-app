@@ -14,17 +14,15 @@ function HamburgerMenu() {
       css={{
         display: "inline-block",
         cursor: "pointer",
-        position: "absolute",
-        width: "3rem",
-        height: "3rem",
+        position: "relative",
+        width: "2rem",
+        height: "2rem",
         left: "0",
         zIndex: "-11",
         border: "1px solid transparent",
-        padding: "0.5rem",
         "&:active": {
           background: "var(--gradient-first)",
           borderRadius: "25px",
-          padding: "0.5rem",
         },
         "@media (min-width: 1008px)": {
           display: "none",

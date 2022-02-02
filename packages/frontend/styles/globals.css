@@ -57,23 +57,6 @@ a {
 3.Layout styling
 ================= */
 
-.chat-settings-open {
-  width: 100% !important;
-}
-
-.chat-settings-close {
-  position: relative;
-  width: 95%;
-  margin: 1rem;
-  padding: 0 1rem;
-}
-
-.chat-settings-close svg {
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-}
-
 .fRequests_modal {
   position: fixed;
   flex-direction: column;
@@ -145,10 +128,6 @@ form {
   color: var(--main-white);
   padding: 2rem;
   background: var(--off-blue);
-}
-
-.main_section {
-  width: 75%;
 }
 
 .find_friends_icons div {
@@ -557,21 +536,9 @@ img {
     font-size: 3vw;
   }
 
-  .main_section {
-    width: 100%;
-  }
-
   .input_gender input[type="radio"] {
     width: 1rem;
     height: 1rem;
-  }
-
-  .div_out_of_nav {
-    position: relative;
-    width: 95%;
-    height: 3rem;
-    margin: 1rem;
-    z-index: 100;
   }
 
   .show {

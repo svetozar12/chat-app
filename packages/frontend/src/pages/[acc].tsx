@@ -73,10 +73,6 @@ const Active_chats = styled.section`
   flex-shrink: unset;
   display: flex;
   align-items: center;
-  @media (max-width: 1008px) {
-    width: 60%;
-    position: absolute;
-  }
 `;
 
 const Dashborad = styled.div`
@@ -89,6 +85,14 @@ const Hambruger_out_of_nav = styled.section`
   position: absolute;
   z-index: 9999;
   height: 30vh;
+`;
+
+const Div_out_of_nav = styled.div`
+  position: relative;
+  width: 95%;
+  height: 3rem;
+  margin: 1rem;
+  z-index: 100;
 `;
 
 const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
@@ -268,11 +272,18 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Hambruger_out_of_nav>
-        <div className="div_out_of_nav">
+        <Div_out_of_nav>
           <HamburgerMenu />
-        </div>
+        </Div_out_of_nav>
       </Hambruger_out_of_nav>
-      <Active_chats style={{ width: !state.setMobileNav && "0" }}>
+      <Active_chats
+        className={css`
+          @media (max-width: 1008px) {
+            ${!state.setMobileNav ? "width:0" : "width:60%"};
+            position: absolute;
+          }
+        `}
+      >
         {socketRef && (
           <FindFriends
             cookie={cookie}
@@ -291,15 +302,27 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
         >
           <Chat_settings
+            style={{ width: state.setChatSettings ? "100%" : "0" }}
             className={` flex ${state.setChatSettings && "chat-settings-open"}`}
           >
             <div
-              style={{ justifyContent: "flex-end" }}
-              className={`chat-settings-close flex ${
-                !state.setChatSettings && "hide"
-              }`}
+              css={{
+                justifyContent: "flex-end",
+                position: "absolute",
+                width: "95%",
+                margin: "1rem",
+                padding: "0 1rem",
+              }}
+              className={`flex ${!state.setChatSettings && "hide"}`}
             >
               <GrClose
+                css={{
+                  width: "2rem",
+                  height: "2rem",
+                  cursor: "pointer",
+                  position: "relative",
+                  zIndex: "9999",
+                }}
                 onClick={() =>
                   dispatch({
                     type: "SET_CHAT_SETTINGS",
@@ -332,7 +355,15 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             })}
         </div>
       </Active_chats>
-      <section className="main_section flex">
+      <section
+        css={{
+          width: "75%",
+          "@media (max-width: 1008px)": {
+            width: "100%",
+          },
+        }}
+        className="flex"
+      >
         {" "}
         <Container className="container">
           <Dashborad className="flex">
