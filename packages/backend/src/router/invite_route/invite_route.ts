@@ -110,7 +110,9 @@ route.post("/invites/group-chat", async (req: Request, res: Response) => {
     });
 
     await chat.save();
-    return res.status(201).json({ Message: chat });
+    return res
+      .status(201)
+      .json({ message: "group-chat was created", Message: chat });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -147,7 +149,9 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     });
 
     await chat.save();
-    return res.status(201).json({ Message: chat });
+    return res
+      .status(201)
+      .json({ message: "chat-room was created", Message: chat });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

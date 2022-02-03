@@ -4,6 +4,27 @@ import { Socket } from "socket.io-client";
 import { InitialState2 } from "../redux/state";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
+const Search_bar = styled.input`
+  width: 70%;
+  height: 2rem;
+  margin: 0.5rem 0;
+  border: 1px solid var(--input-border-color);
+  border-radius: 5px;
+  transition: 0.3s;
+  padding: 1.3rem 0.9rem;
+`;
+
+const Button = styled.button`
+  border-radius: 5px;
+  border: none;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: 0.4s;
+`;
+const Form = styled.form`
+  display: flex;
+  flex-direction: row;
+`;
 function AddGroupChat({
   cookieName,
   socketRef,
@@ -49,27 +70,7 @@ function AddGroupChat({
       return false;
     }
   };
-  const Search_bar = styled.input`
-    width: 70%;
-    height: 2rem;
-    margin: 0.5rem 0;
-    border: 1px solid var(--input-border-color);
-    border-radius: 5px;
-    transition: 0.3s;
-    padding: 1.3rem 0.9rem;
-  `;
 
-  const Button = styled.button`
-    border-radius: 5px;
-    border: none;
-    padding: 0.8rem;
-    cursor: pointer;
-    transition: 0.4s;
-  `;
-  const Form = styled.form`
-    display: flex;
-    flex-direction: row;
-  `;
   return (
     <>
       {state1.toggleCreateGroup && (

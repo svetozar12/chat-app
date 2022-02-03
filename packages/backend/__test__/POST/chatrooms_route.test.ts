@@ -1,6 +1,5 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
-const mongoose = require("mongoose");
 import {
   dumyUser,
   dumyUser2,
@@ -43,19 +42,23 @@ describe("Creating chat-room :/chat-room", () => {
       user2: dumyUser2.username,
       id: invite_id,
     });
+    expect(res.body.message).toBe("chat-room was created");
     expect(res.status).toBe(201);
-    console.log(res.body);
   });
   it("should return 404 User Not found", async () => {
     const res = await request(app)
       .post("/chat-room")
       .send({ user1: "nonExistent1", user2: "nonExistent2" });
+    // expect(res.body.error).toBe("User doesn't exist !");
+    console.log(res.body);
+
     expect(res.status).toBe(404);
   });
   it("should return 404 Invite Not found", async () => {
     const res = await request(app)
       .post("/chat-room")
       .send({ user1: dumyUser3.username, user2: dumyUser.username });
+    expect(res.body.Message).toBe("Invite not found");
     expect(res.status).toBe(404);
   });
 });
@@ -65,12 +68,14 @@ describe("Creating group chat :/invites/group-chat", () => {
     const res = await request(app)
       .post("/invites/group-chat")
       .send({ usersData: users });
+    expect(res.body.message).toBe("group-chat was created");
     expect(res.status).toBe(201);
   });
   it("should return 404 Not found", async () => {
     const res = await request(app)
       .post("/invites/group-chat")
       .send({ usersData: ["nonExistent1", "nonExistent2"] });
+    expect(res.body.message).toBe(`User nonExistent1 not found`);
     expect(res.status).toBe(404);
   });
 });
