@@ -145,15 +145,15 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     try {
       const res = await fetchInviteStatus();
       const res_inviter = await fetchInviterStatus();
-
       const res_chat = await axios.get(
         `http://localhost:4002/chat-room${window.location.pathname}`,
       );
-
       const members_in_chat = res_chat.data.Message[0].members;
 
-      let data = res_inviter ? [...res, ...res_inviter] : [...res];
-      console.log(data, "data");
+      let data: any[];
+      if (res_inviter) data = [...res_inviter];
+      if (res) data = [...data, ...res];
+      console.log(data);
 
       const usersArr: string[] = [];
       data.forEach((element) => {
