@@ -127,7 +127,16 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     const id = req.body.id;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
-    if (!id) return res.status(404).json({ message: "Invite not found" });
+    const checkIfExist = await Invites.findOne({ _id: id });
+    const checkUser1IfExist = await User.findOne({ username: user1 });
+    const checkUser2IfExist = await User.findOne({ username: user2 });
+    if (!checkIfExist)
+      return res.status(404).json({ message: "Invite not found" });
+    if (!checkUser1IfExist)
+      return res.status(404).json({ message: `User ${user1} not found` });
+    if (!checkUser2IfExist)
+      return res.status(404).json({ message: `User ${user2} not found` });
+
     const findInvite = await Invites.findByIdAndUpdate(
       id,
       { status: "accepted" },

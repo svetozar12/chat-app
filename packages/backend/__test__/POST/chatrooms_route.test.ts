@@ -8,6 +8,7 @@ import {
 } from "../test_dumy_data";
 const users = [dumyUser.username, dumyUser2.username, dumyUser3.username];
 let invite_id: any;
+let invalid_id = "22fbf22222f222ce222222c2";
 beforeAll(async () => {
   try {
     await request(app).post("/users/register").send(dumyUser);
@@ -47,18 +48,19 @@ describe("Creating chat-room :/chat-room", () => {
   });
   it("should return 404 User Not found", async () => {
     const res = await request(app)
-      .post("/chat-room")
-      .send({ user1: "nonExistent1", user2: "nonExistent2" });
-    // expect(res.body.error).toBe("User doesn't exist !");
-    console.log(res.body);
-
+      .put("/chat-room")
+      .send({ id: invite_id, user1: "nonExistent1", user2: "nonExistent2" });
+    expect(res.text).toBe('{"message":"User nonExistent1 not found"}');
     expect(res.status).toBe(404);
   });
   it("should return 404 Invite Not found", async () => {
-    const res = await request(app)
-      .post("/chat-room")
-      .send({ user1: dumyUser3.username, user2: dumyUser.username });
-    expect(res.body.Message).toBe("Invite not found");
+    const res = await request(app).put("/chat-room").send({
+      id: invalid_id,
+      user1: dumyUser3.username,
+      user2: dumyUser.username,
+    });
+    // @ts-ignore
+    expect(res.text).toBe('{"message":"Invite not found"}');
     expect(res.status).toBe(404);
   });
 });
@@ -75,7 +77,7 @@ describe("Creating group chat :/invites/group-chat", () => {
     const res = await request(app)
       .post("/invites/group-chat")
       .send({ usersData: ["nonExistent1", "nonExistent2"] });
-    expect(res.body.message).toBe(`User nonExistent1 not found`);
+    expect(res.text).toBe('{"error":"User nonExistent1 not found"}');
     expect(res.status).toBe(404);
   });
 });
