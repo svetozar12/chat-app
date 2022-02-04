@@ -59,7 +59,6 @@ describe("Creating chat-room :/chat-room", () => {
       user1: dumyUser3.username,
       user2: dumyUser.username,
     });
-    // @ts-ignore
     expect(res.text).toBe('{"message":"Invite not found"}');
     expect(res.status).toBe(404);
   });

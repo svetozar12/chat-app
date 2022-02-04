@@ -24,45 +24,47 @@ afterAll(async () => {
 
 describe("Passing valid username and password :/auth/login", () => {
   it("should return 201 Created", async () => {
-    await request(app)
+    const res = await request(app)
       .post("/auth/login")
-      .send({ username: dumyUser.username, password: dumyUser.password })
-      .expect(201);
+      .send({ username: dumyUser.username, password: dumyUser.password });
+    expect(res.status).toBe(201);
   });
 });
 
 describe("Passing invalid username and password :/auth/login", () => {
   it("should return 400 Bad request", async () => {
-    await request(app)
+    const res = await request(app)
       .post("/auth/login")
-      .send({ username: "WrongUser", password: "wrongPassword" })
-      .expect(400);
+      .send({ username: "WrongUser", password: "wrongPassword" });
+    expect(res.body.message).toBe("User not registered");
+    expect(res.status).toBe(400);
   });
 });
 
 describe("Registering user :/users/register", () => {
   it("should return 201 New content", async () => {
-    const res = await request(app)
-      .post("/users/register")
-      .send(dumyUser2)
-      .expect(201);
+    const res = await request(app).post("/users/register").send(dumyUser2);
+    expect(res.body.message).toBe(`User ${dumyUser2.username} created`);
+    expect(res.status).toBe(201);
   });
 });
 
 describe("Passing valid refresh-token", () => {
   it("should return 201 Created", async () => {
-    await request(app)
+    const res = await request(app)
       .post("/auth/refresh")
-      .send({ refresh_token })
-      .expect(201);
+      .send({ refresh_token });
+    expect(res.body.username).toBe(dumyUser.username);
+    expect(res.status).toBe(201);
   });
 });
 
 describe("Passing invalid refresh-token", () => {
   it("should return 501 Internal server error", async () => {
-    await request(app)
+    const res = await request(app)
       .post("/auth/refresh")
-      .send({ refresh_token: "invalid" })
-      .expect(501);
+      .send({ refresh_token: "invalid" });
+    expect(res.body.ErrorMsg).toBe("Token has expired");
+    expect(res.status).toBe(501);
   });
 });

@@ -47,10 +47,6 @@ describe("Render connected React-redux page", () => {
     const renderedComponent = container.getByText("Log In");
     expect(renderedComponent).toBeInTheDocument();
   });
-  test("click checkBox for remember me", () => {
-    userEvent.click(container.getByTestId("Remember me"));
-    expect(container.getByTestId("checkbox")).toBeChecked();
-  });
   test("click login button and call function handleSubmit", () => {
     const button = screen.getByText("Log In");
     userEvent.click(button);

@@ -266,8 +266,6 @@ input {
 
 .group_logo_container svg {
   position: absolute;
-  top: 0;
-  right: 0;
   color: var(--main-logo-color);
 }
 
@@ -445,8 +443,8 @@ p {
 
 .contacts img,
 svg {
-  width: 3rem;
-  height: 3rem;
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: 100%;
 }
 

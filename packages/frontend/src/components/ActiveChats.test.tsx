@@ -1,9 +1,8 @@
-import configureStore from "redux-mock-store";
-import FindFriends from "../../src/components/FindFriends";
+import ActiveChats from "./ActiveChats";
 import renderer from "react-test-renderer";
+import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState as setState } from "../../src/redux/reducer/setReducer";
-import { AuthState } from "../../src/redux/reducer/authReducer";
+import { initialState } from "../redux/reducer/setReducer";
 import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
@@ -11,25 +10,35 @@ import "@testing-library/jest-dom";
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const socketRef: any = jest.fn();
-const cookie: any = jest.fn();
+const dumy: string[] = ["ivan", "gerg"];
 beforeEach(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
-    authReducer: AuthState,
-    setReducer: setState,
+    setReducer: initialState,
   });
-
   component = renderer
     .create(
       <Provider store={store}>
-        <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
+        <ActiveChats
+          _id="61c4957b735b579e5442dfe8"
+          chatId="61c4957b735b579e5442dfe8"
+          members={dumy}
+          cookieName="ivan"
+          socketRef={socketRef}
+        />
       </Provider>,
     )
     .toJSON();
 
   container = render(
     <Provider store={store}>
-      <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
+      <ActiveChats
+        _id="61c4957b735b579e5442dfe8"
+        chatId="61c4957b735b579e5442dfe8"
+        members={dumy}
+        cookieName="ivan"
+        socketRef={socketRef}
+      />
     </Provider>,
   );
 });
@@ -37,12 +46,12 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("Render connected React-redux page", () => {
-  it("should create snapshot for <FindFriends/>", () => {
+  it("should create snapshot for <ActiveChats/>", () => {
     expect(component).toMatchSnapshot();
   });
 
-  it("should render <FindFriends/>", () => {
-    const renderedComponent = container.getByRole("searchbox");
+  it("should render <ActiveChats/>", () => {
+    const renderedComponent = screen.getByText("gerg");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

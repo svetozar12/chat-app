@@ -8,8 +8,6 @@ import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { css } from "@emotion/css";
 
 const logo_post_overlay = css`
-  bottom: 0;
-  left: 0;
   z-index: 1;
 `;
 
@@ -75,6 +73,8 @@ function Single_avatar({
                   height: 3.2rem;
                   color: var(--main-logo-color);
                   marginright: "1rem";
+                  ${overlay ? "bottom: 0;" : "top:0"}
+                  ${overlay ? "left: 0;" : "right:0"}
                 `
           } ${overlay && logo_post_overlay}`}
         />
@@ -82,8 +82,8 @@ function Single_avatar({
         <FaUserCircle
           style={{ width: width, height: height }}
           className={`${group ? group_logo : logo_post_overlay} ${css`
-            ${overlay && "bottom: 0;"}
-            ${overlay && "left: 0;"}
+            ${overlay ? "bottom: 0;" : "top:0"}
+            ${overlay ? "left: 0;" : "right:0"}
             z-index: 1;
             ${!group_logo && "margin-right: 1rem;"}
             color: var(--main-logo-color);

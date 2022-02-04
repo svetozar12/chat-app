@@ -61,6 +61,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       <input
         checked={false}
         className="css-18woaps"
+        data-testid="checkbox"
         id="checkbox"
         onChange={[Function]}
         type="checkbox"

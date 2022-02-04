@@ -1,35 +1,37 @@
 import configureStore from "redux-mock-store";
-import AddGroupChat from "../../src/components/AddGroupChat";
+import FindFriends from "../../src/components/FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { initialState } from "../../src/redux/reducer/setReducer";
+import { initialState as setState } from "../../src/redux/reducer/setReducer";
 import { AuthState } from "../../src/redux/reducer/authReducer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
+import saveInputReducer from "../../src/redux/reducer/save_inputReducer";
+import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const socketRef: any = jest.fn();
-
+const cookie: any = jest.fn();
 beforeEach(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
     authReducer: AuthState,
-    setReducer: initialState,
+    setReducer: setState,
+    saveInputReducer: saveInputReducer,
   });
 
   component = renderer
     .create(
       <Provider store={store}>
-        <AddGroupChat cookieName="ivan" socketRef={socketRef} />
+        <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
       </Provider>,
     )
     .toJSON();
 
   container = render(
     <Provider store={store}>
-      <AddGroupChat cookieName="ivan" socketRef={socketRef} />
+      <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
     </Provider>,
   );
 });
@@ -37,12 +39,12 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("Render connected React-redux page", () => {
-  it("should create snapshot for <AddGroupChat/>", () => {
+  it("should create snapshot for <FindFriends/>", () => {
     expect(component).toMatchSnapshot();
   });
 
-  it("should render <AddGroupChat/>", () => {
-    const renderedComponent = container.getByTestId("form");
+  it("should render <FindFriends/>", () => {
+    const renderedComponent = container.getByRole("searchbox");
     expect(renderedComponent).toBeInTheDocument();
   });
 });
