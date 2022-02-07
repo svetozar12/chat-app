@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserSettings/> should create snapshot 1`] = `
+<div
+  className="css-v8ndqr"
+>
+  <a
+    className="css-jh977x"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+  >
+    User settings
+  </a>
+  <a
+    className="css-jh977x"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+  >
+    Log out
+  </a>
+  <a
+    className="css-jh977x"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+  >
+    Delete user
+  </a>
+</div>
+`;

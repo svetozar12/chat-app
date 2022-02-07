@@ -3,12 +3,11 @@ import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { initialState } from "../redux/reducer/setReducer";
-import { screen, render, cleanup, RenderResult } from "@testing-library/react";
+import { screen, cleanup } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
 const socketRef: any = jest.fn();
 const dumy: string[] = ["ivan", "gerg"];
 beforeEach(() => {
@@ -29,18 +28,6 @@ beforeEach(() => {
       </Provider>,
     )
     .toJSON();
-
-  container = render(
-    <Provider store={store}>
-      <ActiveChats
-        _id="61c4957b735b579e5442dfe8"
-        chatId="61c4957b735b579e5442dfe8"
-        members={dumy}
-        cookieName="ivan"
-        socketRef={socketRef}
-      />
-    </Provider>,
-  );
 });
 
 afterEach(cleanup);

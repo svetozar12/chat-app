@@ -1,18 +1,15 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import LoginForm from "../../src/components/LoginForm";
+import Single_avatar from "./Single_avatar";
 import renderer from "react-test-renderer";
-import userEvent from "@testing-library/user-event";
-import { AuthState } from "../../src/redux/reducer/authReducer";
+import { AuthState } from "../../../src/redux/reducer/authReducer";
 import { render, screen, cleanup, RenderResult } from "@testing-library/react";
-import { initialState as inputState } from "../../src/redux/reducer/save_inputReducer";
+import { initialState as inputState } from "../../../src/redux/reducer/save_inputReducer";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
-const submit = jest.fn();
-submit.mockReturnValue("default");
 
 beforeEach(() => {
   const mockStore = configureStore([]);
@@ -24,14 +21,28 @@ beforeEach(() => {
   component = renderer
     .create(
       <Provider store={store}>
-        <LoginForm handleSubmit={submit} />
+        <Single_avatar
+          inviter="greg"
+          cookieName="ivan"
+          width="2.25rem"
+          height="2.25rem"
+          group={false}
+          overlay={false}
+        />
       </Provider>,
     )
     .toJSON();
 
   container = render(
     <Provider store={store}>
-      <LoginForm handleSubmit={submit} />
+      <Single_avatar
+        inviter="greg"
+        cookieName="ivan"
+        width="2.25rem"
+        height="2.25rem"
+        group={false}
+        overlay={false}
+      />
     </Provider>,
   );
 });
@@ -39,12 +50,12 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("Render connected React-redux page", () => {
-  it("should create snapshot for <LoginForm/>", () => {
+  it("should create snapshot for <Single_avatar/>", () => {
     expect(component).toMatchSnapshot();
   });
 
-  it("should render <LoginForm/>", () => {
-    const renderedComponent = container.getByText("Log In");
+  it("should render <Single_avatar/>", () => {
+    const renderedComponent = screen.getByTestId("single_avatar");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

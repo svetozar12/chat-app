@@ -4,15 +4,14 @@ import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import { initialState } from "../../src/redux/reducer/setReducer";
 import { AuthState } from "../../src/redux/reducer/authReducer";
-import { screen, render, cleanup, RenderResult } from "@testing-library/react";
+import { screen, cleanup } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
 const socketRef: any = jest.fn();
 
-beforeEach(() => {
+beforeAll(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
     authReducer: AuthState,
@@ -26,15 +25,9 @@ beforeEach(() => {
       </Provider>,
     )
     .toJSON();
-
-  container = render(
-    <Provider store={store}>
-      <AddGroupChat cookieName="ivan" socketRef={socketRef} />
-    </Provider>,
-  );
 });
 
-afterEach(cleanup);
+afterAll(cleanup);
 
 describe("Render connected React-redux page", () => {
   it("should create snapshot for <AddGroupChat/>", () => {

@@ -80,6 +80,7 @@ function Single_avatar({
         />
       ) : (
         <FaUserCircle
+          data-testid="single_avatar"
           style={{ width: width, height: height }}
           className={`${group ? group_logo : logo_post_overlay} ${css`
             ${overlay ? "bottom: 0;" : "top:0"}
