@@ -1,7 +1,7 @@
+before(() => {
+  cy.clearCookies();
+});
 describe("The Home Page", () => {
-  before(() => {
-    cy.clearCookies();
-  });
   beforeEach(() => {
     cy.visit("/");
   });

@@ -2,10 +2,7 @@ import { getFirstChat } from "../../src/utils/getFirstChat";
 let chatInstance: any;
 const user = "jane.lane";
 // @ts-ignore
-(async () => {
-  const res = await getFirstChat(user);
-  chatInstance = res._id;
-})();
+
 describe("The Login Page", () => {
   before(() => {
     cy.request("POST", "http://localhost:4002/users/register", {
@@ -13,6 +10,18 @@ describe("The Login Page", () => {
       password: user,
       email: `${user}@.com`,
       gender: "Male",
+    });
+    cy.request({
+      method: "GET",
+      url: `http://localhost:4002/chat-room/?user_name=${user}`,
+    }).as("chatId");
+    cy.get("@chatId").then((response) => {
+      // @ts-ignore
+      chatInstance = response.body.contacts[0]._id;
+      cy.setCookie("first_chat_id", chatInstance, {
+        sameSite: "strict",
+        path: "/",
+      });
     });
   });
   beforeEach(() => {
@@ -29,6 +38,13 @@ describe("The Login Page", () => {
   it("should login", () => {
     cy.url().should("match", /login/);
     cy.get("input[name=username]").type(user);
+    cy.get("input[name=password]").type(`${user}{enter}`);
+    cy.url().should("include", `/${chatInstance}`);
+  });
+  it("should login with rememberMe checked", () => {
+    cy.url().should("match", /login/);
+    cy.get("input[name=username]").type(user);
+    cy.get("[type=checkbox]").check({ force: true }).should("be.checked");
     cy.get("input[name=password]").type(`${user}{enter}`);
     cy.url().should("include", `/${chatInstance}`);
   });

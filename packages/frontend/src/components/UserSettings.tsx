@@ -55,7 +55,6 @@ function UserSettings({ cookie }: { cookie: any }) {
 
   return (
     <User_settings data-testid="user_settings">
-      <div>hello</div>
       <Link href="/settings/profile">
         <User_settings_anchor
           onClick={() => {
