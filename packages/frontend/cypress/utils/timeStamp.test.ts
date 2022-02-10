@@ -1,4 +1,4 @@
-import timeStamp from "../../../src/utils/timeStamp";
+import timeStamp from "../../src/utils/timeStamp";
 
 describe("runs function timeStamp()", () => {
   it("Running the function with valid input", () => {

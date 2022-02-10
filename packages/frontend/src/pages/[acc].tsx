@@ -1,25 +1,26 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from "@emotion/react";
-import React, { useState, useEffect } from "react";
-import ActiveChats from "../components/ActiveChats";
-import FindFriends from "../components/FindFriends";
-import ChatRoom from "../components/ChatRoom";
+import { useState, useEffect } from "react";
+import ActiveChats from "components/ActiveChats/ActiveChats";
+import FindFriends from "components/FindFriends/FindFriends";
+import ChatRoom from "components/ChatRoom/ChatRoom";
+import ChatSettings from "components/ChatSettings/ChatSettings";
+import HamburgerMenu from "components/HamburgerMenu/HamburgerMenu";
+import Notifications_Modal from "components/Notifications_Modal/Notifications_Modal";
+import { AddUsers_Modal } from "components/AddUsers_Modal/AddUsers_Modal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2, InitialState3 } from "../redux/state";
-import { requestUrl } from "../utils/hostUrl_requestUrl";
-import ChatSettings from "../components/ChatSettings";
-import HamburgerMenu from "../components/HamburgerMenu";
+import { InitialState2, InitialState3 } from "redux/state";
+import { requestUrl } from "utils/hostUrl_requestUrl";
 import { GrClose } from "react-icons/gr";
-import Notifications_Modal from "../components/Notifications_Modal";
-import { AddUsers_Modal } from "../components/AddUsers_Modal";
-import styled from "@emotion/styled";
+import { jsx } from "@emotion/react";
 import { css } from "@emotion/css";
+import styled from "@emotion/styled";
+import UserSettings from "components/UserSettings/UserSettings";
 interface Ichats {
   _id: string;
   members: string[];
@@ -67,7 +68,7 @@ const Active_chats = styled.section`
   overflow: hidden;
   height: 100vh;
   z-index: 20;
-  width: 25%;
+  width: 34%;
   flex-direction: column;
   justify-content: flex-start;
   flex-shrink: unset;
@@ -153,8 +154,6 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       let data: any[];
       if (res_inviter) data = [...res_inviter];
       if (res) data = [...data, ...res];
-      console.log(data);
-
       const usersArr: string[] = [];
       data.forEach((element) => {
         usersArr.push(element.inviter);
@@ -284,6 +283,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }
         `}
       >
+        {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
         {socketRef && (
           <FindFriends
             cookie={cookie}

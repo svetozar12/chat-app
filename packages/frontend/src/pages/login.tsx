@@ -5,11 +5,11 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState, InitialState3 } from "../redux/state";
-import { actions, wrapper } from "../redux/store";
-import { getFirstChat } from "../utils/getFirstChat";
-import LoginForm from "../components/LoginForm";
-import { checkJWT, loginAuth } from "../utils/authRoutes";
+import { InitialState, InitialState3 } from "redux/state";
+import { actions, wrapper } from "redux/store";
+import { getFirstChat } from "utils/getFirstChat";
+import LoginForm from "components/LoginForm/LoginForm";
+import { checkJWT, loginAuth } from "utils/authRoutes";
 
 function login(props: AppProps) {
   const router = useRouter();

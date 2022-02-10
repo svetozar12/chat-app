@@ -4,9 +4,9 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import { InitialState3 } from "../../redux/state";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
-import { getFirstChat } from "../../utils/getFirstChat";
+import { InitialState3 } from "redux/state";
+import { requestUrl } from "utils/hostUrl_requestUrl";
+import { getFirstChat } from "utils/getFirstChat";
 
 function profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");

@@ -1,14 +1,14 @@
 import React from "react";
-import RegisterForm from "../components/RegisterForm";
-import { InitialState3 } from "../redux/state";
+import RegisterForm from "components/RegisterForm/RegisterForm";
+import { InitialState3 } from "redux/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actions } from "../redux/store";
-import { loginAuth } from "../utils/authRoutes";
-import { getFirstChat } from "../utils/getFirstChat";
+import { actions } from "redux/store";
+import { loginAuth } from "utils/authRoutes";
+import { getFirstChat } from "utils/getFirstChat";
 
 function register(props: { cookie: string }) {
   const router = useRouter();

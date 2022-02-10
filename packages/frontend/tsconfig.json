@@ -12,12 +12,12 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/avatars/*": ["components/Avatar/*"]
+    },
     "sourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
@@ -26,16 +26,7 @@
     "resolveJsonModule": true,
     "jsx": "preserve"
   },
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "node_modules/**/*"
-  ],
-  "lib": [
-    "es2017",
-    "dom",
-    "ES6",
-    "es2015.core"
-  ]
+  "include": ["./**/*.ts", "src"],
+  "exclude": ["node_modules/**/*"],
+  "lib": ["es2017", "dom", "ES6", "es2015.core"]
 }
