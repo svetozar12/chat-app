@@ -4,11 +4,13 @@ import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState2, InitialState3 } from "redux/state";
 import { requestUrl } from "utils/hostUrl_requestUrl";
-import { BsFillPeopleFill, BsSearch, BsThreeDots } from "react-icons/bs";
+import { BsSearch, BsThreeDots } from "react-icons/bs";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
+import UserSettings from "components/UserSettings/UserSettings";
 const Form = styled.form`
   width: 100%;
   margin: 0;
@@ -157,7 +159,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
               `}
             />
           )}
-          <h1 style={{ whiteSpace: "nowrap", margin: "0 1rem 0 0 " }}>Chats</h1>
+          <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}>Chats</h1>
         </div>
         <div className="flex find_friends_icons">
           <div
@@ -182,7 +184,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             }}
             onClick={toggleGroupCreate}
           >
-            <BsFillPeopleFill />
+            <AiOutlineUsergroupAdd />
           </div>
           <div
             className="flex"
@@ -199,6 +201,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
                 })
               }
             />
+            {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
           </div>
         </div>
       </Profile>

@@ -9,7 +9,7 @@ exports[`Render connected React-redux page should create snapshot for <Single_av
   }
 >
   <svg
-    className="css-nkhozk css-12b2syr"
+    className="css-nkhozk css-boia29"
     data-testid="single_avatar"
     fill="currentColor"
     height="1em"

@@ -9,19 +9,20 @@ import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
 const User_settings = styled.div`
-  width: 50%;
+  width: 10rem;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: var(--main-white);
+  background: var(--main-white) !important;
+  border-radius: 0 !important;
   text-align: left;
   top: 0;
   right: 0;
   margin: 0;
   z-index: 12;
-  transform: translate(-26px, 145px);
+  transform: translate(0px, 67px);
   box-shadow: 0px 0px 23px 1px rgba(0, 0, 0, 0.56);
   &:before {
     position: absolute;
@@ -29,10 +30,13 @@ const User_settings = styled.div`
     height: 20px;
     width: 20px;
     background: var(--main-white);
-    right: 15px;
+    right: 14px;
     top: -10px;
     transform: rotate(45deg);
     z-index: 1;
+  }
+  @media (min-width: 1008px) {
+    width: 15rem;
   }
 `;
 

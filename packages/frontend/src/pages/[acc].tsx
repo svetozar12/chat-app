@@ -68,7 +68,7 @@ const Active_chats = styled.section`
   overflow: hidden;
   height: 100vh;
   z-index: 20;
-  width: 34%;
+  width: 42%;
   flex-direction: column;
   justify-content: flex-start;
   flex-shrink: unset;
@@ -269,7 +269,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, [localStatus]);
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", position: "relative" }}>
       <Hambruger_out_of_nav>
         <Div_out_of_nav>
           <HamburgerMenu />
@@ -278,12 +278,11 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       <Active_chats
         className={css`
           @media (max-width: 1008px) {
-            ${!state.setMobileNav ? "width:0" : "width:60%"};
+            ${!state.setMobileNav ? "width:0" : "width:80%"};
             position: absolute;
           }
         `}
       >
-        {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
         {socketRef && (
           <FindFriends
             cookie={cookie}
