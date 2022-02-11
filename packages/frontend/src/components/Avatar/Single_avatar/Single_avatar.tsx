@@ -23,7 +23,7 @@ function Single_avatar({
   overlay,
   group,
 }: {
-  inviter: string;
+  inviter?: string;
   cookieName: string;
   width?: string;
   height?: string;

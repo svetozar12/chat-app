@@ -41,12 +41,12 @@ route.post("/login", async (req: Request, res: Response) => {
     if (!result) return res.status(409);
 
     if (!user_db)
-      return res.status(400).json({ message: "User not registered" });
+      return res.status(400).json({ ErrorMsg: "User not registered" });
 
     const isMatch = await user_db.isValidPassword(result.password);
 
     if (!isMatch)
-      return res.status(401).json({ message: "Username/password not valid" });
+      return res.status(401).json({ message: "Password is not valid" });
 
     const access = await signTokens(user, ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);

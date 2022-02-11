@@ -2,43 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "redux/state";
 import styled from "@emotion/styled";
-
-const Form = styled.form`
-  width: 40%;
-  height: 90vh;
-  margin: 1rem 0;
-  padding: 3rem;
-  border-radius: 5px;
-  background: #fff;
-  box-shadow: 0 0 15px black;
-  @media (max-width: 1010px) {
-    width: 70%;
-  }
-`;
-
-const Input = styled.input`
-  width: 60%;
-  height: 2rem;
-  margin: 0.5rem 0;
-  border: 1px solid var(--input-border-color);
-  border-radius: 5px;
-  transition: 0.3s;
-  padding: 1.3rem 0.9rem;
-`;
-
-const Button = styled.button`
-  margin-top: 2rem;
-  border-radius: 5px;
-  width: 60%;
-  background-color: var(--main-black);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-`;
+import { Alerts } from "components/Alerts/Alerts";
+import { Form, Button, Input } from "components/LoginForm/LoginForm";
 
 const QuickLogin = styled.div`
   cursor: pointer;
@@ -57,18 +22,15 @@ function RegisterForm({
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
-  const Alert = styled.h2`
-    font-size: 1.9rem;
-    color: ${state.good ? "green" : "red"};
-  `;
+
   const inputState = useSelector(
     (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
   );
 
   return (
-    <div style={{ height: "100vh" }} className="flex">
+    <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
+      <Alerts />
       <Form>
-        <Alert>{state.good || state.bad}</Alert>
         <h1>Register</h1>
         <Input
           value={inputState.input_username}

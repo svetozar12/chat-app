@@ -2,8 +2,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "redux/state";
 import styled from "@emotion/styled";
+import { Alerts } from "components/Alerts/Alerts";
 
-const Input = styled.input`
+export const Input = styled.input`
   width: 60%;
   height: 2rem;
   margin: 0.5rem 0;
@@ -18,9 +19,9 @@ const CheckBox = styled.input`
   height: 40px;
 `;
 
-const Form = styled.form`
+export const Form = styled.form`
   width: 40%;
-  height: 90vh;
+  height: 60vh;
   margin: 1rem 0;
   padding: 3rem;
   border-radius: 5px;
@@ -31,7 +32,7 @@ const Form = styled.form`
   }
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   margin-top: 2rem;
   border-radius: 5px;
   width: 60%;
@@ -45,11 +46,6 @@ const Button = styled.button`
   font-size: 1rem;
 `;
 
-const Alert = styled.h2`
-  font-size: 1.9rem;
-  color: red;
-`;
-
 const Clickable = styled.div`
   display: flex;
   align-items: center;
@@ -60,10 +56,6 @@ const Link_anchor = styled.a`
   cursor: pointer;
   border: 1px solid transparent;
   margin: 1rem;
-  font-size: 1.2rem;
-  @media (max-width: 431px) {
-    text-align: center;
-  }
 `;
 function LoginForm({
   handleSubmit,
@@ -80,9 +72,10 @@ function LoginForm({
   const dispatch = useDispatch();
 
   return (
-    <div style={{ height: "100vh" }} className="flex">
+    <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
+      <Alerts />
+      <div style={{ width: "100%", height: "3rem" }}></div>
       <Form>
-        <Alert>{state.bad}</Alert>
         <h1>Login</h1>
         <Input
           value={inputState.input_username}
@@ -108,7 +101,7 @@ function LoginForm({
         <Clickable>
           <Link href="/register">
             <Link_anchor className="link" style={{ color: "var(--main-blue)" }}>
-              Sign up for chatApp
+              Sign up for chatApp .
             </Link_anchor>
           </Link>
           <CheckBox
