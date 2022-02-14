@@ -14,12 +14,14 @@ Table of concepts
 
 :root {
   --main-white: rgb(252, 252, 252);
-  --off-white: rgb(221, 221, 221);
   --main-black: rgb(0, 0, 0);
+  --form-gray: #343a40;
+  --off-white: rgb(221, 221, 221);
   --off-black: rgb(92, 92, 92);
   --me-chat-buble: #a5a7ac;
   --main-blue: rgb(79, 81, 216);
   --off-blue: rgb(38, 92, 163);
+  --button-blue: #0069d9;
   --main-green: rgb(52, 192, 34);
   --main-red: rgb(231, 10, 10);
   --gradient-first: #dfdfdf;
@@ -30,6 +32,7 @@ Table of concepts
   --bad-alert-bgcolor: rgba(255, 0, 0, 0.2);
   --good-alert-color: #60af86l;
   --good-alert-bgcolor: rgba(0, 255, 0, 0.2);
+  --main-box-shadow: rgba(0, 0, 0, 0.2);
 }
 
 /* =================
@@ -100,8 +103,6 @@ form,
 .invite_buttons,
 .search-bar,
 .message_input_container,
-.input_gender,
-.input_gender span,
 .flex {
   display: flex;
   justify-content: center;
@@ -226,22 +227,20 @@ register_form from input {
   margin: 0 1rem;
 }
 
-.input_gender {
-  width: 60%;
-  flex-direction: row;
-  margin-top: 0.5rem;
+.radio-toolbar input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
 }
 
-.input_gender div {
-  border: 1px solid var(--input-border-color);
-  padding: 0.5rem;
-  border-radius: 5px;
-  margin: 0 0.1rem;
-  width: 33%;
+.radio-toolbar label:hover {
+  opacity: 0.7;
+  transition: 0.2s;
 }
 
-.input_gender span label {
-  font-size: 0.8rem;
+.radio-toolbar input[type="radio"]:checked + label {
+  background-color: #bfb;
+  border-color: #4c4;
 }
 
 input {
@@ -314,17 +313,6 @@ p {
   box-shadow: 0 0 15px black;
 }
 
-.container input[type="text"],
-input[type="email"] {
-  width: 60%;
-  height: 2rem;
-  margin: 0.5rem 0;
-  border: 1px solid var(--input-border-color);
-  border-radius: 5px;
-  transition: 0.3s;
-  padding: 1.3rem 0.9rem;
-}
-
 .container > button {
   margin-top: 2rem;
   border-radius: 5px;
@@ -367,8 +355,7 @@ form div > input {
 }
 
 form > button:hover {
-  background-color: var(--main-white);
-  color: var(--main-black);
+  opacity: 0.7;
   transition: 0.2s;
 }
 
@@ -458,12 +445,6 @@ img {
   cursor: pointer;
 }
 
-.input_gender input[type="radio"] {
-  width: 1rem;
-  height: 1rem;
-  margin-left: 0.1rem;
-}
-
 /* utility */
 .circle_border {
   border-radius: 50px;
@@ -506,18 +487,10 @@ img {
     font-size: 3vw;
   }
 
-  .input_gender input[type="radio"] {
-    width: 1rem;
-    height: 1rem;
-  }
-
   .show {
     width: 80%;
   }
 
-  .input_gender span label {
-    font-size: 2.5vw;
-  }
   .clickable {
     flex-direction: column;
     justify-content: center;
@@ -532,18 +505,10 @@ img {
     font-size: 3vw;
   }
 
-  .input_gender input[type="radio"] {
-    width: 1rem;
-    height: 1rem;
-  }
-
   .show {
     width: 80%;
   }
 
-  .input_gender span label {
-    font-size: 2.5vw;
-  }
   .clickable {
     flex-direction: column;
     justify-content: center;
@@ -557,10 +522,6 @@ img {
     width: 90%;
   }
 
-  .input_gender {
-    width: 95%;
-  }
-
   .accept,
   .decline {
     outline: none;
@@ -568,12 +529,5 @@ img {
     font-size: 1.9rem;
     background: transparent;
     transition: 0.2s;
-  }
-}
-
-@media (max-width: 1000px) {
-  .input_gender input[type="radio"] {
-    width: 1rem;
-    height: 1rem;
   }
 }

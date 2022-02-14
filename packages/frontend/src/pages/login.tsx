@@ -65,7 +65,12 @@ function login(props: AppProps) {
         router.push(`/${chatInstance._id}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
+      return;
     }
+    dispatch({ type: "LOGIN_POST_ERROR", bad: "Input cannot be empty" });
+    setTimeout(() => {
+      dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
+    }, 4000);
   };
 
   return <LoginForm handleSubmit={handleSubmit} />;

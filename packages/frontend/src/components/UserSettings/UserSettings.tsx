@@ -1,5 +1,4 @@
 import React from "react";
-import { css } from "@emotion/react";
 import { requestUrl } from "utils/hostUrl_requestUrl";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -24,7 +23,7 @@ const User_settings = styled.div`
   margin: 0;
   z-index: 12;
   transform: translate(0px, 67px);
-  box-shadow: 2px 2px 22px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 22px 1px var(--main-box-shadow);
   &:before {
     position: absolute;
     content: "";

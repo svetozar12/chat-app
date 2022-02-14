@@ -15,6 +15,7 @@ export const Alerts = () => {
           width: 100%;
           min-height: 3.5rem;
           max-height: 10rem;
+          margin-bottom: 1rem;
         `}
       ></div>
     );
@@ -35,6 +36,7 @@ export const Alerts = () => {
         min-height: 3.5rem;
         max-height: 10rem;
         display: flex;
+        margin-bottom: 1rem;
         align-items: center;
         justify-content: center;
         font-size: 1.9rem;
@@ -48,7 +50,7 @@ export const Alerts = () => {
           ${state.good ? "var(--good-alert-color)" : "var(--bad-alert-color)"};
       `}
     >
-      <p className="flex" style={{ width: "90%", margin: "0" }}>
+      <p className="flex" style={{ width: "95%", margin: "0" }}>
         {state.good || state.bad}
       </p>
       <div
@@ -56,9 +58,8 @@ export const Alerts = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #ff99a4;
           height: 112%;
-          width: 10%;
+          width: 5%;
           padding: 0 0.5rem;
           border-top-right-radius: 5px;
           border-bottom-right-radius: 5px;

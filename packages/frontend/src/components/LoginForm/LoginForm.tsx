@@ -3,9 +3,9 @@ import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "redux/state";
 import styled from "@emotion/styled";
 import { Alerts } from "components/Alerts/Alerts";
-
+import { css } from "@emotion/css";
 export const Input = styled.input`
-  width: 60%;
+  width: 100%;
   height: 2rem;
   margin: 0.5rem 0;
   border: 1px solid var(--input-border-color);
@@ -22,21 +22,20 @@ const CheckBox = styled.input`
 export const Form = styled.form`
   width: 40%;
   height: 60vh;
-  margin: 1rem 0;
   padding: 3rem;
   border-radius: 5px;
   background: #fff;
-  box-shadow: 0 0 15px black;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
   @media (max-width: 1010px) {
     width: 70%;
   }
 `;
 
 export const Button = styled.button`
-  margin-top: 2rem;
+  margin-top: 1rem;
   border-radius: 5px;
   width: 60%;
-  background-color: var(--main-black);
+  background-color: var(--button-blue);
   color: var(--main-white);
   border: 1px solid var(--input-border-color);
   padding: 1rem;
@@ -57,6 +56,25 @@ const Link_anchor = styled.a`
   border: 1px solid transparent;
   margin: 1rem;
 `;
+
+export const Label_container = styled.div`
+  dispay: flex;
+  flex-direction: collumn;
+  width: 60%;
+`;
+
+export const Form_header = styled.h1`
+  padding: 1rem;
+  text-align: center;
+  margin: 0;
+  width: 40%;
+  color: var(--main-white);
+  background: var(--form-gray);
+  @media (max-width: 1010px) {
+    width: 70%;
+  }
+`;
+
 function LoginForm({
   handleSubmit,
 }: {
@@ -75,32 +93,41 @@ function LoginForm({
     <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
       <Alerts />
       <div style={{ width: "100%", height: "3rem" }}></div>
+      <Form_header>Login</Form_header>
       <Form>
-        <h1>Login</h1>
-        <Input
-          value={inputState.input_username}
-          onChange={(e) =>
-            dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
-          }
-          type="text"
-          name="username"
-          placeholder="username ..."
-        />
-        <Input
-          value={inputState.input_password}
-          onChange={(e) =>
-            dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
-          }
-          type="password"
-          name="password"
-          placeholder="password ..."
-        />
+        <Label_container>
+          <label>Username</label>
+          <Input
+            value={inputState.input_username}
+            onChange={(e) =>
+              dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
+            }
+            type="text"
+            name="username"
+            placeholder="username ..."
+          />
+        </Label_container>
+        <Label_container>
+          <label>Password</label>
+          <Input
+            value={inputState.input_password}
+            onChange={(e) =>
+              dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
+            }
+            type="password"
+            name="password"
+            placeholder="password ..."
+          />
+        </Label_container>
         <Button onClick={handleSubmit} type="submit">
           Log In
         </Button>
         <Clickable>
           <Link href="/register">
-            <Link_anchor className="link" style={{ color: "var(--main-blue)" }}>
+            <Link_anchor
+              className="link"
+              style={{ color: "var(--button-blue)" }}
+            >
               Sign up for chatApp .
             </Link_anchor>
           </Link>
