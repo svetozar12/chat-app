@@ -19,7 +19,7 @@ const Label_button = styled.label`
   text-align: center;
   padding: 0.5rem;
   color: var(--main-white);
-  background: rgba(0, 105, 217, 1);
+  background: rgba(0, 105, 217, 0.5);
   cursor: pointer;
 `;
 
@@ -41,9 +41,9 @@ function RegisterForm({
 
   return (
     <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
-      <Alerts />
+      {(state.good || state.bad) && <Alerts />}
       <Form_header>Register</Form_header>
-      <Form style={{ height: "50vh" }}>
+      <Form style={{ height: "70vh" }}>
         <Label_container>
           <label>Username</label>
           <Input
@@ -80,13 +80,15 @@ function RegisterForm({
             placeholder="email ..."
           />
         </Label_container>
-        <Label_container className="radio-toolbar">
+        <Label_container>
           <label>Gender</label>
           <div className="flex">
-            <Label_button className="label" htmlFor="Male">
-              Male
-            </Label_button>
             <Input
+              className={css`
+                opacity: 0;
+                position: fixed;
+                width: 0;
+              `}
               onChange={(e) =>
                 dispatch({
                   type: "SAVE_INPUT_GENDER",
@@ -97,13 +99,15 @@ function RegisterForm({
               id="Male"
               name="gender"
               value="Male"
-              checked={true}
             />
+            <Label_button htmlFor="Male">Male</Label_button>
             <div>
-              <Label_button className="label" htmlFor="Female">
-                Female
-              </Label_button>
               <Input
+                className={css`
+                  opacity: 0;
+                  position: fixed;
+                  width: 0;
+                `}
                 onChange={(e) =>
                   dispatch({
                     type: "SAVE_INPUT_GENDER",
@@ -115,6 +119,7 @@ function RegisterForm({
                 id="Female"
                 value="Female"
               />
+              <Label_button htmlFor="Female">Female</Label_button>
             </div>
           </div>
         </Label_container>

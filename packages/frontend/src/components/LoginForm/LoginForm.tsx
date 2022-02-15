@@ -65,6 +65,7 @@ export const Label_container = styled.div`
 
 export const Form_header = styled.h1`
   padding: 1rem;
+  height: auto;
   text-align: center;
   margin: 0;
   width: 40%;

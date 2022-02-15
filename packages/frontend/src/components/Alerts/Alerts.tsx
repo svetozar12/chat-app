@@ -8,17 +8,6 @@ export const Alerts = () => {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
   );
-  if (!state.good && !state.bad)
-    return (
-      <div
-        className={css`
-          width: 100%;
-          min-height: 3.5rem;
-          max-height: 10rem;
-          margin-bottom: 1rem;
-        `}
-      ></div>
-    );
   const closeAlert = () => {
     dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
     dispatch({ type: "REGISTER_POST", good: "" });
@@ -27,7 +16,9 @@ export const Alerts = () => {
   return (
     <div
       className={css`
-        position: relative;
+        position: absolute;
+        top: 0;
+        margin-top: 1rem;
         border-radius: 5px;
         background: var(--bad-alert-bgcolor);
         width: 70%;
