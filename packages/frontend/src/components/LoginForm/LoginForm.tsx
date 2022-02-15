@@ -21,7 +21,7 @@ const CheckBox = styled.input`
 
 export const Form = styled.form`
   width: 40%;
-  height: 60vh;
+  height: 50vh;
   padding: 3rem;
   border-radius: 5px;
   background: #fff;
@@ -68,6 +68,8 @@ export const Form_header = styled.h1`
   text-align: center;
   margin: 0;
   width: 40%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
   color: var(--main-white);
   background: var(--form-gray);
   @media (max-width: 1010px) {

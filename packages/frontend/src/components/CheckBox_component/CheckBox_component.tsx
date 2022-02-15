@@ -1,17 +1,11 @@
 import React from "react";
 import styled from "@emotion/styled";
-
+import { css } from "@emotion/css";
 const Add_users_checkBox = styled.div`
   width: 95%;
   border-top: 1px solid rgba(0, 0, 0, 0.3);
   justify-content: space-between;
   cursor: pointer;
-`;
-
-const Check_box = styled.input`
-  width: 1.25rem;
-  height: 1.25rem;
-  margin: 0 1rem;
 `;
 
 const Suggested_user = styled.p`
@@ -42,7 +36,16 @@ export const CheckBox_component = ({
       className="flex"
     >
       <Suggested_user>{item}</Suggested_user>
-      <Check_box type="checkbox" checked={isChecked} value={item} />
+      <input
+        className={css`
+          width: 1.25rem;
+          height: 1.25rem;
+          margin: 0 1rem;
+        `}
+        type="checkbox"
+        checked={isChecked}
+        value={item}
+      />
     </Add_users_checkBox>
   );
 };

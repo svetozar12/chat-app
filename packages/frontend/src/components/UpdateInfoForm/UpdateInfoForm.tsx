@@ -24,18 +24,15 @@ const Input_file = styled.label`
     color: var(--main-black);
   }
 `;
-const User_image = styled.image`
-  width: 2rem;
-  height: 2rem;
-`;
+
 export const UpdateInfoForm = ({
   url,
   handleSubmit,
   setImage,
   cookieName,
 }: {
-  url: string;
-  image: string;
+  url?: string;
+  image?: string;
   handleSubmit: (e: any) => Promise<false | undefined>;
   setImage: React.Dispatch<React.SetStateAction<string>>;
   cookieName: string;

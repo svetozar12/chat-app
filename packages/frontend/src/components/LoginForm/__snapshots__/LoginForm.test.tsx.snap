@@ -5,39 +5,62 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
   className="flex"
   style={
     Object {
+      "flexDirection": "column",
       "height": "100vh",
     }
   }
 >
-  <form
-    className="css-1vddxqp"
+  <div
+    className="css-16ciupy"
+  />
+  <div
+    style={
+      Object {
+        "height": "3rem",
+        "width": "100%",
+      }
+    }
+  />
+  <h1
+    className="css-2aouzt"
   >
-    <h2
-      className="css-1fp0cp4"
+    Login
+  </h1>
+  <form
+    className="css-1b11ys9"
+  >
+    <div
+      className="css-artkr0"
     >
-      
-    </h2>
-    <h1>
-      Login
-    </h1>
-    <input
-      className="css-cdjbnr"
-      name="username"
-      onChange={[Function]}
-      placeholder="username ..."
-      type="text"
-      value=""
-    />
-    <input
-      className="css-cdjbnr"
-      name="password"
-      onChange={[Function]}
-      placeholder="password ..."
-      type="password"
-      value=""
-    />
+      <label>
+        Username
+      </label>
+      <input
+        className="css-1s11o3x"
+        name="username"
+        onChange={[Function]}
+        placeholder="username ..."
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="css-artkr0"
+    >
+      <label>
+        Password
+      </label>
+      <input
+        className="css-1s11o3x"
+        name="password"
+        onChange={[Function]}
+        placeholder="password ..."
+        type="password"
+        value=""
+      />
+    </div>
     <button
-      className="css-5qywa"
+      className="css-9owf4o"
       onClick={[MockFunction]}
       type="submit"
     >
@@ -47,16 +70,16 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       className="css-1sg2lsz"
     >
       <a
-        className="link css-qwnpuq"
+        className="link css-c9afss"
         onClick={[Function]}
         onMouseEnter={[Function]}
         style={
           Object {
-            "color": "var(--main-blue)",
+            "color": "var(--button-blue)",
           }
         }
       >
-        Sign up for chatApp
+        Sign up for chatApp .
       </a>
       <input
         checked={false}

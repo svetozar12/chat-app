@@ -54,6 +54,35 @@ describe("The Chat Home Page", () => {
       expect(response.status).to.eq(200);
     });
   });
+  it("should accepte invite for chat", () => {
+    cy.clearCookies();
+    cy.visit("/");
+    cy.request({
+      method: "GET",
+      url: `http://localhost:4002/chat-room/?user_name=${user}`,
+    }).as("chatId");
+
+    cy.request({
+      method: "POST",
+      url: "http://localhost:4002/auth/login",
+      body: { username: user, password: user },
+    }).as("jwtTokens");
+
+    cy.setCookie("name", user);
+    cy.get("@chatId").then((response) => {
+      chatInstance = response.body.contacts[0]._id;
+      cy.setCookie("first_chat_id", chatInstance);
+    });
+
+    cy.get("@jwtTokens").then((interception) => {
+      cy.setCookie("token", interception.body.Access_token);
+      cy.setCookie("refresh_token", interception.body.Refresh_token);
+    });
+    cy.visit(`/${chatInstance}`);
+
+
+
+  })
   it(`should send message to ${user3}`, () => {
     cy.get("p").contains(user3).click();
     cy.get("textarea").type("anotherTestingMessage{enter}");

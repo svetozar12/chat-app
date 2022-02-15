@@ -13,67 +13,9 @@ import { useRouter } from "next/router";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 
-const Container = styled.div`
-  position: relative;
-  z-index: 10;
-  justifycontent: center;
-  alignitems: center;
-  width: 100%;
-  height: 100vh;
-  padding: 0;
-`;
-
-const Container_chat = styled.div`
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  padding: 1rem;
-  overflow: auto;
-  background-color: var(--main-white);
-  box-shadow: 0px 0px 20px var(--off-white);
-`;
-
 const Message_form = styled.form`
   width: 100%;
   background: var(--main-white);
-`;
-
-const Message_input_container = styled.div`
-  cursor: text;
-  position: relative;
-  z-index: 1000;
-  flex-direction: row;
-  justify-content: space-between;
-  background: #d9d9d9;
-  border-radius: 25px;
-  width: 70%;
-  margin: 0.5rem 0;
-  padding: 0.5rem 2rem;
-  overflow-wrap: break-word;
-`;
-
-const Message_submit = styled.div`
-  cursor: pointer;
-  padding: 0.3rem 0 0.3rem 0.5rem;
-  border: 1px transperant;
-  border-radius: 50px;
-  &:hover {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 50px;
-  }
-`;
-
-const Input_msg = styled.textarea`
-  border: none;
-  resize: none;
-  padding: 0;
-  wordbreak: break-all;
-  width: 90%;
-  background: transparent;
-  height: 0.9375rem;
-  &:focus {
-    outline: none;
-  }
 `;
 
 interface IHome {
@@ -227,12 +169,33 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
   return (
-    <Container className="container">
+    <div
+      className={css`
+        position: relative;
+        z-index: 10;
+        justifycontent: center;
+        alignitems: center;
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+      container`}
+    >
       {socketRef && statess.toggleCreateGroup && (
         <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />
       )}
 
-      <Container_chat onScroll={scrollHandler}>
+      <div
+        className={css`
+          flex-direction: column;
+          width: 100%;
+          height: 100vh;
+          padding: 1rem;
+          overflow: auto;
+          background-color: var(--main-white);
+          box-shadow: 0px 0px 20px var(--off-white);
+        `}
+        onScroll={scrollHandler}
+      >
         {chat.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
@@ -249,14 +212,38 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             </li>
           );
         })}
-      </Container_chat>
+      </div>
 
       <Message_form onSubmit={onMessageSubmit} className="flex">
-        <Message_input_container
-          className="flex"
+        <div
+          className={css`
+            cursor: text;
+            position: relative;
+            z-index: 1000;
+            flex-direction: row;
+            justify-content: space-between;
+            background: #d9d9d9;
+            border-radius: 25px;
+            width: 70%;
+            margin: 0.5rem 0;
+            padding: 0.5rem 2rem;
+            overflow-wrap: break-word;
+          flex`}
           onClick={() => inputTextArea.current.focus()}
         >
-          <Input_msg
+          <textarea
+            className={css`
+              border: none;
+              resize: none;
+              padding: 0;
+              wordbreak: break-all;
+              width: 90%;
+              background: transparent;
+              height: 0.9375rem;
+              &:focus {
+                outline: none;
+              }
+            `}
             ref={inputTextArea}
             name="message"
             onKeyDown={(e) => handleSubmit(e)}
@@ -264,7 +251,18 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             placeholder="Your Message "
             value={state.message}
           />
-          <Message_submit className="flex ">
+          <div
+            className={css`
+              cursor: pointer;
+              padding: 0.3rem 0 0.3rem 0.5rem;
+              border: 1px transperant;
+              border-radius: 50px;
+              &:hover {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 50px;
+              }
+            flex`}
+          >
             <MdSend
               className={css`
                 cursor: pointer;
@@ -276,10 +274,10 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
               type="submit"
               onClick={onMessageSubmit}
             />
-          </Message_submit>
-        </Message_input_container>
+          </div>
+        </div>
       </Message_form>
-    </Container>
+    </div>
   );
 };
 

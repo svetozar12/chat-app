@@ -6,6 +6,7 @@ declare global {
     interface Chainable {
       authentication(users: string[]): Chainable<Element>;
       delete_users(users: string[]): Chainable<Element>;
+      set_tokens(user: string): Chainable<Element>
     }
   }
 }

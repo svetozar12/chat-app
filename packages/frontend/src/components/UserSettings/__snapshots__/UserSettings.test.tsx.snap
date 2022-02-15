@@ -2,7 +2,7 @@
 
 exports[`<UserSettings/> should create snapshot 1`] = `
 <div
-  className="css-1u3tmcp"
+  className="css-19ahj5c"
   data-testid="user_settings"
 >
   <a

@@ -4,7 +4,6 @@ import { jsx } from "@emotion/react";
 import { useSelector, useDispatch } from "react-redux";
 import { InitialState2 } from "redux/state";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { css } from "@emotion/css";
 function HamburgerMenu() {
   const dispatch = useDispatch();
   const state = useSelector(

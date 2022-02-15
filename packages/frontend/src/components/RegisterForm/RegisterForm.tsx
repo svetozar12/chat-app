@@ -43,7 +43,7 @@ function RegisterForm({
     <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
       <Alerts />
       <Form_header>Register</Form_header>
-      <Form style={{ height: "70vh" }}>
+      <Form style={{ height: "50vh" }}>
         <Label_container>
           <label>Username</label>
           <Input
