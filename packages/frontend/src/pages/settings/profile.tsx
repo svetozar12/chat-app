@@ -49,7 +49,7 @@ function profile(props: { cookie: string }) {
 
   return (
     <main style={{ height: "100vh" }} className="flex">
-      <section style={{ width: "59%" }}>
+      <section style={{ width: "80%" }}>
         <UpdateInfoForm
           cookieName={cookie.get("name")}
           url={url}

@@ -47,7 +47,7 @@ const Chat_settings = styled.div`
   position: absolute;
   z-index: 11;
   width: 0;
-  height: 100vh;
+  height: 88vh;
   background: var(--main-white);
   padding: 1rem;
   transition: 0.4s;
@@ -151,7 +151,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       );
       const members_in_chat = res_chat.data.Message[0].members;
 
-      let data: any[];
+      let data: any[] = [];
       if (res_inviter) data = [...res_inviter];
       if (res) data = [...data, ...res];
       const usersArr: string[] = [];

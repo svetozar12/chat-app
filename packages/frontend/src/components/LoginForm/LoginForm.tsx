@@ -94,7 +94,7 @@ function LoginForm({
 
   return (
     <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
-      <Alerts />
+      {(state.good || state.bad) && <Alerts />}
       <div style={{ width: "100%", height: "3rem" }}></div>
       <Form_header>Login</Form_header>
       <Form>

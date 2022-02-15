@@ -3,6 +3,7 @@ import axios from "axios";
 import { Socket } from "socket.io-client";
 import { InitialState2 } from "redux/state";
 import { useSelector, useDispatch } from "react-redux";
+import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 const Search_bar = styled.input`
   width: 70%;
@@ -74,7 +75,12 @@ function AddGroupChat({
   return (
     <>
       {state1.toggleCreateGroup && (
-        <div>
+        <div
+          className={css`
+            width: 100%;
+            height: 100%;
+          `}
+        >
           <Form onSubmit={(e) => addToGroup(user, e)}>
             <Search_bar
               onChange={(e) => setUser(e.target.value)}

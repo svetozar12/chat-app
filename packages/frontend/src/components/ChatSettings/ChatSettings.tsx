@@ -45,6 +45,19 @@ const Chat_settings_members = styled.div`
   justify-content: space-between;
 `;
 
+const Chat_settings_nav = styled.div`
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  z-index: 11;
+  height: 80vh;
+  background: var(--main-white);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: auto;
+`;
+
 function ChatSettings({
   chatId,
   socketRef,
@@ -107,20 +120,7 @@ function ChatSettings({
   };
   return (
     <>
-      <div
-        className={css`
-          position: relative;
-          bottom: 0;
-          width: 100%;
-          z-index: 11;
-          height: 80vh;
-          background: var(--main-white);
-          border-left: 1px solid rgba(0, 0, 0, 0.1);
-          flex-direction: column;
-          justify-content: flex-start;
-          overflow: auto;
-        flex`}
-      >
+      <Chat_settings_nav className={`flex`}>
         <h1
           className={css`
             color: var(--main-black);
@@ -184,7 +184,7 @@ function ChatSettings({
             </div>
           </Add_users>
         )}
-      </div>
+      </Chat_settings_nav>
     </>
   );
 }

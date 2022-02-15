@@ -29,6 +29,13 @@ function login(props: AppProps) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!state.input_username) {
+      dispatch({ type: "LOGIN_POST_ERROR", bad: "Input cannot be empty" });
+      setTimeout(() => {
+        dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
+      }, 4000);
+      return;
+    }
     if (state.input_username) {
       const tokens: any = await loginAuth(
         state.input_username,
@@ -67,10 +74,6 @@ function login(props: AppProps) {
       }
       return;
     }
-    dispatch({ type: "LOGIN_POST_ERROR", bad: "Input cannot be empty" });
-    setTimeout(() => {
-      dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
-    }, 4000);
   };
 
   return <LoginForm handleSubmit={handleSubmit} />;

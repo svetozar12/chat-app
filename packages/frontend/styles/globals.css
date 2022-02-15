@@ -301,20 +301,6 @@ p {
   box-shadow: 0 0 15px black;
 }
 
-.container > button {
-  margin-top: 2rem;
-  border-radius: 5px;
-  width: 60%;
-  background-color: var(--main-black);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
 .button {
   border-radius: 5px;
   width: 20%;
