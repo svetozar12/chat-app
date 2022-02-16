@@ -120,7 +120,7 @@ function ChatSettings({
   };
   return (
     <>
-      <Chat_settings_nav className={`flex`}>
+      <Chat_settings_nav className="flex">
         <h1
           className={css`
             color: var(--main-black);
