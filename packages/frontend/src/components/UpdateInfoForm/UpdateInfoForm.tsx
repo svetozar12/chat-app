@@ -1,11 +1,10 @@
 import React from "react";
 import Link from "next/dist/client/link";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState3 } from "redux/state";
+import { InitialState3 } from "../../redux/state";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
-import Single_avatar from "@/avatars/Single_avatar/Single_avatar";
-
+import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
 const Input_file_container = styled.div`
   margin-top: 2rem;
 `;
@@ -48,6 +47,7 @@ export const UpdateInfoForm = ({
 
   return (
     <main
+      title="user_settings"
       className={css`
         display: flex;
         justify-content: center;

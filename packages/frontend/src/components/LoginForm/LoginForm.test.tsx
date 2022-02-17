@@ -1,10 +1,10 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import LoginForm from "components/LoginForm/LoginForm";
+import LoginForm from "./LoginForm";
 import renderer from "react-test-renderer";
-import { AuthState } from "redux/reducer/authReducer";
+import { AuthState } from "../../redux/reducer/authReducer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
-import { initialState as inputState } from "redux/reducer/save_inputReducer";
+import { initialState as inputState } from "../../redux/reducer/save_inputReducer";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
@@ -13,7 +13,7 @@ let container: RenderResult;
 const submit = jest.fn();
 submit.mockReturnValue("default");
 
-beforeEach(() => {
+beforeAll(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
     authReducer: AuthState,
@@ -35,7 +35,7 @@ beforeEach(() => {
   );
 });
 
-afterEach(cleanup);
+afterAll(cleanup);
 
 describe("Render connected React-redux page", () => {
   it("should create snapshot for <LoginForm/>", () => {

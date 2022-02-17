@@ -1,9 +1,8 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { Alerts } from "components/Alerts/Alerts";
-
+import { AuthState } from "../../redux/reducer/authReducer";
+import { Alerts } from "../Alerts/Alerts";
 import renderer from "react-test-renderer";
-import { AuthState } from "redux/reducer/authReducer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
@@ -42,7 +41,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <Alerts/>", () => {
-    const renderedComponent = container.getByRole("div");
+    const renderedComponent = container.getByTitle("alert message");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

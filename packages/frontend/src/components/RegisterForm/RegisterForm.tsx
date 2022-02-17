@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
-import { InitialState, InitialState3 } from "redux/state";
+import { InitialState, InitialState3 } from "../../redux/state";
 import styled from "@emotion/styled";
-import { Alerts } from "components/Alerts/Alerts";
+import { Alerts } from "../Alerts/Alerts";
 import { css } from "@emotion/css";
 import {
   Form,
@@ -10,7 +10,7 @@ import {
   Input,
   Form_header,
   Label_container,
-} from "components/LoginForm/LoginForm";
+} from "../LoginForm/LoginForm";
 
 const Label_button = styled.label`
   margin: 0 2rem;
@@ -40,7 +40,11 @@ function RegisterForm({
   );
 
   return (
-    <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
+    <div
+      title="register_form"
+      style={{ height: "100vh", flexDirection: "column" }}
+      className="flex"
+    >
       {(state.good || state.bad) && <Alerts />}
       <Form_header>Register</Form_header>
       <Form style={{ height: "70vh" }}>

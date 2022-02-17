@@ -10,9 +10,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
     }
   }
 >
-  <div
-    className="css-16ciupy"
-  />
+  
   <div
     style={
       Object {
@@ -22,7 +20,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
     }
   />
   <h1
-    className="css-2aouzt"
+    className="css-jfq1nj"
   >
     Login
   </h1>

@@ -17,6 +17,9 @@ exports[`Render connected React-redux page should create snapshot for <Hamburger
   width="1em"
   xmlns="http://www.w3.org/2000/svg"
 >
+  <title>
+    hamburger
+  </title>
   <path
     d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"
   />

@@ -1,6 +1,3 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx } from "@emotion/react";
 import React from "react";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";

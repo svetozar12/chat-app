@@ -1,8 +1,8 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { AddUsers_Modal } from "components/AddUsers_Modal/AddUsers_Modal";
+import { AddUsers_Modal } from "../AddUsers_Modal/AddUsers_Modal";
 import renderer from "react-test-renderer";
-import { AuthState } from "redux/reducer/authReducer";
+import { AuthState } from "../../redux/reducer/authReducer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";

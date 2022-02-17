@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "redux/state";
+import { InitialState2 } from "../../redux/state";
 import { GrClose } from "react-icons/gr";
-import { CheckBox_component } from "components/CheckBox_component/CheckBox_component";
-import { requestUrl } from "utils/hostUrl_requestUrl";
+import { CheckBox_component } from "../CheckBox_component/CheckBox_component";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { Socket } from "socket.io-client";
 import axios from "axios";
 export const AddUsers_Modal = ({

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState } from "redux/state";
+import { InitialState } from "../../redux/state";
 import { css } from "@emotion/css";
 import { IoClose } from "react-icons/io5";
 export const Alerts = () => {
@@ -15,6 +15,7 @@ export const Alerts = () => {
   };
   return (
     <div
+      title="alert message"
       className={css`
         position: absolute;
         top: 0;

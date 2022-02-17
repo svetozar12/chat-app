@@ -4,7 +4,7 @@ import { jsx } from "@emotion/react";
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
-import { requestUrl } from "utils/hostUrl_requestUrl";
+import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { css } from "@emotion/css";
 
 const logo_post_overlay = css`

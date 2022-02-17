@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
-import { InitialState2 } from "redux/state";
+import { InitialState2 } from "../../redux/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";

@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import { cleanup, render } from "@testing-library/react";
-import RenderChat from "components/RenderChat/RenderChat";
+import RenderChat from "../RenderChat/RenderChat";
 import renderer from "react-test-renderer";
-import { getFirstChat } from "utils/getFirstChat";
+import { getFirstChat } from "../../utils/getFirstChat";
 afterAll(cleanup);
 
 describe("<RenderChat/>", () => {

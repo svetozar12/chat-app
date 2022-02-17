@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { requestUrl } from "utils/hostUrl_requestUrl";
-import Single_avatar from "@/avatars/Single_avatar/Single_avatar";
+import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import Single_avatar from "../Single_avatar/Single_avatar";
 
 function Group_avatar({
   cookieName,
@@ -37,12 +37,12 @@ function Group_avatar({
     });
   }, []);
   return (
-    <div className="group_logo_container">
+    <div title={`groupChat-${cookieName}`} className="group_logo_container">
       {members.map((element, index) => {
         if (index === 2) return;
 
         return (
-          <div>
+          <div title={cookieName}>
             <Single_avatar
               key={index}
               inviter={element}

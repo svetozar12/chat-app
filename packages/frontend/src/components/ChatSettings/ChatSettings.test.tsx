@@ -1,32 +1,42 @@
-import ChatSettings from "components/ChatSettings/ChatSettings";
+import ChatSettings from "../ChatSettings/ChatSettings";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
-
+import configureStore from "redux-mock-store";
+import { Provider } from "react-redux";
+import { initialState as setState } from "../../redux/reducer/setReducer";
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const submit: any = jest.fn();
 
 beforeEach(() => {
+  const mockStore = configureStore([]);
+  const store = mockStore({
+    setReducer: setState,
+  });
   component = renderer
     .create(
+      <Provider store={store}>
+        <ChatSettings
+          cookieName={"greg"}
+          socketRef={submit}
+          setLocalStatus={submit}
+          chatId={"321312313"}
+        />
+      </Provider>,
+    )
+    .toJSON();
+
+  container = render(
+    <Provider store={store}>
       <ChatSettings
         cookieName={"greg"}
         socketRef={submit}
         setLocalStatus={submit}
         chatId={"321312313"}
-      />,
-    )
-    .toJSON();
-
-  container = render(
-    <ChatSettings
-      cookieName={"greg"}
-      socketRef={submit}
-      setLocalStatus={submit}
-      chatId={"321312313"}
-    />,
+      />
+    </Provider>,
   );
 });
 

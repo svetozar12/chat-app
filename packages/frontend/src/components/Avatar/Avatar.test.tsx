@@ -1,4 +1,4 @@
-import Avatar from "@/avatars/Avatar";
+import Avatar from "../Avatar/Avatar";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
@@ -31,7 +31,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <Avatar/>", () => {
-    const renderedComponent = container.getByRole("div");
+    const renderedComponent = container.getByTitle("greg");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

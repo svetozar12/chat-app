@@ -1,7 +1,7 @@
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import { hostUrl } from "utils/hostUrl_requestUrl";
-import { getFirstChat } from "utils/getFirstChat";
+import { hostUrl } from "../utils/hostUrl_requestUrl";
+import { getFirstChat } from "../utils/getFirstChat";
 import styled from "@emotion/styled";
 
 const Container = styled.div`

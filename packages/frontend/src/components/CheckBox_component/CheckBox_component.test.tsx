@@ -1,4 +1,4 @@
-import CheckBox_component from "components/ChatSettings/ChatSettings";
+import { CheckBox_component } from "./CheckBox_component";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
@@ -12,20 +12,18 @@ beforeEach(() => {
   component = renderer
     .create(
       <CheckBox_component
-        cookieName={"greg"}
-        socketRef={submit}
-        setLocalStatus={submit}
-        chatId={"321312313"}
+        item={"greg"}
+        invited={["greg", "ivan"]}
+        setInvited={submit}
       />,
     )
     .toJSON();
 
   container = render(
     <CheckBox_component
-      cookieName={"greg"}
-      socketRef={submit}
-      setLocalStatus={submit}
-      chatId={"321312313"}
+      item={"greg"}
+      invited={["greg", "ivan"]}
+      setInvited={submit}
     />,
   );
 });
@@ -38,7 +36,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <CheckBox_component/>", () => {
-    const renderedComponent = container.getByText("Members in chat");
+    const renderedComponent = container.getByTitle("checkbox");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

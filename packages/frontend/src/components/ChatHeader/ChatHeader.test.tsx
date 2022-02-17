@@ -1,4 +1,4 @@
-import ChatHeader from "components/ChatHeader/ChatHeader";
+import ChatHeader from "./ChatHeader";
 import renderer from "react-test-renderer";
 import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";

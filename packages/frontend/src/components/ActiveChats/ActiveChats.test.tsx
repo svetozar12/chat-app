@@ -2,7 +2,7 @@ import ActiveChats from "./ActiveChats";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState } from "redux/reducer/setReducer";
+import { initialState } from "../../redux/reducer/setReducer";
 import { screen, cleanup } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";

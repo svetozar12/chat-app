@@ -32,6 +32,7 @@ export const CheckBox_component = ({
 
   return (
     <Add_users_checkBox
+      title="checkbox"
       onClick={() => setIsChecked(!isChecked)}
       className="flex"
     >
@@ -43,6 +44,7 @@ export const CheckBox_component = ({
           margin: 0 1rem;
         `}
         type="checkbox"
+        onChange={() => setIsChecked(!isChecked)}
         checked={isChecked}
         value={item}
       />

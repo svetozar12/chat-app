@@ -1,4 +1,4 @@
-import PendingChats from "components/PendingChats/PendingChats";
+import PendingChats from "../PendingChats/PendingChats";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";

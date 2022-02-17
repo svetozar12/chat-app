@@ -11,7 +11,7 @@ function Avatar({
   members: string[];
 }) {
   return (
-    <>
+    <section data-testid="avatar" title={cookieName}>
       {members.length <= 2 ? (
         <div>
           <Single_avatar inviter={inviter} cookieName={cookieName} />
@@ -25,7 +25,7 @@ function Avatar({
           />
         </div>
       )}
-    </>
+    </section>
   );
 }
 

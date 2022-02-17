@@ -1,10 +1,10 @@
 import configureStore from "redux-mock-store";
-import FindFriends from "components/FindFriends/FindFriends";
+import FindFriends from "../FindFriends/FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { initialState as setState } from "redux/reducer/setReducer";
-import { AuthState } from "redux/reducer/authReducer";
-import saveInputReducer from "redux/reducer/save_inputReducer";
+import { initialState as setState } from "../../redux/reducer/setReducer";
+import { AuthState } from "../../redux/reducer/authReducer";
+import saveInputReducer from "../../redux/reducer/save_inputReducer";
 import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";

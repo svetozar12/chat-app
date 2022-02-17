@@ -5,13 +5,13 @@ import { css } from "@emotion/css";
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { requestUrl } from "utils/hostUrl_requestUrl";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { Socket } from "socket.io-client";
-import { getFirstChat } from "utils/getFirstChat";
+import { getFirstChat } from "../../utils/getFirstChat";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2 } from "redux/state";
+import { InitialState2 } from "../../redux/state";
 import styled from "@emotion/styled";
 const Add_users = styled.div`
   position: relative;

@@ -1,26 +1,25 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useState, useEffect } from "react";
-import ActiveChats from "components/ActiveChats/ActiveChats";
-import FindFriends from "components/FindFriends/FindFriends";
-import ChatRoom from "components/ChatRoom/ChatRoom";
-import ChatSettings from "components/ChatSettings/ChatSettings";
-import HamburgerMenu from "components/HamburgerMenu/HamburgerMenu";
-import Notifications_Modal from "components/Notifications_Modal/Notifications_Modal";
-import { AddUsers_Modal } from "components/AddUsers_Modal/AddUsers_Modal";
+import ActiveChats from "../components/ActiveChats/ActiveChats";
+import FindFriends from "../components/FindFriends/FindFriends";
+import ChatRoom from "../components/ChatRoom/ChatRoom";
+import ChatSettings from "../components/ChatSettings/ChatSettings";
+import HamburgerMenu from "../components/HamburgerMenu/HamburgerMenu";
+import Notifications_Modal from "../components/Notifications_Modal/Notifications_Modal";
+import { AddUsers_Modal } from "../components/AddUsers_Modal/AddUsers_Modal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2, InitialState3 } from "redux/state";
-import { requestUrl } from "utils/hostUrl_requestUrl";
+import { InitialState2, InitialState3 } from "../redux/state";
+import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { GrClose } from "react-icons/gr";
 import { jsx } from "@emotion/react";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
-import UserSettings from "components/UserSettings/UserSettings";
 interface Ichats {
   _id: string;
   members: string[];

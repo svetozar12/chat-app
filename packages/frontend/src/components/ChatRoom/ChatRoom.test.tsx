@@ -1,4 +1,4 @@
-import ChatRoom from "components/ChatRoom/ChatRoom";
+import ChatRoom from "../ChatRoom/ChatRoom";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";

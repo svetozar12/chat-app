@@ -1,5 +1,5 @@
 import React from "react";
-import { requestUrl } from "utils/hostUrl_requestUrl";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";

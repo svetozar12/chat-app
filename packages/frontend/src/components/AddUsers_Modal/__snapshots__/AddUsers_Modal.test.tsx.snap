@@ -70,6 +70,7 @@ exports[`Render connected React-redux page should create snapshot for <AddUsers_
     <div
       className="flex css-23rh6g"
       onClick={[Function]}
+      title="checkbox"
     >
       <p
         className="css-1nu6ntq"
@@ -79,6 +80,7 @@ exports[`Render connected React-redux page should create snapshot for <AddUsers_
       <input
         checked={false}
         className="css-jgjwtu"
+        onChange={[Function]}
         type="checkbox"
         value="ivan"
       />
@@ -86,6 +88,7 @@ exports[`Render connected React-redux page should create snapshot for <AddUsers_
     <div
       className="flex css-23rh6g"
       onClick={[Function]}
+      title="checkbox"
     >
       <p
         className="css-1nu6ntq"
@@ -95,6 +98,7 @@ exports[`Render connected React-redux page should create snapshot for <AddUsers_
       <input
         checked={false}
         className="css-jgjwtu"
+        onChange={[Function]}
         type="checkbox"
         value="greg"
       />

@@ -2,15 +2,15 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2, InitialState3 } from "redux/state";
-import { requestUrl } from "utils/hostUrl_requestUrl";
+import { InitialState2, InitialState3 } from "../../redux/state";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
-import UserSettings from "components/UserSettings/UserSettings";
+import UserSettings from "../UserSettings/UserSettings";
 const Form = styled.form`
   width: 100%;
   margin: 0;

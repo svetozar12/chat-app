@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { GrClose } from "react-icons/gr";
 import { Socket } from "socket.io-client";
-import PendingChats from "components/PendingChats/PendingChats";
-import { InitialState2 } from "redux/state";
-import { Iinvites } from "pages/[acc]";
+import PendingChats from "../PendingChats/PendingChats";
+import { InitialState2 } from "../../redux/state";
+import { Iinvites } from "../../pages/[acc]";
 import styled from "@emotion/styled";
 
 const Notification_items = styled.div`

@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2 } from "redux/state";
+import { InitialState2 } from "../../redux/state";
 import { GiHamburgerMenu } from "react-icons/gi";
 function HamburgerMenu() {
   const dispatch = useDispatch();
@@ -11,6 +11,7 @@ function HamburgerMenu() {
   );
   return (
     <GiHamburgerMenu
+      title="hamburger"
       css={{
         display: "inline-block",
         cursor: "pointer",

@@ -1,10 +1,10 @@
-import configureStore from "redux-mock-store";
-import HamburgerMenu from "components/HamburgerMenu/HamburgerMenu";
+import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 import renderer from "react-test-renderer";
+import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState as setState } from "redux/reducer/setReducer";
-import { AuthState } from "redux/reducer/authReducer";
-import saveInputReducer from "redux/reducer/save_inputReducer";
+import { initialState as setState } from "../../redux/reducer/setReducer";
+import { AuthState } from "../../redux/reducer/authReducer";
+import saveInputReducer from "../../redux/reducer/save_inputReducer";
 import { screen, render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
@@ -42,8 +42,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <HamburgerMenu/>", () => {
-    const renderedComponent = container.getByRole("searchbox");
-    screen.getByRole("");
+    const renderedComponent = container.getByTitle("hamburger");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

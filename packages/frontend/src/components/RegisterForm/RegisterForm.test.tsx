@@ -1,23 +1,35 @@
-import RegisterForm from "components/RegisterForm/RegisterForm";
+import RegisterForm from "../RegisterForm/RegisterForm";
 import renderer from "react-test-renderer";
 import { render, cleanup, RenderResult } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
-
+import { Provider } from "react-redux";
+import { initialState } from "../../redux/reducer/authReducer";
+import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer";
+import configureStore from "redux-mock-store";
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const quickLogin: any = jest.fn();
 const handleSubmit = jest.fn();
 
 beforeEach(() => {
+  const mockStore = configureStore([]);
+  const store = mockStore({
+    authReducer: initialState,
+    saveInputReducer: saveInputState,
+  });
   component = renderer
     .create(
-      <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />,
+      <Provider store={store}>
+        <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+      </Provider>,
     )
     .toJSON();
 
   container = render(
-    <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />,
+    <Provider store={store}>
+      <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+    </Provider>,
   );
 });
 
@@ -29,7 +41,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <RegisterForm/>", () => {
-    const renderedComponent = container.getByText("ivan");
+    const renderedComponent = container.getByTitle("register_form");
     expect(renderedComponent).toBeInTheDocument();
   });
 });
