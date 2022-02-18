@@ -1,41 +1,41 @@
 import Group_avatar from "../Group_avatar/Group_avatar";
 import renderer from "react-test-renderer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import { initialState } from "../../../redux/reducer/authReducer";
+import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
+const mockStore = configureStore([]);
+const store = mockStore({
+  setReducer: initialState,
+});
 
-beforeAll(() => {
-  component = renderer
-    .create(
+describe("Render connected React-redux page", () => {
+  it("should create snapshot for <LoginForm/>", () => {
+    expect(
+      renderer
+        .create(
+          <Group_avatar
+            inviter={"ivan"}
+            cookieName={"greg"}
+            members={["ivan", "greg"]}
+          />,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
+  });
+
+  it("should render <Group_avatar/>", () => {
+    render(
       <Group_avatar
         inviter={"ivan"}
         cookieName={"greg"}
         members={["ivan", "greg"]}
       />,
-    )
-    .toJSON();
-
-  container = render(
-    <Group_avatar
-      inviter={"ivan"}
-      cookieName={"greg"}
-      members={["ivan", "greg"]}
-    />,
-  );
-});
-
-afterEach(cleanup);
-
-describe("Render connected React-redux page", () => {
-  it("should create snapshot for <LoginForm/>", () => {
-    expect(component).toMatchSnapshot();
-  });
-
-  it("should render <Group_avatar/>", () => {
-    const renderedComponent = container.getByTitle(`groupChat-greg`);
+    );
+    const renderedComponent = screen.getByTitle(`groupChat-greg`);
     expect(renderedComponent).toBeInTheDocument();
   });
 });

@@ -1,27 +1,35 @@
 import ChatHeader from "./ChatHeader";
 import renderer from "react-test-renderer";
-import { screen, render, cleanup, RenderResult } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import configureStore from "redux-mock-store";
+import { Provider } from "react-redux";
+import { initialState } from "../../redux/reducer/setReducer";
 
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
+const mockStore = configureStore([]);
+const store = mockStore({
+  setReducer: initialState,
+});
 const socketRef: any = jest.fn();
-beforeEach(() => {
-  component = renderer
-    .create(<ChatHeader cookieName={"greg"} socketRef={socketRef} />)
-    .toJSON();
+
+it("should create snapshot for <ChatHeader/>", () => {
+  expect(
+    renderer
+      .create(
+        <Provider store={store}>
+          <ChatHeader cookieName={"greg"} socketRef={socketRef} />
+        </Provider>,
+      )
+      .toJSON(),
+  ).toMatchSnapshot();
 });
 
-afterEach(cleanup);
-
-describe("Render connected React-redux page", () => {
-  it("should create snapshot for <LoginForm/>", () => {
-    expect(component).toMatchSnapshot();
-  });
-
-  it("should render <Group_avatar/>", () => {
-    render(<ChatHeader cookieName={"greg"} socketRef={socketRef} />);
-    const renderedComponent = screen.getByRole("div");
-    expect(renderedComponent).toBeInTheDocument();
-  });
+it("should render <ChatHeader/>", () => {
+  render(
+    <Provider store={store}>
+      <ChatHeader cookieName={"greg"} socketRef={socketRef} />
+    </Provider>,
+  );
+  const renderedComponent = screen.getByTitle("chat_header");
+  expect(renderedComponent).toBeInTheDocument();
 });

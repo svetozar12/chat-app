@@ -37,7 +37,6 @@ export const AddUsers_Modal = ({
       return false;
     }
   };
-  console.log(users);
 
   const handleSubmit = async () => {
     try {

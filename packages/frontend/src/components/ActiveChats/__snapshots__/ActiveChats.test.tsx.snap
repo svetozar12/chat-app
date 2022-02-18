@@ -1,8 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Render connected React-redux page should create snapshot for <ActiveChats/> 1`] = `
+exports[`should create snapshot for <ActiveChats/> 1`] = `
 <div
   className="css-1e1vc0x  css-1bzo7of"
+  data-testid="chat"
   onClick={[Function]}
 >
   <div

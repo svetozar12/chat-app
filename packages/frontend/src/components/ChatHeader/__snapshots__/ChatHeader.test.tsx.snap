@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should create snapshot for <ChatHeader/> 1`] = `
+<div
+  className="css-1qx55g5"
+  title="chat_header"
+/>
+`;

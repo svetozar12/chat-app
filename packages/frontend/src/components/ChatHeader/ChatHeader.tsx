@@ -11,6 +11,7 @@ function ChatHeader({
 }) {
   return (
     <div
+      title="chat_header"
       className={css`
         box-shadow: 0 0 5px;
         position: relative;

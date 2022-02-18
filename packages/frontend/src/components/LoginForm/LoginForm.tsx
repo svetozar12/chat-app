@@ -3,7 +3,7 @@ import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "../../redux/state";
 import styled from "@emotion/styled";
 import { Alerts } from "../Alerts/Alerts";
-import { css } from "@emotion/css";
+
 export const Input = styled.input`
   width: 100%;
   height: 2rem;

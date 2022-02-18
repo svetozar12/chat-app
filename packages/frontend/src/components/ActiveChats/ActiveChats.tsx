@@ -102,6 +102,7 @@ const ActiveChats = ({
 
   return (
     <Contacts_container
+      data-testid="chat"
       onClick={() => {
         joinChat();
         dispatching();
