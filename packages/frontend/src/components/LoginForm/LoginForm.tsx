@@ -44,6 +44,10 @@ export const Button = styled.button`
   transition: 0.2s;
   font-weight: bold;
   font-size: 1rem;
+  &:hover {
+    opacity: 0.7;
+    transition: 0.2s;
+  }
 `;
 
 const Clickable = styled.div`

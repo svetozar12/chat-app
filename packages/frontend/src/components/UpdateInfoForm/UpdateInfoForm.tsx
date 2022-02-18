@@ -5,27 +5,31 @@ import { InitialState3 } from "../../redux/state";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
+import { Form, Button, Input } from "../LoginForm/LoginForm";
+import { Label_button } from "../RegisterForm/RegisterForm";
+import { AiFillPlusCircle } from "react-icons/ai";
+
 const Input_file_container = styled.div`
   margin-top: 2rem;
 `;
 
 const Input_file = styled.label`
-  background: var(--main-black);
+  margin-top: 1rem;
+  border-radius: 5px;
+  width: 60%;
+  background-color: var(--button-blue);
   color: var(--main-white);
   border: 1px solid var(--input-border-color);
-  transition: 0.3s;
-  padding: 0.5rem;
+  padding: 1rem;
   cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
   &:hover {
-    background: var(--main-white);
-    transition: 0.3s;
-    color: var(--main-black);
+    opacity: 0.7;
+    transition: 0.2s;
   }
-`;
-
-const Button = styled.button`
-  width: 20%;
-  background: yellow;
 `;
 
 export const UpdateInfoForm = ({
@@ -36,7 +40,7 @@ export const UpdateInfoForm = ({
 }: {
   url?: string;
   image?: string;
-  handleSubmit: (e: any) => Promise<false | undefined>;
+  handleSubmit: any;
   setImage: React.Dispatch<React.SetStateAction<string>>;
   cookieName: string;
 }) => {
@@ -58,8 +62,9 @@ export const UpdateInfoForm = ({
     >
       <section
         className={css`
+          padding: 3rem;
           width: 25%;
-          height: 50vh;
+          height: 70vh;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -70,18 +75,63 @@ export const UpdateInfoForm = ({
           className={css`
             font-size: 2vw;
             margin-right: 1rem;
+            margin-top: 3rem;
           `}
         >
           Profile
         </h1>
-        <Single_avatar cookieName={cookieName} width="6rem" height="6rem" />
+        <div
+          className={css`
+            position: relative;
+            width: 6rem;
+            height: 6rem;
+            margin-right: 1rem;
+          `}
+        >
+          <Single_avatar cookieName={cookieName} width="6rem" height="6rem" />
+          <label
+            className={css`
+              width: 2rem;
+              height: 2rem;
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              cursor: pointer;
+            `}
+            htmlFor="file"
+          >
+            <AiFillPlusCircle
+              className={css`
+                width: 2rem;
+                height: 2rem;
+              `}
+            />
+          </label>
+        </div>
+        <Input_file
+          style={{ margin: "2rem 1rem 0 0" }}
+          className="input_file"
+          htmlFor="file"
+        >
+          Add file
+        </Input_file>
       </section>
-      <form style={{ width: "75%", height: "50vh", minWidth: "342px" }}>
+      <Form
+        style={{
+          width: "75%",
+          margin: "0 1rem",
+          height: "70vh",
+          minWidth: "342px",
+        }}
+      >
         <h2 style={{ fontSize: "2vw" }}>Update your profile info</h2>
         <label htmlFor="">Email</label>
-        <input
+        <Input
           type="email"
           value={state.input_email}
+          className={css`
+            width: 75%;
+          `}
           onChange={(e) =>
             dispatch({
               type: "SAVE_INPUT_EMAIL",
@@ -89,10 +139,15 @@ export const UpdateInfoForm = ({
             })
           }
         />
-        <div className="input_gender">
+        <div className="input_gender flex">
           <div>
-            <label htmlFor="Male">Male</label>
+            {/* Input have to be placed before label or css will not work */}
             <input
+              className={css`
+                opacity: 0;
+                position: fixed;
+                width: 0;
+              `}
               onChange={(e) =>
                 dispatch({
                   type: "SAVE_INPUT_GENDER",
@@ -104,10 +159,16 @@ export const UpdateInfoForm = ({
               id="Male"
               value="Male"
             />
+            <Label_button htmlFor="Male">Male</Label_button>
           </div>
           <div>
-            <label htmlFor="Female">Female</label>
+            {/* Input have to be placed before label or css will not work */}
             <input
+              className={css`
+                opacity: 0;
+                position: fixed;
+                width: 0;
+              `}
               onChange={(e) =>
                 dispatch({
                   type: "SAVE_INPUT_GENDER",
@@ -119,21 +180,7 @@ export const UpdateInfoForm = ({
               id="Female"
               value="Female"
             />
-          </div>
-          <div>
-            <label htmlFor="Others">Others</label>
-            <input
-              onChange={(e) =>
-                dispatch({
-                  type: "SAVE_INPUT_GENDER",
-                  payload: e.target.value,
-                })
-              }
-              type="radio"
-              name="gender"
-              id="Others"
-              value="Others"
-            />
+            <Label_button htmlFor="Female">Female</Label_button>
           </div>
         </div>
         <Input_file_container>
@@ -146,9 +193,6 @@ export const UpdateInfoForm = ({
             style={{ display: "none" }}
             onChange={(e: any) => setImage(e.target.files[0])}
           />
-          <Input_file className="input_file" htmlFor="file">
-            Add file
-          </Input_file>
         </Input_file_container>
         <Button
           style={{ fontSize: "1vw", textAlign: "center" }}
@@ -157,19 +201,10 @@ export const UpdateInfoForm = ({
         >
           Save
         </Button>
-        <Button
-          style={{ fontSize: "1vw", textAlign: "center" }}
-          onClick={handleSubmit}
-          type="submit"
-        >
-          Cancel
-        </Button>
-      </form>
-      <Link href={`/${url}`}>
-        <a className="link" style={{ color: "var(--main-blue)" }}>
-          Go back
-        </a>
-      </Link>
+        <Link href={`/${url}`}>
+          <Button className="link">Go back</Button>
+        </Link>
+      </Form>
     </main>
   );
 };

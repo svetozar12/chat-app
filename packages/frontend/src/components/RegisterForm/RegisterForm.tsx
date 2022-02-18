@@ -12,7 +12,7 @@ import {
   Label_container,
 } from "../LoginForm/LoginForm";
 
-const Label_button = styled.label`
+export const Label_button = styled.label`
   margin: 0 2rem;
   border-radius: 5px;
   width: 4rem;

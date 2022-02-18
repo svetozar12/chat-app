@@ -328,11 +328,6 @@ form div > input {
   border: 1px solid var(--main-black);
 }
 
-form > button:hover {
-  opacity: 0.7;
-  transition: 0.2s;
-}
-
 .invite_list > main {
   margin: 2rem 0 2rem 0;
 }
