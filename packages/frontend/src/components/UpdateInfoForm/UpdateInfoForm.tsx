@@ -104,6 +104,11 @@ export const UpdateInfoForm = ({
               className={css`
                 width: 2rem;
                 height: 2rem;
+                transition: 0.2s;
+                &:hover {
+                  opacity: 0.7;
+                  transition: 0.2s;
+                }
               `}
             />
           </label>
