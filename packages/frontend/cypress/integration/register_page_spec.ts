@@ -12,14 +12,14 @@ describe("The Register Page", () => {
   });
   it("should click Already have an account", () => {
     cy.get("a").contains("Already have an account?").click();
-    cy.url().should("include", `/register`);
+    cy.url().should("include", `/`);
   });
   it("should register", () => {
     cy.url().should("match", /register/);
     cy.get("input[name=username]").type(user);
     cy.get("input[name=password]").type(`${user}`);
     cy.get("input[name=email]").type(`${user}@.com`);
-    cy.get('[type="radio"]').first().check();
+    cy.get('label').contains("Female").click();
     cy.url().should("include", `/register`);
     cy.get("button").contains("Register").click();
   });
@@ -28,7 +28,7 @@ describe("The Register Page", () => {
     cy.get("input[name=username]").type(user2);
     cy.get("input[name=password]").type(`${user2}`);
     cy.get("input[name=email]").type(`${user2}@.com`);
-    cy.get('[type="radio"]').first().check();
+    cy.get('label').contains("Male").click();
     cy.get("button").contains("Register").click();
     cy.get("div").contains("Click me to Quick login").click();
   });
@@ -37,7 +37,7 @@ describe("The Register Page", () => {
     cy.get("input[name=username]").type("i");
     cy.get("input[name=password]").type(`d`);
     cy.get("input[name=email]").type("d");
-    cy.get('[type="radio"]').first().check();
+    cy.get('label').contains("Male").click();
     cy.get("button").contains("Register").click();
   });
   after(() => {

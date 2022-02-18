@@ -29,7 +29,7 @@ Table of concepts
   --input-border-color: #ccd0d5;
   --main-logo-color: #bfc2c6;
   --bad-alert-color: #f24654;
-  --bad-alert-bgcolor: rgba(255, 0, 0, 0.2);
+  --bad-alert-bgcolor: rgba(255, 0, 0, 0.5);
   --good-alert-color: #60af86l;
   --good-alert-bgcolor: rgba(0, 255, 0, 0.2);
   --main-box-shadow: rgba(0, 0, 0, 0.2);

@@ -21,13 +21,14 @@ const CheckBox = styled.input`
 
 export const Form = styled.form`
   width: 40%;
-  height: 50vh;
+  height: 60vh;
   padding: 3rem;
   border-radius: 5px;
   background: #fff;
   box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
   @media (max-width: 1010px) {
-    width: 70%;
+    padding: 0rem;
+    width: 90%;
   }
 `;
 
@@ -74,7 +75,7 @@ export const Form_header = styled.h1`
   color: var(--main-white);
   background: var(--form-gray);
   @media (max-width: 1010px) {
-    width: 70%;
+    width: 90%;
   }
 `;
 

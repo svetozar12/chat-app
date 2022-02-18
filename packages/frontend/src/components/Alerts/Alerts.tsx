@@ -23,7 +23,7 @@ export const Alerts = () => {
         border-radius: 5px;
         background: var(--bad-alert-bgcolor);
         width: 70%;
-        padding: 0.2rem 0;
+        padding: 0.2rem 0 0.2rem 0;
         height: auto;
         min-height: 3.5rem;
         max-height: 10rem;
@@ -40,9 +40,17 @@ export const Alerts = () => {
           : "var(--bad-alert-bgcolor)"};
         border-left: 5px solid
           ${state.good ? "var(--good-alert-color)" : "var(--bad-alert-color)"};
+        @media (max-width: 1010px) {
+          width: 90%;
+          padding: 0.2rem 0 0.2rem 1rem;
+          font-size: 1rem;
+        }
       `}
     >
-      <p className="flex" style={{ width: "95%", margin: "0" }}>
+      <p
+        className="flex"
+        style={{ width: "95%", margin: "0", color: "var(--main-white)" }}
+      >
         {state.good || state.bad}
       </p>
       <div
@@ -51,7 +59,7 @@ export const Alerts = () => {
           align-items: center;
           justify-content: center;
           height: 112%;
-          width: 5%;
+          width: 3.5rem;
           padding: 0 0.5rem;
           border-top-right-radius: 5px;
           border-bottom-right-radius: 5px;
@@ -60,8 +68,8 @@ export const Alerts = () => {
         <IoClose
           onClick={closeAlert}
           className={css`
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
             cursor: pointer;
             &:hover {
               color: var(--main-black);

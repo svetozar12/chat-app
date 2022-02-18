@@ -25,34 +25,37 @@ describe("The Login Page", () => {
     });
   });
   beforeEach(() => {
-    cy.visit("/login");
+    cy.visit("/");
     cy.clearCookies();
   });
   it("successfully loads", () => {
-    cy.url().should("include", `/login`);
+    cy.url().should("include", `/`);
   });
   it("should click Sign up for chatApp", () => {
     cy.get("a").contains("Sign up for chatApp").click();
     cy.url().should("include", `/register`);
   });
   it("should login", () => {
-    cy.url().should("match", /login/);
+    cy.url().should("include", `/`);
     cy.get("input[name=username]").type(user);
-    cy.get("input[name=password]").type(`${user}{enter}`);
+    cy.get("input[name=password]").type(user);
+    cy.get("button").click();
+    cy.wait(10000);
     cy.url().should("include", `/${chatInstance}`);
   });
   it("should login with rememberMe checked", () => {
-    cy.url().should("match", /login/);
+    cy.url().should("include", `/`);
     cy.get("input[name=username]").type(user);
     cy.get("[type=checkbox]").check({ force: true }).should("be.checked");
     cy.get("input[name=password]").type(`${user}{enter}`);
+    cy.wait(10000);
     cy.url().should("include", `/${chatInstance}`);
   });
   it("shouldn't login", () => {
-    cy.url().should("match", /login/);
+    cy.url().should("include", `/`);
     cy.get("input[name=username]").type("invalidUsername");
     cy.get("input[name=password]").type(`invalidPssword{enter}`);
-    cy.url().should("include", `/login`);
+    cy.url().should("include", `/`);
   });
   after(() => {
     cy.request("DELETE", `http://localhost:4002/users/${user}`);

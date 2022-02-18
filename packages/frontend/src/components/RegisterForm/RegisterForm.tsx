@@ -21,6 +21,7 @@ const Label_button = styled.label`
   color: var(--main-white);
   background: rgba(0, 105, 217, 0.5);
   cursor: pointer;
+  display: block;
 `;
 
 function RegisterForm({
@@ -130,7 +131,7 @@ function RegisterForm({
         <Button onClick={handleSubmit} type="submit">
           Register
         </Button>
-        <Link href="/login">
+        <Link href="/">
           <a className="link" style={{ color: "var(--button-blue)" }}>
             Already have an account?
           </a>
