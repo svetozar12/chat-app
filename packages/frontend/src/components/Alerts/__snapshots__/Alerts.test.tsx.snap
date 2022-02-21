@@ -2,13 +2,14 @@
 
 exports[`Render connected React-redux page should create snapshot for <Alerts/> 1`] = `
 <div
-  className="css-tbtpsy"
+  className="css-1dueyvl"
   title="alert message"
 >
   <p
     className="flex"
     style={
       Object {
+        "color": "var(--main-white)",
         "margin": "0",
         "width": "95%",
       }
@@ -17,10 +18,10 @@ exports[`Render connected React-redux page should create snapshot for <Alerts/> 
     
   </p>
   <div
-    className="css-1jtdu3h"
+    className="css-1l4yf0e"
   >
     <svg
-      className="css-1560mmf"
+      className="css-1pw0edb"
       fill="currentColor"
       height="1em"
       onClick={[Function]}

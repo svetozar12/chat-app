@@ -5,19 +5,25 @@ import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { initialState } from "../../redux/reducer/setReducer";
+import Cookies from "universal-cookie";
+
 const mockStore = configureStore([]);
 const store = mockStore({
   setReducer: initialState,
 });
 
-const cookie = jest.fn();
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null,
+    };
+  },
+}));
+
+const cookie = new Cookies({ name: "TestName" });
 
 describe("Render connected React-redux page", () => {
   it("should create snapshot for <ChatRoom/>", () => {
-    Object.defineProperty(window.document, "cookie", {
-      writable: true,
-      value: "name=TestName",
-    });
     expect(
       renderer
         .create(
@@ -35,7 +41,7 @@ describe("Render connected React-redux page", () => {
         <ChatRoom cookie={cookie} chatId={"321312313"} />
       </Provider>,
     );
-    const renderedComponent = screen.getByRole("textarea");
+    const renderedComponent = screen.getByRole("textbox");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

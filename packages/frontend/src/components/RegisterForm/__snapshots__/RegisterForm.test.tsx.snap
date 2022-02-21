@@ -13,12 +13,12 @@ exports[`Render connected React-redux page should create snapshot for <RegisterF
 >
   
   <h1
-    className="css-jfq1nj"
+    className="css-my1y1y"
   >
     Register
   </h1>
   <form
-    className="css-1b11ys9"
+    className="css-7rx0xo"
     style={
       Object {
         "height": "70vh",
@@ -88,7 +88,7 @@ exports[`Render connected React-redux page should create snapshot for <RegisterF
           value="Male"
         />
         <label
-          className="css-bhiab5"
+          className="css-pa4pqz"
           htmlFor="Male"
         >
           Male
@@ -103,7 +103,7 @@ exports[`Render connected React-redux page should create snapshot for <RegisterF
             value="Female"
           />
           <label
-            className="css-bhiab5"
+            className="css-pa4pqz"
             htmlFor="Female"
           >
             Female
@@ -112,7 +112,7 @@ exports[`Render connected React-redux page should create snapshot for <RegisterF
       </div>
     </div>
     <button
-      className="css-9owf4o"
+      className="css-1hcgzlw"
       onClick={[MockFunction]}
       type="submit"
     >
@@ -120,7 +120,7 @@ exports[`Render connected React-redux page should create snapshot for <RegisterF
     </button>
     <a
       className="link"
-      href="/login"
+      href="/"
       onClick={[Function]}
       onMouseEnter={[Function]}
       style={

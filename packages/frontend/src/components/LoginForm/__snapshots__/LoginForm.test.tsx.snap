@@ -20,12 +20,12 @@ exports[`should create snapshot for <LoginForm/> 1`] = `
     }
   />
   <h1
-    className="css-jfq1nj"
+    className="css-my1y1y"
   >
     Login
   </h1>
   <form
-    className="css-1b11ys9"
+    className="css-7rx0xo"
   >
     <div
       className="css-artkr0"
@@ -58,7 +58,7 @@ exports[`should create snapshot for <LoginForm/> 1`] = `
       />
     </div>
     <button
-      className="css-9owf4o"
+      className="css-1hcgzlw"
       onClick={[MockFunction]}
       type="submit"
     >

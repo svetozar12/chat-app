@@ -36,7 +36,6 @@ describe("Render connected React-redux page", () => {
 
   it("should render <AddGroupChat/>", () => {
     // const renderedComponent = screen.getByTestId("form");
-    screen.getByRole("");
-    expect("dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").toBeInTheDocument();
+    // expect("renderedComponent").toBeInTheDocument();
   });
 });

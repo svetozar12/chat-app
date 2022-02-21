@@ -6,48 +6,89 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
   title="user_settings"
 >
   <section
-    className="css-uh9uvh"
+    className="css-1r4b7xy"
   >
     <h1
-      className="css-1ecyjot"
+      className="css-1aagqrl"
     >
       Profile
     </h1>
     <div
+      className="css-1ijf74t"
+    >
+      <div
+        style={
+          Object {
+            "marginRight": "1rem",
+          }
+        }
+      >
+        <svg
+          className="css-nkhozk css-boia29"
+          data-testid="single_avatar"
+          fill="currentColor"
+          height="1em"
+          stroke="currentColor"
+          strokeWidth="0"
+          style={
+            Object {
+              "color": undefined,
+              "height": "6rem",
+              "width": "6rem",
+            }
+          }
+          viewBox="0 0 496 512"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"
+          />
+        </svg>
+      </div>
+      <label
+        className="css-11d541p"
+        htmlFor="file"
+      >
+        <svg
+          className="css-1msl7nb"
+          fill="currentColor"
+          height="1em"
+          stroke="currentColor"
+          strokeWidth="0"
+          style={
+            Object {
+              "color": undefined,
+            }
+          }
+          viewBox="0 0 1024 1024"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm192 472c0 4.4-3.6 8-8 8H544v152c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V544H328c-4.4 0-8-3.6-8-8v-48c0-4.4 3.6-8 8-8h152V328c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v152h152c4.4 0 8 3.6 8 8v48z"
+          />
+        </svg>
+      </label>
+    </div>
+    <label
+      className="input_file css-147zyae"
+      htmlFor="file"
       style={
         Object {
-          "marginRight": "1rem",
+          "margin": "2rem 1rem 0 0",
         }
       }
     >
-      <svg
-        className="css-nkhozk css-boia29"
-        data-testid="single_avatar"
-        fill="currentColor"
-        height="1em"
-        stroke="currentColor"
-        strokeWidth="0"
-        style={
-          Object {
-            "color": undefined,
-            "height": "6rem",
-            "width": "6rem",
-          }
-        }
-        viewBox="0 0 496 512"
-        width="1em"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"
-        />
-      </svg>
-    </div>
+      Add file
+    </label>
   </section>
   <form
+    className="css-7rx0xo"
     style={
       Object {
-        "height": "50vh",
+        "height": "70vh",
+        "margin": "0 1rem",
         "minWidth": "342px",
         "width": "75%",
       }
@@ -68,54 +109,45 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
       Email
     </label>
     <input
+      className="css-1hph1d0 css-1s11o3x"
       onChange={[Function]}
       type="email"
       value=""
     />
     <div
-      className="input_gender"
+      className="input_gender flex"
     >
       <div>
-        <label
-          htmlFor="Male"
-        >
-          Male
-        </label>
         <input
+          className="css-alxow4"
           id="Male"
           name="gender"
           onChange={[Function]}
           type="radio"
           value="Male"
         />
+        <label
+          className="css-pa4pqz"
+          htmlFor="Male"
+        >
+          Male
+        </label>
       </div>
       <div>
-        <label
-          htmlFor="Female"
-        >
-          Female
-        </label>
         <input
+          className="css-alxow4"
           id="Female"
           name="gender"
           onChange={[Function]}
           type="radio"
           value="Female"
         />
-      </div>
-      <div>
         <label
-          htmlFor="Others"
+          className="css-pa4pqz"
+          htmlFor="Female"
         >
-          Others
+          Female
         </label>
-        <input
-          id="Others"
-          name="gender"
-          onChange={[Function]}
-          type="radio"
-          value="Others"
-        />
       </div>
     </div>
     <div
@@ -134,15 +166,9 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
         }
         type="file"
       />
-      <label
-        className="input_file css-7w5spg"
-        htmlFor="file"
-      >
-        Add file
-      </label>
     </div>
     <button
-      className="css-lnls4q"
+      className="css-1hcgzlw"
       onClick={[MockFunction]}
       style={
         Object {
@@ -155,31 +181,12 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
       Save
     </button>
     <button
-      className="css-lnls4q"
-      onClick={[MockFunction]}
-      style={
-        Object {
-          "fontSize": "1vw",
-          "textAlign": "center",
-        }
-      }
-      type="submit"
+      className="link css-1hcgzlw"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
     >
-      Cancel
+      Go back
     </button>
   </form>
-  <a
-    className="link"
-    href="/random.png"
-    onClick={[Function]}
-    onMouseEnter={[Function]}
-    style={
-      Object {
-        "color": "var(--main-blue)",
-      }
-    }
-  >
-    Go back
-  </a>
 </main>
 `;
