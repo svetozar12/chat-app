@@ -1,19 +1,22 @@
 import ChatSettings from "../ChatSettings/ChatSettings";
 import renderer from "react-test-renderer";
-import { render, cleanup, screen } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { initialState as setState } from "../../redux/reducer/setReducer";
-
 const submit: any = jest.fn();
 const mockStore = configureStore([]);
 const store = mockStore({
   setReducer: setState,
 });
+
 jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+  useRouter() {
+    return {
+      prefetch: () => null,
+    };
+  },
 }));
 
 describe("Render connected React-redux page", () => {
