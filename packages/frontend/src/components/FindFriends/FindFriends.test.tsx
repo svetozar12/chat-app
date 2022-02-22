@@ -2,7 +2,6 @@ import configureStore from "redux-mock-store";
 import FindFriends from "../FindFriends/FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { initialState as setState } from "../../redux/reducer/setReducer";
 import { AuthState } from "../../redux/reducer/authReducer";
 import saveInputReducer from "../../redux/reducer/save_inputReducer";
 import { screen, render, cleanup, RenderResult } from "@testing-library/react";
@@ -13,11 +12,23 @@ let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 const socketRef: any = jest.fn();
 const cookie: any = jest.fn();
+const data = {
+  reciever: "",
+  chat_inviter: "",
+  pageNumber: 2,
+  setUserSettings: false,
+  setFriendRequest: false,
+  toggleCreateGroup: true,
+  setMobileNav: false,
+  setIsMatch: false,
+  setChatSettings: false,
+  setModalInvite: false,
+};
 beforeEach(() => {
   const mockStore = configureStore([]);
   const store = mockStore({
     authReducer: AuthState,
-    setReducer: setState,
+    setReducer: data,
     saveInputReducer: saveInputReducer,
   });
 

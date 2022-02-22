@@ -5,12 +5,13 @@ import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { initialState as setState } from "../../redux/reducer/setReducer";
+import SocketMock from "socket.io-mock";
 const submit: any = jest.fn();
 const mockStore = configureStore([]);
 const store = mockStore({
   setReducer: setState,
 });
-
+let socket = new SocketMock();
 jest.mock("next/router", () => ({
   useRouter() {
     return {
@@ -27,7 +28,7 @@ describe("Render connected React-redux page", () => {
           <Provider store={store}>
             <ChatSettings
               cookieName={"greg"}
-              socketRef={submit}
+              socketRef={socket}
               setLocalStatus={submit}
               chatId={"321312313"}
             />
@@ -42,7 +43,7 @@ describe("Render connected React-redux page", () => {
       <Provider store={store}>
         <ChatSettings
           cookieName={"greg"}
-          socketRef={submit}
+          socketRef={socket}
           setLocalStatus={submit}
           chatId={"321312313"}
         />

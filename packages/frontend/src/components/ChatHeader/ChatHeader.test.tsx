@@ -4,11 +4,23 @@ import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer";
+
+const data = {
+  reciever: "",
+  chat_inviter: "",
+  pageNumber: 2,
+  setUserSettings: false,
+  setFriendRequest: false,
+  toggleCreateGroup: true,
+  setMobileNav: false,
+  setIsMatch: false,
+  setChatSettings: false,
+  setModalInvite: false,
+};
 
 const mockStore = configureStore([]);
 const store = mockStore({
-  setReducer: initialState,
+  setReducer: data,
 });
 const socketRef: any = jest.fn();
 

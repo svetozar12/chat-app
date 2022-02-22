@@ -4,38 +4,57 @@ import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import { initialState } from "../../redux/reducer/setReducer";
 import { AuthState } from "../../redux/reducer/authReducer";
-import { screen, cleanup } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
+const data = {
+  reciever: "",
+  chat_inviter: "",
+  pageNumber: 2,
+  setUserSettings: false,
+  setFriendRequest: false,
+  toggleCreateGroup: true,
+  setMobileNav: false,
+  setIsMatch: false,
+  setChatSettings: false,
+  setModalInvite: false,
+};
+
 const socketRef: any = jest.fn();
-
-beforeAll(() => {
-  const mockStore = configureStore([]);
-  const store = mockStore({
-    authReducer: AuthState,
-    setReducer: initialState,
-  });
-
-  component = renderer
-    .create(
-      <Provider store={store}>
-        <AddGroupChat cookieName="ivan" socketRef={socketRef} />
-      </Provider>,
-    )
-    .toJSON();
+const mockStore = configureStore([]);
+const store = mockStore({
+  authReducer: AuthState,
+  setReducer: data,
 });
 
-afterAll(cleanup);
+const setupRender = () => {
+  const component = render(
+    <Provider store={store}>
+      <AddGroupChat cookieName="ivan" socketRef={socketRef} />
+    </Provider>,
+  );
+  return component;
+};
 
 describe("Render connected React-redux page", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setupRender();
+  });
   it("should create snapshot for <AddGroupChat/>", () => {
-    expect(component).toMatchSnapshot();
+    expect(
+      renderer
+        .create(
+          <Provider store={store}>
+            <AddGroupChat cookieName="ivan" socketRef={socketRef} />
+          </Provider>,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
   });
 
   it("should render <AddGroupChat/>", () => {
-    // const renderedComponent = screen.getByTestId("form");
-    // expect("renderedComponent").toBeInTheDocument();
+    const renderedComponent = screen.getByText("Create room");
+    expect(renderedComponent).toBeInTheDocument();
   });
 });
