@@ -66,6 +66,7 @@ export const loginAuth = async (
 ) => {
   try {
     const tokens = await createJWT(input_username, input_password);
+    // @ts-ignore
     await checkJWT(tokens.JWT);
     return tokens;
   } catch (error) {
