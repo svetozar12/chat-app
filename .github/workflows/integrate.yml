@@ -1,4 +1,4 @@
-name: Discord_clone Integration
+name: Chat_app Integration
 
 on:
   push:
