@@ -14,25 +14,8 @@ const store = mockStore({
   setReducer: initialState,
 });
 
-it("should create snapshot for <ActiveChats/>", () => {
-  expect(
-    renderer
-      .create(
-        <Provider store={store}>
-          <ActiveChats
-            _id="61c4957b735b579e5442dfe8"
-            chatId="61c4957b735b579e5442dfe8"
-            members={dumy}
-            cookieName="ivan"
-            socketRef={socketRef}
-          />
-        </Provider>,
-      )
-      .toJSON(),
-  ).toMatchSnapshot();
-});
-it("should render <ActiveChats/>", () => {
-  render(
+const setupRender = () => {
+  const component = render(
     <Provider store={store}>
       <ActiveChats
         _id="61c4957b735b579e5442dfe8"
@@ -43,5 +26,42 @@ it("should render <ActiveChats/>", () => {
       />
     </Provider>,
   );
-  expect(screen.getByTestId("chat")).toBeInTheDocument();
+  return component;
+};
+
+describe("<ActiveChats/>", () => {
+  beforeEach(() => {
+    setupRender();
+  });
+  it("should create snapshot", () => {
+    expect(
+      renderer
+        .create(
+          <Provider store={store}>
+            <ActiveChats
+              _id="61c4957b735b579e5442dfe8"
+              chatId="61c4957b735b579e5442dfe8"
+              members={dumy}
+              cookieName="ivan"
+              socketRef={socketRef}
+            />
+          </Provider>,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
+  });
+  it("should render", () => {
+    render(
+      <Provider store={store}>
+        <ActiveChats
+          _id="61c4957b735b579e5442dfe8"
+          chatId="61c4957b735b579e5442dfe8"
+          members={dumy}
+          cookieName="ivan"
+          socketRef={socketRef}
+        />
+      </Provider>,
+    );
+    expect(screen.getAllByTitle("ivan")[0]).toBeInTheDocument();
+  });
 });

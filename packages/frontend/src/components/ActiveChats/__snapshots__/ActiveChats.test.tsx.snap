@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should create snapshot for <ActiveChats/> 1`] = `
+exports[`<ActiveChats/> should create snapshot 1`] = `
 <div
   className="css-1e1vc0x  css-1bzo7of"
   data-testid="chat"
