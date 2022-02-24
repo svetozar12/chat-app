@@ -8,7 +8,7 @@ const route = express.Router();
 route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
-    let status = req.query.status as string;
+    const status = req.query.status as string;
     const invites =
       status !== undefined
         ? await Invites.find({
@@ -38,7 +38,7 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
 route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
-    let status = req.query.status as string;
+    const status = req.query.status as string;
 
     const invites =
       status !== undefined

@@ -6,11 +6,11 @@
   "scripts": {
     "build": "lerna run build --stream",
     "dev": "lerna run dev --no-sort --stream",
-    "test": "lerna run test --stream",
-    "lint": "lerna run lint --stream",
-    "lint-css": "lerna run lint-css --stream",
+    "test": "lerna run test --no-sort --stream",
+    "lint": "lerna run lint --no-sort --stream",
+    "lint-css": "lerna run lint-css --no-sort --stream",
     "diff": "lerna diff",
-    "format": "lerna format",
+    "format": "lerna run format --no-sort --stream",
     "kill": "npx kill-port 3000 4000 4002 -y",
     "dev:kill": "yarn kill && yarn dev"
   },
