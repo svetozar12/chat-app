@@ -4,7 +4,7 @@ on:
   push:
     branches: ["**"]
 
-jobs:-
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
@@ -16,4 +16,3 @@ jobs:-
       - run: docker run -d -p 27017:27017 mongo
       - run: yarn build
       - run: yarn test
-
