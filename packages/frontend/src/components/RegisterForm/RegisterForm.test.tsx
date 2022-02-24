@@ -1,47 +1,47 @@
 import RegisterForm from "../RegisterForm/RegisterForm";
 import renderer from "react-test-renderer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import { initialState } from "../../redux/reducer/authReducer";
 import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer";
 import configureStore from "redux-mock-store";
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
 const quickLogin: any = jest.fn();
 const handleSubmit = jest.fn();
 
-beforeEach(() => {
-  const mockStore = configureStore([]);
-  const store = mockStore({
-    authReducer: initialState,
-    saveInputReducer: saveInputState,
-  });
-  component = renderer
-    .create(
-      <Provider store={store}>
-        <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
-      </Provider>,
-    )
-    .toJSON();
+const mockStore = configureStore([]);
+const store = mockStore({
+  authReducer: initialState,
+  saveInputReducer: saveInputState,
+});
 
-  container = render(
+const setupRender = () => {
+  const component = render(
     <Provider store={store}>
       <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
     </Provider>,
   );
-});
-
-afterEach(cleanup);
+  return component;
+};
 
 describe("Render connected React-redux page", () => {
+  beforeEach(() => {
+    setupRender();
+  });
   it("should create snapshot for <RegisterForm/>", () => {
-    expect(component).toMatchSnapshot();
+    expect(
+      renderer
+        .create(
+          <Provider store={store}>
+            <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+          </Provider>,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
   });
 
   it("should render <RegisterForm/>", () => {
-    const renderedComponent = container.getByTitle("register_form");
+    const renderedComponent = screen.getByTitle("register_form");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

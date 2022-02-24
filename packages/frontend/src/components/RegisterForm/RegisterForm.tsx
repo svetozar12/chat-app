@@ -4,7 +4,7 @@ import { InitialState, InitialState3 } from "../../redux/state";
 import styled from "@emotion/styled";
 import { Alerts } from "../Alerts/Alerts";
 import { css } from "@emotion/css";
-import { Form, Button, Input, Form_header, Label_container } from "../LoginForm/LoginForm";
+import { Form, Button, Input, Form_header, Label_container } from "../styledComponents";
 
 export const Label_button = styled.label`
   margin: 0 2rem;

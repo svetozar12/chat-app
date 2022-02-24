@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render connected React-redux page should create snapshot for <Notifications_Modal/> 1`] = `
+<div
+  className="fRequests_modal"
+>
+  <section
+    className="modal_heading flex"
+    style={
+      Object {
+        "position": "relative",
+        "textAlign": "center",
+      }
+    }
+  >
+    <h1
+      style={
+        Object {
+          "padding": "0 25%",
+        }
+      }
+    >
+      Notifications
+    </h1>
+    <div
+      className="circle_border absolute_top_right flex"
+      onClick={[Function]}
+      style={
+        Object {
+          "height": "3rem",
+          "margin": "0 1rem",
+          "width": "3rem",
+        }
+      }
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        stroke="currentColor"
+        strokeWidth="0"
+        style={
+          Object {
+            "color": undefined,
+            "height": "2rem",
+            "width": "2rem",
+          }
+        }
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M3,3 L21,21 M3,21 L21,3"
+          fill="none"
+          stroke="#000"
+          strokeWidth="2"
+        />
+      </svg>
+    </div>
+  </section>
+  <div
+    className="css-1ne78lp"
+  >
+    <h1
+      className="flex"
+    >
+      No Chat suggestions
+    </h1>
+    <div
+      style={
+        Object {
+          "width": "100%",
+        }
+      }
+    />
+  </div>
+</div>
+`;

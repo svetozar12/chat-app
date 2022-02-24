@@ -1,29 +1,13 @@
 import PendingChats from "../PendingChats/PendingChats";
 import renderer from "react-test-renderer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
 const socketRef: any = jest.fn();
 const setLocalStatus = jest.fn();
 
-beforeEach(() => {
-  component = renderer
-    .create(
-      <PendingChats
-        _id="61c4957b735b579e5442dfe8"
-        inviter="ivan"
-        reciever="gosho"
-        socketRef={socketRef}
-        setLocalStatus={setLocalStatus}
-        status="recieved"
-      />,
-    )
-    .toJSON();
-
-  container = render(
+const setupRender = () => {
+  const component = render(
     <PendingChats
       _id="61c4957b735b579e5442dfe8"
       inviter="ivan"
@@ -33,17 +17,32 @@ beforeEach(() => {
       status="recieved"
     />,
   );
-});
-
-afterEach(cleanup);
+  return component;
+};
 
 describe("Render connected React-redux page", () => {
+  beforeEach(() => {
+    setupRender();
+  });
   it("should create snapshot for <PendingChats/>", () => {
-    expect(component).toMatchSnapshot();
+    expect(
+      renderer
+        .create(
+          <PendingChats
+            _id="61c4957b735b579e5442dfe8"
+            inviter="ivan"
+            reciever="gosho"
+            socketRef={socketRef}
+            setLocalStatus={setLocalStatus}
+            status="recieved"
+          />,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
   });
 
   it("should render <PendingChats/>", () => {
-    const renderedComponent = container.getByText("ivan");
+    const renderedComponent = screen.getByText("ivan");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

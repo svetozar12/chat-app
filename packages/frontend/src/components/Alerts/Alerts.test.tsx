@@ -3,12 +3,12 @@ import configureStore from "redux-mock-store";
 import { AuthState } from "../../redux/reducer/authReducer";
 import { Alerts } from "../Alerts/Alerts";
 import renderer from "react-test-renderer";
-import { render, cleanup, RenderResult } from "@testing-library/react";
+import { render, cleanup } from "@testing-library/react";
 import { ReactTestRendererJSON } from "react-test-renderer";
 import "@testing-library/jest-dom";
 
 let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
+let container;
 const submit = jest.fn();
 submit.mockReturnValue("default");
 

@@ -14,5 +14,7 @@ jobs:
           node-version: 12
       - run: yarn
       # - run: docker run -d -p 27017:27017 mongo
+      - run: yarn lint
+      - run: yarn style-lint
       - run: yarn build
       # - run: yarn test

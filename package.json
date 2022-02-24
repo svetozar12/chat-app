@@ -7,7 +7,10 @@
     "build": "lerna run build --stream",
     "dev": "lerna run dev --no-sort --stream",
     "test": "lerna run test --stream",
+    "lint": "lerna run lint --stream",
+    "lint-css": "lerna run lint-css --stream",
     "diff": "lerna diff",
+    "format": "lerna format",
     "kill": "npx kill-port 3000 4000 4002 -y",
     "dev:kill": "yarn kill && yarn dev"
   },

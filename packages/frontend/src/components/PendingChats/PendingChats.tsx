@@ -7,6 +7,7 @@ import { Iinvites } from "../../pages/[acc]";
 import { FaUserCircle } from "react-icons/fa";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
+import Image from "next/image";
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -51,6 +52,18 @@ const Decline = styled.button`
     transition: 0.2s;
   }
 `;
+
+const ButtonSharedStyle = `
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    outline: none;
+    border: none;
+    font-size: 1.9rem;
+    background: transparent;
+    transition: 0.2s;
+  }`;
 
 function PendingChats({ _id, inviter, reciever, status, socketRef, setLocalStatus }: IPendingChats) {
   const [image, setImage] = React.useState<string>("");
@@ -114,7 +127,7 @@ function PendingChats({ _id, inviter, reciever, status, socketRef, setLocalStatu
       {status === "recieved" && (
         <Contacts className="contacts">
           <div className="user_info flex">
-            {image ? <img src={image} alt="user_avatar" /> : <FaUserCircle />}
+            {image ? <Image src={image} alt="user_avatar" /> : <FaUserCircle />}
             <h1 className="flex">{inviter}</h1>
           </div>
           <div className="invite_buttons">
@@ -122,7 +135,9 @@ function PendingChats({ _id, inviter, reciever, status, socketRef, setLocalStatu
               onClick={() => {
                 createChatRoom();
               }}
-              className="accept flex"
+              className={css`
+                ${ButtonSharedStyle}
+              `}
             >
               <AiFillCheckCircle
                 className={css`
@@ -131,7 +146,12 @@ function PendingChats({ _id, inviter, reciever, status, socketRef, setLocalStatu
                 `}
               />
             </Accept>
-            <Decline onClick={() => updateInviteStatus("declined")} className="decline flex">
+            <Decline
+              onClick={() => updateInviteStatus("declined")}
+              className={css`
+                ${ButtonSharedStyle}
+              `}
+            >
               <AiFillCloseCircle
                 className={css`
                   width: 2rem;
