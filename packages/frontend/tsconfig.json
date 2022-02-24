@@ -13,16 +13,32 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "sourceMap": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "jsxImportSource": "@emotion/react"
   },
-  "include": ["./**/*.ts", "src"],
-  "exclude": ["node_modules/**/*", "cypress"],
-  "lib": ["es2017", "dom", "ES6", "es2015.core"]
+  "include": [
+    "./**/*.ts",
+    "src"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "cypress"
+  ],
+  "lib": [
+    "es2017",
+    "dom",
+    "ES6",
+    "es2015.core"
+  ]
 }

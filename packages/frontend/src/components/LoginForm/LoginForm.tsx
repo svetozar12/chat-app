@@ -1,26 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "../../redux/state";
-import styled from "@emotion/styled";
 import { Label_container, Form_header, Form, Button, Input } from "../styledComponents";
 import { Alerts } from "../Alerts/Alerts";
-
-const CheckBox = styled.input`
-  width: 20px;
-  height: 40px;
-`;
-
-const Clickable = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const Link_anchor = styled.a`
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid transparent;
-  margin: 1rem;
-`;
+import { css } from "@emotion/react";
+import React from "react";
 
 // eslint-disable-next-line no-unused-vars
 function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void> }) {
@@ -30,7 +14,7 @@ function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLBu
   const dispatch = useDispatch();
 
   return (
-    <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
+    <div css={css`height: "100vh", flex-direction: "column"`} className="flex">
       {(state.good || state.bad) && <Alerts />}
       <div style={{ width: "100%", height: "3rem" }}></div>
       <Form_header>Login</Form_header>
@@ -58,13 +42,31 @@ function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLBu
         <Button onClick={handleSubmit} type="submit">
           Log In
         </Button>
-        <Clickable>
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
           <Link href="/register">
-            <Link_anchor className="link" style={{ color: "var(--button-blue)" }}>
+            <a
+              className="link"
+              css={css`
+                text-decoration: none;
+                cursor: pointer;
+                border: 1px solid transparent;
+                margin: 1rem;
+                color: "var(--button-blue)";
+              `}
+            >
               Sign up for chatApp .
-            </Link_anchor>
+            </a>
           </Link>
-          <CheckBox
+          <input
+            css={css`
+              width: 20px;
+              height: 40px;
+            `}
             data-testid="checkbox"
             type="checkbox"
             id="checkbox"
@@ -80,7 +82,7 @@ function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLBu
             {" "}
             Remember me
           </label>
-        </Clickable>
+        </div>
       </Form>
     </div>
   );
