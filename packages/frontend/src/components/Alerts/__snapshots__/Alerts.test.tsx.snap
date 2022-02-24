@@ -2,7 +2,7 @@
 
 exports[`Render connected React-redux page should create snapshot for <Alerts/> 1`] = `
 <div
-  className="css-1dueyvl"
+  className="css-1ljjc3q"
   title="alert message"
 >
   <p

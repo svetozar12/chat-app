@@ -10,7 +10,6 @@
     "lint": "next lint",
     "lint-css": "stylelint \"./styles/*.{css}\"",
     "test": "jest",
-    "test:update": "jest --updateSnapshot",
     "test:integration": "cypress open",
     "format": "prettier --write **/*.{js,ts,tsx}"
   },

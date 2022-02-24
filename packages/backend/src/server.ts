@@ -3,7 +3,7 @@ import * as cors from "cors";
 import "dotenv/config";
 import connectDb from "./connection/dbConnection";
 import data from "./router/router";
-const socketIo = require("./connection/wsConnection");
+require("./connection/wsConnection");
 const app = express();
 app.use(cors());
 app.use(express.json());

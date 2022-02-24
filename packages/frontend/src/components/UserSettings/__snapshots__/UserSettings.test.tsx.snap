@@ -7,6 +7,7 @@ exports[`<UserSettings/> should create snapshot 1`] = `
 >
   <a
     className="css-bc367k"
+    href="/settings/profile"
     onClick={[Function]}
     onMouseEnter={[Function]}
     style={
@@ -48,6 +49,7 @@ exports[`<UserSettings/> should create snapshot 1`] = `
   </a>
   <a
     className="css-bc367k"
+    href="/#"
     onClick={[Function]}
     onMouseEnter={[Function]}
   >
@@ -80,6 +82,7 @@ exports[`<UserSettings/> should create snapshot 1`] = `
   </a>
   <a
     className="css-bc367k"
+    href="/#"
     onClick={[Function]}
     onMouseEnter={[Function]}
     style={

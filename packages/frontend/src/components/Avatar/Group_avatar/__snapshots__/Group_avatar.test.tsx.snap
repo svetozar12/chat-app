@@ -16,7 +16,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       }
     >
       <svg
-        className="css-1cx674w css-boia29"
+        className="css-s24rqw css-boia29"
         data-testid="single_avatar"
         fill="currentColor"
         height="1em"
@@ -50,7 +50,7 @@ exports[`Render connected React-redux page should create snapshot for <LoginForm
       }
     >
       <svg
-        className="css-1cx674w css-1795t3g"
+        className="css-s24rqw css-1795t3g"
         data-testid="single_avatar"
         fill="currentColor"
         height="1em"
