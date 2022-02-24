@@ -29,49 +29,46 @@ const RegisterPostError = (res: string) => {
 // MAIN action creators
 // =========
 
-export const loginPost =
-  (username: string, password: string) =>
-    async (dispatch: Dispatch<Action | any>) => {
-      try {
-        const res = await axios.post(`${requestUrl}/auth/login`, {
-          username,
-          password,
-        });
-        return true;
-      } catch (error: any) {
-        username = "";
-        password = "";
-        dispatch(loginPostError(error.response.data.message));
-        setTimeout(() => {
-          dispatch(loginPostError(""));
-        }, 4000);
-        return false;
-      }
-    };
+export const loginPost = (username: string, password: string) => async (dispatch: Dispatch<Action | any>) => {
+  try {
+    const res = await axios.post(`${requestUrl}/auth/login`, {
+      username,
+      password,
+    });
+    return true;
+  } catch (error: any) {
+    username = "";
+    password = "";
+    dispatch(loginPostError(error.response.data.message));
+    setTimeout(() => {
+      dispatch(loginPostError(""));
+    }, 4000);
+    return false;
+  }
+};
 
 export const registerPost =
-  (username: string, password: string, email: string, gender: string) =>
-    async (dispatch: Dispatch<Action | any>) => {
-      try {
-        const res = await axios.post(`${requestUrl}/users/register`, {
-          username,
-          password,
-          email,
-          gender,
-        });
-        const data = res.data.message;
+  (username: string, password: string, email: string, gender: string) => async (dispatch: Dispatch<Action | any>) => {
+    try {
+      const res = await axios.post(`${requestUrl}/users/register`, {
+        username,
+        password,
+        email,
+        gender,
+      });
+      const data = res.data.message;
 
-        dispatch(RegisterPostSuccess(data));
-        setTimeout(() => {
-          dispatch(RegisterPostSuccess(""));
-        }, 4000);
-        return true;
-      } catch (error: any) {
-        const data = error.response.data.message;
-        dispatch(RegisterPostError(data));
-        setTimeout(() => {
-          dispatch(RegisterPostError(""));
-        }, 4000);
-        return false;
-      }
-    };
+      dispatch(RegisterPostSuccess(data));
+      setTimeout(() => {
+        dispatch(RegisterPostSuccess(""));
+      }, 4000);
+      return true;
+    } catch (error: any) {
+      const data = error.response.data.message;
+      dispatch(RegisterPostError(data));
+      setTimeout(() => {
+        dispatch(RegisterPostError(""));
+      }, 4000);
+      return false;
+    }
+  };

@@ -10,14 +10,12 @@ import { actions } from "../redux/store";
 import { loginAuth } from "../utils/authRoutes";
 import { getFirstChat } from "../utils/getFirstChat";
 
-function register(props: { cookie: string }) {
+function Register(props: { cookie: string }) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const { registerPost } = bindActionCreators(actions, dispatch);
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
   const quickLogin = async () => {
     const JWT = await loginAuth(state.input_username, state.input_password);
@@ -47,12 +45,7 @@ function register(props: { cookie: string }) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const register = await registerPost(
-      state.input_username,
-      state.input_password,
-      state.input_email,
-      state.input_gender,
-    );
+    const register = await registerPost(state.input_username, state.input_password, state.input_email, state.input_gender);
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
     } else {
@@ -67,6 +60,7 @@ function register(props: { cookie: string }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cookie = useCookie(context);
   const chatInstance: any = await getFirstChat(cookie.get("name"));
 
@@ -84,4 +78,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default register;
+export default Register;

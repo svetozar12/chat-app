@@ -31,11 +31,7 @@ export const CheckBox_component = ({
   }, [isChecked]);
 
   return (
-    <Add_users_checkBox
-      title="checkbox"
-      onClick={() => setIsChecked(!isChecked)}
-      className="flex"
-    >
+    <Add_users_checkBox title="checkbox" onClick={() => setIsChecked(!isChecked)} className="flex">
       <Suggested_user>{item}</Suggested_user>
       <input
         className={css`

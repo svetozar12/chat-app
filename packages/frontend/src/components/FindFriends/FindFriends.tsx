@@ -86,13 +86,9 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     getUserImage(cookieName);
   }, []);
 
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
-  const notifState = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const notifState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
   const toggleGroupCreate = () => {
     dispatch({
@@ -127,9 +123,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       return false;
     }
   };
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     if (state.reciever) {
       await sendInvite();
@@ -138,10 +132,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   };
 
   return (
-    <Form
-      onSubmit={handleSubmit}
-      style={{ marginBottom: "1rem", alignItems: "center" }}
-    >
+    <Form onSubmit={handleSubmit} style={{ marginBottom: "1rem", alignItems: "center" }}>
       <Closed_hamburger></Closed_hamburger>
       <Profile>
         <div className="flex">
@@ -173,9 +164,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             }}
           >
             <IoNotifications />
-            {notifState.notification_number != 0 && (
-              <div className="flex">{notifState.notification_number}</div>
-            )}
+            {notifState.notification_number != 0 && <div className="flex">{notifState.notification_number}</div>}
           </div>
           <div
             className="flex"
@@ -207,14 +196,9 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       </Profile>
       <div className="flex" style={{ width: "95%", position: "relative" }}>
         <div className="search-bar">
-          <BsSearch
-            style={{ cursor: "pointer", color: "black" }}
-            onClick={handleSubmit}
-          />
+          <BsSearch style={{ cursor: "pointer", color: "black" }} onClick={handleSubmit} />
           <Form_input
-            onChange={(e) =>
-              dispatch({ type: "SET_RECIEVER", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
             placeholder="Search for chats"
             value={state.reciever}
             type="search"

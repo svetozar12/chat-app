@@ -20,19 +20,14 @@ function Notifications({
   socketRef: Socket | any;
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
   const dispatch = useDispatch();
   const checkSize = contacts.filter((element) => element.status != "accepted");
 
   return (
     <div className="fRequests_modal">
-      <section
-        style={{ position: "relative", textAlign: "center" }}
-        className="modal_heading flex"
-      >
+      <section style={{ position: "relative", textAlign: "center" }} className="modal_heading flex">
         <h1 style={{ padding: "0 25%" }}>Notifications</h1>
         <div
           onClick={() => {
@@ -48,20 +43,9 @@ function Notifications({
         </div>
       </section>
       <Notification_items>
-        {checkSize.length === 0 && (
-          <h1 className="flex">No Chat suggestions</h1>
-        )}
+        {checkSize.length === 0 && <h1 className="flex">No Chat suggestions</h1>}
         {contacts.map((item, index) => {
-          return (
-            socketRef && (
-              <PendingChats
-                key={index}
-                socketRef={socketRef}
-                setLocalStatus={setLocalStatus}
-                {...item}
-              />
-            )
-          );
+          return socketRef && <PendingChats key={index} socketRef={socketRef} setLocalStatus={setLocalStatus} {...item} />;
         })}
       </Notification_items>
     </div>

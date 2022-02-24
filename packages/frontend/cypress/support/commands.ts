@@ -59,7 +59,7 @@ Cypress.Commands.add("set_tokens", (user) => {
     cy.setCookie("token", interception.body.Access_token);
     cy.setCookie("refresh_token", interception.body.Refresh_token);
   });
-})
+});
 
 Cypress.Commands.add("delete_users", (users) => {
   users.forEach((element) => {

@@ -6,9 +6,7 @@ import { InitialState2 } from "../../redux/state";
 import { GiHamburgerMenu } from "react-icons/gi";
 function HamburgerMenu() {
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
   return (
     <GiHamburgerMenu
       title="hamburger"
@@ -30,9 +28,7 @@ function HamburgerMenu() {
         },
       }}
       className="hide"
-      onClick={() =>
-        dispatch({ type: "SET_MOBILE_NAV", payload: !state.setMobileNav })
-      }
+      onClick={() => dispatch({ type: "SET_MOBILE_NAV", payload: !state.setMobileNav })}
     />
   );
 }

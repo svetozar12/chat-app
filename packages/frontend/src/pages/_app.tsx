@@ -12,17 +12,10 @@ import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
 import { Global } from "@emotion/react";
 import styled from "@emotion/styled";
 import Head from "next/head";
-const MyApp = (
-  { Component, pageProps }: AppProps,
-  props: { cookie: string },
-) => {
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
+const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) => {
+  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
 
-  const setState = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const setState = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
@@ -77,16 +70,11 @@ const MyApp = (
 
   const BIG = styled.div`
     position: absolute;
-    z-index: ${setState.setFriendRequest || setState.setModalInvite
-      ? "100"
-      : "-1"};
+    z-index: ${setState.setFriendRequest || setState.setModalInvite ? "100" : "-1"};
     width: 100vw;
     height: 100vh;
     opacity: 0.7;
-    background: radial-gradient(
-      var(--gradient-first) 10%,
-      var(--gradient-second) 100%
-    );
+    background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
   `;
 
   return (
@@ -112,6 +100,7 @@ const MyApp = (
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cookie = useCookie(context);
   if (!cookie.has("name")) {
     return {

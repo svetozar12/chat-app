@@ -83,18 +83,11 @@ export const Form_header = styled.h1`
   }
 `;
 
-function LoginForm({
-  handleSubmit,
-}: {
-  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
-}) {
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
+// eslint-disable-next-line no-unused-vars
+function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void> }) {
+  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
 
-  const inputState = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
   const dispatch = useDispatch();
 
   return (
@@ -107,9 +100,7 @@ function LoginForm({
           <label>Username</label>
           <Input
             value={inputState.input_username}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })}
             type="text"
             name="username"
             placeholder="username ..."
@@ -119,9 +110,7 @@ function LoginForm({
           <label>Password</label>
           <Input
             value={inputState.input_password}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })}
             type="password"
             name="password"
             placeholder="password ..."
@@ -132,10 +121,7 @@ function LoginForm({
         </Button>
         <Clickable>
           <Link href="/register">
-            <Link_anchor
-              className="link"
-              style={{ color: "var(--button-blue)" }}
-            >
+            <Link_anchor className="link" style={{ color: "var(--button-blue)" }}>
               Sign up for chatApp .
             </Link_anchor>
           </Link>

@@ -8,19 +8,9 @@ let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
 let container: RenderResult;
 
 beforeEach(() => {
-  component = renderer
-    .create(
-      <Avatar
-        inviter={"ivan"}
-        cookieName={"greg"}
-        members={["ivan", "greg"]}
-      />,
-    )
-    .toJSON();
+  component = renderer.create(<Avatar inviter={"ivan"} cookieName={"greg"} members={["ivan", "greg"]} />).toJSON();
 
-  container = render(
-    <Avatar inviter={"ivan"} cookieName={"greg"} members={["ivan", "greg"]} />,
-  );
+  container = render(<Avatar inviter={"ivan"} cookieName={"greg"} members={["ivan", "greg"]} />);
 });
 
 afterEach(cleanup);

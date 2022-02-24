@@ -95,7 +95,7 @@ const Div_out_of_nav = styled.div`
   z-index: 100;
 `;
 
-const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
+const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
   const cookieName = cookie.get("name");
@@ -105,20 +105,14 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const route = useRouter();
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
-  const inputState = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
   const fetchInviteStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(
-        `${requestUrl}/invites/${cookieName}?status=accepted`,
-      );
+      const res = await axios.get(`${requestUrl}/invites/${cookieName}?status=accepted`);
       const data = res.data.invites;
       setContacts(data);
       return data;
@@ -130,9 +124,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviterStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(
-        `${requestUrl}/invites/inviter/${cookieName}?status=accepted`,
-      );
+      const res = await axios.get(`${requestUrl}/invites/inviter/${cookieName}?status=accepted`);
       const data = res.data.invites;
       setContacts(data);
       return data;
@@ -145,9 +137,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     try {
       const res = await fetchInviteStatus();
       const res_inviter = await fetchInviterStatus();
-      const res_chat = await axios.get(
-        `http://localhost:4002/chat-room${window.location.pathname}`,
-      );
+      const res_chat = await axios.get(`http://localhost:4002/chat-room${window.location.pathname}`);
       const members_in_chat = res_chat.data.Message[0].members;
 
       let data: any[] = [];
@@ -164,9 +154,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           uniqueUsers.push(element);
         }
       });
-      uniqueUsers = uniqueUsers.filter(
-        (element) => !members_in_chat.includes(element),
-      );
+      uniqueUsers = uniqueUsers.filter((element) => !members_in_chat.includes(element));
       console.log(uniqueUsers, "sugestions");
 
       setUsers(uniqueUsers);
@@ -181,9 +169,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await axios.get(
-        `${requestUrl}/chat-room/?user_name=${cookie.get("name")}`,
-      );
+      const res = await axios.get(`${requestUrl}/chat-room/?user_name=${cookie.get("name")}`);
       const data = res.data.contacts;
 
       setChatRooms(data);
@@ -208,9 +194,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(
-        `${requestUrl}/invites/${cookieName}?status=recieved`,
-      );
+      const res = await axios.get(`${requestUrl}/invites/${cookieName}?status=recieved`);
       const data = res.data.invites;
       dispatch({ type: "NOTIFICATION_NUMBER", payload: data.length });
       setContacts(data);
@@ -282,13 +266,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }
         `}
       >
-        {socketRef && (
-          <FindFriends
-            cookie={cookie}
-            cookieName={cookie.get("name")}
-            socketRef={socketRef}
-          />
-        )}
+        {socketRef && <FindFriends cookie={cookie} cookieName={cookie.get("name")} socketRef={socketRef} />}
         <div
           className="flex "
           style={{
@@ -330,26 +308,13 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               />
             </div>
             {socketRef && (
-              <ChatSettings
-                socketRef={socketRef}
-                chatId={props.chatRoom}
-                setLocalStatus={setLocalStatus}
-                cookieName={cookie.get("name")}
-              />
+              <ChatSettings socketRef={socketRef} chatId={props.chatRoom} setLocalStatus={setLocalStatus} cookieName={cookie.get("name")} />
             )}
           </Chat_settings>
 
           {socketRef &&
             chatRooms.map((item, index) => {
-              return (
-                <ActiveChats
-                  key={index}
-                  {...item}
-                  cookieName={cookie.get("name")}
-                  socketRef={socketRef}
-                  chatId={props.chatRoom}
-                />
-              );
+              return <ActiveChats key={index} {...item} cookieName={cookie.get("name")} socketRef={socketRef} chatId={props.chatRoom} />;
             })}
         </div>
       </Active_chats>
@@ -365,13 +330,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         {" "}
         <Container className="container">
           <Dashborad className="flex">
-            {state.setFriendRequest && (
-              <Notifications_Modal
-                contacts={contacts}
-                socketRef={socketRef}
-                setLocalStatus={setLocalStatus}
-              />
-            )}
+            {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} setLocalStatus={setLocalStatus} />}
 
             {state.setModalInvite && socketRef && (
               <AddUsers_Modal
@@ -391,6 +350,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cookie = useCookie(context);
   if (!cookie.has("name") && !cookie.has("token")) {
     return {
@@ -409,4 +369,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default homePage;
+export default HomePage;

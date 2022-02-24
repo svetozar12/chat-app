@@ -8,14 +8,12 @@ import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { getFirstChat } from "../../utils/getFirstChat";
 import { UpdateInfoForm } from "../../components/UpdateInfoForm/UpdateInfoForm";
 
-function profile(props: { cookie: string }) {
+function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
   const [url, setUrl] = React.useState("");
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
   React.useEffect(() => {
     (async () => {
       const first_id = await getFirstChat(cookie.get("name"));
@@ -34,10 +32,10 @@ function profile(props: { cookie: string }) {
 
       axios
         .put(`${requestUrl}/users/update`, formData)
-        .then((res) => {
+        .then(() => {
           return true;
         })
-        .catch((err) => {
+        .catch(() => {
           return false;
         });
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
@@ -50,19 +48,14 @@ function profile(props: { cookie: string }) {
   return (
     <main style={{ height: "100vh" }} className="flex">
       <section style={{ width: "80%" }}>
-        <UpdateInfoForm
-          cookieName={cookie.get("name")}
-          url={url}
-          handleSubmit={handleSubmit}
-          image={image}
-          setImage={setImage}
-        />
+        <UpdateInfoForm cookieName={cookie.get("name")} url={url} handleSubmit={handleSubmit} image={image} setImage={setImage} />
       </section>
     </main>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cookie = useCookie(context);
   if (!cookie.has("name") && !cookie.has("token")) {
     return {
@@ -80,4 +73,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default profile;
+export default Profile;

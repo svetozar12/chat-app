@@ -1,17 +1,3 @@
-/* =================
-Table of concepts
-  1.Global variables
-  2.Global styling
-  3.Layout styling
-  4.Components styling
-  5.Typography styling
-  6.Media Query
-================= */
-
-/* =================
-1.Global variables
-================= */
-
 :root {
   --main-white: rgb(252, 252, 252);
   --main-black: rgb(0, 0, 0);
@@ -25,12 +11,12 @@ Table of concepts
   --main-green: rgb(52, 192, 34);
   --main-red: rgb(231, 10, 10);
   --gradient-first: #dfdfdf;
-  --gradient-second: #ffffff;
+  --gradient-second: #fff;
   --input-border-color: #ccd0d5;
   --main-logo-color: #bfc2c6;
   --bad-alert-color: #f24654;
   --bad-alert-bgcolor: rgba(255, 0, 0, 0.5);
-  --good-alert-color: #60af86l;
+  --good-alert-color: #60af86;
   --good-alert-bgcolor: rgba(0, 255, 0, 0.2);
   --main-box-shadow: rgba(0, 0, 0, 0.2);
 }
@@ -44,8 +30,8 @@ body {
   padding: 0;
   margin: 0;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
 }
 
 button {
@@ -81,11 +67,9 @@ a {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
 }
+
 .BIG {
-  background: radial-gradient(
-    var(--gradient-first) 10%,
-    var(--gradient-second) 100%
-  );
+  background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
   position: absolute;
   z-index: -1;
   width: 100vw;
@@ -94,6 +78,12 @@ a {
 
 .container {
   flex-direction: column;
+  height: 70vh;
+  margin: 1rem 0;
+  padding: 3rem;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 0 15px black;
 }
 
 .contacts_container,
@@ -136,9 +126,61 @@ form {
   margin-left: 1rem;
 }
 
+.search-bar svg {
+  margin-left: 0.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.user_info svg,
+img {
+  margin-right: 1rem;
+}
+
+.group_logo_container svg {
+  position: absolute;
+  color: var(--main-logo-color);
+}
+
+.menu_active > svg {
+  font-size: 3.8rem;
+  color: var(--main-black);
+  margin: 2rem;
+  padding: 1rem;
+  background: var(--main-white);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.user_info svg {
+  color: var(--main-logo-color);
+}
+
+.menu > svg {
+  font-size: 3.8rem;
+  color: var(--main-white);
+  margin: 2rem;
+  padding: 1rem;
+  background: var(--main-black);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 .find_friends_icons div svg {
   width: 2rem;
   height: 2rem;
+}
+
+.notifications div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50px;
+  background: #e73553;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: 0;
+  padding: 0;
 }
 
 .find_friends_icons div:hover {
@@ -165,18 +207,6 @@ form {
   position: relative;
 }
 
-.notifications div {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-radius: 50px;
-  background: #e73553;
-  width: 1.3rem;
-  height: 1.3rem;
-  margin: 0;
-  padding: 0;
-}
-
 .modal_heading {
   width: 100%;
   position: relative;
@@ -198,6 +228,7 @@ form {
   left: 0;
   z-index: 1;
 }
+
 .addGroup_button {
   border-radius: 5px;
   border: none;
@@ -223,16 +254,11 @@ form {
   padding: 0;
 }
 
-register_form from input {
-  margin: 0 1rem;
-}
-
-input[type="radio"]:checked + label {
-  background: rgba(0, 105, 217, 1);
-}
-
-input {
-  outline: none;
+form div > input {
+  border-radius: 5px;
+  margin: 1rem;
+  padding: 0.3rem;
+  border: 1px solid var(--main-black);
 }
 
 .friendsInput input {
@@ -241,6 +267,22 @@ input {
   background: transparent;
   margin: 0 1rem;
   padding: 0.3rem;
+}
+
+.search-bar input {
+  padding: 0.3rem;
+}
+
+.register_form form input {
+  margin: 0 1rem;
+}
+
+input[type="radio"]:checked + label {
+  background: rgba(0, 105, 217, 1);
+}
+
+input[type="radio"] {
+  outline: none;
 }
 
 .group_logo_container {
@@ -255,9 +297,9 @@ input {
   border-radius: 50px;
 }
 
-.group_logo_container svg {
-  position: absolute;
-  color: var(--main-logo-color);
+.container_chat div > h3,
+p {
+  margin: 1rem;
 }
 
 .contacts_info h2,
@@ -278,27 +320,8 @@ p {
   background: rgba(122, 122, 122, 0.1);
 }
 
-.search-bar input {
-  padding: 0.3rem;
-}
-
 .search-bar:focus-within {
   box-shadow: 0 0 5px;
-}
-
-.search-bar svg {
-  margin-left: 0.5rem;
-  width: 1.8rem;
-  height: 1.8rem;
-}
-
-.container {
-  height: 70vh;
-  margin: 1rem 0;
-  padding: 3rem;
-  border-radius: 5px;
-  background: #fff;
-  box-shadow: 0 0 15px black;
 }
 
 .button {
@@ -321,13 +344,6 @@ p {
   transition: 0.2s;
 }
 
-form div > input {
-  border-radius: 5px;
-  margin: 1rem;
-  padding: 0.3rem;
-  border: 1px solid var(--main-black);
-}
-
 .invite_list > main {
   margin: 2rem 0 2rem 0;
 }
@@ -343,11 +359,6 @@ form div > input {
 .blue_no_underline {
   color: var(--main-blue);
   text-decoration: none;
-}
-
-.container_chat div > h3,
-p {
-  margin: 1rem;
 }
 
 .container-chat h2 {
@@ -385,35 +396,6 @@ p {
   text-align: center;
 }
 
-.user_info svg,
-img {
-  margin-right: 1rem;
-}
-
-.user_info svg {
-  color: var(--main-logo-color);
-}
-
-.menu > svg {
-  font-size: 3.8rem;
-  color: var(--main-white);
-  margin: 2rem;
-  padding: 1rem;
-  background: var(--main-black);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.menu_active > svg {
-  font-size: 3.8rem;
-  color: var(--main-black);
-  margin: 2rem;
-  padding: 1rem;
-  background: var(--main-white);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
 /* utility */
 .circle_border {
   border-radius: 50px;
@@ -449,21 +431,20 @@ img {
     transition: 0.4s ease-in;
     overflow: hidden;
     width: 0;
-    disply: a none;
+    display: none;
   }
+
   .clickable {
     align-items: center;
     font-size: 3vw;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .show {
     width: 80%;
   }
 
-  .clickable {
-    flex-direction: column;
-    justify-content: center;
-  }
   .fRequests_modal {
     width: 70%;
   }
@@ -472,16 +453,14 @@ img {
   .clickable {
     align-items: center;
     font-size: 3vw;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .show {
     width: 80%;
   }
 
-  .clickable {
-    flex-direction: column;
-    justify-content: center;
-  }
   .fRequests_modal {
     width: 70%;
   }

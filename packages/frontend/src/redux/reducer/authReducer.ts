@@ -10,10 +10,7 @@ export const initialState = {
   loginPrompt: false,
   cookie: "",
 };
-const reducer = (
-  state: InitialState | undefined = initialState,
-  action: Action,
-) => {
+const reducer = (state: InitialState | undefined = initialState, action: Action) => {
   switch (action.type) {
     case HYDRATE:
       return {

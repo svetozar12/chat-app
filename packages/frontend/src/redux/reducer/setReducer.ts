@@ -13,10 +13,7 @@ export const initialState = {
   setChatSettings: false,
   setModalInvite: false,
 };
-const setReducer = (
-  state: InitialState2 | any | InitialState2[] = initialState,
-  action: Action,
-) => {
+const setReducer = (state: InitialState2 | any | InitialState2[] = initialState, action: Action) => {
   switch (action.type) {
     case HYDRATE:
       return {

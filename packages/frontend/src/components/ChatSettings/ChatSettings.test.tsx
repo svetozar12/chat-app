@@ -26,12 +26,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <ChatSettings
-              cookieName={"greg"}
-              socketRef={socket}
-              setLocalStatus={submit}
-              chatId={"321312313"}
-            />
+            <ChatSettings cookieName={"greg"} socketRef={socket} setLocalStatus={submit} chatId={"321312313"} />
           </Provider>,
         )
         .toJSON(),
@@ -41,12 +36,7 @@ describe("Render connected React-redux page", () => {
   it("should render <ChatSettings/>", () => {
     render(
       <Provider store={store}>
-        <ChatSettings
-          cookieName={"greg"}
-          socketRef={socket}
-          setLocalStatus={submit}
-          chatId={"321312313"}
-        />
+        <ChatSettings cookieName={"greg"} socketRef={socket} setLocalStatus={submit} chatId={"321312313"} />
       </Provider>,
     );
     const renderedComponent = screen.getByText("Members in chat");

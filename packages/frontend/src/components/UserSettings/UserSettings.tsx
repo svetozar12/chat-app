@@ -79,7 +79,7 @@ function UserSettings({ cookie }: { cookie: any }) {
 
   return (
     <User_settings data-testid="user_settings">
-      <Link href="/settings/profile">
+      <Link href="/settings/profile" passHref>
         <User_settings_anchor
           style={{ marginTop: "1rem" }}
           onClick={() => {
@@ -97,7 +97,7 @@ function UserSettings({ cookie }: { cookie: any }) {
           User settings
         </User_settings_anchor>
       </Link>
-      <Link href="#">
+      <Link href="#" passHref>
         <User_settings_anchor onClick={deleteCookies}>
           <IoMdLogOut
             style={{
@@ -110,11 +110,8 @@ function UserSettings({ cookie }: { cookie: any }) {
           Log out
         </User_settings_anchor>
       </Link>
-      <Link href="#">
-        <User_settings_anchor
-          style={{ marginBottom: "1rem" }}
-          onClick={deleteUser}
-        >
+      <Link href="#" passHref>
+        <User_settings_anchor style={{ marginBottom: "1rem" }} onClick={deleteUser}>
           <RiDeleteBin6Fill
             style={{
               margin: "0 1rem",

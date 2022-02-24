@@ -8,10 +8,7 @@ export const initialState = {
   input_gender: "",
   notification_number: 0,
 };
-const saveInputReducer = (
-  state: InitialState3 = initialState,
-  action: Action,
-) => {
+const saveInputReducer = (state: InitialState3 = initialState, action: Action) => {
   switch (action.type) {
     case HYDRATE:
       return {

@@ -11,18 +11,14 @@ import { getFirstChat } from "../utils/getFirstChat";
 import LoginForm from "../components/LoginForm/LoginForm";
 import { checkJWT, loginAuth } from "../utils/authRoutes";
 
-function login(props: AppProps) {
+function Login(props: AppProps) {
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
-  const authState = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
+  const authState = useSelector((state: { authReducer: InitialState }) => state.authReducer);
 
   const rememberMe = authState.remember_me ? 31556952 : 3600;
   const refreshRememberMe = authState.remember_me ? 63113904 : 7200;
@@ -37,10 +33,7 @@ function login(props: AppProps) {
       return;
     }
     if (state.input_username) {
-      const tokens: any = await loginAuth(
-        state.input_username,
-        state.input_password,
-      );
+      const tokens: any = await loginAuth(state.input_username, state.input_password);
 
       const login = await loginPost(state.input_username, state.input_password);
       if (await login) {
@@ -79,24 +72,23 @@ function login(props: AppProps) {
   return <LoginForm handleSubmit={handleSubmit} />;
 }
 
-export const getServerSideProps: GetServerSideProps =
-  wrapper.getServerSideProps((store) => async (context) => {
-    const cookie = useCookie(context);
-    await checkJWT(cookie.get("token"));
-    const chatInstance: any = await getFirstChat(cookie.get("name"));
-    if (cookie.has("name") && cookie.has("token")) {
-      return {
-        redirect: {
-          destination: `/${chatInstance._id}`,
-          permanent: false,
-        },
-      };
-    }
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(() => async (context) => {
+  const cookie = useCookie(context);
+  await checkJWT(cookie.get("token"));
+  const chatInstance: any = await getFirstChat(cookie.get("name"));
+  if (cookie.has("name") && cookie.has("token")) {
     return {
-      props: {
-        cookie: context.req.headers.cookie || "",
+      redirect: {
+        destination: `/${chatInstance._id}`,
+        permanent: false,
       },
     };
-  });
+  }
+  return {
+    props: {
+      cookie: context.req.headers.cookie || "",
+    },
+  };
+});
 
-export default login;
+export default Login;

@@ -79,10 +79,7 @@ describe("The Chat Home Page", () => {
       cy.setCookie("refresh_token", interception.body.Refresh_token);
     });
     cy.visit(`/${chatInstance}`);
-
-
-
-  })
+  });
   it(`should send message to ${user3}`, () => {
     cy.get("p").contains(user3).click();
     cy.get("textarea").type("anotherTestingMessage{enter}");

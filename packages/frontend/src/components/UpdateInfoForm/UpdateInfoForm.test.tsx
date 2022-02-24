@@ -18,24 +18,14 @@ beforeEach(() => {
   component = renderer
     .create(
       <Provider store={store}>
-        <UpdateInfoForm
-          url="random.png"
-          setImage={mockFunc}
-          cookieName="greg"
-          handleSubmit={mockFunc}
-        />
+        <UpdateInfoForm url="random.png" setImage={mockFunc} cookieName="greg" handleSubmit={mockFunc} />
       </Provider>,
     )
     .toJSON();
 
   container = render(
     <Provider store={store}>
-      <UpdateInfoForm
-        url="random.png"
-        setImage={mockFunc}
-        cookieName="greg"
-        handleSubmit={mockFunc}
-      />
+      <UpdateInfoForm url="random.png" setImage={mockFunc} cookieName="greg" handleSubmit={mockFunc} />
     </Provider>,
   );
 });

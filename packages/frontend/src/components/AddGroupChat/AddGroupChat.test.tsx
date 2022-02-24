@@ -36,9 +36,8 @@ const setupRender = () => {
 };
 
 describe("Render connected React-redux page", () => {
-  let wrapper;
   beforeEach(() => {
-    wrapper = setupRender();
+    setupRender();
   });
   it("should create snapshot for <AddGroupChat/>", () => {
     expect(

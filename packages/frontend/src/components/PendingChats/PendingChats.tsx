@@ -52,14 +52,7 @@ const Decline = styled.button`
   }
 `;
 
-function PendingChats({
-  _id,
-  inviter,
-  reciever,
-  status,
-  socketRef,
-  setLocalStatus,
-}: IPendingChats) {
+function PendingChats({ _id, inviter, reciever, status, socketRef, setLocalStatus }: IPendingChats) {
   const [image, setImage] = React.useState<string>("");
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
@@ -138,10 +131,7 @@ function PendingChats({
                 `}
               />
             </Accept>
-            <Decline
-              onClick={() => updateInviteStatus("declined")}
-              className="decline flex"
-            >
+            <Decline onClick={() => updateInviteStatus("declined")} className="decline flex">
               <AiFillCloseCircle
                 className={css`
                   width: 2rem;

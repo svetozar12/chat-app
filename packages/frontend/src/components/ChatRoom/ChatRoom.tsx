@@ -37,9 +37,7 @@ interface IchatInstance {
 
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const route = useRouter();
-  const statess = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const statess = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
@@ -57,9 +55,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   const getRecentMessages = async () => {
     try {
-      const res = await axios.get(
-        `${requestUrl}/messages/${chatId}?page_number=1&page_size=10`,
-      );
+      const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=1&page_size=10`);
       const data = res.data.reversedArr;
       updateChat(data);
       return true;
@@ -71,16 +67,14 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   useEffect(() => {
     setChat([]);
     dispatch({ type: "SET_IS_MATCH", payload: false });
-    if (location.href === hostUrl + "/" + chatId)
-      dispatch({ type: "SET_IS_MATCH", payload: true });
+    if (location.href === hostUrl + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
 
     getRecentMessages();
   }, [route.asPath]);
 
   useEffect(() => {
     inputTextArea.current.focus();
-    if (!cookie.get("token") && !cookie.get("refresh_token"))
-      dispatch({ type: "SIGN_OUT" });
+    if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }) => {
       dispatch({
@@ -121,9 +115,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
           type: "INCREMENT_PAGE_NUMBER",
           payload: statess.pageNumber,
         });
-        const res = await axios.get(
-          `${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`,
-        );
+        const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`);
         const data = res.data.reversedArr;
 
         setChat((prev) => [...data, ...prev]);
@@ -134,9 +126,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
 
-  const onMessageSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
-  ) => {
+  const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     if (state.message) {
       const { name, message, time } = state;
@@ -156,10 +146,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     const target = e.target as HTMLTextAreaElement;
     inputTextArea.current.style.height = "15px";
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
-    inputTextArea.current.style.height = `${Math.min(
-      e.target.scrollHeight,
-      60,
-    )}px`;
+    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -180,9 +167,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         padding: 0;
       container`}
     >
-      {socketRef && statess.toggleCreateGroup && (
-        <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />
-      )}
+      {socketRef && statess.toggleCreateGroup && <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />}
 
       <div
         className={css`

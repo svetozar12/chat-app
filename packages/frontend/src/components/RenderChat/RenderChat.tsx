@@ -21,9 +21,7 @@ const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
     padding: 0.5rem 1rem;
     overflow: hidden;
     word-wrap: break-word;
-    background: ${name === sender
-      ? "var(--main-blue)"
-      : "var(--me-chat-buble)"};
+    background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
   `;
 
   const Message_bubble = styled.div`word-wrap: break-word,

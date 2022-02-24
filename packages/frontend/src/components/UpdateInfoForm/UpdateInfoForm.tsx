@@ -45,9 +45,7 @@ export const UpdateInfoForm = ({
   cookieName: string;
 }) => {
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
   return (
     <main
@@ -113,11 +111,7 @@ export const UpdateInfoForm = ({
             />
           </label>
         </div>
-        <Input_file
-          style={{ margin: "2rem 1rem 0 0" }}
-          className="input_file"
-          htmlFor="file"
-        >
+        <Input_file style={{ margin: "2rem 1rem 0 0" }} className="input_file" htmlFor="file">
           Add file
         </Input_file>
       </section>
@@ -199,11 +193,7 @@ export const UpdateInfoForm = ({
             onChange={(e: any) => setImage(e.target.files[0])}
           />
         </Input_file_container>
-        <Button
-          style={{ fontSize: "1vw", textAlign: "center" }}
-          onClick={handleSubmit}
-          type="submit"
-        >
+        <Button style={{ fontSize: "1vw", textAlign: "center" }} onClick={handleSubmit} type="submit">
           Save
         </Button>
         <Link href={`/${url}`}>

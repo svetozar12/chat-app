@@ -21,9 +21,7 @@ export const AddUsers_Modal = ({
 }) => {
   const [invited, setInvited] = React.useState<string[]>([]);
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
   const addMembers = async (user: string[]) => {
     try {
@@ -54,10 +52,7 @@ export const AddUsers_Modal = ({
 
   return (
     <div className="fRequests_modal">
-      <section
-        style={{ position: "relative", textAlign: "center" }}
-        className="modal_heading flex"
-      >
+      <section style={{ position: "relative", textAlign: "center" }} className="modal_heading flex">
         <h1 style={{ padding: "0 25%" }}>Add people</h1>
         <div
           onClick={() => {
@@ -72,20 +67,10 @@ export const AddUsers_Modal = ({
           <GrClose style={{ width: "2rem", height: "2rem" }} />
         </div>
       </section>
-      <div
-        className="flex"
-        style={{ overflowY: "auto", width: "100%", flexDirection: "column" }}
-      >
+      <div className="flex" style={{ overflowY: "auto", width: "100%", flexDirection: "column" }}>
         {users.length === 0 && <h1>No Chat suggestions</h1>}
         {users.map((item, index) => {
-          return (
-            <CheckBox_component
-              key={index}
-              invited={invited}
-              setInvited={setInvited}
-              item={item}
-            />
-          );
+          return <CheckBox_component key={index} invited={invited} setInvited={setInvited} item={item} />;
         })}
       </div>
       <div className="modal_footer flex">

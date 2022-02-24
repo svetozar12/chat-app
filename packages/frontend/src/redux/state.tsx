@@ -60,10 +60,7 @@ interface signOut {
 }
 
 interface Iset {
-  type:
-    | ActionType.SET_RECIEVER
-    | ActionType.INCREMENT_PAGE_NUMBER
-    | ActionType.NOTIFICATION_NUMBER;
+  type: ActionType.SET_RECIEVER | ActionType.INCREMENT_PAGE_NUMBER | ActionType.NOTIFICATION_NUMBER;
   payload: number;
 }
 
@@ -89,16 +86,7 @@ interface toggle_create_group {
   payload: boolean | string[] | string;
 }
 
-export type Action =
-  | LoginPost
-  | errLoginPost
-  | inputs
-  | signIn
-  | signOut
-  | Iset
-  | IMessages
-  | Hydrate
-  | toggle_create_group;
+export type Action = LoginPost | errLoginPost | inputs | signIn | signOut | Iset | IMessages | Hydrate | toggle_create_group;
 
 export interface InitialState {
   remember_me: boolean;

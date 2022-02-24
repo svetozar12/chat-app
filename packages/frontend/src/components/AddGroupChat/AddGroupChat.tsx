@@ -26,21 +26,13 @@ const Form = styled.form`
   display: flex;
   flex-direction: row;
 `;
-function AddGroupChat({
-  cookieName,
-  socketRef,
-}: {
-  cookieName: string;
-  socketRef: Socket;
-}) {
+function AddGroupChat({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) {
   const [user, setUser] = React.useState<string>("");
   const [usersData, setUsersData] = React.useState<string[]>([]);
 
   const dispatch = useDispatch();
 
-  const state1 = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state1 = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
@@ -82,12 +74,7 @@ function AddGroupChat({
           `}
         >
           <Form onSubmit={(e) => addToGroup(user, e)}>
-            <Search_bar
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              placeholder="Add user ..."
-              type="search"
-            />
+            <Search_bar onChange={(e) => setUser(e.target.value)} value={user} placeholder="Add user ..." type="search" />
             <Button onClick={handleSumbit} type="button">
               Create room
             </Button>

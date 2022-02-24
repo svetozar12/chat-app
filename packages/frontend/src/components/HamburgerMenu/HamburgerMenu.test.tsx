@@ -5,44 +5,44 @@ import { Provider } from "react-redux";
 import { initialState as setState } from "../../redux/reducer/setReducer";
 import { AuthState } from "../../redux/reducer/authReducer";
 import saveInputReducer from "../../redux/reducer/save_inputReducer";
-import { screen, render, cleanup, RenderResult } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
-beforeEach(() => {
-  const mockStore = configureStore([]);
-  const store = mockStore({
-    authReducer: AuthState,
-    setReducer: setState,
-    saveInputReducer: saveInputReducer,
-  });
+const mockStore = configureStore([]);
+const store = mockStore({
+  authReducer: AuthState,
+  setReducer: setState,
+  saveInputReducer: saveInputReducer,
+});
 
-  component = renderer
-    .create(
-      <Provider store={store}>
-        <HamburgerMenu />
-      </Provider>,
-    )
-    .toJSON();
-
-  container = render(
+const setupRender = () => {
+  const component = render(
     <Provider store={store}>
       <HamburgerMenu />
     </Provider>,
   );
-});
 
-afterEach(cleanup);
+  return component;
+};
 
 describe("Render connected React-redux page", () => {
+  beforeEach(() => {
+    setupRender();
+  });
   it("should create snapshot for <HamburgerMenu/>", () => {
-    expect(component).toMatchSnapshot();
+    expect(
+      renderer
+        .create(
+          <Provider store={store}>
+            <HamburgerMenu />
+          </Provider>,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
   });
 
   it("should render <HamburgerMenu/>", () => {
-    const renderedComponent = container.getByTitle("hamburger");
+    const renderedComponent = screen.getByTitle("hamburger");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

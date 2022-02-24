@@ -6,12 +6,14 @@ import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { css } from "@emotion/css";
-
+import Image from "next/image";
 const logo_post_overlay = css`
   z-index: 1;
 `;
 
 const group_logo = css`
+  borderradius: "50px";
+  margin: 0;
   width: 2.6rem;
   height: 2.6rem;
 `;
@@ -57,20 +59,17 @@ function Single_avatar({
   return (
     <div style={{ marginRight: "1rem" }}>
       {hasAvatar ? (
-        <img
+        <Image
+          alt={`${cookieName} logo`}
           src={image}
-          style={{
-            borderRadius: "50px",
-            width: width,
-            height: height,
-            margin: "0",
-          }}
           className={`${
             group
               ? group_logo
               : css`
-                  width: 3.5rem;
-                  height: 3.5rem;
+                  borderradius: "50px";
+                  margin: 0;
+                  width: ${width || "3.5rem"};
+                  height: ${height || "3.5rem"};
                   color: var(--main-logo-color);
                   marginright: "1rem";
                   ${overlay ? "bottom: 0;" : "top:0"}

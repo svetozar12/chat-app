@@ -60,20 +60,12 @@ const Last_message = styled.p`
   margin: 1rem 0;
 `;
 
-const ActiveChats = ({
-  _id,
-  members,
-  cookieName,
-  socketRef,
-  chatId,
-}: IActiveChats) => {
+const ActiveChats = ({ _id, members, cookieName, socketRef, chatId }: IActiveChats) => {
   const router = useRouter();
   const [user1, user2] = [members[0], members[1]];
   const [inviter, setInviter] = React.useState<string>("");
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
   React.useEffect(() => {
     const notMe: string[] = members.filter((element) => element !== cookieName);
@@ -131,21 +123,13 @@ const ActiveChats = ({
                     return (
                       <p style={{ margin: 0 }} key={index}>
                         {element}
-                        {element[members.length - 1] === element[index]
-                          ? `${members.length > 3 ? "..." : ""}`
-                          : ","}
+                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? "..." : ""}` : ","}
                       </p>
                     );
                   })
-                : (members.length === 1 && (
-                    <p style={{ margin: 0 }}>{user1}</p>
-                  )) ||
-                  (user2 === cookieName && (
-                    <p style={{ margin: 0 }}>{user1}</p>
-                  )) ||
-                  (user1 === cookieName && (
-                    <p style={{ margin: 0 }}>{user2}</p>
-                  ))}
+                : (members.length === 1 && <p style={{ margin: 0 }}>{user1}</p>) ||
+                  (user2 === cookieName && <p style={{ margin: 0 }}>{user1}</p>) ||
+                  (user1 === cookieName && <p style={{ margin: 0 }}>{user2}</p>)}
             </Space_between_child>
 
             <Last_message>Last message...</Last_message>

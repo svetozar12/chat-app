@@ -71,9 +71,7 @@ function ChatSettings({
   setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
   const [users, setUsers] = React.useState<string[]>([]);
   const route = useRouter();

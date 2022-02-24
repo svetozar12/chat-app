@@ -9,23 +9,9 @@ let container: RenderResult;
 const submit: any = jest.fn();
 
 beforeEach(() => {
-  component = renderer
-    .create(
-      <CheckBox_component
-        item={"greg"}
-        invited={["greg", "ivan"]}
-        setInvited={submit}
-      />,
-    )
-    .toJSON();
+  component = renderer.create(<CheckBox_component item={"greg"} invited={["greg", "ivan"]} setInvited={submit} />).toJSON();
 
-  container = render(
-    <CheckBox_component
-      item={"greg"}
-      invited={["greg", "ivan"]}
-      setInvited={submit}
-    />,
-  );
+  container = render(<CheckBox_component item={"greg"} invited={["greg", "ivan"]} setInvited={submit} />);
 });
 
 afterEach(cleanup);
