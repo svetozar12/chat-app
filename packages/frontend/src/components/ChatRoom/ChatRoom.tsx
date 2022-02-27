@@ -16,6 +16,7 @@ import styled from "@emotion/styled";
 const Message_form = styled.form`
   width: 100%;
   background: var(--main-white);
+  height: 10%;
 `;
 
 interface IHome {
@@ -173,7 +174,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         className={css`
           flex-direction: column;
           width: 100%;
-          height: 100vh;
+          height: 90%;
           padding: 1rem;
           overflow: auto;
           background-color: var(--main-white);
@@ -213,6 +214,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             margin: 0.5rem 0;
             padding: 0.5rem 2rem;
             overflow-wrap: break-word;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           flex`}
           onClick={() => inputTextArea.current.focus()}
         >
@@ -238,6 +242,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
           />
           <div
             className={css`
+              display:flex;
+              justify-content: center;
+              align-items: center;
               cursor: pointer;
               padding: 0.3rem 0 0.3rem 0.5rem;
               border: 1px transperant;
