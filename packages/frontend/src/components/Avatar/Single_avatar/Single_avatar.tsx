@@ -32,7 +32,7 @@ function Single_avatar({
   height?: string;
   overlay?: boolean;
   group?: boolean;
-  preview?: MediaSource;
+  preview?: string;
 }) {
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
@@ -64,6 +64,7 @@ function Single_avatar({
         // eslint-disable-next-line @next/next/no-img-element
         <img
           alt={`${cookieName} logo`}
+          // @ts-ignore
           src={URL.createObjectURL(preview)}
           className={`${
             group

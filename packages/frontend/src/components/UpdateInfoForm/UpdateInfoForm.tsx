@@ -16,7 +16,7 @@ export const UpdateInfoForm = ({
   cookieName,
 }: {
   url?: string;
-  image?: MediaSource;
+  image?: string;
   handleSubmit: any;
   setImage: React.Dispatch<React.SetStateAction<string>>;
   cookieName: string;
