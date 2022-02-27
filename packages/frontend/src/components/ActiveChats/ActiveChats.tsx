@@ -109,9 +109,10 @@ const ActiveChats = ({ _id, members, cookieName, socketRef, chatId }: IActiveCha
     >
       <Space_between>
         <section
-          className={css`
+          style={{
             display: "flex",
-            alignItems: "center",`}
+            alignItems: "center",
+          }}
         >
           <Avatar members={members} inviter={inviter} cookieName={cookieName} />
           <Contacts_info>
