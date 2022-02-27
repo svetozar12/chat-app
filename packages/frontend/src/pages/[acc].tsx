@@ -278,7 +278,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           }}
         >
           <Chat_settings
-            style={{ width: state.setChatSettings ? "100%" : "0" }}
+            style={{ width: state.setChatSettings ? "100%" : "0", height: "100vh" }}
             className={` flex ${state.setChatSettings && "chat-settings-open"}`}
           >
             <div

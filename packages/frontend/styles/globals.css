@@ -356,29 +356,6 @@ p {
 /* =================
 5.Typography styling
 ================= */
-.blue_no_underline {
-  color: var(--main-blue);
-  text-decoration: none;
-}
-
-.container-chat h2 {
-  font-size: 2rem;
-  text-align: center;
-}
-
-.me {
-  align-items: flex-end;
-  justify-content: center;
-  color: var(--main-white);
-  flex-direction: column;
-}
-
-.you {
-  align-items: flex-start;
-  justify-content: center;
-  color: var(--main-black);
-  flex-direction: column;
-}
 
 .log-out {
   color: var(--main-blue);

@@ -24,6 +24,7 @@ function Single_avatar({
   height,
   overlay,
   group,
+  preview,
 }: {
   inviter?: string;
   cookieName: string;
@@ -31,6 +32,7 @@ function Single_avatar({
   height?: string;
   overlay?: boolean;
   group?: boolean;
+  preview?: MediaSource;
 }) {
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
@@ -58,7 +60,24 @@ function Single_avatar({
 
   return (
     <div style={{ marginRight: "1rem" }}>
-      {hasAvatar ? (
+      {preview ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          alt={`${cookieName} logo`}
+          src={URL.createObjectURL(preview)}
+          className={`${
+            group
+              ? group_logo
+              : css`
+                  border-radius: 50px;
+                  margin: 0;
+                  width: ${width || "3.5rem"};
+                  height: ${height || "3.5rem"};
+                  color: var(--main-logo-color);
+                `
+          } ${overlay && logo_post_overlay}`}
+        />
+      ) : hasAvatar ? (
         <Image
           alt={`${cookieName} logo`}
           src={image}

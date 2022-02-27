@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/css";
 import React from "react";
 interface IRenderChat {
   sender: string;
@@ -7,6 +8,20 @@ interface IRenderChat {
   chatId: string;
   cookie: string;
 }
+
+const mineMessages = css`
+  align-items: flex-end;
+  justify-content: center;
+  color: var(--main-white);
+  flex-direction: column;
+`;
+
+const otherMessages = css`
+  align-items: flex-start;
+  justify-content: center;
+  color: var(--main-black);
+  flex-direction: column;
+`;
 
 const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
@@ -28,7 +43,7 @@ const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
             text-align: center,
   `;
   return (
-    <div className={`${name === sender ? "me" : "you"} flex`}>
+    <div className={`${name === sender ? mineMessages : otherMessages} flex`}>
       <Header2>{name === sender ? null : sender}</Header2>
       <Rendered_chat>
         <Message_bubble>
