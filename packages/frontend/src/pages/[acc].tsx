@@ -34,7 +34,7 @@ const Active_chats = styled.section`
   transition-timing-function: ease-out;
   transition: 0.6s ease-out;
   background: var(--main-white);
-  color: var(--main-black);
+  color: var(--main-whitre);
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   text-align: center;
   overflow: hidden;
@@ -260,7 +260,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                 z-index: 11;
                 width: 0;
                 height: 88vh;
-                background: var(--main-black);
+                background: var(--main-white);
                 padding: 1rem;
                 transition: 0.4s;
                 align-items: flex-start;
@@ -276,7 +276,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             <div
               className={cx(
                 "flex",
-                { ["hide"]: !state.setChatSettings },
                 css`
                   justifycontent: flex-end;
                   position: absolute;
@@ -287,13 +286,17 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               )}
             >
               <GrClose
-                className={css`
-                  width: 2rem;
-                  height: 2rem;
-                  cursor: pointer;
-                  position: relative;
-                  zindex: 9999;
-                `}
+                className={cx(
+                  css`
+                    width: 2rem;
+                    height: 2rem;
+                    cursor: pointer;
+                    right: 0;
+                    position: absolute;
+                    z-index: 9999;
+                    display: ${!state.setChatSettings && "none"};
+                  `,
+                )}
                 onClick={() =>
                   dispatch({
                     type: "SET_CHAT_SETTINGS",
@@ -302,6 +305,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
                 }
               />
             </div>
+
             {socketRef && (
               <ChatSettings socketRef={socketRef} chatId={props.chatRoom} setLocalStatus={setLocalStatus} cookieName={cookie.get("name")} />
             )}

@@ -1,7 +1,4 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx } from "@emotion/react";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -12,52 +9,6 @@ import { getFirstChat } from "../../utils/getFirstChat";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { InitialState2 } from "../../redux/state";
-import styled from "@emotion/styled";
-
-const Add_users = styled.div`
-  position: relative;
-  z-index: 101;
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-  padding: 2rem 0.5rem;
-  border-radius: 5px;
-  justify-content: space-between;
-  width: 70%;
-  height: 2rem;
-  whitespace: nowrap;
-  &:hover {
-    background: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const Add_users_button = styled.h2`
-  color: var(--main-black);
-  margin: 0;
-  @media (max-width: 1344px) {
-    font-size: 1.5vw;
-    word-break: keep-all;
-  }
-`;
-
-const Chat_settings_members = styled.div`
-  width: 70%;
-  padding: 0 0.5rem;
-  justify-content: space-between;
-`;
-
-const Chat_settings_nav = styled.div`
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  z-index: 11;
-  height: 80vh;
-  background: var(--main-white);
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  flex-direction: column;
-  justify-content: flex-start;
-  overflow: auto;
-`;
 
 function ChatSettings({
   chatId,
@@ -119,7 +70,23 @@ function ChatSettings({
   };
   return (
     <>
-      <Chat_settings_nav className="flex">
+      <div
+        className={cx(
+          "flex",
+          css`
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            z-index: 11;
+            height: 80vh;
+            background: var(--main-white);
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-x: hidden;
+          `,
+        )}
+      >
         <h1
           className={css`
             color: var(--main-black);
@@ -136,16 +103,27 @@ function ChatSettings({
         >
           Members in chat
         </h1>
+
         {users.map((item, index) => {
           return (
-            <Chat_settings_members key={index} className="flex">
+            <div
+              key={index}
+              className={cx(
+                "flex",
+                css`
+                  justify-content: space-between;
+                `,
+              )}
+            >
               <h2
-                style={{
-                  flexDirection: "column",
-                  color: "var(--main-black)",
-                  whiteSpace: "nowrap",
-                }}
-                className="flex"
+                className={cx(
+                  "flex",
+                  css`
+                    flex-direction: column;
+                    color: var(--main-black);
+                    white-space: nowrap;
+                  `,
+                )}
               >
                 {item}
               </h2>
@@ -164,26 +142,60 @@ function ChatSettings({
                   }
                 `}
               />
-            </Chat_settings_members>
+            </div>
           );
         })}
         {users.length > 2 && (
-          <Add_users
+          <div
             onClick={() => {
               dispatch({
                 type: "SET_MODAL_INVITE",
                 payload: !state.setModalInvite,
               });
             }}
-            className="flex"
+            className={cx(
+              "flex",
+              css`
+                position: relative;
+                z-index: 101;
+                width: 2rem;
+                height: 2rem;
+                cursor: pointer;
+                padding: 2rem 0.5rem;
+                border-radius: 5px;
+                justify-content: space-between;
+                width: 70%;
+                height: 2rem;
+                whitespace: nowrap;
+                &:hover {
+                  background: rgba(0, 0, 0, 0.1);
+                }
+              `,
+            )}
           >
-            <Add_users_button>Add more users</Add_users_button>
+            <h2
+              className={css`
+                color: var(--main-black);
+                margin: 0;
+                @media (max-width: 1344px) {
+                  font-size: 1.5vw;
+                  word-break: keep-all;
+                }
+              `}
+            >
+              Add more users
+            </h2>
             <div className="flex">
-              <AiOutlinePlusCircle style={{ width: "2rem", height: "2rem" }} />
+              <AiOutlinePlusCircle
+                className={css`
+                  width: 2rem;
+                  height: 2rem;
+                `}
+              />
             </div>
-          </Add_users>
+          </div>
         )}
-      </Chat_settings_nav>
+      </div>
     </>
   );
 }
