@@ -404,13 +404,6 @@ p {
 6.Media Query
 ================= */
 @media only screen and (min-width: 1010px) {
-  .hide {
-    transition: 0.4s ease-in;
-    overflow: hidden;
-    width: 0;
-    display: none;
-  }
-
   .clickable {
     align-items: center;
     font-size: 3vw;
