@@ -1,22 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "../../redux/state";
-import styled from "@emotion/styled";
 import { Alerts } from "../Alerts/Alerts";
 import { css } from "@emotion/css";
-import { Form, Button, Input, Form_header, Label_container } from "../styledComponents";
-
-export const Label_button = styled.label`
-  margin: 0 2rem;
-  border-radius: 5px;
-  width: 4rem;
-  text-align: center;
-  padding: 0.5rem;
-  color: var(--main-white);
-  background: rgba(0, 105, 217, 0.5);
-  cursor: pointer;
-  display: block;
-`;
+import { Form, Button, Input, Form_header, Label_container, Label_button } from "../styledComponents";
+import { QuickLogin_Modal } from "./QuickLogin_Modal/QuickLogin_Modal";
 
 function RegisterForm({
   quickLogin,
@@ -117,20 +105,8 @@ function RegisterForm({
             Already have an account?
           </a>
         </Link>
-        {state.loginPrompt && (
-          <div
-            className={css`
-              cursor: pointer;
-              @media (max-width: 431px) {
-                font-size: 0.689rem;
-              } ;
-            `}
-            onClick={quickLogin}
-          >
-            <h2>Click me to Quick login</h2>
-          </div>
-        )}
       </Form>
+      {state.loginPrompt && <QuickLogin_Modal quickLogin={quickLogin} />}
     </div>
   );
 }

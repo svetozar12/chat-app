@@ -5,7 +5,7 @@ import { InitialState3 } from "../../redux/state";
 import { css } from "@emotion/css";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
 import { Form, Button, Input } from "../styledComponents";
-import { Label_button } from "../RegisterForm/RegisterForm";
+import { Label_button } from "../styledComponents";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 export const UpdateInfoForm = ({

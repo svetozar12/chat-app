@@ -61,3 +61,15 @@ export const Input = styled.input`
   transition: 0.3s;
   padding: 1.3rem 0.9rem;
 `;
+
+export const Label_button = styled.label`
+  margin: 0 2rem;
+  border-radius: 5px;
+  width: 4rem;
+  text-align: center;
+  padding: 0.5rem;
+  color: var(--main-white);
+  background: rgba(0, 105, 217, 0.5);
+  cursor: pointer;
+  display: block;
+`;

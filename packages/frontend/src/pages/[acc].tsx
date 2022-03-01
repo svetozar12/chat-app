@@ -1,5 +1,3 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
 import { useState, useEffect } from "react";
 import ActiveChats from "../components/ActiveChats/ActiveChats";
 import FindFriends from "../components/FindFriends/FindFriends";
@@ -17,8 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { InitialState2, InitialState3 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { GrClose } from "react-icons/gr";
-import { jsx } from "@emotion/react";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import styled from "@emotion/styled";
 interface Ichats {
   _id: string;
@@ -31,30 +28,6 @@ export interface Iinvites {
   reciever: string;
   status: string;
 }
-
-const Container = styled.div`
-  width: 100%;
-  height: 90vh;
-  justify-content: center;
-  alignitems: center;
-  padding: 0;
-`;
-
-const Chat_settings = styled.div`
-  top: 0;
-  left: 0;
-  position: absolute;
-  z-index: 11;
-  width: 0;
-  height: 88vh;
-  background: var(--main-white);
-  padding: 1rem;
-  transition: 0.4s;
-  align-items: flex-start;
-  padding: 0;
-  flex-direction: column;
-  justify-content: flex-start;
-`;
 
 const Active_chats = styled.section`
   position: relative;
@@ -277,28 +250,50 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             justifyContent: "flex-start",
           }}
         >
-          <Chat_settings
-            style={{ width: state.setChatSettings ? "100%" : "0", height: "100vh" }}
-            className={` flex ${state.setChatSettings && "chat-settings-open"}`}
+          <div
+            className={cx(
+              "flex",
+              css`
+                top: 0;
+                left: 0;
+                position: absolute;
+                z-index: 11;
+                width: 0;
+                height: 88vh;
+                background: var(--main-black);
+                padding: 1rem;
+                transition: 0.4s;
+                align-items: flex-start;
+                padding: 0;
+                flex-direction: column;
+                justify-content: flex-start;
+                width: ${state.setChatSettings ? "100%" : "0"};
+                height: 100vh;
+              `,
+              { ["chat-settings-open"]: state.setChatSettings },
+            )}
           >
             <div
-              css={{
-                justifyContent: "flex-end",
-                position: "absolute",
-                width: "95%",
-                margin: "1rem",
-                padding: "0 1rem",
-              }}
-              className={`flex ${!state.setChatSettings && "hide"}`}
+              className={cx(
+                "flex",
+                { ["hide"]: !state.setChatSettings },
+                css`
+                  justifycontent: flex-end;
+                  position: absolute;
+                  width: 95%;
+                  margin: 1rem;
+                  padding: 0 1rem;
+                `,
+              )}
             >
               <GrClose
-                css={{
-                  width: "2rem",
-                  height: "2rem",
-                  cursor: "pointer",
-                  position: "relative",
-                  zIndex: "9999",
-                }}
+                className={css`
+                  width: 2rem;
+                  height: 2rem;
+                  cursor: pointer;
+                  position: relative;
+                  zindex: 9999;
+                `}
                 onClick={() =>
                   dispatch({
                     type: "SET_CHAT_SETTINGS",
@@ -310,7 +305,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             {socketRef && (
               <ChatSettings socketRef={socketRef} chatId={props.chatRoom} setLocalStatus={setLocalStatus} cookieName={cookie.get("name")} />
             )}
-          </Chat_settings>
+          </div>
 
           {socketRef &&
             chatRooms.map((item, index) => {
@@ -319,16 +314,28 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         </div>
       </Active_chats>
       <section
-        css={{
-          width: "75%",
-          "@media (max-width: 1008px)": {
-            width: "100%",
-          },
-        }}
-        className="flex"
+        className={cx(
+          "flex",
+          css`
+          width: 75%;
+          @media (max-width: 1008px) {
+            width: 100%;
+          },`,
+        )}
       >
         {" "}
-        <Container className="container">
+        <div
+          className={cx(
+            css`
+              width: 100%;
+              height: 90vh;
+              justify-content: center;
+              alignitems: center;
+              padding: 0;
+            `,
+            "container",
+          )}
+        >
           <Dashborad className="flex">
             {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} setLocalStatus={setLocalStatus} />}
 
@@ -343,7 +350,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             )}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
           </Dashborad>
-        </Container>
+        </div>
       </section>
     </div>
   );

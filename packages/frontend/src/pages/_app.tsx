@@ -66,11 +66,15 @@ const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) =>
       type: "SET_MODAL_INVITE",
       payload: false,
     });
+    dispatch({
+      type: "QUICK_LOGIN",
+      payload: false,
+    });
   };
 
   const BIG = styled.div`
     position: absolute;
-    z-index: ${setState.setFriendRequest || setState.setModalInvite ? "100" : "-1"};
+    z-index: ${setState.setFriendRequest || setState.setModalInvite || state.loginPrompt ? "100" : "-1"};
     width: 100vw;
     height: 100vh;
     opacity: 0.7;
@@ -80,10 +84,12 @@ const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) =>
   return (
     <>
       <Global
+        // @ts-ignore
         styles={{
           body: {
             margin: 0,
             padding: 0,
+            userSelect: setState.setFriendRequest || setState.setModalInvite || state.loginPrompt ? "none" : "select",
           },
           a: {
             textDecoration: "none",
