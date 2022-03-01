@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => {
   return (
-    <div style={{ width: "35%", height: "20vh" }} className="fRequests_modal flex">
+    <div style={{ width: "75%", height: "20vh" }} className="fRequests_modal flex">
       <div
         className={cx(
           css`

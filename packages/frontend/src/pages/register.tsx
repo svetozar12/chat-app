@@ -56,11 +56,7 @@ function Register(props: { cookie: string }) {
     }
   };
 
-  return (
-    <div style={{ width: "100%", height: "100vh" }}>
-      <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
-    </div>
-  );
+  return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

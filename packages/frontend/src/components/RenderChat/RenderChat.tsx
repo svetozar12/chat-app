@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import React from "react";
+import { BsThreeDotsVertical } from "react-icons/bs";
 interface IRenderChat {
   sender: string;
   time_stamp: string | number;
@@ -25,38 +25,54 @@ const otherMessages = css`
 
 const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
-  const Header2 = styled.h2`
-    font-size: 15px;
-    color: var(--main-black);
-  `;
-
-  const Rendered_chat = styled.div`
-    border-radius: 4px;
-    max-width: 80%;
-    padding: 0.5rem 1rem;
-    overflow: hidden;
-    word-wrap: break-word;
-    background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
-  `;
-
-  const Message_bubble = styled.div`word-wrap: break-word,
-            text-align: center,
-  `;
   return (
-    <div className={`${name === sender ? mineMessages : otherMessages} flex`}>
-      <Header2>{name === sender ? null : sender}</Header2>
-      <Rendered_chat>
-        <Message_bubble>
-          <span>{message}</span>
-        </Message_bubble>
-        <span
-          style={{
-            fontSize: "0.65rem",
-          }}
+    <div
+      title={`${time_stamp.toString()} ${message}`}
+      className={cx("flex", { [mineMessages]: name === sender }, { [otherMessages]: name !== sender })}
+    >
+      <h2
+        className={css`
+          font-size: 15px;
+          color: var(--main-black);
+        `}
+      >
+        {name === sender ? null : sender}
+      </h2>
+      <div
+        className={cx(
+          "flex",
+          css`
+            width: 100%;
+            justify-content: ${name === sender ? "flex-end" : "flex-start"};
+          `,
+        )}
+      >
+        <BsThreeDotsVertical
+          className={css`
+            color: black;
+          `}
+        />
+        <div
+          className={css`
+            border-radius: 4px;
+            max-width: 80%;
+            padding: 0.5rem 1rem;
+            overflow: hidden;
+            word-wrap: break-word;
+            background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
+          `}
         >
-          {time_stamp}
-        </span>
-      </Rendered_chat>
+          <div
+            className={css`
+              word-wrap: break-word;
+              text-align: center;
+              min-width: 7rem;
+            `}
+          >
+            <span>{message}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

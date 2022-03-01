@@ -16,7 +16,6 @@ import { InitialState2, InitialState3 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { GrClose } from "react-icons/gr";
 import { css, cx } from "@emotion/css";
-import styled from "@emotion/styled";
 interface Ichats {
   _id: string;
   members: string[];
@@ -28,45 +27,6 @@ export interface Iinvites {
   reciever: string;
   status: string;
 }
-
-const Active_chats = styled.section`
-  position: relative;
-  transition-timing-function: ease-out;
-  transition: 0.6s ease-out;
-  background: var(--main-white);
-  color: var(--main-whitre);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  text-align: center;
-  overflow: hidden;
-  height: 100vh;
-  z-index: 20;
-  width: 42%;
-  flex-direction: column;
-  justify-content: flex-start;
-  flex-shrink: unset;
-  display: flex;
-  align-items: center;
-`;
-
-const Dashborad = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
-
-const Hambruger_out_of_nav = styled.section`
-  height: 100vh;
-  position: absolute;
-  z-index: 9999;
-  height: 30vh;
-`;
-
-const Div_out_of_nav = styled.div`
-  position: relative;
-  width: 95%;
-  height: 3rem;
-  margin: 1rem;
-  z-index: 100;
-`;
 
 const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const dispatch = useDispatch();
@@ -226,13 +186,44 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   return (
     <div style={{ display: "flex", width: "100%", height: "100vh", position: "absolute" }}>
-      <Hambruger_out_of_nav>
-        <Div_out_of_nav>
-          <HamburgerMenu />
-        </Div_out_of_nav>
-      </Hambruger_out_of_nav>
-      <Active_chats
+      <section
         className={css`
+          height: 100vh;
+          position: absolute;
+          z-index: 9999;
+          height: 30vh;
+        `}
+      >
+        <div
+          className={css`
+            position: relative;
+            width: 95%;
+            height: 3rem;
+            margin: 1rem;
+            z-index: 100;
+          `}
+        >
+          <HamburgerMenu />
+        </div>
+      </section>
+      <section
+        className={css`
+          position: relative;
+          transition-timing-function: ease-out;
+          transition: 0.6s ease-out;
+          background: var(--main-white);
+          color: var(--main-whitre);
+          border-right: 1px solid rgba(0, 0, 0, 0.1);
+          text-align: center;
+          overflow: hidden;
+          height: 100vh;
+          z-index: 20;
+          width: 42%;
+          flex-direction: column;
+          justify-content: flex-start;
+          flex-shrink: unset;
+          display: flex;
+          align-items: center;
           @media (max-width: 1008px) {
             ${!state.setMobileNav ? "width:0" : "width:80%"};
             position: absolute;
@@ -316,7 +307,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               return <ActiveChats key={index} {...item} cookieName={cookie.get("name")} socketRef={socketRef} chatId={props.chatRoom} />;
             })}
         </div>
-      </Active_chats>
+      </section>
       <section
         className={cx(
           "flex",
@@ -340,7 +331,15 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
             "container",
           )}
         >
-          <Dashborad className="flex">
+          <div
+            className={cx(
+              "flex",
+              css`
+                width: 100%;
+                height: 100vh;
+              `,
+            )}
+          >
             {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} setLocalStatus={setLocalStatus} />}
 
             {state.setModalInvite && socketRef && (
@@ -353,7 +352,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
               />
             )}
             <ChatRoom cookie={cookie} chatId={props.chatRoom} />
-          </Dashborad>
+          </div>
         </div>
       </section>
     </div>

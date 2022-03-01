@@ -16,6 +16,7 @@ export const Alerts = () => {
       title="alert message"
       className={css`
         position: absolute;
+        z-index: 9999;
         top: 0;
         margin-top: 1rem;
         border-radius: 5px;
