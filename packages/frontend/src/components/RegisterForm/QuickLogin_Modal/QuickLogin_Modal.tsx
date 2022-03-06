@@ -3,9 +3,9 @@ import { Button } from "../../styledComponents";
 import { css, cx } from "@emotion/css";
 import Link from "next/link";
 
-export const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => {
+const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => {
   return (
-    <div style={{ width: "75%", height: "20vh" }} className="fRequests_modal flex">
+    <div style={{ width: "75%", height: "30vh" }} className="fRequests_modal flex">
       <div
         className={cx(
           css`
@@ -35,3 +35,5 @@ export const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => 
     </div>
   );
 };
+
+export default QuickLogin_Modal;

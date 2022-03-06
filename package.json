@@ -12,7 +12,9 @@
     "diff": "lerna diff",
     "format": "lerna run format --no-sort --stream",
     "kill": "npx kill-port 3000 4000 4002 -y",
-    "dev:kill": "yarn kill && yarn dev"
+    "dev:kill": "yarn kill && yarn dev",
+    "mash-up": "yarn format && yarn lint && yarn build",
+    "mash-up:test": "yarn format && yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
     "lerna": "^4.0.0"

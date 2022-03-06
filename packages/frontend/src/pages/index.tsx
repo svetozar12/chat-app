@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InitialState, InitialState3 } from "../redux/state";
 import { actions, wrapper } from "../redux/store";
 import { getFirstChat } from "../utils/getFirstChat";
-import LoginForm from "../components/LoginForm/LoginForm";
+import LoginForm from "../components/LoginForm";
 import { checkJWT, loginAuth } from "../utils/authRoutes";
 
 function Login(props: AppProps) {

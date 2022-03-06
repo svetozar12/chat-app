@@ -4,11 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { InitialState3 } from "../../redux/state";
 import { css } from "@emotion/css";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
-import { Form, Button, Input } from "../styledComponents";
-import { Label_button } from "../styledComponents";
+import { Form, Button, Input, Label_button } from "../styledComponents";
 import { AiFillPlusCircle } from "react-icons/ai";
 
-export const UpdateInfoForm = ({
+const UpdateInfoForm = ({
   url,
   handleSubmit,
   image,
@@ -218,3 +217,5 @@ export const UpdateInfoForm = ({
     </main>
   );
 };
+
+export default UpdateInfoForm;

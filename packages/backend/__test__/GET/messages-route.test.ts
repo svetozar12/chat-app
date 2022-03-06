@@ -46,9 +46,7 @@ afterAll(async () => {
 
 describe(`Testing endpoint :/messages/${message_id}`, () => {
   it("should return 200 OK", async () => {
-    const res = await request(app).get(
-      `/messages/${chat_id}?page_number=1&page_size=10`,
-    );
+    const res = await request(app).get(`/messages/${chat_id}?page_number=1&page_size=10`);
     expect(res.status).toBe(200);
     expect(res.body.message).toBe("You have messages.");
   });
@@ -56,9 +54,7 @@ describe(`Testing endpoint :/messages/${message_id}`, () => {
 
 describe("Testing endpoind :/messages/chat_id with invalid chat_id", () => {
   it("should return 404 Not found(invalid id)", async () => {
-    const res = await request(app).get(
-      `/messages/22ad22eafe2f2422d2de2b22?page_number=1&page_size=10`,
-    );
+    const res = await request(app).get(`/messages/22ad22eafe2f2422d2de2b22?page_number=1&page_size=10`);
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("You don't have messages.");
   });

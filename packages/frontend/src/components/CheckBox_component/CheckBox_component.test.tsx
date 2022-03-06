@@ -1,4 +1,4 @@
-import { CheckBox_component } from "./CheckBox_component";
+import CheckBox_component from "./CheckBox_component";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";

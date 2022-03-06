@@ -7,12 +7,7 @@ const authSchema = Joi.object({
   gender: Joi.string().required(),
 });
 
-const registerValidation = (data: {
-  username: string;
-  password: string;
-  email: string;
-  gender: string;
-}) => {
+const registerValidation = (data: { username: string; password: string; email: string; gender: string }) => {
   return authSchema.validate(data);
 };
 
@@ -24,13 +19,7 @@ const updateFormSchema = Joi.object({
   userAvatar: Joi.string(),
 });
 
-const update_formValidation = (data: {
-  username: string;
-  password: string;
-  email: string;
-  gender: string;
-  userAvatar: string;
-}) => {
+const update_formValidation = (data: { username: string; password: string; email: string; gender: string; userAvatar: string }) => {
   return updateFormSchema.validate(data);
 };
 export { registerValidation, update_formValidation };

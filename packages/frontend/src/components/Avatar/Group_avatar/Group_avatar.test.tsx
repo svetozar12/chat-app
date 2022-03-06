@@ -1,4 +1,4 @@
-import Group_avatar from "../Group_avatar/Group_avatar";
+import Group_avatar from "../Group_avatar";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";

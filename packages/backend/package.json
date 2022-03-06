@@ -10,7 +10,7 @@
     "lint": "eslint src",
     "dev": "concurrently \"npm run server\" \"npm run watch\"",
     "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
-    "format": "prettier --config .prettierrc.json --write src/**/**/*.ts"
+    "format": "prettier --write **/*.{js,ts,tsx}"
   },
   "keywords": [],
   "author": "",

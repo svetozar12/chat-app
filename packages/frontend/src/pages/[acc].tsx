@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import ActiveChats from "../components/ActiveChats/ActiveChats";
-import FindFriends from "../components/FindFriends/FindFriends";
-import ChatRoom from "../components/ChatRoom/ChatRoom";
-import ChatSettings from "../components/ChatSettings/ChatSettings";
-import HamburgerMenu from "../components/HamburgerMenu/HamburgerMenu";
-import Notifications_Modal from "../components/Notifications_Modal/Notifications_Modal";
-import { AddUsers_Modal } from "../components/AddUsers_Modal/AddUsers_Modal";
+import ActiveChats from "../components/ActiveChats";
+import FindFriends from "../components/FindFriends";
+import ChatRoom from "../components/ChatRoom";
+import ChatSettings from "../components/ChatSettings";
+import HamburgerMenu from "../components/HamburgerMenu";
+import Notifications_Modal from "../components/Notifications_Modal";
+import AddUsers_Modal from "../components/AddUsers_Modal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";

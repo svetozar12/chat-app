@@ -1,4 +1,4 @@
-import { UpdateInfoForm } from "../UpdateInfoForm/UpdateInfoForm";
+import UpdateInfoForm from "../UpdateInfoForm";
 import { Provider } from "react-redux";
 import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer";
 import configureStore from "redux-mock-store";

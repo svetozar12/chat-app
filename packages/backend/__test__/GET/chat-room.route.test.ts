@@ -19,9 +19,7 @@ afterAll(async () => {
 
 describe(`Testing endpoint :/chat-room?user_name=${dumyUser.username}`, () => {
   it("should return 200 OK", async () => {
-    const res = await request(app).get(
-      `/chat-room?user_name=${dumyUser.username}`,
-    );
+    const res = await request(app).get(`/chat-room?user_name=${dumyUser.username}`);
     expect(res.status).toBe(200);
     expect(res.body.message).toBe("You have active chat-rooms");
   });

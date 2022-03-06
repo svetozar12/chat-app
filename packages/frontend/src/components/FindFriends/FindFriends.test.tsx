@@ -1,5 +1,5 @@
 import configureStore from "redux-mock-store";
-import FindFriends from "../FindFriends/FindFriends";
+import FindFriends from "../FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import { AuthState } from "../../redux/reducer/authReducer";

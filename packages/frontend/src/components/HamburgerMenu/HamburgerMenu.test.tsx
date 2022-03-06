@@ -1,4 +1,4 @@
-import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
+import HamburgerMenu from "../HamburgerMenu";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";

@@ -9,6 +9,7 @@
     "prettier/prettier": "error",
     "no-var": "error",
     "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-    "import/named": "error"
+    "import/named": "error",
+    "no-duplicate-imports": "error"
   }
 }

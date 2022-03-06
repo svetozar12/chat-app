@@ -10,7 +10,7 @@ import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
-import UserSettings from "../UserSettings/UserSettings";
+import UserSettings from "../UserSettings";
 const Form = styled.form`
   width: 100%;
   margin: 0;

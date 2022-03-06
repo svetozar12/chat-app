@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { InitialState } from "../../redux/state";
 import { css } from "@emotion/css";
 import { IoClose } from "react-icons/io5";
-export const Alerts = () => {
+const Alerts = () => {
   const dispatch = useDispatch();
   const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
   const closeAlert = () => {
@@ -71,3 +71,5 @@ export const Alerts = () => {
     </div>
   );
 };
+
+export default Alerts;

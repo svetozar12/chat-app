@@ -2,8 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "../../redux/state";
 import styled from "@emotion/styled";
-import { Label_container, Form_header, Form, Button, Input } from "../styledComponents";
-import { Alerts } from "../Alerts/Alerts";
+import { Label_container, Form_header, Form, Button, Input } from "../styledComponents/index";
+import Alerts from "../Alerts";
 
 const CheckBox = styled.input`
   width: 20px;

@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "../../redux/state";
-import { Alerts } from "../Alerts/Alerts";
+import Alerts from "../Alerts";
 import { css } from "@emotion/css";
 import { Form, Button, Input, Form_header, Label_container, Label_button } from "../styledComponents";
-import { QuickLogin_Modal } from "./QuickLogin_Modal/QuickLogin_Modal";
+import QuickLogin_Modal from "./QuickLogin_Modal";
 
 function RegisterForm({
   quickLogin,

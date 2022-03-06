@@ -1,9 +1,8 @@
-import "../../styles/globals.css";
+import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { useEffect } from "react";
 import { wrapper } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { InitialState, InitialState2 } from "../redux/state";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";

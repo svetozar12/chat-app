@@ -13,8 +13,7 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
       .limit(page_size)
       .skip((page_number - 1) * page_size)
       .sort({ createdAt: "desc" });
-    if (messages.length <= 0 || !messages)
-      return res.status(404).json({ message: "You don't have messages." });
+    if (messages.length <= 0 || !messages) return res.status(404).json({ message: "You don't have messages." });
     const reversedArr = messages.reverse();
     return res.status(200).json({ message: "You have messages.", reversedArr });
   } catch (error) {
@@ -57,18 +56,14 @@ route.delete("/:chat_id", async (req: Request, res: Response) => {
     const sender = req.body.sender;
     const message = req.body.message;
     const isUser = await User.findOne({ username: sender });
-    if (!isUser)
-      return res.status(404).json({ message: `User: ${sender} not found` });
+    if (!isUser) return res.status(404).json({ message: `User: ${sender} not found` });
     const isMessages = await Messages.findOne({
       chatInstance: chat_id,
       message,
     });
-    if (!isMessages)
-      return res.status(404).json({ message: `Message: ${message} not found` });
+    if (!isMessages) return res.status(404).json({ message: `Message: ${message} not found` });
     await Messages.deleteOne({ chatInstance: chat_id, message, sender });
-    return res
-      .status(200)
-      .json({ message: `Message ${message} has been deleted` });
+    return res.status(200).json({ message: `Message ${message} has been deleted` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
-const User_settings = styled.div`
+export const User_settings = styled.div`
   width: 10rem;
   position: absolute;
   display: flex;
@@ -40,7 +41,7 @@ const User_settings = styled.div`
   }
 `;
 
-const User_settings_anchor = styled.a`
+export const User_settings_style = css`
   display: flex;
   align-items: center;
   color: black;
@@ -80,7 +81,8 @@ function UserSettings({ cookie }: { cookie: any }) {
   return (
     <User_settings data-testid="user_settings">
       <Link href="/settings/profile" passHref>
-        <User_settings_anchor
+        <a
+          className={User_settings_style}
           style={{ marginTop: "1rem" }}
           onClick={() => {
             dispatch({ type: "SET_USER_SETTINGS", payload: false });
@@ -95,10 +97,10 @@ function UserSettings({ cookie }: { cookie: any }) {
             }}
           />
           User settings
-        </User_settings_anchor>
+        </a>
       </Link>
       <Link href="#" passHref>
-        <User_settings_anchor onClick={deleteCookies}>
+        <a className={User_settings_style} onClick={deleteCookies}>
           <IoMdLogOut
             style={{
               margin: "0 1rem",
@@ -108,10 +110,10 @@ function UserSettings({ cookie }: { cookie: any }) {
             }}
           />
           Log out
-        </User_settings_anchor>
+        </a>
       </Link>
       <Link href="#" passHref>
-        <User_settings_anchor style={{ marginBottom: "1rem" }} onClick={deleteUser}>
+        <a className={User_settings_style} style={{ marginBottom: "1rem" }} onClick={deleteUser}>
           <RiDeleteBin6Fill
             style={{
               margin: "0 1rem",
@@ -121,7 +123,7 @@ function UserSettings({ cookie }: { cookie: any }) {
             }}
           />
           Delete user
-        </User_settings_anchor>
+        </a>
       </Link>
     </User_settings>
   );

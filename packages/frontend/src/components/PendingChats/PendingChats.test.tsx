@@ -1,4 +1,4 @@
-import PendingChats from "../PendingChats/PendingChats";
+import PendingChats from "../PendingChats";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";

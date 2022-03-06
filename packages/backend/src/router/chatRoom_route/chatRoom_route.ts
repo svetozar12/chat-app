@@ -6,37 +6,27 @@ import * as express from "express";
 import { Request, Response } from "express";
 import Chats from "../../models/chatRoom.model";
 const route = express.Router();
-route.get(
-  "/",
-  async (
-    req: Request<undefined, undefined, undefined, IRequest>,
-    res: Response,
-  ) => {
-    try {
-      const user_name = req.query?.user_name;
-      const contacts = await Chats.find({ members: user_name }).exec();
-      if (contacts.length <= 0)
-        return res.status(400).json({ Message: "You don't have chat rooms" });
-      return res
-        .status(200)
-        .json({ message: `You have active chat-rooms`, contacts });
-    } catch (error) {
-      return res.status(501).json({
-        ErrorMsg: (error as Error).message,
-        Error: "Internal server error",
-        Message: "Something went wrong while getting the list of contacts",
-      });
-    }
-  },
-);
+route.get("/", async (req: Request<undefined, undefined, undefined, IRequest>, res: Response) => {
+  try {
+    const user_name = req.query?.user_name;
+    const contacts = await Chats.find({ members: user_name }).exec();
+    if (contacts.length <= 0) return res.status(400).json({ Message: "You don't have chat rooms" });
+    return res.status(200).json({ message: `You have active chat-rooms`, contacts });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while getting the list of contacts",
+    });
+  }
+});
 
 route.get("/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;
 
     const users_rooms = await Chats.find({ _id: user_id }).exec();
-    if (!users_rooms || users_rooms.length <= 0)
-      return res.status(404).json({ Message: "User room not found !" });
+    if (!users_rooms || users_rooms.length <= 0) return res.status(404).json({ Message: "User room not found !" });
     return res.status(200).json({ Message: users_rooms });
   } catch (error) {
     return res.status(501).json({
@@ -57,8 +47,7 @@ route.put("/:chat_id", async (req: Request, res: Response) => {
     const users_array = users_rooms!.members;
     let updated;
 
-    if (!users_rooms)
-      return res.status(404).json({ Message: "Chat-room not found !" });
+    if (!users_rooms) return res.status(404).json({ Message: "Chat-room not found !" });
     let updated_array: string[] = [];
     if (deleted_user) {
       updated_array = users_array.filter((item) => item !== deleted_user);
@@ -83,9 +72,7 @@ route.put("/:chat_id", async (req: Request, res: Response) => {
         },
       );
     }
-    return res
-      .status(200)
-      .json({ message: "Chat-room members were updated", Message: updated });
+    return res.status(200).json({ message: "Chat-room members were updated", Message: updated });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -100,10 +87,7 @@ route.delete("/delete_chat/:chat_id", async (req: Request, res: Response) => {
     const chat_id = req.params.chat_id;
     const chat_room = await Chats.findOne({ _id: chat_id }).exec();
 
-    if (!chat_room)
-      return res
-        .status(404)
-        .json({ Message: `Chat room ${chat_id} not found !` });
+    if (!chat_room) return res.status(404).json({ Message: `Chat room ${chat_id} not found !` });
     return res.status(200).json({ Message: `Chat_room ${chat_id} is deleted` });
   } catch (error) {
     return res.status(501).json({

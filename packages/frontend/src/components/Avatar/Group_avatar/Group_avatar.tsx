@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { requestUrl } from "../../../utils/hostUrl_requestUrl";
-import Single_avatar from "../Single_avatar/Single_avatar";
+import Single_avatar from "../Single_avatar";
 
 function Group_avatar({ cookieName, members }: { inviter: string; cookieName: string; members: string[] }) {
   const [images, setImages] = React.useState<string[]>([]);

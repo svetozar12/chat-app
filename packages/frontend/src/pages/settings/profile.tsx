@@ -6,7 +6,7 @@ import { GetServerSideProps } from "next";
 import { InitialState3 } from "../../redux/state";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { getFirstChat } from "../../utils/getFirstChat";
-import { UpdateInfoForm } from "../../components/UpdateInfoForm/UpdateInfoForm";
+import UpdateInfoForm from "../../components/UpdateInfoForm";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");

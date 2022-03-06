@@ -5,7 +5,6 @@ import { initialState } from "../../redux/reducer/setReducer";
 import "@testing-library/jest-dom";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 
 const socketRef: any = jest.fn();
 const dumy: string[] = ["ivan", "gerg"];
