@@ -41,7 +41,6 @@ function Register(props: { cookie: string }) {
     });
 
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
-
     router.push(`/${chatInstance._id}`);
   };
 

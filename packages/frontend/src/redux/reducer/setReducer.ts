@@ -1,5 +1,4 @@
 import { Action, ActionType, InitialState2 } from "../state";
-import { HYDRATE } from "next-redux-wrapper";
 export const initialState = {
   reciever: "",
   chat_inviter: "",
@@ -15,11 +14,6 @@ export const initialState = {
 };
 const setReducer = (state: InitialState2 | any | InitialState2[] = initialState, action: Action) => {
   switch (action.type) {
-    case HYDRATE:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case ActionType.SET_RECIEVER:
       return { ...state, reciever: action.payload };
     case ActionType.CHAT_INVITER:

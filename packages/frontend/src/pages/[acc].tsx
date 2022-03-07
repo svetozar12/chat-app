@@ -140,6 +140,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   };
 
   useEffect(() => {
+    dispatch({ type: "QUICK_LOGIN", payload: false });
     fetchRecieverStatus();
   }, [inputState.notification_number]);
 

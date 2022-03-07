@@ -1,6 +1,4 @@
-import { Action } from "../state";
-import { ActionType } from "../state";
-import { InitialState } from "../state";
+import { InitialState, Action, ActionType } from "../state";
 import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState = {

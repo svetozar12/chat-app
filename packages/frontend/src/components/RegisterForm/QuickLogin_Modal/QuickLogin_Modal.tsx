@@ -31,7 +31,9 @@ const QuickLogin_Modal = ({ quickLogin, isLogging }: { quickLogin: () => void; i
             className={css`
               width: 50%;
             `}
-            onClick={quickLogin}
+            onClick={() => {
+              quickLogin();
+            }}
           >
             Click me to Quick login
           </Button>
