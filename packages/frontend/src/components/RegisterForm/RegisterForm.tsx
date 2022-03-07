@@ -8,8 +8,10 @@ import QuickLogin_Modal from "./QuickLogin_Modal";
 
 function RegisterForm({
   quickLogin,
+  isLogging,
   handleSubmit,
 }: {
+  isLogging: boolean;
   quickLogin(): void;
   // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -106,7 +108,7 @@ function RegisterForm({
           </a>
         </Link>
       </Form>
-      {state.loginPrompt && <QuickLogin_Modal quickLogin={quickLogin} />}
+      {state.loginPrompt && <QuickLogin_Modal isLogging={isLogging} quickLogin={quickLogin} />}
     </div>
   );
 }

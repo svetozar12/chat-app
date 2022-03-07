@@ -1,5 +1,4 @@
-import { Action, ActionType } from "../state";
-import { InitialState2 } from "../state";
+import { Action, ActionType, InitialState2 } from "../state";
 import { HYDRATE } from "next-redux-wrapper";
 export const initialState = {
   reciever: "",
@@ -12,6 +11,7 @@ export const initialState = {
   setIsMatch: false,
   setChatSettings: false,
   setModalInvite: false,
+  setIsLoggingIn: false,
 };
 const setReducer = (state: InitialState2 | any | InitialState2[] = initialState, action: Action) => {
   switch (action.type) {
@@ -40,6 +40,8 @@ const setReducer = (state: InitialState2 | any | InitialState2[] = initialState,
       return { ...state, setIsMatch: action.payload };
     case ActionType.SET_MODAL_INVITE:
       return { ...state, setModalInvite: action.payload };
+    case ActionType.SET_IS_LOGEDIN:
+      return { ...state, setIsLoggingIn: action.payload };
     case ActionType.SIGN_OUT:
       return initialState;
     default:

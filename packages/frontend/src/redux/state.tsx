@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { HYDRATE } from "next-redux-wrapper";
 
 export enum ActionType {
@@ -25,6 +26,7 @@ export enum ActionType {
   SET_CHAT_SETTINGS = "SET_CHAT_SETTINGS",
   SET_MODAL_INVITE = "SET_MODAL_INVITE",
   NOTIFICATION_NUMBER = "NOTIFICATION_NUMBER",
+  SET_IS_LOGEDIN = "SET_IS_LOGEDIN",
 }
 
 interface LoginPost {
@@ -82,7 +84,8 @@ interface toggle_create_group {
     | ActionType.SET_MOBILE_NAV
     | ActionType.SET_IS_MATCH
     | ActionType.SET_CHAT_SETTINGS
-    | ActionType.SET_MODAL_INVITE;
+    | ActionType.SET_MODAL_INVITE
+    | ActionType.SET_IS_LOGEDIN;
   payload: boolean | string[] | string;
 }
 
@@ -107,6 +110,7 @@ export interface InitialState2 {
   setMobileNav: boolean;
   setIsMatch: boolean;
   setChatSettings: boolean;
+  setIsLoggingIn: boolean;
 }
 
 export interface InitialState3 {

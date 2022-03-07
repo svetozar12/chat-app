@@ -12,14 +12,13 @@ import LoginForm from "../components/LoginForm";
 import { checkJWT, loginAuth } from "../utils/authRoutes";
 
 function Login(props: AppProps) {
+  const [isLogging, setIsLogging] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
   const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
-
   const authState = useSelector((state: { authReducer: InitialState }) => state.authReducer);
-
   const rememberMe = authState.remember_me ? 31556952 : 3600;
   const refreshRememberMe = authState.remember_me ? 63113904 : 7200;
 
@@ -37,6 +36,7 @@ function Login(props: AppProps) {
 
       const login = await loginPost(state.input_username, state.input_password);
       if (await login) {
+        setIsLogging(true);
         cookie.set("name", state.input_username, {
           sameSite: "strict",
           maxAge: rememberMe,
@@ -61,15 +61,15 @@ function Login(props: AppProps) {
           path: "/",
         });
 
-        dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
         router.push(`/${chatInstance._id}`);
+        dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
       return;
     }
   };
 
-  return <LoginForm handleSubmit={handleSubmit} />;
+  return <LoginForm handleSubmit={handleSubmit} isLogging={isLogging} />;
 }
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(() => async (context) => {

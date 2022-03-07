@@ -11,6 +11,7 @@ import { loginAuth } from "../utils/authRoutes";
 import { getFirstChat } from "../utils/getFirstChat";
 
 function Register(props: { cookie: string }) {
+  const [isLogging, setIsLogging] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function Register(props: { cookie: string }) {
   const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
   const quickLogin = async () => {
+    setIsLogging(true);
     const JWT = await loginAuth(state.input_username, state.input_password);
     cookie.set("name", state.input_username, {
       sameSite: "strict",
@@ -56,7 +58,7 @@ function Register(props: { cookie: string }) {
     }
   };
 
-  return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
+  return <RegisterForm isLogging={isLogging} quickLogin={quickLogin} handleSubmit={handleSubmit} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

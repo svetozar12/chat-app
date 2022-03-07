@@ -1,9 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
-import Link from "next/dist/client/link";
 import { InitialState, InitialState3 } from "../../redux/state";
-import styled from "@emotion/styled";
 import { Label_container, Form_header, Form, Button, Input } from "../styledComponents/index";
+import Link from "next/dist/client/link";
+import styled from "@emotion/styled";
 import Alerts from "../Alerts";
+import Loading from "../Loading";
 
 const CheckBox = styled.input`
   width: 20px;
@@ -22,8 +23,14 @@ const Link_anchor = styled.a`
   margin: 1rem;
 `;
 
-// eslint-disable-next-line no-unused-vars
-function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void> }) {
+function LoginForm({
+  handleSubmit,
+  isLogging,
+}: {
+  // eslint-disable-next-line no-unused-vars
+  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  isLogging: boolean;
+}) {
   const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
 
   const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
@@ -55,9 +62,13 @@ function LoginForm({ handleSubmit }: { handleSubmit: (e: React.MouseEvent<HTMLBu
             placeholder="password ..."
           />
         </Label_container>
-        <Button onClick={handleSubmit} type="submit">
-          Log In
-        </Button>
+        {isLogging ? (
+          <Loading />
+        ) : (
+          <Button onClick={handleSubmit} type="submit">
+            Log In
+          </Button>
+        )}
         <Clickable>
           <Link href="/register">
             <Link_anchor className="link" style={{ color: "var(--button-blue)" }}>

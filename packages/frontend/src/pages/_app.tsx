@@ -92,7 +92,7 @@ const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) =>
       <div
         className={css`
           position: absolute;
-          z-index: ${setState.setFriendRequest || setState.setModalInvite || state.loginPrompt ? "100" : "-1"};
+          z-index: ${setState.setIsLoggingIn || setState.setFriendRequest || setState.setModalInvite || state.loginPrompt ? "100" : "-1"};
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
