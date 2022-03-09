@@ -3,7 +3,7 @@ import axios from "axios";
 import { Socket } from "socket.io-client";
 import { InitialState2 } from "../../redux/state";
 import { useSelector, useDispatch } from "react-redux";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 
 const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) => {
   const [user, setUser] = React.useState<string>("");
@@ -47,16 +47,22 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
     <>
       {state1.toggleCreateGroup && (
         <div
-          className={css`
-            width: 100%;
-            height: 100%;
-          `}
+          className={cx(
+            css`
+              width: 100%;
+              height: 100%;
+            `,
+            "flex",
+          )}
         >
           <form
-            className={css`
-              display: flex;
-              flex-direction: row;
-            `}
+            className={cx(
+              css`
+                width: 100%;
+                flex-direction: row;
+              `,
+              "flex",
+            )}
             onSubmit={(e) => addToGroup(user, e)}
           >
             <input

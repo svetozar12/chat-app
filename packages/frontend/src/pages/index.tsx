@@ -36,6 +36,7 @@ function Login(props: AppProps) {
 
       const login = await loginPost(state.input_username, state.input_password);
       if (await login) {
+        dispatch({ type: "QUICK_LOGIN", payload: true });
         setIsLogging(true);
         cookie.set("name", state.input_username, {
           sameSite: "strict",

@@ -17,7 +17,7 @@
   --bad-alert-color: #f24654;
   --bad-alert-bgcolor: rgba(255, 0, 0, 0.5);
   --good-alert-color: #60af86;
-  --good-alert-bgcolor: rgba(0, 255, 0, 0.2);
+  --good-alert-bgcolor: rgba(0, 255, 0, 0.5);
   --main-box-shadow: rgba(0, 0, 0, 0.2);
 }
 

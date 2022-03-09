@@ -62,13 +62,10 @@ function LoginForm({
             placeholder="password ..."
           />
         </Label_container>
-        {isLogging ? (
-          <Loading />
-        ) : (
-          <Button onClick={handleSubmit} type="submit">
-            Log In
-          </Button>
-        )}
+        {isLogging && <Loading />}
+        <Button onClick={handleSubmit} type="submit">
+          Log In
+        </Button>
         <Clickable>
           <Link href="/register">
             <Link_anchor className="link" style={{ color: "var(--button-blue)" }}>

@@ -49,6 +49,10 @@ function Register(props: { cookie: string }) {
     const register = await registerPost(state.input_username, state.input_password, state.input_email, state.input_gender);
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
+      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
+      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
+      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
+      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
     } else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
       dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });

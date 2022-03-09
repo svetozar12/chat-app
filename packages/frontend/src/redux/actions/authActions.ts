@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
-import { Action } from "../state";
-import { ActionType } from "../state";
+import { Action, ActionType } from "../state";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 
@@ -31,7 +30,7 @@ const RegisterPostError = (res: string) => {
 
 export const loginPost = (username: string, password: string) => async (dispatch: Dispatch<Action | any>) => {
   try {
-    const res = await axios.post(`${requestUrl}/auth/login`, {
+    await axios.post(`${requestUrl}/auth/login`, {
       username,
       password,
     });
