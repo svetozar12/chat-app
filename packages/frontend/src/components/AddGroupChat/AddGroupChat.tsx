@@ -47,13 +47,14 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
     <>
       {state1.toggleCreateGroup && (
         <div
-          className={cx(
-            css`
-              width: 100%;
-              height: 100%;
-            `,
-            "flex",
-          )}
+          className={css`
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+          `}
         >
           <form
             className={cx(
@@ -97,7 +98,15 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
           <div style={{ display: "flex" }}>
             {usersData.map((element, index) => {
               return (
-                <p style={{ color: "black" }} key={index}>
+                <p
+                  className={css`
+                    background: var(--main-blue);
+                    color: var(--main-white);
+                    padding: 0.2rem 1rem;
+                    border-radius: 5px;
+                  `}
+                  key={index}
+                >
                   {element}
                 </p>
               );
