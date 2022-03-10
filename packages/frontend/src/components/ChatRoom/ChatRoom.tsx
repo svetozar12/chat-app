@@ -5,7 +5,7 @@ import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialState2 } from "../../redux/state";
 import axios from "axios";
-import RenderChat from "../RenderChat";
+import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
 import timeStamp from "../../utils/timeStamp";
 import { hostUrl, requestUrl } from "../../utils/hostUrl_requestUrl";
@@ -30,7 +30,8 @@ interface IPropsState {
   time?: string | number;
 }
 
-interface IchatInstance {
+export interface IchatInstance {
+  _id: string;
   sender: string;
   message: string;
   createdAt: string;
@@ -191,6 +192,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
                 key={index}
                 chatId={chatId}
                 cookie={cookie.get("name")}
+                id={item._id}
                 sender={sender}
                 time_stamp={time_stamp}
                 message={message}

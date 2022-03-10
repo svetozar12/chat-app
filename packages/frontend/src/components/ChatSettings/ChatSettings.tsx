@@ -9,17 +9,13 @@ import { getFirstChat } from "../../utils/getFirstChat";
 import { useSelector, useDispatch } from "react-redux";
 import { InitialState2 } from "../../redux/state";
 
-function ChatSettings({
-  chatId,
-  socketRef,
-  setLocalStatus,
-  cookieName,
-}: {
+interface IChatSettings {
   chatId: string;
   socketRef: Socket;
   cookieName: string;
-  setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
-}) {
+}
+
+function ChatSettings({ chatId, socketRef, cookieName }: IChatSettings) {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
@@ -64,8 +60,6 @@ function ChatSettings({
 
       route.push(`/${redirect._id}`);
     }
-    setLocalStatus(user);
-    setLocalStatus("");
   };
   return (
     <>
@@ -75,6 +69,8 @@ function ChatSettings({
           css`
             position: relative;
             bottom: 0;
+            transition: 0.3s;
+            opacity: ${state.setChatSettings ? "1" : "0"};
             width: 100%;
             z-index: 11;
             height: 80vh;

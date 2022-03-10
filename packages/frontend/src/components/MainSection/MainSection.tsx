@@ -13,12 +13,11 @@ import { Cookie } from "next-cookie";
 interface IMainSection {
   socketRef: Socket | null;
   cookie: Cookie;
-  setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
   chatId: string;
   chatRooms: Ichats[];
 }
 
-const MainSection = ({ socketRef, chatRooms, cookie, setLocalStatus, chatId }: IMainSection) => {
+const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
@@ -101,9 +100,11 @@ const MainSection = ({ socketRef, chatRooms, cookie, setLocalStatus, chatId }: I
                 height: 2rem;
                 cursor: pointer;
                 right: 0;
+                margin-top: 2.5rem;
                 position: absolute;
                 z-index: 9999;
-                display: ${!state.setChatSettings && "none"};
+                transition: 0.3s;
+                opacity: ${state.setChatSettings ? "1" : "0"};
               `)}
               onClick={() =>
                 dispatch({
@@ -114,9 +115,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, setLocalStatus, chatId }: I
             />
           </div>
 
-          {socketRef && (
-            <ChatSettings socketRef={socketRef} chatId={chatId} setLocalStatus={setLocalStatus} cookieName={cookie.get("name")} />
-          )}
+          {socketRef && <ChatSettings socketRef={socketRef} chatId={chatId} cookieName={cookie.get("name")} />}
         </div>
 
         {socketRef &&

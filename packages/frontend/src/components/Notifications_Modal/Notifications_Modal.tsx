@@ -6,14 +6,13 @@ import PendingChats from "./PendingChats/PendingChats";
 import { InitialState2 } from "../../redux/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css, cx } from "@emotion/css";
-function Notifications({
-  contacts,
-  socketRef,
-}: {
+
+interface INotifications {
   contacts: Iinvites[];
   socketRef: Socket | any;
-  setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
-}) {
+}
+
+function Notifications({ contacts, socketRef }: INotifications) {
   const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
 
   const dispatch = useDispatch();

@@ -62,6 +62,10 @@ function Login(props: AppProps) {
           path: "/",
         });
 
+        cookie.set("last_visited_chatRoom", chatInstance._id, {
+          sameSite: "strict",
+          path: "/",
+        });
         router.push(`/${chatInstance._id}`);
         dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
         dispatch({ type: "SAVE_INPUT", payload: "" });

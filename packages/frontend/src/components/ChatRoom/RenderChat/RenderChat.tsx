@@ -1,8 +1,11 @@
 import { css, cx } from "@emotion/css";
+import axios from "axios";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import MessageSettings from "./MessageSettings";
 interface IRenderChat {
+  id: string;
   sender: string;
   time_stamp: string | number;
   message: string;
@@ -24,7 +27,7 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
+const RenderChat = ({ id, sender, time_stamp, message, cookie }: IRenderChat) => {
   const name = cookie;
   const [styleBool, SetStyleBool] = React.useState(false);
   const [settings, SetSettings] = React.useState(false);
@@ -109,7 +112,7 @@ const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
                 position: relative;
               `}
             >
-              {settings && <MessageSettings translateX="-60px" />}
+              {settings && <MessageSettings id={id} translateX="-60px" />}
               <div onClick={() => SetSettings(!settings)} className={optionsPadding}>
                 <BsThreeDotsVertical className={dothStyle} />
               </div>
@@ -139,7 +142,7 @@ const RenderChat = ({ sender, time_stamp, message, cookie }: IRenderChat) => {
                 position: relative;
               `}
             >
-              {settings && <MessageSettings translateX="250px" />}
+              {settings && <MessageSettings id={id} translateX="250px" />}
               <div onClick={() => SetSettings(!settings)} className={optionsPadding}>
                 <BsThreeDotsVertical className={dothStyle} />
               </div>

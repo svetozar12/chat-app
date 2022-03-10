@@ -50,20 +50,13 @@ route.post("/:chat_id", async (req: Request, res: Response) => {
   }
 });
 
-route.delete("/:chat_id", async (req: Request, res: Response) => {
+route.delete("/:message_id", async (req: Request, res: Response) => {
   try {
-    const chat_id = req.params.chat_id;
-    const sender = req.body.sender;
-    const message = req.body.message;
-    const isUser = await User.findOne({ username: sender });
-    if (!isUser) return res.status(404).json({ message: `User: ${sender} not found` });
-    const isMessages = await Messages.findOne({
-      chatInstance: chat_id,
-      message,
-    });
-    if (!isMessages) return res.status(404).json({ message: `Message: ${message} not found` });
-    await Messages.deleteOne({ chatInstance: chat_id, message, sender });
-    return res.status(200).json({ message: `Message ${message} has been deleted` });
+    const message_id = req.params.message_id;
+    const isMessage = await Messages.findOne({ _id: message_id });
+    if (!isMessage) return res.status(404).json({ message: `Message not found` });
+    await Messages.deleteOne({ _id: message_id }).exec();
+    return res.status(200).json({ message: `Message  has been deleted` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

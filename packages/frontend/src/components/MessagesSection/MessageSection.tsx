@@ -8,7 +8,7 @@ import { InitialState2 } from "../../redux/state";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-const MessageSection = ({ contacts, socketRef, setLocalStatus, cookie, fetchInviteStatus, fetchInviterStatus, chatId }) => {
+const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
   const route = useRouter();
@@ -81,11 +81,9 @@ const MessageSection = ({ contacts, socketRef, setLocalStatus, cookie, fetchInvi
             `,
           )}
         >
-          {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} setLocalStatus={setLocalStatus} />}
+          {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} />}
 
-          {state.setModalInvite && socketRef && (
-            <AddUsers_Modal setLocalStatus={setLocalStatus} socketRef={socketRef} users={users} setUsers={setUsers} chatId={chatId} />
-          )}
+          {state.setModalInvite && socketRef && <AddUsers_Modal socketRef={socketRef} users={users} setUsers={setUsers} chatId={chatId} />}
           <ChatRoom cookie={cookie} chatId={chatId} />
         </div>
       </div>

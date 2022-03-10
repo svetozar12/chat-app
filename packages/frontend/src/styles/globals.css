@@ -222,10 +222,6 @@ form div > input {
   border: 1px solid var(--main-black);
 }
 
-.search-bar input {
-  padding: 0.3rem;
-}
-
 .register_form form input {
   margin: 0 1rem;
 }

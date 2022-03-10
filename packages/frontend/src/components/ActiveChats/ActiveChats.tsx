@@ -122,7 +122,6 @@ const ActiveChats = ({ _id, members, cookieName, socketRef, chatId }: IActiveCha
                   (user2 === cookieName && <p style={{ margin: 0 }}>{user1}</p>) ||
                   (user1 === cookieName && <p style={{ margin: 0 }}>{user2}</p>)}
             </div>
-            <input type="text" />
             <p
               className={css`
                 margin: 0;

@@ -1,4 +1,7 @@
 import React from "react";
+import axios from "axios";
+import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+
 import { css } from "@emotion/css";
 const options = css`
   background: transparent;
@@ -12,7 +15,17 @@ const options = css`
   }
 `;
 
-function MessageSettings({ translateX }: { translateX: string }) {
+function MessageSettings({ translateX, id }: { translateX: string; id: string }) {
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(`${requestUrl}/messages/${id}`);
+      console.log(res);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
   return (
     <div
       className={css`
@@ -38,7 +51,9 @@ function MessageSettings({ translateX }: { translateX: string }) {
         }
       `}
     >
-      <button className={options}>Delete Message</button>
+      <button onClick={handleDelete} className={options}>
+        Delete Message
+      </button>
       <button className={options}>Edit Message</button>
     </div>
   );

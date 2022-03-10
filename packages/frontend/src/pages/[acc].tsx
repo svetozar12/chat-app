@@ -28,7 +28,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookieName = cookie.get("name");
 
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [localStatus, setLocalStatus] = useState<string>("");
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
 
@@ -131,12 +130,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     };
   }, []);
 
-  useEffect(() => {
-    fetchRecieverStatus();
-    fetchInviteStatus();
-    checkNotification();
-  }, [localStatus]);
-
   return (
     <div style={{ display: "flex", width: "100%", height: "100vh", position: "absolute" }}>
       <section
@@ -159,12 +152,11 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <HamburgerMenu />
         </div>
       </section>
-      <MainSection chatId={props.chatRoom} chatRooms={chatRooms} socketRef={socketRef} cookie={cookie} setLocalStatus={setLocalStatus} />
+      <MainSection chatId={props.chatRoom} chatRooms={chatRooms} socketRef={socketRef} cookie={cookie} />
       <MessageSection
         chatId={props.chatRoom}
         contacts={contacts}
         socketRef={socketRef}
-        setLocalStatus={setLocalStatus}
         cookie={cookie}
         fetchInviteStatus={fetchInviteStatus}
         fetchInviterStatus={fetchInviterStatus}
