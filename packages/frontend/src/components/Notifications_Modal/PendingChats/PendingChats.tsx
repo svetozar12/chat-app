@@ -2,10 +2,10 @@ import axios from "axios";
 import React from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
-import { Iinvites } from "../../pages/[acc]";
+import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import { Iinvites } from "../../../pages/[acc]";
 import { css, cx } from "@emotion/css";
-import Single_avatar from "../Avatar/Single_avatar";
+import Single_avatar from "../../Avatar/Single_avatar";
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;

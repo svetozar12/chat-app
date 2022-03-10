@@ -55,6 +55,14 @@ export const User_settings_style = css`
     background: rgba(122, 122, 122, 0.3);
   }
 `;
+
+const buttonStyles = css`
+  margin: 0 1rem;
+  border-radius: unset;
+  width: 1.5rem;
+  height: 1.5rem;
+`;
+
 function UserSettings({ cookie }: { cookie: any }) {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -88,40 +96,19 @@ function UserSettings({ cookie }: { cookie: any }) {
             dispatch({ type: "SET_USER_SETTINGS", payload: false });
           }}
         >
-          <FiSettings
-            style={{
-              margin: "0 1rem",
-              borderRadius: "unset",
-              width: "1.5rem",
-              height: "1.5rem",
-            }}
-          />
+          <FiSettings className={buttonStyles} />
           User settings
         </a>
       </Link>
       <Link href="#" passHref>
         <a className={User_settings_style} onClick={deleteCookies}>
-          <IoMdLogOut
-            style={{
-              margin: "0 1rem",
-              borderRadius: "unset",
-              width: "1.5rem",
-              height: "1.5rem",
-            }}
-          />
+          <IoMdLogOut className={buttonStyles} />
           Log out
         </a>
       </Link>
       <Link href="#" passHref>
         <a className={User_settings_style} style={{ marginBottom: "1rem" }} onClick={deleteUser}>
-          <RiDeleteBin6Fill
-            style={{
-              margin: "0 1rem",
-              borderRadius: "unset",
-              width: "1.5rem",
-              height: "1.5rem",
-            }}
-          />
+          <RiDeleteBin6Fill className={buttonStyles} />
           Delete user
         </a>
       </Link>

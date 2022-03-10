@@ -21,10 +21,6 @@
   --main-box-shadow: rgba(0, 0, 0, 0.2);
 }
 
-/* =================
-2.Global styling
-================= */
-
 html,
 body {
   padding: 0;
@@ -46,36 +42,6 @@ a {
   text-decoration: none;
 }
 
-/* =================
-3.Layout styling
-================= */
-
-.fRequests_modal {
-  position: fixed;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-  justify-content: !important start;
-  z-index: 9999;
-  width: 40%;
-  background: var(--main-white);
-  overflow: hidden;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-}
-
-.BIG {
-  background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
-  position: absolute;
-  z-index: -1;
-  width: 100vw;
-  height: 100vh;
-}
-
 .container {
   flex-direction: column;
   height: 70vh;
@@ -91,7 +57,6 @@ a {
 form,
 .icon,
 .invite_buttons,
-.search-bar,
 .message_input_container,
 .flex {
   display: flex;
@@ -199,10 +164,6 @@ img {
   margin: 0 1rem;
 }
 
-/* =================
-4.Components styling
-================= */
-
 .notifications {
   position: relative;
 }
@@ -261,14 +222,6 @@ form div > input {
   border: 1px solid var(--main-black);
 }
 
-.friendsInput input {
-  width: 90%;
-  border: none;
-  background: transparent;
-  margin: 0 1rem;
-  padding: 0.3rem;
-}
-
 .search-bar input {
   padding: 0.3rem;
 }
@@ -312,38 +265,6 @@ p {
   color: #050505;
 }
 
-.search-bar {
-  width: 95%;
-  border-radius: 25px;
-  margin: 1rem 0;
-  padding: 0.3rem;
-  background: rgba(122, 122, 122, 0.1);
-}
-
-.search-bar:focus-within {
-  box-shadow: 0 0 5px;
-}
-
-.button {
-  border-radius: 5px;
-  width: 20%;
-  background-color: var(--main-black);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 0.7rem 0;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-  margin: 0.5rem 0;
-}
-
-.button:hover {
-  background-color: var(--main-white);
-  color: var(--main-black);
-  transition: 0.2s;
-}
-
 .invite_list > main {
   margin: 2rem 0 2rem 0;
 }
@@ -351,21 +272,6 @@ p {
 .invite_buttons button {
   margin: 0 0.2rem;
   cursor: pointer;
-}
-
-/* =================
-5.Typography styling
-================= */
-
-.log-out {
-  color: var(--main-blue);
-  cursor: pointer;
-  margin: 0.5rem;
-  border-bottom: 1px solid transparent;
-}
-
-.log-out:hover {
-  border-bottom: 1px solid;
 }
 
 .contacts h1 {
@@ -414,10 +320,6 @@ p {
   .show {
     width: 80%;
   }
-
-  .fRequests_modal {
-    width: 70%;
-  }
 }
 @media only screen and (max-width: 1010px) {
   .clickable {
@@ -430,22 +332,9 @@ p {
   .show {
     width: 80%;
   }
-
-  .fRequests_modal {
-    width: 70%;
-  }
 }
 @media (max-width: 431px) {
   .container input {
     width: 90%;
-  }
-
-  .accept,
-  .decline {
-    outline: none;
-    border: none;
-    font-size: 1.9rem;
-    background: transparent;
-    transition: 0.2s;
   }
 }

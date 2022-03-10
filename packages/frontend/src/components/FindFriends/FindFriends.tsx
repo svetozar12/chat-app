@@ -120,6 +120,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           margin: 0 1rem;
         `}
       >
+        {/* refactor to new component bellow */}
         <div className="flex">
           {hasAvatar ? (
             <img
@@ -155,6 +156,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           )}
           <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}>Chats</h1>
         </div>
+        {/* refactor to new component above */}
         <div className="flex find_friends_icons">
           <div
             className="flex notifications"
@@ -198,7 +200,21 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
         </div>
       </div>
       <div className="flex" style={{ width: "95%", position: "relative" }}>
-        <div className="search-bar">
+        <div
+          className={css`
+            width: 95%;
+            border-radius: 25px;
+            margin: 1rem 0;
+            padding: 0.3rem;
+            background: rgba(122, 122, 122, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &:focus-within {
+              box-shadow: 0 0 5px;
+            }
+          `}
+        >
           <BsSearch style={{ cursor: "pointer", color: "black" }} onClick={handleSubmit} />
           <input
             className={css`
