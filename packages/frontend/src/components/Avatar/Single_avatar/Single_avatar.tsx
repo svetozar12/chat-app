@@ -3,7 +3,6 @@ import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { css } from "@emotion/css";
-import Image from "next/image";
 const logo_post_overlay = css`
   z-index: 1;
 `;
@@ -23,7 +22,7 @@ function Single_avatar({
   group,
   preview,
 }: {
-  inviter?: string;
+  inviter: string;
   cookieName: string;
   width?: string;
   height?: string;
@@ -58,7 +57,6 @@ function Single_avatar({
   return (
     <div style={{ marginRight: "1rem" }}>
       {preview ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           alt={`${cookieName} logo`}
           // @ts-ignore
@@ -76,19 +74,18 @@ function Single_avatar({
           } ${overlay && logo_post_overlay}`}
         />
       ) : hasAvatar ? (
-        <Image
+        <img
           alt={`${cookieName} logo`}
           src={image}
           className={`${
             group
               ? group_logo
               : css`
-                  borderradius: "50px";
+                  border-radius: 50px;
                   margin: 0;
                   width: ${width || "3.5rem"};
                   height: ${height || "3.5rem"};
                   color: var(--main-logo-color);
-                  marginright: "1rem";
                   ${overlay ? "bottom: 0;" : "top:0"}
                   ${overlay ? "left: 0;" : "right:0"}
                 `

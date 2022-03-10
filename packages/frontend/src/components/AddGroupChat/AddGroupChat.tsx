@@ -4,6 +4,7 @@ import { Socket } from "socket.io-client";
 import { InitialState2 } from "../../redux/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
+import { Button } from "../styledComponents";
 
 const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) => {
   const [user, setUser] = React.useState<string>("");
@@ -81,8 +82,9 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
               placeholder="Add user ..."
               type="search"
             />
-            <button
+            <Button
               className={css`
+                width: 20%;
                 border-radius: 5px;
                 border: none;
                 padding: 0.8rem;
@@ -93,7 +95,7 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
               type="button"
             >
               Create room
-            </button>
+            </Button>
           </form>
           <div style={{ display: "flex" }}>
             {usersData.map((element, index) => {

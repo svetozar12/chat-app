@@ -40,6 +40,7 @@ io.on("connection", (socket: Socket): void => {
   });
 
   socket.on("inviting_multiple_users", ({ users }) => {
+    console.log(users);
     io.emit("inviting_multiple_users", { users });
   });
   socket.on("send_friend_request", ({ inviter, reciever }) => {

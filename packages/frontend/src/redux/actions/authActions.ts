@@ -1,4 +1,4 @@
-import { Dispatch } from "redux";
+import { Dispatch } from "react";
 import { Action, ActionType } from "../state";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
@@ -38,7 +38,7 @@ export const loginPost = (username: string, password: string) => async (dispatch
   } catch (error: any) {
     username = "";
     password = "";
-    dispatch(loginPostError(error.response.data.message));
+    dispatch(loginPostError(error.response.data.ErrorMsg));
     setTimeout(() => {
       dispatch(loginPostError(""));
     }, 4000);

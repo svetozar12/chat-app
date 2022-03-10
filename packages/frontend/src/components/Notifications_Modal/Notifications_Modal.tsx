@@ -5,16 +5,10 @@ import { Socket } from "socket.io-client";
 import PendingChats from "../PendingChats/PendingChats";
 import { InitialState2 } from "../../redux/state";
 import { Iinvites } from "../../pages/[acc]";
-import styled from "@emotion/styled";
-
-const Notification_items = styled.div`
-  overflow-y: auto;
-  width: 100%;
-`;
+import { css } from "@emotion/css";
 function Notifications({
   contacts,
   socketRef,
-  setLocalStatus,
 }: {
   contacts: Iinvites[];
   socketRef: Socket | any;
@@ -42,12 +36,17 @@ function Notifications({
           <GrClose style={{ width: "2rem", height: "2rem" }} />
         </div>
       </section>
-      <Notification_items>
+      <div
+        className={css`
+          overflow-y: auto;
+          width: 100%;
+        `}
+      >
         {checkSize.length === 0 && <h1 className="flex">No Chat suggestions</h1>}
         {contacts.map((item, index) => {
-          return socketRef && <PendingChats key={index} socketRef={socketRef} setLocalStatus={setLocalStatus} {...item} />;
+          return socketRef && <PendingChats key={index} socketRef={socketRef} {...item} />;
         })}
-      </Notification_items>
+      </div>
     </div>
   );
 }

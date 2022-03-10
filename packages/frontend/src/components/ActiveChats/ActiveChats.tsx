@@ -131,7 +131,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef, chatId }: IActiveCha
                   (user2 === cookieName && <p style={{ margin: 0 }}>{user1}</p>) ||
                   (user1 === cookieName && <p style={{ margin: 0 }}>{user2}</p>)}
             </Space_between_child>
-
+            {/* <input type="text" /> */}
             <Last_message>Last message...</Last_message>
           </Contacts_info>
         </section>

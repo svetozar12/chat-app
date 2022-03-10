@@ -8,52 +8,9 @@ import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
-import styled from "@emotion/styled";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import UserSettings from "../UserSettings";
-const Form = styled.form`
-  width: 100%;
-  margin: 0;
-  padding: 1rem;
-  justify: flex-start;
-  position: relative;
-`;
 
-const Closed_hamburger = styled.div`
-  width: 95%;
-  height: 3rem;
-  margin-bottom: 1rem;
-  position: relative;
-`;
-
-const Form_input = styled.input`
-  width: 90%;
-  margin: 0 1rem;
-  background: transparent;
-  border: none;
-`;
-
-const Profile = styled.div`
-  display: flex;
-  width: 95%;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 0 1rem;
-`;
-
-const User_logo = styled.img`
-  width: 2.8rem;
-  height: 2.8rem;
-  color: var(--main-logo-color);
-  margin-right: 1rem;
-  border-radius: 100px;
-  position: relative;
-  zindex: 10;
-  &:hover {
-    background: rgba(122, 122, 122, 0.4);
-  }
-`;
 export interface IFindFriends {
   cookieName: string;
   socketRef: Socket;
@@ -132,12 +89,58 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   };
 
   return (
-    <Form onSubmit={handleSubmit} style={{ marginBottom: "1rem", alignItems: "center" }}>
-      <Closed_hamburger></Closed_hamburger>
-      <Profile>
+    <form
+      className={css`
+        width: 100%;
+        margin: 0;
+        padding: 1rem;
+        display: flex;
+        justify: flex-start;
+        position: relative;
+        margin-bottom: 1rem;
+        align-items: center;
+      `}
+      onSubmit={handleSubmit}
+    >
+      <div
+        className={css`
+          width: 95%;
+          height: 3rem;
+          margin-bottom: 1rem;
+          position: relative;
+        `}
+      ></div>
+      <div
+        className={css`
+          display: flex;
+          width: 95%;
+          justify-content: space-between;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          margin: 0 1rem;
+        `}
+      >
         <div className="flex">
           {hasAvatar ? (
-            <User_logo src={image} className="click" />
+            <img
+              alt="user_avatar"
+              src={image}
+              className={cx(
+                "click",
+                css`
+                  width: 2.8rem;
+                  height: 2.8rem;
+                  color: var(--main-logo-color);
+                  margin-right: 1rem;
+                  border-radius: 100px;
+                  position: relative;
+                  zindex: 10;
+                  &:hover {
+                    background: rgba(122, 122, 122, 0.4);
+                  }
+                `,
+              )}
+            />
           ) : (
             <FaUserCircle
               className={css`
@@ -193,11 +196,18 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
           </div>
         </div>
-      </Profile>
+      </div>
       <div className="flex" style={{ width: "95%", position: "relative" }}>
         <div className="search-bar">
           <BsSearch style={{ cursor: "pointer", color: "black" }} onClick={handleSubmit} />
-          <Form_input
+          <input
+            className={css`
+              width: 90%;
+              margin: 0 1rem;
+              background: transparent;
+              border: none;
+              outline: none;
+            `}
             onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
             placeholder="Search for chats"
             value={state.reciever}
@@ -205,7 +215,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           />
         </div>
       </div>
-    </Form>
+    </form>
   );
 }
 

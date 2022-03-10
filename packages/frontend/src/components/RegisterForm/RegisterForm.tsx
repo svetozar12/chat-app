@@ -17,8 +17,8 @@ function RegisterForm({
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) {
   const dispatch = useDispatch();
-  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
 
+  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
   const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
 
   return (
