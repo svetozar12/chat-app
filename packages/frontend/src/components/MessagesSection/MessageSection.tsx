@@ -54,7 +54,7 @@ const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchI
       className={cx(
         "flex",
         css`
-          width: 75%;
+          width: 71%;
           @media (max-width: 1008px) {
             width: 100%;
           },`,

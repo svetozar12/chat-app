@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import { requestUrl } from "../../../../utils/hostUrl_requestUrl";
 
 import { css } from "@emotion/css";
 const options = css`

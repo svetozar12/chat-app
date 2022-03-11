@@ -61,7 +61,7 @@ const UpdateInfoForm = ({
           `}
         >
           {/* <p>{image}</p> */}
-          <Single_avatar cookieName={cookieName} width="6rem" height="6rem" preview={image} />
+          <Single_avatar inviter="" cookieName={cookieName} width="6rem" height="6rem" preview={image} />
           <label
             className={css`
               width: 6rem;

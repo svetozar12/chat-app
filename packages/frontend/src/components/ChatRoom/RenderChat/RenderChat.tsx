@@ -1,8 +1,6 @@
 import { css, cx } from "@emotion/css";
-import axios from "axios";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import MessageSettings from "./MessageSettings";
 interface IRenderChat {
   id: string;

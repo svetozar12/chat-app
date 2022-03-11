@@ -34,7 +34,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
         overflow: hidden;
         height: 100vh;
         z-index: 20;
-        width: 42%;
+        width: 29%;
         flex-direction: column;
         justify-content: flex-start;
         flex-shrink: unset;
