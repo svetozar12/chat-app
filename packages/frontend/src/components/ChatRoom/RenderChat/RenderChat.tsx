@@ -2,6 +2,8 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import MessageSettings from "./MessageSettings";
+import { Socket } from "socket.io-client";
+import { IchatInstance } from "../ChatRoom";
 interface IRenderChat {
   id: string;
   sender: string;
@@ -9,6 +11,9 @@ interface IRenderChat {
   message: string;
   chatId: string;
   cookie: string;
+  socketRef: Socket | null;
+  chat: IchatInstance;
+  setChat: React.Dispatch<React.SetStateAction<IchatInstance[]>>;
 }
 
 const mineMessages = css`
@@ -25,7 +30,7 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ id, sender, time_stamp, message, cookie }: IRenderChat) => {
+const RenderChat = ({ id, sender, time_stamp, cookie, socketRef, chat, setChat, message }: IRenderChat) => {
   const name = cookie;
   const [styleBool, SetStyleBool] = React.useState(false);
   const [settings, SetSettings] = React.useState(false);
@@ -110,7 +115,7 @@ const RenderChat = ({ id, sender, time_stamp, message, cookie }: IRenderChat) =>
                 position: relative;
               `}
             >
-              {settings && <MessageSettings id={id} translateX="-60px" />}
+              {settings && <MessageSettings chat={chat} setChat={setChat} SocketRef={socketRef} id={id} translateX="-60px" />}
               <div onClick={() => SetSettings(!settings)} className={optionsPadding}>
                 <BsThreeDotsVertical className={dothStyle} />
               </div>
@@ -123,6 +128,7 @@ const RenderChat = ({ id, sender, time_stamp, message, cookie }: IRenderChat) =>
                 word-wrap: break-word;
                 text-align: center;
                 min-width: 7rem;
+                min-height: 3rem;
                 border-radius: 4px;
                 max-width: 40%;
                 padding: 0.5rem 1rem;
@@ -130,6 +136,7 @@ const RenderChat = ({ id, sender, time_stamp, message, cookie }: IRenderChat) =>
                 word-wrap: break-word;
                 background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
               `,
+              "flex",
             )}
           >
             <span>{message}</span>
@@ -140,7 +147,7 @@ const RenderChat = ({ id, sender, time_stamp, message, cookie }: IRenderChat) =>
                 position: relative;
               `}
             >
-              {settings && <MessageSettings id={id} translateX="250px" />}
+              {settings && <MessageSettings chat={chat} setChat={setChat} SocketRef={socketRef} id={id} translateX="250px" />}
               <div onClick={() => SetSettings(!settings)} className={optionsPadding}>
                 <BsThreeDotsVertical className={dothStyle} />
               </div>

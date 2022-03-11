@@ -196,6 +196,8 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
                 sender={sender}
                 time_stamp={time_stamp}
                 message={message}
+                chat={chat}
+                setChat={setChat}
               />
             </li>
           );

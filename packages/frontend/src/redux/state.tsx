@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { HYDRATE } from "next-redux-wrapper";
+import { IchatInstance } from "../components/ChatRoom/ChatRoom";
 
 export enum ActionType {
   LOGIN_POST = "LOGIN_POST",
@@ -27,6 +28,19 @@ export enum ActionType {
   SET_MODAL_INVITE = "SET_MODAL_INVITE",
   NOTIFICATION_NUMBER = "NOTIFICATION_NUMBER",
   SET_IS_LOGEDIN = "SET_IS_LOGEDIN",
+  MESSAGES = "MESSAGES",
+  CLEAR = "CLEAR",
+  DELETE_MESSAGE = "DELETE_MESSAGE",
+  PAGGINATION_MESSAGES = "PAGGINATION_MESSAGES",
+}
+
+interface MESSAGES {
+  type: ActionType.MESSAGES | ActionType.DELETE_MESSAGE | ActionType.PAGGINATION_MESSAGES;
+  payload: string[];
+}
+
+interface CLEAR {
+  type: ActionType.CLEAR;
 }
 
 interface LoginPost {
@@ -89,7 +103,18 @@ interface toggle_create_group {
   payload: boolean | string[] | string;
 }
 
-export type Action = LoginPost | errLoginPost | inputs | signIn | signOut | Iset | IMessages | Hydrate | toggle_create_group;
+export type Action =
+  | LoginPost
+  | CLEAR
+  | MESSAGES
+  | errLoginPost
+  | inputs
+  | signIn
+  | signOut
+  | Iset
+  | IMessages
+  | Hydrate
+  | toggle_create_group;
 
 export interface InitialState {
   remember_me: boolean;
@@ -122,5 +147,7 @@ export interface InitialState3 {
 }
 
 export interface InitialStateMessage {
-  payload: { sender: string; message: string };
+  sender: string;
+  message: string;
+  messages: IchatInstance[];
 }

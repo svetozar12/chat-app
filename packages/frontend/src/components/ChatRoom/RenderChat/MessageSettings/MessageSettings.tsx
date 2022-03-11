@@ -1,8 +1,6 @@
 import React from "react";
-import axios from "axios";
-import { requestUrl } from "../../../../utils/hostUrl_requestUrl";
-
 import { css } from "@emotion/css";
+import { IchatInstance } from "../../ChatRoom";
 const options = css`
   background: transparent;
   border: none;
@@ -15,17 +13,14 @@ const options = css`
   }
 `;
 
-function MessageSettings({ translateX, id }: { translateX: string; id: string }) {
-  const handleDelete = async () => {
-    try {
-      const res = await axios.delete(`${requestUrl}/messages/${id}`);
-      console.log(res);
+interface IMessageSettings {
+  id: string;
+  translateX: string;
+  chat: IchatInstance[];
+  setChat: React.Dispatch<React.SetStateAction<IchatInstance[]>>;
+}
 
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+function MessageSettings({ id, translateX, chat, setChat }: IMessageSettings) {
   return (
     <div
       className={css`
@@ -51,7 +46,7 @@ function MessageSettings({ translateX, id }: { translateX: string; id: string })
         }
       `}
     >
-      <button onClick={handleDelete} className={options}>
+      <button onClick={() => setChat(chat.filter((message) => message._id != id))} className={options}>
         Delete Message
       </button>
       <button className={options}>Edit Message</button>

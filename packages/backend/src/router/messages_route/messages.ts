@@ -1,7 +1,6 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import Messages from "../../models/Message.model";
-import User from "../../models/User.model";
 const route = express.Router();
 
 route.get("/:chat_id", async (req: Request, res: Response) => {
