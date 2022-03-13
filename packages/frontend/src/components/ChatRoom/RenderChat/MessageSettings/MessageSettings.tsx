@@ -1,6 +1,9 @@
 import React from "react";
 import { css } from "@emotion/css";
-import { IchatInstance } from "../../ChatRoom";
+import { useDispatch } from "react-redux";
+import { requestUrl } from "../../../../utils/hostUrl_requestUrl";
+import axios from "axios";
+
 const options = css`
   background: transparent;
   border: none;
@@ -16,11 +19,37 @@ const options = css`
 interface IMessageSettings {
   id: string;
   translateX: string;
-  chat: IchatInstance[];
-  setChat: React.Dispatch<React.SetStateAction<IchatInstance[]>>;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setSettings: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function MessageSettings({ id, translateX, chat, setChat }: IMessageSettings) {
+function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSettings) {
+  const dispatch = useDispatch();
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`${requestUrl}/messages/${id}`);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      // some stuff with axios
+      setEditing(true);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleClick = (status: string) => {
+    setSettings(false);
+    status === "delete" && handleDelete();
+    status === "edit" && handleEdit();
+  };
   return (
     <div
       className={css`
@@ -46,10 +75,18 @@ function MessageSettings({ id, translateX, chat, setChat }: IMessageSettings) {
         }
       `}
     >
-      <button onClick={() => setChat(chat.filter((message) => message._id != id))} className={options}>
+      <button
+        onClick={() => {
+          dispatch({ type: "DELETE_MESSAGE", payload: id });
+          handleClick("delete");
+        }}
+        className={options}
+      >
         Delete Message
       </button>
-      <button className={options}>Edit Message</button>
+      <button onClick={() => handleClick("edit")} className={options}>
+        Edit Message
+      </button>
     </div>
   );
 }

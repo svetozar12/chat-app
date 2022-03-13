@@ -3,7 +3,7 @@ import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { InitialState2, InitialStateMessage } from "../../redux/state";
 import axios from "axios";
 import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
@@ -39,11 +39,11 @@ export interface IchatInstance {
 
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const route = useRouter();
+  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const statess = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
-  const [chat, setChat] = useState<IchatInstance[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [state, setState] = useState<IPropsState>({
     name: cookie.get("name"),
@@ -51,15 +51,14 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     time: "",
   });
 
-  const updateChat = (param: IchatInstance[]) => {
-    setChat((prev) => [...prev, ...param]);
-  };
-
   const getRecentMessages = async () => {
     try {
       const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=1&page_size=10`);
       const data = res.data.reversedArr;
-      updateChat(data);
+      data.forEach((element) => {
+        dispatch({ type: "MESSAGES", payload: element });
+      });
+
       return true;
     } catch (error) {
       return false;
@@ -67,7 +66,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   };
 
   useEffect(() => {
-    setChat([]);
     dispatch({ type: "SET_IS_MATCH", payload: false });
     if (location.href === hostUrl + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
 
@@ -79,11 +77,8 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }) => {
-      dispatch({
-        type: "MESSAGE_SEND",
-        payload: { sender: cookieName, message: state.message },
-      });
-      updateChat(messages);
+      const [message] = messages;
+      dispatch({ type: "MESSAGES", payload: message });
     });
     socketConnect.emit("joined_chat_room", { user: cookieName });
     setSocketRef(socketConnect);
@@ -97,11 +92,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       await axios.post(`${requestUrl}/messages/${chatId}`, {
         sender: cookieName,
         message: state.message,
-      });
-
-      dispatch({
-        type: "MESSAGE_SEND",
-        payload: { sender: cookieName, message: state.message },
       });
 
       return true;
@@ -120,7 +110,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`);
         const data = res.data.reversedArr;
 
-        setChat((prev) => [...data, ...prev]);
+        data.forEach((element) => {
+          dispatch({ type: "PAGGINATION_MESSAGES", payload: element });
+        });
       }
       return true;
     } catch (error) {
@@ -183,9 +175,10 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         `}
         onScroll={scrollHandler}
       >
-        {chat.map((item, index) => {
+        {messageState.messages.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
+
           return (
             <li style={{ listStyle: "none" }} key={index}>
               <RenderChat
@@ -196,8 +189,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
                 sender={sender}
                 time_stamp={time_stamp}
                 message={message}
-                chat={chat}
-                setChat={setChat}
               />
             </li>
           );

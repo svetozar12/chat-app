@@ -25,6 +25,24 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
   }
 });
 
+route.put("/:_id", async (req: Request, res: Response) => {
+  try {
+    const _id = req.params._id;
+    console.log(_id);
+    const newMessage: string = req.body.newMessage;
+    if (newMessage === "" || newMessage === null) return res.status(200).json({ message: "Message didn't change" });
+    const user = Messages.findByIdAndUpdate(_id, { message: newMessage }).exec();
+    if (!user) return res.status(404).json({ message: "Message wasn't found" });
+    return res.status(200).send({ message: `Message has been updated` });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while registering",
+    });
+  }
+});
+
 route.post("/:chat_id", async (req: Request, res: Response) => {
   try {
     const chat_id = req.params.chat_id;

@@ -2,8 +2,9 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import MessageSettings from "./MessageSettings";
-import { Socket } from "socket.io-client";
-import { IchatInstance } from "../ChatRoom";
+import { useDispatch, useSelector } from "react-redux";
+import { InitialStateMessage } from "../../../redux/state";
+
 interface IRenderChat {
   id: string;
   sender: string;
@@ -11,9 +12,6 @@ interface IRenderChat {
   message: string;
   chatId: string;
   cookie: string;
-  socketRef: Socket | null;
-  chat: IchatInstance;
-  setChat: React.Dispatch<React.SetStateAction<IchatInstance[]>>;
 }
 
 const mineMessages = css`
@@ -30,10 +28,13 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ id, sender, time_stamp, cookie, socketRef, chat, setChat, message }: IRenderChat) => {
+const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) => {
+  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
+  const dispatch = useDispatch();
   const name = cookie;
-  const [styleBool, SetStyleBool] = React.useState(false);
-  const [settings, SetSettings] = React.useState(false);
+  const [styleBool, setStyleBool] = React.useState(false);
+  const [settings, setSettings] = React.useState(false);
+  const [editing, setEditing] = React.useState(false);
 
   const checkSettingsOpt = () => {
     return styleBool || settings;
@@ -65,13 +66,26 @@ const RenderChat = ({ id, sender, time_stamp, cookie, socketRef, chat, setChat, 
     height: 1.5rem;
   `;
 
+  const ToggleSettings = () => {
+    dispatch({ type: "SHOW_SETTINGS", payload: !messageState.show });
+    if (settings === true) setEditing(false);
+    setSettings(!messageState.show);
+  };
+
+  const handleEdit = (e: any) => {
+    if (e.key === "Enter") {
+      console.log("submited");
+      setEditing(false);
+    }
+  };
+
   return (
     <div
       onMouseOut={() => {
-        SetStyleBool(false);
+        setStyleBool(false);
       }}
       onMouseOver={() => {
-        SetStyleBool(true);
+        setStyleBool(true);
       }}
       className={cx(
         "flex",
@@ -115,8 +129,8 @@ const RenderChat = ({ id, sender, time_stamp, cookie, socketRef, chat, setChat, 
                 position: relative;
               `}
             >
-              {settings && <MessageSettings chat={chat} setChat={setChat} SocketRef={socketRef} id={id} translateX="-60px" />}
-              <div onClick={() => SetSettings(!settings)} className={optionsPadding}>
+              {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="-60px" />}
+              <div onClick={ToggleSettings} className={optionsPadding}>
                 <BsThreeDotsVertical className={dothStyle} />
               </div>
             </div>
@@ -139,7 +153,31 @@ const RenderChat = ({ id, sender, time_stamp, cookie, socketRef, chat, setChat, 
               "flex",
             )}
           >
-            <span>{message}</span>
+            <span className="flex">
+              {editing ? (
+                <input
+                  onKeyDown={(e) => handleEdit(e)}
+                  className={css`
+                    background: transparent;
+                    border: none;
+                    padding: 0.2rem 0;
+                    margin: 0.2rem 0;
+                    max-width: 40%;
+                    color: var(--main-white);
+                    box-shadow: 0px 0px 5px var(--main-white);
+                    text-align: center;
+                    &:focus {
+                      outline: none;
+                    }
+                  `}
+                  type="text"
+                  value={message}
+                  autoFocus
+                />
+              ) : (
+                message
+              )}
+            </span>
           </div>
           {name !== sender && (
             <div
@@ -147,8 +185,8 @@ const RenderChat = ({ id, sender, time_stamp, cookie, socketRef, chat, setChat, 
                 position: relative;
               `}
             >
-              {settings && <MessageSettings chat={chat} setChat={setChat} SocketRef={socketRef} id={id} translateX="250px" />}
-              <div onClick={() => SetSettings(!settings)} className={optionsPadding}>
+              {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="250px" />}
+              <div onClick={ToggleSettings} className={optionsPadding}>
                 <BsThreeDotsVertical className={dothStyle} />
               </div>
             </div>

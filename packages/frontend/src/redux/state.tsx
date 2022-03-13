@@ -12,7 +12,6 @@ export enum ActionType {
   SAVE_INPUT_EMAIL = "SAVE_INPUT_EMAIL",
   SAVE_INPUT_GENDER = "SAVE_INPUT_GENDER",
   INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
-  MESSAGE_SEND = "MESSAGE_SEND",
   CHAT_INVITER = "CHAT_INVITER",
   REMEMBER_ME_CHECK = "REMEMBER_ME_CHECK",
   QUICK_LOGIN = "QUICK_LOGIN",
@@ -32,6 +31,7 @@ export enum ActionType {
   CLEAR = "CLEAR",
   DELETE_MESSAGE = "DELETE_MESSAGE",
   PAGGINATION_MESSAGES = "PAGGINATION_MESSAGES",
+  SHOW_SETTINGS = "SHOW_SETTINGS",
 }
 
 interface MESSAGES {
@@ -80,11 +80,6 @@ interface Iset {
   payload: number;
 }
 
-interface IMessages {
-  type: ActionType.MESSAGE_SEND;
-  payload: { sender: string; message: string };
-}
-
 interface Hydrate {
   type: typeof HYDRATE;
   payload: any;
@@ -99,22 +94,12 @@ interface toggle_create_group {
     | ActionType.SET_IS_MATCH
     | ActionType.SET_CHAT_SETTINGS
     | ActionType.SET_MODAL_INVITE
-    | ActionType.SET_IS_LOGEDIN;
+    | ActionType.SET_IS_LOGEDIN
+    | ActionType.SHOW_SETTINGS;
   payload: boolean | string[] | string;
 }
 
-export type Action =
-  | LoginPost
-  | CLEAR
-  | MESSAGES
-  | errLoginPost
-  | inputs
-  | signIn
-  | signOut
-  | Iset
-  | IMessages
-  | Hydrate
-  | toggle_create_group;
+export type Action = LoginPost | CLEAR | MESSAGES | errLoginPost | inputs | signIn | signOut | Iset | Hydrate | toggle_create_group;
 
 export interface InitialState {
   remember_me: boolean;
@@ -147,7 +132,6 @@ export interface InitialState3 {
 }
 
 export interface InitialStateMessage {
-  sender: string;
-  message: string;
   messages: IchatInstance[];
+  show: boolean;
 }
