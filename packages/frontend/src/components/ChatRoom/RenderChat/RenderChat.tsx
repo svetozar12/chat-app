@@ -4,6 +4,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import MessageSettings from "./MessageSettings";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialStateMessage } from "../../../redux/state";
+import axios from "axios";
+import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 
 interface IRenderChat {
   id: string;
@@ -35,6 +37,10 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
+  const [editedMessage, setEditedMessage] = React.useState("");
+  const [width, setWidth] = React.useState(112);
+  const [height, setHeight] = React.useState(48);
+  const inputRef = React.useRef(null);
 
   const checkSettingsOpt = () => {
     return styleBool || settings;
@@ -73,11 +79,29 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
   };
 
   const handleEdit = (e: any) => {
+    const target = e.target as HTMLTextAreaElement;
+    e.target.style.height = "15px";
+    e.target.style.height = `${target.scrollHeight}px`;
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
     if (e.key === "Enter") {
       console.log("submited");
+      for (const obj of messageState.messages) {
+        if (obj._id === id) {
+          obj.message = editedMessage;
+          axios.put(`${requestUrl}/messages/${id}`, { newMessage: editedMessage });
+          dispatch({ type: "MESSAGES", payload: messageState.messages });
+          break;
+        }
+      }
       setEditing(false);
     }
   };
+
+  React.useEffect(() => {
+    setEditedMessage(message);
+    setWidth(inputRef.current.offsetWidth);
+    setHeight(inputRef.current.offsetHeight);
+  }, []);
 
   return (
     <div
@@ -145,7 +169,6 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
                 min-height: 3rem;
                 border-radius: 4px;
                 max-width: 40%;
-                padding: 0.5rem 1rem;
                 overflow: hidden;
                 word-wrap: break-word;
                 background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
@@ -154,27 +177,37 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
             )}
           >
             {editing ? (
-              <input
-                onKeyDown={(e) => handleEdit(e)}
+              <textarea
                 className={css`
-                  background: transparent;
+                  resize: none;
                   border: none;
-                  border-radius: 5px;
-                  padding: 0.2rem;
-                  max-width: 100%;
-                  color: var(--main-white);
-                  background: rgba(0, 0, 0, 0.2);
                   text-align: center;
-                  &:focus {
-                    outline: none;
-                  }
+                  color: var(--main-white);
+                  background: rgba(0, 0, 0, 0.3);
+                  border-radius: 4px;
+                  width: ${width}px;
+                  height: ${height}px;
+                  padding: 1rem 0.5rem;
                 `}
-                type="text"
-                value={message}
                 autoFocus
-              />
+                autoCorrect="off"
+                onChange={(e) => setEditedMessage(e.target.value)}
+                onKeyDown={(e) => handleEdit(e)}
+              >
+                {editedMessage}
+              </textarea>
             ) : (
-              <span className="flex">{message}</span>
+              <span
+                ref={inputRef}
+                className={cx(
+                  "flex",
+                  css`
+                    padding: 1rem 0.5rem;
+                  `,
+                )}
+              >
+                {message}
+              </span>
             )}
           </div>
           {name !== sender && (
