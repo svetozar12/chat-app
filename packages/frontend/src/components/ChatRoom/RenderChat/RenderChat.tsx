@@ -153,31 +153,29 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
               "flex",
             )}
           >
-            <span className="flex">
-              {editing ? (
-                <input
-                  onKeyDown={(e) => handleEdit(e)}
-                  className={css`
-                    background: transparent;
-                    border: none;
-                    padding: 0.2rem 0;
-                    margin: 0.2rem 0;
-                    max-width: 40%;
-                    color: var(--main-white);
-                    box-shadow: 0px 0px 5px var(--main-white);
-                    text-align: center;
-                    &:focus {
-                      outline: none;
-                    }
-                  `}
-                  type="text"
-                  value={message}
-                  autoFocus
-                />
-              ) : (
-                message
-              )}
-            </span>
+            {editing ? (
+              <input
+                onKeyDown={(e) => handleEdit(e)}
+                className={css`
+                  background: transparent;
+                  border: none;
+                  border-radius: 5px;
+                  padding: 0.2rem;
+                  max-width: 100%;
+                  color: var(--main-white);
+                  background: rgba(0, 0, 0, 0.2);
+                  text-align: center;
+                  &:focus {
+                    outline: none;
+                  }
+                `}
+                type="text"
+                value={message}
+                autoFocus
+              />
+            ) : (
+              <span className="flex">{message}</span>
+            )}
           </div>
           {name !== sender && (
             <div
