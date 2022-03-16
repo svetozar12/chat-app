@@ -45,6 +45,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
+  const containerRef = React.useRef<null | HTMLDivElement>(null);
   const [state, setState] = useState<IPropsState>({
     name: cookie.get("name"),
     message: "",
@@ -120,6 +121,15 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
 
+  const scrollToBottom = () => {
+    const parent = containerRef.current;
+    parent?.scrollTo(0, parent.scrollHeight);
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messageState.messages]);
+
   const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     if (state.message) {
@@ -164,6 +174,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
       {socketRef && statess.toggleCreateGroup && <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />}
 
       <div
+        ref={containerRef}
         className={css`
           flex-direction: column;
           width: 100%;
