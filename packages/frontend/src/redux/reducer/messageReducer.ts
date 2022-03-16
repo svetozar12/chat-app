@@ -27,6 +27,8 @@ const messageReducer = (state = initialState, action: Action) => {
         ...state,
         messages: state.messages.filter((message) => message._id != action.payload),
       };
+    case ActionType.RESET_MESSAGES:
+      return initialState;
     default:
       return state;
   }

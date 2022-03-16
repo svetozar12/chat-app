@@ -30,6 +30,7 @@ export enum ActionType {
   MESSAGES = "MESSAGES",
   CLEAR = "CLEAR",
   DELETE_MESSAGE = "DELETE_MESSAGE",
+  RESET_MESSAGES = "RESET_MESSAGES",
   PAGGINATION_MESSAGES = "PAGGINATION_MESSAGES",
   SHOW_SETTINGS = "SHOW_SETTINGS",
 }
@@ -72,7 +73,7 @@ interface signIn {
 }
 
 interface signOut {
-  type: ActionType.SIGN_OUT;
+  type: ActionType.SIGN_OUT | ActionType.RESET_MESSAGES;
 }
 
 interface Iset {

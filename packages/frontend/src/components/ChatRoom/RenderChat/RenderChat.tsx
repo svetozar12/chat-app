@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { InitialStateMessage } from "../../../redux/state";
 import axios from "axios";
 import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import { IchatInstance } from "../ChatRoom";
 
 interface IRenderChat {
   id: string;
@@ -84,15 +85,20 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
     e.target.style.height = `${target.scrollHeight}px`;
     e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
     if (e.key === "Enter") {
-      console.log("submited");
+      let messageArr: IchatInstance[] = [];
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
+          const messages = messageState.messages;
+          console.log(...messages);
           axios.put(`${requestUrl}/messages/${id}`, { newMessage: editedMessage });
-          dispatch({ type: "MESSAGES", payload: messageState.messages });
-          break;
+          dispatch({ type: "RESET_MESSAGES" });
         }
+        messageArr.push(obj);
       }
+      messageArr.forEach((element) => {
+        dispatch({ type: "MESSAGES", payload: element });
+      });
       setEditing(false);
     }
   };
