@@ -5,15 +5,15 @@ exports[`Render connected React-redux page should create snapshot for <ChatRoom/
   className="css-1708wod"
 >
   <div
-    className="css-jkyo07"
+    className="css-1pt27nv"
     onScroll={[Function]}
   />
   <form
-    className="flex css-109vyda"
+    className="flex css-16nrlu7"
     onSubmit={[Function]}
   >
     <div
-      className="css-1wunh09"
+      className="css-1q6ynyn"
       onClick={[Function]}
     >
       <textarea
@@ -25,7 +25,7 @@ exports[`Render connected React-redux page should create snapshot for <ChatRoom/
         value=""
       />
       <div
-        className="css-1ng4w9q"
+        className="css-s85sp7"
       >
         <svg
           className="css-1ao2df9"

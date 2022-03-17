@@ -2,32 +2,60 @@
 
 exports[`<RenderChat/> should create snapshot 1`] = `
 <div
-  className="you flex"
+  className="flex css-1xuuxqa"
+  onMouseOut={[Function]}
+  onMouseOver={[Function]}
 >
   <h2
-    className="css-1ijsx8l"
+    className="css-ztc8g1"
   >
     test1
   </h2>
   <div
-    className="css-wf8gkx"
+    className="flex css-1fdg8pm"
   >
     <div
-      className="css-yaes2l"
+      className="flex css-1gwt78m"
     >
-      <span>
-        hello
-      </span>
+      <div
+        className="css-1ovxih1 flex"
+        title="1111"
+      >
+        <span
+          className="flex css-lqgdu0"
+        >
+          hello
+        </span>
+      </div>
+      <div
+        className="css-8hvobu"
+      >
+        <div
+          className="css-1p554ou flex"
+          onClick={[Function]}
+        >
+          <svg
+            className="css-op7gi5"
+            fill="currentColor"
+            height="1em"
+            stroke="currentColor"
+            strokeWidth="0"
+            style={
+              Object {
+                "color": undefined,
+              }
+            }
+            viewBox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
-    <span
-      style={
-        Object {
-          "fontSize": "0.65rem",
-        }
-      }
-    >
-      1111
-    </span>
   </div>
 </div>
 `;

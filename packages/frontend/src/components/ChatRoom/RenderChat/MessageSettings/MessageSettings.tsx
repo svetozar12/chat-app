@@ -52,6 +52,7 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
   };
   return (
     <div
+      title="message_settings"
       className={css`
         width: 10rem;
         position: absolute;

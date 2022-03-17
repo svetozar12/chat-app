@@ -3,12 +3,12 @@ import configureStore from "redux-mock-store";
 import { AuthState } from "../../redux/reducer/authReducer";
 import Alerts from "./Alerts";
 import renderer from "react-test-renderer";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-
+// AuthState.good;
 const mockStore = configureStore([]);
 const store = mockStore({
-  setReducer: AuthState,
+  authReducer: { ...AuthState, good: "it's a good alert" },
 });
 
 const setupRender = () => {
@@ -40,7 +40,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <Alerts/>", () => {
-    const renderedComponent = wrapper.getByTitle("alert message");
+    const renderedComponent = wrapper.getByText("it's a good alert");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

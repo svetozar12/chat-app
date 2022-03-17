@@ -2,7 +2,7 @@
 
 exports[`Render connected React-redux page should create snapshot for <CheckBox_component/> 1`] = `
 <div
-  className="flex css-23rh6g"
+  className="flex css-16yups9"
   onClick={[Function]}
   title="checkbox"
 >

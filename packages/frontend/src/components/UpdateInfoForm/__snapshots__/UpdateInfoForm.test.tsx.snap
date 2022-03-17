@@ -9,12 +9,12 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
     className="css-1r4b7xy"
   >
     <h1
-      className="css-1aagqrl"
+      className="css-1iv2jx7"
     >
       Profile
     </h1>
     <div
-      className="css-1ijf74t"
+      className="css-bh2x82"
     >
       <div
         style={
@@ -47,11 +47,11 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
         </svg>
       </div>
       <label
-        className="css-11d541p"
+        className="css-9smmpy"
         htmlFor="file"
       >
         <svg
-          className="css-1msl7nb"
+          className="css-jmnsok"
           fill="currentColor"
           height="1em"
           stroke="currentColor"
@@ -72,13 +72,8 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
       </label>
     </div>
     <label
-      className="input_file css-147zyae"
+      className="css-1a5pzuo"
       htmlFor="file"
-      style={
-        Object {
-          "margin": "2rem 1rem 0 0",
-        }
-      }
     >
       Add file
     </label>
@@ -151,7 +146,7 @@ exports[`Render connected React-redux page should create snapshot for <UpdateInf
       </div>
     </div>
     <div
-      className="css-zpu9mn"
+      className="css-1cxg21k"
     >
       <input
         className="input_file"

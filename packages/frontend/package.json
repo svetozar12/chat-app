@@ -10,6 +10,7 @@
     "lint": "next lint",
     "lint-css": "stylelint \"./styles/*.{css}\"",
     "test": "jest",
+    "test-u": "jest -u",
     "test:integration": "cypress open",
     "format": "prettier --write **/*.{js,ts,tsx}"
   },
@@ -41,6 +42,7 @@
     "@babel/core": "^7.17.4",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "7.16.0",
+    "@emotion/jest": "^11.8.0",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",

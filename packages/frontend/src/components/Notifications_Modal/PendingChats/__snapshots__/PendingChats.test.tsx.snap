@@ -9,29 +9,41 @@ exports[`Render connected React-redux page should create snapshot for <PendingCh
   }
 >
   <div
-    className="contacts css-72cnkr"
+    className="contacts css-1o0kggo"
   >
     <div
       className="user_info flex"
     >
-      <svg
-        fill="currentColor"
-        height="1em"
-        stroke="currentColor"
-        strokeWidth="0"
+      <div
         style={
           Object {
-            "color": undefined,
+            "marginRight": "1rem",
           }
         }
-        viewBox="0 0 496 512"
-        width="1em"
-        xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"
-        />
-      </svg>
+        <svg
+          className="css-nkhozk css-boia29"
+          data-testid="single_avatar"
+          fill="currentColor"
+          height="1em"
+          stroke="currentColor"
+          strokeWidth="0"
+          style={
+            Object {
+              "color": undefined,
+              "height": "3rem",
+              "width": "3rem",
+            }
+          }
+          viewBox="0 0 496 512"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"
+          />
+        </svg>
+      </div>
       <h1
         className="flex"
       >
@@ -42,11 +54,11 @@ exports[`Render connected React-redux page should create snapshot for <PendingCh
       className="invite_buttons"
     >
       <button
-        className="css-1vgkxxq css-sokyuw"
+        className="css-1j2602n"
         onClick={[Function]}
       >
         <svg
-          className="css-1q3bwnf"
+          className="css-153rtys"
           fill="currentColor"
           height="1em"
           stroke="currentColor"
@@ -66,11 +78,11 @@ exports[`Render connected React-redux page should create snapshot for <PendingCh
         </svg>
       </button>
       <button
-        className="css-1vgkxxq css-1cdmtdh"
+        className="css-qc0uml"
         onClick={[Function]}
       >
         <svg
-          className="css-1q3bwnf"
+          className="css-153rtys"
           fill="currentColor"
           height="1em"
           stroke="currentColor"

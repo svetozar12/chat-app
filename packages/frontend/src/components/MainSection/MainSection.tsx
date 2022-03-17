@@ -23,6 +23,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
 
   return (
     <section
+      title="main_section"
       className={css`
         position: relative;
         transition-timing-function: ease-out;

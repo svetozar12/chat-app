@@ -7,8 +7,6 @@ import { initialState } from "../../redux/reducer/setReducer";
 import configureStore from "redux-mock-store";
 
 const socketRef: any = jest.fn();
-const setLocalStatus = jest.fn();
-
 const mockStore = configureStore([]);
 const store = mockStore({
   setReducer: initialState,
@@ -17,11 +15,7 @@ const store = mockStore({
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <Notifications_Modal
-        contacts={[{ _id: "31231312", inviter: "ivan", reciever: "greg", status: "declined" }]}
-        socketRef={socketRef}
-        setLocalStatus={setLocalStatus}
-      />
+      <Notifications_Modal contacts={[{ _id: "31231312", inviter: "ivan", reciever: "greg", status: "declined" }]} socketRef={socketRef} />
     </Provider>,
   );
   return component;
@@ -39,7 +33,6 @@ describe("Render connected React-redux page", () => {
             <Notifications_Modal
               contacts={[{ _id: "31231312", inviter: "ivan", reciever: "greg", status: "accepted" }]}
               socketRef={socketRef}
-              setLocalStatus={setLocalStatus}
             />
           </Provider>,
         )

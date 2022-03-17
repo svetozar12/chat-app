@@ -7,8 +7,26 @@ import { useSelector } from "react-redux";
 import { InitialState2 } from "../../redux/state";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { Socket } from "socket.io-client";
+import { Cookie } from "next-cookie";
 
-const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }) => {
+interface IContacts {
+  _id: string;
+  inviter: string;
+  reciever: string;
+  status: string;
+}
+
+interface IMessageSection {
+  contacts: IContacts[];
+  socketRef: Socket | null;
+  cookie: Cookie;
+  fetchInviteStatus: () => Promise<any>;
+  fetchInviterStatus: () => Promise<any>;
+  chatId: string;
+}
+
+const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
   const route = useRouter();
@@ -51,6 +69,7 @@ const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchI
 
   return (
     <section
+      title="message_section"
       className={cx(
         "flex",
         css`

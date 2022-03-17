@@ -166,6 +166,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
             </div>
           )}
           <div
+            ref={inputRef}
             title={time_stamp.toString()}
             className={cx(
               css`
@@ -204,7 +205,6 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
               </textarea>
             ) : (
               <span
-                ref={inputRef}
                 className={cx(
                   "flex",
                   css`

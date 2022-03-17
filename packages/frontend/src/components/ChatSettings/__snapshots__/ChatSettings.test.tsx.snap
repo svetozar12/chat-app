@@ -2,7 +2,7 @@
 
 exports[`Render connected React-redux page should create snapshot for <ChatSettings/> 1`] = `
 <div
-  className="flex css-1gszkkh"
+  className="flex css-w2h0t4"
 >
   <h1
     className="css-zt1gbb"

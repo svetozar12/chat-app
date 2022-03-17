@@ -2,12 +2,12 @@
 
 exports[`<ActiveChats/> should create snapshot 1`] = `
 <div
-  className="css-1e1vc0x  css-1bzo7of"
+  className="css-gzd0uh"
   data-testid="chat"
   onClick={[Function]}
 >
   <div
-    className="css-hndaa8"
+    className="css-1lymioy"
   >
     <section
       style={
@@ -55,10 +55,10 @@ exports[`<ActiveChats/> should create snapshot 1`] = `
         </div>
       </section>
       <div
-        className="css-pw0i2r"
+        className="css-1c5u6r2"
       >
         <div
-          className="css-200l18"
+          className="css-19dbfyd"
         >
           <p
             style={
@@ -71,7 +71,7 @@ exports[`<ActiveChats/> should create snapshot 1`] = `
           </p>
         </div>
         <p
-          className="css-m4wabw"
+          className="css-1p5u1lq"
         >
           Last message...
         </p>

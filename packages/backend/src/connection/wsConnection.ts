@@ -9,7 +9,6 @@ const io = require("socket.io")(server, {
     origin: "*",
   },
 });
-
 // sending message to specific chat room with two users(inviter,reciever)
 io.on("connection", (socket: Socket): void => {
   socket.on("joined_chat_room", ({ user }) => {

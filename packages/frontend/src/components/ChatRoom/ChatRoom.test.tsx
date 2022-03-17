@@ -4,12 +4,14 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer";
+import { initialState as setState } from "../../redux/reducer/setReducer";
+import { initialState as messageState } from "../../redux/reducer/messageReducer";
 import Cookies from "universal-cookie";
 
 const mockStore = configureStore([]);
 const store = mockStore({
-  setReducer: initialState,
+  setReducer: setState,
+  messageReducer: messageState,
 });
 
 jest.mock("next/router", () => ({

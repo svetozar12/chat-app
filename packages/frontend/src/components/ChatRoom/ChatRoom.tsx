@@ -69,7 +69,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   useEffect(() => {
     dispatch({ type: "SET_IS_MATCH", payload: false });
     if (location.href === hostUrl + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
-
+    dispatch({ type: "RESET_MESSAGES" });
     getRecentMessages();
   }, [route.asPath]);
 
