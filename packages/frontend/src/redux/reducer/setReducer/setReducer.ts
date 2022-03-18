@@ -1,5 +1,8 @@
-import { Action, ActionType, InitialState2 } from "../state";
-export const initialState = {
+import { ActionType } from "../../types";
+// eslint-disable-next-line import/named
+import { AnyAction } from "redux";
+import { IInitialSet } from "./state";
+export const initialState: IInitialSet | IInitialSet[] = {
   reciever: "",
   chat_inviter: "",
   pageNumber: 2,
@@ -12,7 +15,7 @@ export const initialState = {
   setModalInvite: false,
   setIsLoggingIn: false,
 };
-const setReducer = (state: InitialState2 | any | InitialState2[] = initialState, action: Action) => {
+const setReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case ActionType.SET_RECIEVER:
       return { ...state, reciever: action.payload };

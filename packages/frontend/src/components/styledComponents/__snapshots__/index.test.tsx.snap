@@ -1,34 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Button renders correctly 1`] = `
-.emotion-0 {
-  margin-top: 1rem;
-  border-radius: 5px;
-  width: 60%;
-  background-color: var(--button-blue);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 1rem;
-  cursor: pointer;
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.emotion-0:hover {
-  opacity: 0.7;
-  -webkit-transition: 0.2s;
-  transition: 0.2s;
-}
-
-<button
-  className="emotion-0"
->
-  hi
-</button>
-`;
-
 exports[`Renders Button 1`] = `
 .emotion-0 {
   margin-top: 1rem;

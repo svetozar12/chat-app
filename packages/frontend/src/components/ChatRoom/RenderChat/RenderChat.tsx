@@ -41,7 +41,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
   const [editedMessage, setEditedMessage] = React.useState("");
   const [width, setWidth] = React.useState(112);
   const [height, setHeight] = React.useState(48);
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef<HTMLDivElement>(null);
 
   const checkSettingsOpt = () => {
     return styleBool || settings;
@@ -105,8 +105,10 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
 
   React.useEffect(() => {
     setEditedMessage(message);
-    setWidth(inputRef.current.offsetWidth);
-    setHeight(inputRef.current.offsetHeight);
+    if (inputRef.current) {
+      setWidth(inputRef.current.offsetWidth);
+      setHeight(inputRef.current.offsetHeight);
+    }
   }, []);
 
   return (

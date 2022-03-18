@@ -3,7 +3,8 @@ import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2, InitialStateMessage } from "../../redux/state";
+import { InitialStateMessage } from "../../redux/reducer/messageReducer/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import axios from "axios";
 import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
@@ -40,7 +41,7 @@ export interface IchatInstance {
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const route = useRouter();
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const statess = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const statess = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();

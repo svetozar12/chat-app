@@ -3,7 +3,7 @@ import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer";
+import { initialState } from "../../redux/reducer/setReducer/setReducer";
 import configureStore from "redux-mock-store";
 
 const socketRef: any = jest.fn();

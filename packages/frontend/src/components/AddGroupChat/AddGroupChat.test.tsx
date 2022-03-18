@@ -2,7 +2,7 @@ import configureStore from "redux-mock-store";
 import AddGroupChat from "./AddGroupChat";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { AuthState } from "../../redux/reducer/authReducer";
+import { AuthState } from "../../redux/reducer/authReducer/authReducer";
 import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 

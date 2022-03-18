@@ -1,6 +1,6 @@
 import UpdateInfoForm from "../UpdateInfoForm";
 import { Provider } from "react-redux";
-import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer";
+import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer/save_inputReducer";
 import configureStore from "redux-mock-store";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";

@@ -172,7 +172,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             {notifState.notification_number != 0 && <div className="flex">{notifState.notification_number}</div>}
           </div>
           <div
-            className="flex"
+            className="flex add_group"
             style={{
               cursor: "pointer",
             }}
@@ -181,7 +181,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             <AiOutlineUsergroupAdd />
           </div>
           <div
-            className="flex"
+            className="flex dots"
             style={{
               cursor: "pointer",
               position: "relative",

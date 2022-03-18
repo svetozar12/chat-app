@@ -1,9 +1,11 @@
-import { Action, ActionType } from "../state";
-export const initialState = {
+import { AnyAction } from "redux";
+import { ActionType } from "../../types";
+import { InitialStateMessage } from "./state";
+export const initialState: InitialStateMessage = {
   messages: [],
   show: false,
 };
-const messageReducer = (state = initialState, action: Action) => {
+const messageReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case ActionType.CLEAR:
       return initialState;
@@ -25,6 +27,7 @@ const messageReducer = (state = initialState, action: Action) => {
     case ActionType.DELETE_MESSAGE:
       return {
         ...state,
+        // @ts-ignore
         messages: state.messages.filter((message) => message._id != action.payload),
       };
     case ActionType.RESET_MESSAGES:

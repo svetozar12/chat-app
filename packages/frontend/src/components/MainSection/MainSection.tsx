@@ -42,7 +42,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
         display: flex;
         align-items: center;
         @media (max-width: 1008px) {
-          ${!state.setMobileNav ? "width:0" : "width:80%"};
+          ${!state.setMobileNav ? "width:0" : "width:100%"};
           position: absolute;
         }
       `}

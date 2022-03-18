@@ -4,7 +4,7 @@ import RenderChat from "../RenderChat";
 import renderer from "react-test-renderer";
 import { getFirstChat } from "../../../utils/getFirstChat";
 import { Provider } from "react-redux";
-import { initialState } from "../../../redux/reducer/messageReducer";
+import { initialState } from "../../../redux/reducer/messageReducer/messageReducer";
 import configureStore from "redux-mock-store";
 
 const mockStore = configureStore([]);

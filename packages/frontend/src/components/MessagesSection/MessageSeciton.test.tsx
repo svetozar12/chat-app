@@ -3,8 +3,8 @@ import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer";
-import { initialState as messageState } from "../../redux/reducer/messageReducer";
+import { initialState } from "../../redux/reducer/setReducer/setReducer";
+import { initialState as messageState } from "../../redux/reducer/messageReducer/messageReducer";
 import configureStore from "redux-mock-store";
 import Cookies from "universal-cookie";
 

@@ -2,9 +2,9 @@ import HamburgerMenu from "../HamburgerMenu";
 import renderer from "react-test-renderer";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState as setState } from "../../redux/reducer/setReducer";
-import { AuthState } from "../../redux/reducer/authReducer";
-import saveInputReducer from "../../redux/reducer/save_inputReducer";
+import { initialState as setState } from "../../redux/reducer/setReducer/setReducer";
+import { AuthState } from "../../redux/reducer/authReducer/authReducer";
+import saveInputReducer from "../../redux/reducer/save_inputReducer/save_inputReducer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 

@@ -2,9 +2,9 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import LoginForm from "./LoginForm";
 import renderer from "react-test-renderer";
-import { AuthState } from "../../redux/reducer/authReducer";
+import { AuthState } from "../../redux/reducer/authReducer/authReducer";
 import { render, screen } from "@testing-library/react";
-import { initialState as inputState } from "../../redux/reducer/save_inputReducer";
+import { initialState as inputState } from "../../redux/reducer/save_inputReducer/save_inputReducer";
 import "@testing-library/jest-dom";
 
 const submit = jest.fn();

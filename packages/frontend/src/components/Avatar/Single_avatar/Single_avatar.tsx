@@ -12,6 +12,8 @@ const group_logo = css`
   margin: 0;
   width: 2.6rem;
   height: 2.6rem;
+  background: white;
+  border-radius: 100%;
 `;
 function Single_avatar({
   inviter,

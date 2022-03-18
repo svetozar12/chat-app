@@ -1,14 +1,15 @@
-import { InitialState, Action, ActionType } from "../state";
 import { HYDRATE } from "next-redux-wrapper";
-
-export const initialState = {
+import { AnyAction } from "redux";
+import { IAuthState } from "./state";
+import { ActionType } from "../../types";
+export const initialState: IAuthState = {
   remember_me: false,
   good: "", //good and bad stand for good alert and bad alert
   bad: "",
   loginPrompt: false,
   cookie: "",
 };
-const reducer = (state: InitialState | undefined = initialState, action: Action) => {
+const reducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE:
       return {

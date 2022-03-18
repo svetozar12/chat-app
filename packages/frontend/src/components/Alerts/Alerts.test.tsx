@@ -1,9 +1,9 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { AuthState } from "../../redux/reducer/authReducer";
+import { AuthState } from "../../redux/reducer/authReducer/authReducer";
 import Alerts from "./Alerts";
 import renderer from "react-test-renderer";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 // AuthState.good;
 const mockStore = configureStore([]);

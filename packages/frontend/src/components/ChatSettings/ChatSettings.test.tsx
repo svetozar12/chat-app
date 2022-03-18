@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState as setState } from "../../redux/reducer/setReducer";
+import { initialState as setState } from "../../redux/reducer/setReducer/setReducer";
 import SocketMock from "socket.io-mock";
 const submit: any = jest.fn();
 const mockStore = configureStore([]);

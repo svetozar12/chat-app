@@ -1,7 +1,8 @@
 import { Dispatch } from "react";
-import { Action, ActionType } from "../state";
+import { ActionType } from "../types";
 import axios from "axios";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
+import { AnyAction } from "redux";
 
 const loginPostError = (res: string) => {
   return {
@@ -28,7 +29,7 @@ const RegisterPostError = (res: string) => {
 // MAIN action creators
 // =========
 
-export const loginPost = (username: string, password: string) => async (dispatch: Dispatch<Action | any>) => {
+export const loginPost = (username: string, password: string) => async (dispatch: Dispatch<AnyAction | any>) => {
   try {
     await axios.post(`${requestUrl}/auth/login`, {
       username,
@@ -47,7 +48,7 @@ export const loginPost = (username: string, password: string) => async (dispatch
 };
 
 export const registerPost =
-  (username: string, password: string, email: string, gender: string) => async (dispatch: Dispatch<Action | any>) => {
+  (username: string, password: string, email: string, gender: string) => async (dispatch: Dispatch<AnyAction | any>) => {
     try {
       const res = await axios.post(`${requestUrl}/users/register`, {
         username,
