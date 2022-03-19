@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2, InitialState3 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
@@ -43,9 +44,9 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     getUserImage(cookieName);
   }, []);
 
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
-  const notifState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
+  const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   const toggleGroupCreate = () => {
     dispatch({

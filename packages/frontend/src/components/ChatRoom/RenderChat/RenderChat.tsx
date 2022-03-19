@@ -3,7 +3,7 @@ import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import MessageSettings from "./MessageSettings";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialStateMessage } from "../../../redux/state";
+import { InitialStateMessage } from "../../../redux/reducer/messageReducer/state";
 import axios from "axios";
 import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { IchatInstance } from "../ChatRoom";

@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState, InitialState3 } from "../../redux/state";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { Label_container, Form_header, Form, Button, Input } from "../styledComponents/index";
 import Link from "next/dist/client/link";
 import styled from "@emotion/styled";
@@ -31,9 +32,9 @@ function LoginForm({
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   isLogging: boolean;
 }) {
-  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
-  const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
+  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const dispatch = useDispatch();
 
   return (

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
-import { InitialState, InitialState3 } from "../../redux/state";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import Alerts from "../Alerts";
 import { css } from "@emotion/css";
 import { Form, Button, Input, Form_header, Label_container, Label_button } from "../styledComponents";
@@ -18,8 +19,8 @@ function RegisterForm({
 }) {
   const dispatch = useDispatch();
 
-  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
-  const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   return (
     <div title="register_form" style={{ height: "100vh", flexDirection: "column" }} className="flex">

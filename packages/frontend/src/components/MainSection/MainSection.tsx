@@ -6,7 +6,7 @@ import { css, cx } from "@emotion/css";
 import { GrClose } from "react-icons/gr";
 import { Ichats } from "../../pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { Socket } from "socket.io-client";
 import { Cookie } from "next-cookie";
 
@@ -19,7 +19,7 @@ interface IMainSection {
 
 const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
   return (
     <section

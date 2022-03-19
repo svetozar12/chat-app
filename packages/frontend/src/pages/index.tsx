@@ -5,7 +5,8 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState, InitialState3 } from "../redux/state";
+import ISave_inputState from "../redux/reducer/save_inputReducer/state";
+import { IAuthState } from "../redux/reducer/authReducer/state";
 import { actions, wrapper } from "../redux/store";
 import { getFirstChat } from "../utils/getFirstChat";
 import LoginForm from "../components/LoginForm";
@@ -17,8 +18,8 @@ function Login(props: AppProps) {
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
-  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
-  const authState = useSelector((state: { authReducer: InitialState }) => state.authReducer);
+  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const rememberMe = authState.remember_me ? 31556952 : 3600;
   const refreshRememberMe = authState.remember_me ? 63113904 : 7200;
 

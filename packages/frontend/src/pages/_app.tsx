@@ -3,7 +3,8 @@ import type { AppProps } from "next/app";
 import React, { useEffect } from "react";
 import { wrapper } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState, InitialState2 } from "../redux/state";
+import { IAuthState } from "../redux/reducer/authReducer/state";
+import { IInitialSet } from "../redux/reducer/setReducer/state";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
@@ -12,9 +13,9 @@ import { Global } from "@emotion/react";
 import { css } from "@emotion/css";
 import Head from "next/head";
 const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) => {
-  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
-  const setState = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);

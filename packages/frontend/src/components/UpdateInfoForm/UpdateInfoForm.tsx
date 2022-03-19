@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/dist/client/link";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState3 } from "../../redux/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { css } from "@emotion/css";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
 import { Form, Button, Input, Label_button } from "../styledComponents";
@@ -21,7 +21,7 @@ const UpdateInfoForm = ({
   cookieName: string;
 }) => {
   const dispatch = useDispatch();
-  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
+  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   return (
     <main

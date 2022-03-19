@@ -7,7 +7,7 @@ import { AiOutlineUserDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
 import { getFirstChat } from "../../utils/getFirstChat";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 
 interface IChatSettings {
   chatId: string;
@@ -17,7 +17,7 @@ interface IChatSettings {
 
 function ChatSettings({ chatId, socketRef, cookieName }: IChatSettings) {
   const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
   const [users, setUsers] = React.useState<string[]>([]);
   const route = useRouter();

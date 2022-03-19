@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { GrClose } from "react-icons/gr";
 import { Socket } from "socket.io-client";
 import PendingChats from "./PendingChats/PendingChats";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css, cx } from "@emotion/css";
 
@@ -13,7 +13,7 @@ interface INotifications {
 }
 
 function Notifications({ contacts, socketRef }: INotifications) {
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
   const dispatch = useDispatch();
   const checkSize = contacts.filter((element) => element.status != "accepted");

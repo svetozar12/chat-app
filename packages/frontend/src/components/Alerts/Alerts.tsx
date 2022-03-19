@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState } from "../../redux/state";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
 import { css } from "@emotion/css";
 import { IoClose } from "react-icons/io5";
 const Alerts = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state: { authReducer: InitialState }) => state.authReducer);
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const closeAlert = () => {
     dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
     dispatch({ type: "REGISTER_POST", good: "" });

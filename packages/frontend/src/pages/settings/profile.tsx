@@ -3,7 +3,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import { InitialState3 } from "../../redux/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { getFirstChat } from "../../utils/getFirstChat";
 import UpdateInfoForm from "../../components/UpdateInfoForm";
@@ -13,7 +13,7 @@ function Profile(props: { cookie: string }) {
   const [url, setUrl] = React.useState("");
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
-  const state = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
+  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   React.useEffect(() => {
     (async () => {
       const first_id = await getFirstChat(cookie.get("name"));

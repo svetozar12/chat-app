@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { GrClose } from "react-icons/gr";
 import CheckBox_component from "../CheckBox_component";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
@@ -18,8 +18,7 @@ interface IAddUsers_Modal {
 const AddUsers_Modal = ({ users, socketRef, chatId, setUsers }: IAddUsers_Modal) => {
   const [invited, setInvited] = React.useState<string[]>([]);
   const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
-
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const addMembers = async (user: string[]) => {
     try {
       await axios.put(`${requestUrl}/chat-room/${chatId}`, {

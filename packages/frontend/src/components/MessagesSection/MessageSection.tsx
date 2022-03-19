@@ -4,7 +4,7 @@ import Notifications_Modal from "../Notifications_Modal";
 import AddUsers_Modal from "../AddUsers_Modal";
 import { css, cx } from "@emotion/css";
 import { useSelector } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
@@ -28,7 +28,7 @@ interface IMessageSection {
 
 const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const route = useRouter();
   const getMembersSuggestions = async () => {
     try {

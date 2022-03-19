@@ -4,7 +4,7 @@
   "description": "",
   "main": "/dist/server.js",
   "scripts": {
-    "build": "tsc --build --force",
+    "build": "tsc --build",
     "server": "nodemon dist/server.js",
     "watch": "tsc --watch",
     "lint": "eslint src",

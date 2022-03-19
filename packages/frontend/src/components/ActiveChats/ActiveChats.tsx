@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "../Avatar";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
 interface IActiveChats {
@@ -19,7 +19,7 @@ const ActiveChats = ({ _id, members, cookieName, socketRef, chatId }: IActiveCha
   const [user1, user2] = [members[0], members[1]];
   const [inviter, setInviter] = React.useState<string>("");
   const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
   React.useEffect(() => {
     const notMe: string[] = members.filter((element) => element !== cookieName);

@@ -7,7 +7,7 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState3 } from "../redux/state";
+import ISave_inputState from "../redux/reducer/save_inputReducer/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
 import { css } from "@emotion/css";
 export interface Ichats {
@@ -31,7 +31,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
 
-  const inputState = useSelector((state: { saveInputReducer: InitialState3 }) => state.saveInputReducer);
+  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const getChatRoom = async () => {
     try {
       setChatRooms([]);

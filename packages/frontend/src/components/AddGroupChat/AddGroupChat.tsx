@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
 import { Button } from "../styledComponents";
@@ -12,7 +12,7 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
 
   const dispatch = useDispatch();
 
-  const state1 = useSelector((state: { setReducer: InitialState2 }) => state.setReducer);
+  const state1 = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
