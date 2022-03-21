@@ -1,9 +1,8 @@
-import * as express from "express";
-import { Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import Invites from "../../models/Invites.model";
 import User from "../../models/User.model";
 import Chats from "../../models/chatRoom.model";
-const route = express.Router();
+const route = Router();
 
 route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {

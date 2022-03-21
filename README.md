@@ -1,23 +1,40 @@
-# About The Project
+<h1 align="center">Welcome to chat-app 👋</h1>
 
-This is an chat app which is using websocket for transfering the messages between the users. The app have basic chat features.
+> chat-app for sending messages
 
-## Built With
+## Install
 
-- [NextJs](https://nextjs.org/)
-- [Redux](https://redux.js.org/)
-- [Express](https://expressjs.com/)
-- [MongoDb](https://www.mongodb.com/)
-- [JWT](https://jwt.io/)
+```sh
+yarn
+```
 
-### Prerequisites
+## Usage
 
-First enter in the frontend and install the dependencies and then repeat the same process in directory backend.
+```sh
+yarn build
+```
 
-- yarn
+## Format
 
-  ```in root dir
-        yarn add
-        yarn kill && yarn build
-        yarn dev
-  ```
+```sh
+yarn format
+```
+
+## Run tests
+
+```sh
+yarn test
+```
+
+## Build and Run Docker container
+
+```sh
+docker-compose build
+docker-compose up
+```
+
+## Author
+
+👤 **Svetozar Gospodinov**
+
+- Github: [@svetozar12](https://github.com/svetozar12)

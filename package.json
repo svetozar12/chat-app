@@ -4,6 +4,7 @@
     "packages/*"
   ],
   "scripts": {
+    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('You must use Yarn to install, not NPM')\"",
     "build": "lerna run build --stream",
     "dev": "lerna run dev --no-sort --stream",
     "test": "lerna run test --no-sort --stream",
@@ -18,6 +19,11 @@
   },
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.17.3",
+    "node": ">= 12.5.0"
   },
   "name": "chat-app"
 }
