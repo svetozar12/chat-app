@@ -1,6 +1,6 @@
 import * as express from "express";
 import { graphqlHTTP } from "express-graphql";
-import schema from "../Schemas/types/User.Schema";
+import Schema from "../Schemas/index";
 const route = express.Router();
 import "dotenv/config";
 import { route as users_route } from "./users_route/users_route";
@@ -12,12 +12,7 @@ import { auth } from "./auth";
 route.use(
   "/graphql",
   graphqlHTTP({
-    schema: schema,
-    rootValue: {
-      hello: () => {
-        return "Hello world!";
-      },
-    },
+    schema: Schema,
     graphiql: true,
   }),
 );
