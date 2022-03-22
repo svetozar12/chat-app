@@ -1,19 +1,25 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
-import UserObject from "./types/User.Schema";
-import { verifyTokens } from "../helpers/jwt_helper";
+import UserSchema from "./types/User.Schema";
+import { update_formValidation } from "../helpers/schema";
 import User from "../models/User.model";
-const ACCESS_TOKEN: any = process.env.JWT_SECRET;
+import Chats from "../models/chatRoom.model";
+import Invites from "../models/Invites.model";
+import * as createError from "http-errors";
+
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    getAuthUser: {
-      type: UserObject.UserTokens,
+    getUser: {
+      type: UserSchema,
       args: {
-        token: { type: GraphQLString },
+        username: { type: GraphQLString },
       },
-      async resolve(parent, args: { token: string }) {
-        const response = await verifyTokens(args.token, ACCESS_TOKEN);
-        if (!response) return { Message: "Bad" };
+      async resolve(parent, args: { username: string }) {
+        const response = await User.findOne({ username: args.username });
+
+        if (!response) {
+          throw new Error(`User ${args.username} not found`);
+        }
         return response;
       },
     },
@@ -24,14 +30,71 @@ const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     createUser: {
-      type: UserObject.User,
+      type: UserSchema,
       args: {
-        log: { type: GraphQLString },
+        username: { type: GraphQLString },
+        password: { type: GraphQLString },
+        email: { type: GraphQLString },
+        gender: { type: GraphQLString },
       },
-      resolve(parent, args) {
-        // userData.push({
-        //   log: args.log,
-        // });
+      async resolve(parent, args: { username: string; password: string; email: string; gender: string }) {
+        const response = await User.findOne({ username: args.username });
+        if (response) {
+          return createError(400, `${args.username} already exist`);
+        }
+
+        const user = new User({
+          type: "POST",
+          username: args.username,
+          password: args.password,
+          email: args.email,
+          userAvatar: "",
+          gender: args.gender,
+        });
+
+        const chat = new Chats({
+          members: args.username,
+        });
+
+        user.save();
+        chat.save();
+
+        return args;
+      },
+    },
+    updateUser: {
+      type: UserSchema,
+      args: {
+        username: { type: GraphQLString },
+        password: { type: GraphQLString },
+        email: { type: GraphQLString },
+        gender: { type: GraphQLString },
+        userAvatar: { type: GraphQLString },
+      },
+      async resolve(parents, args: { username: string; password: string; email: string; gender: string; userAvatar: string }) {
+        const users = await User.findOne({ username: args.username }).exec();
+        if (!users) return createError(404, `${args.username} doesn't exist`);
+        return args;
+      },
+    },
+    deleteUser: {
+      type: UserSchema,
+      args: {
+        username: { type: GraphQLString },
+      },
+      async resolve(parents, args: { username: string }) {
+        const user = await User.findOne({ username: args.username }).exec();
+        if (!user) return createError(404, `${args.username} not found`);
+        await User.deleteOne({ username: args.username }).exec();
+        await Invites.deleteMany({
+          reciever: args.username,
+        }).exec();
+        await Invites.deleteMany({
+          inviter: args.username,
+        }).exec();
+        await Chats.deleteMany({
+          members: { $all: [args.username] },
+        }).exec();
         return args;
       },
     },
