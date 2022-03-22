@@ -13,6 +13,7 @@ route.use(
   "/graphql",
   graphqlHTTP({
     schema: Schema,
+    customFormatErrorFn: (err) => ({ message: err.message }),
     graphiql: true,
   }),
 );

@@ -1,24 +1,15 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLObjectType, GraphQLString, GraphQLID } from "graphql";
 // Construct a schema, using GraphQL schema language
-const User = new GraphQLObjectType({
+const UserSchema = new GraphQLObjectType({
   name: "User",
   fields: () => ({
+    _id: { type: GraphQLID },
     username: { type: GraphQLString },
     password: { type: GraphQLString },
+    email: { type: GraphQLString },
+    gender: { type: GraphQLString },
+    userAvatar: { type: GraphQLString },
   }),
 });
 
-const UserTokens = new GraphQLObjectType({
-  name: "UserTokens",
-  fields: () => ({
-    Access_token: { type: GraphQLString },
-    Refresh_token: { type: GraphQLString },
-  }),
-});
-
-const UserObject = {
-  User,
-  UserTokens,
-};
-
-export default UserObject;
+export default UserSchema;
