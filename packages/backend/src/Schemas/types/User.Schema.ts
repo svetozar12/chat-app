@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLNonNull, GraphQLEnumType, GraphQLInputObjectType } from "graphql";
+import { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLEnumType } from "graphql";
 // Construct a schema, using GraphQL schema language
 
 const genderSchema = new GraphQLEnumType({
@@ -24,17 +24,17 @@ const UserSchema = new GraphQLObjectType({
   }),
 });
 
-const FileSchema = new GraphQLInputObjectType({
-  name: "File",
-  fields: () => ({
-    fieldname: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: "The fieldname used to POST this file.",
-    },
-    originalname: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: "The original file name.",
-    },
-  }),
-});
+// const FileSchema = new GraphQLInputObjectType({
+//   name: "File",
+//   fields: () => ({
+//     fieldname: {
+//       type: new GraphQLNonNull(GraphQLString),
+//       description: "The fieldname used to POST this file.",
+//     },
+//     originalname: {
+//       type: new GraphQLNonNull(GraphQLString),
+//       description: "The original file name.",
+//     },
+//   }),
+// });
 export { UserSchema, genderSchema };

@@ -1,6 +1,7 @@
 import { UserSchema } from "../types/User.Schema";
 import { GraphQLString } from "graphql";
 import User from "../../models/User.model";
+import * as createError from "http-errors";
 
 const getUser = {
   type: UserSchema,
@@ -11,7 +12,7 @@ const getUser = {
     const response = await User.findOne({ username: args.username });
 
     if (!response) {
-      throw new Error(`User ${args.username} not found`);
+      return createError(404, `User ${args.username} not found`);
     }
     return response;
   },

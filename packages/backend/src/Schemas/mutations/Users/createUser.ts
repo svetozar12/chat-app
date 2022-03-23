@@ -1,7 +1,7 @@
-import { UserSchema, genderSchema } from "../types/User.Schema";
-import { registerValidation } from "../../helpers/schema";
-import User from "../../models/User.model";
-import Chats from "../../models/chatRoom.model";
+import { UserSchema, genderSchema } from "../../types/User.Schema";
+import { registerValidation } from "../../../helpers/schema";
+import User from "../../../models/User.model";
+import Chats from "../../../models/chatRoom.model";
 import * as createError from "http-errors";
 import { GraphQLString } from "graphql";
 

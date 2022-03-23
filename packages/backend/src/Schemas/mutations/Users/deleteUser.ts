@@ -1,8 +1,8 @@
-import { UserSchema } from "../types/User.Schema";
+import { UserSchema } from "../../types/User.Schema";
 import { GraphQLString } from "graphql";
-import User from "../../models/User.model";
-import Chats from "../../models/chatRoom.model";
-import Invites from "../../models/Invites.model";
+import User from "../../../models/User.model";
+import Chats from "../../../models/chatRoom.model";
+import Invites from "../../../models/Invites.model";
 import * as createError from "http-errors";
 
 const deleteUser = {
