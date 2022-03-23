@@ -8,9 +8,8 @@ const getInvite = {
     username: { type: GraphQLString },
     status: { type: statusSchema },
     byInviter: { type: GraphQLBoolean, description: "Query data by inviter invites" },
-    byReciever: { type: GraphQLBoolean, description: "Query data by reciever invites" },
   },
-  async resolve(parent: any, args: { username: string; status: string; byInviter: boolean; byReciever: boolean }) {
+  async resolve(parent: any, args: { username: string; status: string; byInviter: boolean }) {
     const name = args.username;
     const status = args.status;
     const queryParam = args.byInviter ? { inviter: name } : { reciever: name };
@@ -25,8 +24,6 @@ const getInvite = {
         ...queryParam,
       }).select("status inviter reciever");
     }
-
-    console.log(invites);
 
     if (!invites || invites.length <= 0) {
       return createError(404, "You dont have  invites .");

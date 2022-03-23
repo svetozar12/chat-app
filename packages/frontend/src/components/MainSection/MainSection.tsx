@@ -9,6 +9,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { Socket } from "socket.io-client";
 import { Cookie } from "next-cookie";
+import { useQuery, useMutation } from "@apollo/client";
+import { getUser, getInvite } from "../../graphql/Queries";
+import { createUser } from "../../graphql/Mutation";
 
 interface IMainSection {
   socketRef: Socket | null;
@@ -18,6 +21,14 @@ interface IMainSection {
 }
 
 const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => {
+  const [CreateUser, { error }] = useMutation(createUser);
+  CreateUser({
+    variables: { username: "user10", password: "user10", email: "user10@.com", gender: "Male" },
+  });
+  if (error) console.log(error);
+
+  console.log(CreateUser, "gql");
+
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 

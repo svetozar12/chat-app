@@ -12,6 +12,9 @@ import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
 import { Global } from "@emotion/react";
 import { css } from "@emotion/css";
 import Head from "next/head";
+import { ApolloProvider } from "@apollo/client";
+import client from "../graphql/apolo-client";
+
 const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
@@ -20,7 +23,7 @@ const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) =>
   const router = useRouter();
   const cookie = useCookie(props.cookie);
 
-  //trigger on route change and on page load
+  //trigger on route change and on page load`
   useEffect(() => {
     const response = checkJWT(cookie.get("token"));
     if (!cookie.get("refresh_token") && !response) {
@@ -101,7 +104,9 @@ const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) =>
         `}
         onClick={closeModals}
       ></div>
-      <Component {...pageProps} />
+      <ApolloProvider client={client}>
+        <Component {...pageProps} />
+      </ApolloProvider>
     </>
   );
 };

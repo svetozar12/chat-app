@@ -8,7 +8,18 @@ import { useDispatch } from "react-redux";
 const QuickLogin_Modal = ({ quickLogin, isLogging }: { quickLogin: () => void; isLogging: boolean }) => {
   const dispatch = useDispatch();
   return (
-    <div style={{ width: "75%", height: "30vh", position: "absolute", zIndex: "200" }} className="fRequests_modal flex">
+    <div
+      className={cx(
+        "fRequests_modal",
+        "flex",
+        css`
+          width: 75%;
+          height: 30vh;
+          position: absolute;
+          z-index: 200;
+        `,
+      )}
+    >
       <div
         className={cx(
           css`
