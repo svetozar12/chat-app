@@ -1,7 +1,7 @@
 import { GraphQLString, GraphQLBoolean, GraphQLList } from "graphql";
-import Invites from "../../models/Invites.model";
+import Invites from "../../../models/Invites.model";
 import * as createError from "http-errors";
-import { statusSchema, InviteSchema } from "../types/Invite.Schema";
+import { statusSchema, InviteSchema } from "../../types/Invite.Schema";
 const getInvite = {
   type: new GraphQLList(InviteSchema),
   args: {

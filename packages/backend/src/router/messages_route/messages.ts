@@ -28,7 +28,6 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
 route.put("/:_id", async (req: Request, res: Response) => {
   try {
     const _id = req.params._id;
-    console.log(_id);
     const newMessage: string = req.body.newMessage;
     if (newMessage === "" || newMessage === null) return res.status(200).json({ message: "Message didn't change" });
     const user = Messages.findByIdAndUpdate(_id, { message: newMessage }).exec();
