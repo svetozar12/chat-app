@@ -3,7 +3,7 @@ import { ActionType } from "../state";
 import { InitialState } from "../state";
 import { HYDRATE } from "next-redux-wrapper";
 
-const initialState = {
+export const initialState = {
   remember_me: false,
   good: "", //good and bad stand for good alert and bad alert
   bad: "",

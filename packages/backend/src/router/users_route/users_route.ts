@@ -126,14 +126,20 @@ route.put(
 route.delete("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
+    const user = await User.findOne({ username }).exec();
+    if (!user)
+      return res.status(404).json({ message: `User ${username} is not found` });
     await User.deleteOne({ username }).exec();
     await Invites.deleteMany({
       reciever: username,
     }).exec();
+    await Invites.deleteMany({
+      inviter: username,
+    }).exec();
     await Chats.deleteMany({
       members: { $all: [username] },
     }).exec();
-    return res.status(200).json({ message: `user ${username} deleted` });
+    return res.status(200).json({ message: `User ${username} deleted` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,

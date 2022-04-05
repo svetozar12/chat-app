@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render connected React-redux page should create snapshot for <HamburgerMenu/> 1`] = `
+<svg
+  className="hide css-1y0ao4k-HamburgerMenu"
+  fill="currentColor"
+  height="1em"
+  onClick={[Function]}
+  stroke="currentColor"
+  strokeWidth="0"
+  style={
+    Object {
+      "color": undefined,
+    }
+  }
+  viewBox="0 0 512 512"
+  width="1em"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>
+    hamburger
+  </title>
+  <path
+    d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"
+  />
+</svg>
+`;

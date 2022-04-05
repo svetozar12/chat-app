@@ -110,7 +110,9 @@ route.post("/invites/group-chat", async (req: Request, res: Response) => {
     });
 
     await chat.save();
-    return res.status(201).json({ Message: chat });
+    return res
+      .status(201)
+      .json({ message: "group-chat was created", Message: chat });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -125,6 +127,16 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     const id = req.body.id;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
+    const checkIfExist = await Invites.findOne({ _id: id });
+    const checkUser1IfExist = await User.findOne({ username: user1 });
+    const checkUser2IfExist = await User.findOne({ username: user2 });
+    if (!checkIfExist)
+      return res.status(404).json({ message: "Invite not found" });
+    if (!checkUser1IfExist)
+      return res.status(404).json({ message: `User ${user1} not found` });
+    if (!checkUser2IfExist)
+      return res.status(404).json({ message: `User ${user2} not found` });
+
     const findInvite = await Invites.findByIdAndUpdate(
       id,
       { status: "accepted" },
@@ -146,7 +158,9 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     });
 
     await chat.save();
-    return res.status(201).json({ Message: chat });
+    return res
+      .status(201)
+      .json({ message: "chat-room was created", Message: chat });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -162,7 +176,7 @@ route.post("/invites", async (req: Request, res: Response) => {
       username: req.body.reciever,
     }).exec();
 
-    if (user === null) {
+    if (!user) {
       return res.status(404).json({ ERROR: "User Not found" });
     }
 

@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should create snapshot for <LoginForm/> 1`] = `
+<div
+  className="flex"
+  style={
+    Object {
+      "flexDirection": "column",
+      "height": "100vh",
+    }
+  }
+>
+  
+  <div
+    style={
+      Object {
+        "height": "3rem",
+        "width": "100%",
+      }
+    }
+  />
+  <h1
+    className="css-my1y1y"
+  >
+    Login
+  </h1>
+  <form
+    className="css-7rx0xo"
+  >
+    <div
+      className="css-artkr0"
+    >
+      <label>
+        Username
+      </label>
+      <input
+        className="css-1s11o3x"
+        name="username"
+        onChange={[Function]}
+        placeholder="username ..."
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="css-artkr0"
+    >
+      <label>
+        Password
+      </label>
+      <input
+        className="css-1s11o3x"
+        name="password"
+        onChange={[Function]}
+        placeholder="password ..."
+        type="password"
+        value=""
+      />
+    </div>
+    <button
+      className="css-1hcgzlw"
+      onClick={[MockFunction]}
+      type="submit"
+    >
+      Log In
+    </button>
+    <div
+      className="css-1sg2lsz"
+    >
+      <a
+        className="link css-c9afss"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+        style={
+          Object {
+            "color": "var(--button-blue)",
+          }
+        }
+      >
+        Sign up for chatApp .
+      </a>
+      <input
+        checked={false}
+        className="css-18woaps"
+        data-testid="checkbox"
+        id="checkbox"
+        onChange={[Function]}
+        type="checkbox"
+      />
+      <label
+        htmlFor="checkbox"
+        style={
+          Object {
+            "marginLeft": ".25rem",
+          }
+        }
+      >
+         
+        Remember me
+      </label>
+    </div>
+  </form>
+</div>
+`;

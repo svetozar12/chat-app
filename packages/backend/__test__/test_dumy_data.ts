@@ -1,24 +1,44 @@
 const tests = [
   {
     describe: "Finding invites by username",
-    request: "/invites/testingUser1",
+    request: "/invites/TestingUser1",
   },
   {
     describe: "Finding invites by username with status accepted",
-    request: "/invites/testingUser1?status=accepted",
+    request: "/invites/TestingUser1?status=accepted",
   },
   {
     describe: "Finding invites by username with status declined",
-    request: "/invites/testingUser1?status=declined",
+    request: "/invites/TestingUser1?status=declined",
   },
 ];
 
 const invitesDumyData = [
-  { reciever: "testingUser1", inviter: "testingUser2", status: "accepted" },
-  { reciever: "testingUser1", inviter: "testingUser2", status: "declined" },
-  { reciever: "testingUser1", inviter: "testingUser2", status: "recieved" },
+  { reciever: "TestingUser1", inviter: "TestingUser2", status: "accepted" },
+  { reciever: "TestingUser1", inviter: "TestingUser2", status: "declined" },
+  { reciever: "TestingUser1", inviter: "TestingUser2", status: "recieved" },
+  { reciever: "TestingUser2", inviter: "TestingUser2", status: "recieved" },
 ];
 
-const dumyUser = { username: "TestUser", password: "TestUser" };
+const dumyUser = {
+  username: "TestingUser1",
+  password: "TestingUser1",
+  email: "TestingUser1",
+  gender: "Male",
+};
 
-export { tests, invitesDumyData, dumyUser };
+const dumyUser2 = {
+  username: "TestingUser2",
+  password: "TestingUser2",
+  email: "TestUser2",
+  gender: "Female",
+};
+
+const dumyUser3 = {
+  username: "TestingUser3",
+  password: "TestingUser3",
+  email: "TestUser3",
+  gender: "Female",
+};
+
+export { tests, invitesDumyData, dumyUser, dumyUser2, dumyUser3 };
