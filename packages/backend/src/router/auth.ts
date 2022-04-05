@@ -1,6 +1,6 @@
 import * as express from "express";
 import User from "../models/User.model";
-import authSchema from "../helpers/schema";
+import { updateFormSchema } from "../helpers/schema";
 import { Request, Response } from "express";
 import { verifyToken, signTokens, verifyTokens } from "../helpers/jwt_helper";
 const route = express.Router();
@@ -13,7 +13,7 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
     return res.status(200).json({ authData: response });
   } catch (error) {
     return res.status(501).json({
-      ErrorMsg: (error as Error).message,
+      ErrorMsg: error as Error,
       Error: "Internal server error",
       Message: "Something went wrong while loging",
     });
@@ -22,7 +22,7 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
 
 route.post("/login", async (req: Request, res: Response) => {
   try {
-    const result = await authSchema.validateAsync(req.body);
+    const result = await updateFormSchema.validateAsync(req.body);
     const user_db = await User.findOne({ username: result.username });
     const remember_me: boolean = req.query.remember_me === `true`;
     const username = req.body.username;
@@ -41,12 +41,12 @@ route.post("/login", async (req: Request, res: Response) => {
     if (!result) return res.status(409);
 
     if (!user_db)
-      return res.status(400).json({ message: "User not registered" });
+      return res.status(400).json({ ErrorMsg: "User not registered" });
 
     const isMatch = await user_db.isValidPassword(result.password);
 
     if (!isMatch)
-      return res.status(401).json({ message: "Username/password not valid" });
+      return res.status(401).json({ message: "Password is not valid" });
 
     const access = await signTokens(user, ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);

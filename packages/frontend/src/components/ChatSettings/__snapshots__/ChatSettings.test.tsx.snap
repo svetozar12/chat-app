@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render connected React-redux page should create snapshot for <ChatSettings/> 1`] = `
+<div
+  className="flex css-1gszkkh"
+>
+  <h1
+    className="css-zt1gbb"
+  >
+    Members in chat
+  </h1>
+</div>
+`;

@@ -1,12 +1,21 @@
 import { combineReducers } from "redux";
 import reducer from "./authReducer";
-import homePageReducer from "./homePageReducer";
+import setReducer from "./setReducer";
+import saveInputReducer from "./save_inputReducer";
 import messageReducer from "./messageReducer";
-
-const reducers = combineReducers({
+import { ActionType } from "../state";
+const combiReducers = combineReducers({
   authReducer: reducer,
-  homePageReducer,
+  setReducer,
   messageReducer,
+  saveInputReducer,
 });
 
-export default reducers;
+const combReducers = (state: any, action: any) => {
+  if (action.type === ActionType.SIGN_OUT) {
+    return undefined;
+  }
+  return combiReducers(state, action);
+};
+
+export default combReducers;

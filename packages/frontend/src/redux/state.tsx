@@ -7,14 +7,24 @@ export enum ActionType {
   REGISTER_POST_ERROR = "REGISTER_POST_ERROR",
   SAVE_INPUT_USERNAME = "SAVE_INPUT_USERNAME",
   SAVE_INPUT_PASSWORD = "SAVE_INPUT_PASSWORD",
+  SAVE_INPUT_EMAIL = "SAVE_INPUT_EMAIL",
+  SAVE_INPUT_GENDER = "SAVE_INPUT_GENDER",
+  INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
+  MESSAGE_SEND = "MESSAGE_SEND",
+  CHAT_INVITER = "CHAT_INVITER",
   REMEMBER_ME_CHECK = "REMEMBER_ME_CHECK",
   QUICK_LOGIN = "QUICK_LOGIN",
   SIGN_IN = "SIGN_IN",
-  SET_RECIEVER = "SET_RECIEVER",
-  INCREMENT_PAGE_NUMBER = "INCREMENT_PAGE_NUMBER",
-  MESSAGE_SEND = "MESSAGE_SEND",
   SIGN_OUT = "SIGN_OUT",
   TOGGLE_CREATE_GROUP = "TOGGLE_CREATE_GROUP",
+  SET_RECIEVER = "SET_RECIEVER",
+  SET_FRIEND_REQUEST = "SET_FRIEND_REQUEST",
+  SET_USER_SETTINGS = "SET_USER_SETTINGS",
+  SET_MOBILE_NAV = "SET_MOBILE_NAV",
+  SET_IS_MATCH = "SET_IS_MATCH",
+  SET_CHAT_SETTINGS = "SET_CHAT_SETTINGS",
+  SET_MODAL_INVITE = "SET_MODAL_INVITE",
+  NOTIFICATION_NUMBER = "NOTIFICATION_NUMBER",
 }
 
 interface LoginPost {
@@ -33,7 +43,10 @@ interface inputs {
   type:
     | ActionType.SAVE_INPUT_USERNAME
     | ActionType.SAVE_INPUT_PASSWORD
-    | ActionType.REMEMBER_ME_CHECK;
+    | ActionType.SAVE_INPUT_EMAIL
+    | ActionType.SAVE_INPUT_GENDER
+    | ActionType.REMEMBER_ME_CHECK
+    | ActionType.CHAT_INVITER;
   payload: string;
 }
 
@@ -47,7 +60,10 @@ interface signOut {
 }
 
 interface Iset {
-  type: ActionType.SET_RECIEVER | ActionType.INCREMENT_PAGE_NUMBER;
+  type:
+    | ActionType.SET_RECIEVER
+    | ActionType.INCREMENT_PAGE_NUMBER
+    | ActionType.NOTIFICATION_NUMBER;
   payload: number;
 }
 
@@ -62,8 +78,15 @@ interface Hydrate {
 }
 
 interface toggle_create_group {
-  type: ActionType.TOGGLE_CREATE_GROUP;
-  payload: boolean;
+  type:
+    | ActionType.TOGGLE_CREATE_GROUP
+    | ActionType.SET_USER_SETTINGS
+    | ActionType.SET_FRIEND_REQUEST
+    | ActionType.SET_MOBILE_NAV
+    | ActionType.SET_IS_MATCH
+    | ActionType.SET_CHAT_SETTINGS
+    | ActionType.SET_MODAL_INVITE;
+  payload: boolean | string[] | string;
 }
 
 export type Action =
@@ -79,18 +102,31 @@ export type Action =
 
 export interface InitialState {
   remember_me: boolean;
-  input_username: string;
-  input_password: string;
   loginPrompt: boolean;
   good?: string;
   bad?: string;
   cookie?: string;
-  toggleCreateGroup: boolean;
 }
 
 export interface InitialState2 {
   reciever: string;
+  chat_inviter: string;
   pageNumber?: number;
+  setUserSettings: boolean;
+  setFriendRequest: boolean;
+  setModalInvite: boolean;
+  toggleCreateGroup: boolean;
+  setMobileNav: boolean;
+  setIsMatch: boolean;
+  setChatSettings: boolean;
+}
+
+export interface InitialState3 {
+  input_username: string;
+  input_password: string;
+  input_email: string;
+  input_gender: string;
+  notification_number: number;
 }
 
 export interface InitialStateMessage {

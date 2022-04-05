@@ -1,20 +1,27 @@
 import "../../styles/globals.css";
 import type { AppProps } from "next/app";
+import React from "react";
 import { wrapper } from "../redux/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { InitialState } from "../redux/state";
+import { InitialState, InitialState2 } from "../redux/state";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
+import { Global } from "@emotion/react";
+import styled from "@emotion/styled";
+import Head from "next/head";
 const MyApp = (
   { Component, pageProps }: AppProps,
   props: { cookie: string },
 ) => {
   const state = useSelector(
     (state: { authReducer: InitialState }) => state.authReducer,
+  );
+
+  const setState = useSelector(
+    (state: { setReducer: InitialState2 }) => state.setReducer,
   );
   const dispatch = useDispatch();
   const router = useRouter();
@@ -57,9 +64,48 @@ const MyApp = (
       res();
     }
   }, [router.asPath]);
+  const closeModals = () => {
+    dispatch({
+      type: "SET_FRIEND_REQUEST",
+      payload: false,
+    });
+    dispatch({
+      type: "SET_MODAL_INVITE",
+      payload: false,
+    });
+  };
+
+  const BIG = styled.div`
+    position: absolute;
+    z-index: ${setState.setFriendRequest || setState.setModalInvite
+      ? "100"
+      : "-1"};
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.7;
+    background: radial-gradient(
+      var(--gradient-first) 10%,
+      var(--gradient-second) 100%
+    );
+  `;
+
   return (
     <>
-      <div className="BIG"></div>
+      <Global
+        styles={{
+          body: {
+            margin: 0,
+            padding: 0,
+          },
+          a: {
+            textDecoration: "none",
+          },
+        }}
+      />
+      <Head>
+        <title>Chat what</title>
+      </Head>
+      <BIG onClick={closeModals}></BIG>
       <Component {...pageProps} />
     </>
   );

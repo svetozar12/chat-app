@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render connected React-redux page should create snapshot for <CheckBox_component/> 1`] = `
+<div
+  className="flex css-23rh6g"
+  onClick={[Function]}
+  title="checkbox"
+>
+  <p
+    className="css-1nu6ntq"
+  >
+    greg
+  </p>
+  <input
+    checked={false}
+    className="css-jgjwtu"
+    onChange={[Function]}
+    type="checkbox"
+    value="greg"
+  />
+</div>
+`;

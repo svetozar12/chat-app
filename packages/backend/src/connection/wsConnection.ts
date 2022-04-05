@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
 import Chats from "../models/chatRoom.model";
 const { createServer } = require("http");
-const { Server } = require("socket.io");
 const server = createServer();
 const io = require("socket.io")(server, {
   cors: {
@@ -31,7 +30,7 @@ io.on("connection", (socket: Socket): void => {
         .exec();
       const date = new Date();
       const messages = [{ sender, message, createdAt: date }];
-      findChat[0].members.forEach((element: any) => {
+      findChat[0].members.forEach((element: string) => {
         io.to(element).emit("message", {
           messages,
         });
@@ -51,6 +50,9 @@ io.on("connection", (socket: Socket): void => {
     io.emit("friend_request");
   });
 
+  socket.on("inviting_multiple_users", ({ users }) => {
+    io.emit("inviting_multiple_users", { users });
+  });
   socket.on("send_friend_request", ({ inviter, reciever }) => {
     if (inviter === reciever) return;
     io.to(reciever).emit("send_friend_request");

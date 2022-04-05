@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render connected React-redux page should create snapshot for <AddGroupChat/> 1`] = `
+<div
+  className="css-1h7sx70"
+>
+  <form
+    className="css-o2j9ze"
+    onSubmit={[Function]}
+  >
+    <input
+      className="css-1q3nqrs"
+      onChange={[Function]}
+      placeholder="Add user ..."
+      type="search"
+      value=""
+    />
+    <button
+      className="css-csscj8"
+      onClick={[Function]}
+      type="button"
+    >
+      Create room
+    </button>
+  </form>
+  <div
+    style={
+      Object {
+        "display": "flex",
+      }
+    }
+  />
+</div>
+`;
