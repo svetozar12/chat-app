@@ -11,7 +11,7 @@ import createUser from "./mutations/Users/createUser";
 import createInvite from "./mutations/Invites/createInvite";
 import createChat from "./mutations/Chats/createChat";
 import createGroupChat from "./mutations/Chats/createGroupChat";
-import createMessage from "./mutations/Messages/CreateMessage";
+import createMessage from "./mutations/Messages/createMessage";
 // update
 import updateMessage from "./mutations/Messages/updateMessage";
 import updateInvite from "./mutations/Invites/updateInvite";
