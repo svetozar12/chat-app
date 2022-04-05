@@ -14,18 +14,25 @@ Table of concepts
 
 :root {
   --main-white: rgb(252, 252, 252);
-  --off-white: rgb(221, 221, 221);
   --main-black: rgb(0, 0, 0);
+  --form-gray: #343a40;
+  --off-white: rgb(221, 221, 221);
   --off-black: rgb(92, 92, 92);
   --me-chat-buble: #a5a7ac;
   --main-blue: rgb(79, 81, 216);
   --off-blue: rgb(38, 92, 163);
+  --button-blue: #0069d9;
   --main-green: rgb(52, 192, 34);
   --main-red: rgb(231, 10, 10);
   --gradient-first: #dfdfdf;
   --gradient-second: #ffffff;
   --input-border-color: #ccd0d5;
   --main-logo-color: #bfc2c6;
+  --bad-alert-color: #f24654;
+  --bad-alert-bgcolor: rgba(255, 0, 0, 0.5);
+  --good-alert-color: #60af86l;
+  --good-alert-bgcolor: rgba(0, 255, 0, 0.2);
+  --main-box-shadow: rgba(0, 0, 0, 0.2);
 }
 
 /* =================
@@ -96,8 +103,6 @@ form,
 .invite_buttons,
 .search-bar,
 .message_input_container,
-.input_gender,
-.input_gender span,
 .flex {
   display: flex;
   justify-content: center;
@@ -222,22 +227,8 @@ register_form from input {
   margin: 0 1rem;
 }
 
-.input_gender {
-  width: 60%;
-  flex-direction: row;
-  margin-top: 0.5rem;
-}
-
-.input_gender div {
-  border: 1px solid var(--input-border-color);
-  padding: 0.5rem;
-  border-radius: 5px;
-  margin: 0 0.1rem;
-  width: 33%;
-}
-
-.input_gender span label {
-  font-size: 0.8rem;
+input[type="radio"]:checked + label {
+  background: rgba(0, 105, 217, 1);
 }
 
 input {
@@ -266,8 +257,6 @@ input {
 
 .group_logo_container svg {
   position: absolute;
-  top: 0;
-  right: 0;
   color: var(--main-logo-color);
 }
 
@@ -312,47 +301,6 @@ p {
   box-shadow: 0 0 15px black;
 }
 
-.container input[type="text"],
-input[type="email"] {
-  width: 60%;
-  height: 2rem;
-  margin: 0.5rem 0;
-  border: 1px solid var(--input-border-color);
-  border-radius: 5px;
-  transition: 0.3s;
-  padding: 1.3rem 0.9rem;
-}
-
-.input_file {
-  background: var(--main-black);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  transition: 0.3s;
-  margin-top: 2rem;
-  padding: 1rem;
-  cursor: pointer;
-}
-
-.input_file:hover {
-  background: var(--main-white);
-  transition: 0.3s;
-  color: var(--main-black);
-}
-
-.container > button {
-  margin-top: 2rem;
-  border-radius: 5px;
-  width: 60%;
-  background-color: var(--main-black);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
 .button {
   border-radius: 5px;
   width: 20%;
@@ -378,12 +326,6 @@ form div > input {
   margin: 1rem;
   padding: 0.3rem;
   border: 1px solid var(--main-black);
-}
-
-form > button:hover {
-  background-color: var(--main-white);
-  color: var(--main-black);
-  transition: 0.2s;
 }
 
 .invite_list > main {
@@ -443,13 +385,6 @@ p {
   text-align: center;
 }
 
-.contacts img,
-svg {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 100%;
-}
-
 .user_info svg,
 img {
   margin-right: 1rem;
@@ -479,17 +414,10 @@ img {
   cursor: pointer;
 }
 
-.input_gender input[type="radio"] {
-  width: 1rem;
-  height: 1rem;
-  margin-left: 0.1rem;
-}
-
 /* utility */
 .circle_border {
   border-radius: 50px;
   padding: 0.7rem;
-  /* margin: 1rem; */
   cursor: pointer;
   width: 20%;
   background: rgba(122, 122, 122, 0.09);
@@ -521,7 +449,23 @@ img {
     transition: 0.4s ease-in;
     overflow: hidden;
     width: 0;
-    display: none;
+    disply: a none;
+  }
+  .clickable {
+    align-items: center;
+    font-size: 3vw;
+  }
+
+  .show {
+    width: 80%;
+  }
+
+  .clickable {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .fRequests_modal {
+    width: 70%;
   }
 }
 @media only screen and (max-width: 1010px) {
@@ -530,18 +474,10 @@ img {
     font-size: 3vw;
   }
 
-  .input_gender input[type="radio"] {
-    width: 1rem;
-    height: 1rem;
-  }
-
   .show {
     width: 80%;
   }
 
-  .input_gender span label {
-    font-size: 2.5vw;
-  }
   .clickable {
     flex-direction: column;
     justify-content: center;
@@ -555,10 +491,6 @@ img {
     width: 90%;
   }
 
-  .input_gender {
-    width: 95%;
-  }
-
   .accept,
   .decline {
     outline: none;
@@ -566,12 +498,5 @@ img {
     font-size: 1.9rem;
     background: transparent;
     transition: 0.2s;
-  }
-}
-
-@media (max-width: 1000px) {
-  .input_gender input[type="radio"] {
-    width: 1rem;
-    height: 1rem;
   }
 }

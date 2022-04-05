@@ -1,5 +1,5 @@
 import React from "react";
-import RegisterForm from "../components/RegisterForm";
+import RegisterForm from "../components/RegisterForm/RegisterForm";
 import { InitialState3 } from "../redux/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";

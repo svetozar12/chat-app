@@ -1,10 +1,13 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from "@emotion/react";
-import React, { useState, useEffect } from "react";
-import ActiveChats from "../components/ActiveChats";
-import FindFriends from "../components/FindFriends";
-import ChatRoom from "../components/ChatRoom";
+import { useState, useEffect } from "react";
+import ActiveChats from "../components/ActiveChats/ActiveChats";
+import FindFriends from "../components/FindFriends/FindFriends";
+import ChatRoom from "../components/ChatRoom/ChatRoom";
+import ChatSettings from "../components/ChatSettings/ChatSettings";
+import HamburgerMenu from "../components/HamburgerMenu/HamburgerMenu";
+import Notifications_Modal from "../components/Notifications_Modal/Notifications_Modal";
+import { AddUsers_Modal } from "../components/AddUsers_Modal/AddUsers_Modal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
@@ -13,13 +16,10 @@ import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { InitialState2, InitialState3 } from "../redux/state";
 import { requestUrl } from "../utils/hostUrl_requestUrl";
-import ChatSettings from "../components/ChatSettings";
-import HamburgerMenu from "../components/HamburgerMenu";
 import { GrClose } from "react-icons/gr";
-import Notifications_Modal from "../components/Notifications_Modal";
-import { AddUsers_Modal } from "../components/AddUsers_Modal";
-import styled from "@emotion/styled";
+import { jsx } from "@emotion/react";
 import { css } from "@emotion/css";
+import styled from "@emotion/styled";
 interface Ichats {
   _id: string;
   members: string[];
@@ -46,7 +46,7 @@ const Chat_settings = styled.div`
   position: absolute;
   z-index: 11;
   width: 0;
-  height: 100vh;
+  height: 88vh;
   background: var(--main-white);
   padding: 1rem;
   transition: 0.4s;
@@ -67,7 +67,7 @@ const Active_chats = styled.section`
   overflow: hidden;
   height: 100vh;
   z-index: 20;
-  width: 25%;
+  width: 42%;
   flex-direction: column;
   justify-content: flex-start;
   flex-shrink: unset;
@@ -150,11 +150,9 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       );
       const members_in_chat = res_chat.data.Message[0].members;
 
-      let data: any[];
+      let data: any[] = [];
       if (res_inviter) data = [...res_inviter];
       if (res) data = [...data, ...res];
-      console.log(data);
-
       const usersArr: string[] = [];
       data.forEach((element) => {
         usersArr.push(element.inviter);
@@ -270,7 +268,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, [localStatus]);
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", position: "relative" }}>
       <Hambruger_out_of_nav>
         <Div_out_of_nav>
           <HamburgerMenu />
@@ -279,7 +277,7 @@ const homePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       <Active_chats
         className={css`
           @media (max-width: 1008px) {
-            ${!state.setMobileNav ? "width:0" : "width:60%"};
+            ${!state.setMobileNav ? "width:0" : "width:80%"};
             position: absolute;
           }
         `}

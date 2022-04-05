@@ -30,16 +30,19 @@ describe("Return user and password :/auth/user", () => {
   it("should return 501 server error", async () => {
     const res = await request(app)
       .get("/auth/user")
-      .set("Authorization", `Bearer ${jwt}`)
-      .expect(200);
+      .set("Authorization", `Bearer ${jwt}`);
+    expect(res.body.authData.username).toBe("TestingUser1");
+    expect(res.body.authData.password).toBe("TestingUser1");
+    expect(res.status).toBe(200);
   });
 });
 
 describe("Passing invalid jwt :/auth/user", () => {
   it("should return 200 OK", async () => {
-    await request(app)
+    const res = await request(app)
       .get("/auth/user")
-      .set("Authorization", `Bearer invalidjwt`)
-      .expect(501);
+      .set("Authorization", `Bearer invalidjwt`);
+    expect(res.body.ErrorMsg.message).toBe("Token has expired");
+    expect(res.status).toBe(501);
   });
 });
