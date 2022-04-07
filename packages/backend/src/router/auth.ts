@@ -6,7 +6,8 @@ import { verifyToken, signTokens, verifyTokens } from "../helpers/jwt_helper";
 const route = express.Router();
 const ACCESS_TOKEN: any = process.env.JWT_SECRET;
 const REFRESH_TOKEN: any = process.env.JWT_REFRESH_SECRET;
-route.get("/user", verifyToken, async (req: any, res: Response) => {
+
+route.get("/:user", verifyToken, async (req: any, res: Response) => {
   try {
     const response = await verifyTokens(req.token, ACCESS_TOKEN);
     if (!response) res.json({ message: "BAD" }).status(403);
@@ -45,6 +46,12 @@ route.post("/login", async (req: Request, res: Response) => {
     const isMatch = await user_db.isValidPassword(result.password);
 
     if (!isMatch) return res.status(401).json({ message: "Password is not valid" });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    req.username = username;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    console.log(req.username);
 
     const access = await signTokens(user, ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);
