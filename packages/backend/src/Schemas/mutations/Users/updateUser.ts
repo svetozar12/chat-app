@@ -6,6 +6,7 @@ import { GraphQLString } from "graphql";
 import upload from "../../../helpers/image_helper";
 import User from "../../../models/User.model";
 import * as createError from "http-errors";
+import { isAuth } from "../../permission";
 
 const updateUser = {
   type: UserSchema,
@@ -18,7 +19,8 @@ const updateUser = {
     },
     userAvatar: { type: GraphQLUpload, description: "Image of the User" },
   },
-  async resolve(parents: any, args: { username: string; email: string; gender: string; userAvatar: string }) {
+  async resolve(parents: any, args: { username: string; email: string; gender: string; userAvatar: string }, context: { user: string }) {
+    isAuth(context.user);
     const { error } = update_formValidation(args);
     if (error) return createError(400, error.message);
     const users = await User.findOne({ username: args.username }).exec();

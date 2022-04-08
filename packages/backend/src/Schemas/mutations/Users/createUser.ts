@@ -4,6 +4,13 @@ import User from "../../../models/User.model";
 import Chats from "../../../models/chatRoom.model";
 import * as createError from "http-errors";
 import { GraphQLString } from "graphql";
+import { isAuth } from "../../permission";
+
+interface IResolve {
+  parent: any;
+  args: { username: string; password: string; email: string; gender: string };
+  context: { user: string };
+}
 
 const createUser = {
   type: UserSchema,
@@ -15,7 +22,8 @@ const createUser = {
       type: genderSchema,
     },
   },
-  async resolve(parent: any, args: { username: string; password: string; email: string; gender: string }) {
+  async resolve({ parent, args, context }: IResolve) {
+    isAuth(context.user);
     const { error } = registerValidation(args);
     if (error) return createError(400, error.message);
     const response = await User.findOne({ username: args.username });

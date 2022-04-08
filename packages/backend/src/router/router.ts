@@ -8,7 +8,7 @@ import { verifyToken } from "../helpers/jwt_helper";
 
 route.use(
   "/graphql",
-  graphqlHTTP((req: any, res, graphQLParams) => {
+  graphqlHTTP((req: any) => {
     return {
       schema: Schema,
       graphiql: true,
@@ -18,6 +18,7 @@ route.use(
         const secret: string = process.env.JWT_SECRET as string;
         const user = verifyToken(token, secret);
         console.log(user);
+
         return { user };
       })(),
     };

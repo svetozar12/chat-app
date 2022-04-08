@@ -2,6 +2,7 @@ import { GraphQLString, GraphQLList, GraphQLID } from "graphql";
 import Chats from "../../../models/chatRoom.model";
 import * as createError from "http-errors";
 import { ChatSchema } from "../../types/Chat.Schema";
+import { isAuth } from "../../permission";
 
 const updateChat = {
   type: ChatSchema,
@@ -10,16 +11,17 @@ const updateChat = {
     username: { type: GraphQLString },
     usernames: { type: new GraphQLList(GraphQLString) },
   },
-  async resolve(parent: any, args: { chat_id: string; username: string; usernames: string[] }) {
+  async resolve(parent: any, args: { chat_id: string; username: string; usernames: string[] }, context: { user: string }) {
+    isAuth(context.user);
     const chat_id = args.chat_id;
     const deleted_user = args.username;
     const added_user = args.usernames;
 
-    const users_rooms = await Chats.findOne({ _id: chat_id }).exec();
-    const users_array = users_rooms!.members;
+    const users_room = await Chats.findOne({ _id: chat_id }).exec();
+    const users_array = users_room!.members;
     let updated;
 
-    if (!users_rooms) return createError(404, `Chat room with id: ${chat_id} not found`);
+    if (!users_room) return createError(404, `Chat room with id: ${chat_id} not found`);
     let updated_array: string[] = [];
     if (deleted_user) {
       updated_array = users_array.filter((item) => item !== deleted_user);

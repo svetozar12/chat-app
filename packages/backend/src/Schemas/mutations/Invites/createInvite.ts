@@ -3,6 +3,7 @@ import { GraphQLString } from "graphql";
 import * as createError from "http-errors";
 import Invites from "../../../models/Invites.model";
 import User from "../../../models/User.model";
+import { isAuth } from "../../permission";
 
 const createInvite = {
   type: InviteSchema,
@@ -13,7 +14,8 @@ const createInvite = {
       type: statusSchema,
     },
   },
-  async resolve(parent: any, args: { inviter: string; reciever: string; status: string }) {
+  async resolve(parent: any, args: { inviter: string; reciever: string; status: string }, context: { user: string }) {
+    isAuth(context.user);
     const user = await User.findOne({
       username: args.reciever,
     }).exec();

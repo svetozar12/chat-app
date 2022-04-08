@@ -4,6 +4,7 @@ import * as createError from "http-errors";
 import { ChatSchema } from "../../types/Chat.Schema";
 import User from "../../../models/User.model";
 import Invites from "../../../models/Invites.model";
+import { isAuth } from "../../permission";
 
 const createChat = {
   type: ChatSchema,
@@ -12,7 +13,8 @@ const createChat = {
     user1: { type: GraphQLString },
     user2: { type: GraphQLString },
   },
-  async resolve(parent: any, args: { invite_id: string; user1: string; user2: string }) {
+  async resolve(parent: any, args: { invite_id: string; user1: string; user2: string }, context: { user: string }) {
+    isAuth(context.user);
     const invite_id = args.invite_id;
     const user1 = args.user1;
     const user2 = args.user2;

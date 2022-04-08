@@ -2,6 +2,7 @@ import { InviteSchema, statusSchema } from "../../types/Invite.Schema";
 import { GraphQLString } from "graphql";
 import * as createError from "http-errors";
 import Invites from "../../../models/Invites.model";
+import { isAuth } from "../../permission";
 
 const updateInvite = {
   type: InviteSchema,
@@ -11,7 +12,8 @@ const updateInvite = {
       type: statusSchema,
     },
   },
-  async resolve(parent: any, args: { _id: string; status: string }) {
+  async resolve(parent: any, args: { _id: string; status: string }, context: { user: string }) {
+    isAuth(context.user);
     const id = args._id;
     const status = args.status;
     const inviteInstance = await Invites.findOne({

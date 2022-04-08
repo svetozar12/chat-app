@@ -1,7 +1,9 @@
-import { GraphQLString, GraphQLList, GraphQLInt, GraphQLID } from "graphql";
+import { GraphQLList, GraphQLInt, GraphQLID } from "graphql";
 import Messages from "../../../models/Message.model";
 import * as createError from "http-errors";
 import { MessageSchema } from "../../types/Message.Schema";
+import { isAuth } from "../../permission";
+
 const getMessages = {
   type: new GraphQLList(MessageSchema),
   args: {
@@ -9,7 +11,8 @@ const getMessages = {
     page_number: { type: GraphQLInt },
     chat_id: { type: GraphQLID },
   },
-  async resolve(parent: any, args: { page_size: number; page_number: number; chat_id: string }) {
+  async resolve(parent: any, args: { page_size: number; page_number: number; chat_id: string }, context: { user: string }) {
+    isAuth(context.user);
     const page_size = args.page_size;
     const page_number = args.page_number;
     const chat_id = args.chat_id;

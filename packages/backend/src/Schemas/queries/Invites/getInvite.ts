@@ -2,6 +2,14 @@ import { GraphQLString, GraphQLBoolean, GraphQLList } from "graphql";
 import Invites from "../../../models/Invites.model";
 import * as createError from "http-errors";
 import { statusSchema, InviteSchema } from "../../types/Invite.Schema";
+import { isAuth } from "../../permission";
+
+interface IResolve {
+  parent: any;
+  args: { username: string; status: string; byInviter: boolean };
+  context: { user: string };
+}
+
 const getInvite = {
   type: new GraphQLList(InviteSchema),
   args: {
@@ -9,7 +17,8 @@ const getInvite = {
     status: { type: statusSchema },
     byInviter: { type: GraphQLBoolean, description: "Query data by inviter invites" },
   },
-  async resolve(parent: any, args: { username: string; status: string; byInviter: boolean }) {
+  async resolve({ parent, args, context }: IResolve) {
+    isAuth(context.user);
     const name = args.username;
     const status = args.status;
     const queryParam = args.byInviter ? { inviter: name } : { reciever: name };

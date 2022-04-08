@@ -40,19 +40,10 @@ route.post("/login", async (req: Request, res: Response) => {
     };
 
     if (!result) return res.status(409);
-
     if (!user_db) return res.status(400).json({ ErrorMsg: "User not registered" });
 
     const isMatch = await user_db.isValidPassword(result.password);
-
     if (!isMatch) return res.status(401).json({ message: "Password is not valid" });
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    req.username = username;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    console.log(req.username);
-
     const access = await signTokens(user, ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);
     return res.status(201).json({ Access_token: access, Refresh_token: refresh });
