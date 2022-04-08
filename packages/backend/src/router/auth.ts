@@ -2,14 +2,14 @@ import * as express from "express";
 import User from "../models/User.model";
 import { updateFormSchema } from "../helpers/schema";
 import { Request, Response } from "express";
-import { verifyToken, signTokens, verifyTokens } from "../helpers/jwt_helper";
+import { verifyToken, signTokens } from "../helpers/jwt_helper";
 const route = express.Router();
 const ACCESS_TOKEN: any = process.env.JWT_SECRET;
 const REFRESH_TOKEN: any = process.env.JWT_REFRESH_SECRET;
 
-route.get("/:user", verifyToken, async (req: any, res: Response) => {
+route.get("/:user", async (req: any, res: Response) => {
   try {
-    const response = await verifyTokens(req.token, ACCESS_TOKEN);
+    const response = verifyToken(req.token, ACCESS_TOKEN);
     if (!response) res.json({ message: "BAD" }).status(403);
     return res.status(200).json({ authData: response });
   } catch (error) {
@@ -69,7 +69,7 @@ route.post("/refresh", async (req: any, res) => {
   try {
     const refresh_token = req.body.refresh_token;
     const remember_me: boolean = req.query.remember_me === `true`;
-    const refresh: any = await verifyTokens(refresh_token, REFRESH_TOKEN);
+    const refresh: any = await verifyToken(refresh_token, REFRESH_TOKEN);
 
     if (refresh) {
       const user = {

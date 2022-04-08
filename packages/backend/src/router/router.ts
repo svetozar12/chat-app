@@ -4,13 +4,22 @@ import Schema from "../Schemas/index";
 const route = express.Router();
 import "dotenv/config";
 import { auth } from "./auth";
+import { verifyToken } from "../helpers/jwt_helper";
 
 route.use(
   "/graphql",
-  graphqlHTTP((req, res, graphQLParams) => {
+  graphqlHTTP((req: any, res, graphQLParams) => {
     return {
       schema: Schema,
       graphiql: true,
+      headerEditorEnabled: true,
+      context: ((): any => {
+        const token = req.headers["authorization"] || "";
+        const secret: string = process.env.JWT_SECRET as string;
+        const user = verifyToken(token, secret);
+        console.log(user);
+        return { user };
+      })(),
     };
   }),
 );

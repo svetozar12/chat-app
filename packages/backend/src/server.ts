@@ -3,14 +3,12 @@ import * as cors from "cors";
 import "dotenv/config";
 import connectDb from "./connection/dbConnection";
 import data from "./router/router";
-import { verifyToken } from "./helpers/jwt_helper";
 require("./connection/wsConnection");
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
-app.use(verifyToken);
 connectDb();
 app.use("/", data);
 
