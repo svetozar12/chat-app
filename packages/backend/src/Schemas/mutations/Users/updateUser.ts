@@ -1,9 +1,9 @@
-import { update_formValidation } from "../../../helpers/schema";
+import { update_formValidation } from "../../../utils/schema";
 import { UserSchema, genderSchema } from "../../types/User.Schema";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { GraphQLUpload } = require("graphql-upload");
 import { GraphQLString } from "graphql";
-import upload from "../../../helpers/image_helper";
+import upload from "../../../utils/image_helper";
 import User from "../../../models/User.model";
 import * as createError from "http-errors";
 import { isAuth } from "../../permission";

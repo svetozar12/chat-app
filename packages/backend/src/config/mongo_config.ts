@@ -4,9 +4,15 @@ import * as mongoose from "mongoose";
 const connection = `mongodb://localhost:27017/${process.env.DB_NAME}`;
 // const connection = `mongodb://mongo:27017/${process.env.DB_NAME}`;
 
-const connectDb = () => {
-  return mongoose.connect(connection, {
-    autoIndex: true,
-  });
+const mongo_connection = () => {
+  return mongoose.connect(
+    connection,
+    {
+      autoIndex: true,
+    },
+    () => {
+      console.log("Connection with mongo");
+    },
+  );
 };
-export default connectDb;
+export default mongo_connection;

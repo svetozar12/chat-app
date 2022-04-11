@@ -4,7 +4,7 @@ import Schema from "../Schemas/index";
 const route = express.Router();
 import "dotenv/config";
 import { auth } from "./auth";
-import { verifyToken } from "../helpers/jwt_helper";
+import { verifyToken } from "../utils/jwt_helper";
 
 route.use(
   "/graphql",

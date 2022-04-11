@@ -5,7 +5,7 @@ export interface ChatRoom {
 }
 
 const chatRoomSchema = new Schema<ChatRoom>({
-  members: [String],
+  members: [{ type: String, required: true }],
 });
 
 const chatRoom = model<ChatRoom>("chatRoom", chatRoomSchema);

@@ -1,8 +1,10 @@
 import * as express from "express";
 import User from "../models/User.model";
-import { updateFormSchema } from "../helpers/schema";
+import { updateFormSchema } from "../utils/schema";
 import { Request, Response } from "express";
-import { verifyToken, signTokens } from "../helpers/jwt_helper";
+import { verifyToken, signTokens } from "../utils/jwt_helper";
+import { client } from "../config/redis_config";
+
 const route = express.Router();
 const ACCESS_TOKEN: any = process.env.JWT_SECRET;
 const REFRESH_TOKEN: any = process.env.JWT_REFRESH_SECRET;

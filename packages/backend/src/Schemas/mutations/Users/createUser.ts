@@ -1,5 +1,5 @@
 import { UserSchema, genderSchema } from "../../types/User.Schema";
-import { registerValidation } from "../../../helpers/schema";
+import { registerValidation } from "../../../utils/schema";
 import User from "../../../models/User.model";
 import Chats from "../../../models/chatRoom.model";
 import * as createError from "http-errors";
