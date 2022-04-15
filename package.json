@@ -12,7 +12,7 @@
     "lint-css": "lerna run lint-css --no-sort --stream",
     "diff": "lerna diff",
     "format": "lerna run format --no-sort --stream",
-    "kill": "npx kill-port 3000 4000 4002 -y",
+    "kill": "npx kill-port 3000 4000 4001 4002 -y",
     "dev:kill": "yarn kill && yarn dev",
     "mash-up": "yarn format && yarn lint && yarn build",
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test"

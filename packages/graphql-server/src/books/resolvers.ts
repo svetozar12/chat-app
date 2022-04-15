@@ -1,7 +1,5 @@
 import { books } from "./Book";
 
-const Books = {};
-
 const BooksResolver = {
   Query: {
     books(parent: undefined, args: { title: string }, infoargs: undefined) {
