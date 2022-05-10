@@ -1,25 +1,23 @@
-const { ApolloServer, gql } = require("apollo-server");
-import * as dotenv from "dotenv";
-dotenv.config();
+import * as express from "express";
+import { graphqlHTTP } from "express-graphql";
+import Schema from "./index";
+// Construct a schema, using GraphQL schema language
 
-import { bookTypes } from "./books/typeDef";
-import { authTypes } from "./Auth/typeDef";
-// resolvers
-import AuthResolver from "./Auth/resolvers";
-import BookResolver from "./books/resolvers";
+const app = express();
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: Schema,
+    graphiql: true,
+    customFormatErrorFn: (err) => {
+      console.log(err.message);
+      const errObj = {
+        message: err.message,
+      };
+      return errObj;
+    },
+  }),
+);
 
-const typeDefs = gql`
-  ${bookTypes}
-  ${authTypes}
-`;
-
-const resolvers = {
-  ...BookResolver,
-  ...AuthResolver,
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen({ port: 4001 }).then(({ url }: { url: string }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+app.listen(4001);
+console.log("Running a GraphQL API server at http://localhost:4001/graphql");

@@ -83,6 +83,7 @@ export const verifyToken: RequestHandler = (req: any, res, next) => {
     //if bearer Header isn't undefined seperates JWT from Bearer and later on use method jwt.verify() to verify the jwt
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
+
     req.token = bearerToken;
     next();
   } else {
@@ -109,12 +110,16 @@ export const signTokens = (
 };
 
 export const verifyTokens = (token: string, secret: string) => {
+  console.log(secret);
+
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secret, (err, token) => {
+    jwt.verify(token, secret, (err, Token) => {
       if (err) {
+        console.log(err);
+
         reject(createError(403, "Token has expired"));
       }
-      return resolve(token);
+      return resolve(Token);
     });
   });
 };
