@@ -3,7 +3,7 @@ import { GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString } from "graphq
 const SignleRoom = new GraphQLObjectType({
   name: "Members",
   fields: () => ({
-    _id: { type: GraphQLID },
+    _id: { type: GraphQLString },
     members: { type: new GraphQLList(GraphQLString) },
   }),
 });

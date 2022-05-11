@@ -6,6 +6,7 @@ import { verifyToken, signTokens, verifyTokens } from "../utils/jwt_helper";
 const route = express.Router();
 const ACCESS_TOKEN: any = process.env.JWT_SECRET;
 const REFRESH_TOKEN: any = process.env.JWT_REFRESH_SECRET;
+
 route.get("/user", verifyToken, async (req: any, res: Response) => {
   try {
     console.log("hello");

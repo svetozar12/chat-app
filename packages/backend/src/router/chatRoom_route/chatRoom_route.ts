@@ -27,8 +27,8 @@ route.get("/:user_id", async (req: Request, res: Response) => {
   try {
     const user_id = req.params.user_id;
 
-    const users_rooms = await Chats.find({ _id: user_id }).exec();
-    if (!users_rooms || users_rooms.length <= 0) return res.status(404).json({ Message: "User room not found !" });
+    const users_rooms = await Chats.findOne({ _id: user_id }).exec();
+    if (!users_rooms) return res.status(404).json({ Message: "User room not found !" });
     return res.status(200).json({ Message: users_rooms });
   } catch (error) {
     return res.status(501).json({

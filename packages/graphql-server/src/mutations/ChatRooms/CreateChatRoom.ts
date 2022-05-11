@@ -3,16 +3,16 @@ import fetch from "node-fetch";
 import buildUrl from "../../utils/buildUrl";
 import { GraphQLString } from "graphql";
 
-interface IGetChatRoom {
+interface ICreateChatRoom {
   id: string;
 }
 
-const GetChatRoom = {
+const CreateChatRoom = {
   type: SignleRoom,
   args: {
     id: { type: GraphQLString },
   },
-  async resolve(parent: undefined, args: IGetChatRoom, context: undefined) {
+  async resolve(parent: undefined, args: ICreateChatRoom, context: undefined) {
     const response = await fetch(buildUrl("chat-room", undefined, args.id), {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -25,4 +25,4 @@ const GetChatRoom = {
   },
 };
 
-export default GetChatRoom;
+export default CreateChatRoom;
