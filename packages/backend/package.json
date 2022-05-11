@@ -2,14 +2,14 @@
   "name": "@chat-app/backend",
   "version": "1.0.0",
   "description": "",
-  "main": "/dist/server.js",
+  "main": "/dist/index.js",
   "scripts": {
     "build": "tsc --build",
-    "server": "nodemon dist/server.js",
+    "server": "nodemon dist/index.js",
     "watch": "tsc --watch",
     "lint": "eslint src",
     "dev": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
-    "start:production": "node dist/server.js",
+    "start:production": "node dist/index.js",
     "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
     "format": "prettier --write **/*.{js,ts,tsx}"
   },

@@ -6,6 +6,9 @@
   "repository": "https://github.com/svetozar12/chat-app",
   "author": "svetozar gospodinov",
   "license": "MIT",
+  "jest": {
+    "verbose": true
+  },
   "scripts": {
     "build": "tsc --build",
     "server": "nodemon dist/server.js",
@@ -13,18 +16,20 @@
     "lint": "eslint src",
     "dev": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
     "start:production": "node dist/server.js",
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
+    "test": "jest",
     "format": "prettier --write **/*.{js,ts,tsx}"
   },
   "dependencies": {
     "apollo-server": "^3.6.7",
+    "axios": "^0.27.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-graphql": "^0.12.0",
-    "graphql": "^16.3.0",
-    "node-fetch": "2"
+    "graphql": "^16.3.0"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.6.1"
+    "@types/node-fetch": "^2.6.1",
+    "babel-jest": "^28.1.0",
+    "jest": "^28.1.0"
   }
 }

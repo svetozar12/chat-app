@@ -1,17 +1,15 @@
-import * as express from "express";
+import { Request, Response, Router } from "express";
 import User from "../models/User.model";
 import { updateFormSchema } from "../utils/schema";
-import { Request, Response } from "express";
 import { verifyToken, signTokens, verifyTokens } from "../utils/jwt_helper";
-const route = express.Router();
-const ACCESS_TOKEN: any = process.env.JWT_SECRET;
-const REFRESH_TOKEN: any = process.env.JWT_REFRESH_SECRET;
 
-route.get("/user", verifyToken, async (req: any, res: Response) => {
+const AuthController = Router();
+const ACCESS_TOKEN: string | undefined = process.env.JWT_SECRET;
+const REFRESH_TOKEN: string | undefined = process.env.JWT_REFRESH_SECRET;
+
+AuthController.get("/user", verifyToken, async (req: any, res: Response) => {
   try {
-    console.log("hello");
-
-    const response = await verifyTokens(req.token, ACCESS_TOKEN);
+    const response = await verifyTokens(req.token, ACCESS_TOKEN || "");
     if (!response) res.json({ message: "BAD" }).status(403);
     return res.status(200).json({ authData: response });
   } catch (error) {
@@ -23,12 +21,11 @@ route.get("/user", verifyToken, async (req: any, res: Response) => {
   }
 });
 
-route.post("/login", async (req: Request, res: Response) => {
+AuthController.post("/login", async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
-
     const result = await updateFormSchema.validateAsync(req.body);
     const user_db = await User.findOne({ username: result.username });
+
     const remember_me: boolean = req.query.remember_me === `true`;
     const username = req.body.username;
     const password = req.body.password;
@@ -49,10 +46,10 @@ route.post("/login", async (req: Request, res: Response) => {
 
     const isMatch = await user_db.isValidPassword(result.password);
 
-    if (!isMatch) return res.status(401).json({ message: "Password is not valid" });
+    if (!isMatch) return res.status(401).json({ ErrorMsg: "Password is not valid" });
 
-    const access = await signTokens(user, ACCESS_TOKEN, expire.access);
-    const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);
+    const access = await signTokens(user, ACCESS_TOKEN || "", expire.access);
+    const refresh = await signTokens(user, REFRESH_TOKEN || "", expire.refresh);
     return res.status(201).json({ Access_token: access, Refresh_token: refresh });
   } catch (error) {
     return res.status(501).json({
@@ -63,11 +60,11 @@ route.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/refresh", async (req: any, res) => {
+AuthController.post("/refresh", async (req, res) => {
   try {
     const refresh_token = req.body.refresh_token;
     const remember_me: boolean = req.query.remember_me === `true`;
-    const refresh: any = await verifyTokens(refresh_token, REFRESH_TOKEN);
+    const refresh: any = await verifyTokens(refresh_token, REFRESH_TOKEN || "");
 
     if (refresh) {
       const user = {
@@ -75,13 +72,13 @@ route.post("/refresh", async (req: any, res) => {
         password: refresh.password,
       };
 
-      const expire = {
+      const expire: { access: string; refresh: string } = {
         access: remember_me ? "1y" : "1h",
         refresh: remember_me ? "2y" : "2h",
       };
 
-      const accessToken = await signTokens(user, ACCESS_TOKEN, expire.access);
-      const refreshToken = await signTokens(user, REFRESH_TOKEN, expire.refresh);
+      const accessToken = await signTokens(user, ACCESS_TOKEN || "", expire.access);
+      const refreshToken = await signTokens(user, REFRESH_TOKEN || "", expire.refresh);
       return res.status(201).json({
         username: refresh.username,
         Access_token: accessToken,
@@ -97,4 +94,4 @@ route.post("/refresh", async (req: any, res) => {
   }
 });
 
-export { route as auth };
+export { AuthController };

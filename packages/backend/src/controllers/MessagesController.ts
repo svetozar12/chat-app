@@ -1,9 +1,9 @@
-import * as express from "express";
-import { Request, Response } from "express";
-import Messages from "../../models/Message.model";
-const route = express.Router();
+import { Request, Response, Router } from "express";
+import Messages from "../models/Message.model";
 
-route.get("/:chat_id", async (req: Request, res: Response) => {
+const MessageController = Router();
+
+MessageController.get("/:chat_id", async (req: Request, res: Response) => {
   try {
     const page_size = Number(req.query.page_size);
     const page_number = Number(req.query.page_number);
@@ -12,7 +12,7 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
       .limit(page_size)
       .skip((page_number - 1) * page_size)
       .sort({ createdAt: "desc" });
-    if (messages.length <= 0 || !messages) return res.status(404).json({ message: "You don't have messages." });
+    if (messages.length <= 0 || !messages) return res.status(404).json({ ErrorMsg: "You don't have messages." });
     const reversedArr = messages.reverse();
     return res.status(200).json({ message: "You have messages.", reversedArr });
   } catch (error) {
@@ -25,13 +25,13 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
   }
 });
 
-route.put("/:_id", async (req: Request, res: Response) => {
+MessageController.put("/:_id", async (req: Request, res: Response) => {
   try {
     const _id = req.params._id;
     const newMessage: string = req.body.newMessage;
     if (newMessage === "" || newMessage === null) return res.status(200).json({ message: "Message didn't change" });
     const user = Messages.findByIdAndUpdate(_id, { message: newMessage }).exec();
-    if (!user) return res.status(404).json({ message: "Message wasn't found" });
+    if (!user) return res.status(404).json({ ErrorMsg: "Message wasn't found" });
     return res.status(200).send({ message: `Message has been updated` });
   } catch (error) {
     return res.status(501).json({
@@ -42,7 +42,7 @@ route.put("/:_id", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/:chat_id", async (req: Request, res: Response) => {
+MessageController.post("/:chat_id", async (req: Request, res: Response) => {
   try {
     const chat_id = req.params.chat_id;
     const sender = req.body.sender;
@@ -54,7 +54,7 @@ route.post("/:chat_id", async (req: Request, res: Response) => {
       message: message,
       seenBy: [],
     });
-    if (!message) return res.status(400).json({ message });
+    if (!message) return res.status(400).json({ ErrorMsg: message });
     await messages.save();
     return res.status(201).json({ messages });
   } catch (error) {
@@ -66,11 +66,11 @@ route.post("/:chat_id", async (req: Request, res: Response) => {
   }
 });
 
-route.delete("/:message_id", async (req: Request, res: Response) => {
+MessageController.delete("/:message_id", async (req: Request, res: Response) => {
   try {
     const message_id = req.params.message_id;
     const isMessage = await Messages.findOne({ _id: message_id });
-    if (!isMessage) return res.status(404).json({ message: `Message not found` });
+    if (!isMessage) return res.status(404).json({ ErrorMsg: `Message not found` });
     await Messages.deleteOne({ _id: message_id }).exec();
     return res.status(200).json({ message: `Message  has been deleted` });
   } catch (error) {
@@ -82,4 +82,4 @@ route.delete("/:message_id", async (req: Request, res: Response) => {
   }
 });
 
-export { route };
+export { MessageController };

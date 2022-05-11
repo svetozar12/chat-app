@@ -1,11 +1,11 @@
-import * as express from "express";
-import { registerValidation, update_formValidation } from "../../utils/schema";
-import { Request, Response } from "express";
-const route = express.Router();
-import User from "../../models/User.model";
-import Invites from "../../models/Invites.model";
-import Chats from "../../models/chatRoom.model";
+import { Request, Response, Router } from "express";
+import { registerValidation, update_formValidation } from "../utils/schema";
+import User from "../models/User.model";
+import Invites from "../models/Invites.model";
+import Chats from "../models/chatRoom.model";
 import * as multer from "multer";
+
+const UsersController: Router = Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req: any, file: any, cb: any) => {
+const fileFilter = (req: Request<any>, file: any, cb: any) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") cb(null, true);
 };
 
@@ -28,11 +28,11 @@ const upload = multer({
   fileFilter,
 });
 
-route.get("/:username", async (req: Request, res: Response) => {
+UsersController.get("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     const users = await User.findOne({ username }).exec();
-
+    if (!users) return res.status(404).json({ ErrorMsg: `User: ${username} wasn't found` });
     return res.status(200).send({ user: users });
   } catch (error) {
     return res.status(501).json({
@@ -43,7 +43,7 @@ route.get("/:username", async (req: Request, res: Response) => {
   }
 });
 
-route.post("/register", async (req: Request, res: Response) => {
+UsersController.post("/register", async (req: Request, res: Response) => {
   try {
     const { error } = registerValidation(req.body);
     const username = req.body.username;
@@ -51,11 +51,11 @@ route.post("/register", async (req: Request, res: Response) => {
     const email = req.body.email;
     const gender = req.body.gender;
     if (error) {
-      return res.status(409).json({ message: error.message });
+      return res.status(409).json({ ErrorMsg: error.message });
     }
 
     const users = await User.findOne({ username }).exec();
-    if (users) return res.status(409).json({ message: "user already exist" });
+    if (users) return res.status(409).json({ ErrorMsg: "user already exist" });
 
     const user = new User({
       type: "POST",
@@ -82,7 +82,7 @@ route.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-route.put("/update", upload.single("userAvatar"), async (req: Request, res: Response) => {
+UsersController.put("/update", upload.single("userAvatar"), async (req: Request, res: Response) => {
   try {
     const { error } = update_formValidation(req.body);
     const username = req.body.username;
@@ -94,10 +94,10 @@ route.put("/update", upload.single("userAvatar"), async (req: Request, res: Resp
     const user_id = users?._id;
 
     if (error) {
-      return res.status(409).json({ message: error.message });
+      return res.status(409).json({ ErrorMsg: error.message });
     }
 
-    if (!users) return res.status(404).json({ message: "User not found" });
+    if (!users) return res.status(404).json({ ErrorMsg: "User not found" });
     await User.findByIdAndUpdate(user_id, {
       email: email ? email : users.email,
       gender: gender ? gender : users.gender,
@@ -113,11 +113,11 @@ route.put("/update", upload.single("userAvatar"), async (req: Request, res: Resp
   }
 });
 
-route.delete("/:username", async (req: Request, res: Response) => {
+UsersController.delete("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     const user = await User.findOne({ username }).exec();
-    if (!user) return res.status(404).json({ message: `User ${username} is not found` });
+    if (!user) return res.status(404).json({ ErrorMsg: `User ${username} is not found` });
     await User.deleteOne({ username }).exec();
     await Invites.deleteMany({
       reciever: username,
@@ -138,4 +138,4 @@ route.delete("/:username", async (req: Request, res: Response) => {
   }
 });
 
-export { route };
+export { UsersController };

@@ -9,7 +9,6 @@ const buildUrl = (endpoint: string, query?: [{ name: string; value: string }], p
   query?.forEach((element) => {
     url.searchParams.append(element.name, element.value);
   });
-  console.log(url);
 
   return url.href;
 };

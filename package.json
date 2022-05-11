@@ -4,7 +4,6 @@
     "packages/*"
   ],
   "scripts": {
-    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('You must use Yarn to install, not NPM')\"",
     "build": "lerna run build --stream",
     "kill": "npx kill-port 3000 4000 4001 4002 -y",
     "dev": "yarn kill && lerna run dev --no-sort --stream",
