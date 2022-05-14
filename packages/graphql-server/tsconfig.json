@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../backend/src/models/custom-error.model.ts", "../backend/src/middlewares/error-handler.middleware.ts"],
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",

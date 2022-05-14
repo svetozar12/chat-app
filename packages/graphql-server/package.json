@@ -6,9 +6,6 @@
   "repository": "https://github.com/svetozar12/chat-app",
   "author": "svetozar gospodinov",
   "license": "MIT",
-  "jest": {
-    "verbose": true
-  },
   "scripts": {
     "build": "tsc --build",
     "server": "nodemon dist/server.js",

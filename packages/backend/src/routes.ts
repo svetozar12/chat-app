@@ -1,17 +1,17 @@
 import { Application, Router } from "express";
-// controllers
-import { MessageController } from "./controllers/MessagesController";
-import { UsersController } from "./controllers/UsersController";
-import { ChatRoomController } from "./controllers/ChatRoomController";
-import { AuthController } from "./controllers/AuthController";
-import { InvitesController } from "./controllers/InvitesController";
+// routes
+import { MessagesRoute } from "./controllers/Messages/index";
+import { UsersRoute } from "./controllers/Users/index";
+import { ChatRoomsRoute } from "./controllers/ChatRooms/index";
+import { AuthRoute } from "./controllers/Auth/index";
+import { InvitesRoute } from "./controllers/Invites/index";
 
 const _routes: [string, Router][] = [
-  ["/users", UsersController],
-  ["/messages", MessageController],
-  ["/chat-room", ChatRoomController],
-  ["/auth", AuthController],
-  ["/invites", InvitesController],
+  ["/users", UsersRoute],
+  ["/messages", MessagesRoute],
+  ["/chat-room", ChatRoomsRoute],
+  ["/auth", AuthRoute],
+  ["/invites", InvitesRoute],
 ];
 
 export const routes = (app: Application) => {

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "12792689-daf6-41cb-880a-12f75cfd5b92",
+		"_postman_id": "7436d897-f225-41fb-92f0-f77829c4b3b9",
 		"name": "Chat-app api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -18,7 +18,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iml2YW4iLCJwYXNzd29yZCI6Iml2YW4iLCJpYXQiOjE2MzkxNDQwNjksImV4cCI6MTYzOTE0NzY2OX0.9X4IijEks4SROsgneieUZlpNVmMYzo7je3pztTAcXIQ",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iml2YW4iLCJwYXNzd29yZCI6Iml2YW4iLCJpYXQiOjE2NTIyMTE0NjcsImV4cCI6MTY1MjIxNTA2N30.e9-YfY2Nl4QyPXCm-Ukfrcy7NjE_EKjpCHT66XJxgP4",
 								"type": "text"
 							}
 						],
@@ -51,12 +51,12 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "ivan",
+									"value": "vanka",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "ivan",
+									"value": "vanka",
 									"type": "text"
 								}
 							]
@@ -93,7 +93,7 @@
 							"urlencoded": [
 								{
 									"key": "refresh_token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlcmdlaSIsInBhc3N3b3JkIjoidGVzdCIsImlhdCI6MTYzODk1Njc2NywiZXhwIjoxNjcwNTE0MzY3fQ.Qs5npYHQgPIDVi_dM8vfAx_1kKi7-gSrSi5yGwKtusk",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Iml2YW4iLCJwYXNzd29yZCI6Iml2YW4iLCJpYXQiOjE2NTIyMDg2NTgsImV4cCI6MTY1MjIxMjI1OH0.ZEe81s2KCia0TKlWnsxAusZU7909EhjlDzKA2Um3i58",
 									"type": "text"
 								}
 							]
@@ -125,62 +125,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"ivan\",\r\n    \"password\":\"ivan\",\r\n    \"email\":\"ivan@.com\",\r\n    \"gender\":\"Male\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4002/users/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4002",
-							"path": [
-								"users",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete user",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:4002/users/:username",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4002",
-							"path": [
-								"users",
-								":username"
-							],
-							"variable": [
-								{
-									"key": "username",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update user",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"some username\",\r\n    \"email\":\"some email\",\r\n    \"gender\":\"some gender\",\r\n    \"userAvatar\":\"some image\",\r\n}",
+							"raw": "{\r\n    \"username\":\"vanka1\",\r\n    \"password\":\"vanka1\",\r\n    \"email\":\"vanka1@.com\",\r\n    \"gender\":\"Male\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -196,6 +141,75 @@
 							"port": "4002",
 							"path": [
 								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4002/users/some username",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4002",
+							"path": [
+								"users",
+								"some username"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"some username\",\r\n    \"email\":\"some email\",\r\n    \"gender\":\"some gender\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4002/users/627ef65d473d1a1c59d1d7f5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4002",
+							"path": [
+								"users",
+								"627ef65d473d1a1c59d1d7f5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4002/users/some username",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4002",
+							"path": [
+								"users",
+								"some username"
 							]
 						}
 					},
@@ -302,7 +316,7 @@
 								},
 								{
 									"key": null,
-									"value": null
+									"value": ""
 								},
 								{
 									"key": "page_number",
@@ -312,6 +326,41 @@
 							"variable": [
 								{
 									"key": "chat_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete message",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4002/messages/:message id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4002",
+							"path": [
+								"messages",
+								":message id"
+							],
+							"variable": [
+								{
+									"key": "message id",
 									"value": null
 								}
 							]
@@ -401,11 +450,11 @@
 							"query": [
 								{
 									"key": "id",
-									"value": null
+									"value": ""
 								},
 								{
 									"key": "status",
-									"value": null
+									"value": ""
 								}
 							]
 						}
@@ -417,6 +466,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
 						"url": {
 							"raw": "http://localhost:4002/invites?reciever",
 							"protocol": "http",
@@ -436,45 +489,6 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Chat-rooms routes",
-			"item": [
-				{
-					"name": "update or create chat room",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:4002/invites/group-chat?id=chat id&user1=some user&user2=another user",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4002",
-							"path": [
-								"invites",
-								"group-chat"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "chat id"
-								},
-								{
-									"key": "user1",
-									"value": "some user"
-								},
-								{
-									"key": "user2",
-									"value": "another user"
-								}
-							]
-						}
-					},
-					"response": []
 				},
 				{
 					"name": "create group chat",
@@ -482,11 +496,11 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
+							"mode": "urlencoded",
+							"urlencoded": [
 								{
 									"key": "usersData",
-									"value": "[some array]",
+									"value": "array",
 									"type": "text"
 								}
 							]
@@ -501,6 +515,39 @@
 							"path": [
 								"invites",
 								"group-chat"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat-rooms routes",
+			"item": [
+				{
+					"name": "update or create chat room",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    id:\"some id\"\r\n    \"user1\":\"some usr\",\r\n    \"user2\":\"some usr\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4002/chat-room",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4002",
+							"path": [
+								"chat-room"
 							]
 						}
 					},
@@ -541,7 +588,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:4002/chat-room/625828b95e605e3ab0a3c6bd",
+							"raw": "http://localhost:4002/chat-room/627e65fe9d249a8e38ab8af3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -549,7 +596,7 @@
 							"port": "4002",
 							"path": [
 								"chat-room",
-								"625828b95e605e3ab0a3c6bd"
+								"627e65fe9d249a8e38ab8af3"
 							]
 						}
 					},
@@ -561,7 +608,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:4002/chat-room/625828b95e605e3ab0a3c6bd",
+							"raw": "http://localhost:4002/chat-room/627e65fe9d249a8e38ab8af3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -569,7 +616,7 @@
 							"port": "4002",
 							"path": [
 								"chat-room",
-								"625828b95e605e3ab0a3c6bd"
+								"627e65fe9d249a8e38ab8af3"
 							]
 						}
 					},
@@ -581,7 +628,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:4002/chat-room?user_name=ivan",
+							"raw": "http://localhost:4002/chat-room?user_name=vanka",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -593,7 +640,7 @@
 							"query": [
 								{
 									"key": "user_name",
-									"value": "ivan"
+									"value": "vanka"
 								}
 							]
 						}
