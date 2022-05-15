@@ -5,10 +5,8 @@ import mongo_connection from "./config/mongo_config";
 import redis_connection from "./config/redis_config";
 // routes function
 import { routes } from "./routes";
-// others
-import handleError from "./middlewares/error-handler.middleware";
-require("./connection/wsConnection");
 
+import handleError from "./middlewares/error-handler.middleware";
 const app = express();
 
 // middleware

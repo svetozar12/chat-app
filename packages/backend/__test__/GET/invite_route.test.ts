@@ -30,12 +30,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-    await Invites.deleteOne({
-      reciever: "TestingUser1",
-      inviter: "testingUser2",
-      status: "accepted",
-    });
-
+    for (const element of invitesDumyData) {
+      await Invites.deleteOne(element);
+    }
     return true;
   } catch (error) {
     return false;
@@ -56,7 +53,7 @@ describe("Bad input/Non existing invites for user :/invites/:id/", () => {
   it("should return 404 Not Found", async () => {
     const res = await request(app).get("/invites/nonExistent");
     expect(res.status).toBe(404);
-    expect(res.body.error).toBe("You dont have invites.");
+    expect(res.body.ErrorMsg).toBe("You don't have invites");
   });
 });
 
@@ -74,6 +71,6 @@ describe("Bad input/Non existing invites for user :/invites/inviter/:id/", () =>
   it("should return 404 Not Found", async () => {
     const res = await request(app).get("/invites/inviter/nonExistent");
     expect(res.status).toBe(404);
-    expect(res.body.error).toBe("You dont have accepted invites .");
+    expect(res.body.ErrorMsg).toBe("You don't have accepted invites");
   });
 });

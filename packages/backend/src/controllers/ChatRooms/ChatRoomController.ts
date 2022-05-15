@@ -36,55 +36,49 @@ const ChatRoomController: IChatRoomController = {
   },
 
   CreateChatRoom: async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.body.id;
+    const invite_id = req.body.invite_id;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
-    const checkIfExist = await Invites.findOne({ _id: id });
+
+    const checkIfInviteExist = await Invites.findOne({ _id: invite_id });
     const checkUser1IfExist = await User.findOne({ username: user1 });
     const checkUser2IfExist = await User.findOne({ username: user2 });
+    const checkIfRoomExist = await Chats.findOne({ members: [user1, user2] });
+    console.log(checkIfInviteExist, "invite");
 
-    if (!checkIfExist) return next(CustomError.notFound("Invite not found"));
-
+    if (checkIfRoomExist) return next(CustomError.conflict("Chat room already exists !"));
+    if (!checkIfInviteExist) return next(CustomError.notFound("Invite not found"));
     if (!checkUser1IfExist) return next(CustomError.notFound(`User ${user1} not found`));
     if (!checkUser2IfExist) return next(CustomError.notFound(`User ${user2} not found`));
 
-    const findInvite = await Invites.findByIdAndUpdate(id, { status: "accepted" }, { new: true });
+    const findInvite = await Invites.findByIdAndUpdate(invite_id, { status: "accepted" }, { new: true });
 
-    const testingUser1 = await User.findOne({ username: user1 });
-    const testingUser2 = await User.findOne({ username: user2 });
-
-    if (!testingUser1 || !testingUser2) return next(CustomError.notFound("User doesn't exit."));
-
-    if (!findInvite) {
-      return next(CustomError.notFound("Invite not found"));
-    }
+    if (!findInvite) return next(CustomError.notFound("Invite not found"));
 
     const chat = await new Chats({
       members: [user1, user2],
     });
 
     await chat.save();
-
     return res.status(201).json({ message: "chat-room was created", Message: chat });
   },
 
   UpdateChatRoom: async (req: Request, res: Response, next: NextFunction) => {
-    const chat_id = req.params.user_id;
-    const added_user = req.body.usernames;
-    const deleted_user = req.body.username;
+    const chat_id = req.params.chat_id;
+    const added_user = req.body.usernames || [];
+    const deleted_user = req.body.username || "";
 
     const users_rooms = await Chats.findOne({ _id: chat_id }).exec();
-    const users_array = users_rooms!.members;
+
+    const users_array = users_rooms && users_rooms.members;
     let updated;
+    let updated_array: string[] = [];
 
     if (!users_rooms) next(CustomError.notFound("Chat room not found ."));
-    let updated_array: string[] = [];
-    if (deleted_user) {
-      updated_array = users_array.filter((item) => item !== deleted_user);
-      if (updated_array.length === 2) {
-        await Chats.deleteOne({ _id: chat_id }).exec();
-        return res.status(200).json({ message: "deleted chat-room" });
-      }
+    if (users_array && deleted_user) updated_array = users_array.filter((item) => item !== deleted_user);
+    if (updated_array.length === 2) {
+      await Chats.deleteOne({ _id: chat_id }).exec();
+      return res.status(200).json({ message: "deleted chat-room" });
     }
     if (deleted_user) {
       updated = await Chats.findByIdAndUpdate(
@@ -102,6 +96,7 @@ const ChatRoomController: IChatRoomController = {
         },
       );
     }
+
     return res.status(200).json({ message: "Chat-room members were updated", Message: updated });
   },
 
@@ -114,37 +109,5 @@ const ChatRoomController: IChatRoomController = {
     return res.status(200).json({ Message: `Chat_room ${chat_id} is deleted` });
   },
 };
-
-// ChatRoomController.put("/chat-room/:id", async (req: Request, res: Response) => {
-//   try {
-//     const id = req.params.id;
-//     const readBy = req.body.read_by;
-//     const chat = await Chats.findOne({ _id: id });
-
-//     if (!chat) {
-//       return res.status(404).json({ ErrorMsg: "error 404 not found" });
-//     }
-//     if (readBy == null) return;
-//     chat.messages.forEach((element) => {
-//       const found = element.seenBy.find((element) => element === readBy);
-//       if (found)
-//         return res
-//           .status(409)
-//           .json({ ErrorMsg: `User ${readBy} already saw the message` });
-
-//       element.seenBy.push(readBy);
-//     });
-//     await chat.save();
-//     return res
-//       .status(201)
-//       .json({ Message: `User ${readBy} saw the message`, chat });
-//   } catch (error) {
-//     return res.status(501).json({
-//       ErrorMsg: error.message,
-//       Error:"Internal server error",
-//       Message: "Something went wrong while seeing the message",
-//     });
-//   }
-// });
 
 export default ChatRoomController;

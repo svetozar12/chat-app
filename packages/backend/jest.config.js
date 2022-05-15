@@ -9,5 +9,8 @@ module.exports = {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
   testMatch: ["**/__test__/**/*.test.(ts|js)"],
+  setupFilesAfterEnv: ["./__test__/setupTests.ts"],
   testEnvironment: "node",
 };
+
+

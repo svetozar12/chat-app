@@ -1,23 +1,17 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
 import Chats from "../../src/models/chatRoom.model";
-const mongoose = require("mongoose");
-import { dumyUser, dumyUser2, invitesDumyData } from "../test_dumy_data";
+import * as mongoose from "mongoose";
+import { dumyUser, dumyUser2 } from "../test_dumy_data";
 const users = [dumyUser.username, dumyUser2.username];
-const chat_id = mongoose.Types.ObjectId();
+const chat_id = new mongoose.Types.ObjectId();
 beforeAll(async () => {
-  try {
-    await request(app).post("/users/register").send(dumyUser);
-    await request(app).post("/users/register").send(dumyUser2);
-    const test_chat_room = new Chats({
-      _id: chat_id,
-      members: users,
-    });
-    test_chat_room.save();
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const test_chat_room = new Chats({
+    _id: chat_id,
+    members: [dumyUser.username, dumyUser2.username],
+  });
+  test_chat_room.save();
+  return true;
 });
 
 afterAll(async () => {

@@ -1,21 +1,11 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
 import { dumyUser, dumyUser2, invitesDumyData } from "../test_dumy_data";
-const users = [dumyUser.username, dumyUser2.username];
-beforeAll(async () => {
-  try {
-    await request(app).post("/users/register").send(dumyUser);
-    await request(app).post("/users/register").send(dumyUser2);
-    return true;
-  } catch (error) {
-    return false;
-  }
-});
+import Invites from "../../src/models/Invites.model";
 
 afterAll(async () => {
-  users.forEach(async (element) => {
-    await request(app).delete(`/users/${element}`);
-  });
+  await Invites.deleteOne(invitesDumyData[2]);
+  await Invites.deleteOne(invitesDumyData[3]);
 });
 
 describe("Sending invite :/invites", () => {
@@ -29,12 +19,12 @@ describe("Sending invite :/invites", () => {
   });
   it("should return 409 Already sent invite", async () => {
     const res = await request(app).post("/invites").send(invitesDumyData[2]);
-    expect(res.body.ERROR).toBe("Already sent");
+    expect(res.body.ErrorMsg).toBe("Invite is already sent !");
     expect(res.status).toBe(409);
   });
   it("should return 409 Sending invites to yourself", async () => {
     const res = await request(app).post("/invites").send(invitesDumyData[3]);
-    expect(res.body.ERROR).toBe("Can't send invites to yourself");
+    expect(res.body.ErrorMsg).toBe("Can't send invites to yourself !");
     expect(res.status).toBe(409);
   });
 });

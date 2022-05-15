@@ -77,6 +77,8 @@
 import { RequestHandler } from "express";
 import * as jwt from "jsonwebtoken";
 import * as createError from "http-errors";
+import { CustomError } from "../models/custom-error.model";
+
 export const verifyToken: RequestHandler = (req: any, res, next) => {
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
@@ -87,7 +89,7 @@ export const verifyToken: RequestHandler = (req: any, res, next) => {
     req.token = bearerToken;
     next();
   } else {
-    res.sendStatus(403);
+    return next(CustomError.forbidden("Forbidden"));
   }
 };
 
@@ -101,8 +103,8 @@ export const signTokens = (
 ) => {
   return new Promise((resolve, reject) => {
     jwt.sign(data, secret, { expiresIn: expires }, (err, token) => {
-      if (err) {
-        return reject(createError(403, "Token has expired"));
+      if (err) {        
+        return reject(CustomError.forbidden("Token has expired"));
       }
       return resolve(token);
     });
@@ -110,14 +112,10 @@ export const signTokens = (
 };
 
 export const verifyTokens = (token: string, secret: string) => {
-  console.log(secret);
-
   return new Promise((resolve, reject) => {
     jwt.verify(token, secret, (err, Token) => {
       if (err) {
-        console.log(err);
-
-        reject(createError(403, "Token has expired"));
+        return reject(CustomError.forbidden("Token has expired"));
       }
       return resolve(Token);
     });
