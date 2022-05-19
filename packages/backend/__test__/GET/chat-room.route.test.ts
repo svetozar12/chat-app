@@ -1,7 +1,7 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
 import { dumyUser } from "../test_dumy_data";
-
+import { tokens } from "../setupTests";
 describe(`Testing endpoint :/chat-room?user_name=${dumyUser.username}`, () => {
   it("should return 200 OK", async () => {
     const res = await request(app).get(`/chat-room?user_name=${dumyUser.username}`);

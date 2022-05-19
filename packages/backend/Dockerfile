@@ -24,6 +24,7 @@ FROM node:alpine as runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV DB_NAME=chatAppDb
 
 COPY package*.json ./
 COPY --from=dependencies-prod /app/node_modules ./node_modules

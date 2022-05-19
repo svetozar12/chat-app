@@ -13,6 +13,8 @@ import { CustomError } from "../models/custom-error.model";
 
 const handleError = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof CustomError) {
+    console.log(err);
+
     return res.status(err.status).json({ ErrorMsg: err.ErrorMsg });
   }
 

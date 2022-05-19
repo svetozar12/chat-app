@@ -1,5 +1,4 @@
 import { app } from "./server";
-
 const port = process.env.PORT || 4002;
 
 if (process.env.NODE_ENV !== "test") {

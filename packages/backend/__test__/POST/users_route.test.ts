@@ -2,12 +2,7 @@ import { app } from "../../src/server";
 import * as request from "supertest";
 import { dumyUser, dumyUser3 } from "../test_dumy_data";
 import User from "../../src/models/User.model";
-let refresh_token: string;
-
-beforeAll(async () => {
-  const res = await request(app).post("/auth/login").send({ username: dumyUser.username, password: dumyUser.password });
-  refresh_token = res.body.Refresh_token;
-});
+import { tokens, user1_id } from "../setupTests";
 
 afterAll(async () => {
   await User.deleteOne({ username: dumyUser3.username });
@@ -40,7 +35,10 @@ describe("Registering user :/users", () => {
 
 describe("Passing valid refresh-token", () => {
   it("should return 201 Created", async () => {
-    const res = await request(app).post("/auth/refresh").send({ refresh_token });
+    const res = await request(app)
+      .post("/auth/refresh")
+      .set({ Authorization: `Bearer ${tokens.Access_token}` })
+      .send({ user_id: user1_id });
     expect(res.body.username).toBe(dumyUser.username);
     expect(res.status).toBe(201);
   });

@@ -1,12 +1,13 @@
+import { constants } from "../constants";
 import { createClient } from "redis";
 
-const client = createClient();
+const client = createClient({ url: constants.REDIS_URL });
 const redis_connection = async () => {
-  client.on("error", (err) => console.log("Redis Client Error", err));
+  await client.on("error", (err) => console.log("Redis Client Error", err));
 
   await client.connect();
-  const value = await client.sendCommand(["ping"]);
-  console.log(value, "Connection with redis");
+  await client.sendCommand(["ping"]);
+  console.log("Redis:✅");
 };
 
 export { client };

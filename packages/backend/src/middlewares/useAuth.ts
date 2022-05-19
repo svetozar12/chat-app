@@ -74,50 +74,32 @@
 //     }
 //   });
 // };
-import { RequestHandler } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import * as createError from "http-errors";
 import { CustomError } from "../models/custom-error.model";
 
-export const verifyToken: RequestHandler = (req: any, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-    //if bearer Header isn't undefined seperates JWT from Bearer and later on use method jwt.verify() to verify the jwt
+/**
+ * verifyToken is an middleware function
+ * this function compares the user_id with the jwt user_id
+ *  to check if the user is trying to get other user data
+ * @param secret this is the jwt secret from the .env variables
+ */
+
+export const verifyToken = (secret: string) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader === "undefined") return next(CustomError.forbidden("Forbidden"));
+
+    const user_id = req.body.user_id;
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
 
-    req.token = bearerToken;
-    next();
-  } else {
-    return next(CustomError.forbidden("Forbidden"));
-  }
-};
-
-export const signTokens = (
-  data: {
-    username: string;
-    password: string;
-  },
-  secret: string,
-  expires: string,
-) => {
-  return new Promise((resolve, reject) => {
-    jwt.sign(data, secret, { expiresIn: expires }, (err, token) => {
-      if (err) {        
-        return reject(CustomError.forbidden("Token has expired"));
-      }
-      return resolve(token);
+    jwt.verify(bearerToken, secret, (err: any, decoded: any) => {
+      if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
+      const current_id = decoded._id;
+      if (current_id !== user_id) next(CustomError.unauthorized("Can't access other users data"));
+      req.token = decoded;
+      next();
     });
-  });
-};
-
-export const verifyTokens = (token: string, secret: string) => {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, secret, (err, Token) => {
-      if (err) {
-        return reject(CustomError.forbidden("Token has expired"));
-      }
-      return resolve(Token);
-    });
-  });
+  };
 };
