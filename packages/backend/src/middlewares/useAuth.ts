@@ -90,13 +90,15 @@ export const verifyToken = (secret: string) => {
     const bearerHeader = req.headers["authorization"];
     if (typeof bearerHeader === "undefined") return next(CustomError.forbidden("Forbidden"));
 
-    const user_id = req.body.user_id;
+    const user_id = req.body.user_id || req.params.user_id || req.query.user_id;
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
 
     jwt.verify(bearerToken, secret, (err: any, decoded: any) => {
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
+      console.log(current_id, user_id);
+
       if (current_id !== user_id) next(CustomError.unauthorized("Can't access other users data"));
       req.token = decoded;
       next();

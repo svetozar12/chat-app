@@ -1,13 +1,5 @@
-interface IRequest {
-  user_name: string;
-}
-
 interface IChatRoomController {
-  GetChatRooms: (
-    req: Request<undefined, undefined, undefined, IRequest>,
-    res: Response,
-    next: NextFunction,
-  ) => Promise<void | Response<any, Record<string, any>>>;
+  GetChatRooms: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
   GetChatRoom: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
   CreateChatRoom: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
   UpdateChatRoom: (req: Request, res: Response, next: NextFunction) => Promise<Response<any, Record<string, any>>>;
@@ -21,9 +13,11 @@ import User from "../../models/User.model";
 import { CustomError } from "../../models/custom-error.model";
 
 const ChatRoomController: IChatRoomController = {
-  GetChatRooms: async (req: Request<undefined, undefined, undefined, IRequest>, res: Response, next: NextFunction) => {
-    const user_name = req.query?.user_name;
-    const contacts = await Chats.find({ members: user_name }).exec();
+  GetChatRooms: async (req, res, next) => {
+    const user_id = req.query.user_id;
+    const user = await User.findOne({ _id: user_id }).exec();
+
+    const contacts = await Chats.find({ members: user?.username }).exec();
     if (contacts.length <= 0) return next(CustomError.notFound("You don't have chat rooms"));
     return res.status(200).json({ data: `You have active chat-rooms`, contacts });
   },
@@ -35,7 +29,7 @@ const ChatRoomController: IChatRoomController = {
     return res.status(200).json({ data: users_rooms });
   },
 
-  CreateChatRoom: async (req: Request, res: Response, next: NextFunction) => {
+  CreateChatRoom: async (req, res, next) => {
     const invite_id = req.body.invite_id;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
@@ -63,7 +57,7 @@ const ChatRoomController: IChatRoomController = {
     return res.status(201).json({ message: "chat-room was created", Message: chat });
   },
 
-  UpdateChatRoom: async (req: Request, res: Response, next: NextFunction) => {
+  UpdateChatRoom: async (req, res, next) => {
     const chat_id = req.params.chat_id;
     const added_user = req.body.usernames || [];
     const deleted_user = req.body.username || "";
@@ -100,7 +94,7 @@ const ChatRoomController: IChatRoomController = {
     return res.status(200).json({ message: "Chat-room members were updated", Message: updated });
   },
 
-  DeleteChatRoom: async (req: Request, res: Response, next: NextFunction) => {
+  DeleteChatRoom: async (req, res, next) => {
     const chat_id = req.params.chat_id;
     const isExist = await Chats.findOne({ _id: chat_id }).exec();
 
