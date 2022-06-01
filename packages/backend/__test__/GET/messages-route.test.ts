@@ -1,6 +1,5 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
-import { dumyUser } from "../test_dumy_data";
 import { user2 } from "../setupTests";
 let chat_id: string;
 let message_id: string;
@@ -8,7 +7,7 @@ let message_id: string;
 beforeAll(async () => {
   try {
     const chat = await request(app)
-      .get(`/chat-room?user_id=${user2.user_id}`)
+      .get(`/chat-room/?user_id=${user2.user_id}`)
       .set({ Authorization: `Bearer ${user2.Access_token}` });
     chat_id = chat.body.contacts[0]._id;
 
@@ -41,9 +40,8 @@ afterAll(async () => {
 describe(`Testing endpoint :/messages/:id`, () => {
   it("should return 200 OK", async () => {
     const res = await request(app)
-      .get(`/messages/${chat_id}?user_id${user2.user_id}&&page_number=1&&page_size=10`)
+      .get(`/messages/${chat_id}?user_id=${user2.user_id}&&page_number=1&&page_size=10`)
       .set({ Authorization: `Bearer ${user2.Access_token}` });
-    console.log(res.body, "ivko", `/messages/${chat_id}?user_id=${user2.user_id}`);
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe("You have messages.");

@@ -7,6 +7,6 @@ import { constants } from "../../constants";
 const route = Router();
 
 route.post("/login", errorHandler(AuthController.Login));
-route.post("/refresh", verifyToken(constants.REFRESH_TOKEN as string), errorHandler(AuthController.RefreshToken));
+route.post("/refresh/:user_id", verifyToken(constants.REFRESH_TOKEN as string), errorHandler(AuthController.RefreshToken));
 
 export { route as AuthRoute };

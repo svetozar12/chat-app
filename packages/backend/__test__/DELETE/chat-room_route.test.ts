@@ -13,6 +13,8 @@ beforeAll(async () => {
     .post("/invites")
     .set({ Authorization: `Bearer ${user2.Access_token}` })
     .send({ user_id: user2.user_id, reciever: dumyUser.username });
+  console.log(res.body, "gosu");
+
   const updateInvite = await request(app)
     .put(`/invites/${res.body.message._id}`)
     .set({ Authorization: `Bearer ${user2.Access_token}` })
@@ -35,6 +37,8 @@ describe(`Testing endpoint :/chat-room/:id DELETE`, () => {
       .delete(`/chat-room/${chat_id}`)
       .set({ Authorization: `Bearer ${user2.Access_token}` })
       .send({ user_id: user2.user_id });
+    console.log(res.body, "dirko");
+
     expect(res.status).toBe(200);
     expect(res.body.Message).toBe(`Chat_room ${chat_id} is deleted`);
   });

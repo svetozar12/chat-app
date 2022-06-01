@@ -35,18 +35,25 @@ describe("Registering user :/users", () => {
 
 describe("Passing valid refresh-token", () => {
   it("should return 201 Created", async () => {
-    const res = await request(app).post("/auth/refresh").send({ refresh_token: user1.Refresh_token });
-    console.log(res.body, "divan");
+    const res = await request(app)
+      .post(`/auth/refresh/${user1.user_id}`)
+      .set({ Authorization: `Bearer ${user1.Refresh_token}` })
+      .send({ refresh_token: user1.Refresh_token });
 
-    expect(res.body.username).toBe(dumyUser.username);
+    expect(res.body.user_id).toBe(user1.user_id);
     expect(res.status).toBe(201);
   });
 });
 
 describe("Passing invalid refresh-token", () => {
   it("should return 403 Forbidden", async () => {
-    const res = await request(app).post("/auth/refresh").send({ refresh_token: "invalid" });
-    expect(res.body.ErrorMsg).toBe("Forbidden");
+    const res = await request(app)
+      .post("/auth/refresh/3123123123")
+      .set({ Authorization: `Bearer dawdaw` })
+      .send({ refresh_token: "invalid" });
+    console.log(res.body, "divan");
+
+    expect(res.body.ErrorMsg).toBe("Token has expired or invalid secret");
     expect(res.status).toBe(403);
   });
 });
