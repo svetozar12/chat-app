@@ -4,4 +4,7 @@ declare namespace Express {
     username: string;
     user: string;
   }
+  interface Response {
+    paginatedResults: any;
+  }
 }

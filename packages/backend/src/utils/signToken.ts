@@ -1,4 +1,4 @@
-import { CustomError } from "../models/custom-error.model";
+import { CustomError } from "./custom-error.model";
 import * as jwt from "jsonwebtoken";
 
 /**

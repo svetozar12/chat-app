@@ -6,10 +6,10 @@ import { constants } from "../../constants";
 
 const route = Router();
 
-route.get("/:id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.GetInvitesByReciever));
-route.get("/inviter/:id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.GetInvitesByInviter));
+route.get("/:user_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.GetInvitesByReciever));
+route.get("/inviter/:user_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.GetInvitesByInviter));
 route.post("/", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.CreateInvite));
-route.put("/", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.UpdateInvite));
-route.post("/group-chat", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.CreateGroupChat));
+route.put("/:invite_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(InvitesController.UpdateInvite));
+route.post("/group-chat", errorHandler(InvitesController.CreateGroupChat));
 
 export { route as InvitesRoute };

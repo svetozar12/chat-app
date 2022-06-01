@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../../models/User.model";
 import { updateFormSchema } from "../../utils/schema";
 import signTokens from "../../utils/signToken";
-import { CustomError } from "../../models/custom-error.model";
+import { CustomError } from "../../utils/custom-error.model";
 import { constants } from "../../constants";
 
 interface IAuthController {

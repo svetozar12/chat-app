@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import { Schema } from "mongoose";
 import Messages from "../../models/Message.model";
-import { CustomError } from "../../models/custom-error.model";
+import User from "../../models/User.model";
+import { CustomError } from "../../utils/custom-error.model";
 
 interface IMessageController {
   GetMessage: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
@@ -11,10 +13,11 @@ interface IMessageController {
 
 const MessageController: IMessageController = {
   GetMessage: async (req: Request, res: Response, next: NextFunction) => {
-    const page_size = Number(req.query.page_size);
-    const page_number = Number(req.query.page_number);
+    const page_size = Number(req.query.page_size) || 2;
+    const page_number = Number(req.query.page_number) || 1;
     const chat_id = req.params.chat_id;
-    const messages = await Messages.find({ chatInstance: chat_id })
+
+    const messages = await Messages.find({ chatInstance: chat_id, user_id: req.query.user_id as unknown as Schema.Types.ObjectId })
       .limit(page_size)
       .skip((page_number - 1) * page_size)
       .sort({ createdAt: "desc" });
@@ -26,13 +29,16 @@ const MessageController: IMessageController = {
 
   CreateMessage: async (req: Request, res: Response, next: NextFunction) => {
     const chat_id = req.params.chat_id;
-    const sender = req.body.sender;
+    const sender_id = req.body.user_id;
     const message = req.body.message;
 
+    const sender = await User.findById(sender_id);
+    if (!sender) return next(CustomError.notFound("User not found"));
     const messages = await new Messages({
-      chatInstance: chat_id,
-      sender: sender,
-      message: message,
+      user_id: req.body.user_id,
+      chat_id,
+      sender: sender.username,
+      message,
       seenBy: [],
     });
     if (!message) return next(CustomError.badRequest(message));
@@ -45,17 +51,16 @@ const MessageController: IMessageController = {
     const _id = req.params._id;
     const newMessage: string = req.body.newMessage;
     if (newMessage === "" || newMessage === null) return res.status(200).json({ message: "Message didn't change" });
-    const user = Messages.findByIdAndUpdate(_id, { message: newMessage }).exec();
-    if (!user) return next(CustomError.notFound("Message wasn't found !"));
+    const message = await Messages.findOneAndUpdate({ _id, user_id: req.body.user_id }, { message: newMessage }).exec();
+    if (!message) return next(CustomError.notFound("Message wasn't found !"));
     return res.status(200).send({ message: `Message has been updated` });
   },
 
   DeleteMessage: async (req: Request, res: Response, next: NextFunction) => {
-    const message_id = req.params.message_id;
-    const isMessage = await Messages.findOne({ _id: message_id });
-    if (!isMessage) return next(CustomError.notFound("Message wasn`t found !"));
-    await Messages.deleteOne({ _id: message_id }).exec();
-    return res.status(200).json({ message: `Message  has been deleted` });
+    const _id = req.params._id;
+    const message = await Messages.findOneAndDelete({ _id, user_id: req.body.user_id }).exec();
+    if (!message) return next(CustomError.notFound("Message wasn't found !"));
+    return res.status(200).send({ message: `Message has been deleted` });
   },
 };
 

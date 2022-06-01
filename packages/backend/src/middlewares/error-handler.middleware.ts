@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../models/custom-error.model";
+import { CustomError } from "../utils/custom-error.model";
 
 /**
  * Custom error handler to standardize error objects returned to

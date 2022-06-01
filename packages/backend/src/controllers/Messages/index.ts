@@ -8,7 +8,7 @@ const route = Router();
 
 route.get("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(MessageController.GetMessage));
 route.post("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(MessageController.CreateMessage));
-route.put("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(MessageController.UpdateMessage));
-route.delete("/:message_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(MessageController.DeleteMessage));
+route.put("/:_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(MessageController.UpdateMessage));
+route.delete("/:_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(MessageController.DeleteMessage));
 
 export { route as MessagesRoute };

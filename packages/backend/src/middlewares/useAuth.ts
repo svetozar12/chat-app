@@ -76,7 +76,7 @@
 // };
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import { CustomError } from "../models/custom-error.model";
+import { CustomError } from "../utils/custom-error.model";
 
 /**
  * verifyToken is an middleware function
@@ -97,6 +97,8 @@ export const verifyToken = (secret: string) => {
     jwt.verify(bearerToken, secret, (err: any, decoded: any) => {
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
+      console.log(req.body);
+
       console.log(current_id, user_id);
 
       if (current_id !== user_id) next(CustomError.unauthorized("Can't access other users data"));
