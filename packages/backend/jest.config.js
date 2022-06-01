@@ -12,5 +12,3 @@ module.exports = {
   setupFilesAfterEnv: ["./__test__/setupTests.ts"],
   testEnvironment: "node",
 };
-
-

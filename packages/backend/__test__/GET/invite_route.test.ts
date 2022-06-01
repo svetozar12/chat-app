@@ -2,8 +2,8 @@ import { app } from "../../src/server";
 import * as request from "supertest";
 import Invites from "../../src/models/Invites.model";
 import { ObjectId } from "mongoose";
-import { tests, invitesDumyData } from "../test_dumy_data";
-
+import { invitesDumyData } from "../test_dumy_data";
+import { user1 } from "../setupTests";
 interface IElement {
   reciever: string;
   inviter: string;
@@ -39,38 +39,22 @@ afterAll(async () => {
   }
 });
 
-tests.forEach((element) => {
-  describe(element.describe, () => {
-    it("should return 200 OK :/invites/:id/", async () => {
-      const res = await request(app).get(element.request);
-      expect(res.status).toBe(200);
-      expect(res.body.invites[0].reciever).toBe("TestingUser1");
-    });
-  });
-});
-
 describe("Bad input/Non existing invites for user :/invites/:id/", () => {
   it("should return 404 Not Found", async () => {
-    const res = await request(app).get("/invites/nonExistent");
-    expect(res.status).toBe(404);
-    expect(res.body.ErrorMsg).toBe("You don't have invites");
-  });
-});
-
-tests.forEach((element) => {
-  describe(element.describe, () => {
-    it("should return 200 OK :/invites/inviter/:id/", async () => {
-      const res = await request(app).get(element.request);
-      expect(res.status).toBe(200);
-      expect(res.body.invites[0].reciever).toBe("TestingUser1");
-    });
+    const res = await request(app)
+      .get("/invites/nonExistent")
+      .set({ Authorization: `Bearer ${user1.Access_token}` });
+    expect(res.status).toBe(401);
+    expect(res.body.ErrorMsg).toBe("Can't access other users data");
   });
 });
 
 describe("Bad input/Non existing invites for user :/invites/inviter/:id/", () => {
   it("should return 404 Not Found", async () => {
-    const res = await request(app).get("/invites/inviter/nonExistent");
-    expect(res.status).toBe(404);
-    expect(res.body.ErrorMsg).toBe("You don't have accepted invites");
+    const res = await request(app)
+      .get("/invites/inviter/nonExistent")
+      .set({ Authorization: `Bearer ${user1.Access_token}` });
+    expect(res.status).toBe(401);
+    expect(res.body.ErrorMsg).toBe("Can't access other users data");
   });
 });

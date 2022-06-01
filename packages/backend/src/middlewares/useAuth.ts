@@ -97,7 +97,6 @@ export const verifyToken = (secret: string) => {
     jwt.verify(bearerToken, secret, (err: any, decoded: any) => {
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
-      console.log(req.body);
 
       console.log(current_id, user_id);
 
