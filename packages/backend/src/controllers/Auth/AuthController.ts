@@ -80,6 +80,7 @@ const AuthController: IAuthController = {
     const bearerToken = bearer[1];
 
     // TokenBL.create({ token: bearerToken });
+    client.DEL(req.params.user_id);
     client.SET("token", bearerToken);
     res.send(bearerToken);
   },
