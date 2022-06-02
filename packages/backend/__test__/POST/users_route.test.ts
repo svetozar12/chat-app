@@ -51,7 +51,6 @@ describe("Passing invalid refresh-token", () => {
       .post("/auth/refresh/3123123123")
       .set({ Authorization: `Bearer dawdaw` })
       .send({ refresh_token: "invalid" });
-    console.log(res.body, "divan");
 
     expect(res.body.ErrorMsg).toBe("Token has expired or invalid secret");
     expect(res.status).toBe(403);

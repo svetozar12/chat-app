@@ -19,7 +19,6 @@ beforeAll(async () => {
     .put(`/invites/${res.body.message._id}`)
     .set({ Authorization: `Bearer ${user1.Access_token}` })
     .send({ user_id: user1.user_id, status: "accepted" });
-  console.log(updateInvite.body, "greg");
 
   invite_id = updateInvite.body.message._id;
 });

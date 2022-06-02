@@ -4,10 +4,13 @@ import { updateFormSchema } from "../../utils/schema";
 import signTokens from "../../utils/signToken";
 import { CustomError } from "../../utils/custom-error.model";
 import { constants } from "../../constants";
+import TokenBL from "../../models/TokenBL";
+import { client } from "../../config/redis_config";
 
 interface IAuthController {
   Login: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
   RefreshToken: (req: Request, res: Response) => Promise<any>;
+  Logout: (req: Request, res: Response, next: NextFunction) => Promise<any>;
 }
 
 const AuthController: IAuthController = {
@@ -38,8 +41,8 @@ const AuthController: IAuthController = {
 
     if (!isMatch) return next(CustomError.unauthorized("Password is not valid"));
 
-    const access = await signTokens(user, constants.ACCESS_TOKEN || "", expire.access);
-    const refresh = await signTokens(user, constants.REFRESH_TOKEN || "", expire.refresh);
+    const access = await signTokens(user, constants.ACCESS_TOKEN, expire.access);
+    const refresh = await signTokens(user, constants.REFRESH_TOKEN, expire.refresh);
 
     return res.status(201).json({ user_id: _id, Access_token: access, Refresh_token: refresh });
   },
@@ -69,6 +72,17 @@ const AuthController: IAuthController = {
         Refresh_token: refreshToken,
       });
     }
+  },
+
+  Logout: async (req, res, next) => {
+    const bearerHeader = req.headers["authorization"];
+    if (bearerHeader === undefined) return next(CustomError.badRequest("token is undefined"));
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+
+    // TokenBL.create({ token: bearerToken });
+    client.SET("token", bearerToken);
+    res.send(bearerToken);
   },
 };
 

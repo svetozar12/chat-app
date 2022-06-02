@@ -34,7 +34,6 @@ describe("Sending invite :/invites", () => {
       .post("/invites")
       .send({ reciever: invitesDumyData[2].inviter, user_id: user1.user_id })
       .set({ Authorization: `Bearer ${user1.Access_token}` });
-    console.log(res.body, "dis");
 
     expect(res.body.ErrorMsg).toBe("Invite is already sent !");
     expect(res.status).toBe(409);
