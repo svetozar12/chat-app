@@ -4,7 +4,6 @@ import { updateFormSchema } from "../../utils/schema";
 import signTokens from "../../utils/signToken";
 import { CustomError } from "../../utils/custom-error.model";
 import { constants } from "../../constants";
-import TokenBL from "../../models/TokenBL";
 import { client } from "../../config/redis_config";
 
 interface IAuthController {

@@ -1,6 +1,6 @@
 import { CustomError } from "./custom-error.model";
 import * as jwt from "jsonwebtoken";
-import TokenBL from "../models/TokenBL";
+import manageSessions from "./manageSessions";
 
 /**
  * signTokens utility function

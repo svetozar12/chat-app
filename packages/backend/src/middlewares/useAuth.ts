@@ -38,15 +38,18 @@ const Auth = (secret: string) => {
     const isTokenBlackListed = await blackListCheck(bearerToken);
 
     if (isTokenBlackListed) return next(CustomError.forbidden("Token has been blacklisted"));
-    jwt.verify(bearerToken, secret, (err: any, decoded: any) => {
+    jwt.verify(bearerToken, secret, async (err: any, decoded: any) => {
       console.log(err);
 
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
       // delete logs on production
       console.log(current_id, user_id);
-
       if (current_id !== user_id) return next(CustomError.unauthorized("Can't access other users data"));
+      const session = await client.LRANGE(user_id, 0, 200);
+      if (session.length <= 0) return next(CustomError.forbidden("Token has expired"));
+      const isToken = session.some((element) => element === bearerToken);
+      if (!isToken) return next(CustomError.forbidden("Your session has expired"));
       req.token = decoded;
       next();
     });
