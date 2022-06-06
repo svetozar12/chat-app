@@ -13,9 +13,6 @@ import TokenBL from "../models/TokenBL.model";
 const blackListCheck = async (token: string) => {
   try {
     const redistToken = await client.LRANGE("token", 0, -1);
-    console.log(token, redistToken);
-
-    console.log(redistToken.some((element) => element === token));
 
     let mongoToken: any | null;
     if (redistToken.length === 0) mongoToken = (await TokenBL.findOne({ token }))?.token;
