@@ -24,6 +24,7 @@ const signTokens = (
       if (err) {
         return reject(CustomError.forbidden("Token has expired or invalid secret"));
       }
+      manageSessions(data._id, token as string, expires);
       return resolve(token);
     });
   });

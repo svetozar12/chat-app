@@ -1,8 +1,8 @@
-import { client } from "../config/redis_config";
+import TokenSession from "../models/TokenSession.model";
+import expireDate from "./expireAfter";
 
-const manageSessions = async (user_id: string, token: string) => {
-  const isSession = await client.LRANGE(user_id, 0, 200);
-  if (isSession.length === 0 || !isSession) await client.RPUSH(user_id, token);
+const manageSessions = async (user_id: string, token: string, expires: string) => {
+  await TokenSession.create({ user_id, token, expireAt: expireDate(expires) });
 };
 
 export default manageSessions;

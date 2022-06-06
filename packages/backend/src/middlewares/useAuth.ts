@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import { CustomError } from "../utils/custom-error.model";
 import { client } from "../config/redis_config";
-import TokenBL from "../models/TokenBL";
+import TokenBL from "../models/TokenBL.model";
 /**
  * verifyToken is an middleware function
  * this function compares the user_id with the jwt user_id
@@ -12,11 +12,15 @@ import TokenBL from "../models/TokenBL";
 
 const blackListCheck = async (token: string) => {
   try {
-    const redistToken = await client.get("token");
-    let mongoToken: any | null;
-    if (!redistToken) mongoToken = (await TokenBL.findOne({ token }))?.token;
+    const redistToken = await client.LRANGE("token", 0, -1);
+    console.log(token, redistToken);
 
-    if (redistToken === token) {
+    console.log(redistToken.some((element) => element === token));
+
+    let mongoToken: any | null;
+    if (redistToken.length === 0) mongoToken = (await TokenBL.findOne({ token }))?.token;
+
+    if (redistToken.some((element) => element === token)) {
       return true;
     } else if (mongoToken === token) {
       return true;
@@ -46,10 +50,6 @@ const Auth = (secret: string) => {
       // delete logs on production
       console.log(current_id, user_id);
       if (current_id !== user_id) return next(CustomError.unauthorized("Can't access other users data"));
-      const session = await client.LRANGE(user_id, 0, 200);
-      if (session.length <= 0) return next(CustomError.forbidden("Token has expired"));
-      const isToken = session.some((element) => element === bearerToken);
-      if (!isToken) return next(CustomError.forbidden("Your session has expired"));
       req.token = decoded;
       next();
     });
