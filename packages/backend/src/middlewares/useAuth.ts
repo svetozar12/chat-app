@@ -12,12 +12,13 @@ import TokenBL from "../models/TokenBL.model";
 
 const blackListCheck = async (token: string) => {
   try {
-    const redistToken = await client.LRANGE("token", 0, -1);
+    const redistToken = await client.GET(`token_${token}`);
+    console.log(redistToken, "token");
 
     let mongoToken: any | null;
-    if (redistToken.length === 0) mongoToken = (await TokenBL.findOne({ token }))?.token;
+    if (!redistToken) mongoToken = (await TokenBL.findOne({ token }))?.token;
 
-    if (redistToken.some((element) => element === token)) {
+    if (redistToken) {
       return true;
     } else if (mongoToken === token) {
       return true;

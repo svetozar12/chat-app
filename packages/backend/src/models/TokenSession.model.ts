@@ -4,6 +4,7 @@ export interface ITokenSession {
   user_id: string;
   token: string;
   expireAt: any;
+  expireAfter: any;
 }
 
 const TokenSessionSchema = new Schema<ITokenSession>({
@@ -11,6 +12,11 @@ const TokenSessionSchema = new Schema<ITokenSession>({
   token: { type: String, required: true },
   expireAt: {
     type: Date,
+    required: true,
+  },
+  expireAfter: {
+    type: Number,
+    required: true,
   },
 });
 

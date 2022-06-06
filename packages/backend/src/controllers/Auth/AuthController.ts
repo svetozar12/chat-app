@@ -81,10 +81,11 @@ const AuthController: IAuthController = {
     const bearerToken = bearer && bearer[1];
     const sessions = await TokenSession.find({ user_id: req.params.user_id });
 
-    if (sessions.length) next(CustomError.notFound("You don't have sessions"));
-    for (const item of sessions) {
-      console.log(typeof item.token);
-      await client.RPUSH("token", item.token);
+    if (sessions.length <= 0) next(CustomError.notFound("You don't have sessions"));
+    for await (const item of sessions) {
+      console.log(item.expireAfter);
+      await client.SET(`token_${item.token}`, item.token);
+      await client.EXPIRE(`token_${item.token}`, item.expireAfter);
     }
     await TokenSession.deleteMany({ user_id: req.params.user_id });
 
