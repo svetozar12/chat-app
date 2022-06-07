@@ -1,6 +1,6 @@
 import { GraphQLString } from "graphql";
 import getUserSchema from "./User.schema";
-import api from "../../utils/axiosInstance";
+import api from "../../api_helper";
 
 interface IUser {
   id: string;

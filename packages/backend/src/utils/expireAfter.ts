@@ -5,6 +5,7 @@
  */
 
 const expireDate = (exp: string) => {
+  if (typeof exp !== "string") return undefined;
   const seconds = exp.indexOf("s") !== -1;
   const hours = exp.indexOf("h") !== -1;
   const days = exp.indexOf("d") !== -1;

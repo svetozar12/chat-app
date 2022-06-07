@@ -30,14 +30,14 @@ describe(`Testing endpoint :/chat-room/:chat_id`, () => {
     expect(res.body.message).toBe(`Chat-room members were updated`);
   });
 
-  it("should return 200 OK removing user", async () => {
+  it("should return 201 OK removing user and deleting chat room", async () => {
     const res = await request(app)
       .put(`/chat-room/${chat_id}`)
       .set({ Authorization: `Bearer ${user1.Access_token}` })
       .send({ user_id: user1.user_id, username: dumyUser2.username });
 
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe(`Chat-room members were updated`);
+    expect(res.body.message).toBe(`deleted chat-room`);
   });
 
   it("should return 404 Not found invalid id", async () => {

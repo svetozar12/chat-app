@@ -94,15 +94,14 @@ describe("Invalid body :/invites/chatroom", () => {
       .post("/invites/group-chat")
       .set({ Authorization: `Bearer ${user1.Access_token}` })
       .send({ usersData: "d" });
-    expect(res.body.ErrorMsg).toBe("group-chat was created");
+    expect(res.body.ErrorMsg).toBe("usersData should be of type array");
     expect(res.status).toBe(422);
   });
-  it("should return 404 Not found", async () => {
+  it("should return 422", async () => {
     const res = await request(app)
       .post("/invites/group-chat")
-      .set({ Authorization: `Bearer ${user1.Access_token}` })
-      .send({ usersData: ["nonExistent1", "nonExistent2"] });
-    expect(res.text).toBe('{"ErrorMsg":"User nonExistent1 not found"}');
-    expect(res.status).toBe(404);
+      .set({ Authorization: `Bearer ${user1.Access_token}` });
+    expect(res.body.ErrorMsg).toBe("usersData is a required field");
+    expect(res.status).toBe(422);
   });
 });

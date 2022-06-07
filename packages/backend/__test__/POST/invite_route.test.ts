@@ -47,3 +47,41 @@ describe("Sending invite :/invites", () => {
     expect(res.status).toBe(409);
   });
 });
+
+describe("Sending invite :/invites", () => {
+  it("should return 422 Unprocessable Entity", async () => {
+    const res = await request(app)
+      .post("/invites")
+      .set({ Authorization: `Bearer ${user2.Access_token}` })
+      .send({ reciever: "", user_id: user2.user_id });
+    expect(res.body.ErrorMsg).toBe("reciever cannot be an empty field");
+    expect(res.status).toBe(422);
+  });
+
+  it("should return 422 Unprocessable Entity", async () => {
+    const res = await request(app)
+      .post("/invites")
+      .set({ Authorization: `Bearer ${user2.Access_token}` })
+      .send({ user_id: user2.user_id });
+    expect(res.body.ErrorMsg).toContain("reciever is a required field");
+    expect(res.status).toBe(422);
+  });
+
+  it("should return 422 Unprocessable Entity", async () => {
+    const res = await request(app)
+      .post("/invites")
+      .set({ Authorization: `Bearer ${user2.Access_token}` })
+      .send({ reciever: "dwadwa", user_id: "" });
+    expect(res.body.ErrorMsg).toContain("user_id cannot be empty");
+    expect(res.status).toBe(422);
+  });
+
+  it("should return 422 Unprocessable Entity", async () => {
+    const res = await request(app)
+      .post("/invites")
+      .set({ Authorization: `Bearer ${user2.Access_token}` })
+      .send({ reciever: "dwadwa" });
+    expect(res.body.ErrorMsg).toContain("user_id is required field");
+    expect(res.status).toBe(422);
+  });
+});

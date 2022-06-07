@@ -27,7 +27,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await Invites.deleteOne({ _id: invite_id });
+  await Invites.deleteMany({ user_id: user2.user_id, reciever: dumyUser.username });
 });
 
 describe(`Testing endpoint :/chat-room/:id DELETE`, () => {
@@ -47,5 +47,25 @@ describe(`Testing endpoint :/chat-room/:id DELETE`, () => {
       .send({ user_id: user2.user_id });
     expect(res.status).toBe(404);
     expect(res.body.ErrorMsg).toBe(`Chat room ${invalid_id} not found !`);
+  });
+});
+
+describe(`Testing endpoint :/chat-room/:id DELETE`, () => {
+  it("should return 422 Unprocessable Entity", async () => {
+    const res = await request(app)
+      .delete(`/chat-room/d`)
+      .set({ Authorization: `Bearer ${user2.Access_token}` })
+      .send({ user_id: "" });
+
+    expect(res.status).toBe(422);
+    expect(res.body.ErrorMsg).toBe(`user_id cannot be empty`);
+  });
+  it("should return 422 Unprocessable Entity", async () => {
+    const res = await request(app)
+      .delete(`/chat-room/`)
+      .set({ Authorization: `Bearer ${user2.Access_token}` });
+
+    expect(res.status).toBe(422);
+    expect(res.body.ErrorMsg).toBe(`user_id is required field`);
   });
 });

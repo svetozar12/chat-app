@@ -4,6 +4,7 @@ import { app } from "../src/server";
 import * as data from "./test_dumy_data";
 import User from "../src/models/User.model";
 import chatRoom from "../src/models/chatRoom.model";
+import Invites from "../src/models/Invites.model";
 
 type IUser =
   | {
@@ -44,6 +45,7 @@ afterAll(async () => {
   for (const index in data.users) {
     const user_id = await User.findOne({ username: data.users[index].username });
     await User.deleteOne({ username: data.users[index].username });
+    user_id && (await Invites.deleteMany({ user_id: user_id._id }));
 
     user_id && (await chatRoom.deleteMany({ members: user_id._id }));
   }

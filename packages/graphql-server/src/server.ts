@@ -3,7 +3,7 @@ import { graphqlHTTP } from "express-graphql";
 import Schema from "./index";
 // Construct a schema, using GraphQL schema language
 import handleError from "./middleware/handleError";
-import api from "./utils/axiosInstance";
+import api from "./api_helper";
 
 const app = express();
 app.use(
