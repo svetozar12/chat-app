@@ -2,8 +2,8 @@ import Joi = require("joi");
 import * as Schema from "../../common/schema";
 
 export const GetMessagesSchema = Schema.UserIdSchema.keys({
-  page_size: Joi.number(),
-  page_number: Joi.number(),
+  page_size: Joi.number().messages({ "number.base": `page_size must be of type number` }),
+  page_number: Joi.number().messages({ "number.base": `page_number must be of type number` }),
 });
 
 export const CreateMessageSchema = Schema.UserIdSchema.keys({

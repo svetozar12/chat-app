@@ -74,7 +74,7 @@ describe("Creating group chat :/invites/group-chat", () => {
     const res = await request(app)
       .post("/invites/group-chat")
       .set({ Authorization: `Bearer ${user1.Access_token}` })
-      .send({ user_id: user1.user_id, usersData: [dumyUser.username, dumyUser2.username, dumyUser4.username] });
+      .send({ usersData: [dumyUser.username, dumyUser2.username, dumyUser4.username] });
     expect(res.body.message).toBe("group-chat was created");
     expect(res.status).toBe(201);
   });
@@ -82,7 +82,26 @@ describe("Creating group chat :/invites/group-chat", () => {
     const res = await request(app)
       .post("/invites/group-chat")
       .set({ Authorization: `Bearer ${user1.Access_token}` })
-      .send({ user_id: user1.user_id, usersData: ["nonExistent1", "nonExistent2"] });
+      .send({ usersData: ["nonExistent1", "nonExistent2"] });
+    expect(res.text).toBe('{"ErrorMsg":"User nonExistent1 not found"}');
+    expect(res.status).toBe(404);
+  });
+});
+
+describe("Invalid body :/invites/chatroom", () => {
+  it("should return 422", async () => {
+    const res = await request(app)
+      .post("/invites/group-chat")
+      .set({ Authorization: `Bearer ${user1.Access_token}` })
+      .send({ usersData: "d" });
+    expect(res.body.ErrorMsg).toBe("group-chat was created");
+    expect(res.status).toBe(422);
+  });
+  it("should return 404 Not found", async () => {
+    const res = await request(app)
+      .post("/invites/group-chat")
+      .set({ Authorization: `Bearer ${user1.Access_token}` })
+      .send({ usersData: ["nonExistent1", "nonExistent2"] });
     expect(res.text).toBe('{"ErrorMsg":"User nonExistent1 not found"}');
     expect(res.status).toBe(404);
   });

@@ -48,6 +48,7 @@ describe("Sending message :/:chat_id", () => {
         seenBy: [],
       })
       .set({ Authorization: `Bearer ${user1.Access_token}` });
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(422);
+    expect(res.body.ErrorMsg).toBe("message cannot be an empty field");
   });
 });

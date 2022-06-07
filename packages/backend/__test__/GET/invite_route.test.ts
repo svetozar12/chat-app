@@ -48,8 +48,6 @@ describe("valid invites for user :/invites/:id?status=accepted", () => {
     res.body.invites.forEach((element: { status: string }) => {
       expect(element.status).toBe("accepted");
     });
-    // expect(res.status).toBe(401);
-    // expect(res.body.ErrorMsg).toBe("Can't access other users data");
   });
 });
 
@@ -94,5 +92,16 @@ describe("Bad input/Non existing invites for user :/invites/inviter/:id/", () =>
       .set({ Authorization: `Bearer ${user1.Access_token}` });
     expect(res.status).toBe(401);
     expect(res.body.ErrorMsg).toBe("Can't access other users data");
+  });
+});
+
+describe("invalid body for invites :/invites/:id?status=accepted", () => {
+  it("should return 422", async () => {
+    const res = await request(app)
+      .get(`/invites/${user1.user_id}?status=accepteddawd`)
+      .set({ Authorization: `Bearer ${user1.Access_token}` });
+
+    expect(res.body.ErrorMsg).toBe("status is not valid");
+    expect(res.status).toBe(422);
   });
 });

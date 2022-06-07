@@ -6,7 +6,6 @@ const Validator = (validator: Joi.ObjectSchema<any>, property: "body" | "params"
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await validator.validateAsync(req[property]);
-      console.log(req[property]);
 
       next();
     } catch (error: any) {

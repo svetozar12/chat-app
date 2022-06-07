@@ -6,18 +6,20 @@ import { constants } from "../../constants";
 // validation
 import * as Schema from "../../common/schema";
 import Validator from "../../middlewares/Validator";
-import { CreateGroupChat, CreateInviteSchema, UpdateInviteSchema } from "./schema";
+import { CreateGroupChat, CreateInviteSchema, GetInviteSchema, UpdateInviteSchema } from "./schema";
 const route = Router();
 
 route.get(
   "/:user_id",
   Validator(Schema.UserIdSchema, "params"),
+  Validator(GetInviteSchema, "query"),
   Auth(constants.ACCESS_TOKEN as string),
   errorHandler(InvitesController.GetInvitesByReciever),
 );
 route.get(
   "/inviter/:user_id",
   Validator(Schema.UserIdSchema, "params"),
+  Validator(GetInviteSchema, "query"),
   Auth(constants.ACCESS_TOKEN as string),
   errorHandler(InvitesController.GetInvitesByInviter),
 );

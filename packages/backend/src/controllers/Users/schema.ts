@@ -16,7 +16,7 @@ export const UpdateUserSchema = Joi.object({
   gender: Joi.string().valid("Male", "Female", "Others").trim().messages({
     "string.base": `gender should be of type text`,
     "string.empty": `gender cannot be an empty field`,
-    "string.valid": `gender is not valid`,
+    "any.only": `gender is not valid`,
   }),
 });
 
