@@ -1,6 +1,16 @@
 import TokenSession from "../models/TokenSession.model";
 import expireDate from "./expireAfter";
 
+/**
+ * manageSessions utility function
+ * Creates new document in mongo collection: token_session where we store the session tokens related
+ * to one user and expires them when the token is invalid
+ *
+ * @param user_id is the user_id from the user which logins
+ * @param token the tokens that will be passed are access_token and refresh_token
+ * @param expires time of expiration ex: 1h,1d
+ */
+
 const manageSessions = async (user_id: string, token: string, expires: string) => {
   const hours = expires.indexOf("h") !== -1;
   const days = expires.indexOf("d") !== -1;

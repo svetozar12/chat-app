@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { registerValidation, update_formValidation } from "../../utils/schema";
+// import { registerValidation, update_formValidation } from "../../validators/schema";
 // models
 import User from "../../models/User.model";
 import Invites from "../../models/Invites.model";
@@ -22,13 +22,11 @@ const UsersController: IUsersController = {
   },
 
   CreateUser: async (req: Request, res: Response, next: NextFunction) => {
-    const { error } = registerValidation(req.body);
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
     const gender = req.body.gender;
 
-    if (error) return next(CustomError.conflict(error.message));
     const users = await User.findOne({ username }).exec();
     if (users) return next(CustomError.conflict(`User already exists !`));
 
@@ -51,7 +49,6 @@ const UsersController: IUsersController = {
   },
 
   UpdateUser: async (req: Request, res: Response, next: NextFunction) => {
-    const { error } = update_formValidation(req.body);
     const id = req.params.user_id;
     const username = req.body.username;
     let email = req.body.email;
@@ -60,7 +57,6 @@ const UsersController: IUsersController = {
     const users = await User.findOne({ _id: id }).exec();
     const user_id = users?._id;
     if (!email) email = users?.email;
-    if (error) return next(CustomError.conflict(error.message));
     if (!users) return next(CustomError.notFound("User wasn't found !" + id));
 
     await User.findByIdAndUpdate(user_id, {
