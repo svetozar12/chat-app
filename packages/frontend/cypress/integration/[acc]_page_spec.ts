@@ -39,12 +39,12 @@ describe("The Chat Home Page", () => {
   it("should type and send a message", () => {
     cy.get("textarea").type("testingMessage{enter}");
     cy.get("span").should((span) => {
-      expect(span).to.have.length(2);
+      expect(span).to.have.length(1);
       expect(span.first()).to.contain("testingMessage");
     });
   });
   it("should send invite for chat", () => {
-    cy.get("input").type(`${user2}{enter}`);
+    cy.get("input").type(`${user2}{enter}`, { force: true });
     cy.request({
       method: "GET",
       url: `http://localhost:4002/invites/${user2}?status=recieved`,
@@ -79,17 +79,30 @@ describe("The Chat Home Page", () => {
       cy.setCookie("refresh_token", interception.body.Refresh_token);
     });
     cy.visit(`/${chatInstance}`);
-
-
-
-  })
+  });
   it(`should send message to ${user3}`, () => {
-    cy.get("p").contains(user3).click();
+    cy.get("p").contains(user3).click({ force: true });
     cy.get("textarea").type("anotherTestingMessage{enter}");
     cy.get("span").should((span) => {
       expect(span).to.have.length(2);
       expect(span.first()).to.contain("anotherTestingMessage");
     });
+  });
+  it(`should open settings menu open add to group chat header`, () => {
+    cy.get(".find_friends_icons").children(".add_group").click();
+  });
+  it(`should open settings menu and log out`, () => {
+    cy.get(".find_friends_icons").children(".notifications").click();
+  });
+  it(`should open settings menu and go to settings`, () => {
+    cy.get(".find_friends_icons").children(".dots").click();
+    cy.get(".find_friends_icons").children(".dots").click();
+    cy.get("a").contains("User settings").click();
+    cy.url().should("include", `/settings/profile`);
+    cy.get("button").contains("Go back").click();
+    cy.get("a").contains("Log out").click();
+    cy.authentication(users);
+    cy.get("a").contains("Delete user").click();
   });
   after(() => {
     cy.delete_users(users);

@@ -1,11 +1,6 @@
 import { app } from "../../src/server";
 import * as request from "supertest";
-import {
-  dumyUser,
-  dumyUser2,
-  dumyUser3,
-  invitesDumyData,
-} from "../test_dumy_data";
+import { dumyUser, dumyUser2, dumyUser3, invitesDumyData } from "../test_dumy_data";
 const users = [dumyUser.username, dumyUser2.username, dumyUser3.username];
 let invite_id: any;
 let invalid_id = "22fbf22222f222ce222222c2";
@@ -21,9 +16,7 @@ beforeAll(async () => {
       inviter: "TestingUser3",
       status: "recieved",
     });
-    await request(app)
-      .post("/invites?status=accepted")
-      .send(invitesDumyData[0]);
+    await request(app).post("/invites?status=accepted").send(invitesDumyData[0]);
     return true;
   } catch (error) {
     return false;
@@ -47,9 +40,7 @@ describe("Creating chat-room :/chat-room", () => {
     expect(res.status).toBe(201);
   });
   it("should return 404 User Not found", async () => {
-    const res = await request(app)
-      .put("/chat-room")
-      .send({ id: invite_id, user1: "nonExistent1", user2: "nonExistent2" });
+    const res = await request(app).put("/chat-room").send({ id: invite_id, user1: "nonExistent1", user2: "nonExistent2" });
     expect(res.text).toBe('{"message":"User nonExistent1 not found"}');
     expect(res.status).toBe(404);
   });
@@ -66,9 +57,7 @@ describe("Creating chat-room :/chat-room", () => {
 
 describe("Creating group chat :/invites/group-chat", () => {
   it("should return 201 Created", async () => {
-    const res = await request(app)
-      .post("/invites/group-chat")
-      .send({ usersData: users });
+    const res = await request(app).post("/invites/group-chat").send({ usersData: users });
     expect(res.body.message).toBe("group-chat was created");
     expect(res.status).toBe(201);
   });

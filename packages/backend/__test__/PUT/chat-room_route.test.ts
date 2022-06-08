@@ -16,9 +16,7 @@ beforeAll(async () => {
     });
     chat_id = test_chat_room._id;
     test_chat_room.save();
-    await request(app)
-      .post("/invites?status=accepted")
-      .send(invitesDumyData[0]);
+    await request(app).post("/invites?status=accepted").send(invitesDumyData[0]);
     return true;
   } catch (error) {
     return false;
@@ -33,9 +31,7 @@ afterAll(async () => {
 
 describe(`Testing endpoint :/chat-room/:chat_id`, () => {
   it("should return 200 OK adding users", async () => {
-    const res = await request(app)
-      .put(`/chat-room/${chat_id}`)
-      .send({ usernames: users });
+    const res = await request(app).put(`/chat-room/${chat_id}`).send({ usernames: users });
     console.log(res.body, chat_id);
 
     expect(res.status).toBe(200);

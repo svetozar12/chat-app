@@ -1,15 +1,17 @@
-import ChatRoom from "../ChatRoom/ChatRoom";
+import ChatRoom from "../ChatRoom";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer";
+import { initialState as setState } from "../../redux/reducer/setReducer/setReducer";
+import { initialState as messageState } from "../../redux/reducer/messageReducer/messageReducer";
 import Cookies from "universal-cookie";
 
 const mockStore = configureStore([]);
 const store = mockStore({
-  setReducer: initialState,
+  setReducer: setState,
+  messageReducer: messageState,
 });
 
 jest.mock("next/router", () => ({
@@ -36,6 +38,7 @@ describe("Render connected React-redux page", () => {
   });
 
   it("should render <ChatRoom/>", () => {
+    screen.getByRole("");
     render(
       <Provider store={store}>
         <ChatRoom cookie={cookie} chatId={"321312313"} />

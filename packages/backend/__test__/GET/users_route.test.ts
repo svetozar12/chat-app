@@ -6,9 +6,7 @@ let jwt: string;
 beforeAll(async () => {
   try {
     await request(app).post("/users/register").send(dumyUser);
-    const res: any = await request(app)
-      .post("/auth/login")
-      .send({ username: dumyUser.username, password: dumyUser.password });
+    const res: any = await request(app).post("/auth/login").send({ username: dumyUser.username, password: dumyUser.password });
     jwt = res.body.Access_token;
     return true;
   } catch (error) {
@@ -28,9 +26,7 @@ afterAll(async () => {
 
 describe("Return user and password :/auth/user", () => {
   it("should return 501 server error", async () => {
-    const res = await request(app)
-      .get("/auth/user")
-      .set("Authorization", `Bearer ${jwt}`);
+    const res = await request(app).get("/auth/user").set("Authorization", `Bearer ${jwt}`);
     expect(res.body.authData.username).toBe("TestingUser1");
     expect(res.body.authData.password).toBe("TestingUser1");
     expect(res.status).toBe(200);
@@ -39,9 +35,7 @@ describe("Return user and password :/auth/user", () => {
 
 describe("Passing invalid jwt :/auth/user", () => {
   it("should return 200 OK", async () => {
-    const res = await request(app)
-      .get("/auth/user")
-      .set("Authorization", `Bearer invalidjwt`);
+    const res = await request(app).get("/auth/user").set("Authorization", `Bearer invalidjwt`);
     expect(res.body.ErrorMsg.message).toBe("Token has expired");
     expect(res.status).toBe(501);
   });

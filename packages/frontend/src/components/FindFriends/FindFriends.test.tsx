@@ -1,15 +1,12 @@
 import configureStore from "redux-mock-store";
-import FindFriends from "../FindFriends/FindFriends";
+import FindFriends from "../FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { AuthState } from "../../redux/reducer/authReducer";
-import saveInputReducer from "../../redux/reducer/save_inputReducer";
-import { screen, render, cleanup, RenderResult } from "@testing-library/react";
-import { ReactTestRendererJSON } from "react-test-renderer";
+import { AuthState } from "../../redux/reducer/authReducer/authReducer";
+import saveInputReducer from "../../redux/reducer/save_inputReducer/save_inputReducer";
+import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-let component: ReactTestRendererJSON | ReactTestRendererJSON[] | null;
-let container: RenderResult;
 const socketRef: any = jest.fn();
 const cookie: any = jest.fn();
 const data = {
@@ -24,38 +21,40 @@ const data = {
   setChatSettings: false,
   setModalInvite: false,
 };
-beforeEach(() => {
-  const mockStore = configureStore([]);
-  const store = mockStore({
-    authReducer: AuthState,
-    setReducer: data,
-    saveInputReducer: saveInputReducer,
-  });
+const mockStore = configureStore([]);
+const store = mockStore({
+  authReducer: AuthState,
+  setReducer: data,
+  saveInputReducer: saveInputReducer,
+});
 
-  component = renderer
-    .create(
-      <Provider store={store}>
-        <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
-      </Provider>,
-    )
-    .toJSON();
-
-  container = render(
+const setupRender = () => {
+  const component = render(
     <Provider store={store}>
       <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
     </Provider>,
   );
-});
-
-afterEach(cleanup);
+  return component;
+};
 
 describe("Render connected React-redux page", () => {
+  beforeEach(() => {
+    setupRender();
+  });
   it("should create snapshot for <FindFriends/>", () => {
-    expect(component).toMatchSnapshot();
+    expect(
+      renderer
+        .create(
+          <Provider store={store}>
+            <FindFriends cookie={cookie} cookieName="ivan" socketRef={socketRef} />
+          </Provider>,
+        )
+        .toJSON(),
+    ).toMatchSnapshot();
   });
 
   it("should render <FindFriends/>", () => {
-    const renderedComponent = container.getByRole("searchbox");
+    const renderedComponent = screen.getByRole("searchbox");
     expect(renderedComponent).toBeInTheDocument();
   });
 });

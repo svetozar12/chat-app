@@ -5,25 +5,21 @@ import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState, InitialState3 } from "../redux/state";
+import ISave_inputState from "../redux/reducer/save_inputReducer/state";
+import { IAuthState } from "../redux/reducer/authReducer/state";
 import { actions, wrapper } from "../redux/store";
 import { getFirstChat } from "../utils/getFirstChat";
-import LoginForm from "../components/LoginForm/LoginForm";
+import LoginForm from "../components/LoginForm";
 import { checkJWT, loginAuth } from "../utils/authRoutes";
 
-function login(props: AppProps) {
+function Login(props: AppProps) {
+  const [isLogging, setIsLogging] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const { loginPost } = bindActionCreators(actions, dispatch);
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
-
-  const authState = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
-
+  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const rememberMe = authState.remember_me ? 31556952 : 3600;
   const refreshRememberMe = authState.remember_me ? 63113904 : 7200;
 
@@ -37,13 +33,12 @@ function login(props: AppProps) {
       return;
     }
     if (state.input_username) {
-      const tokens: any = await loginAuth(
-        state.input_username,
-        state.input_password,
-      );
+      const tokens: any = await loginAuth(state.input_username, state.input_password);
 
       const login = await loginPost(state.input_username, state.input_password);
       if (await login) {
+        dispatch({ type: "QUICK_LOGIN", payload: true });
+        setIsLogging(true);
         cookie.set("name", state.input_username, {
           sameSite: "strict",
           maxAge: rememberMe,
@@ -68,35 +63,38 @@ function login(props: AppProps) {
           path: "/",
         });
 
-        dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
+        cookie.set("last_visited_chatRoom", chatInstance._id, {
+          sameSite: "strict",
+          path: "/",
+        });
         router.push(`/${chatInstance._id}`);
+        dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
       return;
     }
   };
 
-  return <LoginForm handleSubmit={handleSubmit} />;
+  return <LoginForm handleSubmit={handleSubmit} isLogging={isLogging} />;
 }
 
-export const getServerSideProps: GetServerSideProps =
-  wrapper.getServerSideProps((store) => async (context) => {
-    const cookie = useCookie(context);
-    await checkJWT(cookie.get("token"));
-    const chatInstance: any = await getFirstChat(cookie.get("name"));
-    if (cookie.has("name") && cookie.has("token")) {
-      return {
-        redirect: {
-          destination: `/${chatInstance._id}`,
-          permanent: false,
-        },
-      };
-    }
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(() => async (context) => {
+  const cookie = useCookie(context);
+  await checkJWT(cookie.get("token"));
+  const chatInstance: any = await getFirstChat(cookie.get("name"));
+  if (cookie.has("name") && cookie.has("token")) {
     return {
-      props: {
-        cookie: context.req.headers.cookie || "",
+      redirect: {
+        destination: `/${chatInstance._id}`,
+        permanent: false,
       },
     };
-  });
+  }
+  return {
+    props: {
+      cookie: context.req.headers.cookie || "",
+    },
+  };
+});
 
-export default login;
+export default Login;

@@ -8,7 +8,7 @@ const route = express.Router();
 route.get("/invites/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
-    let status = req.query.status as string;
+    const status = req.query.status as string;
     const invites =
       status !== undefined
         ? await Invites.find({
@@ -38,7 +38,7 @@ route.get("/invites/:id/", async (req: Request, res: Response) => {
 route.get("/invites/inviter/:id/", async (req: Request, res: Response) => {
   try {
     const name = req.params.id;
-    let status = req.query.status as string;
+    const status = req.query.status as string;
 
     const invites =
       status !== undefined
@@ -110,9 +110,7 @@ route.post("/invites/group-chat", async (req: Request, res: Response) => {
     });
 
     await chat.save();
-    return res
-      .status(201)
-      .json({ message: "group-chat was created", Message: chat });
+    return res.status(201).json({ message: "group-chat was created", Message: chat });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -130,24 +128,16 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     const checkIfExist = await Invites.findOne({ _id: id });
     const checkUser1IfExist = await User.findOne({ username: user1 });
     const checkUser2IfExist = await User.findOne({ username: user2 });
-    if (!checkIfExist)
-      return res.status(404).json({ message: "Invite not found" });
-    if (!checkUser1IfExist)
-      return res.status(404).json({ message: `User ${user1} not found` });
-    if (!checkUser2IfExist)
-      return res.status(404).json({ message: `User ${user2} not found` });
+    if (!checkIfExist) return res.status(404).json({ message: "Invite not found" });
+    if (!checkUser1IfExist) return res.status(404).json({ message: `User ${user1} not found` });
+    if (!checkUser2IfExist) return res.status(404).json({ message: `User ${user2} not found` });
 
-    const findInvite = await Invites.findByIdAndUpdate(
-      id,
-      { status: "accepted" },
-      { new: true },
-    );
+    const findInvite = await Invites.findByIdAndUpdate(id, { status: "accepted" }, { new: true });
 
     const testingUser1 = await User.findOne({ username: user1 });
     const testingUser2 = await User.findOne({ username: user2 });
 
-    if (!testingUser1 || !testingUser2)
-      return res.status(404).json({ error: "User doesn't exist !" });
+    if (!testingUser1 || !testingUser2) return res.status(404).json({ error: "User doesn't exist !" });
 
     if (!findInvite) {
       return res.status(404).json({ Message: "Invite not found" });
@@ -158,9 +148,7 @@ route.put("/chat-room", async (req: Request, res: Response) => {
     });
 
     await chat.save();
-    return res
-      .status(201)
-      .json({ message: "chat-room was created", Message: chat });
+    return res.status(201).json({ message: "chat-room was created", Message: chat });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -187,11 +175,9 @@ route.post("/invites", async (req: Request, res: Response) => {
       $or: [{ status: "recieved" }, { status: "accepted" }],
     });
 
-    if (checkInviteInstance)
-      return res.status(409).json({ ERROR: "Already sent" });
+    if (checkInviteInstance) return res.status(409).json({ ERROR: "Already sent" });
 
-    if (req.body.reciever === req.body.inviter)
-      return res.status(409).json({ ERROR: "Can't send invites to yourself" });
+    if (req.body.reciever === req.body.inviter) return res.status(409).json({ ERROR: "Can't send invites to yourself" });
 
     const invites = await new Invites({
       reciever: req.body.reciever,

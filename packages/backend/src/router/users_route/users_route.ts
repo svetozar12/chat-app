@@ -1,8 +1,5 @@
 import * as express from "express";
-import {
-  registerValidation,
-  update_formValidation,
-} from "../../helpers/schema";
+import { registerValidation, update_formValidation } from "../../helpers/schema";
 import { Request, Response } from "express";
 const route = express.Router();
 import User from "../../models/User.model";
@@ -20,8 +17,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png")
-    cb(null, true);
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") cb(null, true);
 };
 
 const upload = multer({
@@ -76,9 +72,7 @@ route.post("/register", async (req: Request, res: Response) => {
 
     await user.save();
     await chat.save();
-    return res
-      .status(201)
-      .send({ message: `User ${req.body.username} created` });
+    return res.status(201).send({ message: `User ${req.body.username} created` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -88,47 +82,42 @@ route.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-route.put(
-  "/update",
-  upload.single("userAvatar"),
-  async (req: Request, res: Response) => {
-    try {
-      const { error } = update_formValidation(req.body);
-      const username = req.body.username;
-      let email = req.body.email;
-      const gender = req.body.gender;
-      const userAvatar = req.file?.filename;
-      const users = await User.findOne({ username }).exec();
-      if (!email) email = users?.email;
-      const user_id = users?._id;
+route.put("/update", upload.single("userAvatar"), async (req: Request, res: Response) => {
+  try {
+    const { error } = update_formValidation(req.body);
+    const username = req.body.username;
+    let email = req.body.email;
+    const gender = req.body.gender;
+    const userAvatar = req.file?.filename;
+    const users = await User.findOne({ username }).exec();
+    if (!email) email = users?.email;
+    const user_id = users?._id;
 
-      if (error) {
-        return res.status(409).json({ message: error.message });
-      }
-
-      if (!users) return res.status(404).json({ message: "User not found" });
-      await User.findByIdAndUpdate(user_id, {
-        email: email ? email : users.email,
-        gender: gender ? gender : users.gender,
-        userAvatar: email ? userAvatar : users.userAvatar,
-      });
-      return res.status(200).send({ message: `User ${username} info updated` });
-    } catch (error) {
-      return res.status(501).json({
-        ErrorMsg: (error as Error).message,
-        Error: "Internal server error",
-        Message: "Something went wrong while registering",
-      });
+    if (error) {
+      return res.status(409).json({ message: error.message });
     }
-  },
-);
+
+    if (!users) return res.status(404).json({ message: "User not found" });
+    await User.findByIdAndUpdate(user_id, {
+      email: email ? email : users.email,
+      gender: gender ? gender : users.gender,
+      userAvatar: email ? userAvatar : users.userAvatar,
+    });
+    return res.status(200).send({ message: `User ${username} info updated` });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while registering",
+    });
+  }
+});
 
 route.delete("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     const user = await User.findOne({ username }).exec();
-    if (!user)
-      return res.status(404).json({ message: `User ${username} is not found` });
+    if (!user) return res.status(404).json({ message: `User ${username} is not found` });
     await User.deleteOne({ username }).exec();
     await Invites.deleteMany({
       reciever: username,

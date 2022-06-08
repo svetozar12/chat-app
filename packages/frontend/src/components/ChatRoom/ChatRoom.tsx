@@ -3,10 +3,11 @@ import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { InitialStateMessage } from "../../redux/reducer/messageReducer/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import axios from "axios";
-import RenderChat from "../RenderChat/RenderChat";
-import ChatHeader from "../ChatHeader/ChatHeader";
+import RenderChat from "./RenderChat";
+import ChatHeader from "../ChatHeader";
 import timeStamp from "../../utils/timeStamp";
 import { hostUrl, requestUrl } from "../../utils/hostUrl_requestUrl";
 import { useRouter } from "next/router";
@@ -16,6 +17,7 @@ import styled from "@emotion/styled";
 const Message_form = styled.form`
   width: 100%;
   background: var(--main-white);
+  height: 10%;
 `;
 
 interface IHome {
@@ -29,7 +31,8 @@ interface IPropsState {
   time?: string | number;
 }
 
-interface IchatInstance {
+export interface IchatInstance {
+  _id: string;
   sender: string;
   message: string;
   createdAt: string;
@@ -37,31 +40,27 @@ interface IchatInstance {
 
 const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const route = useRouter();
-  const statess = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
+  const statess = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookieName = cookie.get("name");
   const dispatch = useDispatch();
-  const [chat, setChat] = useState<IchatInstance[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
+  const containerRef = React.useRef<null | HTMLDivElement>(null);
   const [state, setState] = useState<IPropsState>({
     name: cookie.get("name"),
     message: "",
     time: "",
   });
 
-  const updateChat = (param: IchatInstance[]) => {
-    setChat((prev) => [...prev, ...param]);
-  };
-
   const getRecentMessages = async () => {
     try {
-      const res = await axios.get(
-        `${requestUrl}/messages/${chatId}?page_number=1&page_size=10`,
-      );
+      const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=1&page_size=10`);
       const data = res.data.reversedArr;
-      updateChat(data);
+      data.forEach((element) => {
+        dispatch({ type: "MESSAGES", payload: element });
+      });
+
       return true;
     } catch (error) {
       return false;
@@ -69,25 +68,19 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   };
 
   useEffect(() => {
-    setChat([]);
     dispatch({ type: "SET_IS_MATCH", payload: false });
-    if (location.href === hostUrl + "/" + chatId)
-      dispatch({ type: "SET_IS_MATCH", payload: true });
-
+    if (location.href === hostUrl + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
+    dispatch({ type: "RESET_MESSAGES" });
     getRecentMessages();
   }, [route.asPath]);
 
   useEffect(() => {
     inputTextArea.current.focus();
-    if (!cookie.get("token") && !cookie.get("refresh_token"))
-      dispatch({ type: "SIGN_OUT" });
+    if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
     socketConnect.on("message", ({ messages }) => {
-      dispatch({
-        type: "MESSAGE_SEND",
-        payload: { sender: cookieName, message: state.message },
-      });
-      updateChat(messages);
+      const [message] = messages;
+      dispatch({ type: "MESSAGES", payload: message });
     });
     socketConnect.emit("joined_chat_room", { user: cookieName });
     setSocketRef(socketConnect);
@@ -103,11 +96,6 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         message: state.message,
       });
 
-      dispatch({
-        type: "MESSAGE_SEND",
-        payload: { sender: cookieName, message: state.message },
-      });
-
       return true;
     } catch (error) {
       return false;
@@ -121,12 +109,12 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
           type: "INCREMENT_PAGE_NUMBER",
           payload: statess.pageNumber,
         });
-        const res = await axios.get(
-          `${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`,
-        );
+        const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`);
         const data = res.data.reversedArr;
 
-        setChat((prev) => [...data, ...prev]);
+        data.forEach((element) => {
+          dispatch({ type: "PAGGINATION_MESSAGES", payload: element });
+        });
       }
       return true;
     } catch (error) {
@@ -134,9 +122,16 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     }
   };
 
-  const onMessageSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
-  ) => {
+  const scrollToBottom = () => {
+    const parent = containerRef.current;
+    parent?.scrollTo(0, parent.scrollHeight);
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messageState.messages]);
+
+  const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     if (state.message) {
       const { name, message, time } = state;
@@ -156,10 +151,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     const target = e.target as HTMLTextAreaElement;
     inputTextArea.current.style.height = "15px";
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
-    inputTextArea.current.style.height = `${Math.min(
-      e.target.scrollHeight,
-      60,
-    )}px`;
+    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -180,15 +172,14 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         padding: 0;
       container`}
     >
-      {socketRef && statess.toggleCreateGroup && (
-        <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />
-      )}
+      {socketRef && statess.toggleCreateGroup && <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />}
 
       <div
+        ref={containerRef}
         className={css`
           flex-direction: column;
           width: 100%;
-          height: 100vh;
+          height: 90%;
           padding: 1rem;
           overflow: auto;
           background-color: var(--main-white);
@@ -196,15 +187,17 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
         `}
         onScroll={scrollHandler}
       >
-        {chat.map((item, index) => {
+        {messageState.messages.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
+
           return (
             <li style={{ listStyle: "none" }} key={index}>
               <RenderChat
                 key={index}
                 chatId={chatId}
                 cookie={cookie.get("name")}
+                id={item._id}
                 sender={sender}
                 time_stamp={time_stamp}
                 message={message}
@@ -228,6 +221,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
             margin: 0.5rem 0;
             padding: 0.5rem 2rem;
             overflow-wrap: break-word;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           flex`}
           onClick={() => inputTextArea.current.focus()}
         >
@@ -253,6 +249,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
           />
           <div
             className={css`
+              display:flex;
+              justify-content: center;
+              align-items: center;
               cursor: pointer;
               padding: 0.3rem 0 0.3rem 0.5rem;
               border: 1px transperant;

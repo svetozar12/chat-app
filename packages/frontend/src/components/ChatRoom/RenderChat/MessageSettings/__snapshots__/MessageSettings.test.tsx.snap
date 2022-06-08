@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Render connected React-redux page should create snapshot for <MessageSettings/> 1`] = `
+<div
+  className="css-6nkqal"
+  title="message_settings"
+>
+  <button
+    className="css-1g7lucf"
+    onClick={[Function]}
+  >
+    Delete Message
+  </button>
+  <button
+    className="css-1g7lucf"
+    onClick={[Function]}
+  >
+    Edit Message
+  </button>
+</div>
+`;

@@ -1,13 +1,11 @@
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { AddUsers_Modal } from "../AddUsers_Modal/AddUsers_Modal";
+import AddUsers_Modal from "../AddUsers_Modal";
 import renderer from "react-test-renderer";
-import { AuthState } from "../../redux/reducer/authReducer";
+import { AuthState } from "../../redux/reducer/authReducer/authReducer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import React from "react";
-import { shallow } from "enzyme";
-import toJson from "enzyme-to-json";
 const submit: any = jest.fn();
 const mockStore = configureStore([]);
 const store = mockStore({
@@ -17,13 +15,7 @@ const store = mockStore({
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <AddUsers_Modal
-        users={["ivan", "greg"]}
-        socketRef={submit}
-        setLocalStatus={submit}
-        setUsers={submit}
-        chatId={"321312312321"}
-      />
+      <AddUsers_Modal users={["ivan", "greg"]} socketRef={submit} setLocalStatus={submit} setUsers={submit} chatId={"321312312321"} />
     </Provider>,
   );
   return component;
@@ -38,13 +30,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <AddUsers_Modal
-              users={["ivan", "greg"]}
-              socketRef={submit}
-              setLocalStatus={submit}
-              setUsers={submit}
-              chatId={"321312312321"}
-            />
+            <AddUsers_Modal users={["ivan", "greg"]} socketRef={submit} setLocalStatus={submit} setUsers={submit} chatId={"321312312321"} />
           </Provider>,
         )
         .toJSON(),

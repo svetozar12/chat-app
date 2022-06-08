@@ -1,37 +1,29 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { GrClose } from "react-icons/gr";
-import { CheckBox_component } from "../CheckBox_component/CheckBox_component";
+import CheckBox_component from "../CheckBox_component";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { Socket } from "socket.io-client";
 import axios from "axios";
-export const AddUsers_Modal = ({
-  users,
-  socketRef,
-  setLocalStatus,
-  chatId,
-  setUsers,
-}: {
+import { css } from "@emotion/css";
+
+interface IAddUsers_Modal {
   users: string[];
   socketRef: Socket;
-  setLocalStatus: React.Dispatch<React.SetStateAction<string>>;
   chatId: string;
   setUsers: React.Dispatch<React.SetStateAction<any[]>>;
-}) => {
+}
+
+const AddUsers_Modal = ({ users, socketRef, chatId, setUsers }: IAddUsers_Modal) => {
   const [invited, setInvited] = React.useState<string[]>([]);
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
-
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const addMembers = async (user: string[]) => {
     try {
-      setLocalStatus("d");
       await axios.put(`${requestUrl}/chat-room/${chatId}`, {
         usernames: user,
       });
-      setLocalStatus("");
       return true;
     } catch (error) {
       return false;
@@ -53,11 +45,29 @@ export const AddUsers_Modal = ({
   };
 
   return (
-    <div className="fRequests_modal">
-      <section
-        style={{ position: "relative", textAlign: "center" }}
-        className="modal_heading flex"
-      >
+    <div
+      className={css`
+        position: fixed;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        justify-content: !important start;
+        z-index: 9999;
+        width: 40%;
+        background: var(--main-white);
+        overflow: hidden;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        @media (min-width: 1010px) {
+          width: 70%;
+        }
+      `}
+    >
+      <section style={{ position: "relative", textAlign: "center" }} className="modal_heading flex">
         <h1 style={{ padding: "0 25%" }}>Add people</h1>
         <div
           onClick={() => {
@@ -72,20 +82,10 @@ export const AddUsers_Modal = ({
           <GrClose style={{ width: "2rem", height: "2rem" }} />
         </div>
       </section>
-      <div
-        className="flex"
-        style={{ overflowY: "auto", width: "100%", flexDirection: "column" }}
-      >
+      <div className="flex" style={{ overflowY: "auto", width: "100%", flexDirection: "column" }}>
         {users.length === 0 && <h1>No Chat suggestions</h1>}
         {users.map((item, index) => {
-          return (
-            <CheckBox_component
-              key={index}
-              invited={invited}
-              setInvited={setInvited}
-              item={item}
-            />
-          );
+          return <CheckBox_component key={index} invited={invited} setInvited={setInvited} item={item} />;
         })}
       </div>
       <div className="modal_footer flex">
@@ -96,3 +96,5 @@ export const AddUsers_Modal = ({
     </div>
   );
 };
+
+export default AddUsers_Modal;

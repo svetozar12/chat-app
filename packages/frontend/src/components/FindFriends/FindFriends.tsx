@@ -2,58 +2,16 @@ import React from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialState2, InitialState3 } from "../../redux/state";
+import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
-import styled from "@emotion/styled";
-import { css } from "@emotion/css";
-import UserSettings from "../UserSettings/UserSettings";
-const Form = styled.form`
-  width: 100%;
-  margin: 0;
-  padding: 1rem;
-  justify: flex-start;
-  position: relative;
-`;
+import { css, cx } from "@emotion/css";
+import UserSettings from "../UserSettings";
 
-const Closed_hamburger = styled.div`
-  width: 95%;
-  height: 3rem;
-  margin-bottom: 1rem;
-  position: relative;
-`;
-
-const Form_input = styled.input`
-  width: 90%;
-  margin: 0 1rem;
-  background: transparent;
-  border: none;
-`;
-
-const Profile = styled.div`
-  display: flex;
-  width: 95%;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 0 1rem;
-`;
-
-const User_logo = styled.img`
-  width: 2.8rem;
-  height: 2.8rem;
-  color: var(--main-logo-color);
-  margin-right: 1rem;
-  border-radius: 100px;
-  position: relative;
-  zindex: 10;
-  &:hover {
-    background: rgba(122, 122, 122, 0.4);
-  }
-`;
 export interface IFindFriends {
   cookieName: string;
   socketRef: Socket;
@@ -86,13 +44,9 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
     getUserImage(cookieName);
   }, []);
 
-  const state = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
-  const notifState = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   const toggleGroupCreate = () => {
     dispatch({
@@ -127,9 +81,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       return false;
     }
   };
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     if (state.reciever) {
       await sendInvite();
@@ -138,15 +90,59 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   };
 
   return (
-    <Form
+    <form
+      className={css`
+        width: 100%;
+        margin: 0;
+        padding: 1rem;
+        display: flex;
+        justify: flex-start;
+        position: relative;
+        margin-bottom: 1rem;
+        align-items: center;
+      `}
       onSubmit={handleSubmit}
-      style={{ marginBottom: "1rem", alignItems: "center" }}
     >
-      <Closed_hamburger></Closed_hamburger>
-      <Profile>
+      <div
+        className={css`
+          width: 95%;
+          height: 3rem;
+          margin-bottom: 1rem;
+          position: relative;
+        `}
+      ></div>
+      <div
+        className={css`
+          display: flex;
+          width: 95%;
+          justify-content: space-between;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          margin: 0 1rem;
+        `}
+      >
+        {/* refactor to new component bellow */}
         <div className="flex">
           {hasAvatar ? (
-            <User_logo src={image} className="click" />
+            <img
+              alt="user_avatar"
+              src={image}
+              className={cx(
+                "click",
+                css`
+                  width: 2.8rem;
+                  height: 2.8rem;
+                  color: var(--main-logo-color);
+                  margin-right: 1rem;
+                  border-radius: 100px;
+                  position: relative;
+                  zindex: 10;
+                  &:hover {
+                    background: rgba(122, 122, 122, 0.4);
+                  }
+                `,
+              )}
+            />
           ) : (
             <FaUserCircle
               className={css`
@@ -161,6 +157,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
           )}
           <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}>Chats</h1>
         </div>
+        {/* refactor to new component above */}
         <div className="flex find_friends_icons">
           <div
             className="flex notifications"
@@ -173,12 +170,10 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             }}
           >
             <IoNotifications />
-            {notifState.notification_number != 0 && (
-              <div className="flex">{notifState.notification_number}</div>
-            )}
+            {notifState.notification_number != 0 && <div className="flex">{notifState.notification_number}</div>}
           </div>
           <div
-            className="flex"
+            className="flex add_group"
             style={{
               cursor: "pointer",
             }}
@@ -187,7 +182,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             <AiOutlineUsergroupAdd />
           </div>
           <div
-            className="flex"
+            className="flex dots"
             style={{
               cursor: "pointer",
               position: "relative",
@@ -204,24 +199,40 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
           </div>
         </div>
-      </Profile>
+      </div>
       <div className="flex" style={{ width: "95%", position: "relative" }}>
-        <div className="search-bar">
-          <BsSearch
-            style={{ cursor: "pointer", color: "black" }}
-            onClick={handleSubmit}
-          />
-          <Form_input
-            onChange={(e) =>
-              dispatch({ type: "SET_RECIEVER", payload: e.target.value })
+        <div
+          className={css`
+            width: 95%;
+            border-radius: 25px;
+            margin: 1rem 0;
+            padding: 0.3rem;
+            background: rgba(122, 122, 122, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &:focus-within {
+              box-shadow: 0 0 5px;
             }
+          `}
+        >
+          <BsSearch style={{ cursor: "pointer", color: "black" }} onClick={handleSubmit} />
+          <input
+            className={css`
+              width: 90%;
+              margin: 0 1rem;
+              background: transparent;
+              border: none;
+              outline: none;
+            `}
+            onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
             placeholder="Search for chats"
             value={state.reciever}
             type="search"
           />
         </div>
       </div>
-    </Form>
+    </form>
   );
 }
 

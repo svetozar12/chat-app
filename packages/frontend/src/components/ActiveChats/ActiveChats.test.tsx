@@ -1,11 +1,10 @@
 import ActiveChats from "./ActiveChats";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer";
+import { initialState } from "../../redux/reducer/setReducer/setReducer";
 import "@testing-library/jest-dom";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 
 const socketRef: any = jest.fn();
 const dumy: string[] = ["ivan", "gerg"];

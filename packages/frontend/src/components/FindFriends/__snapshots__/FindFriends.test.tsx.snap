@@ -2,20 +2,14 @@
 
 exports[`Render connected React-redux page should create snapshot for <FindFriends/> 1`] = `
 <form
-  className="css-wbcx05"
+  className="css-zv9gyt"
   onSubmit={[Function]}
-  style={
-    Object {
-      "alignItems": "center",
-      "marginBottom": "1rem",
-    }
-  }
 >
   <div
-    className="css-1q40041"
+    className="css-1k4crzf"
   />
   <div
-    className="css-1j8uik1"
+    className="css-1s4m24a"
   >
     <div
       className="flex"
@@ -153,7 +147,7 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
     }
   >
     <div
-      className="search-bar"
+      className="css-16jj1i0"
     >
       <svg
         fill="currentColor"
@@ -176,7 +170,7 @@ exports[`Render connected React-redux page should create snapshot for <FindFrien
         />
       </svg>
       <input
-        className="css-l00huz"
+        className="css-1xg5m5i"
         onChange={[Function]}
         placeholder="Search for chats"
         type="search"

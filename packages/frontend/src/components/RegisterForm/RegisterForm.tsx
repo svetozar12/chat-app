@@ -1,51 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
-import { InitialState, InitialState3 } from "../../redux/state";
-import styled from "@emotion/styled";
-import { Alerts } from "../Alerts/Alerts";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
+import Alerts from "../Alerts";
 import { css } from "@emotion/css";
-import {
-  Form,
-  Button,
-  Input,
-  Form_header,
-  Label_container,
-} from "../LoginForm/LoginForm";
-
-export const Label_button = styled.label`
-  margin: 0 2rem;
-  border-radius: 5px;
-  width: 4rem;
-  text-align: center;
-  padding: 0.5rem;
-  color: var(--main-white);
-  background: rgba(0, 105, 217, 0.5);
-  cursor: pointer;
-  display: block;
-`;
+import { Form, Button, Input, Form_header, Label_container, Label_button } from "../styledComponents";
+import QuickLogin_Modal from "./QuickLogin_Modal";
 
 function RegisterForm({
   quickLogin,
+  isLogging,
   handleSubmit,
 }: {
+  isLogging: boolean;
   quickLogin(): void;
+  // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) {
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
 
-  const inputState = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   return (
-    <div
-      title="register_form"
-      style={{ height: "100vh", flexDirection: "column" }}
-      className="flex"
-    >
+    <div title="register_form" style={{ height: "100vh", flexDirection: "column" }} className="flex">
       {(state.good || state.bad) && <Alerts />}
       <Form_header>Register</Form_header>
       <Form style={{ height: "70vh" }}>
@@ -53,9 +31,7 @@ function RegisterForm({
           <label>Username</label>
           <Input
             value={inputState.input_username}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })}
             type="text"
             name="username"
             placeholder="username ..."
@@ -65,9 +41,7 @@ function RegisterForm({
           <label>Password</label>
           <Input
             value={inputState.input_password}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })}
             type="password"
             name="password"
             placeholder="password ..."
@@ -77,9 +51,7 @@ function RegisterForm({
           <label>Email</label>
           <Input
             value={inputState.input_email}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_EMAIL", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_EMAIL", payload: e.target.value })}
             type="email"
             name="email"
             placeholder="email ..."
@@ -136,20 +108,8 @@ function RegisterForm({
             Already have an account?
           </a>
         </Link>
-        {state.loginPrompt && (
-          <div
-            className={css`
-              cursor: pointer;
-              @media (max-width: 431px) {
-                font-size: 0.689rem;
-              } ;
-            `}
-            onClick={quickLogin}
-          >
-            <h2>Click me to Quick login</h2>
-          </div>
-        )}
       </Form>
+      {state.loginPrompt && <QuickLogin_Modal isLogging={isLogging} quickLogin={quickLogin} />}
     </div>
   );
 }

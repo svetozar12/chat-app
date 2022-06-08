@@ -1,40 +1,16 @@
 import React from "react";
 import Link from "next/dist/client/link";
 import { useSelector, useDispatch } from "react-redux";
-import { InitialState3 } from "../../redux/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { css } from "@emotion/css";
-import styled from "@emotion/styled";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
-import { Form, Button, Input } from "../LoginForm/LoginForm";
-import { Label_button } from "../RegisterForm/RegisterForm";
+import { Form, Button, Input, Label_button } from "../styledComponents";
 import { AiFillPlusCircle } from "react-icons/ai";
 
-const Input_file_container = styled.div`
-  margin-top: 2rem;
-`;
-
-const Input_file = styled.label`
-  margin-top: 1rem;
-  border-radius: 5px;
-  width: 60%;
-  background-color: var(--button-blue);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-  text-align: center;
-  &:hover {
-    opacity: 0.7;
-    transition: 0.2s;
-  }
-`;
-
-export const UpdateInfoForm = ({
+const UpdateInfoForm = ({
   url,
   handleSubmit,
+  image,
   setImage,
   cookieName,
 }: {
@@ -45,9 +21,7 @@ export const UpdateInfoForm = ({
   cookieName: string;
 }) => {
   const dispatch = useDispatch();
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   return (
     <main
@@ -74,7 +48,6 @@ export const UpdateInfoForm = ({
         <h1
           className={css`
             font-size: 2vw;
-            margin-right: 1rem;
             margin-top: 3rem;
           `}
         >
@@ -85,18 +58,27 @@ export const UpdateInfoForm = ({
             position: relative;
             width: 6rem;
             height: 6rem;
-            margin-right: 1rem;
           `}
         >
-          <Single_avatar cookieName={cookieName} width="6rem" height="6rem" />
+          {/* <p>{image}</p> */}
+          <Single_avatar inviter="" cookieName={cookieName} width="6rem" height="6rem" preview={image} />
           <label
             className={css`
-              width: 2rem;
-              height: 2rem;
-              position: absolute;
-              bottom: 0;
-              right: 0;
+              width: 6rem;
+              height: 6rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
               cursor: pointer;
+              position: absolute;
+              top: 0;
+              transition: 0.2s;
+              border-radius: 100%;
+              border: none;
+              &:hover {
+                background: rgba(0, 0, 0, 0.1);
+                transition: 0.2s;
+              }
             `}
             htmlFor="file"
           >
@@ -104,22 +86,43 @@ export const UpdateInfoForm = ({
               className={css`
                 width: 2rem;
                 height: 2rem;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                z-index: 10;
                 transition: 0.2s;
-                &:hover {
-                  opacity: 0.7;
+                &: hover {
+                  opacity: 0.9;
                   transition: 0.2s;
                 }
               `}
             />
           </label>
         </div>
-        <Input_file
-          style={{ margin: "2rem 1rem 0 0" }}
-          className="input_file"
+        <label
+          className={css`
+            margin: "2rem 1rem 0 0";
+            margin-top: 1rem;
+            border-radius: 5px;
+            width: 60%;
+            background-color: var(--button-blue);
+            color: var(--main-white);
+            border: 1px solid var(--input-border-color);
+            padding: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: center;
+            &:hover {
+              opacity: 0.7;
+              transition: 0.2s;
+            }
+          `}
           htmlFor="file"
         >
           Add file
-        </Input_file>
+        </label>
       </section>
       <Form
         style={{
@@ -188,7 +191,12 @@ export const UpdateInfoForm = ({
             <Label_button htmlFor="Female">Female</Label_button>
           </div>
         </div>
-        <Input_file_container>
+
+        <div
+          className={css`
+            margin-top: 2rem;
+          `}
+        >
           <input
             type="file"
             name="userAvatar"
@@ -198,12 +206,8 @@ export const UpdateInfoForm = ({
             style={{ display: "none" }}
             onChange={(e: any) => setImage(e.target.files[0])}
           />
-        </Input_file_container>
-        <Button
-          style={{ fontSize: "1vw", textAlign: "center" }}
-          onClick={handleSubmit}
-          type="submit"
-        >
+        </div>
+        <Button style={{ fontSize: "1vw", textAlign: "center" }} onClick={handleSubmit} type="submit">
           Save
         </Button>
         <Link href={`/${url}`}>
@@ -213,3 +217,5 @@ export const UpdateInfoForm = ({
     </main>
   );
 };
+
+export default UpdateInfoForm;

@@ -1,28 +1,21 @@
-import "../../styles/globals.css";
+import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { useEffect } from "react";
 import { wrapper } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { InitialState, InitialState2 } from "../redux/state";
+import { IAuthState } from "../redux/reducer/authReducer/state";
+import { IInitialSet } from "../redux/reducer/setReducer/state";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { checkJWT, checkRefreshToken } from "../utils/authRoutes";
 import { Global } from "@emotion/react";
-import styled from "@emotion/styled";
+import { css } from "@emotion/css";
 import Head from "next/head";
-const MyApp = (
-  { Component, pageProps }: AppProps,
-  props: { cookie: string },
-) => {
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
+const MyApp = ({ Component, pageProps }: AppProps, props: { cookie: string }) => {
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
-  const setState = useSelector(
-    (state: { setReducer: InitialState2 }) => state.setReducer,
-  );
+  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie(props.cookie);
@@ -73,29 +66,21 @@ const MyApp = (
       type: "SET_MODAL_INVITE",
       payload: false,
     });
+    dispatch({
+      type: "QUICK_LOGIN",
+      payload: false,
+    });
   };
-
-  const BIG = styled.div`
-    position: absolute;
-    z-index: ${setState.setFriendRequest || setState.setModalInvite
-      ? "100"
-      : "-1"};
-    width: 100vw;
-    height: 100vh;
-    opacity: 0.7;
-    background: radial-gradient(
-      var(--gradient-first) 10%,
-      var(--gradient-second) 100%
-    );
-  `;
 
   return (
     <>
       <Global
+        // @ts-ignore
         styles={{
           body: {
             margin: 0,
             padding: 0,
+            userSelect: setState.setFriendRequest || setState.setModalInvite || state.loginPrompt ? "none" : "select",
           },
           a: {
             textDecoration: "none",
@@ -105,13 +90,24 @@ const MyApp = (
       <Head>
         <title>Chat what</title>
       </Head>
-      <BIG onClick={closeModals}></BIG>
+      <div
+        className={css`
+          position: absolute;
+          z-index: ${setState.setFriendRequest || setState.setModalInvite || state.loginPrompt ? "100" : "-1"};
+          width: 100vw;
+          height: 100vh;
+          opacity: 0.7;
+          background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
+        `}
+        onClick={closeModals}
+      ></div>
       <Component {...pageProps} />
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cookie = useCookie(context);
   if (!cookie.has("name")) {
     return {

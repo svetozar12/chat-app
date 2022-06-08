@@ -1,6 +1,6 @@
 import React from "react";
-import RegisterForm from "../components/RegisterForm/RegisterForm";
-import { InitialState3 } from "../redux/state";
+import RegisterForm from "../components/RegisterForm";
+import ISave_inputState from "../redux/reducer/save_inputReducer/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -10,16 +10,16 @@ import { actions } from "../redux/store";
 import { loginAuth } from "../utils/authRoutes";
 import { getFirstChat } from "../utils/getFirstChat";
 
-function register(props: { cookie: string }) {
+function Register(props: { cookie: string }) {
+  const [isLogging, setIsLogging] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const { registerPost } = bindActionCreators(actions, dispatch);
-  const state = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   const quickLogin = async () => {
+    setIsLogging(true);
     const JWT = await loginAuth(state.input_username, state.input_password);
     cookie.set("name", state.input_username, {
       sameSite: "strict",
@@ -41,20 +41,18 @@ function register(props: { cookie: string }) {
     });
 
     dispatch({ type: "SIGN_IN", payload: cookie.get("name") });
-
     router.push(`/${chatInstance._id}`);
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const register = await registerPost(
-      state.input_username,
-      state.input_password,
-      state.input_email,
-      state.input_gender,
-    );
+    const register = await registerPost(state.input_username, state.input_password, state.input_email, state.input_gender);
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
+      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
+      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
+      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
+      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
     } else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
       dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
@@ -63,10 +61,11 @@ function register(props: { cookie: string }) {
     }
   };
 
-  return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
+  return <RegisterForm isLogging={isLogging} quickLogin={quickLogin} handleSubmit={handleSubmit} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cookie = useCookie(context);
   const chatInstance: any = await getFirstChat(cookie.get("name"));
 
@@ -84,4 +83,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default register;
+export default Register;

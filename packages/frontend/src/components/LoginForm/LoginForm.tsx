@@ -1,53 +1,15 @@
 import { useSelector, useDispatch } from "react-redux";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
+import { Label_container, Form_header, Form, Button, Input } from "../styledComponents/index";
 import Link from "next/dist/client/link";
-import { InitialState, InitialState3 } from "../../redux/state";
 import styled from "@emotion/styled";
-import { Alerts } from "../Alerts/Alerts";
-
-export const Input = styled.input`
-  width: 100%;
-  height: 2rem;
-  margin: 0.5rem 0;
-  border: 1px solid var(--input-border-color);
-  border-radius: 5px;
-  transition: 0.3s;
-  padding: 1.3rem 0.9rem;
-`;
+import Alerts from "../Alerts";
+import Loading from "../Loading";
 
 const CheckBox = styled.input`
   width: 20px;
   height: 40px;
-`;
-
-export const Form = styled.form`
-  width: 40%;
-  height: 60vh;
-  padding: 3rem;
-  border-radius: 5px;
-  background: #fff;
-  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
-  @media (max-width: 1010px) {
-    padding: 0rem;
-    width: 90%;
-  }
-`;
-
-export const Button = styled.button`
-  margin-top: 1rem;
-  border-radius: 5px;
-  width: 60%;
-  background-color: var(--button-blue);
-  color: var(--main-white);
-  border: 1px solid var(--input-border-color);
-  padding: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-size: 1rem;
-  &:hover {
-    opacity: 0.7;
-    transition: 0.2s;
-  }
 `;
 
 const Clickable = styled.div`
@@ -62,39 +24,17 @@ const Link_anchor = styled.a`
   margin: 1rem;
 `;
 
-export const Label_container = styled.div`
-  dispay: flex;
-  flex-direction: collumn;
-  width: 60%;
-`;
-
-export const Form_header = styled.h1`
-  padding: 1rem;
-  height: auto;
-  text-align: center;
-  margin: 0;
-  width: 40%;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  color: var(--main-white);
-  background: var(--form-gray);
-  @media (max-width: 1010px) {
-    width: 90%;
-  }
-`;
-
 function LoginForm({
   handleSubmit,
+  isLogging,
 }: {
+  // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  isLogging: boolean;
 }) {
-  const state = useSelector(
-    (state: { authReducer: InitialState }) => state.authReducer,
-  );
+  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
-  const inputState = useSelector(
-    (state: { saveInputReducer: InitialState3 }) => state.saveInputReducer,
-  );
+  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const dispatch = useDispatch();
 
   return (
@@ -107,9 +47,7 @@ function LoginForm({
           <label>Username</label>
           <Input
             value={inputState.input_username}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value })}
             type="text"
             name="username"
             placeholder="username ..."
@@ -119,23 +57,19 @@ function LoginForm({
           <label>Password</label>
           <Input
             value={inputState.input_password}
-            onChange={(e) =>
-              dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })
-            }
+            onChange={(e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value })}
             type="password"
             name="password"
             placeholder="password ..."
           />
         </Label_container>
+        {isLogging && <Loading />}
         <Button onClick={handleSubmit} type="submit">
           Log In
         </Button>
         <Clickable>
           <Link href="/register">
-            <Link_anchor
-              className="link"
-              style={{ color: "var(--button-blue)" }}
-            >
+            <Link_anchor className="link" style={{ color: "var(--button-blue)" }}>
               Sign up for chatApp .
             </Link_anchor>
           </Link>

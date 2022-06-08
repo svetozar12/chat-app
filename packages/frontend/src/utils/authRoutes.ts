@@ -5,10 +5,7 @@ export interface ITokens {
   JWT: string | false;
   refreshJWT: string | false;
 }
-export const createJWT = async (
-  input_username: string,
-  input_password: string,
-): Promise<ITokens | false> => {
+export const createJWT = async (input_username: string, input_password: string): Promise<ITokens | false> => {
   try {
     const res = await axios.post(`${requestUrl}/auth/login`, {
       username: input_username,
@@ -60,12 +57,10 @@ export const checkJWT = async (JWT: string): Promise<string | false> => {
   }
 };
 
-export const loginAuth = async (
-  input_username: string,
-  input_password: string,
-) => {
+export const loginAuth = async (input_username: string, input_password: string) => {
   try {
     const tokens = await createJWT(input_username, input_password);
+    // @ts-ignore
     await checkJWT(tokens.JWT);
     return tokens;
   } catch (error) {

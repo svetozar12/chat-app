@@ -40,19 +40,15 @@ route.post("/login", async (req: Request, res: Response) => {
 
     if (!result) return res.status(409);
 
-    if (!user_db)
-      return res.status(400).json({ ErrorMsg: "User not registered" });
+    if (!user_db) return res.status(400).json({ ErrorMsg: "User not registered" });
 
     const isMatch = await user_db.isValidPassword(result.password);
 
-    if (!isMatch)
-      return res.status(401).json({ message: "Password is not valid" });
+    if (!isMatch) return res.status(401).json({ message: "Password is not valid" });
 
     const access = await signTokens(user, ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, REFRESH_TOKEN, expire.refresh);
-    return res
-      .status(201)
-      .json({ Access_token: access, Refresh_token: refresh });
+    return res.status(201).json({ Access_token: access, Refresh_token: refresh });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
@@ -80,11 +76,7 @@ route.post("/refresh", async (req: any, res) => {
       };
 
       const accessToken = await signTokens(user, ACCESS_TOKEN, expire.access);
-      const refreshToken = await signTokens(
-        user,
-        REFRESH_TOKEN,
-        expire.refresh,
-      );
+      const refreshToken = await signTokens(user, REFRESH_TOKEN, expire.refresh);
       return res.status(201).json({
         username: refresh.username,
         Access_token: accessToken,

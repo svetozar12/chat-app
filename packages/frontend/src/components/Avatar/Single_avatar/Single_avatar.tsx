@@ -1,19 +1,19 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import { jsx } from "@emotion/react";
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { css } from "@emotion/css";
-
 const logo_post_overlay = css`
   z-index: 1;
 `;
 
 const group_logo = css`
+  borderradius: "50px";
+  margin: 0;
   width: 2.6rem;
   height: 2.6rem;
+  background: white;
+  border-radius: 100%;
 `;
 function Single_avatar({
   inviter,
@@ -22,13 +22,15 @@ function Single_avatar({
   height,
   overlay,
   group,
+  preview,
 }: {
-  inviter?: string;
+  inviter: string;
   cookieName: string;
   width?: string;
   height?: string;
   overlay?: boolean;
   group?: boolean;
+  preview?: string;
 }) {
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
@@ -56,23 +58,36 @@ function Single_avatar({
 
   return (
     <div style={{ marginRight: "1rem" }}>
-      {hasAvatar ? (
+      {preview ? (
         <img
-          src={image}
-          style={{
-            borderRadius: "50px",
-            width: width,
-            height: height,
-            margin: "0",
-          }}
+          alt={`${cookieName} logo`}
+          // @ts-ignore
+          src={URL.createObjectURL(preview)}
           className={`${
             group
               ? group_logo
               : css`
-                  width: 3.5rem;
-                  height: 3.5rem;
+                  border-radius: 50px;
+                  margin: 0;
+                  width: ${width || "3.5rem"};
+                  height: ${height || "3.5rem"};
                   color: var(--main-logo-color);
-                  marginright: "1rem";
+                `
+          } ${overlay && logo_post_overlay}`}
+        />
+      ) : hasAvatar ? (
+        <img
+          alt={`${cookieName} logo`}
+          src={image}
+          className={`${
+            group
+              ? group_logo
+              : css`
+                  border-radius: 50px;
+                  margin: 0;
+                  width: ${width || "3.5rem"};
+                  height: ${height || "3.5rem"};
+                  color: var(--main-logo-color);
                   ${overlay ? "bottom: 0;" : "top:0"}
                   ${overlay ? "left: 0;" : "right:0"}
                 `

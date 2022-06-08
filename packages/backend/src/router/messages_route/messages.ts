@@ -1,7 +1,6 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import Messages from "../../models/Message.model";
-import User from "../../models/User.model";
 const route = express.Router();
 
 route.get("/:chat_id", async (req: Request, res: Response) => {
@@ -13,8 +12,7 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
       .limit(page_size)
       .skip((page_number - 1) * page_size)
       .sort({ createdAt: "desc" });
-    if (messages.length <= 0 || !messages)
-      return res.status(404).json({ message: "You don't have messages." });
+    if (messages.length <= 0 || !messages) return res.status(404).json({ message: "You don't have messages." });
     const reversedArr = messages.reverse();
     return res.status(200).json({ message: "You have messages.", reversedArr });
   } catch (error) {
@@ -23,6 +21,24 @@ route.get("/:chat_id", async (req: Request, res: Response) => {
       ErrorMsg: (error as Error).message,
       Error: "Internal server error",
       Message: "Something went wrong while sending the msg",
+    });
+  }
+});
+
+route.put("/:_id", async (req: Request, res: Response) => {
+  try {
+    const _id = req.params._id;
+    console.log(_id);
+    const newMessage: string = req.body.newMessage;
+    if (newMessage === "" || newMessage === null) return res.status(200).json({ message: "Message didn't change" });
+    const user = Messages.findByIdAndUpdate(_id, { message: newMessage }).exec();
+    if (!user) return res.status(404).json({ message: "Message wasn't found" });
+    return res.status(200).send({ message: `Message has been updated` });
+  } catch (error) {
+    return res.status(501).json({
+      ErrorMsg: (error as Error).message,
+      Error: "Internal server error",
+      Message: "Something went wrong while registering",
     });
   }
 });
@@ -51,24 +67,13 @@ route.post("/:chat_id", async (req: Request, res: Response) => {
   }
 });
 
-route.delete("/:chat_id", async (req: Request, res: Response) => {
+route.delete("/:message_id", async (req: Request, res: Response) => {
   try {
-    const chat_id = req.params.chat_id;
-    const sender = req.body.sender;
-    const message = req.body.message;
-    const isUser = await User.findOne({ username: sender });
-    if (!isUser)
-      return res.status(404).json({ message: `User: ${sender} not found` });
-    const isMessages = await Messages.findOne({
-      chatInstance: chat_id,
-      message,
-    });
-    if (!isMessages)
-      return res.status(404).json({ message: `Message: ${message} not found` });
-    await Messages.deleteOne({ chatInstance: chat_id, message, sender });
-    return res
-      .status(200)
-      .json({ message: `Message ${message} has been deleted` });
+    const message_id = req.params.message_id;
+    const isMessage = await Messages.findOne({ _id: message_id });
+    if (!isMessage) return res.status(404).json({ message: `Message not found` });
+    await Messages.deleteOne({ _id: message_id }).exec();
+    return res.status(200).json({ message: `Message  has been deleted` });
   } catch (error) {
     return res.status(501).json({
       ErrorMsg: (error as Error).message,
