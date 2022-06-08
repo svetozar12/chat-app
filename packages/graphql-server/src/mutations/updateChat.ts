@@ -8,7 +8,7 @@ interface IUpdateChat {
   token: string;
 }
 
-const updateChat = async (parent: undefined, args: IUpdateChat, context: undefined) => {
+const updateChat = async (args: IUpdateChat) => {
   const res = await resource.chats.update(args.chat_id, args.username as string, args.user_id, args.token);
   return res.data;
 };

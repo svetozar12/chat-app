@@ -20,6 +20,8 @@ const user = {
     return await api.post(`${rootUrl}`, user);
   },
   update: async (user: IUser, id: string, token: string) => {
+    console.log(user);
+
     return await api.put(`${rootUrl}/${id}`, user, { headers: { Authorization: `Bearer ${token}` } });
   },
   delete: async (id: string, token: string) => {

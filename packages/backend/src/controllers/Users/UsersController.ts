@@ -51,6 +51,7 @@ const UsersController: IUsersController = {
   UpdateUser: async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.user_id;
     const username = req.body.username;
+
     let email = req.body.email;
     const gender = req.body.gender;
     const userAvatar = req.file?.filename;
@@ -65,7 +66,7 @@ const UsersController: IUsersController = {
       gender: gender ? gender : users.gender,
       userAvatar: email ? userAvatar : users.userAvatar,
     });
-    return res.status(200).send({ Message: `User ${username} info updated` });
+    return res.status(200).send({ Message: `User ${username || users.username} info updated` });
   },
 
   DeleteUser: async (req: Request, res: Response, next: NextFunction) => {

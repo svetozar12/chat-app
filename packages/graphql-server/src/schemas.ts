@@ -17,9 +17,11 @@ const Schema = buildSchema(`
     updateUser(user_id: String!,token: String!, user:UpdateUserModel!): Message
     updateChat(user_id: String!,chat_id: String!,token: String!,username: String, usersData: [String]): Chat
     logoutUser(user_id: String!,token: String!): Message
-    createChat(chat: ChatModel!): Message
+    createChat(chat: ChatModel!,token: String!): CreateChatMessage
     deleteChat(user_id: String!, chat_id: String!, token: String!): Message
+    deleteMessage(user_id: String!, message_id: String!, token: String!): Message
     createUser(user: UserModel!): Message
+    createInvite(user_id: String!, reciever:String!,token:String!): Invite
     createMessage(chat_id: String!, user_id: String!, message: String!, token: String!): Messages
   }
 
@@ -64,6 +66,11 @@ const Schema = buildSchema(`
     Message:String
   }
 
+  type CreateChatMessage {
+    Message:String
+    data: Chat
+  }
+
   type Messages {
     user_id: String
     chat_id: String
@@ -78,7 +85,7 @@ const Schema = buildSchema(`
   }
 
   type Invite {
-    user_id: String
+    _id: String
     inviter: String
     reciever: String
     status: String

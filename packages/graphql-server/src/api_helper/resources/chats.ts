@@ -24,19 +24,20 @@ const chats = {
   create: async (user: IChat, token: string) => {
     return await api.post(`${rootUrl}`, user, { headers: { Authorization: `Bearer ${token}` } });
   },
-  update: async (chat_id: string, user_id: string, token: string, username?: string, usersData?: string[]) => {
-    if (usersData) return await api.put(`${rootUrl}/${chat_id}`, { user_id, usersData }, { headers: { Authorization: `Bearer ${token}` } });
+  update: async (message_id: string, user_id: string, token: string, username?: string, usersData?: string[]) => {
+    if (usersData)
+      return await api.put(`${rootUrl}/${message_id}`, { user_id, usersData }, { headers: { Authorization: `Bearer ${token}` } });
 
     return await api.put(
-      `${rootUrl}/${chat_id}`,
+      `${rootUrl}/${message_id}`,
       { user_id, username },
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
   },
-  delete: async (chat_id: string, user_id: string, token: string) => {
-    return await api.delete(`${rootUrl}/${chat_id}`, {
+  delete: async (message_id: string, user_id: string, token: string) => {
+    return await api.delete(`${rootUrl}/${message_id}`, {
       headers: { Authorization: `Bearer ${token}` },
       data: { user_id },
     });

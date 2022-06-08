@@ -5,8 +5,6 @@ import Schema from "./schemas";
 // Construct a schema, using GraphQL schema language
 import handleError from "./middleware/handleError";
 
-console.log(root);
-
 const app = express();
 app.use(
   "/graphql",

@@ -16,10 +16,13 @@ const invite = {
     });
   },
   create: async (user_id: string, reciever: string, token: string) => {
-    return await api.post(`${rootUrl}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      data: { reciever, user_id },
-    });
+    return await api.post(
+      `${rootUrl}`,
+      { reciever, user_id },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
   },
   createGroupChat: async (usersData: string[]) => {
     return await api.post(`${rootUrl}/group-chat`, {

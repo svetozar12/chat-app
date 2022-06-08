@@ -5,10 +5,10 @@ interface IRefreshToken {
   token: string;
 }
 
-const refreshToken = async (parent: undefined, args: IRefreshToken) => {
+const refreshToken = async (args: IRefreshToken) => {
   const res = await resource.auth.refresh(args.user_id, args.token);
 
-  return res.data;
+  return res.data.data;
 };
 
 export default refreshToken;

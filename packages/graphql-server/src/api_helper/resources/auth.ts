@@ -14,6 +14,8 @@ const auth = {
     return await api.post(`${rootUrl}/login`, userCredentials);
   },
   refresh: async (id: string, refresh_token: string) => {
+    console.log(id);
+
     return await api.post(`${rootUrl}/refresh/${id}`, undefined, { headers: { Authorization: `Bearer ${refresh_token}` } });
   },
   logout: async (id: string, token: string) => {

@@ -10,7 +10,7 @@ const loginUser = async (args: ILoginUser) => {
 
   const res = await resource.auth.login(args);
 
-  return res.data;
+  return res.data.data;
 };
 
 export default loginUser;
