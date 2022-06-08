@@ -31,7 +31,6 @@ beforeAll(async () => {
     user1 = login1.body;
     user2 = login2.body;
     user4 = login4.body;
-    console.log(user1, "ganche");
 
     return true;
   } catch (error) {

@@ -4,8 +4,9 @@ import { updateFormSchema } from "../../utils/schema";
 import signTokens from "../../utils/signToken";
 import { CustomError } from "../../utils/custom-error.model";
 import { constants } from "../../constants";
-import TokenBL from "../../models/TokenBL";
 import { client } from "../../config/redis_config";
+import TokenSession from "../../models/TokenSession.model";
+import * as mongoose from "mongoose";
 
 interface IAuthController {
   Login: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
@@ -59,8 +60,8 @@ const AuthController: IAuthController = {
       };
 
       const expire: { access: string; refresh: string } = {
-        access: remember_me ? "1y" : "1h",
-        refresh: remember_me ? "2y" : "2h",
+        access: remember_me ? "2h" : "1h",
+        refresh: remember_me ? "30d" : "1d",
       };
 
       const accessToken = await signTokens(user, constants.ACCESS_TOKEN || "", expire.access);
@@ -76,13 +77,19 @@ const AuthController: IAuthController = {
 
   Logout: async (req, res, next) => {
     const bearerHeader = req.headers["authorization"];
-    if (bearerHeader === undefined) return next(CustomError.badRequest("token is undefined"));
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
+    const bearer = bearerHeader && bearerHeader.split(" ");
+    const bearerToken = bearer && bearer[1];
+    const sessions = await TokenSession.find({ user_id: req.params.user_id });
 
-    // TokenBL.create({ token: bearerToken });
-    client.SET("token", bearerToken);
-    res.send(bearerToken);
+    if (sessions.length <= 0) next(CustomError.notFound("You don't have sessions"));
+    for await (const item of sessions) {
+      console.log(item.expireAfter);
+      await client.SET(`token_${item.token}`, item.token);
+      await client.EXPIRE(`token_${item.token}`, item.expireAfter);
+    }
+    await TokenSession.deleteMany({ user_id: req.params.user_id });
+
+    return res.send(bearerToken);
   },
 };
 

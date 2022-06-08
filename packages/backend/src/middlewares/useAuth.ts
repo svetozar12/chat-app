@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import { CustomError } from "../utils/custom-error.model";
 import { client } from "../config/redis_config";
-import TokenBL from "../models/TokenBL";
+import TokenBL from "../models/TokenBL.model";
 /**
  * verifyToken is an middleware function
  * this function compares the user_id with the jwt user_id
@@ -12,11 +12,13 @@ import TokenBL from "../models/TokenBL";
 
 const blackListCheck = async (token: string) => {
   try {
-    const redistToken = await client.get("token");
+    const redistToken = await client.GET(`token_${token}`);
+    console.log(redistToken, "token");
+
     let mongoToken: any | null;
     if (!redistToken) mongoToken = (await TokenBL.findOne({ token }))?.token;
 
-    if (redistToken === token) {
+    if (redistToken) {
       return true;
     } else if (mongoToken === token) {
       return true;
@@ -38,14 +40,13 @@ const Auth = (secret: string) => {
     const isTokenBlackListed = await blackListCheck(bearerToken);
 
     if (isTokenBlackListed) return next(CustomError.forbidden("Token has been blacklisted"));
-    jwt.verify(bearerToken, secret, (err: any, decoded: any) => {
+    jwt.verify(bearerToken, secret, async (err: any, decoded: any) => {
       console.log(err);
 
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
       // delete logs on production
       console.log(current_id, user_id);
-
       if (current_id !== user_id) return next(CustomError.unauthorized("Can't access other users data"));
       req.token = decoded;
       next();

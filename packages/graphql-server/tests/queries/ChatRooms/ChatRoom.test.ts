@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { generic } from "../../../src/constants/index";
+import constant from "../../../src/constants";
 import buildUrl from "../../../src/utils/buildUrl";
 let ChatId;
 const testUser = { username: "vanka", password: "vanka", email: "vanka@.com", gender: "Male" };
@@ -24,7 +24,7 @@ beforeAll(async () => {
 describe("Testing GetChatRoom resolver", () => {
   test("GetChatRooms", async () => {
     try {
-      const response = await axios.post(generic.graphql_server_url, {
+      const response = await axios.post(constant.graphql_server_url, {
         query: `
           query {
            GetChatRoom(id:${ChatId.toString()}) {

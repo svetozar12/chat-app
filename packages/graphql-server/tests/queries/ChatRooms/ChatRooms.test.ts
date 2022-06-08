@@ -1,9 +1,9 @@
 import axios from "axios";
-import { generic } from "../../../src/constants/index";
+import constant from "../../../src/constants";
 
 describe("Testing GetChatRooms resolver", () => {
   test("GetChatRooms", async () => {
-    const response = await axios.post(generic.graphql_server_url, {
+    const response = await axios.post(constant.graphql_server_url, {
       query: `
           query {
             GetChatRooms(username:"vanka") {

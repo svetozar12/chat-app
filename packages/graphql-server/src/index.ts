@@ -1,27 +1,20 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
 
 // queries
-import { AuthUser } from "./queries/Auth";
-import { GetChatRooms } from "./queries/ChatRooms";
-import { GetChatRoom } from "./queries/ChatRooms";
+import { getUser } from "./queries/getUser";
 // mutations
-import { AuthLogin } from "./mutations/Auth";
-import { AuthRefresh } from "./mutations/Auth";
-
+import loginUser from "./mutations/Auth/loginUser";
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    AuthUser,
-    GetChatRooms,
-    GetChatRoom,
+    getUser,
   },
 });
 
 const Mutation = new GraphQLObjectType({
   name: "RootMutationType",
   fields: {
-    AuthLogin,
-    // AuthRefresh, doesnt work have to fix it in the rest api(the token signing is causing some problems)
+    loginUser,
   },
 });
 
