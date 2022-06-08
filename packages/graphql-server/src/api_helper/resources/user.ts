@@ -10,7 +10,11 @@ const rootUrl = "/users";
 
 const user = {
   getById: async (id: string, token: string) => {
-    return await api.get(`${rootUrl}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    try {
+      return await api.get(`${rootUrl}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (error) {
+      console.log(error);
+    }
   },
   create: async (user: IUser) => {
     return await api.post(`${rootUrl}`, user);

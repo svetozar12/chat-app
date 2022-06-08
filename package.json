@@ -18,7 +18,7 @@
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
-    "lerna": "^5.1.0"
+    "lerna": "^4.0.0"
   },
   "engines": {
     "npm": "please-use-yarn",

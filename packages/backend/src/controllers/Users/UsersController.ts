@@ -65,7 +65,7 @@ const UsersController: IUsersController = {
       gender: gender ? gender : users.gender,
       userAvatar: email ? userAvatar : users.userAvatar,
     });
-    return res.status(200).send({ message: `User ${username} info updated` });
+    return res.status(200).send({ Message: `User ${username} info updated` });
   },
 
   DeleteUser: async (req: Request, res: Response, next: NextFunction) => {

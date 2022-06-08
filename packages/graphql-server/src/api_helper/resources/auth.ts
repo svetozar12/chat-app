@@ -9,6 +9,8 @@ const rootUrl = "/auth";
 
 const auth = {
   login: async (userCredentials: IAuthLogin) => {
+    console.log(userCredentials);
+
     return await api.post(`${rootUrl}/login`, userCredentials);
   },
   refresh: async (id: string, refresh_token: string) => {
