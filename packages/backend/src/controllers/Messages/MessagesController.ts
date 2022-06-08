@@ -24,7 +24,7 @@ const MessageController: IMessageController = {
 
     if (messages.length <= 0 || !messages) return next(CustomError.notFound("You don't have messages."));
     const reversedArr = messages.reverse();
-    return res.status(200).json({ message: "You have messages.", reversedArr });
+    return res.status(200).json({ Message: "You have messages.", data: reversedArr });
   },
 
   CreateMessage: async (req: Request, res: Response, next: NextFunction) => {
@@ -44,23 +44,23 @@ const MessageController: IMessageController = {
     if (!message) return next(CustomError.badRequest(message));
 
     await messages.save();
-    return res.status(201).json({ messages });
+    return res.status(201).json({ data: messages });
   },
 
   UpdateMessage: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id;
     const newMessage: string = req.body.newMessage;
-    if (newMessage === "" || newMessage === null) return res.status(200).json({ message: "Message didn't change" });
+    if (newMessage === "" || newMessage === null) return res.status(200).json({ Message: "Message didn't change" });
     const message = await Messages.findOneAndUpdate({ _id, user_id: req.body.user_id }, { message: newMessage }).exec();
     if (!message) return next(CustomError.notFound("Message wasn't found !"));
-    return res.status(200).send({ message: `Message has been updated` });
+    return res.status(200).json({ Message: `Message has been updated` });
   },
 
   DeleteMessage: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id;
     const message = await Messages.findOneAndDelete({ _id, user_id: req.body.user_id }).exec();
     if (!message) return next(CustomError.notFound("Message wasn't found !"));
-    return res.status(200).send({ message: `Message has been deleted` });
+    return res.status(200).json({ Message: `Message has been deleted` });
   },
 };
 

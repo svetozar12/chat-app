@@ -41,7 +41,7 @@ const AuthController: IAuthController = {
     const access = await signTokens(user, constants.ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, constants.REFRESH_TOKEN, expire.refresh);
 
-    return res.status(201).json({ user_id: _id, Access_token: access, Refresh_token: refresh });
+    return res.status(201).json({ data: { user_id: _id, Access_token: access, Refresh_token: refresh } });
   },
 
   RefreshToken: async (req, res) => {
@@ -64,9 +64,7 @@ const AuthController: IAuthController = {
       const refreshToken = await signTokens(user, constants.REFRESH_TOKEN || "", expire.refresh);
 
       return res.status(201).json({
-        user_id: refresh._id,
-        Access_token: accessToken,
-        Refresh_token: refreshToken,
+        data: { user_id: refresh._id, Access_token: accessToken, Refresh_token: refreshToken },
       });
     }
   },
@@ -82,7 +80,7 @@ const AuthController: IAuthController = {
     }
     await TokenSession.deleteMany({ user_id: req.params.user_id });
 
-    return res.json({ message: "successful" });
+    return res.json({ Message: "successful" });
   },
 };
 

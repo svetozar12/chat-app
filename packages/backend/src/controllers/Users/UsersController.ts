@@ -45,7 +45,7 @@ const UsersController: IUsersController = {
 
     await user.save();
     await chat.save();
-    return res.status(201).send({ message: `User ${req.body.username} created` });
+    return res.status(201).send({ Message: `User ${req.body.username} created` });
   },
 
   UpdateUser: async (req: Request, res: Response, next: NextFunction) => {
@@ -84,7 +84,7 @@ const UsersController: IUsersController = {
     await Chats.deleteMany({
       members: { $all: [user_id] },
     }).exec();
-    return res.status(200).json({ message: `User ${user_id} deleted` });
+    return res.status(200).json({ Message: `User ${user_id} deleted` });
   },
 };
 
