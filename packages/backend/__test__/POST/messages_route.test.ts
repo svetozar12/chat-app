@@ -4,7 +4,7 @@ import Chats from "../../src/models/chatRoom.model";
 import User from "../../src/models/User.model";
 import * as mongoose from "mongoose";
 import { dumyUser, dumyUser2 } from "../test_dumy_data";
-import { tokens, user1_id } from "../setupTests";
+import { user1 } from "../setupTests";
 
 const users = [dumyUser.username, dumyUser2.username];
 const chat_id = new mongoose.Types.ObjectId();
@@ -29,25 +29,25 @@ describe("Sending message :/:chat_id", () => {
     await request(app)
       .post(`/messages/${chat_id}`)
       .send({
-        user_id: user1_id,
+        user_id: user1.user_id,
         chatInstance: chat_id,
         sender: dumyUser.username,
         message: "paprika",
         seenBy: [],
       })
-      .set({ Authorization: `Bearer ${tokens.Access_token}` });
+      .set({ Authorization: `Bearer ${user1.Access_token}` });
   });
   it("should return 400 Bad Request", async () => {
     const res = await request(app)
       .post(`/messages/${chat_id}`)
       .send({
-        user_id: user1_id,
+        user_id: user1.user_id,
         chatInstance: chat_id,
         sender: dumyUser.username,
         message: "",
         seenBy: [],
       })
-      .set({ Authorization: `Bearer ${tokens.Access_token}` });
+      .set({ Authorization: `Bearer ${user1.Access_token}` });
     expect(res.status).toBe(400);
   });
 });

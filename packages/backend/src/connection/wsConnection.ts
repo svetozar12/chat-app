@@ -19,7 +19,7 @@ io.on("connection", (socket: Socket): void => {
     const findChat = await Chats.find({ _id: chatInstance }).select("members").exec();
     const date = new Date();
     const messages = [{ sender, message, createdAt: date }];
-    findChat[0].members.forEach((element: string) => {
+    findChat[0].members.forEach((element: any) => {
       io.to(element).emit("message", {
         messages,
       });

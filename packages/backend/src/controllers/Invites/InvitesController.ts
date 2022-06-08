@@ -70,14 +70,14 @@ const InvitesController: IInviteController = {
     if (!user || !reciever) return next(CustomError.notFound("User not found !"));
 
     const checkInviteInstance = await Invites.findOne({
-      user_id: user._id,
       reciever: reciever.username,
       inviter: user.username,
       $or: [{ status: "recieved" }, { status: "accepted" }],
     });
+    console.log(checkInviteInstance, "fred");
 
-    if (checkInviteInstance) return next(CustomError.conflict("Invite is already sent !"));
     if (req.body.reciever === user.username) return next(CustomError.conflict("Can't send invites to yourself !"));
+    if (checkInviteInstance) return next(CustomError.conflict("Invite is already sent !"));
 
     const invites = await new Invites({
       user_id: [user._id, reciever._id],

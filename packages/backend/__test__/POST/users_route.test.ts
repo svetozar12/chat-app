@@ -2,7 +2,7 @@ import { app } from "../../src/server";
 import * as request from "supertest";
 import { dumyUser, dumyUser3 } from "../test_dumy_data";
 import User from "../../src/models/User.model";
-import { tokens, user1_id } from "../setupTests";
+import { user1 } from "../setupTests";
 
 afterAll(async () => {
   await User.deleteOne({ username: dumyUser3.username });
@@ -36,18 +36,23 @@ describe("Registering user :/users", () => {
 describe("Passing valid refresh-token", () => {
   it("should return 201 Created", async () => {
     const res = await request(app)
-      .post("/auth/refresh")
-      .set({ Authorization: `Bearer ${tokens.Access_token}` })
-      .send({ user_id: user1_id });
-    expect(res.body.username).toBe(dumyUser.username);
+      .post(`/auth/refresh/${user1.user_id}`)
+      .set({ Authorization: `Bearer ${user1.Refresh_token}` })
+      .send({ refresh_token: user1.Refresh_token });
+
+    expect(res.body.user_id).toBe(user1.user_id);
     expect(res.status).toBe(201);
   });
 });
 
 describe("Passing invalid refresh-token", () => {
   it("should return 403 Forbidden", async () => {
-    const res = await request(app).post("/auth/refresh").send({ refresh_token: "invalid" });
-    expect(res.body.ErrorMsg).toBe("Token has expired");
+    const res = await request(app)
+      .post("/auth/refresh/3123123123")
+      .set({ Authorization: `Bearer dawdaw` })
+      .send({ refresh_token: "invalid" });
+
+    expect(res.body.ErrorMsg).toBe("Token has expired or invalid secret");
     expect(res.status).toBe(403);
   });
 });

@@ -5,7 +5,8 @@
   "main": "/dist/index.js",
   "scripts": {
     "build": "tsc --build",
-    "test": "set NODE_ENV=test && jest ./__test__ --runInBand --detectOpenHandles --forceExit",
+    "test": "set NODE_ENV=test && jest  --runInBand --detectOpenHandles --forceExit",
+    "coverage": "yarn test --coverage",
     "server": "set NODE_ENV=development && nodemon dist/index.js",
     "watch": "tsc --watch",
     "lint": "eslint src",

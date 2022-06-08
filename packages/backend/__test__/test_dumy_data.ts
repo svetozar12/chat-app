@@ -1,18 +1,3 @@
-const tests = [
-  {
-    describe: "Finding invites by username",
-    request: "/invites/TestingUser1",
-  },
-  {
-    describe: "Finding invites by username with status accepted",
-    request: "/invites/TestingUser1?status=accepted",
-  },
-  {
-    describe: "Finding invites by username with status declined",
-    request: "/invites/TestingUser1?status=declined",
-  },
-];
-
 const invitesDumyData = [
   { reciever: "TestingUser1", inviter: "TestingUser2", status: "accepted" },
   { reciever: "TestingUser1", inviter: "TestingUser2", status: "declined" },
@@ -48,6 +33,6 @@ const dumyUser4 = {
   gender: "Female",
 };
 
-const users = [dumyUser.username, dumyUser2.username, dumyUser3.username, dumyUser4.username];
+const users = [dumyUser, dumyUser2, dumyUser3, dumyUser4];
 
-export { tests, invitesDumyData, dumyUser, dumyUser2, dumyUser3, dumyUser4, users };
+export { invitesDumyData, dumyUser, dumyUser2, dumyUser3, dumyUser4, users };

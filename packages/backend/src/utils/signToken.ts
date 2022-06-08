@@ -1,5 +1,6 @@
 import { CustomError } from "./custom-error.model";
 import * as jwt from "jsonwebtoken";
+import TokenBL from "../models/TokenBL";
 
 /**
  * signTokens utility function
@@ -19,7 +20,7 @@ const signTokens = (
   expires: string,
 ) => {
   return new Promise((resolve, reject) => {
-    jwt.sign(data, secret, { expiresIn: expires }, (err, token) => {
+    jwt.sign(data, secret, { expiresIn: expires }, async (err, token) => {
       if (err) {
         return reject(CustomError.forbidden("Token has expired or invalid secret"));
       }
