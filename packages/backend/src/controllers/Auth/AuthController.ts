@@ -72,12 +72,9 @@ const AuthController: IAuthController = {
   },
 
   Logout: async (req, res, next) => {
-    const bearerHeader = req.headers["authorization"];
-    const bearer = bearerHeader && bearerHeader.split(" ");
-    const bearerToken = bearer && bearer[1];
     const sessions = await TokenSession.find({ user_id: req.params.user_id });
 
-    if (sessions.length <= 0) next(CustomError.notFound("You don't have sessions"));
+    if (sessions.length <= 0) return next(CustomError.notFound("You don't have sessions"));
     for await (const item of sessions) {
       console.log(item.expireAfter);
       await client.SET(`token_${item.token}`, item.token);
@@ -85,7 +82,7 @@ const AuthController: IAuthController = {
     }
     await TokenSession.deleteMany({ user_id: req.params.user_id });
 
-    return res.send(bearerToken);
+    return res.json({ message: "successful" });
   },
 };
 

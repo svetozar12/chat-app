@@ -7,6 +7,7 @@
     "build": "lerna run build --stream",
     "kill": "npx kill-port 3000 4000 4001 4002 -y",
     "dev": "yarn kill && lerna run dev --no-sort --stream",
+    "dev:backend": "yarn kill && lerna run dev:backend --no-sort --stream",
     "test": "lerna run test --no-sort --stream",
     "lint": "lerna run lint --no-sort --stream",
     "lint-css": "lerna run lint-css --no-sort --stream",
@@ -17,7 +18,7 @@
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^5.1.0"
   },
   "engines": {
     "npm": "please-use-yarn",

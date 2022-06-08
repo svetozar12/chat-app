@@ -12,6 +12,7 @@
     "watch": "tsc --watch",
     "lint": "eslint src",
     "dev": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
+    "dev:backend": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
     "start:production": "node dist/server.js",
     "test": "jest",
     "format": "prettier --write **/*.{js,ts,tsx}"

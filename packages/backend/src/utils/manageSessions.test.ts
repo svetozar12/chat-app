@@ -1,7 +1,6 @@
 import manageSessions from "./manageSessions";
-import { user1 } from "../../__test__/setupTests";
+import { user1 } from "../__test__/setupTests";
 import TokenSession from "../models/TokenSession.model";
-import { client } from "../config/redis_config";
 
 describe("testing manageSessions util function", () => {
   it("valid input", async () => {

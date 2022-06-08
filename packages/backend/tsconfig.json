@@ -1,4 +1,5 @@
 {
+  "exclude": ["src/__test__/**/*", "src/__test__/setupTests.ts"],
   "include": ["src/**/*"],
   "compilerOptions": {
     "target": "es5",

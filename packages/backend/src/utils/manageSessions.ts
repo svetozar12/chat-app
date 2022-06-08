@@ -1,6 +1,5 @@
 import TokenSession from "../models/TokenSession.model";
 import expireDate from "./expireAfter";
-import { Schema } from "mongoose";
 /**
  * manageSessions utility function
  * Creates new document in mongo collection: token_session where we store the session tokens related

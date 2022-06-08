@@ -16,20 +16,24 @@ const chats = {
     });
   },
   getById: async (chat_id: string, user_id: string, token: string) => {
-    return await api.get(`${rootUrl}/${chat_id}?user_id=${user_id}`, {
+    console.log(`${rootUrl}/${user_id}?chat_id=${chat_id}`);
+    return await api.get(`${rootUrl}/${user_id}?chat_id=${chat_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
-  create: async (user: IChat) => {
-    return await api.post(`${rootUrl}`, {
-      data: user,
-    });
+  create: async (user: IChat, token: string) => {
+    return await api.post(`${rootUrl}`, user, { headers: { Authorization: `Bearer ${token}` } });
   },
-  update: async (chat_id: string, username: string, user_id: string, token: string) => {
-    return await api.delete(`${rootUrl}/${chat_id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      data: { user_id, username },
-    });
+  update: async (chat_id: string, user_id: string, token: string, username?: string, usersData?: string[]) => {
+    if (usersData) return await api.put(`${rootUrl}/${chat_id}`, { user_id, usersData }, { headers: { Authorization: `Bearer ${token}` } });
+
+    return await api.put(
+      `${rootUrl}/${chat_id}`,
+      { user_id, username },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
   },
   delete: async (chat_id: string, user_id: string, token: string) => {
     return await api.delete(`${rootUrl}/${chat_id}`, {

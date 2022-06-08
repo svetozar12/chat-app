@@ -9,7 +9,7 @@ const rootUrl = "/messages";
 
 const message = {
   getAll: async (chat_id: string, user_id: string, query: IQuery, token: string) => {
-    return await api.get(`${rootUrl}/${chat_id}?user_id=${user_id}${query && "&&page_size=1&&page_number=1"}`, {
+    return await api.get(`${rootUrl}/${chat_id}?user_id=${user_id}${query ? "&&page_size=1&&page_number=1" : ""}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -26,7 +26,7 @@ export const UpdateInviteSchema = Schema.UserIdSchema.keys({
     "any.only": `status is not valid`,
     "any.required": `status is a required field`,
   }),
-  usernames: Joi.array().required().messages({
+  usernames: Joi.array().messages({
     "array.base": `usernames should be of type array`,
     "array.empty": `usernames cannot be an empty field`,
     "any.required": `usernames is a required field`,

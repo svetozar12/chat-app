@@ -5,13 +5,13 @@ type Status = "accepted" | "recieved" | "declined";
 const rootUrl = "/invites";
 
 const invite = {
-  getAllByReciever: async (user_id: string, status: Status, token: string) => {
-    return await api.get(`${rootUrl}/${user_id}${status && "?".concat(status)}`, {
+  getAllByReciever: async (user_id: string, token: string, status?: Status) => {
+    return await api.get(`${rootUrl}/${user_id}${status ? "?".concat(status) : ""}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
-  getAllByInviter: async (user_id: string, status: Status, token: string) => {
-    return await api.get(`${rootUrl}/inviter/${user_id}${status && "?".concat(status)}`, {
+  getAllByInviter: async (user_id: string, token: string, status?: Status) => {
+    return await api.get(`${rootUrl}/inviter/${user_id}${status ? "?".concat(status) : ""}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
