@@ -4,7 +4,7 @@ import { registerValidation, update_formValidation } from "../../utils/schema";
 import User from "../../models/User.model";
 import Invites from "../../models/Invites.model";
 import Chats from "../../models/chatRoom.model";
-import { CustomError } from "../../models/custom-error.model";
+import { CustomError } from "../../utils/custom-error.model";
 
 interface IUsersController {
   GetUser: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
@@ -15,9 +15,9 @@ interface IUsersController {
 
 const UsersController: IUsersController = {
   GetUser: async (req: Request, res: Response, next: NextFunction) => {
-    const username = req.params.username;
-    const users = await User.findOne({ username }).exec();
-    if (!users) return next(CustomError.notFound(`User: ${username} wasn't found`));
+    const _id = req.params.user_id;
+    const users = await User.findOne({ _id }).exec();
+    if (!users) return next(CustomError.notFound(`User: ${_id} wasn't found`));
     return res.status(200).send({ user: users });
   },
 
@@ -42,7 +42,7 @@ const UsersController: IUsersController = {
     });
 
     const chat = await new Chats({
-      members: username,
+      members: user._id,
     });
 
     await user.save();
@@ -52,7 +52,7 @@ const UsersController: IUsersController = {
 
   UpdateUser: async (req: Request, res: Response, next: NextFunction) => {
     const { error } = update_formValidation(req.body);
-    const id = req.params._id;
+    const id = req.params.user_id;
     const username = req.body.username;
     let email = req.body.email;
     const gender = req.body.gender;
@@ -73,22 +73,22 @@ const UsersController: IUsersController = {
   },
 
   DeleteUser: async (req: Request, res: Response, next: NextFunction) => {
-    const username = req.params.username;
-    const user = await User.findOne({ username }).exec();
+    const user_id = req.params.user_id;
+    const user = await User.findOne({ _id: user_id }).exec();
 
-    if (!user) return next(CustomError.notFound(`User: ${username} wasn't found`));
+    if (!user) return next(CustomError.notFound(`User: ${user_id} wasn't found`));
 
-    await User.deleteOne({ username }).exec();
+    await User.deleteOne({ _id: user_id }).exec();
     await Invites.deleteMany({
-      reciever: username,
+      reciever: user_id,
     }).exec();
     await Invites.deleteMany({
-      inviter: username,
+      inviter: user_id,
     }).exec();
     await Chats.deleteMany({
-      members: { $all: [username] },
+      members: { $all: [user_id] },
     }).exec();
-    return res.status(200).json({ message: `User ${username} deleted` });
+    return res.status(200).json({ message: `User ${user_id} deleted` });
   },
 };
 

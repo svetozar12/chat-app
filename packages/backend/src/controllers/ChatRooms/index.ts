@@ -8,7 +8,7 @@ const route = Router();
 
 route.get("/:user_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.GetChatRoom));
 route.get("/", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.GetChatRooms));
-route.post("/", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.CreateChatRoom));
+route.post("/", errorHandler(ChatRoomController.CreateChatRoom));
 route.put("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.UpdateChatRoom));
 route.delete("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.DeleteChatRoom));
 

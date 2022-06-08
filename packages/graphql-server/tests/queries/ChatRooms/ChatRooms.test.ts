@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { generic } from "../../../src/constants/index";
 
 describe("Testing GetChatRooms resolver", () => {

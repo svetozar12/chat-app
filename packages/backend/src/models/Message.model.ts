@@ -1,14 +1,21 @@
 import { Schema, model } from "mongoose";
 
 interface IMessage {
+  user_id: Schema.Types.ObjectId;
+  chat_id: Schema.Types.ObjectId;
   sender: string;
   message?: string;
   seenBy: string[];
 }
 
-const messageSchema = new Schema(
+const messageSchema = new Schema<IMessage>(
   {
-    chatInstance: {
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    chat_id: {
       type: Schema.Types.ObjectId,
       ref: "chatRoom",
       required: true,
