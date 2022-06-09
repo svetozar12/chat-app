@@ -1,3 +1,9 @@
+/**
+ * expireDate utility function
+ * the function adds some time value(days,hours,seconds) to current date and returns the date
+ * @param exp is a string which can be 1h,1d
+ */
+
 const expireDate = (exp: string) => {
   const seconds = exp.indexOf("s") !== -1;
   const hours = exp.indexOf("h") !== -1;

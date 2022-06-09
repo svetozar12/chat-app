@@ -13,7 +13,6 @@ import TokenBL from "../models/TokenBL.model";
 const blackListCheck = async (token: string) => {
   try {
     const redistToken = await client.GET(`token_${token}`);
-    console.log(redistToken, "token");
 
     let mongoToken: any | null;
     if (!redistToken) mongoToken = (await TokenBL.findOne({ token }))?.token;
@@ -41,8 +40,6 @@ const Auth = (secret: string) => {
 
     if (isTokenBlackListed) return next(CustomError.forbidden("Token has been blacklisted"));
     jwt.verify(bearerToken, secret, async (err: any, decoded: any) => {
-      console.log(err);
-
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
       // delete logs on production

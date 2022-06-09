@@ -18,8 +18,6 @@ const User = {
       headers: { Authorization: `Bearer ${args.token}` },
     });
 
-    console.log(res.data);
-
     if (res.status !== 200) throw Error("bad");
 
     return res.data.user;

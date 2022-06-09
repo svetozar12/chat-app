@@ -1,12 +1,12 @@
 import * as express from "express";
 import * as cors from "cors";
+import handleError from "./middlewares/error-handler.middleware";
 // db configs
 import mongo_connection from "./config/mongo_config";
 import redis_connection from "./config/redis_config";
 // routes function
 import { routes } from "./routes";
 
-import handleError from "./middlewares/error-handler.middleware";
 const app = express();
 
 // middleware

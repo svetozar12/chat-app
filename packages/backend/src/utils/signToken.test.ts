@@ -21,7 +21,6 @@ describe("Signing jwt token", () => {
   it("signing invalid token", async () => {
     const token = await signTokens(data, "invalid secret", "1h");
     jwt.verify(token as string, constants.ACCESS_TOKEN, (err, decoded: any) => {
-      console.log(err, "erka");
       expect(err).toEqual({
         name: "JsonWebTokenError",
         message: "invalid signature",
