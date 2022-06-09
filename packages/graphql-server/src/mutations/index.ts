@@ -9,6 +9,7 @@ import updateUser from "./updateUser";
 import updateChat from "./updateChat";
 import deleteChat from "./deleteChat";
 import deleteMessage from "./deleteMessage";
+import deleteUser from "./deleteUser";
 
 export {
   createUser,
@@ -22,4 +23,5 @@ export {
   updateUser,
   deleteChat,
   deleteMessage,
+  deleteUser,
 };

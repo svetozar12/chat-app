@@ -14,15 +14,16 @@ const Schema = buildSchema(`
   type Mutation {
     loginUser(username: String!,password: String!): LoginUser
     refreshToken(user_id: String!, token: String!): LoginUser
-    updateUser(user_id: String!,token: String!, user:UpdateUserModel!): Message
-    updateChat(user_id: String!,chat_id: String!,token: String!,username: String, usersData: [String]): Chat
     logoutUser(user_id: String!,token: String!): Message
     createChat(chat: ChatModel!,token: String!): CreateChatMessage
-    deleteChat(user_id: String!, chat_id: String!, token: String!): Message
-    deleteMessage(user_id: String!, message_id: String!, token: String!): Message
     createUser(user: UserModel!): Message
     createInvite(user_id: String!, reciever:String!,token:String!): Invite
     createMessage(chat_id: String!, user_id: String!, message: String!, token: String!): Messages
+    updateUser(user_id: String!,token: String!, user:UpdateUserModel!): Message
+    updateChat(user_id: String!,chat_id: String!,token: String!,username: String, usersData: [String]): Chat
+    deleteChat(user_id: String!, chat_id: String!, token: String!): Message
+    deleteMessage(user_id: String!, message_id: String!, token: String!): Message
+    deleteUser(user_id: String!, token: String!): Message
   }
 
   input Pagination {
