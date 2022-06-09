@@ -1,6 +1,5 @@
 import TokenSession from "../models/TokenSession.model";
 import expireDate from "./expireAfter";
-
 /**
  * manageSessions utility function
  * Creates new document in mongo collection: token_session where we store the session tokens related
@@ -12,6 +11,7 @@ import expireDate from "./expireAfter";
  */
 
 const manageSessions = async (user_id: string, token: string, expires: string) => {
+  if (typeof user_id !== "string" || typeof token !== "string" || typeof expires !== "string") return undefined;
   const hours = expires.indexOf("h") !== -1;
   const days = expires.indexOf("d") !== -1;
   let seconds;

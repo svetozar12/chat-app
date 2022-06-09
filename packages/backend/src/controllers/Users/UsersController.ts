@@ -45,12 +45,13 @@ const UsersController: IUsersController = {
 
     await user.save();
     await chat.save();
-    return res.status(201).send({ message: `User ${req.body.username} created` });
+    return res.status(201).send({ Message: `User ${req.body.username} created` });
   },
 
   UpdateUser: async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.user_id;
     const username = req.body.username;
+
     let email = req.body.email;
     const gender = req.body.gender;
     const userAvatar = req.file?.filename;
@@ -65,7 +66,7 @@ const UsersController: IUsersController = {
       gender: gender ? gender : users.gender,
       userAvatar: email ? userAvatar : users.userAvatar,
     });
-    return res.status(200).send({ message: `User ${username} info updated` });
+    return res.status(200).send({ Message: `User ${username || users.username} info updated` });
   },
 
   DeleteUser: async (req: Request, res: Response, next: NextFunction) => {
@@ -84,7 +85,7 @@ const UsersController: IUsersController = {
     await Chats.deleteMany({
       members: { $all: [user_id] },
     }).exec();
-    return res.status(200).json({ message: `User ${user_id} deleted` });
+    return res.status(200).json({ Message: `User ${user_id} deleted` });
   },
 };
 

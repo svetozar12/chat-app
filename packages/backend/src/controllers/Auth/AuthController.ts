@@ -41,7 +41,7 @@ const AuthController: IAuthController = {
     const access = await signTokens(user, constants.ACCESS_TOKEN, expire.access);
     const refresh = await signTokens(user, constants.REFRESH_TOKEN, expire.refresh);
 
-    return res.status(201).json({ user_id: _id, Access_token: access, Refresh_token: refresh });
+    return res.status(201).json({ data: { user_id: _id, Access_token: access, Refresh_token: refresh } });
   },
 
   RefreshToken: async (req, res) => {
@@ -64,20 +64,15 @@ const AuthController: IAuthController = {
       const refreshToken = await signTokens(user, constants.REFRESH_TOKEN || "", expire.refresh);
 
       return res.status(201).json({
-        user_id: refresh._id,
-        Access_token: accessToken,
-        Refresh_token: refreshToken,
+        data: { user_id: refresh._id, Access_token: accessToken, Refresh_token: refreshToken },
       });
     }
   },
 
   Logout: async (req, res, next) => {
-    const bearerHeader = req.headers["authorization"];
-    const bearer = bearerHeader && bearerHeader.split(" ");
-    const bearerToken = bearer && bearer[1];
     const sessions = await TokenSession.find({ user_id: req.params.user_id });
 
-    if (sessions.length <= 0) next(CustomError.notFound("You don't have sessions"));
+    if (sessions.length <= 0) return next(CustomError.notFound("You don't have sessions"));
     for await (const item of sessions) {
       console.log(item.expireAfter);
       await client.SET(`token_${item.token}`, item.token);
@@ -85,7 +80,7 @@ const AuthController: IAuthController = {
     }
     await TokenSession.deleteMany({ user_id: req.params.user_id });
 
-    return res.send(bearerToken);
+    return res.json({ Message: "successful" });
   },
 };
 

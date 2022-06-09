@@ -16,7 +16,7 @@ const TokenSessionSchema = new Schema<ITokenSession>({
   },
   expireAfter: {
     type: Number,
-    required: true,
+    // required: true,
   },
 });
 
