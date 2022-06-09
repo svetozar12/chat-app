@@ -12,7 +12,6 @@ interface ICreateChat {
 
 const createChat = async (args: ICreateChat) => {
   const res = await resource.chats.create(args.chat, args.token);
-  console.log(res.data);
 
   return res.data;
 };

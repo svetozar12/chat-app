@@ -38,8 +38,10 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
+      console.log("BEFORE", user_id, token);
+
       const res = await api_helper.chatroom.getAll(user_id, token);
-      console.log(res, "ALL CHAT ROOMS");
+      console.log(res.data, "ALL CHAT ROOMS", user_id, token);
       const data = res.data.contacts;
 
       setChatRooms(data);

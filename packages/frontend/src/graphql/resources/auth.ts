@@ -4,9 +4,10 @@ const rootUrl = "";
 
 const auth = {
   login: async (username: string, password: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         mutation {
           loginUser(username: "${username}", password: "${password}") {
             user_id
@@ -14,15 +15,19 @@ const auth = {
             Refresh_token
           }
          }`,
-      },
-    });
-    return res.data.data.loginUser;
+        },
+      });
+      return res.data.data.loginUser;
+    } catch (error) {
+      return error;
+    }
   },
 
   refresh: async (user_id: string, token: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         mutation {
           refreshToken(username: "${user_id}", token: "${token}") {
             user_id
@@ -30,23 +35,30 @@ const auth = {
             Refresh_token
           }
         }`,
-      },
-    });
-    return res.data.data.loginUser;
+        },
+      });
+      return res.data.data.loginUser;
+    } catch (error) {
+      return error;
+    }
   },
 
   logout: async (user_id: string, token: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         mutation {
           logoutUser(user_id: "${user_id}", token: "${token}") {
             Message
           }
         }`,
-      },
-    });
-    return res.data;
+        },
+      });
+      return res.data;
+    } catch (error) {
+      return error;
+    }
   },
 };
 

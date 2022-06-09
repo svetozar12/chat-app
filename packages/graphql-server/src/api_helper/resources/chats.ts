@@ -11,12 +11,18 @@ const rootUrl = "/chat-room";
 
 const chats = {
   getAll: async (user_id: string, token: string) => {
+    console.log(
+      await api.get(`${rootUrl}/?user_id=${user_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      "dora",
+    );
+
     return await api.get(`${rootUrl}/?user_id=${user_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
   getById: async (chat_id: string, user_id: string, token: string) => {
-    console.log(`${rootUrl}/${user_id}?chat_id=${chat_id}`);
     return await api.get(`${rootUrl}/${user_id}?chat_id=${chat_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });

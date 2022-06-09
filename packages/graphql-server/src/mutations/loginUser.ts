@@ -6,8 +6,6 @@ interface ILoginUser {
 }
 
 const loginUser = async (args: ILoginUser) => {
-  console.log(args);
-
   const res = await resource.auth.login(args);
 
   return res.data.data;

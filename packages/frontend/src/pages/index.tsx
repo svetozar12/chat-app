@@ -11,6 +11,7 @@ import { getFirstChat } from "../utils/getFirstChat";
 import LoginForm from "../components/LoginForm";
 import { checkJWT } from "../utils/authRoutes";
 import api_helper from "../graphql/api_helper";
+
 function Login(props: AppProps) {
   const [isLogging, setIsLogging] = React.useState(false);
   const router = useRouter();
@@ -49,13 +50,6 @@ function Login(props: AppProps) {
           path: "/",
         });
 
-        const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-        cookie.set("first_chat_id", chatInstance._id, {
-          sameSite: "strict",
-          maxAge: rememberMe,
-          path: "/",
-        });
-
         cookie.set("token", login.Access_token, {
           sameSite: "strict",
           maxAge: rememberMe,
@@ -65,6 +59,15 @@ function Login(props: AppProps) {
         cookie.set("refresh_token", login.Refresh_token, {
           sameSite: "strict",
           maxAge: refreshRememberMe,
+          path: "/",
+        });
+
+        const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
+        console.log(chatInstance, "LOGIN");
+
+        cookie.set("first_chat_id", chatInstance._id, {
+          sameSite: "strict",
+          maxAge: rememberMe,
           path: "/",
         });
 
@@ -78,7 +81,6 @@ function Login(props: AppProps) {
           refresh_token: cookie.get("refresh_token"),
         };
         dispatch({ type: "SIGN_IN", payload: cookieObj });
-        alert(cookieObj);
         router.push(`/${chatInstance._id}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
@@ -92,7 +94,7 @@ function Login(props: AppProps) {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(() => async (context) => {
   const cookie = useCookie(context);
   await checkJWT(cookie.get("user_id"), cookie.get("token"));
-  const chatInstance: any = await getFirstChat(cookie.get("name"), cookie.get("token"));
+  const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
   if (cookie.has("name") && cookie.has("token")) {
     return {
       redirect: {

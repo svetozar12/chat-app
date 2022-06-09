@@ -11,79 +11,102 @@ interface IChat {
 
 const chat = {
   getAll: async (user_id: string, token: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
-        query {
-          getAllChats(user_id: "${user_id}",token:"${token}") {
-            _id
-            members
-          }
-         }`,
-      },
-    });
-    return res.data;
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
+          query {
+            getAllChats(user_id:"${user_id}",token:"${token}") {
+              _id
+              members
+            }
+          }`,
+        },
+      });
+
+      console.log(res.data, "sdk", user_id, token);
+
+      return res.data;
+    } catch (error) {
+      return false;
+    }
   },
 
   getById: async (chat_id: string, user_id: string, token: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         query {
           getChatById(chat_id: "${chat_id}",user_id: "${user_id}",token:"${token}") {
             _id
             members
           }
          }`,
-      },
-    });
-    return res.data;
+        },
+      });
+      return res.data;
+    } catch (error) {
+      return false;
+    }
   },
 
   create: async (chat: IChat, token: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         mutation {
           createChat(chat:{user_id:"${chat.user_id}",invite_id:"${chat.invite_id}",user1:"${chat.user1}",user2:"${chat.user2}"},token:"${token}") {
             data
             Message
           }
          }`,
-      },
-    });
-    return res.data;
+        },
+      });
+      return res.data;
+    } catch (error) {
+      return false;
+    }
   },
 
   update: async (user_id: string, chat_id: string, token: string, username?: String, usersData?: string[]) => {
-    const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
+    try {
+      const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
 
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         mutation {
           updateChat(user_id:"${user_id}",chat_id:"${chat_id}",token:"${token}",${condition}) {
             _id
             memberrs
           }
          }`,
-      },
-    });
-    return res.data;
+        },
+      });
+      return res.data;
+    } catch (error) {
+      return false;
+    }
   },
 
   delete: async (user_id: string, chat_id: string, token: string) => {
-    const res = await api(rootUrl, {
-      data: {
-        query: `
+    try {
+      const res = await api(rootUrl, {
+        data: {
+          query: `
         mutation {
           deleteChat(user_id:"${user_id}",chat_id:"${chat_id}",token:"${token}") {
             Message
           }
          }`,
-      },
-    });
-    return res.data;
+        },
+      });
+      return res.data;
+    } catch (error) {
+      return false;
+    }
   },
 };
 

@@ -11,8 +11,6 @@ interface IUpdateUser {
 }
 
 const updateUser = async (args: IUpdateUser) => {
-  console.log(args);
-
   const res = await resource.user.update(args.user, args.user_id, args.token);
   return res.data;
 };

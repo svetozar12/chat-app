@@ -19,6 +19,8 @@ function Register(props: { cookie: string }) {
   const quickLogin = async () => {
     setIsLogging(true);
     const JWT = await loginAuth(state.input_username, state.input_password);
+    console.log(JWT);
+
     cookie.set("name", state.input_username, {
       sameSite: "strict",
       path: "/",
@@ -49,6 +51,8 @@ function Register(props: { cookie: string }) {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const register = await api_helper.user.create(state.input_username, state.input_email, state.input_password, state.input_gender);
+    console.log(register);
+
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
