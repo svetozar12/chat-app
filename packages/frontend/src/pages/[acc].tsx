@@ -8,7 +8,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import ISave_inputState from "../redux/reducer/save_inputReducer/state";
-import { requestUrl } from "../utils/hostUrl_requestUrl";
+import { constants } from "../constants";
 import { css } from "@emotion/css";
 
 export interface Ichats {
@@ -36,7 +36,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await axios.get(`${requestUrl}/chat-room/?user_name=${cookie.get("name")}`);
+      const res = await axios.get(`${constants.GRAPHQL_URL}/chat-room/?user_name=${cookie.get("name")}`);
       const data = res.data.contacts;
 
       setChatRooms(data);
@@ -48,7 +48,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviteStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${requestUrl}/invites/${cookieName}?status=accepted`);
+      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/${cookieName}?status=accepted`);
       const data = res.data.invites;
       setContacts(data);
       return data;
@@ -60,7 +60,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviterStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${requestUrl}/invites/inviter/${cookieName}?status=accepted`);
+      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/inviter/${cookieName}?status=accepted`);
       const data = res.data.invites;
       setContacts(data);
       return data;
@@ -72,7 +72,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchRecieverStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${requestUrl}/invites/${cookieName}`);
+      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/${cookieName}`);
       const data = res.data.invites;
       setContacts(data);
       return true;
@@ -84,7 +84,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${requestUrl}/invites/${cookieName}?status=recieved`);
+      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/${cookieName}?status=recieved`);
       const data = res.data.invites;
       dispatch({ type: "NOTIFICATION_NUMBER", payload: data.length });
       setContacts(data);

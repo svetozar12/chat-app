@@ -23,8 +23,8 @@ const message = {
       },
     });
   },
-  update: async (chat_id: string, user_id: string, newMessage: string, token: string) => {
-    return await api.post(`${rootUrl}/${chat_id}`, {
+  update: async (message_id: string, user_id: string, newMessage: string, token: string) => {
+    return await api.post(`${rootUrl}/${message_id}`, {
       data: { user_id, newMessage },
       headers: {
         Authorization: `Bearer ${token}`,

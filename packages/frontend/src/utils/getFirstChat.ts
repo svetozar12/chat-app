@@ -1,8 +1,7 @@
-import { requestUrl } from "./hostUrl_requestUrl";
 import axios from "axios";
 export const getFirstChat = async (name: string) => {
   try {
-    const res = await axios.get(`${requestUrl}/chat-room/?user_name=${name}`);
+    const res = await axios.get(name);
     if (res.data.contacts.length <= 0) return;
     const data = res.data.contacts[0];
 

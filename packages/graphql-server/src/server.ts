@@ -4,8 +4,9 @@ import root from "./index";
 import Schema from "./schemas";
 // Construct a schema, using GraphQL schema language
 import handleError from "./middleware/handleError";
-
+import * as cors from "cors";
 const app = express();
+app.use(cors());
 app.use(
   "/graphql",
   graphqlHTTP({

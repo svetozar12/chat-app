@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { GrClose } from "react-icons/gr";
 import CheckBox_component from "../CheckBox_component";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
+import { constants } from "../../constants";
 import { Socket } from "socket.io-client";
 import axios from "axios";
 import { css } from "@emotion/css";
@@ -21,7 +21,7 @@ const AddUsers_Modal = ({ users, socketRef, chatId, setUsers }: IAddUsers_Modal)
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const addMembers = async (user: string[]) => {
     try {
-      await axios.put(`${requestUrl}/chat-room/${chatId}`, {
+      await axios.put(`${constants.GRAPHQL_URL}/chat-room/${chatId}`, {
         usernames: user,
       });
       return true;

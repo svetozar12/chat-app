@@ -5,7 +5,7 @@ interface ILogoutUser {
   token: string;
 }
 
-const logoutUser = async (parent: undefined, args: ILogoutUser, context: undefined) => {
+const logoutUser = async (args: ILogoutUser) => {
   const res = await resource.auth.logout(args.user_id, args.token);
   console.log(res);
 
