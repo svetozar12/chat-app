@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from "react";
 import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
 import { InitialStateMessage } from "../../redux/reducer/messageReducer/state";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import axios from "axios";
-import RenderChat from "./RenderChat";
-import ChatHeader from "../ChatHeader";
 import timeStamp from "../../utils/timeStamp";
-import { hostUrl, requestUrl } from "../../utils/hostUrl_requestUrl";
 import { useRouter } from "next/router";
 import { css } from "@emotion/css";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+// utils
+import { constants } from "../../constants";
+import api_helper from "../../graphql/api_helper";
+// components
+import RenderChat from "./RenderChat";
+import ChatHeader from "../ChatHeader";
+// hooks
+import { useDispatch, useSelector } from "react-redux";
 
 const Message_form = styled.form`
   width: 100%;
@@ -44,6 +47,9 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const statess = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookieName = cookie.get("name");
+  const user_id = cookie.get("id");
+  const token = cookie.get("token");
+
   const dispatch = useDispatch();
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const containerRef = React.useRef<null | HTMLDivElement>(null);
@@ -55,7 +61,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   const getRecentMessages = async () => {
     try {
-      const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=1&page_size=10`);
+      const res = await api_helper.message.getAll({ user_id, chat_id: chatId, token, query: { page_size: 10, page_number: 1 } });
       const data = res.data.reversedArr;
       data.forEach((element) => {
         dispatch({ type: "MESSAGES", payload: element });
@@ -69,7 +75,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   useEffect(() => {
     dispatch({ type: "SET_IS_MATCH", payload: false });
-    if (location.href === hostUrl + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
+    if (location.href === constants.HOST_URL + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
     dispatch({ type: "RESET_MESSAGES" });
     getRecentMessages();
   }, [route.asPath]);
@@ -91,11 +97,7 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
 
   const saveMessage = async () => {
     try {
-      await axios.post(`${requestUrl}/messages/${chatId}`, {
-        sender: cookieName,
-        message: state.message,
-      });
-
+      await api_helper.message.create(user_id, chatId, state.message as string, token);
       return true;
     } catch (error) {
       return false;
@@ -109,7 +111,12 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
           type: "INCREMENT_PAGE_NUMBER",
           payload: statess.pageNumber,
         });
-        const res = await axios.get(`${requestUrl}/messages/${chatId}?page_number=${statess.pageNumber}&page_size=10`);
+        const res = await api_helper.message.getAll({
+          user_id,
+          chat_id: chatId,
+          token,
+          query: { page_size: 10, page_number: statess.pageNumber },
+        });
         const data = res.data.reversedArr;
 
         data.forEach((element) => {

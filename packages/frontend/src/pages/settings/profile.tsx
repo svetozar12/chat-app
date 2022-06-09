@@ -1,12 +1,11 @@
 import React from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { getFirstChat } from "../../utils/getFirstChat";
 import UpdateInfoForm from "../../components/UpdateInfoForm";
+import api_helper from "../../graphql/api_helper";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
@@ -16,7 +15,7 @@ function Profile(props: { cookie: string }) {
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   React.useEffect(() => {
     (async () => {
-      const first_id = await getFirstChat(cookie.get("name"));
+      const first_id = await getFirstChat(cookie.get("id"), cookie.get("token"));
       setUrl(first_id._id);
     })();
   }, []);
@@ -29,15 +28,7 @@ function Profile(props: { cookie: string }) {
       if (image) formData.append("userAvatar", image);
 
       e.preventDefault();
-
-      axios
-        .put(`${requestUrl}/users/update`, formData)
-        .then(() => {
-          return true;
-        })
-        .catch(() => {
-          return false;
-        });
+      await api_helper.user.update(cookie.get("id"), cookie.get("token"), formData as any);
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
       dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
     } catch (error) {

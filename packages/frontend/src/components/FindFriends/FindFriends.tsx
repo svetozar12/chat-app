@@ -1,16 +1,16 @@
 import React from "react";
-import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { BsSearch, BsThreeDots } from "react-icons/bs";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { css, cx } from "@emotion/css";
 import UserSettings from "../UserSettings";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import api_helper from "../../graphql/api_helper";
 
 export interface IFindFriends {
   cookieName: string;
@@ -18,21 +18,22 @@ export interface IFindFriends {
   cookie: any;
 }
 
-function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
+function FindFriends({ socketRef }: IFindFriends) {
   const dispatch = useDispatch();
   const [hasAvatar, setHasAvatar] = React.useState(false);
   const [image, setImage] = React.useState("");
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
-  const getUserImage = async (name: string) => {
+  const getUserImage = async () => {
     try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
+      const res = await api_helper.user.getById(authState.cookie?.id as string, authState.cookie?.token as string);
       const userAvatar = res.data.user.userAvatar;
       if (!userAvatar) {
         setHasAvatar(false);
         return true;
       }
       setHasAvatar(true);
-      const requestString = `${requestUrl}/${userAvatar}`;
+      const requestString = ``;
       setImage(requestString);
       return true;
     } catch (error) {
@@ -41,7 +42,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   };
 
   React.useEffect(() => {
-    getUserImage(cookieName);
+    getUserImage();
   }, []);
 
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
@@ -65,11 +66,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
 
   const sendInvite = async () => {
     try {
-      const res = await axios.post(`${requestUrl}/invites`, {
-        reciever: state.reciever,
-        inviter: cookieName,
-        status: "recieved",
-      });
+      const res = await api_helper.invite.create(authState.cookie?.id as string, state.reciever, authState.cookie?.token as string);
       const data = res.data.message;
       socketRef.emit("send_friend_request", {
         inviter: data.inviter,
@@ -196,7 +193,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
                 })
               }
             />
-            {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
+            {state.setUserSettings ? <UserSettings /> : null}
           </div>
         </div>
       </div>

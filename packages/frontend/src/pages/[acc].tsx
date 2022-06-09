@@ -1,15 +1,15 @@
-import MainSection from "../components/MainSection";
-import MessageSection from "../components/MessagesSection";
 import { useState, useEffect } from "react";
-import HamburgerMenu from "../components/HamburgerMenu";
-import axios from "axios";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import ISave_inputState from "../redux/reducer/save_inputReducer/state";
-import { constants } from "../constants";
 import { css } from "@emotion/css";
+import api_helper from "../graphql/api_helper";
+// components
+import MainSection from "../components/MainSection";
+import MessageSection from "../components/MessagesSection";
+import HamburgerMenu from "../components/HamburgerMenu";
 
 export interface Ichats {
   _id: string;
@@ -24,19 +24,22 @@ export interface Iinvites {
 }
 
 const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
-  const dispatch = useDispatch();
   const cookie = useCookie(props.cookie);
-  const cookieName = cookie.get("name");
+  const user_id: string = cookie.get("id");
+  const token: string = cookie.get("token");
 
+  // hooks
+  const dispatch = useDispatch();
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
-
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await axios.get(`${constants.GRAPHQL_URL}/chat-room/?user_name=${cookie.get("name")}`);
+      const res = await api_helper.chatroom.getAll(user_id, token);
+      console.log(res, "ALL CHAT ROOMS");
       const data = res.data.contacts;
 
       setChatRooms(data);
@@ -48,7 +51,9 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviteStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/${cookieName}?status=accepted`);
+      const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "accepted" });
+      console.log(res, "invites", "reciever");
+
       const data = res.data.invites;
       setContacts(data);
       return data;
@@ -60,7 +65,9 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchInviterStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/inviter/${cookieName}?status=accepted`);
+      const res = await api_helper.invite.getAllByInviter({ user_id, token, status: "accepted" });
+      console.log(res, "invites", "inviter");
+
       const data = res.data.invites;
       setContacts(data);
       return data;
@@ -72,7 +79,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const fetchRecieverStatus = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/${cookieName}`);
+      const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "accepted" });
       const data = res.data.invites;
       setContacts(data);
       return true;
@@ -84,7 +91,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await axios.get(`${constants.GRAPHQL_URL}/invites/${cookieName}?status=recieved`);
+      const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
       const data = res.data.invites;
       dispatch({ type: "NOTIFICATION_NUMBER", payload: data.length });
       setContacts(data);
@@ -123,7 +130,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       checkNotification();
     });
 
-    socketConnect.emit("room", { user: cookieName });
+    socketConnect.emit("room", { user: cookie.get("name") });
 
     setSocketRef(socketConnect);
     return () => {

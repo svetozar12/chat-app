@@ -1,10 +1,10 @@
 import React from "react";
-import axios from "axios";
 import { Socket } from "socket.io-client";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
 import { Button } from "../styledComponents";
+import api_helper from "../../graphql/api_helper";
 
 const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) => {
   const [user, setUser] = React.useState<string>("");
@@ -28,9 +28,7 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);
-      await axios.post("http://localhost:4002/invites/group-chat", {
-        usersData,
-      });
+      await api_helper.invite.createGroupChat(usersData);
       emitFriendRequest();
       setUsersData([]);
       dispatch({

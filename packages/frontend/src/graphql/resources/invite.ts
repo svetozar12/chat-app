@@ -5,7 +5,7 @@ const rootUrl = "";
 interface IInvite {
   user_id: string;
   token: string;
-  status?: "Accepted" | "Declined" | "Recieved";
+  status?: "accepted" | "declined" | "recieved";
 }
 
 const invite = {

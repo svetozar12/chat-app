@@ -1,16 +1,15 @@
 import ISave_inputState from "./state";
 import { HYDRATE } from "next-redux-wrapper";
-import { AnyAction } from "redux";
 import { ActionType } from "../../types";
 
 export const initialState: ISave_inputState | ISave_inputState[] = {
   input_username: "",
   input_password: "",
   input_email: "",
-  input_gender: "",
+  input_gender: "other",
   notification_number: 0,
 };
-const saveInputReducer = (state = initialState, action: AnyAction) => {
+const saveInputReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case HYDRATE:
       return {

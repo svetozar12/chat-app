@@ -5,7 +5,7 @@ const rootUrl = "";
 interface IUser {
   username: string;
   email: string;
-  gender: "Male" | "Female" | "Other";
+  gender: "male" | "female" | "other";
 }
 
 const user = {
@@ -25,7 +25,7 @@ const user = {
     return res.data.data.loginUser;
   },
 
-  create: async (username: string, email: string, password: string, gender: "Male" | "Female" | "Other") => {
+  create: async (username: string, email: string, password: string, gender: "male" | "female" | "other") => {
     const res = await api(rootUrl, {
       data: {
         query: `

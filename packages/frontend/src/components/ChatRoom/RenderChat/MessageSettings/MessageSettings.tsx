@@ -1,8 +1,7 @@
 import React from "react";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
-import { requestUrl } from "../../../../utils/hostUrl_requestUrl";
-import axios from "axios";
+import api_helper from "../../../../graphql/api_helper";
 
 const options = css`
   background: transparent;
@@ -28,7 +27,7 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${requestUrl}/messages/${id}`);
+      await api_helper.message.delete("user_id", id, "token");
       return true;
     } catch (error) {
       return false;

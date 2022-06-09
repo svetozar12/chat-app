@@ -1,14 +1,16 @@
 import React from "react";
-import ChatRoom from "../ChatRoom";
-import Notifications_Modal from "../Notifications_Modal";
-import AddUsers_Modal from "../AddUsers_Modal";
 import { css, cx } from "@emotion/css";
 import { useSelector } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 import { Cookie } from "next-cookie";
+// components
+import ChatRoom from "../ChatRoom";
+import Notifications_Modal from "../Notifications_Modal";
+import AddUsers_Modal from "../AddUsers_Modal";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import api_helper from "../../graphql/api_helper";
 
 interface IContacts {
   _id: string;
@@ -29,12 +31,17 @@ interface IMessageSection {
 const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const route = useRouter();
   const getMembersSuggestions = async () => {
     try {
       const res = await fetchInviteStatus();
       const res_inviter = await fetchInviterStatus();
-      const res_chat = await axios.get(`http://localhost:4002/chat-room${window.location.pathname}`);
+      const res_chat = await api_helper.chatroom.getById(
+        window.location.pathname,
+        authState.cookie?.id as string,
+        authState.cookie?.token as string,
+      );
       const members_in_chat = res_chat.data.Message[0].members;
 
       let data: any[] = [];

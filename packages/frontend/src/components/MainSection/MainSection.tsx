@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
+// components
 import ActiveChats from "../ActiveChats";
 import FindFriends from "../FindFriends";
 import ChatSettings from "../ChatSettings";
+// other
 import { css, cx } from "@emotion/css";
 import { GrClose } from "react-icons/gr";
 import { Ichats } from "../../pages/[acc]";
@@ -10,9 +12,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { Socket } from "socket.io-client";
 import { Cookie } from "next-cookie";
-// import { useQuery, useMutation } from "@apollo/client";
-// import { getUser, getInvite } from "../../graphql/Queries";
-// import { createUser } from "../../graphql/Mutation";
 
 interface IMainSection {
   socketRef: Socket | null;
@@ -22,14 +21,6 @@ interface IMainSection {
 }
 
 const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => {
-  // const [CreateUser, { error }] = useMutation(createUser);
-  // CreateUser({
-  //   variables: { username: "user10", password: "user10", email: "user10@.com", gender: "Male" },
-  // });
-  // if (error) console.log(error);
-
-  // console.log(CreateUser, "gql");
-
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
@@ -127,8 +118,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
               }
             />
           </div>
-
-          {socketRef && <ChatSettings socketRef={socketRef} chatId={chatId} cookieName={cookie.get("name")} />}
+          {socketRef && <ChatSettings socketRef={socketRef} chatId={chatId} />}
         </div>
 
         {socketRef &&

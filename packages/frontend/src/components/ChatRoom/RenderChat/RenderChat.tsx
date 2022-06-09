@@ -4,9 +4,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import MessageSettings from "./MessageSettings";
 import { useDispatch, useSelector } from "react-redux";
 import { InitialStateMessage } from "../../../redux/reducer/messageReducer/state";
-import axios from "axios";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { IchatInstance } from "../ChatRoom";
+import api_helper from "../../../graphql/api_helper";
+import { IAuthState } from "../../../redux/reducer/authReducer/state";
 
 interface IRenderChat {
   id: string;
@@ -33,6 +33,7 @@ const otherMessages = css`
 
 const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) => {
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const dispatch = useDispatch();
   const name = cookie;
   const [styleBool, setStyleBool] = React.useState(false);
@@ -79,7 +80,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
     setSettings(!messageState.show);
   };
 
-  const handleEdit = (e: any) => {
+  const handleEdit = async (e: any) => {
     const target = e.target as HTMLTextAreaElement;
     e.target.style.height = "15px";
     e.target.style.height = `${target.scrollHeight}px`;
@@ -89,9 +90,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          const messages = messageState.messages;
-          console.log(...messages);
-          axios.put(`${requestUrl}/messages/${id}`, { newMessage: editedMessage });
+          await api_helper.message.update(authState.cookie?.id as string, id, editedMessage, authState.cookie?.token as string);
           dispatch({ type: "RESET_MESSAGES" });
         }
         messageArr.push(obj);

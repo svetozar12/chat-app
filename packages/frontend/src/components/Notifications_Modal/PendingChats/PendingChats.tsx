@@ -1,11 +1,12 @@
-import axios from "axios";
 import React from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
 import { Iinvites } from "../../../pages/[acc]";
 import { css, cx } from "@emotion/css";
 import Single_avatar from "../../Avatar/Single_avatar";
+import { IAuthState } from "../../../redux/reducer/authReducer/state";
+import { useSelector } from "react-redux";
+import api_helper from "../../../graphql/api_helper";
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
@@ -27,16 +28,14 @@ const ButtonSharedStyle = `
   }`;
 
 function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingChats) {
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await axios.put(`${requestUrl}/invites`, {
-        id: _id,
-        status: param,
-      });
+      await api_helper.invite.update(authState.cookie?.id as string, param, authState.cookie?.token as string);
       emitFriendRequest();
 
       return true;
@@ -47,11 +46,10 @@ function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingCha
 
   const createChatRoom = async () => {
     try {
-      await axios.put(`${requestUrl}/chat-room`, {
-        id: _id,
-        user1: inviter,
-        user2: reciever,
-      });
+      await api_helper.chatroom.create(
+        { user_id: authState.cookie?.id as string, invite_id: _id, user1: inviter, user2: reciever },
+        authState.cookie?.token as string,
+      );
       emitFriendRequest();
     } catch (error) {
       return false;

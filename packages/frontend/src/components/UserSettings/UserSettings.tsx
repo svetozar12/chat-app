@@ -1,7 +1,5 @@
 import React from "react";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
-import { useDispatch } from "react-redux";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { css } from "@emotion/css";
@@ -9,6 +7,8 @@ import styled from "@emotion/styled";
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
+import { IAuthState } from "../../redux/reducer/authReducer/state";
+import api_helper from "../../graphql/api_helper";
 export const User_settings = styled.div`
   width: 10rem;
   position: absolute;
@@ -63,22 +63,26 @@ const buttonStyles = css`
   height: 1.5rem;
 `;
 
-function UserSettings({ cookie }: { cookie: any }) {
+function UserSettings() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const deleteCookies = () => {
-    cookie.remove("name");
-    cookie.remove("token");
-    cookie.remove("refresh_token");
+    const cookies = document.cookie.split(";");
+
+    for (const cookie of cookies) {
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
     router.push("/");
     dispatch({ type: "SIGN_OUT" });
   };
 
   const deleteUser = async () => {
     try {
-      await axios.delete(`${requestUrl}/users/${cookie.get("name")}`);
-
+      await api_helper.user.delete(authState.cookie?.id as string, authState.cookie?.token as string);
       deleteCookies();
       return true;
     } catch (error) {

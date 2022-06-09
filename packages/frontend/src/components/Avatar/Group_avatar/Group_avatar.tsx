@@ -1,20 +1,21 @@
 import React from "react";
-import axios from "axios";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import api_helper from "../../../graphql/api_helper";
+import { IAuthState } from "../../../redux/reducer/authReducer/state";
 import Single_avatar from "../Single_avatar";
+import { useSelector } from "react-redux";
 
 function Group_avatar({ cookieName, members }: { inviter: string; cookieName: string; members: string[] }) {
   const [images, setImages] = React.useState<string[]>([]);
-
-  const getUserImage = async (name: string) => {
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const getUserImage = async (image: string) => {
     try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
+      const res = await api_helper.user.getById(authState.cookie?.id as string, authState.cookie?.token as string);
       const userAvatar = res.data.user.userAvatar;
       if (!userAvatar) {
         return false;
       }
 
-      const requestString = `${requestUrl}/${userAvatar}`;
+      const requestString = `${image}`;
       setImages([...images, requestString]);
       return true;
     } catch (error) {

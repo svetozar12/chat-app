@@ -1,5 +1,4 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { AnyAction } from "redux";
 import { IAuthState } from "./state";
 import { ActionType } from "../../types";
 export const initialState: IAuthState = {
@@ -7,9 +6,14 @@ export const initialState: IAuthState = {
   good: "", //good and bad stand for good alert and bad alert
   bad: "",
   loginPrompt: false,
-  cookie: "",
+  cookie: {
+    username: "",
+    id: "",
+    token: "",
+    refresh_token: "",
+  },
 };
-const reducer = (state = initialState, action: AnyAction) => {
+const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case HYDRATE:
       return {

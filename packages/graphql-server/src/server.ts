@@ -2,6 +2,7 @@ import * as express from "express";
 import { graphqlHTTP } from "express-graphql";
 import root from "./index";
 import Schema from "./schemas";
+
 // Construct a schema, using GraphQL schema language
 import handleError from "./middleware/handleError";
 import * as cors from "cors";

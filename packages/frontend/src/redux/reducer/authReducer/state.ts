@@ -3,5 +3,10 @@ export interface IAuthState {
   loginPrompt: boolean;
   good?: string;
   bad?: string;
-  cookie?: string;
+  cookie?: {
+    username: string;
+    id: string;
+    token: string;
+    refresh_token: string;
+  };
 }
