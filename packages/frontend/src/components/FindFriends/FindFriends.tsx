@@ -13,9 +13,7 @@ import { IAuthState } from "../../redux/reducer/authReducer/state";
 import api_helper from "../../graphql/api_helper";
 
 export interface IFindFriends {
-  cookieName: string;
   socketRef: Socket;
-  cookie: any;
 }
 
 function FindFriends({ socketRef }: IFindFriends) {

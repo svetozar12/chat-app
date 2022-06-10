@@ -75,12 +75,7 @@ function Login(props: AppProps) {
           sameSite: "strict",
           path: "/",
         });
-        const cookieObj = {
-          id: cookie.get("id"),
-          token: cookie.get("token"),
-          refresh_token: cookie.get("refresh_token"),
-        };
-        dispatch({ type: "SIGN_IN", payload: cookieObj });
+
         router.push(`/${chatInstance._id}`);
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }

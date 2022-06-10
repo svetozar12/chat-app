@@ -4,6 +4,7 @@ import api_helper from "../../../graphql/api_helper";
 import { css } from "@emotion/css";
 import { IAuthState } from "../../../redux/reducer/authReducer/state";
 import { useSelector } from "react-redux";
+import { useCookie } from "next-cookie";
 const logo_post_overlay = css`
   z-index: 1;
 `;
@@ -18,7 +19,6 @@ const group_logo = css`
 `;
 function Single_avatar({
   inviter,
-  cookieName,
   width,
   height,
   overlay,
@@ -26,7 +26,6 @@ function Single_avatar({
   preview,
 }: {
   inviter: string;
-  cookieName: string;
   width?: string;
   height?: string;
   overlay?: boolean;
@@ -36,6 +35,8 @@ function Single_avatar({
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const cookie = useCookie();
+  const cookieName = cookie.get("name") as string;
 
   const getUserImage = async (name: string) => {
     try {

@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
-import { Cookie } from "next-cookie";
 // components
 import ChatRoom from "../ChatRoom";
 import Notifications_Modal from "../Notifications_Modal";
@@ -22,17 +21,17 @@ interface IContacts {
 interface IMessageSection {
   contacts: IContacts[];
   socketRef: Socket | null;
-  cookie: Cookie;
   fetchInviteStatus: () => Promise<any>;
   fetchInviterStatus: () => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
+const MessageSection = ({ contacts, socketRef, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const route = useRouter();
+
   const getMembersSuggestions = async () => {
     try {
       const res = await fetchInviteStatus();
@@ -110,7 +109,7 @@ const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchI
           {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} />}
 
           {state.setModalInvite && socketRef && <AddUsers_Modal socketRef={socketRef} users={users} setUsers={setUsers} chatId={chatId} />}
-          <ChatRoom cookie={cookie} chatId={chatId} />
+          <ChatRoom chatId={chatId} />
         </div>
       </div>
     </section>

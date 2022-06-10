@@ -5,7 +5,6 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAuth } from "../utils/authRoutes";
 import { getFirstChat } from "../utils/getFirstChat";
 import api_helper from "../graphql/api_helper";
 
@@ -18,40 +17,55 @@ function Register(props: { cookie: string }) {
 
   const quickLogin = async () => {
     setIsLogging(true);
-    const JWT = await loginAuth(state.input_username, state.input_password);
-    console.log(JWT);
 
-    cookie.set("name", state.input_username, {
-      sameSite: "strict",
-      path: "/",
-    });
-    cookie.set("token", JWT, {
-      sameSite: "strict",
-      path: "/",
-    });
-    const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-    cookie.set("first_chat_id", chatInstance._id, {
-      sameSite: "strict",
-      path: "/",
-    });
-    cookie.set("refresh_token", JWT, {
-      sameSite: "strict",
-      path: "/",
-      maxAge: 7200,
-    });
-    const cookieObj = {
-      id: cookie.get("id"),
-      token: cookie.get("token"),
-      refresh_token: cookie.get("refresh_token"),
-    };
-    dispatch({ type: "SIGN_IN", payload: cookieObj });
-    router.push(`/${chatInstance._id}`);
+    const login = await api_helper.auth.login(state.input_username, state.input_password);
+    if (await login) {
+      dispatch({ type: "QUICK_LOGIN", payload: true });
+      setIsLogging(true);
+      console.log(login);
+
+      cookie.set("name", state.input_username, {
+        sameSite: "strict",
+        path: "/",
+      });
+
+      cookie.set("id", login.user_id, {
+        sameSite: "strict",
+        path: "/",
+      });
+
+      cookie.set("token", login.Access_token, {
+        sameSite: "strict",
+        path: "/",
+      });
+
+      cookie.set("refresh_token", login.Refresh_token, {
+        sameSite: "strict",
+        path: "/",
+      });
+
+      const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
+      console.log(chatInstance, "LOGIN");
+
+      cookie.set("first_chat_id", chatInstance._id, {
+        sameSite: "strict",
+        path: "/",
+      });
+
+      cookie.set("last_visited_chatRoom", chatInstance._id, {
+        sameSite: "strict",
+        path: "/",
+      });
+
+      router.push(`/${chatInstance._id}`);
+      dispatch({ type: "SAVE_INPUT", payload: "" });
+    }
+    return;
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const register = await api_helper.user.create(state.input_username, state.input_email, state.input_password, state.input_gender);
-    console.log(register);
 
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });

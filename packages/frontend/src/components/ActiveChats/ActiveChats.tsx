@@ -6,24 +6,43 @@ import Avatar from "../Avatar";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
+import api_helper from "../../graphql/api_helper";
+import { useCookie } from "next-cookie";
 interface IActiveChats {
   _id: string;
   members: string[];
-  cookieName: string;
   socketRef: Socket;
   chatId: string;
 }
 
-const ActiveChats = ({ _id, members, cookieName, socketRef, chatId }: IActiveChats) => {
+const ActiveChats = ({ _id, members, socketRef, chatId }: IActiveChats) => {
   const router = useRouter();
-  const [user1, user2] = [members[0], members[1]];
-  const [inviter, setInviter] = React.useState<string>("");
+  const [user1, setUser1] = React.useState("");
+  const [user2, setUser2] = React.useState("");
+
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const [inviter, setInviter] = React.useState<string>("");
+  const cookie = useCookie();
+  const cookieName = cookie.get("name") as string;
+  const getMembers = async () => {
+    try {
+      for await (const member of members) {
+        const user = await api_helper.user.getById(member, cookie.get("token"));
+
+        if (user1) setUser2(user.getUser.username);
+        setUser1(user.getUser.username);
+        console.log();
+      }
+    } catch (error) {
+      return false;
+    }
+  };
 
   React.useEffect(() => {
     const notMe: string[] = members.filter((element) => element !== cookieName);
     setInviter(notMe[0]);
+    getMembers();
   }, []);
 
   const joinChat = () => {

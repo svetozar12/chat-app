@@ -12,13 +12,11 @@ const UpdateInfoForm = ({
   handleSubmit,
   image,
   setImage,
-  cookieName,
 }: {
   url?: string;
   image?: string;
   handleSubmit: any;
   setImage: React.Dispatch<React.SetStateAction<string>>;
-  cookieName: string;
 }) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
@@ -61,7 +59,7 @@ const UpdateInfoForm = ({
           `}
         >
           {/* <p>{image}</p> */}
-          <Single_avatar inviter="" cookieName={cookieName} width="6rem" height="6rem" preview={image} />
+          <Single_avatar inviter="" width="6rem" height="6rem" preview={image} />
           <label
             className={css`
               width: 6rem;

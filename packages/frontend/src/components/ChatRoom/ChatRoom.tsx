@@ -16,7 +16,7 @@ import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
-
+import { useCookie } from "next-cookie";
 const Message_form = styled.form`
   width: 100%;
   background: var(--main-white);
@@ -24,7 +24,6 @@ const Message_form = styled.form`
 `;
 
 interface IHome {
-  cookie: any;
   chatId: any;
 }
 
@@ -41,15 +40,15 @@ export interface IchatInstance {
   createdAt: string;
 }
 
-const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
+const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const route = useRouter();
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const statess = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
-  const cookieName = cookie.get("name");
-  const user_id = cookie.get("id");
-  const token = cookie.get("token");
-
+  const cookie = useCookie();
+  const cookieName = cookie.get("name") as string;
+  const user_id = cookie.get("id") as string;
+  const token = cookie.get("token") as string;
   const dispatch = useDispatch();
   const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const containerRef = React.useRef<null | HTMLDivElement>(null);

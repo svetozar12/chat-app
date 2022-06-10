@@ -11,16 +11,15 @@ import { Ichats } from "../../pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
 import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { Socket } from "socket.io-client";
-import { Cookie } from "next-cookie";
+import { Cookie, useCookie } from "next-cookie";
 
 interface IMainSection {
   socketRef: Socket | null;
-  cookie: Cookie;
   chatId: string;
   chatRooms: Ichats[];
 }
 
-const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => {
+const MainSection = ({ socketRef, chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
@@ -50,7 +49,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
         }
       `}
     >
-      {socketRef && <FindFriends cookie={cookie} cookieName={cookie.get("name")} socketRef={socketRef} />}
+      {socketRef && <FindFriends socketRef={socketRef} />}
       <div
         className="flex "
         style={{
@@ -123,7 +122,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
 
         {socketRef &&
           chatRooms.map((item, index) => {
-            return <ActiveChats key={index} {...item} cookieName={cookie.get("name")} socketRef={socketRef} chatId={chatId} />;
+            return <ActiveChats key={index} {...item} socketRef={socketRef} chatId={chatId} />;
           })}
       </div>
     </section>

@@ -6,12 +6,6 @@ export const initialState: IAuthState = {
   good: "", //good and bad stand for good alert and bad alert
   bad: "",
   loginPrompt: false,
-  cookie: {
-    username: "",
-    id: "",
-    token: "",
-    refresh_token: "",
-  },
 };
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {

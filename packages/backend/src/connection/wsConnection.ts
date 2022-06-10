@@ -29,7 +29,6 @@ io.on("connection", (socket: Socket): void => {
     console.log(messages);
     findChat.members.forEach((element: any) => {
       const id = element.toString().split("(");
-      console.log(id[0]);
 
       io.to(id[0]).emit("message", {
         messages,

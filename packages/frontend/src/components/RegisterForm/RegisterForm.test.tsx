@@ -18,7 +18,7 @@ const store = mockStore({
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+      <RegisterForm quickLogin={quickLogin} isLogging={false} handleSubmit={handleSubmit} />
     </Provider>,
   );
   return component;
@@ -33,7 +33,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+            <RegisterForm quickLogin={quickLogin} isLogging={false} handleSubmit={handleSubmit} />
           </Provider>,
         )
         .toJSON(),

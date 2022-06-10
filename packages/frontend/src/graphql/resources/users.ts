@@ -8,8 +8,13 @@ interface IUser {
   gender: "male" | "female" | "other";
 }
 
+interface GetUser {
+  getUser: any | false;
+  error?: any;
+}
+
 const user = {
-  getById: async (user_id: string, token: string) => {
+  getById: async (user_id: string, token: string): Promise<GetUser> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -23,9 +28,9 @@ const user = {
          }`,
         },
       });
-      return res.data.data.loginUser;
+      return res.data.data;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -41,7 +46,7 @@ const user = {
          }`,
         },
       });
-      return res.data.data.loginUser;
+      return res.data.data;
     } catch (error) {
       return false;
     }
@@ -59,7 +64,7 @@ const user = {
          }`,
         },
       });
-      return res.data.data.loginUser;
+      return res.data.data;
     } catch (error) {
       return false;
     }
@@ -77,7 +82,7 @@ const user = {
          }`,
         },
       });
-      return res.data.data.loginUser;
+      return res.data.data;
     } catch (error) {
       return false;
     }
