@@ -62,7 +62,8 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
   const getRecentMessages = async () => {
     try {
       const res = await api_helper.message.getAll({ user_id, chat_id: chatId, token, query: { page_size: 10, page_number: 1 } });
-      const data = res.data.reversedArr;
+      const data = res.getAllMessages;
+
       data.forEach((element) => {
         dispatch({ type: "MESSAGES", payload: element });
       });
@@ -84,11 +85,15 @@ const ChatRoom: NextPage<IHome> = ({ cookie, chatId }) => {
     inputTextArea.current.focus();
     if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
+    console.log(user_id, "id");
+
     socketConnect.on("message", ({ messages }) => {
       const [message] = messages;
+      console.log(messages, "ws");
+
       dispatch({ type: "MESSAGES", payload: message });
     });
-    socketConnect.emit("joined_chat_room", { user: cookieName });
+    socketConnect.emit("joined_chat_room", { user: user_id });
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();

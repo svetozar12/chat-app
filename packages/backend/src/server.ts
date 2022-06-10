@@ -6,7 +6,6 @@ import mongo_connection from "./config/mongo_config";
 import redis_connection from "./config/redis_config";
 // routes function
 import { routes } from "./routes";
-
 const app = express();
 
 // middleware
@@ -14,6 +13,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
+// ws connection
+import "./connection/wsConnection";
 // db connection
 mongo_connection();
 redis_connection();

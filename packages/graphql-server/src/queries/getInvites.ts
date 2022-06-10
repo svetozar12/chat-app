@@ -8,12 +8,12 @@ interface IGetAll {
 
 const getInvitesByReciever = async (parent: undefined, args: IGetAll, context: undefined) => {
   const res = await resource.invite.getAllByReciever(args.user_id, args.token);
-  return res.data;
+  return res.data.data;
 };
 
 const getInvitesByInviter = async (args: IGetAll) => {
   const res = await resource.invite.getAllByInviter(args.user_id, args.token);
-  return res.data;
+  return res.data.data;
 };
 
 const getInvites = { getInvitesByReciever, getInvitesByInviter };

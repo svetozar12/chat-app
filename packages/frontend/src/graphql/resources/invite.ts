@@ -25,7 +25,7 @@ const invite = {
          }`,
         },
       });
-      return res.data;
+      return res.data.data;
     } catch (error) {
       return false;
     }

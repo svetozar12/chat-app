@@ -2,7 +2,7 @@
   "name": "@chat-app/graphql-server",
   "version": "1.0.0",
   "description": "graphql-server that stays between fe and be",
-  "main": "server.js",
+  "main": "/dist/server.js",
   "repository": "https://github.com/svetozar12/chat-app",
   "author": "svetozar gospodinov",
   "license": "MIT",

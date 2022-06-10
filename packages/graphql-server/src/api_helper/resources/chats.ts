@@ -11,13 +11,6 @@ const rootUrl = "/chat-room";
 
 const chats = {
   getAll: async (user_id: string, token: string) => {
-    console.log(
-      await api.get(`${rootUrl}/?user_id=${user_id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }),
-      "dora",
-    );
-
     return await api.get(`${rootUrl}/?user_id=${user_id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });

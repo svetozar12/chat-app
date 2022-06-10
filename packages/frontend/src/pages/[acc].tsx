@@ -38,13 +38,9 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      console.log("BEFORE", user_id, token);
-
       const res = await api_helper.chatroom.getAll(user_id, token);
-      console.log(res.data, "ALL CHAT ROOMS", user_id, token);
-      const data = res.data.contacts;
 
-      setChatRooms(data);
+      setChatRooms(res.getAllChats);
       return true;
     } catch (error) {
       return false;
@@ -54,7 +50,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     try {
       setContacts([]);
       const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "accepted" });
-      console.log(res, "invites", "reciever");
 
       const data = res.data.invites;
       setContacts(data);
@@ -68,7 +63,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     try {
       setContacts([]);
       const res = await api_helper.invite.getAllByInviter({ user_id, token, status: "accepted" });
-      console.log(res, "invites", "inviter");
 
       const data = res.data.invites;
       setContacts(data);

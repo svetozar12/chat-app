@@ -1,6 +1,9 @@
 import "dotenv/config";
 
 export const constants = {
+  CLIENT_URL: process.env.CLIENT_URL,
+  PORT: process.env.PORT,
+  WS_PORT: process.env.WS_PORT,
   ACCESS_TOKEN: process.env.JWT_SECRET as string,
   REFRESH_TOKEN: process.env.JWT_REFRESH_SECRET as string,
   SESSION_SECRET: process.env.SESSION_SECRET,

@@ -27,4 +27,5 @@ app.use(
 app.use(handleError);
 
 app.listen(4001);
+
 console.log("Running a GraphQL API server at http://localhost:4001/graphql");

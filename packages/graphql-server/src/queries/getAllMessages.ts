@@ -10,9 +10,10 @@ interface IMessage {
   token: string;
 }
 
-const getMessages = async (args: IMessage) => {
+const getAllMessages = async (args: IMessage) => {
   const res = await resource.message.getAll(args.chat_id, args.user_id, args.query, args.token);
+
   return res.data;
 };
 
-export default getMessages;
+export default getAllMessages;

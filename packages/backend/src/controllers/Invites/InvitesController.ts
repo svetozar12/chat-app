@@ -74,7 +74,6 @@ const InvitesController: IInviteController = {
       inviter: user.username,
       $or: [{ status: "recieved" }, { status: "accepted" }],
     });
-    console.log(checkInviteInstance, "fred");
 
     if (req.body.reciever === user.username) return next(CustomError.conflict("Can't send invites to yourself !"));
     if (checkInviteInstance) return next(CustomError.conflict("Invite is already sent !"));

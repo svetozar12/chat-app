@@ -15,23 +15,26 @@ interface IGetMessages {
 const message = {
   getAll: async ({ user_id, chat_id, token, query }: IGetMessages) => {
     try {
-      const condition = query ? `query:{page_size:${query.page_size},page_number:"${query.page_number}"}` : "";
+      const condition = query ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : "";
+
       const res = await api(rootUrl, {
         data: {
           query: `
-        query {
-          getAllMessages(user_id: "${user_id}",chat_id: "${chat_id}",token:"${token}",${condition}) {
+          query {
+          getAllMessages(user_id: "${user_id}",chat_id:"${chat_id}"${condition},token:"${token}") {
             user_id
             chat_id
             sender
             message
-            seenBy
           }
-         }`,
+      }`,
         },
       });
-      return res.data;
+
+      return res.data.data;
     } catch (error) {
+      console.log("getAll", error);
+
       return false;
     }
   },

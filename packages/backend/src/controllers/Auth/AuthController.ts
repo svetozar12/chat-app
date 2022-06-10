@@ -74,7 +74,6 @@ const AuthController: IAuthController = {
 
     if (sessions.length <= 0) return next(CustomError.notFound("You don't have sessions"));
     for await (const item of sessions) {
-      console.log(item.expireAfter);
       await client.SET(`token_${item.token}`, item.token);
       await client.EXPIRE(`token_${item.token}`, item.expireAfter);
     }

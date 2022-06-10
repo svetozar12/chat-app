@@ -9,19 +9,27 @@ const rootUrl = "/messages";
 
 const message = {
   getAll: async (chat_id: string, user_id: string, query: IQuery, token: string) => {
-    return await api.get(`${rootUrl}/${chat_id}?user_id=${user_id}${query ? "&&page_size=1&&page_number=1" : ""}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await api.get(
+      `${rootUrl}/${chat_id}?user_id=${user_id}${query ? `&&page_size=${query.page_size}&&page_number=${query.page_number}` : ""}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
+
+    return res.data;
   },
   create: async (chat_id: string, user_id: string, message: string, token: string) => {
-    return await api.post(`${rootUrl}/${chat_id}`, {
-      data: { user_id, message },
-      headers: {
-        Authorization: `Bearer ${token}`,
+    return await api.post(
+      `${rootUrl}/${chat_id}`,
+      { user_id, message },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
   },
   update: async (message_id: string, user_id: string, newMessage: string, token: string) => {
     return await api.post(`${rootUrl}/${message_id}`, {

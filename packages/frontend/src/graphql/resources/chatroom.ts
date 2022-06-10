@@ -24,9 +24,7 @@ const chat = {
         },
       });
 
-      console.log(res.data, "sdk", user_id, token);
-
-      return res.data;
+      return res.data.data;
     } catch (error) {
       return false;
     }
