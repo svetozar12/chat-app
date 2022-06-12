@@ -1,9 +1,7 @@
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
-import api_helper from "../../../graphql/api_helper";
+import api_helper from "../../../services/graphql/api_helper";
 import { css } from "@emotion/css";
-import { IAuthState } from "../../../redux/reducer/authReducer/state";
-import { useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 const logo_post_overlay = css`
   z-index: 1;
@@ -34,13 +32,12 @@ function Single_avatar({
 }) {
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const cookie = useCookie();
   const cookieName = cookie.get("name") as string;
 
   const getUserImage = async (name: string) => {
     try {
-      const res = await api_helper.user.getById(authState.cookie?.id as string, authState.cookie?.token as string);
+      const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
       const userAvatar = res.data.user.userAvatar;
       if (!userAvatar) {
         setHasAvatar(false);

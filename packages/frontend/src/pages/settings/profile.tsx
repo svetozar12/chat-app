@@ -2,10 +2,10 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
-import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
+import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 import { getFirstChat } from "../../utils/getFirstChat";
 import UpdateInfoForm from "../../components/UpdateInfoForm";
-import api_helper from "../../graphql/api_helper";
+import api_helper from "../../services/graphql/api_helper";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
@@ -39,7 +39,7 @@ function Profile(props: { cookie: string }) {
   return (
     <main style={{ height: "100vh" }} className="flex">
       <section style={{ width: "80%" }}>
-        <UpdateInfoForm cookieName={cookie.get("name")} url={url} handleSubmit={handleSubmit} image={image} setImage={setImage} />
+        <UpdateInfoForm url={url} handleSubmit={handleSubmit} image={image} setImage={setImage} />
       </section>
     </main>
   );

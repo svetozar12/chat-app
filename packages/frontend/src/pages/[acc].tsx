@@ -3,9 +3,10 @@ import { useCookie } from "next-cookie";
 import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import ISave_inputState from "../redux/reducer/save_inputReducer/state";
 import { css } from "@emotion/css";
-import api_helper from "../graphql/api_helper";
+// services
+import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
+import api_helper from "../services/graphql/api_helper";
 // components
 import MainSection from "../components/MainSection";
 import MessageSection from "../components/MessagesSection";
@@ -156,12 +157,11 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <HamburgerMenu />
         </div>
       </section>
-      <MainSection chatId={props.chatRoom} chatRooms={chatRooms} socketRef={socketRef} cookie={cookie} />
+      <MainSection chatId={props.chatRoom} chatRooms={chatRooms} socketRef={socketRef} />
       <MessageSection
         chatId={props.chatRoom}
         contacts={contacts}
         socketRef={socketRef}
-        cookie={cookie}
         fetchInviteStatus={fetchInviteStatus}
         fetchInviterStatus={fetchInviterStatus}
       />

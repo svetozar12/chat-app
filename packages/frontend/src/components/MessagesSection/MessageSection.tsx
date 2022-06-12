@@ -1,15 +1,16 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { useSelector } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 // components
 import ChatRoom from "../ChatRoom";
 import Notifications_Modal from "../Notifications_Modal";
 import AddUsers_Modal from "../AddUsers_Modal";
-import { IAuthState } from "../../redux/reducer/authReducer/state";
-import api_helper from "../../graphql/api_helper";
+// services
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import api_helper from "../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 interface IContacts {
   _id: string;
@@ -29,19 +30,19 @@ interface IMessageSection {
 const MessageSection = ({ contacts, socketRef, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const cookie = useCookie();
   const route = useRouter();
 
   const getMembersSuggestions = async () => {
     try {
       const res = await fetchInviteStatus();
       const res_inviter = await fetchInviterStatus();
-      const res_chat = await api_helper.chatroom.getById(
-        window.location.pathname,
-        authState.cookie?.id as string,
-        authState.cookie?.token as string,
-      );
-      const members_in_chat = res_chat.data.Message[0].members;
+      const res_chat = await api_helper.chatroom.getById(window.location.pathname, cookie.get("id"), cookie.get("token"));
+      const {
+        data: [{ members: Message }],
+      } = res_chat;
+
+      const members_in_chat = Message;
 
       let data: any[] = [];
       if (res_inviter) data = [...res_inviter];

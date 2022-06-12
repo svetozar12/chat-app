@@ -4,13 +4,15 @@ import { useCookie } from "next-cookie";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import ISave_inputState from "../redux/reducer/save_inputReducer/state";
-import { IAuthState } from "../redux/reducer/authReducer/state";
-import { wrapper } from "../redux/store";
-import { getFirstChat } from "../utils/getFirstChat";
+import { wrapper } from "../services/redux/store";
 import LoginForm from "../components/LoginForm";
+// utils
+import { getFirstChat } from "../utils/getFirstChat";
 import { checkJWT } from "../utils/authRoutes";
-import api_helper from "../graphql/api_helper";
+// services
+import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
+import { IAuthState } from "../services/redux/reducer/authReducer/state";
+import api_helper from "../services/graphql/api_helper";
 
 function Login(props: AppProps) {
   const [isLogging, setIsLogging] = React.useState(false);

@@ -1,10 +1,10 @@
 import React from "react";
 import { Socket } from "socket.io-client";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
 import { Button } from "../styledComponents";
-import api_helper from "../../graphql/api_helper";
+import api_helper from "../../services/graphql/api_helper";
 
 const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) => {
   const [user, setUser] = React.useState<string>("");

@@ -9,9 +9,8 @@ import { css, cx } from "@emotion/css";
 import { GrClose } from "react-icons/gr";
 import { Ichats } from "../../pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
 import { Socket } from "socket.io-client";
-import { Cookie, useCookie } from "next-cookie";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 
 interface IMainSection {
   socketRef: Socket | null;

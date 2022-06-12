@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
-import { IAuthState } from "../../redux/reducer/authReducer/state";
-import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import Alerts from "../Alerts";
 import { css } from "@emotion/css";
 import { Form, Button, Input, Form_header, Label_container, Label_button } from "../styledComponents";
 import QuickLogin_Modal from "./QuickLogin_Modal";
+// services
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 
 function RegisterForm({
   quickLogin,

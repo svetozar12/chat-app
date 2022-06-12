@@ -1,4 +1,5 @@
-import api_helper from "../graphql/api_helper";
+import api_helper from "../services/graphql/api_helper";
+
 export interface ITokens {
   name?: string;
   JWT: string | false;

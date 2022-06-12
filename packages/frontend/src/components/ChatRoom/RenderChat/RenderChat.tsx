@@ -1,12 +1,14 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import MessageSettings from "./MessageSettings";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialStateMessage } from "../../../redux/reducer/messageReducer/state";
+// components
+import MessageSettings from "./MessageSettings";
 import { IchatInstance } from "../ChatRoom";
-import api_helper from "../../../graphql/api_helper";
-import { IAuthState } from "../../../redux/reducer/authReducer/state";
+// services
+import { InitialStateMessage } from "../../../services/redux/reducer/messageReducer/state";
+import api_helper from "../../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 interface IRenderChat {
   id: string;
@@ -14,7 +16,6 @@ interface IRenderChat {
   time_stamp: string | number;
   message: string;
   chatId: string;
-  cookie: string;
 }
 
 const mineMessages = css`
@@ -31,11 +32,10 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) => {
+const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const dispatch = useDispatch();
-  const name = cookie;
+  const cookie = useCookie();
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
@@ -44,6 +44,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
   const [height, setHeight] = React.useState(48);
   const inputRef = React.useRef<HTMLDivElement>(null);
 
+  const name = cookie.get("name");
   const checkSettingsOpt = () => {
     return styleBool || settings;
   };
@@ -90,7 +91,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          await api_helper.message.update(authState.cookie?.id as string, id, editedMessage, authState.cookie?.token as string);
+          await api_helper.message.update(cookie.get("id"), id, editedMessage, cookie.get("token"));
           dispatch({ type: "RESET_MESSAGES" });
         }
         messageArr.push(obj);

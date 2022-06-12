@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/dist/client/link";
 import { useSelector, useDispatch } from "react-redux";
-import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { css } from "@emotion/css";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
 import { Form, Button, Input, Label_button } from "../styledComponents";
 import { AiFillPlusCircle } from "react-icons/ai";
+import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 
 const UpdateInfoForm = ({
   url,

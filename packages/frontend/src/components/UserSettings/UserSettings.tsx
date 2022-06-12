@@ -7,8 +7,9 @@ import styled from "@emotion/styled";
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
-import api_helper from "../../graphql/api_helper";
 import { useCookie } from "next-cookie";
+import api_helper from "../../services/graphql/api_helper";
+
 export const User_settings = styled.div`
   width: 10rem;
   position: absolute;

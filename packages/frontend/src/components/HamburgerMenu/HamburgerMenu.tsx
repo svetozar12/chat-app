@@ -1,6 +1,6 @@
 import { css, cx } from "@emotion/css";
 import { useSelector, useDispatch } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { GiHamburgerMenu } from "react-icons/gi";
 function HamburgerMenu() {
   const dispatch = useDispatch();

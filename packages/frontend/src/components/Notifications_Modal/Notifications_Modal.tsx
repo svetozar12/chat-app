@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { GrClose } from "react-icons/gr";
 import { Socket } from "socket.io-client";
 import PendingChats from "./PendingChats/PendingChats";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css, cx } from "@emotion/css";
 

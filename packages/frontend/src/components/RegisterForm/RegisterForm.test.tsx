@@ -3,9 +3,10 @@ import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/authReducer/authReducer";
-import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer/save_inputReducer";
 import configureStore from "redux-mock-store";
+// services
+import { initialState } from "../../services/redux/reducer/authReducer/authReducer";
+import { initialState as saveInputState } from "../../services/redux/reducer/save_inputReducer/save_inputReducer";
 const quickLogin: any = jest.fn();
 const handleSubmit = jest.fn();
 

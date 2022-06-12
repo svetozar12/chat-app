@@ -1,11 +1,10 @@
-import { AnyAction } from "redux";
 import { ActionType } from "../../types";
 import { InitialStateMessage } from "./state";
 export const initialState: InitialStateMessage = {
   messages: [],
   show: false,
 };
-const messageReducer = (state = initialState, action: AnyAction) => {
+const messageReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case ActionType.CLEAR:
       return initialState;

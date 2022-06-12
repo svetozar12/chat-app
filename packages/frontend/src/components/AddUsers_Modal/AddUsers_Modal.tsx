@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { GrClose } from "react-icons/gr";
 import CheckBox_component from "../CheckBox_component";
 import { constants } from "../../constants";

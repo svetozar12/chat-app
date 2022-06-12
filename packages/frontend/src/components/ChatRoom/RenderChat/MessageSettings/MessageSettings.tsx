@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
-import api_helper from "../../../../graphql/api_helper";
+import api_helper from "../../../../services/graphql/api_helper";
 
 const options = css`
   background: transparent;

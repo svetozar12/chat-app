@@ -3,10 +3,10 @@ import { useRouter } from "next/router";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "../Avatar";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
-import api_helper from "../../graphql/api_helper";
+import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 interface IActiveChats {
   _id: string;

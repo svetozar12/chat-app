@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { IAuthState } from "../../redux/reducer/authReducer/state";
-import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 import { Label_container, Form_header, Form, Button, Input } from "../styledComponents/index";
 import Link from "next/dist/client/link";
 import styled from "@emotion/styled";

@@ -1,10 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import React from "react";
-import { wrapper } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { IAuthState } from "../redux/reducer/authReducer/state";
-import { IInitialSet } from "../redux/reducer/setReducer/state";
 // import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
@@ -12,6 +9,10 @@ import { GetServerSideProps } from "next";
 import { Global } from "@emotion/react";
 import { css } from "@emotion/css";
 import Head from "next/head";
+// services
+import { wrapper } from "../services/redux/store";
+import { IAuthState } from "../services/redux/reducer/authReducer/state";
+import { IInitialSet } from "../services/redux/reducer/setReducer/state";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);

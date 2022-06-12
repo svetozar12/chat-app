@@ -1,22 +1,24 @@
 import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
-import { InitialStateMessage } from "../../redux/reducer/messageReducer/state";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import timeStamp from "../../utils/timeStamp";
 import { useRouter } from "next/router";
 import { css } from "@emotion/css";
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 // utils
+import timeStamp from "../../utils/timeStamp";
 import { constants } from "../../constants";
-import api_helper from "../../graphql/api_helper";
 // components
 import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
+// services
+import api_helper from "../../services/graphql/api_helper";
+import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+
 const Message_form = styled.form`
   width: 100%;
   background: var(--main-white);
@@ -183,7 +185,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
         padding: 0;
       container`}
     >
-      {socketRef && statess.toggleCreateGroup && <ChatHeader socketRef={socketRef} cookieName={cookie.get("name")} />}
+      {socketRef && statess.toggleCreateGroup && <ChatHeader socketRef={socketRef} />}
 
       <div
         ref={containerRef}
@@ -204,15 +206,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
 
           return (
             <li style={{ listStyle: "none" }} key={index}>
-              <RenderChat
-                key={index}
-                chatId={chatId}
-                cookie={cookie.get("name")}
-                id={item._id}
-                sender={sender}
-                time_stamp={time_stamp}
-                message={message}
-              />
+              <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />
             </li>
           );
         })}

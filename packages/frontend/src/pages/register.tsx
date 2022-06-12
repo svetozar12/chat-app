@@ -1,12 +1,13 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
-import ISave_inputState from "../redux/reducer/save_inputReducer/state";
 import { useCookie } from "next-cookie";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { getFirstChat } from "../utils/getFirstChat";
-import api_helper from "../graphql/api_helper";
+// services
+import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
+import api_helper from "../services/graphql/api_helper";
 
 function Register(props: { cookie: string }) {
   const [isLogging, setIsLogging] = React.useState(false);

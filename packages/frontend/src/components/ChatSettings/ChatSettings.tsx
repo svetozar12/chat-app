@@ -5,9 +5,10 @@ import { AiOutlineUserDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
 import { getFirstChat } from "../../utils/getFirstChat";
 import { useSelector, useDispatch } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import { IAuthState } from "../../redux/reducer/authReducer/state";
-import api_helper from "../../graphql/api_helper";
+// services
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import api_helper from "../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 interface IChatSettings {
   chatId: string;
@@ -15,17 +16,20 @@ interface IChatSettings {
 }
 
 function ChatSettings({ chatId, socketRef }: IChatSettings) {
-  const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [users, setUsers] = React.useState<string[]>([]);
+  const dispatch = useDispatch();
   const route = useRouter();
+  const cookie = useCookie();
+  const id = cookie.get("id") as string;
+  const token = cookie.get("token") as string;
+
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
   const getMembers = async () => {
     try {
-      const res = await api_helper.chatroom.getById(chatId, authState.cookie?.id as string, authState.cookie?.token as string);
+      const res = await api_helper.chatroom.getById(chatId, id, token);
       const data = res.data.Message[0].members;
       setUsers(data);
       return true;
@@ -36,7 +40,7 @@ function ChatSettings({ chatId, socketRef }: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await api_helper.chatroom.update(authState.cookie?.id as string, chatId, authState.cookie?.token as string, user);
+      await api_helper.chatroom.update(id, chatId, token, user);
       return true;
     } catch (error) {
       return false;
@@ -55,7 +59,7 @@ function ChatSettings({ chatId, socketRef }: IChatSettings) {
     const updated_users = users.filter((element) => element !== user);
     setUsers(updated_users);
     if (updated_users.length === 2) {
-      const redirect = await getFirstChat(authState.cookie?.id as string, authState.cookie?.token as string);
+      const redirect = await getFirstChat(id, token);
 
       route.push(`/${redirect._id}`);
     }

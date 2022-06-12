@@ -4,9 +4,10 @@ import { Socket } from "socket.io-client";
 import { Iinvites } from "../../../pages/[acc]";
 import { css, cx } from "@emotion/css";
 import Single_avatar from "../../Avatar/Single_avatar";
-import { IAuthState } from "../../../redux/reducer/authReducer/state";
-import { useSelector } from "react-redux";
-import api_helper from "../../../graphql/api_helper";
+// services
+import api_helper from "../../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
+
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
@@ -28,14 +29,17 @@ const ButtonSharedStyle = `
   }`;
 
 function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingChats) {
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const cookie = useCookie();
+  const id = cookie.get("id") as string;
+  const token = cookie.get("token") as string;
+
   const emitFriendRequest = async () => {
     socketRef?.emit("friend_request");
   };
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await api_helper.invite.update(authState.cookie?.id as string, param, authState.cookie?.token as string);
+      await api_helper.invite.update(id, param, token);
       emitFriendRequest();
 
       return true;
@@ -46,10 +50,7 @@ function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingCha
 
   const createChatRoom = async () => {
     try {
-      await api_helper.chatroom.create(
-        { user_id: authState.cookie?.id as string, invite_id: _id, user1: inviter, user2: reciever },
-        authState.cookie?.token as string,
-      );
+      await api_helper.chatroom.create({ user_id: id, invite_id: _id, user1: inviter, user2: reciever }, token);
       emitFriendRequest();
     } catch (error) {
       return false;
@@ -74,7 +75,7 @@ function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingCha
           )}
         >
           <div className="user_info flex">
-            <Single_avatar inviter={inviter} cookieName="" width="3rem" height="3rem" />
+            <Single_avatar inviter={inviter} width="3rem" height="3rem" />
             <h1 className="flex">{inviter}</h1>
           </div>
           <div className="invite_buttons">
