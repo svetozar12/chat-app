@@ -2,7 +2,7 @@ import { api } from "../api_helper";
 
 const rootUrl = "";
 
-interface IGetMessages {
+export interface IGetMessages {
   user_id: string;
   chat_id: string;
   token: string;
@@ -22,6 +22,7 @@ const message = {
           query: `
           query {
           getAllMessages(user_id: "${user_id}",chat_id:"${chat_id}"${condition},token:"${token}") {
+            _id
             user_id
             chat_id
             sender
@@ -31,21 +32,34 @@ const message = {
         },
       });
 
-      return res.data.data;
-    } catch (error) {
-      console.log("getAll", error);
+      const {
+        data: {
+          data: { getAllMessages },
+        },
+      } = res;
 
-      return false;
+      if (!getAllMessages) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return getAllMessages;
+    } catch (error) {
+      return error;
     }
   },
 
-  create: async (user_id: string, chat_id: string, message: string, token: string) => {
+  create: async (user_id: string, chat_id: string, _message: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          createMessage(user_id: "${user_id}",chat_id: "${chat_id}",token:"${token}",message:"${message}") {
+          createMessage(user_id: "${user_id}",chat_id: "${chat_id}",token:"${token}",message:"${_message}") {
             user_id
             chat_id
             sender
@@ -55,9 +69,25 @@ const message = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { createMessage },
+        },
+      } = res;
+
+      if (!createMessage) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return createMessage;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -73,9 +103,24 @@ const message = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { updateMessage },
+        },
+      } = res;
+
+      if (!updateMessage) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return updateMessage;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -88,12 +133,27 @@ const message = {
           deleteMessage(user_id: "${user_id}",message_id: "${message_id}",token:"${token}") {
             Message
           }
-         }`,
+        }`,
         },
       });
-      return res.data;
+      const {
+        data: {
+          data: { deleteMessage },
+        },
+      } = res;
+
+      if (!deleteMessage) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return deleteMessage;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 };

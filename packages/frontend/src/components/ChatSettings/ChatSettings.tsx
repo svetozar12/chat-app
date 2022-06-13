@@ -30,7 +30,7 @@ function ChatSettings({ chatId, socketRef }: IChatSettings) {
   const getMembers = async () => {
     try {
       const res = await api_helper.chatroom.getById(chatId, id, token);
-      const data = res.data.Message[0].members;
+      const data = res[0].members;
       setUsers(data);
       return true;
     } catch (error) {

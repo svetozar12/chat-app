@@ -1,23 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/dist/client/link";
-import Alerts from "../Alerts";
 import { css } from "@emotion/css";
-import { Form, Button, Input, Form_header, Label_container, Label_button } from "../styledComponents";
+import { Button, Input, Label_container, Label_button } from "../styledComponents";
 import QuickLogin_Modal from "./QuickLogin_Modal";
 // services
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
+import FormWrapper from "../FormWrapper";
 
-function RegisterForm({
-  quickLogin,
-  isLogging,
-  handleSubmit,
-}: {
-  isLogging: boolean;
-  quickLogin(): void;
+interface IRegisterForm {
+  // eslint-disable-next-line no-unused-vars
+  quickLogin: () => Promise<false | undefined>;
   // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
-}) {
+}
+
+function RegisterForm({ quickLogin, handleSubmit }: IRegisterForm) {
   const dispatch = useDispatch();
 
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -25,9 +23,7 @@ function RegisterForm({
 
   return (
     <div title="register_form" style={{ height: "100vh", flexDirection: "column" }} className="flex">
-      {(state.good || state.bad) && <Alerts />}
-      <Form_header>Register</Form_header>
-      <Form style={{ height: "70vh" }}>
+      <FormWrapper>
         <Label_container>
           <label>Username</label>
           <Input
@@ -109,8 +105,9 @@ function RegisterForm({
             Already have an account?
           </a>
         </Link>
-      </Form>
-      {state.loginPrompt && <QuickLogin_Modal isLogging={isLogging} quickLogin={quickLogin} />}
+      </FormWrapper>
+
+      {state.loginPrompt && <QuickLogin_Modal quickLogin={quickLogin} />}
     </div>
   );
 }

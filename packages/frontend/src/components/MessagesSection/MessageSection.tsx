@@ -22,12 +22,11 @@ interface IContacts {
 interface IMessageSection {
   contacts: IContacts[];
   socketRef: Socket | null;
-  fetchInviteStatus: () => Promise<any>;
-  fetchInviterStatus: () => Promise<any>;
+  FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, socketRef, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
+const MessageSection = ({ contacts, socketRef, FetchInvites, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
@@ -35,12 +34,10 @@ const MessageSection = ({ contacts, socketRef, fetchInviteStatus, fetchInviterSt
 
   const getMembersSuggestions = async () => {
     try {
-      const res = await fetchInviteStatus();
-      const res_inviter = await fetchInviterStatus();
+      const res = await FetchInvites("accepted", "inviter");
+      const res_inviter = await FetchInvites("accepted", "inviter");
       const res_chat = await api_helper.chatroom.getById(window.location.pathname, cookie.get("id"), cookie.get("token"));
-      const {
-        data: [{ members: Message }],
-      } = res_chat;
+      const [{ members: Message }] = res_chat;
 
       const members_in_chat = Message;
 
@@ -72,6 +69,7 @@ const MessageSection = ({ contacts, socketRef, fetchInviteStatus, fetchInviterSt
 
   React.useEffect(() => {
     getMembersSuggestions();
+    return;
   }, [route.asPath]);
 
   return (
@@ -107,7 +105,7 @@ const MessageSection = ({ contacts, socketRef, fetchInviteStatus, fetchInviterSt
             `,
           )}
         >
-          {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} />}
+          {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} socketRef={socketRef} />}
 
           {state.setModalInvite && socketRef && <AddUsers_Modal socketRef={socketRef} users={users} setUsers={setUsers} chatId={chatId} />}
           <ChatRoom chatId={chatId} />

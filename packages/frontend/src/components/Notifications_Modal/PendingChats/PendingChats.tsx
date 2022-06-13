@@ -59,7 +59,7 @@ function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingCha
 
   return (
     <div style={{ width: "100%" }}>
-      {status === "recieved" && (
+      {status === "recieved" && reciever !== cookie.get("name") && (
         <div
           className={cx(
             "contacts",

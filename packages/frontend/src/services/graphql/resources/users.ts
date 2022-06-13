@@ -2,7 +2,7 @@ import { api } from "../api_helper";
 
 const rootUrl = "";
 
-interface IUser {
+export interface IUser {
   username: string;
   email: string;
   gender: "male" | "female" | "other";
@@ -23,7 +23,23 @@ const user = {
          }`,
         },
       });
-      return res.data.data;
+
+      const {
+        data: {
+          data: { getUser },
+        },
+      } = res;
+
+      if (!getUser) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return getUser;
     } catch (error) {
       return error;
     }
@@ -41,9 +57,24 @@ const user = {
          }`,
         },
       });
-      return res.data.data;
+
+      const {
+        data: {
+          data: { createUser },
+        },
+      } = res;
+      if (!createUser) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return createUser;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -59,9 +90,24 @@ const user = {
          }`,
         },
       });
-      return res.data.data;
+      const {
+        data: {
+          data: { updateUser },
+        },
+      } = res;
+
+      if (!updateUser) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return updateUser;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -77,9 +123,23 @@ const user = {
          }`,
         },
       });
-      return res.data.data;
+      const {
+        data: {
+          data: { deleteUser },
+        },
+      } = res;
+      if (!deleteUser) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return deleteUser;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 };

@@ -15,7 +15,7 @@ const auth = {
     return await api.post(`${rootUrl}/refresh/${id}`, undefined, { headers: { Authorization: `Bearer ${refresh_token}` } });
   },
   logout: async (id: string, token: string) => {
-    return await api.post(`${rootUrl}/logout/${id}`, undefined, { headers: { Authorization: `Bearer ${token}` } });
+    return await api.post(`${rootUrl}/logout/${id}`, { headers: { Authorization: `Bearer ${token}` } });
   },
 };
 

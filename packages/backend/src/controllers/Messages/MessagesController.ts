@@ -58,7 +58,9 @@ const MessageController: IMessageController = {
 
   DeleteMessage: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id;
-    const message = await Messages.findOneAndDelete({ _id, user_id: req.body.user_id }).exec();
+    console.log(_id, "samoskola");
+
+    const message = await Messages.findByIdAndDelete(_id, { user_id: req.body.user_id }).exec();
     if (!message) return next(CustomError.notFound("Message wasn't found !"));
     return res.status(200).json({ Message: `Message has been deleted` });
   },

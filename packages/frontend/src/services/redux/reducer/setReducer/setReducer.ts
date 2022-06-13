@@ -14,6 +14,7 @@ export const initialState: IInitialSet | IInitialSet[] = {
   setChatSettings: false,
   setModalInvite: false,
   setIsLoggingIn: false,
+  setIsLoading: false,
 };
 const setReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
@@ -39,6 +40,8 @@ const setReducer = (state = initialState, action: AnyAction) => {
       return { ...state, setModalInvite: action.payload };
     case ActionType.SET_IS_LOGEDIN:
       return { ...state, setIsLoggingIn: action.payload };
+    case ActionType.SET_IS_LOADING:
+      return { ...state, setIsLoading: action.payload };
     case ActionType.SIGN_OUT:
       return initialState;
     default:

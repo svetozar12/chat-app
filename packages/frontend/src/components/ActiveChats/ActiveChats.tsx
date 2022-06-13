@@ -30,8 +30,8 @@ const ActiveChats = ({ _id, members, socketRef, chatId }: IActiveChats) => {
       for await (const member of members) {
         const user = await api_helper.user.getById(member, cookie.get("token"));
 
-        if (user1) setUser2(user.getUser.username);
-        setUser1(user.getUser.username);
+        if (user1) setUser2(user.username);
+        setUser1(user.username);
         console.log();
       }
     } catch (error) {

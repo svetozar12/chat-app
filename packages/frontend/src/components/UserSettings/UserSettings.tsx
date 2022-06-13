@@ -68,9 +68,12 @@ function UserSettings() {
   const router = useRouter();
   const dispatch = useDispatch();
   const cookie = useCookie();
-  const deleteCookies = () => {
+  const deleteCookies = async () => {
     const cookies = cookie.getAll();
+    const logout = await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
     for (const key in cookies) cookie.remove(key);
+    console.log(logout, "logout");
+
     router.push("/");
     dispatch({ type: "SIGN_OUT" });
   };

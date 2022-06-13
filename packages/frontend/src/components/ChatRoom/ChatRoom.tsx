@@ -63,9 +63,9 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const getRecentMessages = async () => {
     try {
       const res = await api_helper.message.getAll({ user_id, chat_id: chatId, token, query: { page_size: 10, page_number: 1 } });
-      const data = res.getAllMessages;
+      console.log(res, "bat");
 
-      data.forEach((element) => {
+      res.forEach((element) => {
         dispatch({ type: "MESSAGES", payload: element });
       });
 
@@ -86,11 +86,9 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
     inputTextArea.current.focus();
     if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
-    console.log(user_id, "id");
 
     socketConnect.on("message", ({ messages }) => {
       const [message] = messages;
-      console.log(messages, "ws");
 
       dispatch({ type: "MESSAGES", payload: message });
     });
@@ -123,7 +121,8 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
           token,
           query: { page_size: 10, page_number: statess.pageNumber },
         });
-        const data = res.data.reversedArr;
+        const data = res.reversedArr;
+        console.log(data, "ped");
 
         data.forEach((element) => {
           dispatch({ type: "PAGGINATION_MESSAGES", payload: element });
@@ -203,6 +202,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
         {messageState.messages.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
+          console.log(item);
 
           return (
             <li style={{ listStyle: "none" }} key={index}>

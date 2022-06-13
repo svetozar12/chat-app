@@ -32,7 +32,7 @@ const message = {
     );
   },
   update: async (message_id: string, user_id: string, newMessage: string, token: string) => {
-    return await api.post(`${rootUrl}/${message_id}`, {
+    return await api.put(`${rootUrl}/${message_id}`, {
       data: { user_id, newMessage },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const message = {
     });
   },
   delete: async (message_id: string, user_id: string, token: string) => {
-    return await api.post(`${rootUrl}/${message_id}`, {
+    return await api.delete(`${rootUrl}/${message_id}`, {
       data: { user_id },
       headers: {
         Authorization: `Bearer ${token}`,

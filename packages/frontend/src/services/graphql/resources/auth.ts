@@ -17,7 +17,22 @@ const auth = {
          }`,
         },
       });
-      return res.data.data.loginUser;
+      const {
+        data: {
+          data: { loginUser },
+        },
+      } = res;
+
+      if (!loginUser) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return loginUser;
     } catch (error) {
       return error;
     }
@@ -37,7 +52,22 @@ const auth = {
         }`,
         },
       });
-      return res.data.data.loginUser;
+
+      const {
+        data: {
+          data: { refreshToken },
+        },
+      } = res;
+
+      if (!refreshToken) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return refreshToken;
     } catch (error) {
       return error;
     }
@@ -45,6 +75,13 @@ const auth = {
 
   logout: async (user_id: string, token: string) => {
     try {
+      console.log(`
+        mutation {
+          logoutUser(user_id: "${user_id}", token: "${token}") {
+            Message
+          }
+        }`);
+
       const res = await api(rootUrl, {
         data: {
           query: `
@@ -55,7 +92,22 @@ const auth = {
         }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { logoutUser },
+        },
+      } = res;
+
+      if (!logoutUser) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return logoutUser;
     } catch (error) {
       return error;
     }

@@ -38,7 +38,7 @@ function Single_avatar({
   const getUserImage = async (name: string) => {
     try {
       const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
-      const userAvatar = res.data.user.userAvatar;
+      const userAvatar = res.userAvatar;
       if (!userAvatar) {
         setHasAvatar(false);
         return false;

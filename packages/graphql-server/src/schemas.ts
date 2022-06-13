@@ -76,6 +76,7 @@ const Schema = buildSchema(`
   }
 
   type Messages {
+    _id: String
     user_id: String
     chat_id: String
     sender: String

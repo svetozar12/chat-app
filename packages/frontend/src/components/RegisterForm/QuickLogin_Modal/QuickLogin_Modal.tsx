@@ -2,10 +2,9 @@ import React from "react";
 import { Button } from "../../styledComponents";
 import { css, cx } from "@emotion/css";
 import Link from "next/link";
-import Loading from "../../Loading";
 import { useDispatch } from "react-redux";
 
-const QuickLogin_Modal = ({ quickLogin, isLogging }: { quickLogin: () => void; isLogging: boolean }) => {
+const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => {
   const dispatch = useDispatch();
   return (
     <div
@@ -28,7 +27,6 @@ const QuickLogin_Modal = ({ quickLogin, isLogging }: { quickLogin: () => void; i
           "flex",
         )}
       >
-        {isLogging && <Loading />}
         <Button
           className={css`
             width: 50%;

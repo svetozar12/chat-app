@@ -10,4 +10,5 @@ export interface IInitialSet {
   setChatSettings: boolean;
   setModalInvite: boolean;
   setIsLoggingIn: boolean;
+  setIsLoading: boolean;
 }

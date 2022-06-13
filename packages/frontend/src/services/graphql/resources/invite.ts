@@ -2,7 +2,7 @@ import { api } from "../api_helper";
 
 const rootUrl = "";
 
-interface IInvite {
+export interface IInvite {
   user_id: string;
   token: string;
   status?: "accepted" | "declined" | "recieved";
@@ -25,9 +25,24 @@ const invite = {
          }`,
         },
       });
-      return res.data.data;
+
+      const {
+        data: {
+          data: { getInvitesByReciever },
+        },
+      } = res;
+
+      if (!getInvitesByReciever) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return getInvitesByReciever;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -47,9 +62,24 @@ const invite = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { getInvitesByInviter },
+        },
+      } = res;
+
+      if (!getInvitesByInviter) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return getInvitesByInviter;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -68,7 +98,20 @@ const invite = {
          }`,
         },
       });
-      return res.data;
+      const {
+        data: { message },
+      } = res;
+
+      if (!message) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return message;
     } catch (error) {
       return false;
     }
@@ -87,7 +130,22 @@ const invite = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { createInviteGroupChat },
+        },
+      } = res;
+
+      if (!createInviteGroupChat) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return createInviteGroupChat;
     } catch (error) {
       return false;
     }
@@ -108,7 +166,22 @@ const invite = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { updateInvite },
+        },
+      } = res;
+
+      if (!updateInvite) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return updateInvite;
     } catch (error) {
       return false;
     }

@@ -6,6 +6,9 @@ import PendingChats from "./PendingChats/PendingChats";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css, cx } from "@emotion/css";
+import useFetch from "../../hooks/useFetch";
+import api_helper from "../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 interface INotifications {
   contacts: Iinvites[];
@@ -14,10 +17,13 @@ interface INotifications {
 
 function Notifications({ contacts, socketRef }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const cookie = useCookie();
+  const { data, error } = useFetch(api_helper.invite.getAllByReciever({ user_id: cookie.get("id"), token: cookie.get("token") }));
+  if (error) return <p>{error}</p>;
+  if (data) return <pre>{JSON.stringify(data, null, 2)}</pre>;
 
   const dispatch = useDispatch();
-  const checkSize = contacts.filter((element) => element.status != "accepted");
-
+  const checkSize = contacts.length > 0 && contacts.filter((element) => element.status !== "accepted" && element.status !== "declined");
   return (
     <div
       className={css`
@@ -87,10 +93,11 @@ function Notifications({ contacts, socketRef }: INotifications) {
           width: 100%;
         `}
       >
-        {checkSize.length === 0 && <h1 className="flex">No Chat suggestions</h1>}
-        {contacts.map((item, index) => {
-          return socketRef && <PendingChats key={index} socketRef={socketRef} {...item} />;
-        })}
+        {!checkSize && <h1 className="flex">No Chat suggestions</h1>}
+        {checkSize &&
+          contacts.map((item, index) => {
+            return socketRef && contacts.length > 0 && <PendingChats key={index} socketRef={socketRef} {...item} />;
+          })}
       </div>
     </div>
   );

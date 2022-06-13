@@ -1,11 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
-import { Label_container, Form_header, Form, Button, Input } from "../styledComponents/index";
+import { Label_container, Button, Input } from "../styledComponents/index";
 import Link from "next/dist/client/link";
 import styled from "@emotion/styled";
-import Alerts from "../Alerts";
-import Loading from "../Loading";
+import FormWrapper from "../FormWrapper";
 
 const CheckBox = styled.input`
   width: 20px;
@@ -26,11 +25,9 @@ const Link_anchor = styled.a`
 
 function LoginForm({
   handleSubmit,
-  isLogging,
 }: {
   // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
-  isLogging: boolean;
 }) {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
@@ -39,10 +36,7 @@ function LoginForm({
 
   return (
     <div style={{ height: "100vh", flexDirection: "column" }} className="flex">
-      {(state.good || state.bad) && <Alerts />}
-      <div style={{ width: "100%", height: "3rem" }}></div>
-      <Form_header>Login</Form_header>
-      <Form>
+      <FormWrapper>
         <Label_container>
           <label>Username</label>
           <Input
@@ -63,7 +57,6 @@ function LoginForm({
             placeholder="password ..."
           />
         </Label_container>
-        {isLogging && <Loading />}
         <Button onClick={handleSubmit} type="submit">
           Log In
         </Button>
@@ -90,7 +83,7 @@ function LoginForm({
             Remember me
           </label>
         </Clickable>
-      </Form>
+      </FormWrapper>
     </div>
   );
 }

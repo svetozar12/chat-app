@@ -26,7 +26,7 @@ function FindFriends({ socketRef }: IFindFriends) {
   const getUserImage = async () => {
     try {
       const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
-      const userAvatar = res.data.user.userAvatar;
+      const userAvatar = res.userAvatar;
       if (!userAvatar) {
         setHasAvatar(false);
         return true;
@@ -66,7 +66,7 @@ function FindFriends({ socketRef }: IFindFriends) {
   const sendInvite = async () => {
     try {
       const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
-      const data = res.data.message;
+      const data = res.message;
       socketRef.emit("send_friend_request", {
         inviter: data.inviter,
         reciever: state.reciever,
@@ -166,7 +166,7 @@ function FindFriends({ socketRef }: IFindFriends) {
             }}
           >
             <IoNotifications />
-            {notifState.notification_number != 0 && <div className="flex">{notifState.notification_number}</div>}
+            {notifState.notification_number > 0 && <div className="flex">{notifState.notification_number}</div>}
           </div>
           <div
             className="flex add_group"

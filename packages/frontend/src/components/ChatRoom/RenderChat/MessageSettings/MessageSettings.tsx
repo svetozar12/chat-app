@@ -2,6 +2,7 @@ import React from "react";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import api_helper from "../../../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 const options = css`
   background: transparent;
@@ -24,10 +25,12 @@ interface IMessageSettings {
 
 function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSettings) {
   const dispatch = useDispatch();
+  const cookie = useCookie();
+  console.log(cookie.get("id"), id);
 
   const handleDelete = async () => {
     try {
-      await api_helper.message.delete("user_id", id, "token");
+      await api_helper.message.delete(cookie.get("id"), id, cookie.get("token"));
       return true;
     } catch (error) {
       return false;
@@ -36,7 +39,7 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
 
   const handleEdit = async () => {
     try {
-      // some stuff with axios
+      // await api_helper.message.update(cookie.get("id"), id, ,cookie.get("token"));
       setEditing(true);
       return true;
     } catch (error) {

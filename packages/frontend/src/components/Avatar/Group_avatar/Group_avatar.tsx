@@ -14,7 +14,7 @@ function Group_avatar({ members }: IGroup_avatar) {
   const getUserImage = async (image: string) => {
     try {
       const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
-      const userAvatar = res.data.user.userAvatar;
+      const userAvatar = res.userAvatar;
       if (!userAvatar) {
         return false;
       }

@@ -2,7 +2,7 @@ import { api } from "../api_helper";
 
 const rootUrl = "";
 
-interface IChat {
+export interface IChat {
   user_id: string;
   invite_id: string;
   user1: string;
@@ -23,11 +23,25 @@ const chat = {
           }`,
         },
       });
-      console.log(res.data.data);
 
-      return res.data.data;
+      const {
+        data: {
+          data: { getAllChats },
+        },
+      } = res;
+
+      if (!getAllChats) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+
+      return getAllChats;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
@@ -44,7 +58,22 @@ const chat = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { getChatById },
+        },
+      } = res;
+
+      if (!getChatById) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return getChatById;
     } catch (error) {
       return false;
     }
@@ -63,7 +92,22 @@ const chat = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { createChat },
+        },
+      } = res;
+
+      if (!createChat) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return createChat;
     } catch (error) {
       return false;
     }
@@ -84,7 +128,22 @@ const chat = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { updateChat },
+        },
+      } = res;
+
+      if (!updateChat) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return updateChat;
     } catch (error) {
       return false;
     }
@@ -102,7 +161,21 @@ const chat = {
          }`,
         },
       });
-      return res.data;
+
+      const {
+        data: {
+          data: { deleteChat },
+        },
+      } = res;
+      if (!deleteChat) {
+        const {
+          data: {
+            errors: [{ message }],
+          },
+        } = res;
+        throw Error(message);
+      }
+      return deleteChat;
     } catch (error) {
       return false;
     }

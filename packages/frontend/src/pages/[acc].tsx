@@ -41,45 +41,27 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       setChatRooms([]);
       const res = await api_helper.chatroom.getAll(user_id, token);
 
-      setChatRooms(res.getAllChats);
+      setChatRooms(res);
       return true;
     } catch (error) {
       return false;
     }
   };
-  const fetchInviteStatus = async () => {
+
+  const FetchInvites = async (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => {
     try {
       setContacts([]);
-      const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "accepted" });
+      if (InvitesOrigin === "reciever") {
+        const res = await api_helper.invite.getAllByReciever({ user_id, token, status });
+        console.log(res, "invites");
 
-      const data = res.data.invites;
-      setContacts(data);
-      return data;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const fetchInviterStatus = async () => {
-    try {
-      setContacts([]);
+        setContacts(res);
+        return res;
+      }
       const res = await api_helper.invite.getAllByInviter({ user_id, token, status: "accepted" });
 
-      const data = res.data.invites;
-      setContacts(data);
-      return data;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const fetchRecieverStatus = async () => {
-    try {
-      setContacts([]);
-      const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "accepted" });
-      const data = res.data.invites;
-      setContacts(data);
-      return true;
+      setContacts(res);
+      return res;
     } catch (error) {
       return false;
     }
@@ -89,10 +71,10 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     try {
       setContacts([]);
       const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
-      const data = res.data.invites;
-      dispatch({ type: "NOTIFICATION_NUMBER", payload: data.length });
-      setContacts(data);
-      if (data.status === "declined") return false;
+
+      dispatch({ type: "NOTIFICATION_NUMBER", payload: res.length });
+      setContacts(res);
+      if (res.status === "declined") return false;
       return true;
     } catch (error) {
       dispatch({ type: "NOTIFICATION_NUMBER", payload: 0 });
@@ -102,28 +84,29 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   useEffect(() => {
     dispatch({ type: "QUICK_LOGIN", payload: false });
-    fetchRecieverStatus();
+    FetchInvites("accepted", "reciever");
   }, [inputState.notification_number]);
 
   useEffect(() => {
     getChatRoom();
     checkNotification();
     setContacts([]);
-    fetchRecieverStatus();
-    fetchInviteStatus();
+    FetchInvites("accepted", "reciever");
+    FetchInvites("accepted", "inviter");
+
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
     });
     socketConnect.on("friend_request", () => {
       getChatRoom();
-      fetchRecieverStatus();
-      fetchInviteStatus();
+      FetchInvites("accepted", "reciever");
+      FetchInvites("accepted", "inviter");
       checkNotification();
     });
 
     socketConnect.on("send_friend_request", () => {
-      fetchRecieverStatus();
-      fetchInviteStatus();
+      FetchInvites("accepted", "reciever");
+      FetchInvites("accepted", "inviter");
       checkNotification();
     });
 
@@ -158,13 +141,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
         </div>
       </section>
       <MainSection chatId={props.chatRoom} chatRooms={chatRooms} socketRef={socketRef} />
-      <MessageSection
-        chatId={props.chatRoom}
-        contacts={contacts}
-        socketRef={socketRef}
-        fetchInviteStatus={fetchInviteStatus}
-        fetchInviterStatus={fetchInviterStatus}
-      />
+      <MessageSection chatId={props.chatRoom} contacts={contacts} socketRef={socketRef} FetchInvites={FetchInvites} />
     </div>
   );
 };

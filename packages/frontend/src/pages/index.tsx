@@ -13,9 +13,9 @@ import { checkJWT } from "../utils/authRoutes";
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
 import api_helper from "../services/graphql/api_helper";
+// hooks
 
 function Login(props: AppProps) {
-  const [isLogging, setIsLogging] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
@@ -37,8 +37,10 @@ function Login(props: AppProps) {
       const login = await api_helper.auth.login(state.input_username, state.input_password);
       if (await login) {
         dispatch({ type: "QUICK_LOGIN", payload: true });
-        setIsLogging(true);
-        console.log(login);
+        dispatch({
+          type: "SET_IS_LOADING",
+          payload: true,
+        });
 
         cookie.set("name", state.input_username, {
           sameSite: "strict",
@@ -79,13 +81,17 @@ function Login(props: AppProps) {
         });
 
         router.push(`/${chatInstance._id}`);
+        dispatch({
+          type: "SET_IS_LOADING",
+          payload: false,
+        });
         dispatch({ type: "SAVE_INPUT", payload: "" });
       }
       return;
     }
   };
 
-  return <LoginForm handleSubmit={handleSubmit} isLogging={isLogging} />;
+  return <LoginForm handleSubmit={handleSubmit} />;
 }
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(() => async (context) => {
