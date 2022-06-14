@@ -236,4 +236,4 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   );
 };
 
-export default RenderChat;
+export default React.memo(RenderChat);

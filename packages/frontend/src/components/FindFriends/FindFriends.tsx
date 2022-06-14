@@ -13,11 +13,7 @@ import ISave_inputState from "../../services/redux/reducer/save_inputReducer/sta
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 
-export interface IFindFriends {
-  socketRef: Socket;
-}
-
-function FindFriends({ socketRef }: IFindFriends) {
+function FindFriends() {
   const dispatch = useDispatch();
   const [hasAvatar, setHasAvatar] = React.useState(false);
   const [image, setImage] = React.useState("");
@@ -66,10 +62,10 @@ function FindFriends({ socketRef }: IFindFriends) {
   const sendInvite = async () => {
     try {
       const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
-      socketRef.emit("send_friend_request", {
-        inviter: res.inviter,
-        reciever: res.reciever,
-      });
+      // socketRef.emit("send_friend_request", {
+      //   inviter: res.inviter,
+      //   reciever: res.reciever,
+      // });
 
       return true;
     } catch (error) {
@@ -222,7 +218,7 @@ function FindFriends({ socketRef }: IFindFriends) {
               border: none;
               outline: none;
             `}
-            onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
+            // onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
             placeholder="Search for chats"
             value={state.reciever}
             type="search"
@@ -233,4 +229,4 @@ function FindFriends({ socketRef }: IFindFriends) {
   );
 }
 
-export default FindFriends;
+export default React.memo(FindFriends);

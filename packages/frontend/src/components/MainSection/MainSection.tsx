@@ -48,7 +48,7 @@ const MainSection = ({ socketRef, chatRooms, chatId }: IMainSection) => {
         }
       `}
     >
-      {socketRef && <FindFriends socketRef={socketRef} />}
+      <FindFriends />
       <div
         className="flex "
         style={{
