@@ -8,7 +8,9 @@ const rootUrl = "/invites";
 const invite = {
   getAllByReciever: async (user_id: string, token: string, status?: Status) => {
     try {
-      return await api.get(`${rootUrl}/${user_id}${status ? "?".concat(status) : ""}`, {
+      console.log(`${rootUrl}/${user_id}${status ? "?status=".concat(status) : ""}`);
+
+      return await api.get(`${rootUrl}/${user_id}${status ? "?status=".concat(status) : ""}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error: any) {
@@ -46,12 +48,15 @@ const invite = {
       return AxiosErrorHandler(error);
     }
   },
-  update: async (user_id: string, status: Status, token: string) => {
+  update: async (user_id: string, invite_id: string, status: Status, token: string) => {
     try {
-      return await api.put(`${rootUrl}`, {
-        headers: { Authorization: `Bearer ${token}` },
-        data: { status, user_id },
-      });
+      return await api.put(
+        `${rootUrl}/${invite_id}`,
+        { status, user_id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
     } catch (error: any) {
       return AxiosErrorHandler(error);
     }

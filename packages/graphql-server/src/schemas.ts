@@ -22,7 +22,7 @@ const Schema = buildSchema(`
     createMessage(chat_id: String!, user_id: String!, message: String!, token: String!): Messages
     updateUser(user_id: String!,token: String!, user:UpdateUserModel!): Message
     updateMessage(user_id: String!,message_id: String!,newMessage: String!,token: String!): Message
-    updateInvite(user_id: String!,token: String!,status: String!): Invite
+    updateInvite(user_id: String!,token: String!,status: String!,invite_id: String!): Invite
     updateChat(user_id: String!,chat_id: String!,token: String!,username: String, usersData: [String]): Chat
     deleteChat(user_id: String!, chat_id: String!, token: String!): Message
     deleteMessage(user_id: String!, message_id: String!, token: String!): Message

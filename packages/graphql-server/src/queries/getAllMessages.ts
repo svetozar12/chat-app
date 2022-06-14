@@ -13,7 +13,8 @@ interface IMessage {
 const getAllMessages = async (args: IMessage) => {
   const res = await resource.message.getAll(args.chat_id, args.user_id, args.query, args.token);
   if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+
+  return res.data.data;
 };
 
 export default getAllMessages;

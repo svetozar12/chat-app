@@ -23,6 +23,7 @@ const chat = {
           }`,
         },
       });
+      console.log(res, "importo");
 
       const {
         data: {

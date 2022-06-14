@@ -34,16 +34,16 @@ const MessageSection = ({ contacts, socketRef, FetchInvites, chatId }: IMessageS
 
   const getMembersSuggestions = async () => {
     try {
-      const res = await FetchInvites("accepted", "inviter");
-      const res_inviter = await FetchInvites("accepted", "inviter");
+      // const res = await FetchInvites("accepted", "inviter");
+      // const res_inviter = await FetchInvites("accepted", "inviter");
       const res_chat = await api_helper.chatroom.getById(window.location.pathname, cookie.get("id"), cookie.get("token"));
       const [{ members: Message }] = res_chat;
 
       const members_in_chat = Message;
 
       let data: any[] = [];
-      if (res_inviter) data = [...res_inviter];
-      if (res) data = [...data, ...res];
+      // if (res_inviter) data = [...res_inviter];
+      // if (res) data = [...data, ...res];
       const usersArr: string[] = [];
       data.forEach((element) => {
         usersArr.push(element.inviter);

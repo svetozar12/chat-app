@@ -53,16 +53,16 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       setContacts([]);
       if (InvitesOrigin === "reciever") {
         const res = await api_helper.invite.getAllByReciever({ user_id, token, status });
-        console.log(res, "invites");
-
+        if (res instanceof Error) throw Error(res.message);
         setContacts(res);
         return res;
       }
       const res = await api_helper.invite.getAllByInviter({ user_id, token, status: "accepted" });
-
+      if (res instanceof Error) throw Error(res.message);
       setContacts(res);
       return res;
     } catch (error) {
+      setContacts([]);
       return false;
     }
   };
@@ -71,8 +71,10 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     try {
       setContacts([]);
       const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
-
+      if (res instanceof Error) throw Error(res.message);
       dispatch({ type: "NOTIFICATION_NUMBER", payload: res.length });
+      console.log(res, "notif");
+
       setContacts(res);
       if (res.status === "declined") return false;
       return true;
@@ -84,33 +86,32 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 
   useEffect(() => {
     dispatch({ type: "QUICK_LOGIN", payload: false });
-    FetchInvites("accepted", "reciever");
+    checkNotification();
   }, [inputState.notification_number]);
 
   useEffect(() => {
     getChatRoom();
     checkNotification();
-    setContacts([]);
-    FetchInvites("accepted", "reciever");
-    FetchInvites("accepted", "inviter");
+    // FetchInvites("accepted", "reciever");
+    // FetchInvites("accepted", "inviter");
 
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
     });
     socketConnect.on("friend_request", () => {
       getChatRoom();
-      FetchInvites("accepted", "reciever");
-      FetchInvites("accepted", "inviter");
+      // FetchInvites("accepted", "reciever");
+      // FetchInvites("accepted", "inviter");
       checkNotification();
     });
 
     socketConnect.on("send_friend_request", () => {
-      FetchInvites("accepted", "reciever");
-      FetchInvites("accepted", "inviter");
+      // FetchInvites("accepted", "reciever");
+      // FetchInvites("accepted", "inviter");
       checkNotification();
     });
 
-    socketConnect.emit("room", { user: cookie.get("name") });
+    socketConnect.emit("room", { user: cookie.get("id") });
 
     setSocketRef(socketConnect);
     return () => {

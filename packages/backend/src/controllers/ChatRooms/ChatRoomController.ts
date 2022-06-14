@@ -19,14 +19,17 @@ const ChatRoomController: IChatRoomController = {
     const user = await User.findOne({ _id: user_id }).exec();
     if (!user) return next(CustomError.notFound("User not found"));
 
-    const contacts = await Chats.find({ members: [user._id] }).exec();
+    const contacts = await Chats.find({ members: user.username }).exec();
     if (contacts.length <= 0) return next(CustomError.notFound("You don't have chat rooms"));
     return res.status(200).json({ data: `You have active chat-rooms`, contacts });
   },
 
   GetChatRoom: async (req: Request, res: Response, next: NextFunction) => {
     const user_id = req.params.user_id as unknown as Schema.Types.ObjectId;
-    const users_rooms = await Chats.findOne({ members: user_id }).exec();
+    const user = await User.findOne({ _id: user_id });
+
+    if (!user) return next(CustomError.notFound(`${user} not found`));
+    const users_rooms = await Chats.findOne({ members: user.username }).exec();
     if (!users_rooms) return next(CustomError.notFound("Chat room not found"));
     return res.status(200).json({ data: users_rooms });
   },
@@ -42,6 +45,8 @@ const ChatRoomController: IChatRoomController = {
     const isUser2 = await User.findOne({ username: user2 });
     if (!isUser1) return next(CustomError.notFound(`User ${user1} not found`));
     if (!isUser2) return next(CustomError.notFound(`User ${user2} not found`));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const checkIfRoomExist = await Chats.findOne({ members: [isUser1._id, isUser2._id] });
 
     if (checkIfRoomExist) return next(CustomError.conflict("Chat room already exists !"));
@@ -52,7 +57,7 @@ const ChatRoomController: IChatRoomController = {
     if (!findInvite) return next(CustomError.notFound("Invite not found"));
 
     const chat = await new Chats({
-      members: [isUser1._id, isUser2._id],
+      members: [isUser1.username, isUser2.username],
     });
 
     await chat.save();
@@ -69,7 +74,7 @@ const ChatRoomController: IChatRoomController = {
 
     const users_array = users_rooms && users_rooms.members;
     let updated;
-    let updated_array: Schema.Types.ObjectId[] = [];
+    let updated_array: string[] = [];
     console.log(users_rooms, req.body, "pencho petrohana");
 
     if (!users_rooms) return next(CustomError.notFound("Chat room not found ."));

@@ -63,7 +63,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const getRecentMessages = async () => {
     try {
       const res = await api_helper.message.getAll({ user_id, chat_id: chatId, token, query: { page_size: 10, page_number: 1 } });
-      console.log(res, "bat");
 
       res.forEach((element) => {
         dispatch({ type: "MESSAGES", payload: element });
@@ -122,7 +121,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
           query: { page_size: 10, page_number: statess.pageNumber },
         });
         const data = res.reversedArr;
-        console.log(data, "ped");
 
         data.forEach((element) => {
           dispatch({ type: "PAGGINATION_MESSAGES", payload: element });
@@ -202,7 +200,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
         {messageState.messages.map((item, index) => {
           const { sender, message, createdAt } = item;
           const time_stamp = timeStamp(createdAt);
-          console.log(item);
 
           return (
             <li style={{ listStyle: "none" }} key={index}>

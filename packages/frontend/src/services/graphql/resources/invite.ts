@@ -12,6 +12,7 @@ const invite = {
   getAllByReciever: async ({ user_id, token, status }: IInvite) => {
     try {
       const condition = status ? `status:"${status}"` : "";
+
       const res = await api(rootUrl, {
         data: {
           query: `

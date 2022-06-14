@@ -40,7 +40,7 @@ const UsersController: IUsersController = {
     });
 
     const chat = await new Chats({
-      members: user._id,
+      members: user.username,
     });
 
     await user.save();

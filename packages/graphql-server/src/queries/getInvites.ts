@@ -3,11 +3,12 @@ import resource from "../api_helper/index";
 interface IGetAll {
   user_id: string;
   token: string;
-  status?: string;
+  status?: string | any;
 }
 
-const getInvitesByReciever = async (parent: undefined, args: IGetAll, context: undefined) => {
-  const res = await resource.invite.getAllByReciever(args.user_id, args.token);
+const getInvitesByReciever = async (args: IGetAll) => {
+  const res = await resource.invite.getAllByReciever(args.user_id, args.token, args.status);
+
   if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data.data;
 };

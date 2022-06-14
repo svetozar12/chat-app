@@ -212,7 +212,7 @@ function FindFriends({ socketRef }: IFindFriends) {
             }
           `}
         >
-          <BsSearch style={{ cursor: "pointer", color: "black" }} onClick={handleSubmit} />
+          <BsSearch style={{ cursor: "pointer", color: "black" }} />
           <input
             className={css`
               width: 90%;

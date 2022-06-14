@@ -17,32 +17,17 @@ interface IActiveChats {
 
 const ActiveChats = ({ _id, members, socketRef, chatId }: IActiveChats) => {
   const router = useRouter();
-  const [user1, setUser1] = React.useState("");
-  const [user2, setUser2] = React.useState("");
 
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const [inviter, setInviter] = React.useState<string>("");
   const cookie = useCookie();
   const cookieName = cookie.get("name") as string;
-  const getMembers = async () => {
-    try {
-      for await (const member of members) {
-        const user = await api_helper.user.getById(member, cookie.get("token"));
-
-        if (user1) setUser2(user.username);
-        setUser1(user.username);
-        console.log();
-      }
-    } catch (error) {
-      return false;
-    }
-  };
-
+  const user1 = members[0];
+  const user2 = members[1];
   React.useEffect(() => {
     const notMe: string[] = members.filter((element) => element !== cookieName);
     setInviter(notMe[0]);
-    getMembers();
   }, []);
 
   const joinChat = () => {

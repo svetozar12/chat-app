@@ -1,14 +1,13 @@
 import { Schema, model } from "mongoose";
 
 export interface ChatRoom {
-  members: Schema.Types.ObjectId[];
+  members: [string];
 }
 
 const chatRoomSchema = new Schema<ChatRoom>({
   members: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
     },
   ],

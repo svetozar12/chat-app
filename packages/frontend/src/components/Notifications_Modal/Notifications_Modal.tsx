@@ -18,9 +18,7 @@ interface INotifications {
 function Notifications({ contacts, socketRef }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
-  const { data, error } = useFetch(api_helper.invite.getAllByReciever({ user_id: cookie.get("id"), token: cookie.get("token") }));
-  if (error) return <p>{error}</p>;
-  if (data) return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  console.log(contacts, "contacts");
 
   const dispatch = useDispatch();
   const checkSize = contacts.length > 0 && contacts.filter((element) => element.status !== "accepted" && element.status !== "declined");
@@ -93,11 +91,15 @@ function Notifications({ contacts, socketRef }: INotifications) {
           width: 100%;
         `}
       >
-        {!checkSize && <h1 className="flex">No Chat suggestions</h1>}
-        {checkSize &&
+        {contacts.length <= 0 ? (
+          <h1 className="flex">No Chat suggestions</h1>
+        ) : (
           contacts.map((item, index) => {
-            return socketRef && contacts.length > 0 && <PendingChats key={index} socketRef={socketRef} {...item} />;
-          })}
+            console.log(item);
+
+            return socketRef && <PendingChats key={index} socketRef={socketRef} {...item} />;
+          })
+        )}
       </div>
     </div>
   );
