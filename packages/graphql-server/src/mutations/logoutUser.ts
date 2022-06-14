@@ -7,7 +7,7 @@ interface ILogoutUser {
 
 const logoutUser = async (args: ILogoutUser) => {
   const res = await resource.auth.logout(args.user_id, args.token);
-
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data;
 };
 

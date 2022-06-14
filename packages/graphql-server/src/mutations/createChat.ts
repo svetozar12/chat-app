@@ -12,8 +12,8 @@ interface ICreateChat {
 
 const createChat = async (args: ICreateChat) => {
   const res = await resource.chats.create(args.chat, args.token);
-
-  return res.data;
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
+  return res.data.data;
 };
 
 export default createChat;

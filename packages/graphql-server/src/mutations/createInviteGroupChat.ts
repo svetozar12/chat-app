@@ -2,8 +2,8 @@ import resource from "../api_helper/index";
 
 const createInviteGroupChat = async (args: { usersData: string[] }) => {
   const res = await resource.invite.createGroupChat(args.usersData);
-
-  return res.data;
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
+  return res.data.data;
 };
 
 export default createInviteGroupChat;

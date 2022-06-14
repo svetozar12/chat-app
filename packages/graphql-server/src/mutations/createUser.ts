@@ -11,7 +11,7 @@ interface ICreateUser {
 
 const createUser = async (args: ICreateUser) => {
   const res = await resource.user.create(args.user);
-
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data;
 };
 

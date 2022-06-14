@@ -9,6 +9,7 @@ interface ICreateMessage {
 
 const createMessage = async (args: ICreateMessage) => {
   const res = await resource.message.create(args.chat_id, args.user_id, args.message, args.token);
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data.data;
 };
 

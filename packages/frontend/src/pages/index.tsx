@@ -26,68 +26,77 @@ function Login(props: AppProps) {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!state.input_username) {
-      dispatch({ type: "LOGIN_POST_ERROR", bad: "Input cannot be empty" });
-      setTimeout(() => {
-        dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
-      }, 4000);
-      return;
-    }
-    if (state.input_username) {
-      const login = await api_helper.auth.login(state.input_username, state.input_password);
-      if (await login) {
-        dispatch({ type: "QUICK_LOGIN", payload: true });
-        dispatch({
-          type: "SET_IS_LOADING",
-          payload: true,
-        });
-
-        cookie.set("name", state.input_username, {
-          sameSite: "strict",
-          maxAge: rememberMe,
-          path: "/",
-        });
-
-        cookie.set("id", login.user_id, {
-          sameSite: "strict",
-          maxAge: rememberMe,
-          path: "/",
-        });
-
-        cookie.set("token", login.Access_token, {
-          sameSite: "strict",
-          maxAge: rememberMe,
-          path: "/",
-        });
-
-        cookie.set("refresh_token", login.Refresh_token, {
-          sameSite: "strict",
-          maxAge: refreshRememberMe,
-          path: "/",
-        });
-
-        const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-        console.log(chatInstance, "LOGIN");
-
-        cookie.set("first_chat_id", chatInstance._id, {
-          sameSite: "strict",
-          maxAge: rememberMe,
-          path: "/",
-        });
-
-        cookie.set("last_visited_chatRoom", chatInstance._id, {
-          sameSite: "strict",
-          path: "/",
-        });
-
-        router.push(`/${chatInstance._id}`);
-        dispatch({
-          type: "SET_IS_LOADING",
-          payload: false,
-        });
-        dispatch({ type: "SAVE_INPUT", payload: "" });
+    try {
+      if (!state.input_username) {
+        dispatch({ type: "LOGIN_POST_ERROR", bad: "Input cannot be empty" });
+        setTimeout(() => {
+          dispatch({ type: "LOGIN_POST_ERROR", bad: "" });
+        }, 4000);
+        return;
       }
-      return;
+      if (state.input_username) {
+        const login = await api_helper.auth.login(state.input_username, state.input_password);
+
+        if (login instanceof Error) return dispatch({ type: "LOGIN_POST_ERROR", bad: login.message });
+
+        if (login) {
+          dispatch({ type: "QUICK_LOGIN", payload: true });
+          dispatch({
+            type: "SET_IS_LOADING",
+            payload: true,
+          });
+
+          cookie.set("name", state.input_username, {
+            sameSite: "strict",
+            maxAge: rememberMe,
+            path: "/",
+          });
+
+          cookie.set("id", login.user_id, {
+            sameSite: "strict",
+            maxAge: rememberMe,
+            path: "/",
+          });
+
+          cookie.set("token", login.Access_token, {
+            sameSite: "strict",
+            maxAge: rememberMe,
+            path: "/",
+          });
+
+          cookie.set("refresh_token", login.Refresh_token, {
+            sameSite: "strict",
+            maxAge: refreshRememberMe,
+            path: "/",
+          });
+
+          const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
+          console.log(chatInstance, "LOGIN");
+
+          cookie.set("first_chat_id", chatInstance._id, {
+            sameSite: "strict",
+            maxAge: rememberMe,
+            path: "/",
+          });
+
+          cookie.set("last_visited_chatRoom", chatInstance._id, {
+            sameSite: "strict",
+            path: "/",
+          });
+
+          router.push(`/${chatInstance._id}`);
+          dispatch({
+            type: "SET_IS_LOADING",
+            payload: false,
+          });
+          dispatch({ type: "SAVE_INPUT", payload: "" });
+        }
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+
+      return error;
     }
   };
 

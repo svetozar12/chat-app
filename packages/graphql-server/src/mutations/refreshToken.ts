@@ -7,7 +7,7 @@ interface IRefreshToken {
 
 const refreshToken = async (args: IRefreshToken) => {
   const res = await resource.auth.refresh(args.user_id, args.token);
-
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data.data;
 };
 

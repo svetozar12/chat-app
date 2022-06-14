@@ -7,6 +7,7 @@ interface IUser {
 
 const getUser = async (args: IUser) => {
   const res = await resource.user.getById(args.user_id, args.token);
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   if (res) return res.data.user;
 };
 

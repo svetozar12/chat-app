@@ -8,7 +8,7 @@ interface ICreateInvite {
 
 const createInvite = async (args: ICreateInvite) => {
   const res = await resource.invite.create(args.user_id, args.reciever, args.token);
-
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data.data;
 };
 

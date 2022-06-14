@@ -7,6 +7,7 @@ interface IGetAll {
 
 const getAllChats = async (args: IGetAll) => {
   const res = await resource.chats.getAll(args.user_id, args.token);
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data.contacts;
 };
 

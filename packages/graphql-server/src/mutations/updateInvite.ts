@@ -8,6 +8,7 @@ interface IupdateInvite {
 
 const updateInvite = async (args: IupdateInvite) => {
   const res = await resource.invite.update(args.user_id, args.status, args.token);
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data;
 };
 

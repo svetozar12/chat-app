@@ -7,7 +7,7 @@ interface IDeleteUser {
 
 const deleteUser = async (args: IDeleteUser) => {
   const res = await resource.user.delete(args.user_id, args.token);
-
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data;
 };
 

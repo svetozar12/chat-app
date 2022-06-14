@@ -1,3 +1,4 @@
+import AxiosErrorHandler from "../../utils/AxiosErrorHandler";
 import { api } from "../index";
 
 type Status = "accepted" | "recieved" | "declined";
@@ -6,34 +7,54 @@ const rootUrl = "/invites";
 
 const invite = {
   getAllByReciever: async (user_id: string, token: string, status?: Status) => {
-    return await api.get(`${rootUrl}/${user_id}${status ? "?".concat(status) : ""}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      return await api.get(`${rootUrl}/${user_id}${status ? "?".concat(status) : ""}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error: any) {
+      return AxiosErrorHandler(error);
+    }
   },
   getAllByInviter: async (user_id: string, token: string, status?: Status) => {
-    return await api.get(`${rootUrl}/inviter/${user_id}${status ? "?".concat(status) : ""}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      return await api.get(`${rootUrl}/inviter/${user_id}${status ? "?".concat(status) : ""}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (error: any) {
+      return AxiosErrorHandler(error);
+    }
   },
   create: async (user_id: string, reciever: string, token: string) => {
-    return await api.post(
-      `${rootUrl}`,
-      { reciever, user_id },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    try {
+      return await api.post(
+        `${rootUrl}`,
+        { reciever, user_id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+    } catch (error: any) {
+      return AxiosErrorHandler(error);
+    }
   },
   createGroupChat: async (usersData: string[]) => {
-    return await api.post(`${rootUrl}/group-chat`, {
-      data: { usersData },
-    });
+    try {
+      return await api.post(`${rootUrl}/group-chat`, {
+        data: { usersData },
+      });
+    } catch (error: any) {
+      return AxiosErrorHandler(error);
+    }
   },
   update: async (user_id: string, status: Status, token: string) => {
-    return await api.put(`${rootUrl}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      data: { status, user_id },
-    });
+    try {
+      return await api.put(`${rootUrl}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { status, user_id },
+      });
+    } catch (error: any) {
+      return AxiosErrorHandler(error);
+    }
   },
 };
 

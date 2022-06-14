@@ -10,6 +10,7 @@ interface IUpdateChat {
 
 const updateChat = async (args: IUpdateChat) => {
   const res = await resource.chats.update(args.chat_id, args.username as string, args.user_id, args.token);
+  if (res.ErrorMsg) throw Error(res.ErrorMsg);
   return res.data;
 };
 
