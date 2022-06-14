@@ -66,14 +66,15 @@ function FindFriends({ socketRef }: IFindFriends) {
   const sendInvite = async () => {
     try {
       const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
-      const data = res.message;
       socketRef.emit("send_friend_request", {
-        inviter: data.inviter,
-        reciever: state.reciever,
+        inviter: res.inviter,
+        reciever: res.reciever,
       });
 
       return true;
     } catch (error) {
+      console.log(error);
+
       return false;
     }
   };

@@ -73,6 +73,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
       if (res instanceof Error) throw Error(res.message);
       dispatch({ type: "NOTIFICATION_NUMBER", payload: res.length });
+      console.log(res);
 
       setContacts(res);
       if (res.status === "declined") return false;
@@ -107,6 +108,8 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     socketConnect.on("send_friend_request", () => {
       // FetchInvites("accepted", "reciever");
       // FetchInvites("accepted", "inviter");
+      console.log("send fr");
+
       checkNotification();
     });
 

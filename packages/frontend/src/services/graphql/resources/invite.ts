@@ -99,11 +99,15 @@ const invite = {
          }`,
         },
       });
-      const {
-        data: { message },
-      } = res;
 
-      if (!message) {
+      const {
+        data: {
+          data: { createInvite },
+        },
+      } = res;
+      console.log(createInvite);
+
+      if (!createInvite) {
         const {
           data: {
             errors: [{ message }],
@@ -112,7 +116,7 @@ const invite = {
         throw Error(message);
       }
 
-      return message;
+      return createInvite;
     } catch (error) {
       return false;
     }
