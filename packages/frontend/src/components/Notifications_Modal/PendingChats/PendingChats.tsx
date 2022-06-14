@@ -7,7 +7,6 @@ import Single_avatar from "../../Avatar/Single_avatar";
 // services
 import api_helper from "../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
@@ -31,6 +30,7 @@ const ButtonSharedStyle = `
 function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingChats) {
   const cookie = useCookie();
   const id = cookie.get("id") as string;
+  const invite_id = _id;
   const token = cookie.get("token") as string;
 
   const emitFriendRequest = async () => {
@@ -39,7 +39,7 @@ function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingCha
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await api_helper.invite.update(id, param, token);
+      await api_helper.invite.update(id, invite_id, param, token);
       emitFriendRequest();
 
       return true;

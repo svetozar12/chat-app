@@ -23,7 +23,6 @@ const chat = {
           }`,
         },
       });
-      console.log(res, "importo");
 
       const {
         data: {
@@ -87,7 +86,10 @@ const chat = {
           query: `
         mutation {
           createChat(chat:{user_id:"${chat.user_id}",invite_id:"${chat.invite_id}",user1:"${chat.user1}",user2:"${chat.user2}"},token:"${token}") {
-            data
+            data {
+              _id
+              members
+            }
             Message
           }
          }`,

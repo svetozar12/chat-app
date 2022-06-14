@@ -73,7 +73,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
       if (res instanceof Error) throw Error(res.message);
       dispatch({ type: "NOTIFICATION_NUMBER", payload: res.length });
-      console.log(res, "notif");
 
       setContacts(res);
       if (res.status === "declined") return false;

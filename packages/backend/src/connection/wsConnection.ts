@@ -16,25 +16,18 @@ const io = require("socket.io")(server, {
 io.on("connection", (socket: Socket): void => {
   console.log("ws connecting...");
 
-  socket.on("joined_chat_room", ({ user }) => {
-    socket.join(user);
+  socket.on("joined_chat_room", ({ chatInstance }) => {
+    socket.join(chatInstance);
   });
 
   socket.on("message", async ({ chatInstance, sender, message }: { chatInstance: string; sender: string; message: string }) => {
-    console.log(message);
-
     const findChat = await Chats.findOne({ _id: chatInstance }).select("members").exec();
     if (!findChat) return null;
     const date = new Date();
     const messages = [{ sender, message, createdAt: date }];
-    findChat.members.forEach(async (element: any) => {
-      const id = await User.findOne({ username: element });
-      if (!id) return;
-      console.log(id._id);
-      const user_id = id._id.toString().split("(");
-      console.log(user_id[0]);
-
-      io.to(user_id[0]).emit("message", {
+    findChat.members.forEach(async () => {
+      console.log(message);
+      io.to(chatInstance).emit("message", {
         messages,
       });
     });
@@ -49,8 +42,6 @@ io.on("connection", (socket: Socket): void => {
   });
 
   socket.on("friend_request", () => {
-    console.log("avera mi");
-
     io.emit("friend_request");
   });
 

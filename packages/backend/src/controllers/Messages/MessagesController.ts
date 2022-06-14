@@ -16,11 +16,13 @@ const MessageController: IMessageController = {
     const page_size = Number(req.query.page_size) || 2;
     const page_number = Number(req.query.page_number) || 1;
     const chat_id = req.params.chat_id;
-
-    const messages = await Messages.find({ chatInstance: chat_id, user_id: req.query.user_id as unknown as Schema.Types.ObjectId })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const messages = await Messages.find({ chat_id })
       .limit(page_size)
       .skip((page_number - 1) * page_size)
-      .sort({ createdAt: "desc" });
+      .sort({ createdAt: "desc" })
+      .exec();
 
     if (messages.length <= 0 || !messages) return next(CustomError.notFound("You don't have messages."));
     const reversedArr = messages.reverse();

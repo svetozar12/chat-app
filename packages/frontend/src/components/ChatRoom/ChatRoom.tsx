@@ -75,28 +75,30 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SET_IS_MATCH", payload: false });
-    if (location.href === constants.HOST_URL + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
-    dispatch({ type: "RESET_MESSAGES" });
-    getRecentMessages();
-  }, [route.asPath]);
-
-  useEffect(() => {
     inputTextArea.current.focus();
     if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
     const socketConnect: Socket = io("http://localhost:4000");
 
+    console.log("ws-connect");
     socketConnect.on("message", ({ messages }) => {
       const [message] = messages;
 
       dispatch({ type: "MESSAGES", payload: message });
     });
-    socketConnect.emit("joined_chat_room", { user: user_id });
+    socketConnect.emit("joined_chat_room", { chatInstance: chatId });
     setSocketRef(socketConnect);
     return () => {
       socketRef && socketRef.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    dispatch({ type: "SET_IS_MATCH", payload: false });
+    if (location.href === constants.HOST_URL + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
+    dispatch({ type: "RESET_MESSAGES" });
+    socketRef && socketRef.emit("joined_chat_room", { chatInstance: chatId });
+    getRecentMessages();
+  }, [route.asPath]);
 
   const saveMessage = async () => {
     try {

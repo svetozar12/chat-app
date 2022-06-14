@@ -152,13 +152,23 @@ const invite = {
     }
   },
 
-  update: async (user_id: string, status: string, token: string) => {
+  update: async (user_id: string, invite_id: string, status: string, token: string) => {
     try {
+      console.log(`
+        mutation {
+          updateInvite(user_id: "${user_id}",invite_id:"${invite_id}",status:"${status}",token:"${token}") {
+            _id
+            inviter
+            reciever
+            status
+          }
+         }`);
+
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          updateInvite(user_id: "${user_id}",status:"${status}",token:"${token}") {
+          updateInvite(user_id: "${user_id}",invite_id:"${invite_id}",status:"${status}",token:"${token}") {
             _id
             inviter
             reciever

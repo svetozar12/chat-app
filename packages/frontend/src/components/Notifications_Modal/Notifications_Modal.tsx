@@ -18,7 +18,6 @@ interface INotifications {
 function Notifications({ contacts, socketRef }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
-  console.log(contacts, "contacts");
 
   const dispatch = useDispatch();
   const checkSize = contacts.length > 0 && contacts.filter((element) => element.status !== "accepted" && element.status !== "declined");
@@ -95,8 +94,6 @@ function Notifications({ contacts, socketRef }: INotifications) {
           <h1 className="flex">No Chat suggestions</h1>
         ) : (
           contacts.map((item, index) => {
-            console.log(item);
-
             return socketRef && <PendingChats key={index} socketRef={socketRef} {...item} />;
           })
         )}
