@@ -11,6 +11,8 @@ import api_helper from "../services/graphql/api_helper";
 import MainSection from "../components/MainSection";
 import MessageSection from "../components/MessagesSection";
 import HamburgerMenu from "../components/HamburgerMenu";
+import { IAuthState } from "../services/redux/reducer/authReducer/state";
+import withAuthSync from "../utils/auth";
 
 export interface Ichats {
   _id: string;
@@ -28,13 +30,13 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookie = useCookie(props.cookie);
   const user_id: string = cookie.get("id");
   const token: string = cookie.get("token");
-
+  const chat_id = props.chatRoom.split("/")[0];
   // hooks
   const dispatch = useDispatch();
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const getChatRoom = async () => {
     try {
@@ -73,7 +75,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
       const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
       if (res instanceof Error) throw Error(res.message);
       dispatch({ type: "NOTIFICATION_NUMBER", payload: res.length });
-      console.log(res);
 
       setContacts(res);
       if (res.status === "declined") return false;
@@ -92,32 +93,23 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   useEffect(() => {
     getChatRoom();
     checkNotification();
-    // FetchInvites("accepted", "reciever");
-    // FetchInvites("accepted", "inviter");
 
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
     });
+
     socketConnect.on("friend_request", () => {
       getChatRoom();
-      // FetchInvites("accepted", "reciever");
-      // FetchInvites("accepted", "inviter");
       checkNotification();
     });
 
     socketConnect.on("send_friend_request", () => {
-      // FetchInvites("accepted", "reciever");
-      // FetchInvites("accepted", "inviter");
-      console.log("send fr");
-
       checkNotification();
     });
 
-    socketConnect.emit("room", { user: cookie.get("id") });
-
-    setSocketRef(socketConnect);
+    dispatch({ type: "SET_WS_CONNECTED", payload: socketConnect });
     return () => {
-      socketRef && socketRef.disconnect();
+      socketConnect.disconnect();
     };
   }, []);
 
@@ -143,23 +135,23 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <HamburgerMenu />
         </div>
       </section>
-      <MainSection chatId={props.chatRoom} chatRooms={chatRooms} socketRef={socketRef} />
-      <MessageSection chatId={props.chatRoom} contacts={contacts} socketRef={socketRef} FetchInvites={FetchInvites} />
+      <MainSection chatId={chat_id} chatRooms={chatRooms} />
+      <MessageSection chatId={chat_id} contacts={contacts} FetchInvites={FetchInvites} />
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const cookie = useCookie(context);
-  if (!cookie.has("name") && !cookie.has("token")) {
-    return {
-      redirect: {
-        destination: `/`,
-        permanent: false,
-      },
-    };
-  }
+  // const cookie = useCookie(context);
+  // if (!cookie.has("name") && !cookie.has("token")) {
+  //   return {
+  //     redirect: {
+  //       destination: `/`,
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: {
@@ -169,4 +161,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default HomePage;
+export default withAuthSync(HomePage);
