@@ -72,7 +72,6 @@ function UserSettings() {
     const cookies = cookie.getAll();
     const logout = await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
     for (const key in cookies) cookie.remove(key);
-    console.log(logout, "logout");
 
     router.push("/");
     dispatch({ type: "SIGN_OUT" });

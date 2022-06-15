@@ -105,7 +105,6 @@ const invite = {
           data: { createInvite },
         },
       } = res;
-      console.log(createInvite);
 
       if (!createInvite) {
         const {

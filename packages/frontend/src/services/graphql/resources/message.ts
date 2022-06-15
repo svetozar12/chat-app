@@ -16,16 +16,6 @@ const message = {
   getAll: async ({ user_id, chat_id, token, query }: IGetMessages) => {
     try {
       const condition = query ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : "";
-      console.log(`
-          query {
-          getAllMessages(user_id: "${user_id}",chat_id:"${chat_id}"${condition},token:"${token}") {
-            _id
-            user_id
-            chat_id
-            sender
-            message
-          }
-      }`);
 
       const res = await api(rootUrl, {
         data: {

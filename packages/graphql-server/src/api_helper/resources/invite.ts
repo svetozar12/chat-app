@@ -8,8 +8,6 @@ const rootUrl = "/invites";
 const invite = {
   getAllByReciever: async (user_id: string, token: string, status?: Status) => {
     try {
-      console.log(`${rootUrl}/${user_id}${status ? "?status=".concat(status) : ""}`);
-
       return await api.get(`${rootUrl}/${user_id}${status ? "?status=".concat(status) : ""}`, {
         headers: { Authorization: `Bearer ${token}` },
       });

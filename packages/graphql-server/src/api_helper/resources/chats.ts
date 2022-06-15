@@ -23,7 +23,7 @@ const chats = {
   },
   getById: async (chat_id: string, user_id: string, token: string) => {
     try {
-      return await api.get(`${rootUrl}/${user_id}?chat_id=${chat_id}`, {
+      return await api.get(`${rootUrl}/${chat_id}?user_id=${user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error: any) {

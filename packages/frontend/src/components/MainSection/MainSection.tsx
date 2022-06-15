@@ -13,12 +13,11 @@ import { Socket } from "socket.io-client";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 
 interface IMainSection {
-  socketRef: Socket | null;
   chatId: string;
   chatRooms: Ichats[];
 }
 
-const MainSection = ({ socketRef, chatRooms, chatId }: IMainSection) => {
+const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
@@ -116,13 +115,12 @@ const MainSection = ({ socketRef, chatRooms, chatId }: IMainSection) => {
               }
             />
           </div>
-          {socketRef && <ChatSettings socketRef={socketRef} chatId={chatId} />}
+          {<ChatSettings chatId={chatId} />}
         </div>
 
-        {socketRef &&
-          chatRooms.map((item, index) => {
-            return <ActiveChats key={index} {...item} socketRef={socketRef} chatId={chatId} />;
-          })}
+        {chatRooms.map((item, index) => {
+          return <ActiveChats key={index} {...item} chatId={chatId} />;
+        })}
       </div>
     </section>
   );

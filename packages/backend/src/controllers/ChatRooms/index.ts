@@ -11,8 +11,8 @@ import { CreateChatSchema, UpdateChatSchema } from "./schema";
 const route = Router();
 
 route.get(
-  "/:user_id",
-  Validator(Schemas.UserIdSchema, "params"),
+  "/:chat_id",
+  Validator(Schemas.ChatIdSchema, "params"),
   Auth(constants.ACCESS_TOKEN as string),
   errorHandler(ChatRoomController.GetChatRoom),
 );

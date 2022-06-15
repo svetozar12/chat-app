@@ -6,30 +6,11 @@ import { GetServerSideProps } from "next";
 // services
 import { wrapper } from "../services/redux/store";
 import App from "../components/App";
+import withAuthSync from "../utils/auth";
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp = ({ Component }: AppProps) => {
   // @ts-ignore
-  return <App Component={Component} pageProps={pageProps} />;
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const cookie = useCookie(context);
-  if (!cookie.has("name")) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      cookie: context.req.headers.cookie || "",
-      chatRoom: context.query,
-    },
-  };
+  return <App Component={Component} />;
 };
 
 export default wrapper.withRedux(MyApp);

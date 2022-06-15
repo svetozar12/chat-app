@@ -25,11 +25,13 @@ const ChatRoomController: IChatRoomController = {
   },
 
   GetChatRoom: async (req: Request, res: Response, next: NextFunction) => {
-    const user_id = req.params.user_id as unknown as Schema.Types.ObjectId;
+    const user_id = req.query.user_id as unknown as Schema.Types.ObjectId;
+    const chat_id = req.params.chat_id;
+
     const user = await User.findOne({ _id: user_id });
 
     if (!user) return next(CustomError.notFound(`${user} not found`));
-    const users_rooms = await Chats.findOne({ members: user.username }).exec();
+    const users_rooms = await Chats.findOne({ _id: chat_id, members: user.username }).exec();
     if (!users_rooms) return next(CustomError.notFound("Chat room not found"));
     return res.status(200).json({ data: users_rooms });
   },

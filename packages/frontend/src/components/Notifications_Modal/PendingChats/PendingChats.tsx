@@ -7,12 +7,13 @@ import Single_avatar from "../../Avatar/Single_avatar";
 // services
 import api_helper from "../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { useSelector } from "react-redux";
+import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
   status: string;
   reciever: string;
-  socketRef: Socket;
 }
 
 const ButtonSharedStyle = `
@@ -27,14 +28,15 @@ const ButtonSharedStyle = `
     transition: 0.2s;
   }`;
 
-function PendingChats({ _id, inviter, reciever, status, socketRef }: IPendingChats) {
+function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const cookie = useCookie();
   const id = cookie.get("id") as string;
   const invite_id = _id;
   const token = cookie.get("token") as string;
 
   const emitFriendRequest = async () => {
-    socketRef?.emit("friend_request");
+    authState.ws?.emit("friend_request");
   };
 
   const updateInviteStatus = async (param: string) => {

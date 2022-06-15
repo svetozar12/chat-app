@@ -1,26 +1,19 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { GrClose } from "react-icons/gr";
-import { Socket } from "socket.io-client";
 import PendingChats from "./PendingChats/PendingChats";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css, cx } from "@emotion/css";
-import useFetch from "../../hooks/useFetch";
-import api_helper from "../../services/graphql/api_helper";
-import { useCookie } from "next-cookie";
 
 interface INotifications {
   contacts: Iinvites[];
-  socketRef: Socket | any;
 }
 
-function Notifications({ contacts, socketRef }: INotifications) {
+function Notifications({ contacts }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const cookie = useCookie();
 
   const dispatch = useDispatch();
-  const checkSize = contacts.length > 0 && contacts.filter((element) => element.status !== "accepted" && element.status !== "declined");
   return (
     <div
       className={css`
@@ -94,7 +87,7 @@ function Notifications({ contacts, socketRef }: INotifications) {
           <h1 className="flex">No Chat suggestions</h1>
         ) : (
           contacts.map((item, index) => {
-            return socketRef && <PendingChats key={index} socketRef={socketRef} {...item} />;
+            return <PendingChats key={index} {...item} />;
           })
         )}
       </div>

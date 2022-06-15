@@ -21,12 +21,11 @@ interface IContacts {
 
 interface IMessageSection {
   contacts: IContacts[];
-  socketRef: Socket | null;
   FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, socketRef, FetchInvites, chatId }: IMessageSection) => {
+const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
@@ -105,9 +104,9 @@ const MessageSection = ({ contacts, socketRef, FetchInvites, chatId }: IMessageS
             `,
           )}
         >
-          {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} socketRef={socketRef} />}
+          {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} />}
 
-          {state.setModalInvite && socketRef && <AddUsers_Modal socketRef={socketRef} users={users} setUsers={setUsers} chatId={chatId} />}
+          {state.setModalInvite && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
           <ChatRoom chatId={chatId} />
         </div>
       </div>

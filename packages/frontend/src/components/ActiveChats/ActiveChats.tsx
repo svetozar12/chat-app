@@ -8,34 +8,38 @@ import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 interface IActiveChats {
   _id: string;
   members: string[];
-  socketRef: Socket;
   chatId: string;
 }
 
-const ActiveChats = ({ _id, members, socketRef, chatId }: IActiveChats) => {
+const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
   const router = useRouter();
 
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [inviter, setInviter] = React.useState<string>("");
   const cookie = useCookie();
+
   const cookieName = cookie.get("name") as string;
   const user1 = members[0];
   const user2 = members[1];
-  React.useEffect(() => {
-    const notMe: string[] = members.filter((element) => element !== cookieName);
-    setInviter(notMe[0]);
-  }, []);
 
   const joinChat = () => {
-    socketRef?.emit("join_chat", {
-      chat_id: cookieName,
+    authState.ws?.emit("join_chat", {
+      rooms: [cookieName, chatId],
     });
     router.push(`${_id}`);
   };
+
+  React.useEffect(() => {
+    joinChat();
+    const notMe: string[] = members.filter((element) => element !== cookieName);
+    setInviter(notMe[0]);
+  }, []);
 
   const dispatching = () => {
     dispatch({

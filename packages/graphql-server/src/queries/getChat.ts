@@ -6,10 +6,14 @@ interface IChat {
   token: string;
 }
 
-const getChatById = async (parent: undefined, args: IChat, context: undefined) => {
+const getChatById = async (args: IChat) => {
   const res = await resource.chats.getById(args.chat_id, args.user_id, args.token);
   if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+  const {
+    data: { data },
+  } = res;
+
+  return data;
 };
 
 export default getChatById;

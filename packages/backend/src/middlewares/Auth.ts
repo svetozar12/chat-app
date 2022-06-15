@@ -3,6 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { CustomError } from "../utils/custom-error.model";
 import { client } from "../config/redis_config";
 import TokenBL from "../models/TokenBL.model";
+import { constants } from "../constants";
 /**
  * verifyToken is an middleware function
  * this function compares the user_id with the jwt user_id
@@ -42,8 +43,8 @@ const Auth = (secret: string) => {
     jwt.verify(bearerToken, secret, async (err: any, decoded: any) => {
       if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
       const current_id = decoded._id;
-      // delete logs on production
-      console.log(current_id, user_id);
+
+      // process.env.NODE_ENV !== "production" && console.log(current_id, user_id);
       if (current_id !== user_id) return next(CustomError.unauthorized("Can't access other users data"));
       req.token = decoded;
       next();

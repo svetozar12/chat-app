@@ -19,6 +19,7 @@ import api_helper from "../../services/graphql/api_helper";
 import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import ChatRoomForm from "./ChatRoomForm/ChatRoomForm";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 
 interface IHome {
   chatId: any;
@@ -33,14 +34,14 @@ export interface IchatInstance {
 
 const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const route = useRouter();
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const statess = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookie = useCookie();
   const user_id = cookie.get("id") as string;
   const token = cookie.get("token") as string;
   const dispatch = useDispatch();
-  const [socketRef, setSocketRef] = useState<Socket | null>(null);
   const containerRef = React.useRef<null | HTMLDivElement>(null);
 
   const getRecentMessages = async () => {
@@ -59,27 +60,20 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
 
   useEffect(() => {
     inputTextArea.current.focus();
-    if (!cookie.get("token") && !cookie.get("refresh_token")) dispatch({ type: "SIGN_OUT" });
-    const socketConnect: Socket = io("http://localhost:4000");
 
     console.log("ws-connect");
-    socketConnect.on("message", ({ messages }) => {
-      const [message] = messages;
+    authState.ws?.on("message", ({ messages }) => {
+      console.log(messages);
 
+      const [message] = messages;
       dispatch({ type: "MESSAGES", payload: message });
     });
-    socketConnect.emit("joined_chat_room", { chatInstance: chatId });
-    setSocketRef(socketConnect);
-    return () => {
-      socketRef && socketRef.disconnect();
-    };
   }, []);
 
   useEffect(() => {
     dispatch({ type: "SET_IS_MATCH", payload: false });
     if (location.href === constants.HOST_URL + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
     dispatch({ type: "RESET_MESSAGES" });
-    socketRef && socketRef.emit("joined_chat_room", { chatInstance: chatId });
     getRecentMessages();
   }, [route.asPath]);
 
@@ -88,13 +82,13 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
       if (e.currentTarget.scrollTop === 0) {
         dispatch({
           type: "INCREMENT_PAGE_NUMBER",
-          payload: statess.pageNumber,
+          payload: setState.pageNumber,
         });
         const res = await api_helper.message.getAll({
           user_id,
           chat_id: chatId,
           token,
-          query: { page_size: 10, page_number: statess.pageNumber },
+          query: { page_size: 10, page_number: setState.pageNumber },
         });
         const data = res.reversedArr;
 
@@ -129,7 +123,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
         padding: 0;
       container`}
     >
-      {socketRef && statess.toggleCreateGroup && <ChatHeader socketRef={socketRef} />}
+      {setState.toggleCreateGroup && <ChatHeader />}
 
       <div
         ref={containerRef}
@@ -155,7 +149,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
           );
         })}
       </div>
-      <ChatRoomForm chatId={chatId} socketRef={socketRef} inputTextArea={inputTextArea} />
+      <ChatRoomForm chatId={chatId} inputTextArea={inputTextArea} />
     </div>
   );
 };

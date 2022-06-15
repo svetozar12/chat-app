@@ -11,6 +11,7 @@ interface IFormWrapper {
 
 const FormWrapper = ({ children }: IFormWrapper) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+
   return (
     <>
       {(state.good || state.bad) && <Alerts />}

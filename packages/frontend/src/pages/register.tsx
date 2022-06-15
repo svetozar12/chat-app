@@ -47,7 +47,6 @@ function Register(props: { cookie: string }) {
         });
 
         const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-        console.log(chatInstance, "LOGIN");
 
         cookie.set("first_chat_id", chatInstance._id, {
           sameSite: "strict",

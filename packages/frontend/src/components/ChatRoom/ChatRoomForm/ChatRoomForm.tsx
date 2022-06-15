@@ -5,6 +5,8 @@ import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
 import api_helper from "../../../services/graphql/api_helper";
 import { Socket } from "socket.io-client";
+import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
+import { useSelector } from "react-redux";
 
 interface IPropsState {
   name?: string;
@@ -14,12 +16,12 @@ interface IPropsState {
 
 interface IChatRoomForm {
   chatId: string;
-  socketRef: Socket | null;
   inputTextArea: React.MutableRefObject<any>;
 }
 
-const ChatRoomForm = ({ chatId, socketRef, inputTextArea }: IChatRoomForm) => {
+const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
   const cookie = useCookie();
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [state, setState] = React.useState<IPropsState>({
     name: cookie.get("name"),
     message: "",
@@ -31,7 +33,7 @@ const ChatRoomForm = ({ chatId, socketRef, inputTextArea }: IChatRoomForm) => {
       const { name, message, time } = state;
 
       await saveMessage();
-      socketRef?.emit("message", {
+      authState.ws?.emit("message", {
         chatInstance: chatId,
         sender: cookie.get("name"),
         message,

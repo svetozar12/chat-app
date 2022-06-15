@@ -75,13 +75,6 @@ const auth = {
 
   logout: async (user_id: string, token: string) => {
     try {
-      console.log(`
-        mutation {
-          logoutUser(user_id: "${user_id}", token: "${token}") {
-            Message
-          }
-        }`);
-
       const res = await api(rootUrl, {
         data: {
           query: `

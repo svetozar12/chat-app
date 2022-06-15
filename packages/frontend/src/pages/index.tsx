@@ -71,20 +71,19 @@ function Login(props: AppProps) {
           });
 
           const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-          console.log(chatInstance, "LOGIN");
 
-          cookie.set("first_chat_id", chatInstance._id, {
+          cookie.set("first_chat_id", chatInstance, {
             sameSite: "strict",
             maxAge: rememberMe,
             path: "/",
           });
 
-          cookie.set("last_visited_chatRoom", chatInstance._id, {
+          cookie.set("last_visited_chatRoom", chatInstance, {
             sameSite: "strict",
             path: "/",
           });
 
-          router.push(`/${chatInstance._id}`);
+          router.push(`/${chatInstance}`);
           dispatch({
             type: "SET_IS_LOADING",
             payload: false,

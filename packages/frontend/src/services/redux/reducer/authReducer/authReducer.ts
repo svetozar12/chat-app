@@ -5,6 +5,7 @@ export const initialState: IAuthState = {
   remember_me: false,
   good: "", //good and bad stand for good alert and bad alert
   bad: "",
+  ws: null,
   loginPrompt: false,
 };
 const reducer = (state = initialState, action: any) => {
@@ -28,6 +29,8 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, loginPrompt: action.payload };
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
+    case ActionType.SET_WS_CONNECTED:
+      return { ...state, ws: action.payload };
     default:
       return state;
   }

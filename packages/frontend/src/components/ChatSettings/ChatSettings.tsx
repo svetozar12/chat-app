@@ -9,14 +9,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 
 interface IChatSettings {
   chatId: string;
-  socketRef: Socket;
 }
 
-function ChatSettings({ chatId, socketRef }: IChatSettings) {
+function ChatSettings({ chatId }: IChatSettings) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+
   const [users, setUsers] = React.useState<string[]>([]);
   const dispatch = useDispatch();
   const route = useRouter();
@@ -25,12 +27,13 @@ function ChatSettings({ chatId, socketRef }: IChatSettings) {
   const token = cookie.get("token") as string;
 
   const emitFriendRequest = async () => {
-    socketRef?.emit("friend_request");
+    authState.ws?.emit("friend_request");
   };
   const getMembers = async () => {
     try {
       const res = await api_helper.chatroom.getById(chatId, id, token);
-      const data = res[0].members;
+      const data = res.members;
+
       setUsers(data);
       return true;
     } catch (error) {
@@ -50,7 +53,7 @@ function ChatSettings({ chatId, socketRef }: IChatSettings) {
   React.useEffect(() => {
     setUsers([]);
     getMembers();
-    socketRef.on("inviting_multiple_users", ({ users }) => {
+    authState.ws?.on("inviting_multiple_users", ({ users }) => {
       setUsers((prev) => [...prev, ...users]);
     });
   }, [route.asPath]);

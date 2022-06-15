@@ -34,7 +34,6 @@ const App = ({ Component, pageProps }: AppProps) => {
         const expireIn = state.remember_me ? 31556952 : 3600;
         const refreshExpireIn = state.remember_me ? 63113904 : 7200;
         const res = await checkRefreshToken(cookie.get("id"), cookie.get("refresh_token"));
-        console.log(res, "auth");
 
         if (res) {
           cookie.set("name", res.name, {
