@@ -1,6 +1,6 @@
-import { NextPageContext } from "next";
-
 const redirectTo = (redirectURL) => {
+  console.log(redirectURL, "uriloka");
+
   return {
     redirect: {
       destination: redirectURL,

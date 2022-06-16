@@ -9,6 +9,6 @@ export const getFirstChat = async (user_id: string, token: string) => {
   } catch (error) {
     console.error(error);
 
-    return error.message;
+    return false;
   }
 };
