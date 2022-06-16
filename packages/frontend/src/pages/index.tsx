@@ -11,6 +11,7 @@ import { getFirstChat } from "../utils/getFirstChat";
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
 import api_helper from "../services/graphql/api_helper";
+import withAuthSync from "../utils/auth";
 // hooks
 
 function Login(props: AppProps) {
@@ -38,7 +39,6 @@ function Login(props: AppProps) {
         if (login instanceof Error) return dispatch({ type: "LOGIN_POST_ERROR", bad: login.message });
 
         if (login) {
-          dispatch({ type: "QUICK_LOGIN", payload: true });
           dispatch({
             type: "SET_IS_LOADING",
             payload: true,
@@ -100,22 +100,6 @@ function Login(props: AppProps) {
   return <LoginForm handleSubmit={handleSubmit} />;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const cookie = useCookie(context);
-  const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-  if (cookie.has("name") && cookie.has("token")) {
-    return {
-      redirect: {
-        destination: `/${chatInstance}`,
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {
-      cookie: context.req.headers.cookie || "",
-    },
-  };
-};
+export const getServerSideProps = withAuthSync();
 
 export default Login;

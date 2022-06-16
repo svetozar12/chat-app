@@ -34,8 +34,8 @@ const AuthController: IAuthController = {
     };
 
     const expire = {
-      access: remember_me ? "1y" : "1h",
-      refresh: remember_me ? "2y" : "2h",
+      access: remember_me ? "2h" : "1h",
+      refresh: remember_me ? "30d" : "1d",
     };
 
     const access = await signTokens(user, constants.ACCESS_TOKEN, expire.access);

@@ -9,6 +9,7 @@ import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";
 import { AppProps } from "next/app";
 import Loading from "../Loading";
+import SessionProvider from "../../utils/SessionProvider";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -61,37 +62,39 @@ const App = ({ Component, pageProps }: AppProps) => {
   const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
 
   return (
-    <>
-      <Global
-        // @ts-ignore
-        styles={{
-          body: {
-            margin: 0,
-            padding: 0,
-            userSelect: Blur ? "none" : "select",
-          },
-          a: {
-            textDecoration: "none",
-          },
-        }}
-      />
-      <Head>
-        <title>Chat what</title>
-      </Head>
-      <div
-        className={css`
-          position: absolute;
-          z-index: ${Blur ? "100" : "-1"};
-          width: 100vw;
-          height: 100vh;
-          opacity: 0.7;
-          background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
-        `}
-        onClick={closeModals}
-      ></div>
-      {setState.setIsLoading && <Loading />}
-      <Component {...pageProps} />
-    </>
+    <SessionProvider>
+      <>
+        <Global
+          // @ts-ignore
+          styles={{
+            body: {
+              margin: 0,
+              padding: 0,
+              userSelect: Blur ? "none" : "select",
+            },
+            a: {
+              textDecoration: "none",
+            },
+          }}
+        />
+        <Head>
+          <title>Chat what</title>
+        </Head>
+        <div
+          className={css`
+            position: absolute;
+            z-index: ${Blur ? "100" : "-1"};
+            width: 100vw;
+            height: 100vh;
+            opacity: 0.7;
+            background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
+          `}
+          onClick={closeModals}
+        ></div>
+        {setState.setIsLoading && <Loading />}
+        <Component {...pageProps} />
+      </>
+    </SessionProvider>
   );
 };
 

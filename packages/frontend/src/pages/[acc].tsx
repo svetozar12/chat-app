@@ -142,20 +142,8 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 };
 
 export const getServerSideProps = withAuthSync(async (context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  // const cookie = useCookie(context);
-  // if (!cookie.has("name") && !cookie.has("token")) {
-  //   return {
-  //     redirect: {
-  //       destination: `/`,
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-
   return {
     props: {
-      cookie: context.req.headers.cookie || "",
       chatRoom: context.query.acc,
     },
   };

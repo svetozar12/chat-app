@@ -6,6 +6,7 @@ import ISave_inputState from "../../services/redux/reducer/save_inputReducer/sta
 import { getFirstChat } from "../../utils/getFirstChat";
 import UpdateInfoForm from "../../components/UpdateInfoForm";
 import api_helper from "../../services/graphql/api_helper";
+import withAuthSync from "../../utils/auth";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
@@ -45,23 +46,6 @@ function Profile(props: { cookie: string }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const cookie = useCookie(context);
-  if (!cookie.has("name") && !cookie.has("token")) {
-    return {
-      redirect: {
-        destination: `/`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      cookie: context.req.headers.cookie,
-    },
-  };
-};
+export const getServerSideProps = withAuthSync();
 
 export default Profile;

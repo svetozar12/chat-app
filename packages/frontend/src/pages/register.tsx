@@ -8,6 +8,7 @@ import { getFirstChat } from "../utils/getFirstChat";
 // services
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import api_helper from "../services/graphql/api_helper";
+import withAuthSync from "../utils/auth";
 // hooks
 
 function Register(props: { cookie: string }) {
@@ -92,23 +93,6 @@ function Register(props: { cookie: string }) {
   return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const cookie = useCookie(context);
-  const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
-
-  if (cookie.has("name") && cookie.has("token")) {
-    return {
-      redirect: {
-        destination: `/${chatInstance._id}`,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: { cookie: context.req.headers.cookie || "" },
-  };
-};
+export const getServerSideProps = withAuthSync();
 
 export default Register;

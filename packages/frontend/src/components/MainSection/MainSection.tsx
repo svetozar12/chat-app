@@ -9,7 +9,7 @@ import { css, cx } from "@emotion/css";
 import { GrClose } from "react-icons/gr";
 import { Ichats } from "../../pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
-import { Socket } from "socket.io-client";
+import { useAuth } from "../../utils/SessionProvider";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 
 interface IMainSection {
@@ -20,6 +20,8 @@ interface IMainSection {
 const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const auth = useAuth();
+  console.log(auth);
 
   return (
     <section

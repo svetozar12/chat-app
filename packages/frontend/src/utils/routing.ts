@@ -1,8 +1,6 @@
 import { NextPageContext } from "next";
 
-const redirectTo = (ctx: NextPageContext, redirectURL) => {
-  console.log(redirectURL);
-
+const redirectTo = (redirectURL) => {
   return {
     redirect: {
       destination: redirectURL,
