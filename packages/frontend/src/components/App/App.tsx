@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import { checkJWT, checkRefreshToken } from "../../utils/authRoutes";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import { Global } from "@emotion/react";
@@ -19,43 +18,31 @@ const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
   const cookie = useCookie();
 
-  React.useEffect(() => {
-    const response = checkJWT(cookie.get("id"), cookie.get("token"));
-    if (!cookie.get("refresh_token") && !response) {
-      //check if both jwt and refresh token are expired
-      cookie.remove("name");
-      cookie.remove("token");
-      cookie.remove("refresh_token");
-      dispatch({ type: "SIGN_OUT" });
-    }
-    if (cookie.get("refresh_token") && !cookie.get("token")) {
-      //if refresh token isnt expired but jwt is,The refresh token will refresh jwt
-      const res = async () => {
-        const expireIn = state.remember_me ? 31556952 : 3600;
-        const refreshExpireIn = state.remember_me ? 63113904 : 7200;
-        const res = await checkRefreshToken(cookie.get("id"), cookie.get("refresh_token"));
+  // React.useEffect(() => {
+  //   if (!cookie.get("refresh_token") && !response) {
+  //     //check if both jwt and refresh token are expired
+  //     cookie.remove("name");
+  //     cookie.remove("token");
+  //     cookie.remove("refresh_token");
+  //     dispatch({ type: "SIGN_OUT" });
+  //   }
+  //   if (cookie.get("refresh_token") && !cookie.get("token")) {
+  //     //if refresh token isnt expired but jwt is,The refresh token will refresh jwt
+  //     const res = async () => {
+  //       const expireIn = state.remember_me ? 31556952 : 3600;
+  //       const refreshExpireIn = state.remember_me ? 63113904 : 7200;
 
-        if (res) {
-          cookie.set("name", res.name, {
-            maxAge: expireIn,
-            sameSite: "strict",
-            path: "/",
-          });
-          cookie.set("token", res.JWT, {
-            maxAge: expireIn,
-            sameSite: "strict",
-            path: "/",
-          });
-          cookie.set("refresh_token", res.refreshJWT, {
-            maxAge: refreshExpireIn,
-            sameSite: "strict",
-            path: "/",
-          });
-        }
-      };
-      res();
-    }
-  }, [router.asPath]);
+  //       if (res) {
+  //         cookie.set("name", res.name, {
+  //           maxAge: expireIn,
+  //           sameSite: "strict",
+  //           path: "/",
+  //         });
+  //       }
+  //     };
+  //     res();
+  //   }
+  // }, [router.asPath]);
   const closeModals = () => {
     dispatch({
       type: "SET_FRIEND_REQUEST",

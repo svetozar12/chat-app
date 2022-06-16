@@ -8,9 +8,9 @@ import { wrapper } from "../services/redux/store";
 import App from "../components/App";
 import withAuthSync from "../utils/auth";
 
-const MyApp = ({ Component }: AppProps) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   // @ts-ignore
-  return <App Component={Component} />;
+  return <App Component={Component} pageProps={pageProps} />;
 };
-
+// export const getServerSideProps = withAuthSync();
 export default wrapper.withRedux(MyApp);

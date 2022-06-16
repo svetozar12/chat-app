@@ -4,11 +4,9 @@ import { useCookie } from "next-cookie";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { wrapper } from "../services/redux/store";
 import LoginForm from "../components/LoginForm";
 // utils
 import { getFirstChat } from "../utils/getFirstChat";
-import { checkJWT } from "../utils/authRoutes";
 // services
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
@@ -102,9 +100,8 @@ function Login(props: AppProps) {
   return <LoginForm handleSubmit={handleSubmit} />;
 }
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(() => async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookie = useCookie(context);
-  await checkJWT(cookie.get("user_id"), cookie.get("token"));
   const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
   if (cookie.has("name") && cookie.has("token")) {
     return {
@@ -119,6 +116,6 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       cookie: context.req.headers.cookie || "",
     },
   };
-});
+};
 
 export default Login;
