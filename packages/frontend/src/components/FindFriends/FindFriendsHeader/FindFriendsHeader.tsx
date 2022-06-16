@@ -20,7 +20,6 @@ const FindFriendsHeader = () => {
 
   const [hasAvatar, setHasAvatar] = React.useState(false);
   const [image, setImage] = React.useState("");
-
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
@@ -113,7 +112,7 @@ const FindFriendsHeader = () => {
               `}
             />
           )}
-          <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}>Chats</h1>
+          <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}> Chats</h1>
         </div>
         <div className="flex find_friends_icons">
           <div
