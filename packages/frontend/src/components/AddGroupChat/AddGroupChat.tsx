@@ -7,6 +7,7 @@ import { Button } from "../styledComponents";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { getAuth } from "../../utils/authMethods";
 
 const AddGroupChat = () => {
   const [user, setUser] = React.useState<string>("");
@@ -28,6 +29,7 @@ const AddGroupChat = () => {
   };
   const handleSumbit = async () => {
     try {
+      getAuth();
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);

@@ -7,6 +7,7 @@ import api_helper from "../../../services/graphql/api_helper";
 import { Socket } from "socket.io-client";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
 import { useSelector } from "react-redux";
+import { getAuth } from "../../../utils/authMethods";
 
 interface IPropsState {
   name?: string;
@@ -30,8 +31,8 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
   const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
     if (state.message) {
+      await getAuth();
       const { name, message, time } = state;
-
       await saveMessage();
       authState.ws?.emit("message", {
         chatInstance: chatId,

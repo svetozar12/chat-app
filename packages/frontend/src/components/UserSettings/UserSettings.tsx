@@ -9,6 +9,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
 import { useCookie } from "next-cookie";
 import api_helper from "../../services/graphql/api_helper";
+import { getAuth } from "../../utils/authMethods";
 
 export const User_settings = styled.div`
   width: 10rem;
@@ -69,8 +70,9 @@ function UserSettings() {
   const dispatch = useDispatch();
   const cookie = useCookie();
   const deleteCookies = async () => {
+    getAuth();
     const cookies = cookie.getAll();
-    const logout = await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
+    await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
     for (const key in cookies) cookie.remove(key);
 
     router.push("/");
@@ -79,6 +81,7 @@ function UserSettings() {
 
   const deleteUser = async () => {
     try {
+      getAuth();
       await api_helper.user.delete(cookie.get("id"), cookie.get("token"));
       deleteCookies();
       return true;

@@ -7,6 +7,7 @@ import UpdateInfoForm from "../../components/UpdateInfoForm";
 import api_helper from "../../services/graphql/api_helper";
 import withAuthSync from "../../utils/auth";
 import { useAuth } from "../../utils/SessionProvider";
+import { getAuth } from "../../utils/authMethods";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
@@ -18,6 +19,7 @@ function Profile(props: { cookie: string }) {
 
   React.useEffect(() => {
     (async () => {
+      getAuth();
       const first_id = await getFirstChat(user._id, cookie.get("token"));
       setUrl(first_id._id);
     })();
@@ -25,6 +27,7 @@ function Profile(props: { cookie: string }) {
 
   const handleSubmit = async (e: any) => {
     try {
+      getAuth();
       const formData = new FormData();
       formData.append("username", user.username);
       if (state.input_email) formData.append("email", state.input_email);

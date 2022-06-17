@@ -1,9 +1,8 @@
 import * as express from "express";
 import * as cors from "cors";
 import handleError from "./middlewares/error-handler.middleware";
-// db configs
-import mongo_connection from "./config/mongo_config";
-import redis_connection from "./config/redis_config";
+// config
+import config_init from "./config";
 // routes function
 import { routes } from "./routes";
 const app = express();
@@ -15,9 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
 // ws connection
 import "./connection/wsConnection";
-// db connection
-mongo_connection();
-redis_connection();
+// config_init
+config_init();
 // routes
 routes(app);
 // error handling

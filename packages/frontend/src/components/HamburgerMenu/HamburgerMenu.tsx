@@ -2,9 +2,11 @@ import { css, cx } from "@emotion/css";
 import { useSelector, useDispatch } from "react-redux";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { useAuth } from "../../utils/SessionProvider";
 function HamburgerMenu() {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+
   return (
     <div
       className={cx(

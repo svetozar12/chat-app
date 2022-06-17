@@ -3,6 +3,7 @@ import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
 import api_helper from "../../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { getAuth } from "../../../../utils/authMethods";
 
 const options = css`
   background: transparent;
@@ -48,6 +49,7 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
   };
 
   const handleClick = (status: string) => {
+    getAuth();
     setSettings(false);
     status === "delete" && handleDelete();
     status === "edit" && handleEdit();

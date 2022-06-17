@@ -3,8 +3,6 @@ import { Cookie, useCookie } from "next-cookie";
 import api_helper from "../services/graphql/api_helper";
 import jwtDecode from "jwt-decode";
 import redirectTo from "./routing";
-import { getFirstChat } from "./getFirstChat";
-import { ICtx } from "./auth";
 
 interface IToken {
   _id: string;
@@ -67,5 +65,19 @@ export const logout = async (ctx: NextPageContext) => {
  */
 export const isAuth = async (ctx) => {
   const cookie = useCookie(ctx);
+  return checkTokens(cookie);
+};
+
+/**
+ * Refresh session if refresh token is valid (works in server and client sidde)
+ * @param {NextPageContext}ctx Only need to pass it in getServerSideprops || getInitialProps
+ */
+export const getAuth = (ctx?: NextPageContext) => {
+  let cookie: Cookie;
+  if (ctx) {
+    cookie = useCookie(ctx);
+    return checkTokens(cookie);
+  }
+  cookie = useCookie();
   return checkTokens(cookie);
 };

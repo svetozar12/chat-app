@@ -9,6 +9,7 @@ import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import api_helper from "../../services/graphql/api_helper";
 import FindFriendsHeader from "./FindFriendsHeader";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { getAuth } from "../../utils/authMethods";
 
 function FindFriends() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ function FindFriends() {
 
   const sendInvite = async () => {
     try {
+      await getAuth();
       const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
       authState.ws?.emit("send_friend_request", {
         inviter: res.inviter,
