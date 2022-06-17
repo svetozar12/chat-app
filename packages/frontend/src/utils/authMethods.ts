@@ -3,6 +3,8 @@ import { Cookie, useCookie } from "next-cookie";
 import api_helper from "../services/graphql/api_helper";
 import jwtDecode from "jwt-decode";
 import redirectTo from "./routing";
+import { getFirstChat } from "./getFirstChat";
+import { ICtx } from "./auth";
 
 interface IToken {
   _id: string;
@@ -63,6 +65,7 @@ export const logout = async (ctx: NextPageContext) => {
  *  Also in the future all sort of user auth can be added here
  * @param {NextPageContext} ctx is Used as response from the next server
  */
-export const isAuth = async () => {
-  return checkTokens;
+export const isAuth = async (ctx) => {
+  const cookie = useCookie(ctx);
+  return checkTokens(cookie);
 };

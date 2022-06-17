@@ -12,6 +12,7 @@ import ISave_inputState from "../services/redux/reducer/save_inputReducer/state"
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
 import api_helper from "../services/graphql/api_helper";
 import withAuthSync from "../utils/auth";
+import redirectTo from "../utils/routing";
 // hooks
 
 function Login(props: AppProps) {
