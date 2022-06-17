@@ -11,8 +11,9 @@ import { getFirstChat } from "../utils/getFirstChat";
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
 import api_helper from "../services/graphql/api_helper";
-import withAuthSync from "../utils/auth";
+import withAuthSync, { isAlreadyAuth } from "../utils/auth";
 import redirectTo from "../utils/routing";
+import protected_routes from "../constants/routes";
 // hooks
 
 function Login(props: AppProps) {
@@ -23,6 +24,8 @@ function Login(props: AppProps) {
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const rememberMe = authState.remember_me ? 31556952 : 3600;
   const refreshRememberMe = authState.remember_me ? 63113904 : 7200;
+  cookie.set("ivan", "vankov");
+  console.log(typeof window !== "undefined" && document.cookie);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -81,8 +84,11 @@ function Login(props: AppProps) {
             sameSite: "strict",
             path: "/",
           });
+          const REDIRECT_URL_CALLBACK: string = cookie.get("REDIRECT_URL_CALLBACK");
+          console.log(REDIRECT_URL_CALLBACK);
 
-          router.push(`/${chatInstance}`);
+          cookie.set("REDIRECT_URL_CALLBACK", REDIRECT_URL_CALLBACK || `/${chatInstance}`);
+          router.push(REDIRECT_URL_CALLBACK || `/${chatInstance}`);
           dispatch({
             type: "SET_IS_LOADING",
             payload: false,
@@ -101,6 +107,6 @@ function Login(props: AppProps) {
   return <LoginForm handleSubmit={handleSubmit} />;
 }
 
-export const getServerSideProps = withAuthSync();
+export const getServerSideProps = isAlreadyAuth();
 
 export default Login;

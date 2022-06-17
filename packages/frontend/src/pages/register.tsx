@@ -1,14 +1,14 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { getFirstChat } from "../utils/getFirstChat";
 // services
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import api_helper from "../services/graphql/api_helper";
-import withAuthSync from "../utils/auth";
+import { isAlreadyAuth } from "../utils/auth";
+import routes from "../constants/routes";
 // hooks
 
 function Register(props: { cookie: string }) {
@@ -92,7 +92,5 @@ function Register(props: { cookie: string }) {
 
   return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
 }
-
-export const getServerSideProps = withAuthSync();
-
+export const getServerSideProps = isAlreadyAuth();
 export default Register;

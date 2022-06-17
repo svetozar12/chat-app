@@ -13,6 +13,8 @@ import MessageSection from "../components/MessagesSection";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
 import withAuthSync from "../utils/auth";
+import redirectTo from "../utils/routing";
+import { isAuth } from "../utils/authMethods";
 
 export interface Ichats {
   _id: string;
@@ -93,7 +95,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   useEffect(() => {
     getChatRoom();
     checkNotification();
-
+    cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname);
     const socketConnect: Socket = io("http://localhost:4000", {
       transports: ["websocket"],
     });
@@ -141,12 +143,20 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   );
 };
 
-export const getServerSideProps = withAuthSync(async (context) => {
+export const getServerSideProps = async (ctx) => {
+  const isUserAuth: any = await isAuth(ctx);
+  const currPath = ctx.resolvedUrl;
+  const cookie = useCookie(ctx);
+  const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
+  console.log(desiredURL);
+
+  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
+
   return {
     props: {
-      chatRoom: context.query.acc,
+      chatRoom: ctx.query.acc,
     },
   };
-});
+};
 
 export default HomePage;
