@@ -10,3 +10,8 @@ services:
     image: redis
     ports:
       - "6379:6379"
+  blob:
+    container_name: blob
+    image: mcr.microsoft.com/azure-blob-storage
+    ports:
+      - "1000:1000"
