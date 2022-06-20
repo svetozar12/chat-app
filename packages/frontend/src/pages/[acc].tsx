@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCookie } from "next-cookie";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/css";
@@ -12,8 +12,7 @@ import MainSection from "../components/MainSection";
 import MessageSection from "../components/MessagesSection";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
-import redirectTo from "../utils/routing";
-import { isAuth } from "../utils/authMethods";
+import withAuthSync from "../utils/auth";
 
 export interface Ichats {
   _id: string;
@@ -31,7 +30,9 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookie = useCookie(props.cookie);
   const user_id: string = cookie.get("id");
   const token: string = cookie.get("token");
-  const chat_id = props.chatRoom.split("/")[0];
+  console.log(props);
+
+  const chat_id = props.chatRoom;
   // hooks
   const dispatch = useDispatch();
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
@@ -136,26 +137,20 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
           <HamburgerMenu />
         </div>
       </section>
+      hello
       <MainSection chatId={chat_id} chatRooms={chatRooms} />
       <MessageSection chatId={chat_id} contacts={contacts} FetchInvites={FetchInvites} />
     </div>
   );
 };
-
-export const getServerSideProps = async (ctx) => {
-  const isUserAuth: any = await isAuth(ctx);
-  const currPath = ctx.resolvedUrl;
+export const getServerSideProps = withAuthSync(async (ctx) => {
   const cookie = useCookie(ctx);
   const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
-  console.log(desiredURL);
-
-  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
 
   return {
     props: {
       chatRoom: ctx.query.acc,
     },
   };
-};
-
+});
 export default HomePage;

@@ -20,9 +20,8 @@ interface IMainSection {
 const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const auth = useAuth();
-  console.log(auth);
-
+  const { user } = useAuth();
+  if (!user) return <p>loading</p>;
   return (
     <section
       title="main_section"
