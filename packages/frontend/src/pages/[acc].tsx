@@ -12,7 +12,6 @@ import MainSection from "../components/MainSection";
 import MessageSection from "../components/MessagesSection";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
-import withAuthSync from "../utils/auth";
 import redirectTo from "../utils/routing";
 import { isAuth } from "../utils/authMethods";
 

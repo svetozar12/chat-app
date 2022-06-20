@@ -3,6 +3,7 @@ import { Cookie, useCookie } from "next-cookie";
 import api_helper from "../services/graphql/api_helper";
 import jwtDecode from "jwt-decode";
 import redirectTo from "./routing";
+import { ICtx } from "./auth";
 
 interface IToken {
   _id: string;
@@ -49,19 +50,19 @@ export const checkTokens = async (cookie: Cookie) => {
   return true;
 };
 
-export const logout = async (ctx: NextPageContext) => {
+export const logout = async (ctx: ICtx) => {
   const cookie = useCookie(ctx);
   const cookies = cookie.getAll();
   await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
   for (const key in cookies) cookie.remove(key);
-  return redirectTo("/");
+  return redirectTo("/", ctx);
 };
 
 /**
  * This function will be used only in getServerSideProps Wrapper.
  *  It checks if avaliable cookie(token,refresh_token) are valid and returns true if they are !
  *  Also in the future all sort of user auth can be added here
- * @param {NextPageContext} ctx is Used as response from the next server
+ * @param {ICtx} ctx is Used as response from the next server
  */
 export const isAuth = async (ctx) => {
   const cookie = useCookie(ctx);
