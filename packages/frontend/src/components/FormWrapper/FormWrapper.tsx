@@ -3,26 +3,37 @@ import { useSelector } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 // components
 import Alerts from "../Alerts";
-import { FormControl, Box, Heading, VStack } from "@chakra-ui/react";
+import { FormControl, Box, Heading, VStack, Flex } from "@chakra-ui/react";
 interface IFormWrapper {
   children: JSX.Element | JSX.Element[];
+  type: "Register" | "Login";
 }
 
-const FormWrapper = ({ children }: IFormWrapper) => {
+const FormWrapper = ({ children, type }: IFormWrapper) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   return (
     <>
       {(state.good || state.bad) && <Alerts />}
-      <div style={{ width: "100%", height: "3rem" }}></div>
-      <Heading w="60%" p="0.5rem" color="white" borderTopRadius="5px" textAlign="center" bg="chat_form_bg.100">
-        Login
-      </Heading>
-      <Box w="60%" h="60vh" padding="3rem" boxShadow="default">
-        <FormControl w="full" borderRadius="5px">
-          {children}
-        </FormControl>
-      </Box>
+      <Flex h="100vh" flexDir="column" alignItems="center" justifyContent="center">
+        <Heading
+          w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }}
+          p="0.5rem"
+          color="white"
+          borderTopRadius="5px"
+          textAlign="center"
+          bg="chat_form_bg.100"
+        >
+          {type}
+        </Heading>
+        <Box w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }} maxH="auto" minH="45vh" padding="3rem" boxShadow="default">
+          <FormControl w="full" borderRadius="5px">
+            <VStack alignItems="flex-start" spacing={5}>
+              {children}
+            </VStack>
+          </FormControl>
+        </Box>
+      </Flex>
     </>
   );
 };

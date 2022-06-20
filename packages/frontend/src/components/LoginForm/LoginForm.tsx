@@ -2,9 +2,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 import Link from "next/dist/client/link";
-import styled from "@emotion/styled";
 import FormWrapper from "../FormWrapper";
-import { Flex, FormLabel, HStack, VStack, Link as AnchorLink, Input, Button, Spacer, Checkbox } from "@chakra-ui/react";
+import DefaultLink from "../DefaultLink";
+import {
+  Flex,
+  FormLabel,
+  HStack,
+  VStack,
+  Link as AnchorLink,
+  Input,
+  Button,
+  Checkbox,
+  SimpleGrid,
+  GridItem,
+  Center,
+} from "@chakra-ui/react";
 import React from "react";
 import api_helper from "../../services/graphql/api_helper";
 import { getFirstChat } from "../../utils/getFirstChat";
@@ -112,7 +124,7 @@ function LoginForm() {
     {
       label: "Password",
       props: {
-        value: inputState.input_username,
+        value: inputState.input_password,
         onChange: (e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value }),
         type: "password",
         name: "password",
@@ -122,31 +134,34 @@ function LoginForm() {
   ];
 
   return (
-    <Flex h="100vh" flexDir="column" alignItems="center" justifyContent="center">
-      <FormWrapper>
-        <VStack alignItems="flex-start" spacing={5}>
-          {renderInputs.map((element, index) => {
-            const { props } = element;
-            return (
-              <React.Fragment key={index}>
-                <FormLabel>{element.label}</FormLabel>
-                <Input colorScheme="black" {...props} />
-              </React.Fragment>
-            );
-          })}
+    <FormWrapper type="Login">
+      <>
+        {renderInputs.map((element, index) => {
+          const { props } = element;
+          return (
+            <React.Fragment key={index}>
+              <FormLabel>{element.label}</FormLabel>
+              <Input variant="FormInput" {...props} />
+            </React.Fragment>
+          );
+        })}
+      </>
 
-          <Button colorScheme="blue" w="full" type="submit">
-            Log In
-          </Button>
-          <HStack spacing="5" alignItems="center" justifyContent="center" w="full">
-            <HStack w="60%">
-              <Link href="/register">
-                <AnchorLink color="blue.500" fontWeight="bold" href="#">
-                  Sign up for chatApp .
-                </AnchorLink>
-              </Link>
-              <Spacer />
+      <Flex w="full" alignItems="center" justifyContent="center">
+        <Button colorScheme="blue" w="60%" type="submit">
+          Log In
+        </Button>
+      </Flex>
+      <HStack spacing="5" alignItems="center" justifyContent="center" w="full">
+        <SimpleGrid gap={5} w="full" columns={2}>
+          <GridItem colSpan={{ base: 2, lg: 1 }}>
+            <DefaultLink href="/register" text="Sign up for chatApp" />
+          </GridItem>
+          <GridItem colSpan={{ base: 2, lg: 1 }}>
+            <HStack alignItems="center" justifyContent="center">
               <Checkbox
+                variant="solid"
+                border="1px"
                 cursor="pointer"
                 data-testid="checkbox"
                 type="checkbox"
@@ -163,10 +178,10 @@ function LoginForm() {
                 Remember me
               </FormLabel>
             </HStack>
-          </HStack>
-        </VStack>
-      </FormWrapper>
-    </Flex>
+          </GridItem>
+        </SimpleGrid>
+      </HStack>
+    </FormWrapper>
   );
 }
 

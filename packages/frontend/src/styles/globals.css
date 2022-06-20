@@ -226,14 +226,6 @@ form div > input {
   margin: 0 1rem;
 }
 
-input[type="radio"]:checked + label {
-  background: rgba(0, 105, 217, 1);
-}
-
-input[type="radio"] {
-  outline: none;
-}
-
 .group_logo_container {
   position: relative;
   width: 3.2rem;
