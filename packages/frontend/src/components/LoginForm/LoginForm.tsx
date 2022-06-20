@@ -148,7 +148,7 @@ function LoginForm() {
       </>
 
       <Flex w="full" alignItems="center" justifyContent="center">
-        <Button colorScheme="blue" w="60%" type="submit">
+        <Button onClick={handleSubmit} colorScheme="blue" w="60%" type="submit">
           Log In
         </Button>
       </Flex>

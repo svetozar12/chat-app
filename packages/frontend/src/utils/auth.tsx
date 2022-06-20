@@ -43,7 +43,7 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
     const currPath = await getFirstChat(cookie.get("id"), cookie.get("token"));
     const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
     const path = desiredURL || currPath;
-    console.log(cookie.getAll());
+    console.log(path, "putq", isUserAuth);
 
     if (isUserAuth && ctx.resolvedUrl !== path) return redirectTo(`/${path}`, ctx);
 

@@ -33,7 +33,6 @@ export const checkTokens = async (cookie: Cookie) => {
   const user_id: string = cookie.get("id");
   const access_token: string = cookie.get("token");
   const refresh_token: string = cookie.get("refresh_token");
-
   if (!access_token) {
     if (refresh_token) {
       const refreshedToken = await api_helper.auth.refresh(user_id, refresh_token);
@@ -66,6 +65,8 @@ export const logout = async (ctx: ICtx) => {
  */
 export const isAuth = async (ctx) => {
   const cookie = useCookie(ctx);
+  console.log(cookie.getAll(), "biskvitki");
+
   return checkTokens(cookie);
 };
 
