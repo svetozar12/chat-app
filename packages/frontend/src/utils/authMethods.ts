@@ -30,6 +30,8 @@ const getTokenExpirationSeconds = (token: string) => {
  * @param {Cookie}cookie this is cookie instance, it`s used to get cookies from the browser
  * */
 export const checkTokens = async (cookie: Cookie) => {
+  console.log("helo");
+
   const user_id: string = cookie.get("id");
   const access_token: string = cookie.get("token");
   const refresh_token: string = cookie.get("refresh_token");
@@ -44,6 +46,11 @@ export const checkTokens = async (cookie: Cookie) => {
 
       return true;
     }
+    console.log("del");
+
+    const cookies = cookie.getAll();
+    await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
+    for (const key in cookies) cookie.remove(key);
     return false;
   }
   return true;

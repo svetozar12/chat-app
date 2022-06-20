@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCookie } from "next-cookie";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/css";
@@ -13,6 +13,10 @@ import MessageSection from "../components/MessagesSection";
 import HamburgerMenu from "../components/HamburgerMenu";
 import { IAuthState } from "../services/redux/reducer/authReducer/state";
 import withAuthSync from "../utils/auth";
+import redirectTo from "../utils/routing";
+import { isAuth } from "../utils/authMethods";
+import { useAuth } from "../utils/SessionProvider";
+import SkeletonActiveInvites from "../components/Loading/SkeletonActiveInvites";
 
 export interface Ichats {
   _id: string;
@@ -30,15 +34,14 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const cookie = useCookie(props.cookie);
   const user_id: string = cookie.get("id");
   const token: string = cookie.get("token");
-  console.log(props);
-
-  const chat_id = props.chatRoom;
+  const chat_id = props.chatRoom.split("/")[0];
   // hooks
   const dispatch = useDispatch();
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const { user } = useAuth();
 
   const getChatRoom = async () => {
     try {
@@ -116,41 +119,46 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   }, []);
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "100vh", position: "absolute" }}>
+    <div style={{ display: "flex", width: "100%", height: "100vh" }}>
       <section
         className={css`
           height: 100vh;
-          position: absolute;
-          z-index: 9999;
           height: 30vh;
+          position: absolute;
         `}
       >
         <div
           className={css`
-            position: relative;
             width: 95%;
             height: 3rem;
             margin: 1rem;
             z-index: 100;
+            position: relative;
           `}
         >
           <HamburgerMenu />
         </div>
       </section>
-      hello
       <MainSection chatId={chat_id} chatRooms={chatRooms} />
       <MessageSection chatId={chat_id} contacts={contacts} FetchInvites={FetchInvites} />
     </div>
   );
 };
-export const getServerSideProps = withAuthSync(async (ctx) => {
+
+export const getServerSideProps = async (ctx) => {
+  const isUserAuth: any = await isAuth(ctx);
+  const currPath = ctx.resolvedUrl;
   const cookie = useCookie(ctx);
   const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
+  console.log(desiredURL);
+
+  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
 
   return {
     props: {
       chatRoom: ctx.query.acc,
     },
   };
-});
+};
+
 export default HomePage;

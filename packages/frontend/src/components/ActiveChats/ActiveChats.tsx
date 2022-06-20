@@ -72,7 +72,7 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
           color: var(--main-white);
           width: 97%;
           cursor: pointer;
-          padding: 1rem 1rem;
+          padding: 1rem;
           width: 100%;
           white-space: nowrap;
           transition: 0.2s;

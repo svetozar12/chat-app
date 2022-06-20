@@ -20,6 +20,10 @@ import { InitialStateMessage } from "../../services/redux/reducer/messageReducer
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import ChatRoomForm from "./ChatRoomForm/ChatRoomForm";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { Skeleton, VStack } from "@chakra-ui/react";
+import { useAuth } from "../../utils/SessionProvider";
+import SkelletonUserSettings from "../Loading/SkelletonUserSettings";
+import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
 
 interface IHome {
   chatId: any;
@@ -39,6 +43,8 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const inputTextArea = React.useRef<any>(null);
   const cookie = useCookie();
+
+  const user = useAuth();
   const user_id = cookie.get("id") as string;
   const token = cookie.get("token") as string;
   const dispatch = useDispatch();
@@ -125,30 +131,31 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
     >
       {setState.toggleCreateGroup && <ChatHeader />}
 
-      <div
-        ref={containerRef}
-        className={css`
-          flex-direction: column;
-          width: 100%;
-          height: 90%;
-          padding: 1rem;
-          overflow: auto;
-          background-color: var(--main-white);
-          box-shadow: 0px 0px 20px var(--off-white);
-        `}
-        onScroll={scrollHandler}
-      >
-        {messageState.messages.map((item, index) => {
-          const { sender, message, createdAt } = item;
-          const time_stamp = timeStamp(createdAt);
+      {user ? (
+        <div
+          ref={containerRef}
+          className={css`
+            flex-direction: column;
+            width: 100%;
+            height: 90%;
+            padding: 1rem;
+            overflow: auto;
+            background-color: var(--main-white);
+            box-shadow: 0px 0px 20px var(--off-white);
+          `}
+          onScroll={scrollHandler}
+        >
+          {messageState.messages.map((item, index) => {
+            const { sender, message, createdAt } = item;
+            const time_stamp = timeStamp(createdAt);
 
-          return (
-            <li style={{ listStyle: "none" }} key={index}>
-              <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />
-            </li>
-          );
-        })}
-      </div>
+            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />;
+          })}
+        </div>
+      ) : (
+        <SkelletonUserMessages />
+      )}
+
       <ChatRoomForm chatId={chatId} inputTextArea={inputTextArea} />
     </div>
   );

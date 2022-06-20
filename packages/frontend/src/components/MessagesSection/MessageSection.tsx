@@ -11,6 +11,8 @@ import AddUsers_Modal from "../AddUsers_Modal";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { useAuth } from "../../utils/SessionProvider";
+import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
 
 interface IContacts {
   _id: string;
@@ -30,7 +32,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
   const route = useRouter();
-
+  const { user } = useAuth();
   const getMembersSuggestions = async () => {
     try {
       // const res = await FetchInvites("accepted", "inviter");
@@ -87,7 +89,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
         className={cx(
           css`
             width: 100%;
-            height: 90vh;
+            height: 100vh;
             justify-content: center;
             alignitems: center;
             padding: 0;
@@ -107,7 +109,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
           {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} />}
 
           {state.setModalInvite && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
-          <ChatRoom chatId={chatId} />
+          {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
         </div>
       </div>
     </section>

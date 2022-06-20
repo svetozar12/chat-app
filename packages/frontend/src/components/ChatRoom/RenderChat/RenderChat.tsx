@@ -9,6 +9,7 @@ import { IchatInstance } from "../ChatRoom";
 import { InitialStateMessage } from "../../../services/redux/reducer/messageReducer/state";
 import api_helper from "../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { Heading, HStack } from "@chakra-ui/react";
 
 interface IRenderChat {
   id: string;
@@ -112,7 +113,8 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   }, []);
 
   return (
-    <div
+    <HStack
+      gap={5}
       onMouseOut={() => {
         setStyleBool(false);
       }}
@@ -129,14 +131,15 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         { [otherMessages]: name !== sender },
       )}
     >
-      <h2
+      <Heading
+        fontSize="lg"
         className={css`
           font-size: 15px;
           color: var(--main-black);
         `}
       >
         {name === sender ? null : sender}
-      </h2>
+      </Heading>
       <div
         className={cx(
           "flex",
@@ -232,7 +235,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
           )}
         </div>
       </div>
-    </div>
+    </HStack>
   );
 };
 

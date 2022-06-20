@@ -32,7 +32,7 @@ const App = () => {
 
   return (
     <>
-      {/* <Global
+      <Global
         // @ts-ignore
         styles={{
           body: {
@@ -58,7 +58,7 @@ const App = () => {
           background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
         `}
         onClick={closeModals}
-      ></div> */}
+      ></div>
       {setState.setIsLoading && <Loading />}
     </>
   );
