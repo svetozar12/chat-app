@@ -60,6 +60,8 @@ function Notifications({ contacts }: INotifications) {
           </Heading>
         ) : (
           contacts.map((item, index) => {
+            console.log(item);
+
             return <PendingChats key={index} {...item} />;
           })
         )}

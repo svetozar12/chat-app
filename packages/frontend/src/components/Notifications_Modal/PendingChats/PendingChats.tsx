@@ -9,6 +9,8 @@ import api_helper from "../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { useSelector } from "react-redux";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
+import { Button, HStack, Spacer } from "@chakra-ui/react";
+
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
@@ -59,49 +61,64 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
     }
   };
 
+  const isRecieved = status === "recieved" && inviter !== cookie.get("name");
+
+  const buttons = [
+    {
+      Svg: AiFillCheckCircle,
+      Button,
+      props: {
+        bg: "transparent",
+        color: "green.500",
+        transition: "0.2s",
+        _hover: { opacity: "0.8s", transition: "0.2s" },
+        onclick: () => createChatRoom(),
+      },
+    },
+    {
+      Svg: AiFillCloseCircle,
+      Button,
+      props: {
+        bg: "transparent",
+        color: "red.600",
+        transition: "0.2s",
+
+        onclick: () => updateInviteStatus("declined"),
+      },
+    },
+  ];
+
   return (
-    <div style={{ width: "100%" }}>
-      {status === "recieved" && inviter !== cookie.get("name") && (
-        <div
-          className={cx(
-            "contacts",
-            css`
-              border-top: 2px solid rgba(0, 0, 0, 0.3);
-              background: var(--main-white);
-              width: 98.5%;
-              height: 20vh;
-              margin: 0.5rem;
-              display: flex;
-              justify-content: space-between;
-            `,
-          )}
-        >
-          <div className="user_info flex">
-            <Single_avatar inviter={inviter} width="3rem" height="3rem" />
+    <HStack w="full">
+      {isRecieved && (
+        <HStack w="98.5%" m={2} h="20vh">
+          <HStack>
+            <Single_avatar width="3rem" height="3rem" />
             <h1 className="flex">{inviter}</h1>
-          </div>
-          <div className="invite_buttons">
-            <button
+          </HStack>
+          <Spacer />
+          <HStack>
+            {buttons.map((element, index) => {
+              const { Button, Svg, props } = element;
+              return (
+                <Button key={index} _hover={{ opacity: "0.8s", transition: "0.2s" }} {...props}>
+                  <Svg
+                    className={css`
+                      width: 3rem;
+                      height: 3rem;
+                    `}
+                  />
+                </Button>
+              );
+            })}
+            {/* <Button
+              bg="transparent"
+              color="green.500"
+              transition="0.2s"
+              _hover={{ opacity: "0.8", transition: "0.2s" }}
               onClick={() => {
                 createChatRoom();
               }}
-              className={cx(
-                css`
-                  ${ButtonSharedStyle}
-                `,
-                css`
-                  color: var(--main-black);
-                  outline: none;
-                  border: none;
-                  font-size: 3.01rem;
-                  background: transparent;
-                  transition: 0.2s;
-                  &:hover {
-                    color: var(--main-green);
-                    transition: 0.2s;
-                  }
-                `,
-              )}
             >
               <AiFillCheckCircle
                 className={css`
@@ -109,26 +126,15 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
                   height: 3rem;
                 `}
               />
-            </button>
-            <button
-              onClick={() => updateInviteStatus("declined")}
-              className={cx(
-                css`
-                  ${ButtonSharedStyle}
-                `,
-                css`
-                  color: var(--main-black);
-                  outline: none;
-                  border: none;
-                  font-size: 3.01rem;
-                  background: transparent;
-                  transition: 0.2s;
-                  &:hover {
-                    color: var(--main-red);
-                    transition: 0.2s;
-                  }
-                `,
-              )}
+            </Button>
+            <Button
+              bg="transparent"
+              color="red.600"
+              transition="0.2s"
+              _hover={{ opacity: "0.8", transition: "0.2s" }}
+              onClick={() => {
+                updateInviteStatus("declined");
+              }}
             >
               <AiFillCloseCircle
                 className={css`
@@ -136,11 +142,11 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
                   height: 3rem;
                 `}
               />
-            </button>
-          </div>
-        </div>
+            </Button> */}
+          </HStack>
+        </HStack>
       )}
-    </div>
+    </HStack>
   );
 }
 

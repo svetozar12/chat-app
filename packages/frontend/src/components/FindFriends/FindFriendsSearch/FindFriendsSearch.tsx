@@ -4,7 +4,11 @@ import { BsSearch } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { IInitialSet } from "../../../services/redux/reducer/setReducer/state";
 
-const FindFriendsSearch = () => {
+interface IFindFriendsSearch {
+  handleSubmit: (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => Promise<void>;
+}
+
+const FindFriendsSearch = ({ handleSubmit }: IFindFriendsSearch) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
@@ -34,6 +38,11 @@ const FindFriendsSearch = () => {
             border: none;
             outline: none;
           `}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleSubmit(e);
+            }
+          }}
           onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
           placeholder="Search for chats"
           value={state.reciever}

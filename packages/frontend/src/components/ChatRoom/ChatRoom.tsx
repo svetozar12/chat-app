@@ -15,7 +15,7 @@ import { useCookie } from "next-cookie";
 import api_helper from "../../services/graphql/api_helper";
 import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import ChatRoomForm from "./ChatRoomForm/ChatRoomForm";
+import ChatRoomForm from "./ChatRoomForm";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { VStack } from "@chakra-ui/react";
 import { useAuth } from "../../utils/SessionProvider";
@@ -37,7 +37,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const inputTextArea = React.useRef<any>(null);
   const cookie = useCookie();
 
   const user = useAuth();
@@ -59,16 +58,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
       return false;
     }
   };
-
-  useEffect(() => {
-    inputTextArea.current.focus();
-
-    console.log("ws-connect");
-    authState.ws?.on("message", ({ messages }) => {
-      const [message] = messages;
-      dispatch({ type: "MESSAGES", payload: message });
-    });
-  }, []);
 
   useEffect(() => {
     dispatch({ type: "SET_IS_MATCH", payload: false });
@@ -141,7 +130,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
         <SkelletonUserMessages />
       )}
 
-      <ChatRoomForm chatId={chatId} inputTextArea={inputTextArea} />
+      <ChatRoomForm chatId={chatId} />
     </VStack>
   );
 };

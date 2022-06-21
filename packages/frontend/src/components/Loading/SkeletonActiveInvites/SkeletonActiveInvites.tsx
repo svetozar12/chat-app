@@ -2,7 +2,7 @@ import React from "react";
 import { HStack, Skeleton, SkeletonCircle, VStack } from "@chakra-ui/react";
 
 const SkelletonUserSettings = () => {
-  const arr = ["", "", "", ""];
+  const arr = ["", "", "", "", "", ""];
   return (
     <VStack gap={5} p="1rem" w="full">
       {arr.map((el, index) => {

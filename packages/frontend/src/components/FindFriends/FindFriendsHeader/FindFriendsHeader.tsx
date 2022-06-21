@@ -14,7 +14,7 @@ import api_helper from "../../../services/graphql/api_helper";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
-import { Box, Center, Divider, Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
+import { Box, Center, Circle, Divider, Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 
 const FindFriendsHeader = () => {
@@ -92,6 +92,7 @@ const FindFriendsHeader = () => {
         <Spacer />
         <HStack gap={{ base: 0, md: 5 }}>
           <Center
+            pos="relative"
             className={s.icon_parrent}
             onClick={() => {
               dispatch({
@@ -101,7 +102,24 @@ const FindFriendsHeader = () => {
             }}
           >
             <IoNotifications className={s.icon} />
-            {notifState.notification_number > 0 && <div className="flex">{notifState.notification_number}</div>}
+            {notifState.notification_number > 0 && (
+              <Circle
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                pos="absolute"
+                right={0}
+                top={0}
+                bg="red"
+                borderRadius="full"
+                size="1.2rem"
+                m={2}
+                fontWeight="semibold"
+                color="white"
+              >
+                {notifState.notification_number}
+              </Circle>
+            )}
           </Center>
           <Center className={s.icon_parrent} onClick={toggleGroupCreate}>
             <AiOutlineUsergroupAdd className={s.icon} />

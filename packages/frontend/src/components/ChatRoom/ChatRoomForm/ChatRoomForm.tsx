@@ -3,11 +3,10 @@ import { MdSend } from "react-icons/md";
 import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
 import api_helper from "../../../services/graphql/api_helper";
-import { Socket } from "socket.io-client";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAuth } from "../../../utils/authMethods";
-import { Flex, HStack, Textarea } from "@chakra-ui/react";
+import { Box, Center, HStack, Spacer } from "@chakra-ui/react";
 import s from "./ChatRoomForm.module.css";
 
 interface IPropsState {
@@ -18,33 +17,29 @@ interface IPropsState {
 
 interface IChatRoomForm {
   chatId: string;
-  inputTextArea: React.MutableRefObject<any>;
 }
 
-const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
+const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   const cookie = useCookie();
+  const dispatch = useDispatch();
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [state, setState] = React.useState<IPropsState>({
     name: cookie.get("name"),
     message: "",
     time: "",
   });
-  const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
-    e.preventDefault();
-    if (state.message) {
-      await getAuth();
-      const { name, message, time } = state;
-      await saveMessage();
-      authState.ws?.emit("message", {
-        chatInstance: chatId,
-        sender: cookie.get("name"),
-        message,
-        time,
-      });
-      setState({ name, message: "" });
-    }
-  };
+  const inputTextArea = React.useRef<any>(null);
 
+  useEffect(() => {
+    inputTextArea.current.focus();
+
+    console.log("ws-connect");
+    authState.ws?.on("message", ({ messages }) => {
+      const [message] = messages;
+      dispatch({ type: "MESSAGES", payload: message });
+    }),
+      [];
+  });
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
     inputTextArea.current.style.height = "10px";
@@ -71,17 +66,35 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
       return false;
     }
   };
+
+  const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
+    e.preventDefault();
+    if (state.message) {
+      await getAuth();
+      const { name, message, time } = state;
+      await saveMessage();
+      authState.ws?.emit("message", {
+        chatInstance: chatId,
+        sender: cookie.get("name"),
+        message,
+        time,
+      });
+      setState({ name, message: "" });
+    }
+  };
+
   return (
-    <Flex justifyContent="center" alignItems="center" w="full" bg="#FCFCFC" h="10vh" onSuappbmit={onMessageSubmit}>
+    <div className={s.container}>
       <HStack
         cursor="text"
         pos="relative"
         zIndex="1"
-        bg="red"
         w="70%"
         p="2"
+        bg="#F3F3F5"
         overflowWrap="break-word"
         borderRadius="3xl"
+        align="center"
         onClick={() => inputTextArea.current.focus()}
       >
         <textarea
@@ -93,36 +106,32 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
           placeholder="Your Message "
           value={state.message}
         />
-        <div
-          className={css`
-              display:flex;
-              justify-content: center;
-              align-items: center;
-              cursor: pointer;
-              padding: 0.3rem 0 0.3rem 0.5rem;
-              border: 1px transperant;
-              border-radius: 50px;
-              &:hover {
-                background: rgba(0, 0, 0, 0.1);
-                border-radius: 50px;
-              }
-            flex`}
+        <Spacer />
+        <Center
+          mr={12}
+          w="2rem"
+          h="2rem"
+          _hover={{ bg: "rgba(0,0,0,0.1)", borderRadius: "full" }}
+          justifyItems="center"
+          alignItems="center"
+          cursor="pointer"
+          justifyContent="center"
+          border="1px transperant"
         >
           <MdSend
             className={css`
               cursor: pointer;
               width: 1.5rem;
               height: 1.5rem;
-              margin-right: 0.3rem;
               padding: 0.1rem;
             `}
             type="submit"
             onClick={onMessageSubmit}
           />
-        </div>
+        </Center>
       </HStack>
-    </Flex>
+    </div>
   );
 };
 
-export default ChatRoomForm;
+export default React.memo(ChatRoomForm);
