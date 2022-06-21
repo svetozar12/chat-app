@@ -1,10 +1,7 @@
-import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
-import { io, Socket } from "socket.io-client";
 import { useRouter } from "next/router";
 import { css } from "@emotion/css";
-import React, { useState, useEffect } from "react";
-import styled from "@emotion/styled";
+import React, { useEffect } from "react";
 // utils
 import timeStamp from "../../utils/timeStamp";
 import { constants } from "../../constants";
@@ -20,9 +17,8 @@ import { InitialStateMessage } from "../../services/redux/reducer/messageReducer
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import ChatRoomForm from "./ChatRoomForm/ChatRoomForm";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { Skeleton, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { useAuth } from "../../utils/SessionProvider";
-import SkelletonUserSettings from "../Loading/SkelletonUserSettings";
 import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
 
 interface IHome {
@@ -69,8 +65,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
 
     console.log("ws-connect");
     authState.ws?.on("message", ({ messages }) => {
-      console.log(messages);
-
       const [message] = messages;
       dispatch({ type: "MESSAGES", payload: message });
     });
@@ -118,17 +112,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   }, [messageState.messages]);
 
   return (
-    <div
-      className={css`
-        position: relative;
-        z-index: 10;
-        justifycontent: center;
-        alignitems: center;
-        width: 100%;
-        height: 100vh;
-        padding: 0;
-      container`}
-    >
+    <VStack w="full" h="100vh">
       {setState.toggleCreateGroup && <ChatHeader />}
 
       {user ? (
@@ -139,6 +123,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
             width: 100%;
             height: 90%;
             padding: 1rem;
+            margin-top: 0;
             overflow: auto;
             background-color: var(--main-white);
             box-shadow: 0px 0px 20px var(--off-white);
@@ -157,7 +142,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
       )}
 
       <ChatRoomForm chatId={chatId} inputTextArea={inputTextArea} />
-    </div>
+    </VStack>
   );
 };
 

@@ -1,0 +1,9 @@
+.remove_user {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.remove_user:hover {
+  color: red;
+}

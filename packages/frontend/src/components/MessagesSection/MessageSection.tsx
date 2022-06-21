@@ -13,6 +13,7 @@ import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { useAuth } from "../../utils/SessionProvider";
 import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
+import { Box } from "@chakra-ui/react";
 
 interface IContacts {
   _id: string;
@@ -97,20 +98,11 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
           "container",
         )}
       >
-        <div
-          className={cx(
-            "flex",
-            css`
-              width: 100%;
-              height: 100vh;
-            `,
-          )}
-        >
+        <Box w="full" h="100vh">
           {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} />}
-
           {state.setModalInvite && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
           {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
-        </div>
+        </Box>
       </div>
     </section>
   );

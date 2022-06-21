@@ -1,31 +1,21 @@
-import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
-import Link from "next/dist/client/link";
-import FormWrapper from "../FormWrapper";
-import DefaultLink from "../DefaultLink";
-import {
-  Flex,
-  FormLabel,
-  HStack,
-  VStack,
-  Link as AnchorLink,
-  Input,
-  Button,
-  Checkbox,
-  SimpleGrid,
-  GridItem,
-  Center,
-} from "@chakra-ui/react";
 import React from "react";
 import api_helper from "../../services/graphql/api_helper";
 import { getFirstChat } from "../../utils/getFirstChat";
+import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem } from "@chakra-ui/react";
+// hooks
+import { useSelector, useDispatch } from "react-redux";
 import { useCookie } from "next-cookie";
 import { useRouter } from "next/router";
+// components
+import FormWrapper from "../FormWrapper";
+import DefaultLink from "../DefaultLink";
+import Loading from "../Loading";
 
 function LoginForm() {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -45,10 +35,10 @@ function LoginForm() {
       }
       if (inputState.input_username) {
         const login = await api_helper.auth.login(inputState.input_username, inputState.input_password);
-
         if (login instanceof Error) return dispatch({ type: "LOGIN_POST_ERROR", bad: login.message });
 
         if (login) {
+          setIsLoading(true);
           dispatch({
             type: "SET_IS_LOADING",
             payload: true,
@@ -99,13 +89,14 @@ function LoginForm() {
             type: "SET_IS_LOADING",
             payload: false,
           });
+          setIsLoading(false);
           dispatch({ type: "SAVE_INPUT", payload: "" });
         }
         return;
       }
     } catch (error) {
       console.log(error);
-
+      setIsLoading(false);
       return error;
     }
   };
@@ -148,7 +139,7 @@ function LoginForm() {
       </>
 
       <Flex w="full" alignItems="center" justifyContent="center">
-        <Button onClick={handleSubmit} colorScheme="blue" w="60%" type="submit">
+        <Button isLoading={isLoading} spinner={<Loading />} onClick={handleSubmit} colorScheme="blue" w="60%" type="submit">
           Log In
         </Button>
       </Flex>

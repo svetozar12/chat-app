@@ -15,11 +15,11 @@ function Avatar({ inviter, members }: IAvatar) {
     <section data-testid="avatar" title={cookie.get("username")}>
       {members.length <= 2 ? (
         <div>
-          <Single_avatar inviter={inviter} />
+          <Single_avatar />
         </div>
       ) : (
         <div>
-          <Group_avatar inviter={inviter} members={members} />
+          <Group_avatar members={members} />
         </div>
       )}
     </section>

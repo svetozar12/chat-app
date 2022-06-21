@@ -64,6 +64,7 @@ const Schema = buildSchema(`
     _id: String
     username: String
     email: String
+    userAvatar: String
   }
 
   type Message {

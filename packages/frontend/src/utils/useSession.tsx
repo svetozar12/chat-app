@@ -16,7 +16,6 @@ function useProvideAuth() {
     const user_id: string = cookie.get("id");
     const token: string = cookie.get("token");
     setTimeout(async () => {
-      console.log("dobro utro");
       const res = await api_helper.user.getById(user_id, token);
       setUser(res);
     }, 10000);

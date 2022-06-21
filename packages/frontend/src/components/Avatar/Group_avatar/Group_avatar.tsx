@@ -4,7 +4,6 @@ import Single_avatar from "../Single_avatar";
 import { useCookie } from "next-cookie";
 
 interface IGroup_avatar {
-  inviter: string;
   members: string[];
 }
 
@@ -38,7 +37,7 @@ function Group_avatar({ members }: IGroup_avatar) {
 
         return (
           <div key={index} title={cookie.get("username")}>
-            <Single_avatar inviter={element} width="2.3125rem" height="2.3125rem" group={true} overlay={index === 1 ? true : false} />
+            <Single_avatar width="2.3125rem" height="2.3125rem" group={true} overlay={index === 1 ? true : false} />
           </div>
         );
       })}

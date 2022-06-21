@@ -64,8 +64,9 @@ function Register(props: { cookie: string }) {
         dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
         dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
         dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+        return true;
       }
-      return;
+      return false;
     } catch (error) {
       dispatch({
         type: "SET_IS_LOADING",
@@ -76,21 +77,7 @@ function Register(props: { cookie: string }) {
     }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const register = await api_helper.user.create(state.input_username, state.input_email, state.input_password, state.input_gender);
-
-    if (await register) {
-      dispatch({ type: "QUICK_LOGIN", payload: true });
-    } else {
-      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
-      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
-      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
-      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
-    }
-  };
-
-  return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
+  return <RegisterForm quickLogin={quickLogin} />;
 }
 export const getServerSideProps = isAlreadyAuth();
 export default Register;

@@ -11,6 +11,7 @@ interface IConstants {
   MONGO_URL: string;
   REDIS_URL: string;
   BLOB_URL: string;
+  AVATAR_URL: string;
 }
 
 export const constants: IConstants = {
@@ -24,4 +25,5 @@ export const constants: IConstants = {
   MONGO_URL: `mongodb://${process.env.NODE_ENV === "production" ? "mongodb" : "localhost"}:27017/${process.env.DB_NAME}`,
   REDIS_URL: `redis://${process.env.NODE_ENV === "production" ? "redis" : "localhost"}:6379`,
   BLOB_URL: process.env.BLOB_CONNECTION_STRING as string,
+  AVATAR_URL: `${process.env.AVATAR_URL}/identicon`,
 };

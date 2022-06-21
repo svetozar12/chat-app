@@ -9,19 +9,41 @@ import { FormLabel, Input, Button, Flex, Spacer, useRadioGroup, HStack } from "@
 import React from "react";
 import DefaultLink from "../DefaultLink";
 import RadioCard from "../RadioCards/RadioCards";
+import api_helper from "../../services/graphql/api_helper";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars
-  quickLogin: () => Promise<false | undefined>;
-  // eslint-disable-next-line no-unused-vars
-  handleSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  quickLogin: () => Promise<boolean>;
 }
 
-function RegisterForm({ quickLogin, handleSubmit }: IRegisterForm) {
+function RegisterForm({ quickLogin }: IRegisterForm) {
   const dispatch = useDispatch();
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const register = await api_helper.user.create(
+      inputState.input_username,
+      inputState.input_email,
+      inputState.input_password,
+      inputState.input_gender,
+    );
+    setIsLoading(true);
+
+    if (await register) {
+      dispatch({ type: "QUICK_LOGIN", payload: true });
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
+      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
+      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
+      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+    }
+  };
+
   const handleGenderChange = (value) => {
     dispatch({
       type: "SAVE_INPUT_GENDER",

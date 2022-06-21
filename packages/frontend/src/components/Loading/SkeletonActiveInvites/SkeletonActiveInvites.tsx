@@ -9,7 +9,7 @@ const SkelletonUserSettings = () => {
         return (
           <HStack p="1rem" spacing={10} h="5rem" key={index} w="full">
             <SkeletonCircle size="3.5rem" />
-            <VStack alignItems="flex-start" w="85%">
+            <VStack alignItems="flex-start" w="70%">
               <Skeleton w="80%">dawdawdawdawdaw</Skeleton>
               <Skeleton w="full">dawdawdawdawdaw</Skeleton>
             </VStack>

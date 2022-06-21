@@ -13,6 +13,7 @@ import { getAuth } from "../../utils/authMethods";
 
 export const User_settings = styled.div`
   width: 10rem;
+  padding: 1rem;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -25,7 +26,7 @@ export const User_settings = styled.div`
   right: 0;
   margin: 0;
   z-index: 12;
-  transform: translate(0px, 67px);
+  transform: translate(-3px, 67px);
   box-shadow: 2px 2px 22px 1px var(--main-box-shadow);
   &:before {
     position: absolute;
@@ -90,32 +91,43 @@ function UserSettings() {
     }
   };
 
+  const Render = [
+    {
+      href: "/settings/profile",
+      onClick: () => {
+        dispatch({ type: "SET_USER_SETTINGS", payload: false });
+      },
+      Icon: FiSettings,
+      title: "User settings",
+    },
+    {
+      href: "#",
+      onClick: deleteCookies,
+      Icon: IoMdLogOut,
+      title: "Log out",
+    },
+    {
+      href: "#",
+      onClick: deleteUser,
+      Icon: RiDeleteBin6Fill,
+      title: " Delete user",
+    },
+  ];
+
   return (
     <User_settings data-testid="user_settings">
-      <Link href="/settings/profile" passHref>
-        <a
-          className={User_settings_style}
-          style={{ marginTop: "1rem" }}
-          onClick={() => {
-            dispatch({ type: "SET_USER_SETTINGS", payload: false });
-          }}
-        >
-          <FiSettings className={buttonStyles} />
-          User settings
-        </a>
-      </Link>
-      <Link href="#" passHref>
-        <a className={User_settings_style} onClick={deleteCookies}>
-          <IoMdLogOut className={buttonStyles} />
-          Log out
-        </a>
-      </Link>
-      <Link href="#" passHref>
-        <a className={User_settings_style} style={{ marginBottom: "1rem" }} onClick={deleteUser}>
-          <RiDeleteBin6Fill className={buttonStyles} />
-          Delete user
-        </a>
-      </Link>
+      {Render.map((element, index) => {
+        const { href, onClick, Icon, title } = element;
+
+        return (
+          <Link key={index} href={href} passHref>
+            <a className={User_settings_style} onClick={onClick}>
+              <Icon className={buttonStyles} />
+              {title}
+            </a>
+          </Link>
+        );
+      })}
     </User_settings>
   );
 }

@@ -1,54 +1,49 @@
 import React from "react";
-import { Button } from "../../styledComponents";
 import { css, cx } from "@emotion/css";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import Loading from "../../Loading";
+import { Button, GridItem, HStack, SimpleGrid, Spacer } from "@chakra-ui/react";
+import { useAuth } from "../../../utils/SessionProvider";
 
-const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => {
+const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = React.useState(false);
+
   return (
-    <div
-      className={cx(
-        "fRequests_modal",
-        "flex",
-        css`
-          width: 75%;
-          height: 30vh;
-          position: absolute;
-          z-index: 200;
-        `,
-      )}
-    >
-      <div
-        className={cx(
-          css`
-            width: 100%;
-          `,
-          "flex",
-        )}
+    <HStack w="full" h="100vh" alignItems="center" justifyContent="center" zIndex="200" pos="absolute" top={0}>
+      <SimpleGrid
+        gap={4}
+        placeItems="center"
+        columns={2}
+        w={{ base: "95%", md: "80%", lg: "50%", xl: "30%" }}
+        bg="white"
+        h="40%"
+        p={4}
+        boxShadow="default"
       >
-        <Button
-          className={css`
-            width: 50%;
-          `}
-          onClick={() => {
-            quickLogin();
-          }}
-        >
-          Click me to Quick login
-        </Button>
-        <Link href="/" passHref>
+        <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Button
-            onClick={() => dispatch({ type: "QUICK_LOGIN", payload: false })}
-            className={css`
-              width: 50%;
-            `}
+            colorScheme="blue"
+            w="full"
+            isLoading={isLoading}
+            spinner={<Loading />}
+            onClick={async () => {
+              setIsLoading(await quickLogin());
+            }}
           >
-            Sign up
+            Click me to Quick login
           </Button>
-        </Link>
-      </div>
-    </div>
+        </GridItem>
+        <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
+          <Link href="/" passHref>
+            <Button colorScheme="blue" w="full" onClick={() => dispatch({ type: "QUICK_LOGIN", payload: false })}>
+              Sign up
+            </Button>
+          </Link>
+        </GridItem>
+      </SimpleGrid>
+    </HStack>
   );
 };
 

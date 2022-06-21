@@ -6,12 +6,16 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
+// services
+import s from "./FindFriendsHeader.module.css";
 import ISave_inputState from "../../../services/redux/reducer/save_inputReducer/state";
 import { IInitialSet } from "../../../services/redux/reducer/setReducer/state";
 import api_helper from "../../../services/graphql/api_helper";
+// hooks
+import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
-import { useAuth } from "../../../utils/SessionProvider";
+import { Box, Center, Divider, Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 
 const FindFriendsHeader = () => {
   const dispatch = useDispatch();
@@ -27,14 +31,12 @@ const FindFriendsHeader = () => {
   const getUserImage = async () => {
     try {
       const res = await api_helper.user.getById(user_id, token);
+      console.log(res);
+
       const userAvatar = res.userAvatar;
-      if (!userAvatar) {
-        setHasAvatar(false);
-        return true;
-      }
+
       setHasAvatar(true);
-      const requestString = ``;
-      setImage(requestString);
+      setImage(userAvatar);
       return true;
     } catch (error) {
       return false;
@@ -70,55 +72,27 @@ const FindFriendsHeader = () => {
           position: relative;
         `}
       ></div>
-      <div
-        className={css`
-          display: flex;
-          width: 95%;
-          justify-content: space-between;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-          margin: 0 1rem;
-        `}
-      >
-        <div className="flex">
-          {hasAvatar ? (
-            <img
-              alt="user_avatar"
-              src={image}
-              className={cx(
-                "click",
-                css`
-                  width: 2.8rem;
-                  height: 2.8rem;
-                  color: var(--main-logo-color);
-                  margin-right: 1rem;
-                  border-radius: 100px;
-                  position: relative;
-                  zindex: 10;
-                  &:hover {
-                    background: rgba(122, 122, 122, 0.4);
-                  }
-                `,
-              )}
-            />
-          ) : (
-            <FaUserCircle
-              className={css`
-                width: 3.25rem;
-                height: 3.25rem;
-                margin: 0;
-                color: var(--main-logo-color);
-                position: relative;
-                z-index: 10;
-              `}
-            />
-          )}
-          <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}> Chats</h1>
-        </div>
-        <div className="flex find_friends_icons">
-          <div
-            className="flex notifications"
-            style={{ cursor: "pointer" }}
+      <HStack w="95%" pb="1rem">
+        <Flex align="center">
+          <Image
+            alt="user_avatar"
+            src={image}
+            w="2.8rem"
+            h="2.8rem"
+            mr="1rem"
+            borderRadius="full"
+            pos="relative"
+            zIndex={10}
+            color="var(--main-logo-color)"
+          />
+          <Heading size="md" whiteSpace="nowrap">
+            Chats
+          </Heading>
+        </Flex>
+        <Spacer />
+        <HStack gap={{ base: 0, md: 5 }}>
+          <Center
+            className={s.icon_parrent}
             onClick={() => {
               dispatch({
                 type: "SET_FRIEND_REQUEST",
@@ -126,26 +100,15 @@ const FindFriendsHeader = () => {
               });
             }}
           >
-            <IoNotifications />
+            <IoNotifications className={s.icon} />
             {notifState.notification_number > 0 && <div className="flex">{notifState.notification_number}</div>}
-          </div>
-          <div
-            className="flex add_group"
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={toggleGroupCreate}
-          >
-            <AiOutlineUsergroupAdd />
-          </div>
-          <div
-            className="flex dots"
-            style={{
-              cursor: "pointer",
-              position: "relative",
-            }}
-          >
+          </Center>
+          <Center className={s.icon_parrent} onClick={toggleGroupCreate}>
+            <AiOutlineUsergroupAdd className={s.icon} />
+          </Center>
+          <Center pos="relative" className={s.icon_parrent}>
             <BsThreeDots
+              className={s.icon}
               onClick={() =>
                 dispatch({
                   type: "SET_USER_SETTINGS",
@@ -154,9 +117,10 @@ const FindFriendsHeader = () => {
               }
             />
             {state.setUserSettings ? <UserSettings /> : null}
-          </div>
-        </div>
-      </div>
+          </Center>
+        </HStack>
+      </HStack>
+      <Divider />
     </>
   );
 };

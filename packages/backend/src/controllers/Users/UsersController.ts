@@ -5,7 +5,8 @@ import User from "../../models/User.model";
 import Invites from "../../models/Invites.model";
 import Chats from "../../models/chatRoom.model";
 import { CustomError } from "../../utils/custom-error.model";
-
+import { constants } from "../../constants";
+import { v4 as uuidv4 } from "uuid";
 interface IUsersController {
   GetUser: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
   CreateUser: (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
@@ -30,12 +31,16 @@ const UsersController: IUsersController = {
     const users = await User.findOne({ username }).exec();
     if (users) return next(CustomError.conflict(`User already exists !`));
 
+    const avatarGenerator = () => {
+      return `${constants.AVATAR_URL}/${uuidv4()}.svg`;
+    };
+
     const user = new User({
       type: "POST",
       username,
       password,
       email,
-      userAvatar: "",
+      userAvatar: avatarGenerator(),
       gender,
     });
 

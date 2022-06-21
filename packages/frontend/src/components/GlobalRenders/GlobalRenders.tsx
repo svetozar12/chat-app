@@ -5,7 +5,6 @@ import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Global } from "@emotion/react";
 import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";
-import Loading from "../Loading";
 
 const App = () => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -59,7 +58,6 @@ const App = () => {
         `}
         onClick={closeModals}
       ></div>
-      {setState.setIsLoading && <Loading />}
     </>
   );
 };

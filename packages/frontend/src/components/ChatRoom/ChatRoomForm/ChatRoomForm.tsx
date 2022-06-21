@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdSend } from "react-icons/md";
-import { Message_form } from "./styled";
 import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
 import api_helper from "../../../services/graphql/api_helper";
@@ -8,7 +7,8 @@ import { Socket } from "socket.io-client";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
 import { useSelector } from "react-redux";
 import { getAuth } from "../../../utils/authMethods";
-import { Flex, FormControl, HStack, Textarea } from "@chakra-ui/react";
+import { Flex, HStack, Textarea } from "@chakra-ui/react";
+import s from "./ChatRoomForm.module.css";
 
 interface IPropsState {
   name?: string;
@@ -47,7 +47,7 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
 
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    inputTextArea.current.style.height = "15px";
+    inputTextArea.current.style.height = "10px";
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
     inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
 
@@ -59,6 +59,10 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
     }
   };
 
+  useEffect(() => {
+    inputTextArea.current.style.height = "10px";
+  }, []);
+
   const saveMessage = async () => {
     try {
       await api_helper.message.create(cookie.get("id"), chatId, state.message as string, cookie.get("token"));
@@ -68,26 +72,20 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
     }
   };
   return (
-    <Flex justifyContent="center" alignItems="center" w="full" h="10vh" bg="white" onSubmit={onMessageSubmit}>
+    <Flex justifyContent="center" alignItems="center" w="full" bg="#FCFCFC" h="10vh" onSuappbmit={onMessageSubmit}>
       <HStack
         cursor="text"
         pos="relative"
-        zIndex="1000"
-        bg="#f3f3f5"
+        zIndex="1"
+        bg="red"
         w="70%"
-        m="1"
-        h="5rem"
         p="2"
         overflowWrap="break-word"
         borderRadius="3xl"
         onClick={() => inputTextArea.current.focus()}
       >
-        <Textarea
-          variant="unstyled"
-          resize="none"
-          wordBreak="break-all"
-          w="90%"
-          size="sm"
+        <textarea
+          className={s.MessageInput}
           ref={inputTextArea}
           name="message"
           onKeyDown={(e) => handleSubmit(e)}

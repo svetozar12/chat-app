@@ -12,7 +12,7 @@ import { useAuth } from "../../utils/SessionProvider";
 import FindFriendsHeader from "./FindFriendsHeader";
 import SkeletonFindFriendsHeader from "../Loading/SkeletonFindFriendsHeader";
 import FindFriendsSearch from "./FindFriendsSearch";
-import { Skeleton } from "@chakra-ui/react";
+import { Skeleton, VStack, FormControl } from "@chakra-ui/react";
 
 function FindFriends() {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ function FindFriends() {
   };
 
   return (
-    <form
+    <VStack
       className={css`
         width: 100%;
         margin: 0;
@@ -58,11 +58,10 @@ function FindFriends() {
         margin-bottom: 1rem;
         align-items: center;
       `}
-      onSubmit={handleSubmit}
     >
       {user ? <FindFriendsHeader /> : <SkeletonFindFriendsHeader />}
-      {user ? <FindFriendsSearch /> : <Skeleton w="95%" mt={1} h="2.6875rem" />}
-    </form>
+      <FormControl onSubmit={handleSubmit}>{user ? <FindFriendsSearch /> : <Skeleton w="95%" mt={1} h="2.6875rem" />}</FormControl>
+    </VStack>
   );
 }
 

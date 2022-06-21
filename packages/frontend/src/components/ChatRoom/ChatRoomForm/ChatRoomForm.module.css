@@ -1,0 +1,7 @@
+.MessageInput {
+  resize: none;
+  word-break: break-all;
+  width: 90%;
+  background: transparent;
+  outline: none;
+}

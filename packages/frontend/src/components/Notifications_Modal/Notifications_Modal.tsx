@@ -5,6 +5,7 @@ import PendingChats from "./PendingChats/PendingChats";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css, cx } from "@emotion/css";
+import { Center, CloseButton, Divider, Flex, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 
 interface INotifications {
   contacts: Iinvites[];
@@ -15,68 +16,38 @@ function Notifications({ contacts }: INotifications) {
 
   const dispatch = useDispatch();
   return (
-    <div
-      className={css`
-        position: fixed;
-        flex-direction: column;
-        display: flex;
-        align-items: center;
-        justify-content: !important start;
-        z-index: 9999;
-        width: 40%;
-        background: var(--main-white);
-        overflow: hidden;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        border-radius: 5px;
-        @media (min-width: 1010px) {
-          width: 70%;
-        }
-      `}
+    <VStack
+      pos="fixed"
+      zIndex={999}
+      justifyContent="flex-start"
+      w={{ base: "90%", md: "70%", lg: "60%", xl: "50%" }}
+      bg="white"
+      boxShadow="default"
+      borderRadius="xl"
+      p={2}
+      overflow="hidden"
+      top="50%"
+      left="50%"
+      transform="translate(-50%,-50%)"
     >
-      <section
-        className={cx(
-          "modal_heading flex",
-          css`
-            position: relative;
-            text-align: center;
-          `,
-        )}
-      >
-        <h1
-          className={css`
-            padding: 0 25%;
-          `}
-        >
-          Notifications
-        </h1>
-        <div
-          onClick={() => {
-            dispatch({
-              type: "SET_FRIEND_REQUEST",
-              payload: !state.setFriendRequest,
-            });
-          }}
-          className={cx(
-            "circle_border absolute_top_right flex",
-            css`
-              width: 3rem;
-              height: 3rem;
-              margin: 0 1rem;
-            `,
-          )}
-        >
-          <GrClose
-            className={css`
-              width: 2rem;
-              height: 2rem;
-            `}
-          />
-        </div>
-      </section>
+      <Flex alignItems="center" h="5rem" justifyItems="center" justifyContent="center">
+        <Heading m="1rem">Notifications</Heading>
+      </Flex>
+      <Divider />
+      <CloseButton
+        size="lg"
+        pos="absolute"
+        right={0}
+        top={0}
+        p={5}
+        mt={0}
+        onClick={() => {
+          dispatch({
+            type: "SET_FRIEND_REQUEST",
+            payload: !state.setFriendRequest,
+          });
+        }}
+      />
       <div
         className={css`
           overflow-y: auto;
@@ -84,14 +55,16 @@ function Notifications({ contacts }: INotifications) {
         `}
       >
         {contacts.length <= 0 ? (
-          <h1 className="flex">No Chat suggestions</h1>
+          <Heading p={5} size="md" className="flex">
+            You don't have invites !!!
+          </Heading>
         ) : (
           contacts.map((item, index) => {
             return <PendingChats key={index} {...item} />;
           })
         )}
       </div>
-    </div>
+    </VStack>
   );
 }
 
