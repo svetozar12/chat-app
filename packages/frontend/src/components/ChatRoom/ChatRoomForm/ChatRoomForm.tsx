@@ -8,6 +8,7 @@ import { Socket } from "socket.io-client";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
 import { useSelector } from "react-redux";
 import { getAuth } from "../../../utils/authMethods";
+import { Flex, FormControl, HStack, Textarea } from "@chakra-ui/react";
 
 interface IPropsState {
   name?: string;
@@ -67,39 +68,26 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
     }
   };
   return (
-    <Message_form onSubmit={onMessageSubmit} className="flex">
-      <div
-        className={css`
-            cursor: text;
-            position: relative;
-            z-index: 1000;
-            flex-direction: row;
-            justify-content: space-between;
-            background: #d9d9d9;
-            border-radius: 25px;
-            width: 70%;
-            margin: 0.5rem 0;
-            padding: 0.5rem 2rem;
-            overflow-wrap: break-word;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          flex`}
+    <Flex justifyContent="center" alignItems="center" w="full" h="10vh" bg="white" onSubmit={onMessageSubmit}>
+      <HStack
+        cursor="text"
+        pos="relative"
+        zIndex="1000"
+        bg="#f3f3f5"
+        w="70%"
+        m="1"
+        h="5rem"
+        p="2"
+        overflowWrap="break-word"
+        borderRadius="3xl"
         onClick={() => inputTextArea.current.focus()}
       >
-        <textarea
-          className={css`
-            border: none;
-            resize: none;
-            padding: 0;
-            wordbreak: break-all;
-            width: 90%;
-            background: transparent;
-            height: 0.9375rem;
-            &:focus {
-              outline: none;
-            }
-          `}
+        <Textarea
+          variant="unstyled"
+          resize="none"
+          wordBreak="break-all"
+          w="90%"
+          size="sm"
           ref={inputTextArea}
           name="message"
           onKeyDown={(e) => handleSubmit(e)}
@@ -134,8 +122,8 @@ const ChatRoomForm = ({ chatId, inputTextArea }: IChatRoomForm) => {
             onClick={onMessageSubmit}
           />
         </div>
-      </div>
-    </Message_form>
+      </HStack>
+    </Flex>
   );
 };
 

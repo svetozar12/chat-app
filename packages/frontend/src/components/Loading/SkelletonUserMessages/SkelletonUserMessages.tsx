@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Center, Flex, GridItem, HStack, SimpleGrid, Skeleton, SkeletonCircle, VStack } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 
 const SkelletonUserSettings = () => {
   return (

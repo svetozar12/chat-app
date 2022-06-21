@@ -11,6 +11,7 @@ import ISave_inputState from "../../../services/redux/reducer/save_inputReducer/
 import { IInitialSet } from "../../../services/redux/reducer/setReducer/state";
 import api_helper from "../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
+import { useAuth } from "../../../utils/SessionProvider";
 
 const FindFriendsHeader = () => {
   const dispatch = useDispatch();
