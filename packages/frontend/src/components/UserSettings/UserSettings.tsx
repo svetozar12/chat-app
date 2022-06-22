@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -25,8 +25,8 @@ export const User_settings = styled.div`
   top: 0;
   right: 0;
   margin: 0;
-  z-index: 12;
-  transform: translate(-3px, 67px);
+  z-index: 2000;
+  transform: translate(-4px, 75px);
   box-shadow: 2px 2px 22px 1px var(--main-box-shadow);
   &:before {
     position: absolute;
@@ -37,7 +37,7 @@ export const User_settings = styled.div`
     right: 14px;
     top: -10px;
     transform: rotate(45deg);
-    z-index: 1;
+    z-index: 2000;
   }
   @media (min-width: 1008px) {
     width: 15rem;

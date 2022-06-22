@@ -10,6 +10,7 @@ import React from "react";
 import DefaultLink from "../DefaultLink";
 import RadioCard from "../RadioCards/RadioCards";
 import api_helper from "../../services/graphql/api_helper";
+import generic from "../../utils/generic";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars
@@ -18,7 +19,6 @@ interface IRegisterForm {
 
 function RegisterForm({ quickLogin }: IRegisterForm) {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = React.useState(false);
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
@@ -30,13 +30,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       inputState.input_password,
       inputState.input_gender,
     );
-    setIsLoading(true);
 
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
-      setIsLoading(false);
     } else {
-      setIsLoading(false);
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
       dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
@@ -50,6 +47,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       payload: value,
     });
   };
+
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "gender",
     defaultValue: "Male",
@@ -64,6 +62,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       props: {
         value: inputState.input_username,
         onChange: (e) => dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value }),
+        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "text",
         name: "username",
         placeholder: "username ...",
@@ -74,6 +73,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       props: {
         value: inputState.input_password,
         onChange: (e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value }),
+        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "password",
         name: "password",
         placeholder: "password ...",
@@ -84,6 +84,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       props: {
         value: inputState.input_email,
         onChange: (e) => dispatch({ type: "SAVE_INPUT_EMAIL", payload: e.target.value }),
+        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "email",
         name: "email",
         placeholder: "email ...",

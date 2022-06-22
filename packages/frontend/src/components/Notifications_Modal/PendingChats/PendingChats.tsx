@@ -9,7 +9,7 @@ import api_helper from "../../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { useSelector } from "react-redux";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
-import { Button, HStack, Spacer } from "@chakra-ui/react";
+import { Button, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -71,8 +71,8 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
         bg: "transparent",
         color: "green.500",
         transition: "0.2s",
-        _hover: { opacity: "0.8s", transition: "0.2s" },
-        onclick: () => createChatRoom(),
+        _hover: { opacity: "0.8", transition: "0.2s" },
+        onClick: () => createChatRoom(),
       },
     },
     {
@@ -82,8 +82,8 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
         bg: "transparent",
         color: "red.600",
         transition: "0.2s",
-
-        onclick: () => updateInviteStatus("declined"),
+        _hover: { opacity: "0.8", transition: "0.2s" },
+        onClick: () => updateInviteStatus("declined"),
       },
     },
   ];
@@ -92,16 +92,17 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
     <HStack w="full">
       {isRecieved && (
         <HStack w="98.5%" m={2} h="20vh">
-          <HStack>
+          <VStack align="center">
             <Single_avatar width="3rem" height="3rem" />
-            <h1 className="flex">{inviter}</h1>
-          </HStack>
+            <Heading>{inviter}</Heading>
+          </VStack>
           <Spacer />
           <HStack>
             {buttons.map((element, index) => {
-              const { Button, Svg, props } = element;
+              const { props, Svg } = element;
+
               return (
-                <Button key={index} _hover={{ opacity: "0.8s", transition: "0.2s" }} {...props}>
+                <Button key={index} {...props}>
                   <Svg
                     className={css`
                       width: 3rem;
@@ -111,38 +112,6 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
                 </Button>
               );
             })}
-            {/* <Button
-              bg="transparent"
-              color="green.500"
-              transition="0.2s"
-              _hover={{ opacity: "0.8", transition: "0.2s" }}
-              onClick={() => {
-                createChatRoom();
-              }}
-            >
-              <AiFillCheckCircle
-                className={css`
-                  width: 3rem;
-                  height: 3rem;
-                `}
-              />
-            </Button>
-            <Button
-              bg="transparent"
-              color="red.600"
-              transition="0.2s"
-              _hover={{ opacity: "0.8", transition: "0.2s" }}
-              onClick={() => {
-                updateInviteStatus("declined");
-              }}
-            >
-              <AiFillCloseCircle
-                className={css`
-                  width: 3rem;
-                  height: 3rem;
-                `}
-              />
-            </Button> */}
           </HStack>
         </HStack>
       )}

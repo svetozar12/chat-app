@@ -2,18 +2,9 @@ import React from "react";
 import api_helper from "../../../services/graphql/api_helper";
 import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
-const logo_post_overlay = css`
-  z-index: 1;
-`;
+import { Image } from "@chakra-ui/react";
+import s from "./Single_avatar.module.css";
 
-const group_logo = css`
-  borderradius: "50px";
-  margin: 0;
-  width: 2.6rem;
-  height: 2.6rem;
-  background: white;
-  border-radius: 100%;
-`;
 function Single_avatar({
   width,
   height,
@@ -47,33 +38,34 @@ function Single_avatar({
     getUserImage();
   })();
 
+  const FallBackImage =
+    "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg";
+
   return (
-    <div style={{ marginRight: "1rem" }}>
+    <>
       {preview ? (
-        <img
-          alt={`no avatar`}
+        <Image
+          borderRadius="100%"
+          w={width || "3.5rem"}
+          h={height || "3.5rem"}
+          color="var(--main-logo-color)"
+          zIndex={overlay ? 1 : 0}
+          resize="none"
           src={image}
-          className={`${
-            group
-              ? group_logo
-              : css`
-                  border-radius: 50px;
-                  margin: 0;
-                  width: ${width || "3.5rem"};
-                  height: ${height || "3.5rem"};
-                  color: var(--main-logo-color);
-                `
-          } ${overlay && logo_post_overlay}`}
+          fallbackSrc={FallBackImage}
+          className={`${group ? s.GroupLogo : s.SignleLogo} `}
         />
       ) : (
-        <img
-          alt={`avatar logo`}
+        <Image
+          fallbackSrc={FallBackImage}
           src={image}
+          resize="none"
+          zIndex={overlay ? 1 : 0}
           className={`${
             group
-              ? group_logo
+              ? s.GroupLogo
               : css`
-                  border-radius: 50px;
+                  border-radius: 100%;
                   margin: 0;
                   width: ${width || "3.5rem"};
                   height: ${height || "3.5rem"};
@@ -81,10 +73,10 @@ function Single_avatar({
                   ${overlay ? "bottom: 0;" : "top:0"}
                   ${overlay ? "left: 0;" : "right:0"}
                 `
-          } ${overlay && logo_post_overlay}`}
+          } `}
         />
       )}
-    </div>
+    </>
   );
 }
 

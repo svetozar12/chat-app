@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
-import { getFirstChat } from "../../utils/getFirstChat";
+import generic from "../../utils/generic";
 import UpdateInfo from "../../components/UpdateInfo";
 import api_helper from "../../services/graphql/api_helper";
 import withAuthSync from "../../utils/auth";
@@ -26,7 +26,7 @@ function Profile(props: { cookie: string }) {
       cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname);
       (async () => {
         getAuth();
-        const first_id = await getFirstChat(user._id, cookie.get("token"));
+        const first_id = await generic.getFirstChat(user._id, cookie.get("token"));
         setUrl(first_id._id);
       })();
     }
@@ -54,9 +54,8 @@ function Profile(props: { cookie: string }) {
 
   return (
     <HStack w="full" h="100vh" alignItems="center" justifyContent="center">
-      <UpdateInfo>
-        <UpdateInfoDetails image={image} />
-        <UpdateInfoForm handleSubmit={handleSubmit} url={url} setImage={setImage} />
+      <UpdateInfo handleSubmit={handleSubmit} url={url}>
+        <UpdateInfoForm image={image} setImage={setImage} />
       </UpdateInfo>
     </HStack>
   );

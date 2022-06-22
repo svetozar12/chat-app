@@ -8,6 +8,8 @@ import { constants } from "../../constants";
 // components
 import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
+import ChatRoomForm from "./ChatRoomForm";
+import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
@@ -15,11 +17,9 @@ import { useCookie } from "next-cookie";
 import api_helper from "../../services/graphql/api_helper";
 import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import ChatRoomForm from "./ChatRoomForm";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { VStack } from "@chakra-ui/react";
 import { useAuth } from "../../utils/SessionProvider";
-import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
 
 interface IHome {
   chatId: any;
@@ -105,18 +105,14 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
       {setState.toggleCreateGroup && <ChatHeader />}
 
       {user ? (
-        <div
+        <VStack
+          mt="-0.5rem !important"
+          w="full"
+          h="full"
+          p="1rem"
+          overflow="auto"
+          bg="var(--main-white)"
           ref={containerRef}
-          className={css`
-            flex-direction: column;
-            width: 100%;
-            height: 90%;
-            padding: 1rem;
-            margin-top: 0;
-            overflow: auto;
-            background-color: var(--main-white);
-            box-shadow: 0px 0px 20px var(--off-white);
-          `}
           onScroll={scrollHandler}
         >
           {messageState.messages.map((item, index) => {
@@ -125,7 +121,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
 
             return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />;
           })}
-        </div>
+        </VStack>
       ) : (
         <SkelletonUserMessages />
       )}

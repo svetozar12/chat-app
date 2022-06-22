@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
-import { Button } from "../styledComponents";
+import { Button, HStack, VStack } from "@chakra-ui/react";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
@@ -100,7 +100,7 @@ const AddGroupChat = () => {
               Create room
             </Button>
           </form>
-          <div style={{ display: "flex" }}>
+          <HStack mx={5} gap={5}>
             {usersData.map((element, index) => {
               return (
                 <p
@@ -116,7 +116,7 @@ const AddGroupChat = () => {
                 </p>
               );
             })}
-          </div>
+          </HStack>
         </div>
       )}
     </>

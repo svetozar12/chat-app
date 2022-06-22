@@ -1,8 +1,9 @@
-import { css } from "@emotion/css";
+import { Box, Flex, HStack, Input } from "@chakra-ui/react";
 import React from "react";
 import { BsSearch } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { IInitialSet } from "../../../services/redux/reducer/setReducer/state";
+import generic from "../../../utils/generic";
 
 interface IFindFriendsSearch {
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => Promise<void>;
@@ -13,43 +14,23 @@ const FindFriendsSearch = ({ handleSubmit }: IFindFriendsSearch) => {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
   return (
-    <div className="flex" style={{ width: "95%", position: "relative" }}>
-      <div
-        className={css`
-          width: 95%;
-          border-radius: 25px;
-          margin: 1rem 0;
-          padding: 0.3rem;
-          background: rgba(122, 122, 122, 0.1);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          &:focus-within {
-            box-shadow: 0 0 5px;
-          }
-        `}
-      >
-        <BsSearch style={{ cursor: "pointer", color: "black" }} />
-        <input
-          className={css`
-            width: 90%;
-            margin: 0 1rem;
-            background: transparent;
-            border: none;
-            outline: none;
-          `}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              handleSubmit(e);
-            }
-          }}
+    <Flex w="100%" justifyContent="center" pos="relative">
+      <HStack w="95%" h="3rem" borderRadius="25px" my="1rem" p="0.3rem" bg="rgba(122, 122, 122, 0.1)" _focusWithin={{ boxShadow: "md" }}>
+        <Box p="0.8rem">
+          <BsSearch style={{ cursor: "pointer", color: "black" }} />
+        </Box>
+        <Input
+          variant="unstyled"
+          w="90%"
+          my="1rem"
+          onKeyPress={(e) => generic.handleSubmitOnEnter(e, handleSubmit)}
           onChange={(e) => dispatch({ type: "SET_RECIEVER", payload: e.target.value })}
-          placeholder="Search for chats"
+          placeholder="Search for chats..."
           value={state.reciever}
           type="search"
         />
-      </div>
-    </div>
+      </HStack>
+    </Flex>
   );
 };
 

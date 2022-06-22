@@ -1,0 +1,14 @@
+.SingleLogo {
+  border-radius: 50px;
+  margin: 0;
+  color: var(--main-logo-color);
+}
+
+.GroupLogo {
+  borderradius: "50px";
+  margin: 0;
+  width: 2.6rem;
+  height: 2.6rem;
+  background: white;
+  border-radius: 100%;
+}

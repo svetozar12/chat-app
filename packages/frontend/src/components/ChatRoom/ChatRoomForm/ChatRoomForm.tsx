@@ -6,8 +6,9 @@ import api_helper from "../../../services/graphql/api_helper";
 import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth } from "../../../utils/authMethods";
-import { Box, Center, HStack, Spacer } from "@chakra-ui/react";
+import { background, Box, Center, Flex, HStack, Spacer, Text } from "@chakra-ui/react";
 import s from "./ChatRoomForm.module.css";
+import generic from "../../../utils/generic";
 
 interface IPropsState {
   name?: string;
@@ -42,20 +43,15 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   });
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    inputTextArea.current.style.height = "10px";
+    inputTextArea.current.style.height = "20px";
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
     inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e: any) => {
-    if (e.key === "Enter") {
-      onMessageSubmit(e);
-    }
-  };
 
   useEffect(() => {
-    inputTextArea.current.style.height = "10px";
+    inputTextArea.current.style.height = "20px";
   }, []);
 
   const saveMessage = async () => {
@@ -84,12 +80,13 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   };
 
   return (
-    <div className={s.container}>
+    <Flex mt="-0.5rem !important" w="full" h="10vh" bg="var(--main-white)" alignItems="center" justifyContent="center">
       <HStack
         cursor="text"
         pos="relative"
         zIndex="1"
         w="70%"
+        h="auto"
         p="2"
         bg="#F3F3F5"
         overflowWrap="break-word"
@@ -98,14 +95,20 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
         onClick={() => inputTextArea.current.focus()}
       >
         <textarea
+          rows={40}
+          style={{ height: "3rem", margin: "0 0.5rem" }}
           className={s.MessageInput}
           ref={inputTextArea}
           name="message"
-          onKeyDown={(e) => handleSubmit(e)}
+          onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
           onChange={(e) => handleKeyPress(e)}
-          placeholder="Your Message "
           value={state.message}
         />
+        {!state.message && (
+          <Text pos="absolute" color="#B1BAC5">
+            placeholder
+          </Text>
+        )}
         <Spacer />
         <Center
           mr={12}
@@ -130,7 +133,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
           />
         </Center>
       </HStack>
-    </div>
+    </Flex>
   );
 };
 

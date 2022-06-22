@@ -20,7 +20,7 @@ function Notifications({ contacts }: INotifications) {
       pos="fixed"
       zIndex={999}
       justifyContent="flex-start"
-      w={{ base: "90%", md: "70%", lg: "60%", xl: "50%" }}
+      w={{ base: "70%", md: "50%", lg: "40%", xl: "30%" }}
       bg="white"
       boxShadow="default"
       borderRadius="xl"

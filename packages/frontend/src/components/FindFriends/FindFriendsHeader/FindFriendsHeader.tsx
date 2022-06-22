@@ -31,8 +31,6 @@ const FindFriendsHeader = () => {
   const getUserImage = async () => {
     try {
       const res = await api_helper.user.getById(user_id, token);
-      console.log(res);
-
       const userAvatar = res.userAvatar;
 
       setHasAvatar(true);
@@ -124,16 +122,17 @@ const FindFriendsHeader = () => {
           <Center className={s.icon_parrent} onClick={toggleGroupCreate}>
             <AiOutlineUsergroupAdd className={s.icon} />
           </Center>
-          <Center pos="relative" className={s.icon_parrent}>
-            <BsThreeDots
-              className={s.icon}
-              onClick={() =>
-                dispatch({
-                  type: "SET_USER_SETTINGS",
-                  payload: !state.setUserSettings,
-                })
-              }
-            />
+          <Center
+            className={s.icon_parrent}
+            pos="relative"
+            onClick={() =>
+              dispatch({
+                type: "SET_USER_SETTINGS",
+                payload: !state.setUserSettings,
+              })
+            }
+          >
+            <BsThreeDots className={s.icon} />
             {state.setUserSettings ? <UserSettings /> : null}
           </Center>
         </HStack>

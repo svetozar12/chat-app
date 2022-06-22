@@ -134,6 +134,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       <Heading
         fontSize="lg"
         className={css`
+          justify-content: ${name === sender ? "flex-end" : "flex-start"};
           font-size: 15px;
           color: var(--main-black);
         `}

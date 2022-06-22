@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
-import { getFirstChat } from "../../utils/getFirstChat";
+import generic from "../../utils/generic";
 import { useSelector, useDispatch } from "react-redux";
 // services
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
@@ -64,7 +64,7 @@ function ChatSettings({ chatId }: IChatSettings) {
     const updated_users = users.filter((element) => element !== user);
     setUsers(updated_users);
     if (updated_users.length === 2) {
-      const redirect = await getFirstChat(id, token);
+      const redirect = await generic.getFirstChat(id, token);
 
       route.push(`/${redirect._id}`);
     }

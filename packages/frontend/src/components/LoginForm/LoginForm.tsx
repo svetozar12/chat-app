@@ -2,7 +2,7 @@ import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 import React from "react";
 import api_helper from "../../services/graphql/api_helper";
-import { getFirstChat } from "../../utils/getFirstChat";
+import generic from "../../utils/generic";
 import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem } from "@chakra-ui/react";
 // hooks
 import { useSelector, useDispatch } from "react-redux";
@@ -23,6 +23,7 @@ function LoginForm() {
 
   const rememberMe = state.remember_me ? 31556952 : 3600;
   const refreshRememberMe = state.remember_me ? 63113904 : 7200;
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
@@ -44,31 +45,20 @@ function LoginForm() {
             payload: true,
           });
 
-          cookie.set("name", inputState.input_username, {
-            sameSite: "strict",
-            maxAge: rememberMe,
-            path: "/",
+          const cookies = [
+            { name: "name", value: inputState.input_username, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
+            { name: "id", value: login.user_id, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
+            { name: "token", value: login.Access_token, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
+            { name: "refresh_token", value: login.Refresh_token, options: { sameSite: "strict", maxAge: refreshRememberMe, path: "/" } },
+          ];
+
+          cookies.forEach((element) => {
+            const { name, value, options } = element;
+            // @ts-ignore
+            cookie.set(name, value, { ...options });
           });
 
-          cookie.set("id", login.user_id, {
-            sameSite: "strict",
-            maxAge: rememberMe,
-            path: "/",
-          });
-
-          cookie.set("token", login.Access_token, {
-            sameSite: "strict",
-            maxAge: rememberMe,
-            path: "/",
-          });
-
-          cookie.set("refresh_token", login.Refresh_token, {
-            sameSite: "strict",
-            maxAge: refreshRememberMe,
-            path: "/",
-          });
-
-          const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
+          const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
 
           cookie.set("first_chat_id", chatInstance, {
             sameSite: "strict",
@@ -95,7 +85,6 @@ function LoginForm() {
         return;
       }
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       return error;
     }
@@ -107,6 +96,7 @@ function LoginForm() {
       props: {
         value: inputState.input_username,
         onChange: (e) => dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value }),
+        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "text",
         name: "username",
         placeholder: "username ...",
@@ -117,6 +107,7 @@ function LoginForm() {
       props: {
         value: inputState.input_password,
         onChange: (e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value }),
+        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "password",
         name: "password",
         placeholder: "password ...",

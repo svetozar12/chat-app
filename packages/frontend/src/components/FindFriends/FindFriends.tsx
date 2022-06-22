@@ -60,7 +60,7 @@ function FindFriends() {
       `}
     >
       {user ? <FindFriendsHeader /> : <SkeletonFindFriendsHeader />}
-      <FormControl>{user ? <FindFriendsSearch handleSubmit={handleSubmit} /> : <Skeleton w="95%" mt={1} h="2.6875rem" />}</FormControl>
+      <FormControl>{user ? <FindFriendsSearch handleSubmit={handleSubmit} /> : <Skeleton w="100%" mt={1} h="2.6875rem" />}</FormControl>
     </VStack>
   );
 }
