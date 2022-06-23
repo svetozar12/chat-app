@@ -5,12 +5,14 @@ import QuickLogin_Modal from "./QuickLogin_Modal";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 import FormWrapper from "../FormWrapper";
-import { FormLabel, Input, Button, Flex, Spacer, useRadioGroup, HStack } from "@chakra-ui/react";
+import { FormLabel, Input, Button, Flex, Spacer, useRadioGroup, HStack, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import React from "react";
 import DefaultLink from "../DefaultLink";
 import RadioCard from "../RadioCards/RadioCards";
 import api_helper from "../../services/graphql/api_helper";
 import generic from "../../utils/generic";
+import { useFormik } from "formik";
+import { RegisterSchema } from "../../utils/validation";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars
@@ -20,16 +22,18 @@ interface IRegisterForm {
 function RegisterForm({ quickLogin }: IRegisterForm) {
   const dispatch = useDispatch();
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const register = await api_helper.user.create(
-      inputState.input_username,
-      inputState.input_email,
-      inputState.input_password,
-      inputState.input_gender,
-    );
+  interface IValues {
+    username: string;
+    email: string;
+    password: string;
+    gender: "male" | "female";
+  }
+
+  const handleSubmit = async ({ username, password, email, gender }: IValues) => {
+    console.log(username);
+
+    const register = await api_helper.user.create(username, email, password, gender);
 
     if (await register) {
       dispatch({ type: "QUICK_LOGIN", payload: true });
@@ -60,9 +64,6 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     {
       label: "Username",
       props: {
-        value: inputState.input_username,
-        onChange: (e) => dispatch({ type: "SAVE_INPUT_USERNAME", payload: e.target.value }),
-        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "text",
         name: "username",
         placeholder: "username ...",
@@ -71,9 +72,6 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     {
       label: "Password",
       props: {
-        value: inputState.input_password,
-        onChange: (e) => dispatch({ type: "SAVE_INPUT_PASSWORD", payload: e.target.value }),
-        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "password",
         name: "password",
         placeholder: "password ...",
@@ -82,9 +80,6 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     {
       label: "Email",
       props: {
-        value: inputState.input_email,
-        onChange: (e) => dispatch({ type: "SAVE_INPUT_EMAIL", payload: e.target.value }),
-        onKeyPress: (e) => generic.handleSubmitOnEnter(e, handleSubmit),
         type: "email",
         name: "email",
         placeholder: "email ...",
@@ -92,17 +87,33 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     },
   ];
 
+  const formik = useFormik({
+    initialValues: { username: "", password: "", email: "", gender: "male" },
+    validationSchema: RegisterSchema,
+    onSubmit: (values: IValues) => {
+      alert(JSON.stringify(values, null, 2));
+      handleSubmit(values);
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+  });
+
   return (
     <>
-      <FormWrapper type="Register">
+      <FormWrapper handleSubmit={formik.handleSubmit} type="Register">
         <>
           {renderInputs.map((element, index) => {
             const { props } = element;
             return (
-              <React.Fragment key={index}>
+              <FormControl isInvalid={formik.errors[props.name] && formik.touched[props.name]} key={index}>
                 <FormLabel>{element.label}</FormLabel>
-                <Input variant="FormInput" {...props} />
-              </React.Fragment>
+                <Input {...formik.getFieldProps(props.name)} variant="FormInput" {...props} />
+                {formik.errors[props.name] && (
+                  <FormErrorMessage fontSize="xl" fontWeight="semibold">
+                    {formik.errors[props.name]}
+                  </FormErrorMessage>
+                )}
+              </FormControl>
             );
           })}
         </>
@@ -113,7 +124,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
             {genderOptions.map((value) => {
               const radio = getRadioProps({ value });
               return (
-                <RadioCard key={value} {...radio}>
+                <RadioCard {...formik.getFieldProps(value)} key={value} {...radio}>
                   {value}
                 </RadioCard>
               );
@@ -121,7 +132,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button onClick={handleSubmit} colorScheme="blue" w="60%" type="submit">
+          <Button colorScheme="blue" w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />

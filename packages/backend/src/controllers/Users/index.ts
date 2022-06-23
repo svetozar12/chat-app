@@ -8,14 +8,9 @@ import { constants } from "../../constants";
 import Validator from "../../middlewares/Validator";
 import * as Schema from "../../common/schema";
 import { UpdateUserSchema, CreateUserSchema } from "./schema";
-
 const route = Router();
 
-route.get(
-  "/:user_id",
-  Validator(Schema.UserIdSchema, "params"),
-  errorHandler(UsersController.GetUser),
-);
+route.get("/:user_id", Validator(Schema.UserIdSchema, "params"), errorHandler(UsersController.GetUser));
 route.post("/", Validator(CreateUserSchema, "body"), errorHandler(UsersController.CreateUser));
 route.put(
   "/:user_id",

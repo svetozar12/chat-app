@@ -4,12 +4,14 @@ import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 // components
 import Alerts from "../Alerts";
 import { FormControl, Box, Heading, VStack, Flex } from "@chakra-ui/react";
+import { Formik } from "formik";
 interface IFormWrapper {
   children: JSX.Element | JSX.Element[];
   type: "Register" | "Login";
+  handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
 }
 
-const FormWrapper = ({ children, type }: IFormWrapper) => {
+const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   return (
@@ -28,9 +30,11 @@ const FormWrapper = ({ children, type }: IFormWrapper) => {
         </Heading>
         <Box w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }} maxH="auto" minH="45vh" padding="3rem" boxShadow="default">
           <FormControl w="full" borderRadius="5px">
-            <VStack alignItems="flex-start" spacing={5}>
-              {children}
-            </VStack>
+            <form onSubmit={handleSubmit}>
+              <VStack alignItems="flex-start" spacing={5}>
+                {children}
+              </VStack>
+            </form>
           </FormControl>
         </Box>
       </Flex>
