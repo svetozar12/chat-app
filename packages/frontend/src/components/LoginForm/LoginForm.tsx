@@ -118,7 +118,6 @@ function LoginForm() {
     initialValues: { username: "", password: "" },
     validationSchema: LoginSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
       handleSubmit(values);
     },
     validateOnChange: false,

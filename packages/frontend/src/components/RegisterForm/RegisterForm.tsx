@@ -36,6 +36,9 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     const register = await api_helper.user.create(username, email, password, gender);
 
     if (await register) {
+      console.log(register);
+
+      dispatch({ type: "REGISTER_POST", payload: register });
       dispatch({ type: "QUICK_LOGIN", payload: true });
     } else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
