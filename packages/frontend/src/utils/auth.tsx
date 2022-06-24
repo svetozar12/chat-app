@@ -1,5 +1,6 @@
 import { NextPageContext } from "next";
 import { useCookie } from "next-cookie";
+import { constants } from "../constants";
 import { isAuth } from "./authMethods";
 import generic from "./generic";
 import redirectTo from "./routing";
@@ -10,12 +11,13 @@ export interface ICtx extends NextPageContext {
 
 const withAuthSync = (getServerSideProps?: Function) => {
   return async (ctx: ICtx) => {
+    console.log(ctx.query, "new_kureo");
+    console.log("kureo");
     const isUserAuth: any = await isAuth(ctx);
     const currPath = ctx.resolvedUrl;
     const cookie = useCookie(ctx);
-    const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
 
-    if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
+    if (!isUserAuth && currPath !== "/") return redirectTo(constants.HOST_URL as string, ctx, currPath);
     if (getServerSideProps) {
       const gssp = await getServerSideProps(ctx);
       return {

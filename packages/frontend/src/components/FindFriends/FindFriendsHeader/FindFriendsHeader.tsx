@@ -70,13 +70,13 @@ const FindFriendsHeader = () => {
           position: relative;
         `}
       ></div>
-      <HStack w="95%" pb="1rem">
+      <HStack w="99%" minW="300px" pb="1rem">
         <Flex align="center">
           <Image
             alt="user_avatar"
             src={image}
-            w="2.8rem"
-            h="2.8rem"
+            w="5rem"
+            h="5rem"
             mr="1rem"
             borderRadius="full"
             pos="relative"

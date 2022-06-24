@@ -15,10 +15,9 @@ function useProvideAuth() {
   const getUser = async () => {
     const user_id: string = cookie.get("id");
     const token: string = cookie.get("token");
-    setTimeout(async () => {
-      const res = await api_helper.user.getById(user_id, token);
-      setUser(res);
-    }, 10000);
+    // setTimeout(async () => {}, 10000);
+    const res = await api_helper.user.getById(user_id, token);
+    setUser(res);
   };
 
   useEffect(() => {

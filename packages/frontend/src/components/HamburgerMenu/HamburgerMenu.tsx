@@ -33,7 +33,7 @@ function HamburgerMenu() {
           width: 2rem;
           height: 2rem;
           zindex: -11;
-          @media (min-width: 1008px) {
+          @media (min-width: 980px) {
             display: none;
           } ;
         `}

@@ -1,13 +1,14 @@
 import { Box, Button, Divider, Flex, FormControl, Heading, Link, SimpleGrid, VStack } from "@chakra-ui/react";
+import { useCookie } from "next-cookie";
 import React from "react";
 
 interface IUpdateInfo {
   children: JSX.Element | JSX.Element[];
   handleSubmit: any;
-  url: string;
 }
 
-const UpdateInfo = ({ children, handleSubmit, url }: IUpdateInfo) => {
+const UpdateInfo = ({ children, handleSubmit }: IUpdateInfo) => {
+  const cookie = useCookie();
   return (
     <Box w="95%">
       {" "}
@@ -21,7 +22,7 @@ const UpdateInfo = ({ children, handleSubmit, url }: IUpdateInfo) => {
               <Button minW="6rem" colorScheme="blue" onClick={handleSubmit} type="submit">
                 Save
               </Button>
-              <Link href={`/${url}`}>
+              <Link href={`/${cookie.get("last_visited_chatRoom")}`}>
                 <Button minW="6rem" bg="rgba(0,0,0,.1)" className="link">
                   Go back
                 </Button>

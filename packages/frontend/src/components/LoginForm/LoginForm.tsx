@@ -30,7 +30,6 @@ import { LoginSchema } from "../../utils/validation";
 function LoginForm() {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [isLoading, setIsLoading] = React.useState(false);
-  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie();

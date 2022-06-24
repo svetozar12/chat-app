@@ -4,6 +4,7 @@ import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
 import { Image } from "@chakra-ui/react";
 import s from "./Single_avatar.module.css";
+import { Box } from "@chakra-ui/react";
 
 function Single_avatar({
   width,
@@ -44,37 +45,28 @@ function Single_avatar({
   return (
     <>
       {preview ? (
-        <Image
-          borderRadius="100%"
-          w={width || "3.5rem"}
-          h={height || "3.5rem"}
-          color="var(--main-logo-color)"
-          zIndex={overlay ? 1 : 0}
-          resize="none"
-          src={image}
-          fallbackSrc={FallBackImage}
-          className={`${group ? s.GroupLogo : s.SignleLogo} `}
-        />
+        <Box resize="none" w={width || "3.5rem"} h={height || "3.5rem"} color="var(--main-logo-color)" zIndex={overlay ? 1 : 0}>
+          <Image src={image} className={`${group ? s.GroupLogo : s.SignleLogo} `} />
+        </Box>
       ) : (
-        <Image
-          fallbackSrc={FallBackImage}
-          src={image}
-          resize="none"
-          zIndex={overlay ? 1 : 0}
-          className={`${
-            group
-              ? s.GroupLogo
-              : css`
-                  border-radius: 100%;
-                  margin: 0;
-                  width: ${width || "3.5rem"};
-                  height: ${height || "3.5rem"};
-                  color: var(--main-logo-color);
-                  ${overlay ? "bottom: 0;" : "top:0"}
-                  ${overlay ? "left: 0;" : "right:0"}
-                `
-          } `}
-        />
+        <Box resize="none" zIndex={overlay ? 1 : 0}>
+          <Image
+            src={image}
+            className={`${
+              group
+                ? s.GroupLogo
+                : css`
+                    border-radius: 100%;
+                    margin: 0;
+                    width: ${width || "3.5rem"};
+                    height: ${height || "3.5rem"};
+                    color: var(--main-logo-color);
+                    ${overlay ? "bottom: 0;" : "top:0"}
+                    ${overlay ? "left: 0;" : "right:0"}
+                  `
+            } `}
+          />
+        </Box>
       )}
     </>
   );

@@ -88,11 +88,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     initialValues: { username: "", password: "", email: "", gender: "male" },
     validationSchema: RegisterSchema,
     onSubmit: (values: IValues) => {
-      alert(JSON.stringify(values, null, 2));
       handleSubmit(values);
     },
-    validateOnChange: false,
-    validateOnBlur: false,
+    // validateOnChange: false,
+    // validateOnBlur: false,
   });
 
   return (

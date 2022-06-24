@@ -17,21 +17,13 @@ import UpdateInfoForm from "../../components/UpdateInfo/UpdateInfoForm";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
-  const [url, setUrl] = React.useState("");
   const cookie = useCookie(props.cookie);
   const dispatch = useDispatch();
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const { user } = useAuth();
 
   React.useEffect(() => {
-    if (user) {
-      cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname);
-      (async () => {
-        getAuth();
-        const first_id = await generic.getFirstChat(user._id, cookie.get("token"));
-        setUrl(first_id._id);
-      })();
-    }
+    cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname, { path: "/" });
   }, []);
 
   if (!user) return <SkelletonUserSettings />;
@@ -56,13 +48,26 @@ function Profile(props: { cookie: string }) {
 
   return (
     <HStack w="full" h="100vh" alignItems="center" justifyContent="center">
-      <UpdateInfo handleSubmit={handleSubmit} url={url}>
+      <UpdateInfo handleSubmit={handleSubmit}>
         <UpdateInfoForm image={image} setImage={setImage} />
       </UpdateInfo>
     </HStack>
   );
 }
 
-export const getServerSideProps = withAuthSync();
+export const getServerSideProps = withAuthSync(async (ctx) => {
+  const cookie = useCookie(ctx);
+  const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
+  console.log(cookie.getAll());
+  cookie.set("first_chat_id", chatInstance, {
+    sameSite: "strict",
+    path: "/",
+  });
+  cookie.set("last_visited_chatRoom", chatInstance, {
+    sameSite: "strict",
+    path: "/",
+  });
+  return { props: {} };
+});
 
 export default Profile;
