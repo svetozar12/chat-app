@@ -12,7 +12,8 @@
     "test": "jest",
     "test-u": "jest -u",
     "test:integration": "cypress open",
-    "format": "prettier --write **/*.{js,ts,tsx}"
+    "format": "prettier --write **/*.{js,ts,tsx}",
+    "graphql:codegen": "graphql-codegen — config graphql-codegen.yml"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.8",

@@ -31,16 +31,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    console.log(username);
-
     const register = await api_helper.user.create(username, email, password, gender);
 
-    if (await register) {
-      console.log(register);
-
-      dispatch({ type: "REGISTER_POST", payload: register });
-      dispatch({ type: "QUICK_LOGIN", payload: true });
-    } else {
+    if (await register) dispatch({ type: "QUICK_LOGIN", payload: true });
+    else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
       dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
       dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });

@@ -53,7 +53,7 @@ function LoginForm() {
         setIsLoading(true);
 
         const cookies = [
-          { name: "name", value: inputState.input_username, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
+          { name: "name", value: username, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
           { name: "id", value: login.user_id, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
           { name: "token", value: login.Access_token, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
           { name: "refresh_token", value: login.Refresh_token, options: { sameSite: "strict", maxAge: refreshRememberMe, path: "/" } },
@@ -67,18 +67,7 @@ function LoginForm() {
 
         const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
 
-        cookie.set("first_chat_id", chatInstance, {
-          sameSite: "strict",
-          maxAge: rememberMe,
-          path: "/",
-        });
-
-        cookie.set("last_visited_chatRoom", chatInstance, {
-          sameSite: "strict",
-          path: "/",
-        });
         const REDIRECT_URL_CALLBACK: string = cookie.get("REDIRECT_URL_CALLBACK");
-        console.log(REDIRECT_URL_CALLBACK);
 
         cookie.set("REDIRECT_URL_CALLBACK", REDIRECT_URL_CALLBACK || `/${chatInstance}`);
         router.push(REDIRECT_URL_CALLBACK || `/${chatInstance}`);

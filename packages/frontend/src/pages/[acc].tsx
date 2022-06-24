@@ -15,7 +15,7 @@ import redirectTo from "../utils/routing";
 import { isAuth } from "../utils/authMethods";
 import withAuthSync from "../utils/auth";
 import { HStack, Box } from "@chakra-ui/react";
-
+import generic from "../utils/generic";
 export interface Ichats {
   _id: string;
   members: string[];
@@ -130,8 +130,19 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
 export const getServerSideProps = withAuthSync(async (ctx) => {
   const isUserAuth: any = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
-
+  const cookie = useCookie(ctx);
   if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
+  const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
+
+  cookie.set("first_chat_id", chatInstance._id, {
+    sameSite: "strict",
+    path: "/",
+  });
+
+  cookie.set("last_visited_chatRoom", chatInstance._id, {
+    sameSite: "strict",
+    path: "/",
+  });
 
   return {
     props: {
