@@ -178,7 +178,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
               css`
                 word-wrap: break-word;
                 text-align: center;
-                min-width: 7rem;
+                min-width: 10rem;
                 min-height: 3rem;
                 border-radius: 4px;
                 max-width: 40%;

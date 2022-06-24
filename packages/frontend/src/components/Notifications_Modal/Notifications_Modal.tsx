@@ -39,8 +39,8 @@ function Notifications({ contacts }: INotifications) {
         pos="absolute"
         right={0}
         top={0}
-        p={5}
-        mt={0}
+        m={5}
+        mt="-0.5px !important"
         onClick={() => {
           dispatch({
             type: "SET_FRIEND_REQUEST",
