@@ -42,17 +42,7 @@ function Register(props: { cookie: string }) {
 
         const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
 
-        cookie.set("first_chat_id", chatInstance._id, {
-          sameSite: "strict",
-          path: "/",
-        });
-
-        cookie.set("last_visited_chatRoom", chatInstance._id, {
-          sameSite: "strict",
-          path: "/",
-        });
-
-        router.push(`/${chatInstance._id}`);
+        router.push(`/${chatInstance}`);
         dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
         dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
         dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
