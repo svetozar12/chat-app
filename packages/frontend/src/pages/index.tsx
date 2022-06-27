@@ -10,8 +10,6 @@ export interface ILogin {
 }
 
 const Login: NextPage<ILogin> = (props) => {
-  console.log(props, "propove");
-
   return <LoginForm {...props} />;
 };
 

@@ -14,23 +14,18 @@ const io = require("socket.io")(server, {
 // sending message to specific chat room with two users(inviter,reciever)
 io.on("connection", (socket: Socket): void => {
   console.log("ws connecting...");
-  console.log(socket.id);
 
   socket.on("message", async ({ chatInstance, sender, message }: { chatInstance: string; sender: string; message: string }) => {
     const findChat = await Chats.findOne({ _id: chatInstance }).select("members").exec();
     if (!findChat) return null;
     const date = new Date();
     const messages = [{ sender, message, createdAt: date }];
-    console.log(message, chatInstance, socket.rooms);
-
     io.to(chatInstance).emit("message", {
       messages,
     });
   });
 
   socket.on("join_chat", ({ rooms }) => {
-    console.log(rooms);
-
     socket.join(rooms);
   });
 
@@ -42,8 +37,6 @@ io.on("connection", (socket: Socket): void => {
     io.emit("inviting_multiple_users", { users });
   });
   socket.on("send_friend_request", async ({ inviter, reciever }) => {
-    console.log(inviter, reciever);
-
     const reciever_field = await User.findOne({ username: reciever });
     if (!reciever_field) return;
     if (inviter === reciever) return;

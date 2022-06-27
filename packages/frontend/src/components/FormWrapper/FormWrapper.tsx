@@ -24,7 +24,7 @@ const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {
           color="white"
           borderTopRadius="5px"
           textAlign="center"
-          bg="chat_form_bg.100"
+          bg="form_gray"
         >
           {type}
         </Heading>

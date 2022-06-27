@@ -12,14 +12,10 @@ export interface ICtx extends NextPageContext {
 const withAuthSync = (getServerSideProps?: Function) => {
   return async (ctx: ICtx) => {
     const isUserAuth: any = await isAuth(ctx);
-    const { query } = ctx;
     const currPath = ctx.resolvedUrl;
 
     if (!isUserAuth && currPath !== "/") return redirectTo(constants.HOST_URL as string, ctx, currPath);
     if (getServerSideProps) {
-      console.log(ctx.query, "another ssr quori");
-
-      console.log(query, "kuori");
       const gssp = await getServerSideProps(ctx);
       return {
         props: {
@@ -40,7 +36,6 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
   return async (ctx: ICtx) => {
     const isUserAuth: any = await isAuth(ctx);
     const cookie = useCookie(ctx);
-    console.log(ctx.query, "yeat another ssr quori");
     const currPath = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
     const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
     const path = desiredURL || currPath;
@@ -49,8 +44,6 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
 
     if (getServerSideProps) {
       const gssp = await getServerSideProps(ctx);
-      console.log(ctx.query, "vandangan");
-
       return {
         props: {
           cookie: ctx.req?.headers.cookie || "",

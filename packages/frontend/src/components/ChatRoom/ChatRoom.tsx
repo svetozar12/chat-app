@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { css } from "@emotion/css";
 import React, { useEffect } from "react";
 // utils
 import timeStamp from "../../utils/timeStamp";
@@ -17,7 +16,6 @@ import { useCookie } from "next-cookie";
 import api_helper from "../../services/graphql/api_helper";
 import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { VStack } from "@chakra-ui/react";
 import { useAuth } from "../../utils/SessionProvider";
 
@@ -34,7 +32,6 @@ export interface IchatInstance {
 
 const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const route = useRouter();
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
@@ -106,12 +103,12 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
 
       {user ? (
         <VStack
-          mt="-0.5rem !important"
           w="full"
+          mt={{ base: "2rem", lg: "-0.5rem !important" }}
           h="full"
           p="1rem"
           overflow="auto"
-          bg="var(--main-white)"
+          bg="main_white"
           ref={containerRef}
           onScroll={scrollHandler}
         >

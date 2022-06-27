@@ -7,6 +7,7 @@ export const initialState: ISave_inputState | ISave_inputState[] = {
   input_password: "",
   input_email: "",
   input_gender: "other",
+  input_file: null,
   notification_number: 0,
 };
 const saveInputReducer = (state = initialState, action: any) => {
@@ -17,8 +18,6 @@ const saveInputReducer = (state = initialState, action: any) => {
         ...action.payload,
       };
     case ActionType.SAVE_INPUT_USERNAME:
-      console.log({ ...state, input: action.payload });
-
       return { ...state, input_username: action.payload };
     case ActionType.SAVE_INPUT_PASSWORD:
       return { ...state, input_password: action.payload };
@@ -26,6 +25,8 @@ const saveInputReducer = (state = initialState, action: any) => {
       return { ...state, input_email: action.payload };
     case ActionType.SAVE_INPUT_GENDER:
       return { ...state, input_gender: action.payload };
+    case ActionType.SAVE_INPUT_FILE:
+      return { ...state, input_file: action.payload };
     case ActionType.NOTIFICATION_NUMBER:
       return { ...state, notification_number: action.payload };
     default:

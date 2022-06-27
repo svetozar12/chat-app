@@ -34,7 +34,6 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   useEffect(() => {
     inputTextArea.current.focus();
 
-    console.log("ws-connect");
     authState.ws?.on("message", ({ messages }) => {
       const [message] = messages;
       dispatch({ type: "MESSAGES", payload: message });

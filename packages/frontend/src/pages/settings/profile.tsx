@@ -58,7 +58,6 @@ function Profile(props: { cookie: string }) {
 export const getServerSideProps = withAuthSync(async (ctx) => {
   const cookie = useCookie(ctx);
   const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
-  console.log(cookie.getAll());
   cookie.set("first_chat_id", chatInstance, {
     sameSite: "strict",
     path: "/",
