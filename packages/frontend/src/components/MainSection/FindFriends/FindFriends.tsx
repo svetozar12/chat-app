@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
 // services
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import api_helper from "../../services/graphql/api_helper";
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { getAuth } from "../../utils/authMethods";
-import { useAuth } from "../../utils/SessionProvider";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
+import api_helper from "services/graphql/api_helper";
+import { IAuthState } from "services/redux/reducer/authReducer/state";
+import { getAuth } from "utils/authMethods";
+import { useAuth } from "utils/SessionProvider";
 // components
 import FindFriendsHeader from "./FindFriendsHeader";
-import SkeletonFindFriendsHeader from "../Loading/SkeletonFindFriendsHeader";
+import SkeletonFindFriendsHeader from "components/Loading/SkeletonFindFriendsHeader";
 import FindFriendsSearch from "./FindFriendsSearch";
 import { Skeleton, VStack, FormControl } from "@chakra-ui/react";
 

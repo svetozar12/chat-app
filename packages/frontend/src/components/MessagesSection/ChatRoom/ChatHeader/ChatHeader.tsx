@@ -1,5 +1,5 @@
 import React from "react";
-import AddGroupChat from "../AddGroupChat";
+import AddGroupChat from "components/AddGroupChat";
 import { css } from "@emotion/css";
 
 function ChatHeader() {

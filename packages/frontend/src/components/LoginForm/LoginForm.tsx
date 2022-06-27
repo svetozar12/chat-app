@@ -106,8 +106,9 @@ const LoginForm = ({ callback }: ILoginForm) => {
   const formik = useFormik({
     initialValues: { username: "", password: "" },
     validationSchema: LoginSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       handleSubmit(values);
+      resetForm();
     },
     validateOnChange: false,
     validateOnBlur: false,

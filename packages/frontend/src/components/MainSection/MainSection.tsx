@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 // components
-import ActiveChats from "../ActiveChats";
-import FindFriends from "../FindFriends";
-import ChatSettings from "../ChatSettings";
+import ActiveChats from "./ActiveChats";
+import FindFriends from "./FindFriends";
+import ChatSettings from "./ChatSettings";
 // other
 import { css, cx } from "@emotion/css";
 import { GrClose } from "react-icons/gr";
-import { Ichats } from "../../pages/[acc]";
+import { Ichats } from "pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
-import { useAuth } from "../../utils/SessionProvider";
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import SkeletonActiveInvites from "../Loading/SkeletonActiveInvites";
-import { Flex, Center, VStack } from "@chakra-ui/react";
+import { useAuth } from "utils/SessionProvider";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
+import SkeletonActiveInvites from "components/Loading/SkeletonActiveInvites";
+import { Flex, VStack } from "@chakra-ui/react";
 
 interface IMainSection {
   chatId: string;

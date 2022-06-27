@@ -45,6 +45,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@chat-app/eslint_config": "*",
+    "@chat-app/prettier_config": "*",
     "@babel/core": "^7.17.4",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "7.16.0",

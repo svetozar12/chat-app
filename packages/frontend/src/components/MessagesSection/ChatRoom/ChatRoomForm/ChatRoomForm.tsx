@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { MdSend } from "react-icons/md";
 import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
-import api_helper from "../../../services/graphql/api_helper";
-import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
+import api_helper from "services/graphql/api_helper";
+import { IAuthState } from "services/redux/reducer/authReducer/state";
+import { getAuth } from "utils/authMethods";
+import generic from "utils/generic";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuth } from "../../../utils/authMethods";
-import { background, Box, Center, Flex, HStack, Spacer, Text } from "@chakra-ui/react";
+import { Center, Flex, HStack, Spacer, Text } from "@chakra-ui/react";
 import s from "./ChatRoomForm.module.css";
-import generic from "../../../utils/generic";
+
+const newow = "";
 
 interface IPropsState {
   name?: string;
@@ -23,7 +25,9 @@ interface IChatRoomForm {
 const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   const cookie = useCookie();
   const dispatch = useDispatch();
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const authState = useSelector(
+    (state: { authReducer: IAuthState }) => state.authReducer
+  );
   const [state, setState] = React.useState<IPropsState>({
     name: cookie.get("name"),
     message: "",
@@ -35,16 +39,20 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
     inputTextArea.current.focus();
 
     authState.ws?.on("message", ({ messages }) => {
+      console.log(messages, "fr message");
+
       const [message] = messages;
       dispatch({ type: "MESSAGES", payload: message });
-    }),
-      [];
-  });
+    });
+  }, [authState.ws]);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
     inputTextArea.current.style.height = "20px";
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
-    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
+    inputTextArea.current.style.height = `${Math.min(
+      e.target.scrollHeight,
+      60
+    )}px`;
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -55,14 +63,21 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
 
   const saveMessage = async () => {
     try {
-      await api_helper.message.create(cookie.get("id"), chatId, state.message as string, cookie.get("token"));
+      await api_helper.message.create(
+        cookie.get("id"),
+        chatId,
+        state.message as string,
+        cookie.get("token")
+      );
       return true;
     } catch (error) {
       return false;
     }
   };
 
-  const onMessageSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
+  const onMessageSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>
+  ) => {
     e.preventDefault();
     if (state.message) {
       await getAuth();
@@ -79,7 +94,14 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   };
 
   return (
-    <Flex mt="-0.5rem !important" w="full" h="10vh" bg="var(--main-white)" alignItems="center" justifyContent="center">
+    <Flex
+      mt="-0.5rem !important"
+      w="full"
+      h="10vh"
+      bg="var(--main-white)"
+      alignItems="center"
+      justifyContent="center"
+    >
       <HStack
         cursor="text"
         pos="relative"

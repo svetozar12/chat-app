@@ -1,13 +1,12 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useCookie } from "next-cookie";
 import Link from "next/link";
 // utils
-import api_helper from "../../services/graphql/api_helper";
-import { getAuth } from "../../utils/authMethods";
+import api_helper from "services/graphql/api_helper";
+import { getAuth } from "utils/authMethods";
 import { css } from "@emotion/css";
-import styled from "@emotion/styled";
 import { Link as ALink, VStack } from "@chakra-ui/react";
 // icons
 import { IoMdLogOut } from "react-icons/io";

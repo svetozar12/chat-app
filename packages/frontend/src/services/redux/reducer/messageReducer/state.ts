@@ -1,4 +1,4 @@
-import { IchatInstance } from "../../../../components/ChatRoom/ChatRoom";
+import { IchatInstance } from "components/MessagesSection/ChatRoom/ChatRoom";
 
 export interface InitialStateMessage {
   messages: IchatInstance[];

@@ -2,9 +2,8 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { Socket } from "socket.io-client";
 // components
-import ChatRoom from "../ChatRoom";
+import ChatRoom from "./ChatRoom";
 import Notifications_Modal from "../Notifications_Modal";
 import AddUsers_Modal from "../AddUsers_Modal";
 // services

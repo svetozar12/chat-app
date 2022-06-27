@@ -1,20 +1,19 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
-import UserSettings from "../../UserSettings";
+import UserSettings from "./UserSettings";
 // icons
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
 // services
 import s from "./FindFriendsHeader.module.css";
-import ISave_inputState from "../../../services/redux/reducer/save_inputReducer/state";
-import { IInitialSet } from "../../../services/redux/reducer/setReducer/state";
-import api_helper from "../../../services/graphql/api_helper";
+import ISave_inputState from "services/redux/reducer/save_inputReducer/state";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
+import api_helper from "services/graphql/api_helper";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
-import { Box, Center, Circle, Divider, Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
+import { Center, Circle, Divider, Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 
 const FindFriendsHeader = () => {

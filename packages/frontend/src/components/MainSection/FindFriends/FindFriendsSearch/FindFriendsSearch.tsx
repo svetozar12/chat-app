@@ -2,8 +2,8 @@ import { Box, Flex, HStack, Input } from "@chakra-ui/react";
 import React from "react";
 import { BsSearch } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { IInitialSet } from "../../../services/redux/reducer/setReducer/state";
-import generic from "../../../utils/generic";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
+import generic from "utils/generic";
 
 interface IFindFriendsSearch {
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => Promise<void>;

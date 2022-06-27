@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import MessageSettings from "./MessageSettings";
 import { IchatInstance } from "../ChatRoom";
 // services
-import { InitialStateMessage } from "../../../services/redux/reducer/messageReducer/state";
-import api_helper from "../../../services/graphql/api_helper";
+import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
+import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { Heading, HStack } from "@chakra-ui/react";
 
