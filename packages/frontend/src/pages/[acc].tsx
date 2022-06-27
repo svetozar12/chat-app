@@ -132,7 +132,8 @@ export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
   const cookie = useCookie(ctx);
-  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
+
+  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, (ctx.query.callback as string) || currPath);
   const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
   console.log(cookie.getAll());
 

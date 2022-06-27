@@ -31,7 +31,7 @@ const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {
         <Box w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }} maxH="auto" minH="45vh" padding="3rem" boxShadow="default">
           <FormControl w="full" borderRadius="5px">
             <form onSubmit={handleSubmit}>
-              <VStack alignItems="flex-start" spacing={5}>
+              <VStack w="full" alignItems="flex-start" spacing={5}>
                 {children}
               </VStack>
             </form>

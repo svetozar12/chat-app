@@ -26,8 +26,11 @@ import DefaultLink from "../DefaultLink";
 import Loading from "../Loading";
 import { useFormik } from "formik";
 import { LoginSchema } from "../../utils/validation";
+import { ILogin } from "../../pages";
 
-function LoginForm() {
+interface ILoginForm extends ILogin {}
+
+const LoginForm = ({ callback }: ILoginForm) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useDispatch();
@@ -66,10 +69,8 @@ function LoginForm() {
 
         const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
 
-        const REDIRECT_URL_CALLBACK: string = cookie.get("REDIRECT_URL_CALLBACK");
-
-        cookie.set("REDIRECT_URL_CALLBACK", REDIRECT_URL_CALLBACK || `/${chatInstance}`);
-        router.push(REDIRECT_URL_CALLBACK || `/${chatInstance}`);
+        cookie.set("REDIRECT_URL_CALLBACK", callback || `/${chatInstance}`);
+        router.push(callback || `/${chatInstance}`);
         dispatch({
           type: "SET_IS_LOADING",
           payload: false,
@@ -167,6 +168,6 @@ function LoginForm() {
       </HStack>
     </FormWrapper>
   );
-}
+};
 
 export default LoginForm;
