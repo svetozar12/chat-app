@@ -1,8 +1,7 @@
 import React from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
-import { Socket } from "socket.io-client";
 import { Iinvites } from "../../../pages/[acc]";
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 import Single_avatar from "../../Avatar/Single_avatar";
 // services
 import api_helper from "../../../services/graphql/api_helper";
@@ -18,19 +17,7 @@ interface IPendingChats extends Iinvites {
   reciever: string;
 }
 
-const ButtonSharedStyle = `
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    outline: none;
-    border: none;
-    font-size: 1.9rem;
-    background: transparent;
-    transition: 0.2s;
-  }`;
-
-function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
+const PendingChats = ({ _id, inviter, reciever, status }: IPendingChats) => {
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const cookie = useCookie();
   const id = cookie.get("id") as string;
@@ -117,6 +104,6 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
       )}
     </HStack>
   );
-}
+};
 
 export default PendingChats;

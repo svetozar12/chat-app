@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import { IAuthState } from "services/redux/reducer/authReducer/state";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import { Global } from "@emotion/react";
 import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";

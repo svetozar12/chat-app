@@ -39,8 +39,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@chat-app/eslint_config": "*",
-    "@chat-app/prettier_config": "*",
     "@babel/core": "^7.16.0",
     "@babel/plugin-transform-modules-commonjs": "^7.16.0",
     "@babel/preset-env": "^7.16.0",

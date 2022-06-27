@@ -26,8 +26,6 @@
     "graphql": "^16.3.0"
   },
   "devDependencies": {
-    "@chat-app/eslint_config": "*",
-    "@chat-app/prettier_config": "*",
     "@types/node-fetch": "^2.6.1",
     "eslint": "^8.17.0",
     "eslint-plugin-graphql": "^4.0.0",
