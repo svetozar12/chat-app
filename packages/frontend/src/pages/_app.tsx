@@ -9,6 +9,7 @@ import theme from "../styles/theme";
 import GlobalRenders from "../components/GlobalRenders";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return (
     <SessionProvider>

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useCookie } from "next-cookie";
-import { NextPage, NextPageContext } from "next";
+import { NextPage } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import { css } from "@emotion/css";
 // services
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import api_helper from "../services/graphql/api_helper";
@@ -16,7 +15,6 @@ import { isAuth } from "../utils/authMethods";
 import withAuthSync, { ICtx } from "../utils/auth";
 import { HStack, Box } from "@chakra-ui/react";
 import generic from "../utils/generic";
-import { IAuthState } from "../services/redux/reducer/authReducer/state";
 
 export interface Ichats {
   _id: string;
@@ -40,7 +38,6 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const getChatRoom = async () => {
     try {

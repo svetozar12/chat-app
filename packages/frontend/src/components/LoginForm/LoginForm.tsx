@@ -1,21 +1,8 @@
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 import React from "react";
 import api_helper from "../../services/graphql/api_helper";
 import generic from "../../utils/generic";
-import {
-  Flex,
-  FormLabel,
-  HStack,
-  Input,
-  Button,
-  Checkbox,
-  SimpleGrid,
-  GridItem,
-  Box,
-  FormErrorMessage,
-  FormControl,
-} from "@chakra-ui/react";
+import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem, FormErrorMessage, FormControl } from "@chakra-ui/react";
 // hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useCookie } from "next-cookie";
@@ -28,7 +15,7 @@ import { useFormik } from "formik";
 import { LoginSchema } from "../../utils/validation";
 import { ILogin } from "../../pages";
 
-interface ILoginForm extends ILogin {}
+type ILoginForm = ILogin;
 
 const LoginForm = ({ callback }: ILoginForm) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -63,6 +50,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
 
         cookies.forEach((element) => {
           const { name, value, options } = element;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           cookie.set(name, value, { ...options });
         });

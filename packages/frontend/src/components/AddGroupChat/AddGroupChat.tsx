@@ -1,9 +1,8 @@
 import React from "react";
-import { Socket } from "socket.io-client";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
-import { Button, HStack, VStack } from "@chakra-ui/react";
+import { Button, HStack } from "@chakra-ui/react";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";

@@ -2,7 +2,7 @@ import configureStore from "redux-mock-store";
 import AddGroupChat from "./AddGroupChat";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { AuthState } from "../../redux/reducer/authReducer/authReducer";
+import { AuthState } from "services/redux/reducer/authReducer/authReducer";
 import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
@@ -19,7 +19,6 @@ const data = {
   setModalInvite: false,
 };
 
-const socketRef: any = jest.fn();
 const mockStore = configureStore([]);
 const store = mockStore({
   authReducer: AuthState,
@@ -29,7 +28,7 @@ const store = mockStore({
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <AddGroupChat cookieName="ivan" socketRef={socketRef} />
+      <AddGroupChat />
     </Provider>,
   );
   return component;
@@ -44,7 +43,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <AddGroupChat cookieName="ivan" socketRef={socketRef} />
+            <AddGroupChat />
           </Provider>,
         )
         .toJSON(),

@@ -2,9 +2,8 @@ import React from "react";
 import api_helper from "../../../services/graphql/api_helper";
 import { css } from "@emotion/css";
 import { useCookie } from "next-cookie";
-import { Image } from "@chakra-ui/react";
+import { Image, Box } from "@chakra-ui/react";
 import s from "./Single_avatar.module.css";
-import { Box } from "@chakra-ui/react";
 
 function Single_avatar({
   width,
@@ -38,9 +37,6 @@ function Single_avatar({
   (() => {
     getUserImage();
   })();
-
-  const FallBackImage =
-    "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg";
 
   return (
     <>

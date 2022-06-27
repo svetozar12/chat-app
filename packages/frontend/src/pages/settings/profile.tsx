@@ -2,18 +2,18 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 // services
-import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
-import api_helper from "../../services/graphql/api_helper";
+import ISave_inputState from "services/redux/reducer/save_inputReducer/state";
+import api_helper from "services/graphql/api_helper";
 // utils
-import generic from "../../utils/generic";
-import withAuthSync from "../../utils/auth";
-import { useAuth } from "../../utils/SessionProvider";
-import { getAuth } from "../../utils/authMethods";
+import generic from "utils/generic";
+import withAuthSync from "utils/auth";
+import { useAuth } from "utils/SessionProvider";
+import { getAuth } from "utils/authMethods";
 // components
 import { HStack } from "@chakra-ui/react";
-import UpdateInfo from "../../components/UpdateInfo";
-import SkelletonUserSettings from "../../components/Loading/SkelletonUserSettings";
-import UpdateInfoForm from "../../components/UpdateInfo/UpdateInfoForm";
+import UpdateInfo from "components/UpdateInfo";
+import SkelletonUserSettings from "components/Loading/SkelletonUserSettings";
+import UpdateInfoForm from "components/UpdateInfo/UpdateInfoForm";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");

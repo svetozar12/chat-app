@@ -2,13 +2,11 @@ import configureStore from "redux-mock-store";
 import FindFriends from "../FindFriends";
 import renderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import { AuthState } from "../../services/redux/reducer/authReducer/authReducer";
-import saveInputReducer from "../../services/redux/reducer/save_inputReducer/save_inputReducer";
+import { AuthState } from "services/redux/reducer/authReducer/authReducer";
+import saveInputReducer from "services/redux/reducer/save_inputReducer/save_inputReducer";
 import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-const socketRef: any = jest.fn();
-const cookie: any = jest.fn();
 const data = {
   reciever: "",
   chat_inviter: "",
@@ -31,7 +29,7 @@ const store = mockStore({
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <FindFriends socketRef={socketRef} />
+      <FindFriends />
     </Provider>,
   );
   return component;
@@ -46,7 +44,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <FindFriends socketRef={socketRef} />
+            <FindFriends />
           </Provider>,
         )
         .toJSON(),

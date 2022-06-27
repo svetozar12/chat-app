@@ -1,4 +1,4 @@
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 import React from "react";
 import UserSettings from "./UserSettings";
 // icons
@@ -13,8 +13,7 @@ import api_helper from "services/graphql/api_helper";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
-import { Center, Circle, Divider, Flex, Heading, HStack, Spacer } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
+import { Center, Circle, Divider, Flex, Heading, HStack, Spacer, Image } from "@chakra-ui/react";
 
 const FindFriendsHeader = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,6 @@ const FindFriendsHeader = () => {
   const user_id = cookie.get("id") as string;
   const token = cookie.get("token") as string;
 
-  const [hasAvatar, setHasAvatar] = React.useState(false);
   const [image, setImage] = React.useState("");
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
@@ -32,7 +30,6 @@ const FindFriendsHeader = () => {
       const res = await api_helper.user.getById(user_id, token);
       const userAvatar = res.userAvatar;
 
-      setHasAvatar(true);
       setImage(userAvatar);
       return true;
     } catch (error) {

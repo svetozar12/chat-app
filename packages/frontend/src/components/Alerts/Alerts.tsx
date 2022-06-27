@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { css } from "@emotion/css";
-import { IoClose } from "react-icons/io5";
 import { Alert, AlertIcon, AlertTitle, CloseButton, HStack } from "@chakra-ui/react";
 const Alerts = () => {
   const dispatch = useDispatch();

@@ -10,7 +10,7 @@ interface IAvatar {
   members: string[];
 }
 
-function Avatar({ inviter, members }: IAvatar) {
+function Avatar({ members }: IAvatar) {
   const cookie = useCookie();
   return (
     <HStack w="4rem" h="4rem" data-testid="avatar" title={cookie.get("username")}>

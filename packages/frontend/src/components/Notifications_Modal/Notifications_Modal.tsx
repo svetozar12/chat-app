@@ -1,11 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { GrClose } from "react-icons/gr";
 import PendingChats from "./PendingChats/PendingChats";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
-import { css, cx } from "@emotion/css";
-import { Center, CloseButton, Divider, Flex, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
+import { css } from "@emotion/css";
+import { CloseButton, Divider, Flex, Heading, VStack } from "@chakra-ui/react";
 
 interface INotifications {
   contacts: Iinvites[];
@@ -56,7 +55,7 @@ function Notifications({ contacts }: INotifications) {
       >
         {contacts.length <= 0 ? (
           <Heading p={5} size="md" className="flex">
-            You don't have invites !!!
+            You don&apos;t have invites !!!
           </Heading>
         ) : (
           contacts.map((item, index) => {

@@ -23,11 +23,12 @@ interface IContacts {
 
 interface IMessageSection {
   contacts: IContacts[];
+  // eslint-disable-next-line no-unused-vars
   FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => {
+const MessageSection = ({ contacts, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
@@ -42,7 +43,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
 
       const members_in_chat = Message;
 
-      let data: any[] = [];
+      const data: any[] = [];
       // if (res_inviter) data = [...res_inviter];
       // if (res) data = [...data, ...res];
       const usersArr: string[] = [];

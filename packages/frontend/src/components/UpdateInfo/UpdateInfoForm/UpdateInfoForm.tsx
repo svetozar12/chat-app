@@ -9,7 +9,7 @@ interface IUpdateInfoForm {
   setImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const UpdateInfoForm = ({ setImage, image }: IUpdateInfoForm) => {
+const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 

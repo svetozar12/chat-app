@@ -88,7 +88,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
     e.target.style.height = `${target.scrollHeight}px`;
     e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
     if (e.key === "Enter") {
-      let messageArr: IchatInstance[] = [];
+      const messageArr: IchatInstance[] = [];
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;

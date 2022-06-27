@@ -1,10 +1,8 @@
 import React from "react";
-import { css, cx } from "@emotion/css";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import Loading from "../../Loading";
-import { Button, GridItem, HStack, SimpleGrid, Spacer } from "@chakra-ui/react";
-import { useAuth } from "../../../utils/SessionProvider";
+import { Button, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
 
 const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }) => {
   const dispatch = useDispatch();

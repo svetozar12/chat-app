@@ -6,6 +6,7 @@ import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import generic from "utils/generic";
 
 interface IFindFriendsSearch {
+  // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => Promise<void>;
 }
 

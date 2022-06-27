@@ -36,6 +36,7 @@ function Register(props: { cookie: string }) {
 
         cookies.forEach((element) => {
           const { name, value, options } = element;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           cookie.set(name, value, { ...options });
         });
