@@ -29,6 +29,7 @@ io.on("connection", (socket: Socket): void => {
 
   socket.on("join_chat", ({ rooms }) => {
     socket.join(rooms);
+    console.log(rooms);
   });
 
   socket.on("friend_request", () => {
@@ -40,11 +41,13 @@ io.on("connection", (socket: Socket): void => {
   });
   socket.on("send_friend_request", async ({ inviter, reciever }) => {
     const reciever_field = await User.findOne({ username: reciever });
+    console.log(reciever_field);
+
     if (!reciever_field) return;
     if (inviter === reciever) return;
-    const _id = reciever_field._id.toString().split("(");
-
-    io.to(_id[0]).emit("send_friend_request");
+    const _id = reciever_field.username;
+    console.log(_id, socket.rooms);
+    io.to(_id).emit("send_friend_request");
   });
 
   socket.on("connect_error", (err) => {

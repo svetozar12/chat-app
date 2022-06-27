@@ -105,6 +105,8 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     });
 
     socketConnect.on("send_friend_request", () => {
+      console.log("recieved");
+
       checkNotification();
     });
 

@@ -30,7 +30,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
     const register = await api_helper.user.create(username, email, password, gender);
-
+    dispatch({ type: "SAVE_INPUT_USERNAME", payload: username });
+    dispatch({ type: "SAVE_INPUT_PASSWORD", payload: password });
+    dispatch({ type: "SAVE_INPUT_EMAIL", payload: email });
+    dispatch({ type: "SAVE_INPUT_GENDER", payload: gender });
     if (await register) dispatch({ type: "QUICK_LOGIN", payload: true });
     else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
@@ -83,13 +86,11 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
   ];
 
   const formik = useFormik({
-    initialValues: { username: "", password: "", email: "", gender: "male" },
+    initialValues: { username: "", password: "", email: "", gender: "Male" },
     validationSchema: RegisterSchema,
     onSubmit: (values: IValues) => {
       handleSubmit(values);
     },
-    // validateOnChange: false,
-    // validateOnBlur: false,
   });
 
   return (
