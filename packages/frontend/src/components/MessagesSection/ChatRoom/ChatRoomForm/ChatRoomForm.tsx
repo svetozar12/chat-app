@@ -7,7 +7,7 @@ import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { getAuth } from "utils/authMethods";
 import generic from "utils/generic";
 import { useDispatch, useSelector } from "react-redux";
-import { Center, Flex, HStack, Spacer, Text } from "@chakra-ui/react";
+import { Center, Flex, HStack, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import s from "./ChatRoomForm.module.css";
 
 interface IPropsState {
@@ -79,8 +79,12 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
     }
   };
 
+  const chat_bg = useColorModeValue("main_white", "main_black");
+  const from_bg = useColorModeValue("white", "#2c323d");
+  const color = useColorModeValue("#B1BAC5", "white");
+
   return (
-    <Flex mt="-0.5rem !important" w="full" h="10vh" bg="var(--main-white)" alignItems="center" justifyContent="center">
+    <Flex mt="-0.5rem !important" w="full" h="10vh" bg={chat_bg} alignItems="center" justifyContent="center">
       <HStack
         cursor="text"
         pos="relative"
@@ -88,7 +92,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
         w="70%"
         h="auto"
         p="2"
-        bg="#F3F3F5"
+        bg={from_bg}
         overflowWrap="break-word"
         borderRadius="3xl"
         align="center"
@@ -105,7 +109,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
           value={state.message}
         />
         {!state.message && (
-          <Text pos="absolute" color="#B1BAC5">
+          <Text pos="absolute" color={color}>
             placeholder
           </Text>
         )}

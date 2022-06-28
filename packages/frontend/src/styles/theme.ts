@@ -1,8 +1,14 @@
-import { extendTheme, withDefaultProps } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 // c comes from components
 import c from "./CustomComponents";
 
+const config = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+
 const theme = extendTheme({
+  config,
   components: {
     Input: {
       variants: {
@@ -20,7 +26,7 @@ const theme = extendTheme({
   },
   colors: {
     main_white: "#FCFCFC",
-    main_black: "rgb(0, 0, 0)",
+    main_black: "#1A202C",
     off_black: "rgb(92, 92, 92)",
     main_green: "rgb(52, 192, 34)",
     main_blue: "rgb(79, 81, 216)",

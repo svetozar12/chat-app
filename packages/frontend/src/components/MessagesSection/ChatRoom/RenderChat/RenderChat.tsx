@@ -9,7 +9,7 @@ import { IchatInstance } from "../ChatRoom";
 import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-import { Heading, HStack } from "@chakra-ui/react";
+import { Heading, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
 
 interface IRenderChat {
   id: string;
@@ -112,6 +112,10 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
     }
   }, []);
 
+  const chat_bg = useColorModeValue("off_black", "#2c323d");
+  const from_bg = useColorModeValue("white", "#3F3D3C");
+  const color = useColorModeValue("black", "white");
+
   return (
     <HStack
       gap={5}
@@ -132,11 +136,11 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       )}
     >
       <Heading
+        color={color}
         fontSize="lg"
         className={css`
           justify-content: ${name === sender ? "flex-end" : "flex-start"};
           font-size: 15px;
-          color: var(--main-black);
         `}
       >
         {name === sender ? null : sender}
@@ -171,23 +175,16 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
               </div>
             </div>
           )}
-          <div
+          <VStack
+            wordBreak="break-word"
+            textAlign="center"
+            minW="10rem"
+            minH="3rem"
+            overflow="hidden"
+            color={color}
+            bg={name === sender ? "#2c323d" : chat_bg}
             ref={inputRef}
             title={time_stamp.toString()}
-            className={cx(
-              css`
-                word-wrap: break-word;
-                text-align: center;
-                min-width: 10rem;
-                min-height: 3rem;
-                border-radius: 4px;
-                max-width: 40%;
-                overflow: hidden;
-                word-wrap: break-word;
-                background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
-              `,
-              "flex",
-            )}
           >
             {editing ? (
               <textarea
@@ -221,7 +218,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                 {message}
               </span>
             )}
-          </div>
+          </VStack>
           {name !== sender && (
             <div
               className={css`

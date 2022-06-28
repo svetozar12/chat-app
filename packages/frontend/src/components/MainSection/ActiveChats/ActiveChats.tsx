@@ -7,7 +7,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { useCookie } from "next-cookie";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
 
 interface IActiveChats {
   _id: string;
@@ -54,10 +54,11 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
     });
   };
 
+  const color = useColorModeValue("#B1BAC5", "white");
+
   return (
     <HStack
       w="full"
-      color="var(--main-white)"
       cursor="pointer"
       p="2rem"
       ml="2rem"
@@ -99,24 +100,24 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
                 ? members.map((element, index) => {
                     if (index === 3) return;
                     return (
-                      <Heading size="md" style={{ margin: 0 }} key={index}>
+                      <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
                         {element}
                         {element[members.length - 1] === element[index] ? `${members.length > 3 ? "..." : ""}` : ","}
                       </Heading>
                     );
                   })
                 : (members.length === 1 && (
-                    <Heading size="md" m={0}>
+                    <Heading color={color} size="md" m={0}>
                       {user1}
                     </Heading>
                   )) ||
                   (user2 === cookieName && (
-                    <Heading size="md" m={0}>
+                    <Heading color={color} size="md" m={0}>
                       {user1}
                     </Heading>
                   )) ||
                   (user1 === cookieName && (
-                    <Heading size="md" m={0}>
+                    <Heading color={color} size="md" m={0}>
                       {user2}
                     </Heading>
                   ))}
@@ -124,7 +125,7 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
             <p
               className={css`
                 margin: 0;
-                color: #65676b;
+                color: ${color};
                 justify-content: flex-start;
                 align-items: center;
                 margin: 1rem 0;

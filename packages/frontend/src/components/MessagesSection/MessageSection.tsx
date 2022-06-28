@@ -12,7 +12,7 @@ import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { useAuth } from "../../utils/SessionProvider";
 import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
-import { Box } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 
 interface IContacts {
   _id: string;
@@ -75,7 +75,8 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
   }, [route.asPath]);
 
   return (
-    <section
+    <HStack
+      w="71%"
       title="message_section"
       className={cx(
         "flex",
@@ -104,7 +105,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
           {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
         </Box>
       </div>
-    </section>
+    </HStack>
   );
 };
 
