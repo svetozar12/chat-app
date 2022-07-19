@@ -14,8 +14,8 @@ const FindFriendsSearch = ({ handleSubmit }: IFindFriendsSearch) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
-  const chat_bg = useColorModeValue("main_white", "main_black");
-  const from_bg = useColorModeValue("white", "#3F3D3C");
+  // const chat_bg = useColorModeValue("main_white", "main_black");
+  // const from_bg = useColorModeValue("white", "#3F3D3C");
   const color = useColorModeValue("#B1BAC5", "white");
 
   return (

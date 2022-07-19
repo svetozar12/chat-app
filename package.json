@@ -18,7 +18,8 @@
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^5.1.8",
+    "nx": "^14.4.3"
   },
   "engines": {
     "npm": "please-use-yarn",

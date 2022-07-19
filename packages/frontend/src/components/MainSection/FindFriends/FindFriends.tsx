@@ -12,7 +12,7 @@ import { useAuth } from "utils/SessionProvider";
 import FindFriendsHeader from "./FindFriendsHeader";
 import SkeletonFindFriendsHeader from "components/Loading/SkeletonFindFriendsHeader";
 import FindFriendsSearch from "./FindFriendsSearch";
-import { Skeleton, VStack, FormControl, useColorModeValue } from "@chakra-ui/react";
+import { Skeleton, VStack, FormControl } from "@chakra-ui/react";
 
 function FindFriends() {
   const dispatch = useDispatch();

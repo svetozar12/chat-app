@@ -113,7 +113,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   }, []);
 
   const chat_bg = useColorModeValue("off_black", "#2c323d");
-  const from_bg = useColorModeValue("white", "#3F3D3C");
+  // const from_bg = useColorModeValue("white", "#3F3D3C");
   const color = useColorModeValue("black", "white");
 
   return (
