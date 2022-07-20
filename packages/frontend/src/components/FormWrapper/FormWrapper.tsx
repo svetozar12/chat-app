@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 // components
 import Alerts from "../Alerts";
-import { FormControl, Box, Heading, VStack, Flex } from "@chakra-ui/react";
+import { FormControl, Box, Heading, VStack, Flex, ScaleFade } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IFormWrapper {
   children: JSX.Element | JSX.Element[];
@@ -13,11 +14,13 @@ interface IFormWrapper {
 
 const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-
+  const {
+    colors: { from_bg },
+  } = useThemeColors();
   return (
-    <>
+    <ScaleFade initialScale={0.7} in={true}>
       {(state.good || state.bad) && <Alerts />}
-      <Flex h="100vh" flexDir="column" alignItems="center" justifyContent="center">
+      <Flex h="100vh" flexDir="column" alignItems="center" justifyContent="center" pos={"relative"} zIndex="101">
         <Heading
           w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }}
           p="0.5rem"
@@ -28,7 +31,14 @@ const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {
         >
           {type}
         </Heading>
-        <Box w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }} maxH="auto" minH="45vh" padding="3rem" boxShadow="default">
+        <Box
+          bg={from_bg}
+          w={{ base: "95%", sm: "90%", md: "70%", lg: "60%", xl: "40%" }}
+          maxH="auto"
+          minH="45vh"
+          padding="3rem"
+          boxShadow="default"
+        >
           <FormControl w="full" borderRadius="5px">
             <form onSubmit={handleSubmit}>
               <VStack w="full" alignItems="flex-start" spacing={5}>
@@ -38,7 +48,7 @@ const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {
           </FormControl>
         </Box>
       </Flex>
-    </>
+    </ScaleFade>
   );
 };
 

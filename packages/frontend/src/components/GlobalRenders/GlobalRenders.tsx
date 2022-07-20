@@ -5,6 +5,7 @@ import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import { Global } from "@emotion/react";
 import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";
+import useThemeColors from "hooks/useThemeColors";
 
 const App = () => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -26,7 +27,9 @@ const App = () => {
       payload: false,
     });
   };
-
+  const {
+    colors: { chat_bg },
+  } = useThemeColors();
   const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
 
   return (
@@ -51,11 +54,11 @@ const App = () => {
       <div
         className={css`
           position: absolute;
-          z-index: ${Blur ? "100" : "-1"};
+          z-index: ${Blur ? "101" : "-1"};
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
-          background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
+          background: ${chat_bg};
         `}
         onClick={closeModals}
       ></div>

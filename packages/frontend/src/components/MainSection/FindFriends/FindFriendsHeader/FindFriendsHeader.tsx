@@ -27,6 +27,8 @@ import {
   useColorMode,
   IconButton,
   useColorModeValue,
+  Collapse,
+  ScaleFade,
 } from "@chakra-ui/react";
 
 const FindFriendsHeader = () => {
@@ -102,8 +104,8 @@ const FindFriendsHeader = () => {
         <HStack gap={{ base: 0, md: 5 }} w="50%">
           <Center w="25%" onClick={toggleColorMode}>
             {useColorModeValue(
-              <IconButton w="full" h="4rem" aria-label="" icon={<BsFillSunFill className={s.icon} />} />,
-              <IconButton w="full" h="4rem" aria-label="" icon={<MdDarkMode className={s.icon} />} />,
+              <IconButton w="full" h="3rem" aria-label="" icon={<BsFillSunFill className={s.icon} />} />,
+              <IconButton w="full" h="3rem" aria-label="" icon={<MdDarkMode className={s.icon} />} />,
             )}
           </Center>
           <Center
@@ -116,7 +118,7 @@ const FindFriendsHeader = () => {
               });
             }}
           >
-            <IconButton w="full" h="4rem" aria-label="button for recieved invites" icon={<IoNotifications className={s.icon} />} />
+            <IconButton w="full" h="3rem" aria-label="button for recieved invites" icon={<IoNotifications className={s.icon} />} />
             {notifState.notification_number > 0 && (
               <Circle
                 display="flex"
@@ -136,7 +138,7 @@ const FindFriendsHeader = () => {
             )}
           </Center>
           <Center onClick={toggleGroupCreate} w="25%">
-            <IconButton w="full" h="4rem" aria-label="creates group chat" icon={<AiOutlineUsergroupAdd className={s.icon} />} />
+            <IconButton w="full" h="3rem" aria-label="creates group chat" icon={<AiOutlineUsergroupAdd className={s.icon} />} />
           </Center>
           <Center
             w="25%"
@@ -148,8 +150,10 @@ const FindFriendsHeader = () => {
               })
             }
           >
-            <IconButton w="full" h="4rem" aria-label="open user settings" icon={<BsThreeDots className={s.icon} />} />
-            {state.setUserSettings ? <UserSettings /> : null}
+            <IconButton w="full" h="3rem" aria-label="open user settings" icon={<BsThreeDots className={s.icon} />} />
+            <ScaleFade initialScale={0.5} in={state.setUserSettings}>
+              <UserSettings />
+            </ScaleFade>
           </Center>
         </HStack>
       </HStack>

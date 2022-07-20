@@ -84,6 +84,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
           width: 71%;
           @media (max-width: 1008px) {
             width: 100%;
+            margin-top: 0 !important;
           },`,
       )}
     >

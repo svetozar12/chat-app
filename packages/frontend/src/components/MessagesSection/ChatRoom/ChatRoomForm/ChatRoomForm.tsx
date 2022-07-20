@@ -9,6 +9,7 @@ import generic from "utils/generic";
 import { useDispatch, useSelector } from "react-redux";
 import { Center, Flex, HStack, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import s from "./ChatRoomForm.module.css";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IPropsState {
   name?: string;
@@ -79,9 +80,9 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
     }
   };
 
-  const chat_bg = useColorModeValue("main_white", "main_black");
-  const from_bg = useColorModeValue("white", "#2c323d");
-  const color = useColorModeValue("#B1BAC5", "white");
+  const {
+    colors: { chat_bg, from_bg, color },
+  } = useThemeColors();
 
   return (
     <Flex mt="-0.5rem !important" w="full" h="10vh" bg={chat_bg} alignItems="center" justifyContent="center">

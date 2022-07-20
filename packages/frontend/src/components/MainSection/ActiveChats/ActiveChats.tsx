@@ -7,7 +7,8 @@ import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { useCookie } from "next-cookie";
-import { Heading, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, useColorModeValue, VStack } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IActiveChats {
   _id: string;
@@ -53,8 +54,9 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
       payload: !state.setChatSettings,
     });
   };
-
-  const color = useColorModeValue("#B1BAC5", "white");
+  const {
+    colors: { color },
+  } = useThemeColors();
 
   return (
     <HStack
@@ -136,20 +138,21 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
           </VStack>
         </HStack>
         {_id === chatId && (
-          <BsThreeDots
-            className={css`
-              width: 2rem;
-              height: 2rem;
-              background: var(--main-white);
-              color: var(--main-black);
-              border-radius: 25px;
-              box-shadow: 0 0 5px var(--main-black);
-              &:hover {
-                color: rgba(122, 122, 122, 1);
-              }
-            `}
-            onClick={chatSettings}
-          />
+          <IconButton
+            borderRadius="full"
+            aria-label=""
+            boxShadow="box-shadow: 0 0 5px main_black"
+            icon={
+              <BsThreeDots
+                className={css`
+                  width: 2rem;
+                  height: 2rem;
+                  color: ${color};
+                `}
+                onClick={chatSettings}
+              />
+            }
+          ></IconButton>
         )}
       </div>
     </HStack>

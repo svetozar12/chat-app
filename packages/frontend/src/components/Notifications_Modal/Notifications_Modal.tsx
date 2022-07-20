@@ -4,7 +4,7 @@ import PendingChats from "./PendingChats/PendingChats";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
 import { css } from "@emotion/css";
-import { CloseButton, Divider, Flex, Heading, VStack } from "@chakra-ui/react";
+import { CloseButton, Divider, Flex, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
 
 interface INotifications {
   contacts: Iinvites[];
@@ -13,6 +13,7 @@ interface INotifications {
 function Notifications({ contacts }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
+  const from_bg = useColorModeValue("white", "#1c2330");
   const dispatch = useDispatch();
   return (
     <VStack
@@ -20,7 +21,7 @@ function Notifications({ contacts }: INotifications) {
       zIndex={999}
       justifyContent="flex-start"
       w={{ base: "70%", md: "50%", lg: "40%", xl: "30%" }}
-      bg="white"
+      bg={from_bg}
       boxShadow="default"
       borderRadius="xl"
       p={2}

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, FormControl, Heading, Link, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, FormControl, Heading, Link, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useCookie } from "next-cookie";
 import React from "react";
 
@@ -9,9 +9,9 @@ interface IUpdateInfo {
 
 const UpdateInfo = ({ children, handleSubmit }: IUpdateInfo) => {
   const cookie = useCookie();
+
   return (
     <Box w="95%">
-      {" "}
       <VStack w="full" px={10} align="flex-start">
         <Heading>Personal Profile</Heading>
         <Divider size="4rem" borderBottomWidth="1px" borderColor="#c9d1d9" />

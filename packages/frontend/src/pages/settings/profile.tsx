@@ -10,7 +10,7 @@ import withAuthSync from "utils/auth";
 import { useAuth } from "utils/SessionProvider";
 import { getAuth } from "utils/authMethods";
 // components
-import { HStack } from "@chakra-ui/react";
+import { HStack, useColorModeValue } from "@chakra-ui/react";
 import UpdateInfo from "components/UpdateInfo";
 import SkelletonUserSettings from "components/Loading/SkelletonUserSettings";
 import UpdateInfoForm from "components/UpdateInfo/UpdateInfoForm";
@@ -25,6 +25,7 @@ function Profile(props: { cookie: string }) {
   React.useEffect(() => {
     cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname, { path: "/" });
   }, []);
+  const chat_bg = useColorModeValue("main_white", "off_black");
 
   if (!user) return <SkelletonUserSettings />;
 
@@ -47,7 +48,7 @@ function Profile(props: { cookie: string }) {
   };
 
   return (
-    <HStack w="full" h="100vh" alignItems="center" justifyContent="center">
+    <HStack w="full" h="100vh" bg={chat_bg} alignItems="center" justifyContent="center">
       <UpdateInfo handleSubmit={handleSubmit}>
         <UpdateInfoForm image={image} setImage={setImage} />
       </UpdateInfo>

@@ -11,6 +11,7 @@ import { RegisterSchema } from "../../utils/validation";
 // components
 import QuickLogin_Modal from "./QuickLogin_Modal";
 import FormWrapper from "../FormWrapper";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars
@@ -93,6 +94,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     },
   });
 
+  const {
+    colors: { form_button },
+  } = useThemeColors();
+
   return (
     <>
       <FormWrapper handleSubmit={formik.handleSubmit} type="Register">
@@ -127,7 +132,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button colorScheme="blue" w="60%" type="submit">
+          <Button colorScheme={form_button} w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />

@@ -27,7 +27,7 @@ const theme = extendTheme({
   colors: {
     main_white: "#FCFCFC",
     main_black: "#1A202C",
-    off_black: "rgb(92, 92, 92)",
+    off_black: "#1c2330",
     main_green: "rgb(52, 192, 34)",
     main_blue: "rgb(79, 81, 216)",
     off_blue: "rgb(38, 92, 163)",

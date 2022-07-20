@@ -2,7 +2,19 @@ import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import React from "react";
 import api_helper from "../../services/graphql/api_helper";
 import generic from "../../utils/generic";
-import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem, FormErrorMessage, FormControl } from "@chakra-ui/react";
+import {
+  Flex,
+  FormLabel,
+  HStack,
+  Input,
+  Button,
+  Checkbox,
+  SimpleGrid,
+  GridItem,
+  FormErrorMessage,
+  FormControl,
+  useColorModeValue,
+} from "@chakra-ui/react";
 // hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useCookie } from "next-cookie";
@@ -14,6 +26,7 @@ import Loading from "../Loading";
 import { useFormik } from "formik";
 import { LoginSchema } from "../../utils/validation";
 import { ILogin } from "../../pages";
+import useThemeColors from "hooks/useThemeColors";
 
 type ILoginForm = ILogin;
 
@@ -72,12 +85,15 @@ const LoginForm = ({ callback }: ILoginForm) => {
     }
   };
 
+  const color = useColorModeValue("white", "#343a40");
+
   const renderInputs = [
     {
       label: "Username",
       props: {
         type: "text",
         name: "username",
+        bg: color,
         placeholder: "username ...",
       },
     },
@@ -86,6 +102,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
       props: {
         type: "password",
         name: "password",
+        bg: color,
         placeholder: "password ...",
       },
     },
@@ -101,6 +118,10 @@ const LoginForm = ({ callback }: ILoginForm) => {
     validateOnChange: false,
     validateOnBlur: false,
   });
+
+  const {
+    colors: { form_button },
+  } = useThemeColors();
 
   return (
     <FormWrapper handleSubmit={formik.handleSubmit} type="Login">
@@ -122,7 +143,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
       </>
 
       <Flex w="full" alignItems="center" justifyContent="center">
-        <Button isLoading={isLoading} spinner={<Loading />} colorScheme="blue" w="60%" type="submit">
+        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={form_button} w="60%" type="submit">
           Log In
         </Button>
       </Flex>
