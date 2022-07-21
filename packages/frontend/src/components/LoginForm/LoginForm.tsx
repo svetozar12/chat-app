@@ -2,19 +2,7 @@ import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import React from "react";
 import api_helper from "../../services/graphql/api_helper";
 import generic from "../../utils/generic";
-import {
-  Flex,
-  FormLabel,
-  HStack,
-  Input,
-  Button,
-  Checkbox,
-  SimpleGrid,
-  GridItem,
-  FormErrorMessage,
-  FormControl,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem, FormErrorMessage, FormControl } from "@chakra-ui/react";
 // hooks
 import { useSelector, useDispatch } from "react-redux";
 import { useCookie } from "next-cookie";
@@ -85,9 +73,8 @@ const LoginForm = ({ callback }: ILoginForm) => {
     }
   };
 
-  const color = useColorModeValue("white", "#343a40");
   const {
-    colors: { chat_border_color },
+    colors: { chat_border_color, input_bg },
   } = useThemeColors();
   const renderInputs = [
     {
@@ -95,7 +82,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
       props: {
         type: "text",
         name: "username",
-        bg: color,
+        bg: input_bg,
         border: "1px solid black",
         borderColor: chat_border_color,
         placeholder: "username ...",
@@ -108,7 +95,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
         borderColor: chat_border_color,
         type: "password",
         name: "password",
-        bg: color,
+        bg: input_bg,
         placeholder: "password ...",
       },
     },

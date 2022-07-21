@@ -7,6 +7,7 @@ const useThemeColors = () => {
   const chat_bg = useColorModeValue("#FCFCFC", "#1A202C");
   const chat_border_color = useColorModeValue("#E5E5E5", "transparent");
   const chat_message_bg_color = useColorModeValue("rgb(79, 81, 216)", "#2c323d");
+  const input_bg = useColorModeValue("white", "#343a40");
 
   const colors = {
     from_bg,
@@ -15,6 +16,7 @@ const useThemeColors = () => {
     chat_bg,
     chat_border_color,
     chat_message_bg_color,
+    input_bg,
   };
   return { colors };
 };
