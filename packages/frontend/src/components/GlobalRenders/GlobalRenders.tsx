@@ -6,6 +6,7 @@ import { Global } from "@emotion/react";
 import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";
 import useThemeColors from "hooks/useThemeColors";
+import { Fade, ScaleFade, useColorMode, useColorModeValue } from "@chakra-ui/react";
 
 const App = () => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -27,9 +28,9 @@ const App = () => {
       payload: false,
     });
   };
-  const {
-    colors: { chat_bg },
-  } = useThemeColors();
+
+  const { colorMode } = useColorMode();
+
   const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
 
   return (
@@ -49,7 +50,7 @@ const App = () => {
         }}
       />
       <Head>
-        <title>Chat what</title>
+        <title>{colorMode}</title>
       </Head>
       <div
         className={css`
@@ -58,7 +59,7 @@ const App = () => {
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
-          background: ${chat_bg};
+          background: ${colorMode === "dark" ? "#1A202C" : "#FCFCFC"};
         `}
         onClick={closeModals}
       ></div>

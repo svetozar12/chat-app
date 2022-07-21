@@ -27,9 +27,8 @@ import {
   useColorMode,
   IconButton,
   useColorModeValue,
-  Collapse,
-  ScaleFade,
 } from "@chakra-ui/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const FindFriendsHeader = () => {
   const dispatch = useDispatch();
@@ -83,7 +82,7 @@ const FindFriendsHeader = () => {
           position: relative;
         `}
       ></div>
-      <HStack w="99%" minW="300px" pb="1rem">
+      <HStack w="99%" pos="relative" minW="300px" pb="1rem">
         <Flex align="center">
           <Image
             alt="user_avatar"
@@ -100,6 +99,7 @@ const FindFriendsHeader = () => {
             Chats
           </Heading>
         </Flex>
+
         <Spacer />
         <HStack gap={{ base: 0, md: 5 }} w="50%">
           <Center w="25%" onClick={toggleColorMode}>
@@ -150,10 +150,21 @@ const FindFriendsHeader = () => {
               })
             }
           >
+            <AnimatePresence>
+              {state.setUserSettings && (
+                <motion.div
+                  className={s.box}
+                  style={{ position: "absolute", top: 0, right: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "tween" }}
+                  initial={{ scale: 0.2 }}
+                  exit={{ scale: 0.2 }}
+                >
+                  <UserSettings />
+                </motion.div>
+              )}
+            </AnimatePresence>
             <IconButton w="full" h="3rem" aria-label="open user settings" icon={<BsThreeDots className={s.icon} />} />
-            <ScaleFade initialScale={0.5} in={state.setUserSettings}>
-              <UserSettings />
-            </ScaleFade>
           </Center>
         </HStack>
       </HStack>

@@ -1,6 +1,6 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 // components
 import MessageSettings from "./MessageSettings";
@@ -9,7 +9,8 @@ import { IchatInstance } from "../ChatRoom";
 import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-import { Heading, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, useColorModeValue, VStack } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IRenderChat {
   id: string;
@@ -112,9 +113,9 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
     }
   }, []);
 
-  const chat_bg = useColorModeValue("off_black", "#2c323d");
-  // const from_bg = useColorModeValue("white", "#3F3D3C");
-  const color = useColorModeValue("black", "white");
+  const {
+    colors: { color, chat_bg, chat_message_bg_color },
+  } = useThemeColors();
 
   return (
     <HStack
@@ -171,7 +172,20 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
             >
               {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="-60px" />}
               <div onClick={ToggleSettings} className={optionsPadding}>
-                <BsThreeDotsVertical className={dothStyle} />
+                <IconButton
+                  borderRadius="full"
+                  aria-label=""
+                  boxShadow="box-shadow: 0 0 5px main_black"
+                  icon={
+                    <BsThreeDots
+                      className={css`
+                        width: 2rem;
+                        height: 2rem;
+                        color: ${color};
+                      `}
+                    />
+                  }
+                ></IconButton>
               </div>
             </div>
           )}
@@ -181,8 +195,8 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
             minW="10rem"
             minH="3rem"
             overflow="hidden"
-            color={color}
-            bg={name === sender ? "#2c323d" : chat_bg}
+            color="white"
+            bg={name === sender ? chat_message_bg_color : chat_bg}
             ref={inputRef}
             title={time_stamp.toString()}
           >
@@ -192,7 +206,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                   resize: none;
                   border: none;
                   text-align: center;
-                  color: var(--main-white);
+                  color: main_white;
                   background: rgba(0, 0, 0, 0.3);
                   border-radius: 4px;
                   width: ${width}px;

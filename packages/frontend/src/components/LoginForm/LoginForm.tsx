@@ -86,7 +86,9 @@ const LoginForm = ({ callback }: ILoginForm) => {
   };
 
   const color = useColorModeValue("white", "#343a40");
-
+  const {
+    colors: { chat_border_color },
+  } = useThemeColors();
   const renderInputs = [
     {
       label: "Username",
@@ -94,12 +96,16 @@ const LoginForm = ({ callback }: ILoginForm) => {
         type: "text",
         name: "username",
         bg: color,
+        border: "1px solid black",
+        borderColor: chat_border_color,
         placeholder: "username ...",
       },
     },
     {
       label: "Password",
       props: {
+        border: "1px solid black",
+        borderColor: chat_border_color,
         type: "password",
         name: "password",
         bg: color,

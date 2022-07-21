@@ -12,6 +12,7 @@ import { Link as ALink, useColorModeValue, VStack } from "@chakra-ui/react";
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
+import useThemeColors from "hooks/useThemeColors";
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -69,8 +70,9 @@ function UserSettings() {
     },
   ];
 
-  const from_bg = useColorModeValue("white", "off_black");
-
+  const {
+    colors: { from_bg },
+  } = useThemeColors();
   return (
     <VStack
       w={{ base: "15rem", lg: "15rem" }}
@@ -87,17 +89,6 @@ function UserSettings() {
       zIndex={2000}
       transform="translate(-4px, 75px)"
       boxShadow=" 2px 2px 22px 1px var(--main-box-shadow)"
-      _before={{
-        pos: "absolute",
-        content: `""`,
-        height: "20px",
-        width: "20px",
-        bg: from_bg,
-        right: " 14px",
-        top: "-10px",
-        transform: "rotate(45deg)",
-        zIndex: "-1",
-      }}
     >
       {Render.map((element, index) => {
         const { href, onClick, Icon, title } = element;

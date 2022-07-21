@@ -7,7 +7,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { useCookie } from "next-cookie";
-import { Heading, HStack, IconButton, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
 import useThemeColors from "hooks/useThemeColors";
 
 interface IActiveChats {

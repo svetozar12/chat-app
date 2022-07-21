@@ -36,8 +36,6 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
       h="100vh"
       pos={{ base: "absolute", lg: "relative" }}
       bg={from_bg}
-      transitionTimingFunction="ease-out"
-      transition="0.6s ease-out"
       borderRight="1px solid rgba(0, 0, 0, 0.1)"
       textAlign="center"
       overflow="hidden"
