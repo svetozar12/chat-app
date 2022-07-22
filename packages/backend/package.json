@@ -14,7 +14,8 @@
     "dev": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
     "dev:backend": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
     "start:production": "set NODE_ENV=production && node dist/index.js",
-    "format": "prettier --write **/*.{js,ts,tsx}"
+    "format": "prettier --write **/*.{js,ts,tsx}",
+    "db:up": "docker compose -f ./local_db_compose/docker-compose.yml up -d"
   },
   "keywords": [],
   "author": "",

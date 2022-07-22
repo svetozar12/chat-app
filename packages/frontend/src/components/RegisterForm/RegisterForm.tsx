@@ -11,6 +11,7 @@ import { RegisterSchema } from "../../utils/validation";
 // components
 import QuickLogin_Modal from "./QuickLogin_Modal";
 import FormWrapper from "../FormWrapper";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars
@@ -56,6 +57,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     onChange: handleGenderChange,
   });
 
+  const {
+    colors: { input_bg, chat_border_color },
+  } = useThemeColors();
+
   const group = getRootProps();
   const genderOptions = ["Male", "Female"];
   const renderInputs = [
@@ -64,6 +69,8 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       props: {
         type: "text",
         name: "username",
+        bg: input_bg,
+        borderColor: chat_border_color,
         placeholder: "username ...",
       },
     },
@@ -71,6 +78,8 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       label: "Password",
       props: {
         type: "password",
+        bg: input_bg,
+        borderColor: chat_border_color,
         name: "password",
         placeholder: "password ...",
       },
@@ -79,6 +88,8 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       label: "Email",
       props: {
         type: "email",
+        borderColor: chat_border_color,
+        bg: input_bg,
         name: "email",
         placeholder: "email ...",
       },
@@ -92,6 +103,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       handleSubmit(values);
     },
   });
+
+  const {
+    colors: { form_button },
+  } = useThemeColors();
 
   return (
     <>
@@ -127,7 +142,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button colorScheme="blue" w="60%" type="submit">
+          <Button colorScheme={form_button} w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />

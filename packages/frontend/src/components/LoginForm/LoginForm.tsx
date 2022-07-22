@@ -14,6 +14,7 @@ import Loading from "../Loading";
 import { useFormik } from "formik";
 import { LoginSchema } from "../../utils/validation";
 import { ILogin } from "../../pages";
+import useThemeColors from "hooks/useThemeColors";
 
 type ILoginForm = ILogin;
 
@@ -72,20 +73,29 @@ const LoginForm = ({ callback }: ILoginForm) => {
     }
   };
 
+  const {
+    colors: { chat_border_color, input_bg },
+  } = useThemeColors();
   const renderInputs = [
     {
       label: "Username",
       props: {
         type: "text",
         name: "username",
+        bg: input_bg,
+        border: "1px solid black",
+        borderColor: chat_border_color,
         placeholder: "username ...",
       },
     },
     {
       label: "Password",
       props: {
+        border: "1px solid black",
+        borderColor: chat_border_color,
         type: "password",
         name: "password",
+        bg: input_bg,
         placeholder: "password ...",
       },
     },
@@ -101,6 +111,10 @@ const LoginForm = ({ callback }: ILoginForm) => {
     validateOnChange: false,
     validateOnBlur: false,
   });
+
+  const {
+    colors: { form_button },
+  } = useThemeColors();
 
   return (
     <FormWrapper handleSubmit={formik.handleSubmit} type="Login">
@@ -122,7 +136,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
       </>
 
       <Flex w="full" alignItems="center" justifyContent="center">
-        <Button isLoading={isLoading} spinner={<Loading />} colorScheme="blue" w="60%" type="submit">
+        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={form_button} w="60%" type="submit">
           Log In
         </Button>
       </Flex>

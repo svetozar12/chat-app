@@ -1,4 +1,4 @@
-import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, VStack } from "@chakra-ui/react";
+import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ISave_inputState from "../../../services/redux/reducer/save_inputReducer/state";
@@ -12,6 +12,7 @@ interface IUpdateInfoForm {
 const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const color = useColorModeValue("black", "white");
 
   const InputsLayout = [
     {
@@ -32,6 +33,7 @@ const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
             type: "SAVE_INPUT_USERNAME",
             payload: e.target.value,
           }),
+        color: color,
       },
     },
     {
@@ -47,6 +49,7 @@ const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
         value: state.input_email,
         w: "full",
         id: "email",
+        color: color,
         onChange: (e) =>
           dispatch({
             type: "SAVE_INPUT_EMAIL",
@@ -65,6 +68,7 @@ const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
         variant: "FormInput",
         type: "file",
         id: "file",
+        color: color,
         value: state.input_file,
         display: "none",
         onChange: (e) =>

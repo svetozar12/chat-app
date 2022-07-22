@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { IInitialSet } from "services/redux/reducer/setReducer/state";
@@ -27,6 +27,10 @@ const App = () => {
     });
   };
 
+  const [ColorMode, setColorMode] = useState("light");
+  React.useEffect(() => {
+    setColorMode(localStorage.getItem("chakra-ui-color-mode") || "");
+  }, []);
   const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
 
   return (
@@ -46,16 +50,16 @@ const App = () => {
         }}
       />
       <Head>
-        <title>Chat what</title>
+        <title>Chat What</title>
       </Head>
       <div
         className={css`
           position: absolute;
-          z-index: ${Blur ? "100" : "-1"};
+          z-index: ${Blur ? "101" : "-1"};
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
-          background: radial-gradient(var(--gradient-first) 10%, var(--gradient-second) 100%);
+          background: ${ColorMode === "dark" ? "#1A202C" : "#FCFCFC"};
         `}
         onClick={closeModals}
       ></div>
