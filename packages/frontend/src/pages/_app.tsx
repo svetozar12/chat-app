@@ -8,10 +8,12 @@ import App from "components/PageLayout/App";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <App>
+    <App cookies={pageProps.cookie}>
       <Component {...pageProps} />
     </App>
   );
 };
 
 export default wrapper.withRedux(MyApp);
+
+export { getServerSideProps } from "components/PageLayout/App/App";
