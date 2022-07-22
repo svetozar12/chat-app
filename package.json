@@ -16,7 +16,7 @@
     "dev:kill": "yarn kill && yarn dev",
     "mash-up": "yarn format && yarn lint && yarn build",
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test",
-    "db:up": "docker compose up mongo redis azurite -d"
+    "db:up": "lerna run db:up --stream"
   },
   "devDependencies": {
     "lerna": "^5.1.8",

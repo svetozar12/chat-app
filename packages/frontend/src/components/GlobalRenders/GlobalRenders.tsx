@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import { Global } from "@emotion/react";
 import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";
-import useThemeColors from "hooks/useThemeColors";
-import { Fade, ScaleFade, useColorMode, useColorModeValue } from "@chakra-ui/react";
 
 const App = () => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
@@ -29,8 +27,10 @@ const App = () => {
     });
   };
 
-  const { colorMode } = useColorMode();
-
+  const [ColorMode, setColorMode] = useState("light");
+  React.useEffect(() => {
+    setColorMode(localStorage.getItem("chakra-ui-color-mode") || "");
+  }, []);
   const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
 
   return (
@@ -50,7 +50,7 @@ const App = () => {
         }}
       />
       <Head>
-        <title>{colorMode}</title>
+        <title>Chat What</title>
       </Head>
       <div
         className={css`
@@ -59,7 +59,7 @@ const App = () => {
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
-          background: ${colorMode === "dark" ? "#1A202C" : "#FCFCFC"};
+          background: ${ColorMode === "dark" ? "#1A202C" : "#FCFCFC"};
         `}
         onClick={closeModals}
       ></div>

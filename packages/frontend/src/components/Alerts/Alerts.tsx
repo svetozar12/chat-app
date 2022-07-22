@@ -18,7 +18,7 @@ const Alerts = () => {
   }, []);
 
   return (
-    <HStack pos="absolute" w="60%" transform="translate(50%,-600%)" top="50%" right="50%">
+    <HStack pos="absolute" zIndex="102" w="60%" transform="translate(50%,-600%)" top="50%" right="50%">
       <Alert status={state.good ? "success" : "error"}>
         <AlertIcon />
         <AlertTitle textAlign="center" w="full">

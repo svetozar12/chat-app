@@ -9,7 +9,7 @@ import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { Heading, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Flex, Heading, HStack, VStack } from "@chakra-ui/react";
 import s from "./ChatSettings.module.css";
 import useThemeColors from "hooks/useThemeColors";
 
@@ -83,7 +83,7 @@ function ChatSettings({ chatId }: IChatSettings) {
 
         {users.map((item, index) => {
           return (
-            <HStack alignItems="center" key={index}>
+            <HStack color={color} justify="center" alignItems="center" key={index}>
               <Heading>{item}</Heading>
               <AiOutlineUserDelete
                 onClick={() => {
@@ -136,14 +136,14 @@ function ChatSettings({ chatId }: IChatSettings) {
             >
               Add more users
             </h2>
-            <div className="flex">
+            <Flex>
               <AiOutlinePlusCircle
                 className={css`
                   width: 2rem;
                   height: 2rem;
                 `}
               />
-            </div>
+            </Flex>
           </div>
         )}
       </VStack>

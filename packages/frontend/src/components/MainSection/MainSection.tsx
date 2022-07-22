@@ -6,13 +6,13 @@ import FindFriends from "./FindFriends";
 import ChatSettings from "./ChatSettings";
 // other
 import { css, cx } from "@emotion/css";
-import { GrClose } from "react-icons/gr";
 import { Ichats } from "pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "utils/SessionProvider";
 import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import SkeletonActiveInvites from "components/Loading/SkeletonActiveInvites";
-import { CloseButton, Flex, Slide, useColorModeValue, VStack } from "@chakra-ui/react";
+import { CloseButton, Flex, Slide, VStack } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IMainSection {
   chatId: string;
@@ -23,11 +23,9 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const { user } = useAuth();
-
-  const chat_bg = useColorModeValue("main_white", "main_black");
-  const from_bg = useColorModeValue("white", "#1c2330");
-  const color = useColorModeValue("#B1BAC5", "white");
-
+  const {
+    colors: { color, from_bg },
+  } = useThemeColors();
   return (
     <VStack
       mr="-0.5rem !important"
@@ -68,6 +66,7 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
                     cursor: pointer;
                     right: 0;
                     margin-top: 2.5rem;
+                    color:${color};
                     position: absolute;
                     background:${color},
                     z-index: 9999;
