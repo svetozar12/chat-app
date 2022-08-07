@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { checkTokens, logout } from "./authMethods";
+import { logout } from "./authMethods";
 import useProvideAuth from "./useSession";
 
 const AuthContext = createContext({ user: { _id: "", username: "", email: "" }, logout });
@@ -10,6 +10,7 @@ interface ISessionProvider {
 
 const SessionProvider = ({ children }: ISessionProvider) => {
   const auth = useProvideAuth();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };

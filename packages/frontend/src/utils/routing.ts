@@ -1,4 +1,3 @@
-import { Cookie, useCookie } from "next-cookie";
 import { ICtx } from "./auth";
 
 const redirectTo = (redirectURL: string, ctx: ICtx, prevPath?: string) => {

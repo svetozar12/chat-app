@@ -9,7 +9,7 @@ export interface ICtx extends NextPageContext {
   resolvedUrl: string;
 }
 
-const withAuthSync = (getServerSideProps?: Function) => {
+const withAuthSync = (getServerSideProps?: any) => {
   return async (ctx: ICtx) => {
     const isUserAuth: any = await isAuth(ctx);
     const currPath = ctx.resolvedUrl;
@@ -32,7 +32,7 @@ const withAuthSync = (getServerSideProps?: Function) => {
   };
 };
 
-export const isAlreadyAuth = (getServerSideProps?: Function) => {
+export const isAlreadyAuth = (getServerSideProps?: any) => {
   return async (ctx: ICtx) => {
     const isUserAuth: any = await isAuth(ctx);
     const cookie = useCookie(ctx);

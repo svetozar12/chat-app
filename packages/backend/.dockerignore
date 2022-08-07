@@ -1,1 +1,5 @@
-npm-debug.log
+npm-debug.log/
+.eslintrc.js /
+.eslintignore /
+.gitignore / 
+.prettierrc/ 

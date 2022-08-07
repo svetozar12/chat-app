@@ -7,7 +7,7 @@ import Link from "next/link";
 import api_helper from "services/graphql/api_helper";
 import { getAuth } from "utils/authMethods";
 import { css } from "@emotion/css";
-import { Link as ALink, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Link as ALink, VStack } from "@chakra-ui/react";
 // icons
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";

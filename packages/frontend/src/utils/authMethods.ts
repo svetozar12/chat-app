@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { NextPageContext } from "next";
 import { Cookie, useCookie } from "next-cookie";
 import api_helper from "../services/graphql/api_helper";

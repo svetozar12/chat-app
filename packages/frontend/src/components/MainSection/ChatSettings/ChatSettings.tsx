@@ -9,7 +9,7 @@ import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { Heading, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Heading, HStack, VStack } from "@chakra-ui/react";
 import s from "./ChatSettings.module.css";
 import useThemeColors from "hooks/useThemeColors";
 

@@ -116,7 +116,7 @@ const chat = {
     }
   },
 
-  update: async (user_id: string, chat_id: string, token: string, username?: String, usersData?: string[]) => {
+  update: async (user_id: string, chat_id: string, token: string, username?: string, usersData?: string[]) => {
     try {
       const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
 

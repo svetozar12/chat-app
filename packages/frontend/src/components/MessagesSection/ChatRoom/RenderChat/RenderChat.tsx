@@ -9,7 +9,7 @@ import { IchatInstance } from "../ChatRoom";
 import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-import { Heading, HStack, IconButton, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
 import useThemeColors from "hooks/useThemeColors";
 
 interface IRenderChat {

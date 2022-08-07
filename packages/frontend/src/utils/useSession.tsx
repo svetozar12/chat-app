@@ -11,7 +11,6 @@ function useProvideAuth() {
     await checkTokens(cookie);
   };
 
-  if (cookie.getAll() === {}) return;
   const getUser = async () => {
     const user_id: string = cookie.get("id");
     const token: string = cookie.get("token");
@@ -24,6 +23,8 @@ function useProvideAuth() {
     checkSession();
     getUser();
   }, []);
+
+  if (cookie.getAll() === {}) return;
 
   return {
     user,

@@ -5,8 +5,7 @@ import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import { Global } from "@emotion/react";
 import Head from "next/dist/shared/lib/head";
 import { css } from "@emotion/css";
-import useThemeColors from "hooks/useThemeColors";
-import { Fade, ScaleFade, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
 
 const App = () => {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);

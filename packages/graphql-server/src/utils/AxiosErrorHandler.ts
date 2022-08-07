@@ -3,7 +3,8 @@ import axios, { AxiosError } from "axios";
 const AxiosErrorHandler = (error: AxiosError) => {
   if (axios.isAxiosError(error)) {
     const {
-      //   @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       response: { data },
     } = error;
     return data;

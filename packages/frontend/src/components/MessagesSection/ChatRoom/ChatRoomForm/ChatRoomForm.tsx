@@ -7,7 +7,7 @@ import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { getAuth } from "utils/authMethods";
 import generic from "utils/generic";
 import { useDispatch, useSelector } from "react-redux";
-import { Center, Flex, HStack, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
+import { Center, Flex, HStack, Spacer, Text } from "@chakra-ui/react";
 import s from "./ChatRoomForm.module.css";
 import useThemeColors from "hooks/useThemeColors";
 
