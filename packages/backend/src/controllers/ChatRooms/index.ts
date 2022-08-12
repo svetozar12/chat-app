@@ -1,15 +1,41 @@
 import { Router } from "express";
 import ChatRoomController from "./ChatRoomController";
 import errorHandler from "../../utils/error-helper";
-import { verifyToken } from "../../middlewares/useAuth";
+import Auth from "../../middlewares/Auth";
 import { constants } from "../../constants";
+// validation
+import * as Schemas from "../../common/schema";
+import Validator from "../../middlewares/Validator";
+import { CreateChatSchema, UpdateChatSchema } from "./schema";
 
 const route = Router();
 
-route.get("/:user_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.GetChatRoom));
-route.get("/", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.GetChatRooms));
-route.post("/", errorHandler(ChatRoomController.CreateChatRoom));
-route.put("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.UpdateChatRoom));
-route.delete("/:chat_id", verifyToken(constants.ACCESS_TOKEN as string), errorHandler(ChatRoomController.DeleteChatRoom));
+route.get(
+  "/:user_id",
+  Validator(Schemas.UserIdSchema, "params"),
+  Auth(constants.ACCESS_TOKEN as string),
+  errorHandler(ChatRoomController.GetChatRoom),
+);
+route.get(
+  "/",
+  Validator(Schemas.UserIdSchema, "query"),
+  Auth(constants.ACCESS_TOKEN as string),
+  errorHandler(ChatRoomController.GetChatRooms),
+);
+route.post("/", Validator(CreateChatSchema, "body"), errorHandler(ChatRoomController.CreateChatRoom));
+route.put(
+  "/:chat_id",
+  Validator(Schemas.ChatIdSchema, "params"),
+  Validator(UpdateChatSchema, "body"),
+  Auth(constants.ACCESS_TOKEN as string),
+  errorHandler(ChatRoomController.UpdateChatRoom),
+);
+route.delete(
+  "/:chat_id",
+  Validator(Schemas.ChatIdSchema, "params"),
+  Validator(Schemas.UserIdSchema, "body"),
+  Auth(constants.ACCESS_TOKEN as string),
+  errorHandler(ChatRoomController.DeleteChatRoom),
+);
 
 export { route as ChatRoomsRoute };

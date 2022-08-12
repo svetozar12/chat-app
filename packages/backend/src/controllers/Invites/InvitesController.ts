@@ -33,7 +33,7 @@ const InvitesController: IInviteController = {
       return next(CustomError.notFound("You don't have invites"));
     }
 
-    return res.status(200).json({ invites });
+    return res.status(200).json({ data: invites });
   },
 
   GetInvitesByInviter: async (req: Request, res: Response, next: NextFunction) => {
@@ -55,7 +55,7 @@ const InvitesController: IInviteController = {
 
     if (!invites || invites.length <= 0) return next(CustomError.notFound("You don't have accepted invites"));
 
-    return res.status(200).json({ invites });
+    return res.status(200).json({ data: invites });
   },
 
   CreateInvite: async (req: Request, res: Response, next: NextFunction) => {
@@ -70,14 +70,14 @@ const InvitesController: IInviteController = {
     if (!user || !reciever) return next(CustomError.notFound("User not found !"));
 
     const checkInviteInstance = await Invites.findOne({
-      user_id: user._id,
       reciever: reciever.username,
       inviter: user.username,
       $or: [{ status: "recieved" }, { status: "accepted" }],
     });
+    console.log(checkInviteInstance, "fred");
 
-    if (checkInviteInstance) return next(CustomError.conflict("Invite is already sent !"));
     if (req.body.reciever === user.username) return next(CustomError.conflict("Can't send invites to yourself !"));
+    if (checkInviteInstance) return next(CustomError.conflict("Invite is already sent !"));
 
     const invites = await new Invites({
       user_id: [user._id, reciever._id],
@@ -87,7 +87,7 @@ const InvitesController: IInviteController = {
     });
     await invites.save();
 
-    return res.status(201).json({ message: invites });
+    return res.status(201).json({ data: invites });
   },
   UpdateInvite: async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.invite_id;
@@ -109,7 +109,7 @@ const InvitesController: IInviteController = {
       { new: true },
     ).exec();
 
-    return res.json({ message: updateStatus });
+    return res.json({ data: updateStatus });
   },
 
   CreateGroupChat: async (req: Request, res: Response, next: NextFunction) => {
@@ -123,7 +123,7 @@ const InvitesController: IInviteController = {
     });
 
     await chat.save();
-    return res.status(201).json({ message: "group-chat was created", Message: chat });
+    return res.status(201).json({ Message: "group-chat was created", data: chat });
   },
 };
 

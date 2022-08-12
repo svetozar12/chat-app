@@ -18,7 +18,6 @@ const ChatRoomController: IChatRoomController = {
     const user_id = req.query.user_id;
     const user = await User.findOne({ _id: user_id }).exec();
     if (!user) return next(CustomError.notFound("User not found"));
-    console.log(user);
 
     const contacts = await Chats.find({ members: [user._id] }).exec();
     if (contacts.length <= 0) return next(CustomError.notFound("You don't have chat rooms"));
@@ -36,10 +35,8 @@ const ChatRoomController: IChatRoomController = {
     const invite_id = req.body.invite_id;
     const user1 = req.body.user1;
     const user2 = req.body.user2;
-    console.log(invite_id);
 
     const checkIfInviteExist = await Invites.findOne({ _id: invite_id });
-    console.log(checkIfInviteExist);
 
     const isUser1 = await User.findOne({ username: user1 });
     const isUser2 = await User.findOne({ username: user2 });
@@ -59,9 +56,10 @@ const ChatRoomController: IChatRoomController = {
     });
 
     await chat.save();
-    return res.status(201).json({ message: "chat-room was created", Message: chat });
+    return res.status(201).json({ Message: "chat-room was created", data: chat });
   },
-
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   UpdateChatRoom: async (req, res, next) => {
     const chat_id = req.params.chat_id;
     const added_user = req.body.usernames || [];
@@ -72,12 +70,16 @@ const ChatRoomController: IChatRoomController = {
     const users_array = users_rooms && users_rooms.members;
     let updated;
     let updated_array: Schema.Types.ObjectId[] = [];
+    console.log(users_rooms, req.body, "pencho petrohana");
 
-    if (!users_rooms) next(CustomError.notFound("Chat room not found ."));
+    if (!users_rooms) return next(CustomError.notFound("Chat room not found ."));
     if (users_array && deleted_user) updated_array = users_array.filter((item) => item !== deleted_user);
-    if (updated_array.length === 2) {
-      await Chats.deleteOne({ _id: chat_id }).exec();
-      return res.status(200).json({ message: "deleted chat-room" });
+    if (updated_array.length < 2) {
+      const isDublicate = await Chats.findOne({ _id: chat_id, data: updated_array });
+      if (isDublicate) {
+        await Chats.deleteOne({ _id: chat_id }).exec();
+        return res.status(200).json({ Message: "deleted chat-room" });
+      }
     }
     if (deleted_user) {
       updated = await Chats.findByIdAndUpdate(
@@ -96,7 +98,7 @@ const ChatRoomController: IChatRoomController = {
       );
     }
 
-    return res.status(200).json({ message: "Chat-room members were updated", Message: updated });
+    return res.status(200).json({ Message: "Chat-room members were updated", data: updated });
   },
 
   DeleteChatRoom: async (req, res, next) => {
