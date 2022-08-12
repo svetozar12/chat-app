@@ -6,7 +6,7 @@ import { constants } from "../../constants";
 // validation
 import * as Schemas from "../../common/schema";
 import Validator from "../../middlewares/Validator";
-import { UpdateChatSchema } from "./schema";
+import { CreateChatSchema, UpdateChatSchema } from "./schema";
 
 const route = Router();
 
@@ -22,7 +22,7 @@ route.get(
   Auth(constants.ACCESS_TOKEN as string),
   errorHandler(ChatRoomController.GetChatRooms),
 );
-route.post("/", errorHandler(ChatRoomController.CreateChatRoom));
+route.post("/", Validator(CreateChatSchema, "body"), errorHandler(ChatRoomController.CreateChatRoom));
 route.put(
   "/:chat_id",
   Validator(Schemas.ChatIdSchema, "params"),

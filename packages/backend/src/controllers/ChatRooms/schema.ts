@@ -27,8 +27,8 @@ export const UpdateChatSchema = Schema.UserIdSchema.keys({
     "string.min": `username should have a minimum length of {#limit}`,
     "string.max": `username should have a maximum length of {#limit}`,
   }),
-  usernames: Joi.array().messages({
-    "array.base": `usernames should be of type array`,
-    "array.empty": `usernames cannot be an empty field`,
+  usersData: Joi.array().messages({
+    "array.base": `usersData should be of type array`,
+    "array.empty": `usersData cannot be an empty field`,
   }),
 });

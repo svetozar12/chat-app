@@ -56,7 +56,7 @@ const ChatRoomController: IChatRoomController = {
     });
 
     await chat.save();
-    return res.status(201).json({ message: "chat-room was created", Message: chat });
+    return res.status(201).json({ Message: "chat-room was created", data: chat });
   },
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -75,10 +75,10 @@ const ChatRoomController: IChatRoomController = {
     if (!users_rooms) return next(CustomError.notFound("Chat room not found ."));
     if (users_array && deleted_user) updated_array = users_array.filter((item) => item !== deleted_user);
     if (updated_array.length < 2) {
-      const isDublicate = await Chats.findOne({ _id: chat_id, members: updated_array });
+      const isDublicate = await Chats.findOne({ _id: chat_id, data: updated_array });
       if (isDublicate) {
         await Chats.deleteOne({ _id: chat_id }).exec();
-        return res.status(200).json({ message: "deleted chat-room" });
+        return res.status(200).json({ Message: "deleted chat-room" });
       }
     }
     if (deleted_user) {
@@ -98,7 +98,7 @@ const ChatRoomController: IChatRoomController = {
       );
     }
 
-    return res.status(200).json({ message: "Chat-room members were updated", Message: updated });
+    return res.status(200).json({ Message: "Chat-room members were updated", data: updated });
   },
 
   DeleteChatRoom: async (req, res, next) => {

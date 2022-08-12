@@ -1,7 +1,7 @@
 import Joi = require("joi");
 
 export const UpdateUserSchema = Joi.object({
-  username: Joi.string().trim().alphanum().min(3).max(30).required().messages({
+  username: Joi.string().trim().alphanum().min(3).max(30).messages({
     "string.base": `username should be of type text`,
     "string.empty": `username cannot be an empty field`,
     "string.min": `username should have a minimum length of {#limit}`,
