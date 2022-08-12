@@ -1,6 +1,6 @@
 import { CustomError } from "./custom-error.model";
 import * as jwt from "jsonwebtoken";
-import TokenBL from "../models/TokenBL";
+import manageSessions from "./manageSessions";
 
 /**
  * signTokens utility function
@@ -24,6 +24,7 @@ const signTokens = (
       if (err) {
         return reject(CustomError.forbidden("Token has expired or invalid secret"));
       }
+      manageSessions(data._id, token as string, expires);
       return resolve(token);
     });
   });
