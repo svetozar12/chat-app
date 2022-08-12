@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { registerValidation, update_formValidation } from "../../utils/schema";
+// import { registerValidation, update_formValidation } from "../../validators/schema";
 // models
 import User from "../../models/User.model";
 import Invites from "../../models/Invites.model";
@@ -22,13 +22,11 @@ const UsersController: IUsersController = {
   },
 
   CreateUser: async (req: Request, res: Response, next: NextFunction) => {
-    const { error } = registerValidation(req.body);
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
     const gender = req.body.gender;
 
-    if (error) return next(CustomError.conflict(error.message));
     const users = await User.findOne({ username }).exec();
     if (users) return next(CustomError.conflict(`User already exists !`));
 
@@ -47,20 +45,19 @@ const UsersController: IUsersController = {
 
     await user.save();
     await chat.save();
-    return res.status(201).send({ message: `User ${req.body.username} created` });
+    return res.status(201).send({ Message: `User ${req.body.username} created` });
   },
 
   UpdateUser: async (req: Request, res: Response, next: NextFunction) => {
-    const { error } = update_formValidation(req.body);
     const id = req.params.user_id;
     const username = req.body.username;
+
     let email = req.body.email;
     const gender = req.body.gender;
     const userAvatar = req.file?.filename;
     const users = await User.findOne({ _id: id }).exec();
     const user_id = users?._id;
     if (!email) email = users?.email;
-    if (error) return next(CustomError.conflict(error.message));
     if (!users) return next(CustomError.notFound("User wasn't found !" + id));
 
     await User.findByIdAndUpdate(user_id, {
@@ -69,7 +66,7 @@ const UsersController: IUsersController = {
       gender: gender ? gender : users.gender,
       userAvatar: email ? userAvatar : users.userAvatar,
     });
-    return res.status(200).send({ message: `User ${username} info updated` });
+    return res.status(200).send({ Message: `User ${username || users.username} info updated` });
   },
 
   DeleteUser: async (req: Request, res: Response, next: NextFunction) => {
@@ -88,7 +85,7 @@ const UsersController: IUsersController = {
     await Chats.deleteMany({
       members: { $all: [user_id] },
     }).exec();
-    return res.status(200).json({ message: `User ${user_id} deleted` });
+    return res.status(200).json({ Message: `User ${user_id} deleted` });
   },
 };
 
