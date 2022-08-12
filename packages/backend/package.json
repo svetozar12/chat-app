@@ -5,14 +5,17 @@
   "main": "/dist/index.js",
   "scripts": {
     "build": "tsc --build",
+    "pretest": "yarn dev:test",
     "test": "set NODE_ENV=test && jest  --runInBand --detectOpenHandles --forceExit",
-    "test-failed": "yarn test --only-failures",
     "coverage": "yarn test --coverage",
     "server": "set NODE_ENV=development && nodemon dist/index.js",
     "watch": "tsc --watch",
     "lint": "eslint src",
+    "predev": "yarn dev:db",
     "dev": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
     "dev:backend": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
+    "dev:db": "docker compose -f ./local_db_compose/docker-compose.yml up -d",
+    "test:db": "docker compose -f ./local_db_compose/docker-compose-test.yml up -d",
     "start:production": "set NODE_ENV=production && node dist/index.js",
     "format": "prettier --write **/*.{js,ts,tsx}"
   },
