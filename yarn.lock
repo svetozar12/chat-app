@@ -2046,11 +2046,6 @@
     "@emotion/weak-memoize" "^0.3.0"
     stylis "4.0.13"
 
-"@emotion/core@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.npmjs.org/@emotion/core/-/core-11.0.0.tgz#d075867e07864119de7cfd5268c15012bd2d6290"
-  integrity sha512-w4sE3AmHmyG6RDKf6mIbtHpgJUSJ2uGvPQb8VXFL7hFjMPibE8IiehG8cMX3Ztm4svfCQV6KqusQbeIOkurBcA==
-
 "@emotion/css-prettifier@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@emotion/css-prettifier/-/css-prettifier-1.1.0.tgz#1b5ac1588af9525e583f56fa898abb7edb3c7d9e"
@@ -11110,7 +11105,7 @@ next-redux-wrapper@^7.0.5:
   resolved "https://registry.npmjs.org/next-redux-wrapper/-/next-redux-wrapper-7.0.5.tgz#109cd3fe02183b18fbd094924cfcbd21262039dc"
   integrity sha512-UFXdAWG5i+GFT8+Hoqpx3GArkPh34fVWF9YoA2VSHlBzsrPtnRd7NWM6FNSYUennpommTpWJ09mu+r/1UxyIkg==
 
-next@^12.2.5:
+next@^12.0.0:
   version "12.2.5"
   resolved "https://registry.npmjs.org/next/-/next-12.2.5.tgz#14fb5975e8841fad09553b8ef41fe1393602b717"
   integrity sha512-tBdjqX5XC/oFs/6gxrZhjmiq90YWizUYU6qOWAfat7zJwrwapJ+BYgX2PmiacunXMaRpeVT4vz5MSPSLgNkrpA==
