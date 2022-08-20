@@ -1,6 +1,5 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-// eslint-disable-next-line import/named
 import { Box, BoxProps, Text } from '@chakra-ui/react';
 import { IBaseComponent } from '../types';
 

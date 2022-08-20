@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Center, CenterProps, Link as AnchorLink } from '@chakra-ui/react';
 import React from 'react';
 import Link from 'next/dist/client/link';

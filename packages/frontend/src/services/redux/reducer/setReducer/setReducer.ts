@@ -1,6 +1,5 @@
 import { AnyAction } from 'redux';
 import { ActionType } from '../../types';
-// eslint-disable-next-line import/named
 import { IInitialSet } from './state';
 
 export const initialState: IInitialSet | IInitialSet[] = {

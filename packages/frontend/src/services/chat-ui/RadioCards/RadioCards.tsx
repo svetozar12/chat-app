@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Box, BoxProps, useRadio, UseRadioProps } from '@chakra-ui/react';
 import { IBaseComponent } from 'services/chat-ui/types';
 

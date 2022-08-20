@@ -1,5 +1,3 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { NextPageContext } from 'next';
 import { Cookie, useCookie } from 'next-cookie';

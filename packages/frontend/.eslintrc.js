@@ -5,7 +5,7 @@ module.exports = {
     jest: true,
     node: true,
   },
-  extends: ['plugin:react/recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: ['plugin:react/recommended', 'plugin:@typescript-eslint/recommended', 'prettier', 'next/core-web-vitals'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Box, BoxProps } from '@chakra-ui/react';
 import { css, cx } from '@emotion/css';
 import { GiHamburgerMenu } from 'react-icons/gi';

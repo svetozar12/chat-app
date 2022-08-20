@@ -1,6 +1,5 @@
 import React from 'react';
 // components
-// eslint-disable-next-line import/named
 import { FormControl, Box, Heading, VStack, Flex, ScaleFade, FlexProps } from '@chakra-ui/react';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { IBaseComponent } from '../types';
