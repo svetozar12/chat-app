@@ -1,12 +1,12 @@
-import ISave_inputState from "./state";
-import { HYDRATE } from "next-redux-wrapper";
-import { ActionType } from "../../types";
+import { HYDRATE } from 'next-redux-wrapper';
+import ISave_inputState from './state';
+import { ActionType } from '../../types';
 
 export const initialState: ISave_inputState | ISave_inputState[] = {
-  input_username: "",
-  input_password: "",
-  input_email: "",
-  input_gender: "other",
+  input_username: '',
+  input_password: '',
+  input_email: '',
+  input_gender: 'other',
   input_file: null,
   notification_number: 0,
 };

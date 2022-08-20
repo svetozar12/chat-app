@@ -1,21 +1,21 @@
-import { css, cx } from "@emotion/css";
-import React from "react";
-import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
+import { css, cx } from '@emotion/css';
+import React from 'react';
+import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
+import { useDispatch, useSelector } from 'react-redux';
 // components
-import MessageSettings from "./MessageSettings";
-import { IchatInstance } from "../ChatRoom";
+import { useCookie } from 'next-cookie';
+import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
+import MessageSettings from './MessageSettings';
+import { IchatInstance } from '../ChatRoom';
 // services
-import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
-import api_helper from "services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
-import useThemeColors from "hooks/useThemeColors";
+import { InitialStateMessage } from '../../../../services/redux/reducer/messageReducer/state';
+import apiHelper from '../../../../services/graphql/apiHelper';
+import useThemeColors from '../../../../hooks/useThemeColors';
 
 interface IRenderChat {
   id: string;
   sender: string;
-  time_stamp: string | number;
+  timeStamp: string | number;
   message: string;
   chatId: string;
 }
@@ -34,22 +34,20 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
+function RenderChat({ id, sender, timeStamp, message }: IRenderChat) {
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const dispatch = useDispatch();
   const cookie = useCookie();
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
-  const [editedMessage, setEditedMessage] = React.useState("");
+  const [editedMessage, setEditedMessage] = React.useState('');
   const [width, setWidth] = React.useState(112);
   const [height, setHeight] = React.useState(48);
   const inputRef = React.useRef<HTMLDivElement>(null);
 
-  const name = cookie.get("name");
-  const checkSettingsOpt = () => {
-    return styleBool || settings;
-  };
+  const name = cookie.get('name');
+  const checkSettingsOpt = () => styleBool || settings;
 
   const optionsPadding = cx(
     css`
@@ -61,7 +59,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       cursor: pointer;
       color: var(--main-black);
       display: flex;
-      visibility: ${checkSettingsOpt() ? "vissible" : "hidden"};
+      visibility: ${checkSettingsOpt() ? 'vissible' : 'hidden'};
       &:hover {
         background: rgba(0, 0, 0, 0.1);
       }
@@ -69,7 +67,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         border: 1px solid rgba(0, 0, 255, 0.2);
       }
     `,
-    "flex",
+    'flex',
   );
 
   const dothStyle = css`
@@ -78,28 +76,28 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   `;
 
   const ToggleSettings = () => {
-    dispatch({ type: "SHOW_SETTINGS", payload: !messageState.show });
-    if (settings === true) setEditing(false);
+    dispatch({ type: 'SHOW_SETTINGS', payload: !messageState.show });
+    if (settings) setEditing(false);
     setSettings(!messageState.show);
   };
 
   const handleEdit = async (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    e.target.style.height = "15px";
+    e.target.style.height = '15px';
     e.target.style.height = `${target.scrollHeight}px`;
     e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       const messageArr: IchatInstance[] = [];
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          await api_helper.message.update(cookie.get("id"), id, editedMessage, cookie.get("token"));
-          dispatch({ type: "RESET_MESSAGES" });
+          await apiHelper.message.update(cookie.get('id'), id, editedMessage, cookie.get('token'));
+          dispatch({ type: 'RESET_MESSAGES' });
         }
         messageArr.push(obj);
       }
       messageArr.forEach((element) => {
-        dispatch({ type: "MESSAGES", payload: element });
+        dispatch({ type: 'MESSAGES', payload: element });
       });
       setEditing(false);
     }
@@ -107,14 +105,14 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
 
   React.useEffect(() => {
     setEditedMessage(message);
-    if (inputRef.current) {
+    if (inputRef.current != null) {
       setWidth(inputRef.current.offsetWidth);
       setHeight(inputRef.current.offsetHeight);
     }
   }, []);
 
   const {
-    colors: { color, chat_bg, chat_message_bg_color },
+    colors: { color, chatBg, chatMessageBgColor },
   } = useThemeColors();
 
   return (
@@ -127,9 +125,9 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         setStyleBool(true);
       }}
       className={cx(
-        "flex",
+        'flex',
         css`
-          justify-content: ${name === sender ? "flex-end" : "flex-start"};
+          justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
           width: 100%;
         `,
         { [mineMessages]: name === sender },
@@ -140,7 +138,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         color={color}
         fontSize="lg"
         className={css`
-          justify-content: ${name === sender ? "flex-end" : "flex-start"};
+          justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
           font-size: 15px;
         `}
       >
@@ -148,19 +146,19 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       </Heading>
       <div
         className={cx(
-          "flex",
+          'flex',
           css`
             width: 100%;
-            justify-content: ${name === sender ? "flex-end" : "flex-start"};
+            justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
           `,
         )}
       >
         <div
           className={cx(
-            "flex",
+            'flex',
             css`
               width: 100%;
-              justify-content: ${name === sender ? "flex-end" : "flex-start"};
+              justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
             `,
           )}
         >
@@ -185,7 +183,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                       `}
                     />
                   }
-                ></IconButton>
+                />
               </div>
             </div>
           )}
@@ -196,9 +194,9 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
             minH="3rem"
             overflow="hidden"
             color="white"
-            bg={name === sender ? chat_message_bg_color : chat_bg}
+            bg={name === sender ? chatMessageBgColor : chatBg}
             ref={inputRef}
-            title={time_stamp.toString()}
+            title={timeStamp.toString()}
           >
             {editing ? (
               <textarea
@@ -216,14 +214,14 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                 autoFocus
                 autoCorrect="off"
                 onChange={(e) => setEditedMessage(e.target.value)}
-                onKeyDown={(e) => handleEdit(e)}
+                onKeyDown={async (e) => await handleEdit(e)}
               >
                 {editedMessage}
               </textarea>
             ) : (
               <span
                 className={cx(
-                  "flex",
+                  'flex',
                   css`
                     padding: 1rem 0.5rem;
                   `,
@@ -249,6 +247,6 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       </div>
     </HStack>
   );
-};
+}
 
 export default React.memo(RenderChat);

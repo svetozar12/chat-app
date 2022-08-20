@@ -9,6 +9,8 @@
 build
 
 # Runtime data
+database.sqlite
+
 # Test coverage
 coverage
 
@@ -16,15 +18,27 @@ coverage
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Editors and IDEs
+.idea
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Misc
+.DS_Store
 public/
 docs/
 build/
+netfield-sdk-node/
+pts-sdk-node/
 src/assets/
-packages/**/node_modules/
-packages/**/build/
+tools/
+src/constants/semanticUIIcons.js
+tests/
+lib/**/node_modules/
+lib/**/build/
+lib/
 next-env.d.ts

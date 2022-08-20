@@ -1,8 +1,8 @@
-import React from "react";
-import Single_avatar from "./Single_avatar";
-import Group_avatar from "./Group_avatar";
-import { useCookie } from "next-cookie";
-import { HStack } from "@chakra-ui/react";
+import React from 'react';
+import { useCookie } from 'next-cookie';
+import { HStack } from '@chakra-ui/react';
+import Single_avatar from './Single_avatar';
+import Group_avatar from './Group_avatar';
 
 interface IAvatar {
   inviter: string;
@@ -13,7 +13,7 @@ interface IAvatar {
 function Avatar({ members }: IAvatar) {
   const cookie = useCookie();
   return (
-    <HStack w="4rem" h="4rem" data-testid="avatar" title={cookie.get("username")}>
+    <HStack w="4rem" h="4rem" data-testid="avatar" title={cookie.get('username')}>
       {members.length <= 2 ? (
         <div>
           <Single_avatar />

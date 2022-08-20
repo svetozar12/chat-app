@@ -1,20 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable react/prop-types */
+import { useDispatch, useSelector } from 'react-redux';
 // services
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from "@chakra-ui/react";
-import React from "react";
-import DefaultLink from "../DefaultLink";
-import RadioCard from "../RadioCards/RadioCards";
-import api_helper from "../../services/graphql/api_helper";
-import { useFormik } from "formik";
-import { RegisterSchema } from "../../utils/validation";
+import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from '@chakra-ui/react';
+import React from 'react';
+import { useFormik } from 'formik';
+import { IAuthState } from '../../services/redux/reducer/authReducer/state';
+import DefaultLink from '../../services/chat-ui/DefaultLink';
+import RadioCard from '../../services/chat-ui/RadioCards/RadioCards';
+import api_helper from '../../services/graphql/apiHelper';
+import { RegisterSchema } from '../../utils/validation';
 // components
-import QuickLogin_Modal from "./QuickLogin_Modal";
-import FormWrapper from "../FormWrapper";
-import useThemeColors from "hooks/useThemeColors";
+import QuickLogin_Modal from './QuickLogin_Modal';
+import FormWrapper from '../../services/chat-ui/FormWrapper';
+import useThemeColors from '../../hooks/useThemeColors';
 
 interface IRegisterForm {
-  // eslint-disable-next-line no-unused-vars
   quickLogin: () => Promise<boolean>;
 }
 
@@ -26,68 +26,76 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     username: string;
     email: string;
     password: string;
-    gender: "male" | "female";
+    gender: 'Male' | 'Female' | 'Other';
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
     const register = await api_helper.user.create(username, email, password, gender);
-    dispatch({ type: "SAVE_INPUT_USERNAME", payload: username });
-    dispatch({ type: "SAVE_INPUT_PASSWORD", payload: password });
-    dispatch({ type: "SAVE_INPUT_EMAIL", payload: email });
-    dispatch({ type: "SAVE_INPUT_GENDER", payload: gender });
-    if (await register) dispatch({ type: "QUICK_LOGIN", payload: true });
+    dispatch({ type: 'SAVE_INPUT_USERNAME', payload: username });
+    dispatch({ type: 'SAVE_INPUT_PASSWORD', payload: password });
+    dispatch({ type: 'SAVE_INPUT_EMAIL', payload: email });
+    dispatch({ type: 'SAVE_INPUT_GENDER', payload: gender });
+    if (await register) dispatch({ type: 'QUICK_LOGIN', payload: true });
     else {
-      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
-      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
-      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
-      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+      dispatch({ type: 'SAVE_INPUT_USERNAME', payload: '' });
+      dispatch({ type: 'SAVE_INPUT_PASSWORD', payload: '' });
+      dispatch({ type: 'SAVE_INPUT_EMAIL', payload: '' });
+      dispatch({ type: 'SAVE_INPUT_GENDER', payload: '' });
     }
   };
 
-  const handleGenderChange = (value) => {
+  const handleGenderChange = (value: any) => {
     dispatch({
-      type: "SAVE_INPUT_GENDER",
+      type: 'SAVE_INPUT_GENDER',
       payload: value,
     });
   };
 
   const { getRootProps, getRadioProps } = useRadioGroup({
-    name: "gender",
-    defaultValue: "Male",
+    name: 'gender',
+    defaultValue: 'Male',
     onChange: handleGenderChange,
   });
 
   const group = getRootProps();
-  const genderOptions = ["Male", "Female"];
-  const renderInputs = [
+  const genderOptions = ['Male', 'Female'];
+  interface IRenderInputs {
+    label: string;
+    props: {
+      type: string;
+      name: 'username' | 'password' | 'email';
+      placeholder: string;
+    };
+  }
+  const renderInputs: IRenderInputs[] = [
     {
-      label: "Username",
+      label: 'Username',
       props: {
-        type: "text",
-        name: "username",
-        placeholder: "username ...",
+        type: 'text',
+        name: 'username',
+        placeholder: 'username ...',
       },
     },
     {
-      label: "Password",
+      label: 'Password',
       props: {
-        type: "password",
-        name: "password",
-        placeholder: "password ...",
+        type: 'password',
+        name: 'password',
+        placeholder: 'password ...',
       },
     },
     {
-      label: "Email",
+      label: 'Email',
       props: {
-        type: "email",
-        name: "email",
-        placeholder: "email ...",
+        type: 'email',
+        name: 'email',
+        placeholder: 'email ...',
       },
     },
   ];
 
   const formik = useFormik({
-    initialValues: { username: "", password: "", email: "", gender: "Male" },
+    initialValues: { username: '', password: '', email: '', gender: 'Male' },
     validationSchema: RegisterSchema,
     onSubmit: (values: IValues) => {
       handleSubmit(values);
@@ -95,7 +103,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
   });
 
   const {
-    colors: { form_button },
+    colors: { formButton },
   } = useThemeColors();
 
   return (
@@ -104,8 +112,11 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
         <>
           {renderInputs.map((element, index) => {
             const { props } = element;
+            const { name } = props;
+            const isInvalid = Boolean(formik.errors[name] && formik.touched[name]);
+
             return (
-              <FormControl isInvalid={formik.errors[props.name] && formik.touched[props.name]} key={index}>
+              <FormControl isInvalid={isInvalid} key={index}>
                 <FormLabel>{element.label}</FormLabel>
                 <Input {...formik.getFieldProps(props.name)} variant="FormInput" {...props} />
                 {formik.errors[props.name] && (
@@ -125,14 +136,14 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
               const radio = getRadioProps({ value });
               return (
                 <RadioCard {...formik.getFieldProps(value)} key={value} {...radio}>
-                  {value}
+                  {value as any}
                 </RadioCard>
               );
             })}
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button colorScheme={form_button} w="60%" type="submit">
+          <Button colorScheme={formButton} w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />

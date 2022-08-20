@@ -1,1 +1,1 @@
-export { default } from "./UserSettings";
+export { default } from './UserSettings';

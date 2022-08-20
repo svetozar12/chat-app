@@ -1,22 +1,22 @@
-import { api } from "../api_helper";
+import { api } from '../apiHelper';
 
-const rootUrl = "";
+const rootUrl = '';
 
 export interface IChat {
-  user_id: string;
+  userId: string;
   invite_id: string;
   user1: string;
   user2: string;
 }
 
 const chat = {
-  getAll: async (user_id: string, token: string) => {
+  getAll: async (userId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
           query {
-            getAllChats(user_id:"${user_id}",token:"${token}") {
+            getAllChats(userId:"${userId}",token:"${token}") {
               _id
               members
             }
@@ -45,13 +45,13 @@ const chat = {
     }
   },
 
-  getById: async (chat_id: string, user_id: string, token: string) => {
+  getById: async (chatId: string, userId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         query {
-          getChatById(chat_id: "${chat_id}",user_id: "${user_id}",token:"${token}") {
+          getChatById(chatId: "${chatId}",userId: "${userId}",token:"${token}") {
             _id
             members
           }
@@ -85,7 +85,7 @@ const chat = {
         data: {
           query: `
         mutation {
-          createChat(chat:{user_id:"${chat.user_id}",invite_id:"${chat.invite_id}",user1:"${chat.user1}",user2:"${chat.user2}"},token:"${token}") {
+          createChat(chat:{userId:"${chat.userId}",invite_id:"${chat.invite_id}",user1:"${chat.user1}",user2:"${chat.user2}"},token:"${token}") {
             data {
               _id
               members
@@ -116,15 +116,16 @@ const chat = {
     }
   },
 
-  update: async (user_id: string, chat_id: string, token: string, username?: string, usersData?: string[]) => {
+  update: async (userId: string, chatId: string, token: string, username?: string, usersData?: string[]) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
 
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          updateChat(user_id:"${user_id}",chat_id:"${chat_id}",token:"${token}",${condition}) {
+          updateChat(userId:"${userId}",chatId:"${chatId}",token:"${token}",${condition}) {
             _id
             memberrs
           }
@@ -152,13 +153,13 @@ const chat = {
     }
   },
 
-  delete: async (user_id: string, chat_id: string, token: string) => {
+  delete: async (userId: string, chatId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          deleteChat(user_id:"${user_id}",chat_id:"${chat_id}",token:"${token}") {
+          deleteChat(userId:"${userId}",chatId:"${chatId}",token:"${token}") {
             Message
           }
          }`,

@@ -1,1 +1,1 @@
-export { default } from "./FindFriends";
+export { default } from './FindFriends';

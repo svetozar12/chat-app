@@ -26,14 +26,17 @@
     "graphql": "^16.3.0"
   },
   "devDependencies": {
+    "@jsdragon12/eslint-config": "latest",
+    "@jsdragon12/prettier-config": "latest",
+    "@jsdragon12/typescript-config": "latest",
     "@types/node-fetch": "^2.6.1",
+    "babel-jest": "^28.1.0",
     "eslint": "^8.17.0",
     "eslint-plugin-graphql": "^4.0.0",
     "express": "^4.17.3",
-    "babel-jest": "^28.1.0",
     "jest": "^28.1.0",
+    "kill-port": "^2.0.0",
     "nodemon": "^2.0.16",
-    "ts-node": "^10.8.1",
-    "kill-port": "^2.0.0"
+    "ts-node": "^10.8.1"
   }
 }

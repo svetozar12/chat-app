@@ -1,79 +1,79 @@
-import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from "@chakra-ui/react";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ISave_inputState from "../../../services/redux/reducer/save_inputReducer/state";
-import UpdateInfoDetails from "./UpdateInfoDetails";
+import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ISave_inputState from '../../../services/redux/reducer/save_inputReducer/state';
+import UpdateInfoDetails from './UpdateInfoDetails';
 
 interface IUpdateInfoForm {
   image: string;
   setImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
+function UpdateInfoForm({ image }: IUpdateInfoForm) {
   const dispatch = useDispatch();
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
-  const color = useColorModeValue("black", "white");
+  const color = useColorModeValue('black', 'white');
 
   const InputsLayout = [
     {
-      label: "Username",
+      label: 'Username',
       labelProps: {
-        htmlFor: "username",
-        fontWeight: "bold",
-        fontSize: "xl",
+        htmlFor: 'username',
+        fontWeight: 'bold',
+        fontSize: 'xl',
       },
       props: {
-        variant: "FormInput",
-        type: "username",
+        variant: 'FormInput',
+        type: 'username',
         value: state.input_username,
-        id: "username",
-        w: "full",
-        onChange: (e) =>
+        id: 'username',
+        w: 'full',
+        onChange: (e: any) =>
           dispatch({
-            type: "SAVE_INPUT_USERNAME",
+            type: 'SAVE_INPUT_USERNAME',
             payload: e.target.value,
           }),
-        color: color,
+        color,
       },
     },
     {
-      label: "Email",
+      label: 'Email',
       labelProps: {
-        htmlFor: "email",
-        fontWeight: "bold",
-        fontSize: "xl",
+        htmlFor: 'email',
+        fontWeight: 'bold',
+        fontSize: 'xl',
       },
       props: {
-        variant: "FormInput",
-        type: "email",
+        variant: 'FormInput',
+        type: 'email',
         value: state.input_email,
-        w: "full",
-        id: "email",
-        color: color,
-        onChange: (e) =>
+        w: 'full',
+        id: 'email',
+        color,
+        onChange: (e: any) =>
           dispatch({
-            type: "SAVE_INPUT_EMAIL",
+            type: 'SAVE_INPUT_EMAIL',
             payload: e.target.value,
           }),
       },
     },
     {
-      label: "",
+      label: '',
       labelProps: {
-        htmlFor: "file",
-        fontWeight: "bold",
-        fontSize: "xl",
+        htmlFor: 'file',
+        fontWeight: 'bold',
+        fontSize: 'xl',
       },
       props: {
-        variant: "FormInput",
-        type: "file",
-        id: "file",
-        color: color,
+        variant: 'FormInput',
+        type: 'file',
+        id: 'file',
+        color,
         value: state.input_file,
-        display: "none",
-        onChange: (e) =>
+        display: 'none',
+        onChange: (e: any) =>
           dispatch({
-            type: "SAVE_INPUT_FILE",
+            type: 'SAVE_INPUT_FILE',
             payload: e.target.value,
           }),
       },
@@ -113,6 +113,6 @@ const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
       </GridItem>
     </SimpleGrid>
   );
-};
+}
 
 export default UpdateInfoForm;

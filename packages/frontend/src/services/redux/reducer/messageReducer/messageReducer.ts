@@ -1,5 +1,6 @@
-import { ActionType } from "../../types";
-import { InitialStateMessage } from "./state";
+import { ActionType } from '../../types';
+import { InitialStateMessage } from './state';
+
 export const initialState: InitialStateMessage = {
   messages: [],
   show: false,
@@ -26,9 +27,7 @@ const messageReducer = (state = initialState, action: any) => {
     case ActionType.DELETE_MESSAGE:
       return {
         ...state,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        messages: state.messages.filter((message) => message._id != action.payload),
+        messages: state.messages.filter((message) => message._id !== action.payload),
       };
     case ActionType.RESET_MESSAGES:
       return initialState;

@@ -1,10 +1,10 @@
-import React from "react";
-import Link from "next/link";
-import { useDispatch } from "react-redux";
-import Loading from "../../Loading";
-import { Button, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
+import React from 'react';
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { Button, GridItem, HStack, SimpleGrid } from '@chakra-ui/react';
+import Loading from '../../Loading';
 
-const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }) => {
+function QuickLoginModal({ quickLogin }: { quickLogin: () => Promise<boolean> }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -14,7 +14,7 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
         gap={4}
         placeItems="center"
         columns={2}
-        w={{ base: "95%", md: "80%", lg: "50%", xl: "30%" }}
+        w={{ base: '95%', md: '80%', lg: '50%', xl: '30%' }}
         bg="white"
         h="40%"
         p={4}
@@ -35,7 +35,7 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
         </GridItem>
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Link href="/" passHref>
-            <Button colorScheme="blue" w="full" onClick={() => dispatch({ type: "QUICK_LOGIN", payload: false })}>
+            <Button colorScheme="blue" w="full" onClick={() => dispatch({ type: 'QUICK_LOGIN', payload: false })}>
               Sign up
             </Button>
           </Link>
@@ -43,6 +43,6 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
       </SimpleGrid>
     </HStack>
   );
-};
+}
 
-export default QuickLogin_Modal;
+export default QuickLoginModal;

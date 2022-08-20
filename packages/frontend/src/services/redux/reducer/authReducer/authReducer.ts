@@ -1,10 +1,11 @@
-import { HYDRATE } from "next-redux-wrapper";
-import { IAuthState } from "./state";
-import { ActionType } from "../../types";
+import { HYDRATE } from 'next-redux-wrapper';
+import { IAuthState } from './state';
+import { ActionType } from '../../types';
+
 export const initialState: IAuthState = {
   remember_me: false,
-  good: "", //good and bad stand for good alert and bad alert
-  bad: "",
+  good: '', // good and bad stand for good alert and bad alert
+  bad: '',
   ws: null,
   loginPrompt: false,
 };

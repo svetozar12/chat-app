@@ -1,14 +1,14 @@
-import React from "react";
-import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
-import { Iinvites } from "../../../pages/[acc]";
-import { css } from "@emotion/css";
-import Single_avatar from "../../Avatar/Single_avatar";
+import React from 'react';
+import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
+import { css } from '@emotion/css';
+import { useCookie } from 'next-cookie';
+import { useSelector } from 'react-redux';
+import { Button, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
+import { Iinvites } from '../../../pages/[acc]';
+import Single_avatar from '../../Avatar/Single_avatar';
 // services
-import api_helper from "../../../services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { useSelector } from "react-redux";
-import { IAuthState } from "../../../services/redux/reducer/authReducer/state";
-import { Button, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
+import api_helper from '../../../services/graphql/apiHelper';
+import { IAuthState } from '../../../services/redux/reducer/authReducer/state';
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -17,20 +17,20 @@ interface IPendingChats extends Iinvites {
   reciever: string;
 }
 
-const PendingChats = ({ _id, inviter, reciever, status }: IPendingChats) => {
+function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const cookie = useCookie();
-  const id = cookie.get("id") as string;
-  const invite_id = _id;
-  const token = cookie.get("token") as string;
+  const id: string = cookie.get('id');
+  const inviteId = _id;
+  const token: string = cookie.get('token');
 
   const emitFriendRequest = async () => {
-    authState.ws?.emit("friend_request");
+    authState.ws?.emit('friend_request');
   };
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await api_helper.invite.update(id, invite_id, param, token);
+      await api_helper.invite.update(id, inviteId, param, token);
       emitFriendRequest();
 
       return true;
@@ -41,36 +41,36 @@ const PendingChats = ({ _id, inviter, reciever, status }: IPendingChats) => {
 
   const createChatRoom = async () => {
     try {
-      await api_helper.chatroom.create({ user_id: id, invite_id: _id, user1: inviter, user2: reciever }, token);
+      await api_helper.chatroom.create({ userId: id, invite_id: _id, user1: inviter, user2: reciever }, token);
       emitFriendRequest();
     } catch (error) {
       return false;
     }
   };
 
-  const isRecieved = status === "recieved" && inviter !== cookie.get("name");
+  const isRecieved = status === 'recieved' && inviter !== cookie.get('name');
 
   const buttons = [
     {
       Svg: AiFillCheckCircle,
       Button,
       props: {
-        bg: "transparent",
-        color: "green.500",
-        transition: "0.2s",
-        _hover: { opacity: "0.8", transition: "0.2s" },
-        onClick: () => createChatRoom(),
+        bg: 'transparent',
+        color: 'green.500',
+        transition: '0.2s',
+        _hover: { opacity: '0.8', transition: '0.2s' },
+        onClick: async () => await createChatRoom(),
       },
     },
     {
       Svg: AiFillCloseCircle,
       Button,
       props: {
-        bg: "transparent",
-        color: "red.600",
-        transition: "0.2s",
-        _hover: { opacity: "0.8", transition: "0.2s" },
-        onClick: () => updateInviteStatus("declined"),
+        bg: 'transparent',
+        color: 'red.600',
+        transition: '0.2s',
+        _hover: { opacity: '0.8', transition: '0.2s' },
+        onClick: async () => await updateInviteStatus('declined'),
       },
     },
   ];
@@ -104,6 +104,6 @@ const PendingChats = ({ _id, inviter, reciever, status }: IPendingChats) => {
       )}
     </HStack>
   );
-};
+}
 
 export default PendingChats;

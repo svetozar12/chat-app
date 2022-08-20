@@ -1,15 +1,22 @@
 {
-  "include": ["src/**/*", "../backend/src/models/custom-error.model.ts"],
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
     "target": "es5",
-    "module": "commonjs",
-    "esModuleInterop": false,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "types": ["node", "@types/jest"],
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "rootDir": "src",
-    "outDir": "dist",
-    "typeRoots": ["./node_modules/@types"]
-  }
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": true
+  },
+  "include": ["./**/*.ts", "src"],
+  "exclude": ["node_modules/**/*", "cypress"],
+  "lib": ["es2017", "dom", "ES6", "es2015.core"]
 }

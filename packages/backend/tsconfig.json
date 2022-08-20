@@ -1,15 +1,22 @@
 {
-  "exclude": ["src/__test__/**/*", "src/__test__/setupTests.ts"],
-  "include": ["src/**/*"],
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
     "target": "es5",
-    "module": "commonjs",
-    "esModuleInterop": false,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "types": ["node", "@types/jest"],
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "outDir": "dist",
-    "typeRoots": ["./node_modules/@types", "./src/custom_typings"]
-  }
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": true
+  },
+  "include": ["./**/*.ts", "src"],
+  "exclude": ["node_modules/**/*", "cypress"],
+  "lib": ["es2017", "dom", "ES6", "es2015.core"]
 }

@@ -1,20 +1,13 @@
-import { css } from "@emotion/css";
-import React from "react";
-import UserSettings from "./UserSettings";
+import { css } from '@emotion/css';
+import React from 'react';
 // icons
-
-import { MdDarkMode } from "react-icons/md";
-import { AiOutlineUsergroupAdd } from "react-icons/ai";
-import { BsFillSunFill, BsThreeDots } from "react-icons/bs";
-import { IoNotifications } from "react-icons/io5";
+import { MdDarkMode } from 'react-icons/md';
+import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import { BsFillSunFill, BsThreeDots } from 'react-icons/bs';
+import { IoNotifications } from 'react-icons/io5';
 // services
-import s from "./FindFriendsHeader.module.css";
-import ISave_inputState from "services/redux/reducer/save_inputReducer/state";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import api_helper from "services/graphql/api_helper";
-// hooks
-import { useDispatch, useSelector } from "react-redux";
-import { useCookie } from "next-cookie";
+import { useDispatch, useSelector } from 'react-redux';
+import { useCookie } from 'next-cookie';
 import {
   Center,
   Circle,
@@ -27,24 +20,30 @@ import {
   useColorMode,
   IconButton,
   useColorModeValue,
-} from "@chakra-ui/react";
-import { motion, AnimatePresence } from "framer-motion";
+} from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import s from './FindFriendsHeader.module.css';
+import ISave_inputState from '../../../../services/redux/reducer/save_inputReducer/state';
+import { IInitialSet } from '../../../../services/redux/reducer/setReducer/state';
+import apiHelper from '../../../../services/graphql/apiHelper';
+// hooks
+import UserSettings from './UserSettings';
 
-const FindFriendsHeader = () => {
+function FindFriendsHeader() {
   const dispatch = useDispatch();
   const cookie = useCookie();
-  const user_id = cookie.get("id") as string;
-  const token = cookie.get("token") as string;
+  const userId: string = cookie.get('id');
+  const token: string = cookie.get('token');
 
   const { toggleColorMode } = useColorMode();
-  const [image, setImage] = React.useState("");
+  const [image, setImage] = React.useState('');
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   const getUserImage = async () => {
     try {
-      const res = await api_helper.user.getById(user_id, token);
-      const userAvatar = res.userAvatar;
+      const res = await apiHelper.user.getById(userId, token);
+      const { userAvatar } = res;
 
       setImage(userAvatar);
       return true;
@@ -59,15 +58,15 @@ const FindFriendsHeader = () => {
 
   const toggleGroupCreate = () => {
     dispatch({
-      type: "TOGGLE_CREATE_GROUP",
+      type: 'TOGGLE_CREATE_GROUP',
       payload: !state.toggleCreateGroup,
     });
     dispatch({
-      type: "SET_MOBILE_NAV",
+      type: 'SET_MOBILE_NAV',
       payload: !state.setMobileNav,
     });
     dispatch({
-      type: "SET_CHAT_SETTINGS",
+      type: 'SET_CHAT_SETTINGS',
       payload: false,
     });
   };
@@ -81,7 +80,7 @@ const FindFriendsHeader = () => {
           margin-bottom: 1rem;
           position: relative;
         `}
-      ></div>
+      />
       <HStack w="99%" pos="relative" minW="300px" pb="1rem">
         <Flex align="center">
           <Image
@@ -113,7 +112,7 @@ const FindFriendsHeader = () => {
             pos="relative"
             onClick={() => {
               dispatch({
-                type: "SET_FRIEND_REQUEST",
+                type: 'SET_FRIEND_REQUEST',
                 payload: !state.setFriendRequest,
               });
             }}
@@ -145,7 +144,7 @@ const FindFriendsHeader = () => {
             pos="relative"
             onClick={() =>
               dispatch({
-                type: "SET_USER_SETTINGS",
+                type: 'SET_USER_SETTINGS',
                 payload: !state.setUserSettings,
               })
             }
@@ -154,9 +153,9 @@ const FindFriendsHeader = () => {
               {state.setUserSettings && (
                 <motion.div
                   className={s.box}
-                  style={{ position: "absolute", top: 0, right: 0 }}
+                  style={{ position: 'absolute', top: 0, right: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "tween" }}
+                  transition={{ type: 'tween' }}
                   initial={{ scale: 0.2 }}
                   exit={{ scale: 0.2 }}
                 >
@@ -171,6 +170,6 @@ const FindFriendsHeader = () => {
       <Divider />
     </>
   );
-};
+}
 
 export default React.memo(FindFriendsHeader);

@@ -1,9 +1,9 @@
 const FormButton = {
   FormButton: {
-    colorSchema: "blue",
+    colorSchema: 'blue',
     _focus: {
-      borderColor: "#343a40",
-      boxShadow: "none",
+      borderColor: '#343a40',
+      boxShadow: 'none',
     },
   },
 };

@@ -1,41 +1,38 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 // components
-import ActiveChats from "./ActiveChats";
-import FindFriends from "./FindFriends";
-import ChatSettings from "./ChatSettings";
+import { css, cx } from '@emotion/css';
+import { CloseButton, Flex, Slide, VStack } from '@chakra-ui/react';
+import ActiveChats from './ActiveChats';
+import FindFriends from './FindFriends';
+import ChatSettings from './ChatSettings';
 // other
-import { css, cx } from "@emotion/css";
-import { GrClose } from "react-icons/gr";
-import { Ichats } from "pages/[acc]";
-import { useSelector, useDispatch } from "react-redux";
-import { useAuth } from "utils/SessionProvider";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import SkeletonActiveInvites from "components/Loading/SkeletonActiveInvites";
-import { CloseButton, Flex, Slide, useColorModeValue, VStack } from "@chakra-ui/react";
+import { useAuth } from '../../utils/SessionProvider';
+// import { IInitialSet } from 'services/redux/reducer/setReducer/state';
+import { Ichats } from '../../pages/[acc]';
+import useThemeColors from '../../hooks/useThemeColors';
 
 interface IMainSection {
   chatId: string;
   chatRooms: Ichats[];
 }
 
-const MainSection = ({ chatRooms, chatId }: IMainSection) => {
-  const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+function MainSection({ chatRooms, chatId }: IMainSection) {
+  // const dispatch = useDispatch();
+  // const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const { user } = useAuth();
-
-  const chat_bg = useColorModeValue("main_white", "main_black");
-  const from_bg = useColorModeValue("white", "#1c2330");
-  const color = useColorModeValue("#B1BAC5", "white");
+  const {
+    colors: { fromBg, color },
+  } = useThemeColors();
 
   return (
     <VStack
       mr="-0.5rem !important"
       ml="-0.5rem !important"
-      w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "40%" }}
+      // w={{ base: !state.setMobileNav ? 0 : '102%', xl: '50%', '2xl': '40%' }}
       h="100vh"
-      pos={{ base: "absolute", lg: "relative" }}
-      bg={from_bg}
+      pos={{ base: 'absolute', lg: 'relative' }}
+      bg={fromBg}
       borderRight="1px solid rgba(0, 0, 0, 0.1)"
       textAlign="center"
       overflow="hidden"
@@ -47,21 +44,21 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
       <FindFriends />
       {user ? (
         <VStack overflow="auto" w="94%" h="100vh">
-          <Slide style={{ zIndex: 10, width: "100%" }} direction="left" in={state.setChatSettings}>
+          <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in>
             <VStack
-              w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "35%" }}
+              // w={{ base: !state.setMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
               h="100vh"
               top={0}
               left={0}
               transition="0.34s"
               zIndex={11}
-              bg={from_bg}
+              bg={fromBg}
               color="white"
               p={0}
             >
               <Flex ml="2rem" align="center" pos="relative" w="95%" m="1rem" px="1rem">
                 <CloseButton
-                  size={"lg"}
+                  size="lg"
                   className={cx(css`
                     width: 3rem;
                     height: 3rem;
@@ -72,27 +69,28 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
                     background:${color},
                     z-index: 9999;
                   `)}
-                  onClick={() =>
-                    dispatch({
-                      type: "SET_CHAT_SETTINGS",
-                      payload: !state.setChatSettings,
-                    })
-                  }
+                  // onClick={() =>
+                  //   dispatch({
+                  //     type: 'SET_CHAT_SETTINGS',
+                  //     payload: !state.setChatSettings,
+                  //   })
+                  // }
                 />
               </Flex>
               <ChatSettings chatId={chatId} />
             </VStack>
           </Slide>
 
-          {chatRooms.map((item, index) => {
-            return <ActiveChats key={index} {...item} chatId={chatId} />;
-          })}
+          {chatRooms.map((item, index) => (
+            <ActiveChats key={index} {...item} chatId={chatId} />
+          ))}
         </VStack>
       ) : (
-        <SkeletonActiveInvites />
+        <div>loading</div>
+        // <SkeletonActiveInvites />
       )}
     </VStack>
   );
-};
+}
 
 export default MainSection;

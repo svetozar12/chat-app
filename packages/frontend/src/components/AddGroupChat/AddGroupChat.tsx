@@ -1,32 +1,32 @@
-import React from "react";
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import { useSelector, useDispatch } from "react-redux";
-import { css, cx } from "@emotion/css";
-import { CloseButton, HStack, IconButton, Input, Spacer } from "@chakra-ui/react";
-import api_helper from "../../services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { getAuth } from "../../utils/authMethods";
-import useThemeColors from "hooks/useThemeColors";
-import { IoCreateOutline } from "react-icons/io5";
+import React from 'react';
+import { IInitialSet } from 'services/redux/reducer/setReducer/state';
+import { useSelector, useDispatch } from 'react-redux';
+import { css, cx } from '@emotion/css';
+import { CloseButton, HStack, IconButton, Input, Spacer } from '@chakra-ui/react';
+import apiHelper from 'services/graphql/apiHelper';
+import { useCookie } from 'next-cookie';
+import { IAuthState } from 'services/redux/reducer/authReducer/state';
+import { getAuth } from 'utils/authMethods';
+import useThemeColors from 'hooks/useThemeColors';
+import { IoCreateOutline } from 'react-icons/io5';
 
-const AddGroupChat = () => {
-  const [user, setUser] = React.useState<string>("");
+function AddGroupChat() {
+  const [user, setUser] = React.useState<string>('');
   const [usersData, setUsersData] = React.useState<string[]>([]);
   const cookie = useCookie();
   const dispatch = useDispatch();
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const cookieName = cookie.get("name") as string;
+  const cookieName: string = cookie.get('name');
 
   const emitFriendRequest = async () => {
-    authState.ws?.emit("friend_request");
+    authState.ws?.emit('friend_request');
   };
 
   const addToGroup = (user: string, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUsersData((prev) => [...prev, user]);
-    setUser("");
+    setUser('');
   };
 
   const removeFromGroup = (username: string) => {
@@ -40,11 +40,11 @@ const AddGroupChat = () => {
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);
-      await api_helper.invite.createGroupChat(usersData);
+      await apiHelper.invite.createGroupChat(usersData);
       emitFriendRequest();
       setUsersData([]);
       dispatch({
-        type: "TOGGLE_CREATE_GROUP",
+        type: 'TOGGLE_CREATE_GROUP',
         payload: !setState.toggleCreateGroup,
       });
       return true;
@@ -55,7 +55,7 @@ const AddGroupChat = () => {
   };
 
   const {
-    colors: { chat_message_bg_color, chat_bg },
+    colors: { chatMessageBgColor, chatBg },
   } = useThemeColors();
 
   return (
@@ -69,7 +69,7 @@ const AddGroupChat = () => {
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
-            background: ${chat_bg};
+            background: ${chatBg};
           `}
         >
           <form
@@ -78,7 +78,7 @@ const AddGroupChat = () => {
                 width: 100%;
                 flex-direction: row;
               `,
-              "flex",
+              'flex',
             )}
             onSubmit={(e) => addToGroup(user, e)}
           >
@@ -106,25 +106,23 @@ const AddGroupChat = () => {
             />
           </form>
           <HStack mx={5} gap={5}>
-            {usersData.map((element, index) => {
-              return (
-                <HStack align="center" justify="center" bg={chat_message_bg_color} color="main_white" p="0.5rem 0.8rem" key={index}>
-                  <p>{element}</p>
-                  <Spacer />
-                  <CloseButton
-                    onClick={() => {
-                      removeFromGroup(element);
-                    }}
-                    borderRadius="full"
-                  />
-                </HStack>
-              );
-            })}
+            {usersData.map((element, index) => (
+              <HStack align="center" justify="center" bg={chatMessageBgColor} color="main_white" p="0.5rem 0.8rem" key={index}>
+                <p>{element}</p>
+                <Spacer />
+                <CloseButton
+                  onClick={() => {
+                    removeFromGroup(element);
+                  }}
+                  borderRadius="full"
+                />
+              </HStack>
+            ))}
           </HStack>
         </div>
       )}
     </>
   );
-};
+}
 
 export default AddGroupChat;

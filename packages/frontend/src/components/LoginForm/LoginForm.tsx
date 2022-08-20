@@ -1,7 +1,7 @@
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import React from "react";
-import api_helper from "../../services/graphql/api_helper";
-import generic from "../../utils/generic";
+import { IAuthState } from 'services/redux/reducer/authReducer/state';
+import React from 'react';
+import apiHelper from 'services/graphql/apiHelper';
+import generic from 'utils/generic';
 import {
   Flex,
   FormLabel,
@@ -14,23 +14,23 @@ import {
   FormErrorMessage,
   FormControl,
   useColorModeValue,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 // hooks
-import { useSelector, useDispatch } from "react-redux";
-import { useCookie } from "next-cookie";
-import { useRouter } from "next/router";
+import { useSelector, useDispatch } from 'react-redux';
+import { useCookie } from 'next-cookie';
+import { useRouter } from 'next/router';
 // components
-import FormWrapper from "../FormWrapper";
-import DefaultLink from "../DefaultLink";
-import Loading from "../Loading";
-import { useFormik } from "formik";
-import { LoginSchema } from "../../utils/validation";
-import { ILogin } from "../../pages";
-import useThemeColors from "hooks/useThemeColors";
+import FormWrapper from 'services/chat-ui/FormWrapper';
+import DefaultLink from 'services/chat-ui/DefaultLink';
+import { useFormik } from 'formik';
+import { LoginSchema } from 'utils/validation';
+import { ILogin } from 'pages';
+import useThemeColors from 'hooks/useThemeColors';
+import Loading from '../Loading';
 
 type ILoginForm = ILogin;
 
-const LoginForm = ({ callback }: ILoginForm) => {
+function LoginForm({ callback }: ILoginForm) {
   const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useDispatch();
@@ -48,36 +48,36 @@ const LoginForm = ({ callback }: ILoginForm) => {
   const handleSubmit = async (values: IValues) => {
     try {
       const { username, password } = values;
-      const login = await api_helper.auth.login(username, password);
-      if (login instanceof Error) return dispatch({ type: "LOGIN_POST_ERROR", bad: login.message });
+      const login = await apiHelper.auth.login(username, password);
+      if (login instanceof Error) return dispatch({ type: 'LOGIN_POST_ERROR', bad: login.message });
 
       if (login) {
         setIsLoading(true);
 
         const cookies = [
-          { name: "name", value: username, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
-          { name: "id", value: login.user_id, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
-          { name: "token", value: login.Access_token, options: { sameSite: "strict", maxAge: rememberMe, path: "/" } },
-          { name: "refresh_token", value: login.Refresh_token, options: { sameSite: "strict", maxAge: refreshRememberMe, path: "/" } },
+          { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'id', value: login.user_id, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'token', value: login.Access_token, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'refresh_token', value: login.Refresh_token, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
         ];
 
         cookies.forEach((element) => {
           const { name, value, options } = element;
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+          // @ts-expect-error
           cookie.set(name, value, { ...options });
         });
 
-        const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
+        const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
 
-        cookie.set("REDIRECT_URL_CALLBACK", callback || `/${chatInstance}`);
+        cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
         router.push(callback || `/${chatInstance}`);
         dispatch({
-          type: "SET_IS_LOADING",
+          type: 'SET_IS_LOADING',
           payload: false,
         });
         setIsLoading(false);
-        dispatch({ type: "SAVE_INPUT", payload: "" });
+        dispatch({ type: 'SAVE_INPUT', payload: '' });
       }
     } catch (error) {
       setIsLoading(false);
@@ -85,37 +85,50 @@ const LoginForm = ({ callback }: ILoginForm) => {
     }
   };
 
-  const color = useColorModeValue("white", "#343a40");
+  const color = useColorModeValue('white', '#343a40');
   const {
-    colors: { chat_border_color },
+    colors: { chatBorderColor, formButton },
   } = useThemeColors();
-  const renderInputs = [
+
+  interface IRenderInputs {
+    label: string;
+    props: {
+      type: string;
+      name: 'username' | 'password';
+      bg: string;
+      border: string;
+      borderColor: string;
+      placeholder: string;
+    };
+  }
+
+  const renderInputs: IRenderInputs[] = [
     {
-      label: "Username",
+      label: 'Username',
       props: {
-        type: "text",
-        name: "username",
+        type: 'text',
+        name: 'username',
         bg: color,
-        border: "1px solid black",
-        borderColor: chat_border_color,
-        placeholder: "username ...",
+        border: '1px solid black',
+        borderColor: chatBorderColor,
+        placeholder: 'username ...',
       },
     },
     {
-      label: "Password",
+      label: 'Password',
       props: {
-        border: "1px solid black",
-        borderColor: chat_border_color,
-        type: "password",
-        name: "password",
+        border: '1px solid black',
+        borderColor: chatBorderColor,
+        type: 'password',
+        name: 'password',
         bg: color,
-        placeholder: "password ...",
+        placeholder: 'password ...',
       },
     },
   ];
 
   const formik = useFormik({
-    initialValues: { username: "", password: "" },
+    initialValues: { username: '', password: '' },
     validationSchema: LoginSchema,
     onSubmit: (values, { resetForm }) => {
       handleSubmit(values);
@@ -125,22 +138,21 @@ const LoginForm = ({ callback }: ILoginForm) => {
     validateOnBlur: false,
   });
 
-  const {
-    colors: { form_button },
-  } = useThemeColors();
-
   return (
     <FormWrapper handleSubmit={formik.handleSubmit} type="Login">
       <>
         {renderInputs.map((element, index) => {
           const { props } = element;
+          const { name } = props;
+          const isInvalid = Boolean(formik.errors[name] && formik.touched[name]);
+
           return (
-            <FormControl isInvalid={formik.errors[props.name] && formik.touched[props.name]} key={index}>
+            <FormControl isInvalid={isInvalid} key={index}>
               <FormLabel>{element.label}</FormLabel>
-              <Input {...formik.getFieldProps(props.name)} variant="FormInput" {...props} />
-              {formik.errors[props.name] && (
+              <Input {...formik.getFieldProps(name)} variant="FormInput" {...props} />
+              {formik.errors[name] && (
                 <FormErrorMessage fontSize="xl" fontWeight="semibold">
-                  {formik.errors[props.name]}
+                  {formik.errors[name]}
                 </FormErrorMessage>
               )}
             </FormControl>
@@ -149,7 +161,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
       </>
 
       <Flex w="full" alignItems="center" justifyContent="center">
-        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={form_button} w="60%" type="submit">
+        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={formButton} w="60%" type="submit">
           Log In
         </Button>
       </Flex>
@@ -170,7 +182,7 @@ const LoginForm = ({ callback }: ILoginForm) => {
                 checked={state.remember_me}
                 onChange={(e) =>
                   dispatch({
-                    type: "REMEMBER_ME_CHECK",
+                    type: 'REMEMBER_ME_CHECK',
                     payload: e.target.checked,
                   })
                 }
@@ -184,6 +196,6 @@ const LoginForm = ({ callback }: ILoginForm) => {
       </HStack>
     </FormWrapper>
   );
-};
+}
 
 export default LoginForm;

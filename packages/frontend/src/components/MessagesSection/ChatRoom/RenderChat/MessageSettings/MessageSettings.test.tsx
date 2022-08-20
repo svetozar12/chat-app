@@ -1,9 +1,10 @@
-import MessageSettings from "./MessageSettings";
-import renderer from "react-test-renderer";
-import configureStore from "redux-mock-store";
-import { Provider } from "react-redux";
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
+import renderer from 'react-test-renderer';
+import configureStore from 'redux-mock-store';
+import { Provider } from 'react-redux';
+import { render, screen } from '@testing-library/react';
+import MessageSettings from './MessageSettings';
+import '@testing-library/jest-dom';
+
 const mockStore = configureStore([]);
 const store = mockStore({});
 const mockFunc: any = jest.fn();
@@ -17,11 +18,11 @@ const setupRender = () => {
   return component;
 };
 
-describe("Render connected React-redux page", () => {
+describe('Render connected React-redux page', () => {
   beforeEach(() => {
     setupRender();
   });
-  it("should create snapshot for <MessageSettings/>", () => {
+  it('should create snapshot for <MessageSettings/>', () => {
     expect(
       renderer
         .create(
@@ -33,8 +34,8 @@ describe("Render connected React-redux page", () => {
     ).toMatchSnapshot();
   });
 
-  it("should render <MessageSettings/>", () => {
-    const renderedComponent = screen.getByTitle("message_settings");
+  it('should render <MessageSettings/>', () => {
+    const renderedComponent = screen.getByTitle('message_settings');
     expect(renderedComponent).toBeInTheDocument();
   });
 });

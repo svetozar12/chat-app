@@ -1,14 +1,14 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import Avatar from "components/Avatar";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import { BsThreeDots } from "react-icons/bs";
-import { css, cx } from "@emotion/css";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { useCookie } from "next-cookie";
-import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
-import useThemeColors from "hooks/useThemeColors";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { BsThreeDots } from 'react-icons/bs';
+import { css, cx } from '@emotion/css';
+import { useCookie } from 'next-cookie';
+import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { IAuthState } from '../../../services/redux/reducer/authReducer/state';
+import { IInitialSet } from '../../../services/redux/reducer/setReducer/state';
+import Avatar from '../../Avatar';
+import useThemeColors from '../../../hooks/useThemeColors';
 
 interface IActiveChats {
   _id: string;
@@ -16,21 +16,21 @@ interface IActiveChats {
   chatId: string;
 }
 
-const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
+function ActiveChats({ _id, members, chatId }: IActiveChats) {
   const router = useRouter();
 
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-  const [inviter, setInviter] = React.useState<string>("");
+  const [inviter, setInviter] = React.useState<string>('');
   const cookie = useCookie();
 
-  const cookieName = cookie.get("name") as string;
+  const cookieName: string = cookie.get('name');
   const user1 = members[0];
   const user2 = members[1];
 
   const joinChat = () => {
-    authState.ws?.emit("join_chat", {
+    authState.ws?.emit('join_chat', {
       rooms: [cookieName, chatId],
     });
     router.push(`${_id}`);
@@ -44,13 +44,13 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
 
   const dispatching = () => {
     dispatch({
-      type: "TOGGLE_CREATE_GROUP",
+      type: 'TOGGLE_CREATE_GROUP',
       payload: false,
     });
   };
   const chatSettings = () => {
     dispatch({
-      type: "SET_CHAT_SETTINGS",
+      type: 'SET_CHAT_SETTINGS',
       payload: !state.setChatSettings,
     });
   };
@@ -67,7 +67,7 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
       whiteSpace="nowrap"
       transition="0.2s"
       borderRadius="2xl"
-      _hover={{ borderRadius: "15px", background: " rgba(122, 122, 122, 0.1)", transition: "0.2s" }}
+      _hover={{ borderRadius: '15px', background: ' rgba(122, 122, 122, 0.1)', transition: '0.2s' }}
       data-testid="chat"
       onClick={() => {
         joinChat();
@@ -100,11 +100,11 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
             >
               {members.length > 2
                 ? members.map((element, index) => {
-                    if (index === 3) return;
+                    if (index === 3) return null;
                     return (
                       <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
                         {element}
-                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? "..." : ""}` : ","}
+                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? '...' : ''}` : ','}
                       </Heading>
                     );
                   })
@@ -152,10 +152,10 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
                 onClick={chatSettings}
               />
             }
-          ></IconButton>
+          />
         )}
       </div>
     </HStack>
   );
-};
+}
 export default ActiveChats;

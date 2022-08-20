@@ -1,19 +1,20 @@
-import React from "react";
-import api_helper from "../../../services/graphql/api_helper";
-import Single_avatar from "../Single_avatar";
-import { useCookie } from "next-cookie";
+import React from 'react';
+import { useCookie } from 'next-cookie';
+import apiHelper from '../../../services/graphql/apiHelper';
+import Single_avatar from '../Single_avatar';
 
 interface IGroup_avatar {
   members: string[];
 }
 
-function Group_avatar({ members }: IGroup_avatar) {
+function GroupAvatar({ members }: IGroup_avatar) {
   const [images, setImages] = React.useState<string[]>([]);
   const cookie = useCookie();
+  const username: string = cookie.get('username');
   const getUserImage = async (image: string) => {
     try {
-      const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
-      const userAvatar = res.userAvatar;
+      const res = await apiHelper.user.getById(cookie.get('id'), cookie.get('token'));
+      const { userAvatar } = res;
       if (!userAvatar) {
         return false;
       }
@@ -31,13 +32,12 @@ function Group_avatar({ members }: IGroup_avatar) {
     });
   }, []);
   return (
-    <div title={`groupChat-${cookie.get("username")}`} className="group_logo_container">
+    <div title={`groupChat-${username}`} className="groupLogoContainer">
       {members.map((element, index) => {
-        if (index === 2) return;
-
+        if (index === 2) return null;
         return (
-          <div key={index} title={cookie.get("username")}>
-            <Single_avatar width="2.3125rem" height="2.3125rem" group={true} overlay={index === 1 ? true : false} />
+          <div key={index} title={username}>
+            <Single_avatar width="2.3125rem" height="2.3125rem" group overlay={index === 1} />
           </div>
         );
       })}
@@ -45,4 +45,4 @@ function Group_avatar({ members }: IGroup_avatar) {
   );
 }
 
-export default Group_avatar;
+export default GroupAvatar;

@@ -1,18 +1,18 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import { useCookie } from "next-cookie";
-import Link from "next/link";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { useCookie } from 'next-cookie';
+import Link from 'next/link';
 // utils
-import api_helper from "services/graphql/api_helper";
-import { getAuth } from "utils/authMethods";
-import { css } from "@emotion/css";
-import { Link as ALink, VStack } from "@chakra-ui/react";
+import { css } from '@emotion/css';
+import { Link as ALink, VStack } from '@chakra-ui/react';
 // icons
-import { IoMdLogOut } from "react-icons/io";
-import { RiDeleteBin6Fill } from "react-icons/ri";
-import { FiSettings } from "react-icons/fi";
-import useThemeColors from "hooks/useThemeColors";
+import { IoMdLogOut } from 'react-icons/io';
+import { RiDeleteBin6Fill } from 'react-icons/ri';
+import { FiSettings } from 'react-icons/fi';
+import { getAuth } from '../../../../../utils/authMethods';
+import apiHelper from '../../../../../services/graphql/apiHelper';
+import useThemeColors from '../../../../../hooks/useThemeColors';
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -29,17 +29,17 @@ function UserSettings() {
   const deleteCookies = async () => {
     getAuth();
     const cookies = cookie.getAll();
-    await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
+    await apiHelper.auth.logout(cookie.get('id'), cookie.get('token'));
     for (const key in cookies) cookie.remove(key);
 
-    router.push("/");
-    dispatch({ type: "SIGN_OUT" });
+    router.push('/');
+    dispatch({ type: 'SIGN_OUT' });
   };
 
   const deleteUser = async () => {
     try {
       getAuth();
-      await api_helper.user.delete(cookie.get("id"), cookie.get("token"));
+      await apiHelper.user.delete(cookie.get('id'), cookie.get('token'));
       deleteCookies();
       return true;
     } catch (error) {
@@ -49,37 +49,37 @@ function UserSettings() {
 
   const Render = [
     {
-      href: "/settings/profile",
+      href: '/settings/profile',
       onClick: () => {
-        dispatch({ type: "SET_USER_SETTINGS", payload: false });
+        dispatch({ type: 'SET_USER_SETTINGS', payload: false });
       },
       Icon: FiSettings,
-      title: "User settings",
+      title: 'User settings',
     },
     {
-      href: "#",
+      href: '#',
       onClick: deleteCookies,
       Icon: IoMdLogOut,
-      title: "Log out",
+      title: 'Log out',
     },
     {
-      href: "#",
+      href: '#',
       onClick: deleteUser,
       Icon: RiDeleteBin6Fill,
-      title: " Delete user",
+      title: ' Delete user',
     },
   ];
 
   const {
-    colors: { from_bg },
+    colors: { fromBg },
   } = useThemeColors();
   return (
     <VStack
-      w={{ base: "15rem", lg: "15rem" }}
+      w={{ base: '15rem', lg: '15rem' }}
       pos="absolute"
       justifyContent="center"
       align="center"
-      bg={from_bg}
+      bg={fromBg}
       textAlign="left"
       top={0}
       right={0}
@@ -103,8 +103,8 @@ function UserSettings() {
               w="full"
               my="0 !important"
               py="2"
-              fontSize={{ base: "1.4rem", md: "3vw", lg: "2vw", xl: "1vw" }}
-              _hover={{ bg: "hover_bg" }}
+              fontSize={{ base: '1.4rem', md: '3vw', lg: '2vw', xl: '1vw' }}
+              _hover={{ bg: 'hover_bg' }}
               onClick={onClick}
             >
               <Icon className={buttonStyles} />

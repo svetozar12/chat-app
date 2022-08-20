@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { MdSend } from "react-icons/md";
-import { css } from "@emotion/css";
-import { useCookie } from "next-cookie";
-import api_helper from "services/graphql/api_helper";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { getAuth } from "utils/authMethods";
-import generic from "utils/generic";
-import { useDispatch, useSelector } from "react-redux";
-import { Center, Flex, HStack, Spacer, Text } from "@chakra-ui/react";
-import s from "./ChatRoomForm.module.css";
-import useThemeColors from "hooks/useThemeColors";
+import React, { useEffect } from 'react';
+import { MdSend } from 'react-icons/md';
+import { css } from '@emotion/css';
+import { useCookie } from 'next-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { Center, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
+import apiHelper from '../../../../services/graphql/apiHelper';
+import { IAuthState } from '../../../../services/redux/reducer/authReducer/state';
+import { getAuth } from '../../../../utils/authMethods';
+import generic from '../../../../utils/generic';
+import s from './ChatRoomForm.module.css';
+import useThemeColors from '../../../../hooks/useThemeColors';
 
 interface IPropsState {
   name?: string;
@@ -21,30 +21,30 @@ interface IChatRoomForm {
   chatId: string;
 }
 
-const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
+function ChatRoomForm({ chatId }: IChatRoomForm) {
   const cookie = useCookie();
   const dispatch = useDispatch();
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [state, setState] = React.useState<IPropsState>({
-    name: cookie.get("name"),
-    message: "",
-    time: "",
+    name: cookie.get('name'),
+    message: '',
+    time: '',
   });
   const inputTextArea = React.useRef<any>(null);
 
   useEffect(() => {
     inputTextArea.current.focus();
 
-    authState.ws?.on("message", ({ messages }) => {
-      console.log(messages, "fr message");
+    authState.ws?.on('message', ({ messages }) => {
+      console.log(messages, 'fr message');
 
       const [message] = messages;
-      dispatch({ type: "MESSAGES", payload: message });
+      dispatch({ type: 'MESSAGES', payload: message });
     });
   }, [authState.ws]);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    inputTextArea.current.style.height = "20px";
+    inputTextArea.current.style.height = '20px';
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
     inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
 
@@ -52,12 +52,12 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
   };
 
   useEffect(() => {
-    inputTextArea.current.style.height = "20px";
+    inputTextArea.current.style.height = '20px';
   }, []);
 
   const saveMessage = async () => {
     try {
-      await api_helper.message.create(cookie.get("id"), chatId, state.message as string, cookie.get("token"));
+      await apiHelper.message.create(cookie.get('id'), chatId, state.message as string, cookie.get('token'));
       return true;
     } catch (error) {
       return false;
@@ -70,22 +70,22 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
       await getAuth();
       const { name, message, time } = state;
       await saveMessage();
-      authState.ws?.emit("message", {
+      authState.ws?.emit('message', {
         chatInstance: chatId,
-        sender: cookie.get("name"),
+        sender: cookie.get('name'),
         message,
         time,
       });
-      setState({ name, message: "" });
+      setState({ name, message: '' });
     }
   };
 
   const {
-    colors: { chat_bg, from_bg, color },
+    colors: { chatBg, fromBg, color },
   } = useThemeColors();
 
   return (
-    <Flex mt="-0.5rem !important" w="full" h="10vh" bg={chat_bg} alignItems="center" justifyContent="center">
+    <Flex mt="-0.5rem !important" w="full" h="10vh" bg={chatBg} alignItems="center" justifyContent="center">
       <HStack
         cursor="text"
         pos="relative"
@@ -93,7 +93,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
         w="70%"
         h="auto"
         p="2"
-        bg={from_bg}
+        bg={fromBg}
         overflowWrap="break-word"
         borderRadius="3xl"
         align="center"
@@ -101,8 +101,8 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
       >
         <textarea
           rows={40}
-          style={{ height: "3rem", margin: "0 0.5rem" }}
-          className={s.MessageInput}
+          style={{ height: '3rem', margin: '0 0.5rem' }}
+          className={s.messageInput}
           ref={inputTextArea}
           name="message"
           onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
@@ -119,7 +119,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
           mr={12}
           w="2rem"
           h="2rem"
-          _hover={{ bg: "rgba(0,0,0,0.1)", borderRadius: "full" }}
+          _hover={{ bg: 'rgba(0,0,0,0.1)', borderRadius: 'full' }}
           justifyItems="center"
           alignItems="center"
           cursor="pointer"
@@ -140,6 +140,6 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
       </HStack>
     </Flex>
   );
-};
+}
 
 export default React.memo(ChatRoomForm);

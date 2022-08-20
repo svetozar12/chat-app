@@ -1,10 +1,11 @@
-import { ActionType } from "../../types";
+import { AnyAction } from 'redux';
+import { ActionType } from '../../types';
 // eslint-disable-next-line import/named
-import { AnyAction } from "redux";
-import { IInitialSet } from "./state";
+import { IInitialSet } from './state';
+
 export const initialState: IInitialSet | IInitialSet[] = {
-  reciever: "",
-  chat_inviter: "",
+  reciever: '',
+  chat_inviter: '',
   pageNumber: 2,
   setUserSettings: false,
   setFriendRequest: false,

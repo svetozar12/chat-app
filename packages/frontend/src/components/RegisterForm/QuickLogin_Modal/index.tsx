@@ -1,1 +1,1 @@
-export { default } from "./QuickLogin_Modal";
+export { default } from './QuickLogin_Modal';

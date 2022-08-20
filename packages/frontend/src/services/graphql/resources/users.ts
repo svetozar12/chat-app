@@ -1,21 +1,21 @@
-import { api } from "../api_helper";
+import { api } from '../apiHelper';
 
-const rootUrl = "";
+const rootUrl = '';
 
 export interface IUser {
   username: string;
   email: string;
-  gender: "male" | "female";
+  gender: 'male' | 'female';
 }
 
 const user = {
-  getById: async (user_id: string, token: string): Promise<any> => {
+  getById: async (userId: string, token: string): Promise<any> => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         query {
-          getUser(user_id: "${user_id}",token:"${token}") {
+          getUser(userId: "${userId}",token:"${token}") {
             _id
             username
             email
@@ -46,7 +46,7 @@ const user = {
     }
   },
 
-  create: async (username: string, email: string, password: string, gender: "male" | "female" | "other") => {
+  create: async (username: string, email: string, password: string, gender: 'Male' | 'Female' | 'Other') => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -79,13 +79,13 @@ const user = {
     }
   },
 
-  update: async (user_id: string, token: string, user: IUser) => {
+  update: async (userId: string, token: string, user: IUser) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          updateUser(user_id:"${user_id}",user:{username: "${user.username}",email:"${user.email}",gender:"${user.gender}"},token:"${token}") {
+          updateUser(userId:"${userId}",user:{username: "${user.username}",email:"${user.email}",gender:"${user.gender}"},token:"${token}") {
             Message
           }
          }`,
@@ -112,13 +112,13 @@ const user = {
     }
   },
 
-  delete: async (user_id: string, token: string) => {
+  delete: async (userId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          deleteUser(user_id:"${user_id}",token:"${token}") {
+          deleteUser(userId:"${userId}",token:"${token}") {
             Message
           }
          }`,

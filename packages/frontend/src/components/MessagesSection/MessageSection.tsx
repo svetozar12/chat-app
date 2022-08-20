@@ -1,18 +1,18 @@
-import React from "react";
-import { css, cx } from "@emotion/css";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import React from 'react';
+import { css, cx } from '@emotion/css';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 // components
-import ChatRoom from "./ChatRoom";
-import Notifications_Modal from "../Notifications_Modal";
-import AddUsers_Modal from "../AddUsers_Modal";
+import { useCookie } from 'next-cookie';
+import { Box, HStack } from '@chakra-ui/react';
+import ChatRoom from './ChatRoom';
+import Notifications_Modal from '../Notifications_Modal';
+import AddUsers_Modal from '../AddUsers_Modal';
 // services
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import api_helper from "../../services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { useAuth } from "../../utils/SessionProvider";
-import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
-import { Box, HStack } from "@chakra-ui/react";
+import { IInitialSet } from '../../services/redux/reducer/setReducer/state';
+import api_helper from '../../services/graphql/apiHelper';
+import { useAuth } from '../../utils/SessionProvider';
+import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 
 interface IContacts {
   _id: string;
@@ -24,11 +24,11 @@ interface IContacts {
 interface IMessageSection {
   contacts: IContacts[];
   // eslint-disable-next-line no-unused-vars
-  FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
+  FetchInvites: (status: 'accepted' | 'recieved' | 'declined', InvitesOrigin: 'reciever' | 'inviter') => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, chatId }: IMessageSection) => {
+function MessageSection({ contacts, chatId }: IMessageSection) {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
@@ -38,10 +38,10 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
     try {
       // const res = await FetchInvites("accepted", "inviter");
       // const res_inviter = await FetchInvites("accepted", "inviter");
-      const res_chat = await api_helper.chatroom.getById(window.location.pathname, cookie.get("id"), cookie.get("token"));
-      const [{ members: Message }] = res_chat;
+      const resChat = await api_helper.chatroom.getById(window.location.pathname, cookie.get('id'), cookie.get('token'));
+      const [{ members: Message }] = resChat;
 
-      const members_in_chat = Message;
+      const membersInChat = Message;
 
       const data: any[] = [];
       // if (res_inviter) data = [...res_inviter];
@@ -57,7 +57,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
           uniqueUsers.push(element);
         }
       });
-      uniqueUsers = uniqueUsers.filter((element) => !members_in_chat.includes(element));
+      uniqueUsers = uniqueUsers.filter((element) => !membersInChat.includes(element));
       setUsers(uniqueUsers);
       return true;
     } catch (error) {
@@ -71,7 +71,6 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
 
   React.useEffect(() => {
     getMembersSuggestions();
-    return;
   }, [route.asPath]);
 
   return (
@@ -79,7 +78,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
       w="71%"
       title="message_section"
       className={cx(
-        "flex",
+        'flex',
         css`
           width: 71%;
           @media (max-width: 1008px) {
@@ -97,7 +96,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
             alignitems: center;
             padding: 0;
           `,
-          "container",
+          'container',
         )}
       >
         <Box w="full" h="100vh">
@@ -108,6 +107,6 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
       </div>
     </HStack>
   );
-};
+}
 
 export default MessageSection;

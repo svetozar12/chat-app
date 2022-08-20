@@ -1,4 +1,4 @@
-.UserAvatar {
+.userAvatar {
   width: 3.25rem;
   height: 3.25rem;
   margin: 0;
@@ -7,16 +7,16 @@
   z-index: 10;
 }
 
-.icon_parrent {
+.iconParent {
   width: 3.5rem;
   height: 3.5rem;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgb(0 0 0 / 20%);
   border-radius: 100%;
 }
 
-.icon_parrent:hover {
-  background: rgba(0, 0, 0, 0.1);
+.iconParent:hover {
+  background: rgb(0 0 0 / 10%);
   border-radius: 100%;
 }
 
@@ -25,7 +25,7 @@
   height: 2rem;
 }
 
-.HeaderAvatar {
+.headerAvatar {
   width: 2.8rem;
   height: 2.8rem;
   color: var(--main-logo-color);

@@ -1,31 +1,31 @@
 :root {
-  --main-white: rgb(252, 252, 252);
-  --main-black: rgb(0, 0, 0);
+  --main-white: rgb(252 252 252);
+  --main-black: rgb(0 0 0);
   --form-gray: #343a40;
-  --off-black: rgb(92, 92, 92);
+  --off-black: rgb(92 92 92);
   --me-chat-buble: #a5a7ac;
-  --main-blue: rgb(79, 81, 216);
-  --off-blue: rgb(38, 92, 163);
+  --main-blue: rgb(79 81 216);
+  --off-blue: rgb(38 92 163);
   --button-blue: #0069d9;
-  --main-green: rgb(52, 192, 34);
-  --main-red: rgb(231, 10, 10);
+  --main-green: rgb(52 192 34);
+  --main-red: rgb(231 10 10);
   --gradient-first: #dfdfdf;
   --gradient-second: #fff;
   --input-border-color: #ccd0d5;
   --main-logo-color: #bfc2c6;
   --bad-alert-color: #f24654;
-  --bad-alert-bgcolor: rgba(255, 0, 0, 0.5);
+  --bad-alert-bgcolor: rgb(255 0 0 / 50%);
   --good-alert-color: #60af86;
-  --good-alert-bgcolor: rgba(0, 255, 0, 0.5);
-  --main-box-shadow: rgba(0, 0, 0, 0.2);
+  --good-alert-bgcolor: rgb(0 255 0 50%);
+  --main-box-shadow: rgb(0 0 0 20%);
 }
 
-.contacts_container,
+.contactsContainer,
 .container,
 form,
 .icon,
-.invite_buttons,
-.message_input_container,
+.inviteButtons,
+.messageInputContainer,
 .flex {
   display: flex;
   justify-content: center;

@@ -1,18 +1,18 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { css } from "@emotion/css";
-import { useCookie } from "next-cookie";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { css } from '@emotion/css';
+import { useCookie } from 'next-cookie';
 // services
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import api_helper from "services/graphql/api_helper";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { getAuth } from "utils/authMethods";
-import { useAuth } from "utils/SessionProvider";
+import { IInitialSet } from 'services/redux/reducer/setReducer/state';
+import apiHelper from 'services/graphql/apiHelper';
+import { IAuthState } from 'services/redux/reducer/authReducer/state';
+import { getAuth } from 'utils/authMethods';
+import { useAuth } from 'utils/SessionProvider';
 // components
-import FindFriendsHeader from "./FindFriendsHeader";
-import SkeletonFindFriendsHeader from "components/Loading/SkeletonFindFriendsHeader";
-import FindFriendsSearch from "./FindFriendsSearch";
-import { Skeleton, VStack, FormControl } from "@chakra-ui/react";
+import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
+import { Skeleton, VStack, FormControl } from '@chakra-ui/react';
+import FindFriendsHeader from './FindFriendsHeader';
+import FindFriendsSearch from './FindFriendsSearch';
 
 function FindFriends() {
   const dispatch = useDispatch();
@@ -25,8 +25,8 @@ function FindFriends() {
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
-      authState.ws?.emit("send_friend_request", {
+      const res = await apiHelper.invite.create(cookie.get('id'), state.reciever, cookie.get('token'));
+      authState.ws?.emit('send_friend_request', {
         inviter: res.inviter,
         reciever: res.reciever,
       });
@@ -42,7 +42,7 @@ function FindFriends() {
     e.preventDefault();
     if (state.reciever) {
       await sendInvite();
-      dispatch({ type: "SET_RECIEVER", payload: "" });
+      dispatch({ type: 'SET_RECIEVER', payload: '' });
     }
   };
 

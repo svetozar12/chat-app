@@ -1,23 +1,24 @@
-import { api } from "../api_helper";
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { api } from '../apiHelper';
 
-const rootUrl = "";
+const rootUrl = '';
 
 export interface IInvite {
-  user_id: string;
+  userId: string;
   token: string;
-  status?: "accepted" | "declined" | "recieved";
+  status?: 'accepted' | 'declined' | 'recieved';
 }
 
 const invite = {
-  getAllByReciever: async ({ user_id, token, status }: IInvite) => {
+  getAllByReciever: async ({ userId, token, status }: IInvite) => {
     try {
-      const condition = status ? `status:"${status}"` : "";
+      const condition = status ? `status:"${status}"` : '';
 
       const res = await api(rootUrl, {
         data: {
           query: `
         query {
-          getInvitesByReciever(user_id: "${user_id}",token:"${token}",${condition}) {
+          getInvitesByReciever(userId: "${userId}",token:"${token}",${condition}) {
             _id
             inviter
             reciever
@@ -47,14 +48,14 @@ const invite = {
     }
   },
 
-  getAllByInviter: async ({ user_id, token, status }: IInvite) => {
+  getAllByInviter: async ({ userId, token, status }: IInvite) => {
     try {
-      const condition = status ? `status:"${status}"` : "";
+      const condition = status ? `status:"${status}"` : '';
       const res = await api(rootUrl, {
         data: {
           query: `
         query {
-          getInvitesByInviter(user_id: "${user_id}",token:"${token}",${condition}) {
+          getInvitesByInviter(userId: "${userId}",token:"${token}",${condition}) {
             _id
             inviter
             reciever
@@ -84,13 +85,13 @@ const invite = {
     }
   },
 
-  create: async (user_id: string, reciever: string, token: string) => {
+  create: async (userId: string, reciever: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          createInvite(user_id: "${user_id}",reciever:"${reciever}",token:"${token}") {
+          createInvite(userId: "${userId}",reciever:"${reciever}",token:"${token}") {
             _id
             inviter
             reciever
@@ -155,11 +156,11 @@ const invite = {
     }
   },
 
-  update: async (user_id: string, invite_id: string, status: string, token: string) => {
+  update: async (userId: string, inviteId: string, status: string, token: string) => {
     try {
       console.log(`
         mutation {
-          updateInvite(user_id: "${user_id}",invite_id:"${invite_id}",status:"${status}",token:"${token}") {
+          updateInvite(userId: "${userId}",inviteId:"${inviteId}",status:"${status}",token:"${token}") {
             _id
             inviter
             reciever
@@ -171,7 +172,7 @@ const invite = {
         data: {
           query: `
         mutation {
-          updateInvite(user_id: "${user_id}",invite_id:"${invite_id}",status:"${status}",token:"${token}") {
+          updateInvite(userId: "${userId}",inviteId:"${inviteId}",status:"${status}",token:"${token}") {
             _id
             inviter
             reciever

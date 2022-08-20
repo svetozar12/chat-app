@@ -1,21 +1,26 @@
-import { useCookie } from "next-cookie";
-import { useEffect, useState } from "react";
-import api_helper from "../services/graphql/api_helper";
-import { checkTokens, logout } from "./authMethods";
+import { useCookie } from 'next-cookie';
+import { useEffect, useState } from 'react';
+import apiHelper from '../services/graphql/apiHelper';
+import { checkTokens, logout } from './authMethods';
 
 function useProvideAuth() {
   const [user, setUser] = useState(null);
   const cookie = useCookie();
 
   const checkSession = async () => {
-    await checkTokens(cookie);
+    try {
+      await checkTokens(cookie);
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   const getUser = async () => {
-    const user_id: string = cookie.get("id");
-    const token: string = cookie.get("token");
+    const userId: string = cookie.get('id');
+    const token: string = cookie.get('token');
     // setTimeout(async () => {}, 10000);
-    const res = await api_helper.user.getById(user_id, token);
+    const res = await apiHelper.user.getById(userId, token);
     setUser(res);
   };
 
@@ -24,7 +29,7 @@ function useProvideAuth() {
     getUser();
   }, []);
 
-  if (cookie.getAll() === {}) return;
+  if (cookie.getAll() === {}) return { user: '' };
 
   return {
     user,

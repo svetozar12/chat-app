@@ -1,10 +1,10 @@
-import { api } from "../api_helper";
+import { api } from '../apiHelper';
 
-const rootUrl = "";
+const rootUrl = '';
 
 export interface IGetMessages {
-  user_id: string;
-  chat_id: string;
+  userId: string;
+  chatId: string;
   token: string;
   query?: {
     page_size: number;
@@ -13,17 +13,17 @@ export interface IGetMessages {
 }
 
 const message = {
-  getAll: async ({ user_id, chat_id, token, query }: IGetMessages) => {
+  getAll: async ({ userId, chatId, token, query }: IGetMessages) => {
     try {
-      const condition = query ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : "";
+      const condition = query != null ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : '';
 
       const res = await api(rootUrl, {
         data: {
           query: `
           query {
-          getAllMessages(user_id: "${user_id}",chat_id:"${chat_id}"${condition},token:"${token}") {
+          getAllMessages(userId: "${userId}",chatId:"${chatId}"${condition},token:"${token}") {
             _id
-            user_id
+            userId
             chat_id
             sender
             message
@@ -53,14 +53,14 @@ const message = {
     }
   },
 
-  create: async (user_id: string, chat_id: string, _message: string, token: string) => {
+  create: async (userId: string, chatId: string, _message: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          createMessage(user_id: "${user_id}",chat_id: "${chat_id}",token:"${token}",message:"${_message}") {
-            user_id
+          createMessage(userId: "${userId}",chat_id: "${chatId}",token:"${token}",message:"${_message}") {
+            userId
             chat_id
             sender
             message
@@ -91,13 +91,13 @@ const message = {
     }
   },
 
-  update: async (user_id: string, message_id: string, newMessage: string, token: string) => {
+  update: async (userId: string, messageId: string, newMessage: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          updateMessage(user_id: "${user_id}",message_id: "${message_id}",token:"${token}",newMessage:"${newMessage}") {
+          updateMessage(userId: "${userId}",messageId: "${messageId}",token:"${token}",newMessage:"${newMessage}") {
             Message
           }
          }`,
@@ -124,13 +124,13 @@ const message = {
     }
   },
 
-  delete: async (user_id: string, message_id: string, token: string) => {
+  delete: async (userId: string, messageId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          deleteMessage(user_id: "${user_id}",message_id: "${message_id}",token:"${token}") {
+          deleteMessage(userId: "${userId}",messageId: "${messageId}",token:"${token}") {
             Message
           }
         }`,

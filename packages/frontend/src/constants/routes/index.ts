@@ -1,7 +1,7 @@
 const routes = {
-  indexRoute: "/",
-  registerRoute: "/register",
-  settingsProfileRouter: "/settings/profile",
+  indexRoute: '/',
+  registerRoute: '/register',
+  settingsProfileRouter: '/settings/profile',
 };
 
 export default routes;

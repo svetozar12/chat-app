@@ -1,6 +1,6 @@
-import { api } from "../api_helper";
+import { api } from '../apiHelper';
 
-const rootUrl = "";
+const rootUrl = '';
 
 const auth = {
   login: async (username: string, password: string) => {
@@ -10,7 +10,7 @@ const auth = {
           query: `
         mutation {
           loginUser(username: "${username}", password: "${password}") {
-            user_id
+            userId
             Access_token
             Refresh_token
           }
@@ -38,14 +38,14 @@ const auth = {
     }
   },
 
-  refresh: async (user_id: string, token: string) => {
+  refresh: async (userId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          refreshToken(username: "${user_id}", token: "${token}") {
-            user_id
+          refreshToken(username: "${userId}", token: "${token}") {
+            userId
             Access_token
             Refresh_token
           }
@@ -73,13 +73,13 @@ const auth = {
     }
   },
 
-  logout: async (user_id: string, token: string) => {
+  logout: async (userId: string, token: string) => {
     try {
       const res = await api(rootUrl, {
         data: {
           query: `
         mutation {
-          logoutUser(user_id: "${user_id}", token: "${token}") {
+          logoutUser(userId: "${userId}", token: "${token}") {
             Message
           }
         }`,

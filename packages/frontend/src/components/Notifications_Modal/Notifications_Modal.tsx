@@ -1,11 +1,12 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import PendingChats from "./PendingChats/PendingChats";
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import { Iinvites } from "../../pages/[acc]";
-import { css } from "@emotion/css";
-import { CloseButton, Divider, Flex, Heading, ScaleFade, useColorModeValue } from "@chakra-ui/react";
-import s from "./Notifications_Modal.module.css";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { css } from '@emotion/css';
+import { CloseButton, Divider, Flex, Heading, ScaleFade } from '@chakra-ui/react';
+import PendingChats from './PendingChats/PendingChats';
+import { IInitialSet } from '../../services/redux/reducer/setReducer/state';
+import { Iinvites } from '../../pages/[acc]';
+import s from './Notifications_Modal.module.css';
+import useThemeColors from '../../hooks/useThemeColors';
 
 interface INotifications {
   contacts: Iinvites[];
@@ -13,8 +14,9 @@ interface INotifications {
 
 function Notifications({ contacts }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-
-  const from_bg = useColorModeValue("white", "#1c2330");
+  const {
+    colors: { fromBg },
+  } = useThemeColors();
   const dispatch = useDispatch();
 
   const modalVariant = {
@@ -22,8 +24,8 @@ function Notifications({ contacts }: INotifications) {
       scale: 0.8,
     },
     show: {
-      y: "-50%",
-      x: "-50%",
+      y: '-50%',
+      x: '-50%',
       scale: 1,
     },
     exit: {
@@ -32,7 +34,7 @@ function Notifications({ contacts }: INotifications) {
   };
 
   return (
-    <ScaleFade style={{ background: from_bg }} className={s.box} variants={modalVariant} initial="hide" animate="show" exit="exit">
+    <ScaleFade style={{ background: fromBg }} className={s.box} variants={modalVariant} initial="hide" animate="show" exit="exit">
       <Flex alignItems="center" h="5rem" justifyItems="center" justifyContent="center">
         <Heading m="1rem">Notifications</Heading>
       </Flex>
@@ -46,7 +48,7 @@ function Notifications({ contacts }: INotifications) {
         mt="-0.5px !important"
         onClick={() => {
           dispatch({
-            type: "SET_FRIEND_REQUEST",
+            type: 'SET_FRIEND_REQUEST',
             payload: !state.setFriendRequest,
           });
         }}
@@ -62,9 +64,7 @@ function Notifications({ contacts }: INotifications) {
             You don&apos;t have invites !!!
           </Heading>
         ) : (
-          contacts.map((item, index) => {
-            return <PendingChats key={index} {...item} />;
-          })
+          contacts.map((item, index) => <PendingChats key={index} {...item} />)
         )}
       </div>
     </ScaleFade>

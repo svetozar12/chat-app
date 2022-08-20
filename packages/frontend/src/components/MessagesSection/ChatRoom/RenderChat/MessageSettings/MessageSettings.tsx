@@ -1,9 +1,9 @@
-import React from "react";
-import { css } from "@emotion/css";
-import { useDispatch } from "react-redux";
-import api_helper from "services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { getAuth } from "utils/authMethods";
+import React from 'react';
+import { css } from '@emotion/css';
+import { useDispatch } from 'react-redux';
+import apiHelper from 'services/graphql/apiHelper';
+import { useCookie } from 'next-cookie';
+import { getAuth } from 'utils/authMethods';
 
 const options = css`
   background: transparent;
@@ -27,11 +27,11 @@ interface IMessageSettings {
 function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSettings) {
   const dispatch = useDispatch();
   const cookie = useCookie();
-  console.log(cookie.get("id"), id);
+  console.log(cookie.get('id'), id);
 
   const handleDelete = async () => {
     try {
-      await api_helper.message.delete(cookie.get("id"), id, cookie.get("token"));
+      await apiHelper.message.delete(cookie.get('id'), id, cookie.get('token'));
       return true;
     } catch (error) {
       return false;
@@ -51,8 +51,8 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
   const handleClick = (status: string) => {
     getAuth();
     setSettings(false);
-    status === "delete" && handleDelete();
-    status === "edit" && handleEdit();
+    status === 'delete' && handleDelete();
+    status === 'edit' && handleEdit();
   };
   return (
     <div
@@ -82,14 +82,14 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
     >
       <button
         onClick={() => {
-          dispatch({ type: "DELETE_MESSAGE", payload: id });
-          handleClick("delete");
+          dispatch({ type: 'DELETE_MESSAGE', payload: id });
+          handleClick('delete');
         }}
         className={options}
       >
         Delete Message
       </button>
-      <button onClick={() => handleClick("edit")} className={options}>
+      <button onClick={() => handleClick('edit')} className={options}>
         Edit Message
       </button>
     </div>
