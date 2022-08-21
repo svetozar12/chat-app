@@ -1,21 +1,16 @@
 import { HYDRATE } from 'next-redux-wrapper';
-import { IAuthState } from './state';
+import { IAuth } from './state';
 import { ActionType } from '../../types';
 
-export const initialState: IAuthState = {
+export const initialState: IAuth = {
   remember_me: false,
   good: '', // good and bad stand for good alert and bad alert
   bad: '',
   ws: null,
   loginPrompt: false,
 };
-const reducer = (state = initialState, action: any) => {
+const authReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case HYDRATE:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case ActionType.LOGIN_POST:
       return { ...state, state };
     case ActionType.LOGIN_POST_ERROR:
@@ -30,12 +25,9 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, loginPrompt: action.payload };
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
-    case ActionType.SET_WS_CONNECTED:
-      return { ...state, ws: action.payload };
     default:
       return state;
   }
 };
 
-export default reducer;
-export { initialState as AuthState };
+export default authReducer;

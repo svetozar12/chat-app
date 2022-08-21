@@ -1,26 +1,33 @@
 import React from 'react';
-import { IInitialSet } from 'services/redux/reducer/setReducer/state';
-import { useSelector, useDispatch } from 'react-redux';
 import { css, cx } from '@emotion/css';
 import { CloseButton, HStack, IconButton, Input, Spacer } from '@chakra-ui/react';
 import apiHelper from 'services/graphql/apiHelper';
 import { useCookie } from 'next-cookie';
-import { IAuthState } from 'services/redux/reducer/authReducer/state';
 import { getAuth } from 'utils/authMethods';
 import useThemeColors from 'hooks/useThemeColors';
 import { IoCreateOutline } from 'react-icons/io5';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { bindActionCreators, Dispatch } from 'redux';
+import { toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
 
-function AddGroupChat() {
+interface IAddGroupChat {
+  ws: IWebSocket;
+  toggle: IToggle;
+  toggleCreateGroup: typeof toggleCreateGroup;
+}
+
+function AddGroupChat(props: IAddGroupChat) {
+  const { toggle, ws, toggleCreateGroup } = props;
   const [user, setUser] = React.useState<string>('');
   const [usersData, setUsersData] = React.useState<string[]>([]);
   const cookie = useCookie();
-  const dispatch = useDispatch();
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookieName: string = cookie.get('name');
 
   const emitFriendRequest = async () => {
-    authState.ws?.emit('friend_request');
+    ws.ws?.emit('friend_request');
   };
 
   const addToGroup = (user: string, e: React.FormEvent<HTMLFormElement>) => {
@@ -43,10 +50,7 @@ function AddGroupChat() {
       await apiHelper.invite.createGroupChat(usersData);
       emitFriendRequest();
       setUsersData([]);
-      dispatch({
-        type: 'TOGGLE_CREATE_GROUP',
-        payload: !setState.toggleCreateGroup,
-      });
+      toggleCreateGroup(!toggle.toggleCreateGroupModal);
       return true;
     } catch (error) {
       setUsersData([]);
@@ -60,7 +64,7 @@ function AddGroupChat() {
 
   return (
     <>
-      {setState.toggleCreateGroup && (
+      {toggle.toggleCreateGroupModal && (
         <div
           className={css`
             width: 100%;
@@ -125,4 +129,13 @@ function AddGroupChat() {
   );
 }
 
-export default AddGroupChat;
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddGroupChat);

@@ -1,23 +1,31 @@
 import { css, cx } from '@emotion/css';
 import React from 'react';
 import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 // components
 import { useCookie } from 'next-cookie';
 import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
 import MessageSettings from './MessageSettings';
 import { IchatInstance } from '../ChatRoom';
 // services
-import { InitialStateMessage } from '../../../../services/redux/reducer/messageReducer/state';
-import apiHelper from '../../../../services/graphql/apiHelper';
-import useThemeColors from '../../../../hooks/useThemeColors';
+import apiHelper from 'services/graphql/apiHelper';
+import useThemeColors from 'hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { resetMessagesAction, setMessagesAction } from 'services/redux/reducer/messages/actions';
+import { IMessage } from 'services/redux/reducer/messages/state';
+import { toggleMessageSettings } from 'services/redux/reducer/toggles/actions';
 
 interface IRenderChat {
   id: string;
   sender: string;
   timeStamp: string | number;
-  message: string;
+  recievedMessage: string;
   chatId: string;
+  message: IMessage;
+  toggleMessageSettings: typeof toggleMessageSettings;
+  setMessages: typeof setMessagesAction;
+  resetMessages: typeof resetMessagesAction;
 }
 
 const mineMessages = css`
@@ -34,9 +42,9 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-function RenderChat({ id, sender, timeStamp, message }: IRenderChat) {
-  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const dispatch = useDispatch();
+function RenderChat(props: IRenderChat) {
+  const { id, sender, timeStamp, recievedMessage, message, toggleMessageSettings, resetMessages, setMessages } = props;
+  const { show, messages } = message;
   const cookie = useCookie();
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
@@ -76,9 +84,9 @@ function RenderChat({ id, sender, timeStamp, message }: IRenderChat) {
   `;
 
   const ToggleSettings = () => {
-    dispatch({ type: 'SHOW_SETTINGS', payload: !messageState.show });
+    toggleMessageSettings(!show);
     if (settings) setEditing(false);
-    setSettings(!messageState.show);
+    setSettings(!show);
   };
 
   const handleEdit = async (e: any) => {
@@ -88,23 +96,23 @@ function RenderChat({ id, sender, timeStamp, message }: IRenderChat) {
     e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
     if (e.key === 'Enter') {
       const messageArr: IchatInstance[] = [];
-      for (const obj of messageState.messages) {
+      for (const obj of messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
           await apiHelper.message.update(cookie.get('id'), id, editedMessage, cookie.get('token'));
-          dispatch({ type: 'RESET_MESSAGES' });
+          resetMessages();
         }
         messageArr.push(obj);
       }
       messageArr.forEach((element) => {
-        dispatch({ type: 'MESSAGES', payload: element });
+        setMessages(element);
       });
       setEditing(false);
     }
   };
 
   React.useEffect(() => {
-    setEditedMessage(message);
+    setEditedMessage(recievedMessage);
     if (inputRef.current != null) {
       setWidth(inputRef.current.offsetWidth);
       setHeight(inputRef.current.offsetHeight);
@@ -227,7 +235,7 @@ function RenderChat({ id, sender, timeStamp, message }: IRenderChat) {
                   `,
                 )}
               >
-                {message}
+                {recievedMessage}
               </span>
             )}
           </VStack>
@@ -249,4 +257,14 @@ function RenderChat({ id, sender, timeStamp, message }: IRenderChat) {
   );
 }
 
-export default React.memo(RenderChat);
+const mapStateToProps = (state: STATE) => ({
+  message: state.messages,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setMessages: bindActionCreators(setMessagesAction, dispatch),
+  resetMessages: bindActionCreators(resetMessagesAction, dispatch),
+  toggleMessageSettings: bindActionCreators(toggleMessageSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(RenderChat));

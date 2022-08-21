@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCookie } from 'next-cookie';
 import apiHelper from '../../../services/graphql/apiHelper';
-import Single_avatar from '../Single_avatar';
+import SingleAvatar from '../SingleAvatar';
 
 interface IGroup_avatar {
   members: string[];
@@ -37,7 +37,7 @@ function GroupAvatar({ members }: IGroup_avatar) {
         if (index === 2) return null;
         return (
           <div key={index} title={username}>
-            <Single_avatar width="2.3125rem" height="2.3125rem" group overlay={index === 1} />
+            <SingleAvatar width="2.3125rem" height="2.3125rem" group overlay={index === 1} />
           </div>
         );
       })}

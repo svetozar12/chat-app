@@ -1,35 +1,33 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { IAuthState } from 'services/redux/reducer/authReducer/state';
-import { IInitialSet } from 'services/redux/reducer/setReducer/state';
+import { useSelector, useDispatch, connect } from 'react-redux';
 import Head from 'next/dist/shared/lib/head';
 import { css } from '@emotion/css';
 import { useColorMode } from '@chakra-ui/react';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleFriendRequestAction, toggleInviteModal, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 
-function App() {
-  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+// todo refactor redux implementation from loading folder to updateinfo
 
-  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const dispatch = useDispatch();
+interface IGlobals {
+  toggle: IToggle;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  toggleFriendRequestModal: typeof toggleFriendRequestAction;
+  toggleInviteModal: typeof toggleInviteModal;
+}
 
+function Globals(props: IGlobals) {
+  const { toggle, toggleQuickLogin, toggleFriendRequestModal, toggleInviteModal } = props;
   const closeModals = () => {
-    dispatch({
-      type: 'SET_FRIEND_REQUEST',
-      payload: false,
-    });
-    dispatch({
-      type: 'SET_MODAL_INVITE',
-      payload: false,
-    });
-    dispatch({
-      type: 'QUICK_LOGIN',
-      payload: false,
-    });
+    toggleFriendRequestModal(false);
+    toggleInviteModal(false);
+    toggleQuickLogin(false);
   };
 
   const { colorMode } = useColorMode();
 
-  const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
+  const Blur: boolean = toggle.toggleFriendReqModal || toggle.toggleInvideModal || toggle.toggleQuickLogin;
   // styles={{
   //         body: {
   //           margin: 0,
@@ -60,4 +58,14 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  toggleInviteModal: bindActionCreators(toggleInviteModal, dispatch),
+  toggleFriendRequestModal: bindActionCreators(toggleFriendRequestAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Globals);

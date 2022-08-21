@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 // utils
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import { VStack } from '@chakra-ui/react';
 import timeStamp from '../../../utils/timeStamp';
@@ -14,13 +14,29 @@ import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // hooks
 // services
 import apiHelper from '../../../services/graphql/apiHelper';
-import { InitialStateMessage } from '../../../services/redux/reducer/messageReducer/state';
-import { IInitialSet } from '../../../services/redux/reducer/setReducer/state';
 import { useAuth } from '../../../utils/SessionProvider';
 import useThemeColors from '../../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import {
+  incrementPaginationNumberAction,
+  resetMessagesAction,
+  setMessagesAction,
+  setPaginatedMessagesAction,
+} from 'services/redux/reducer/messages/actions';
+import { IMessage } from 'services/redux/reducer/messages/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleIsMatch } from 'services/redux/reducer/toggles/actions';
 
-interface IHome {
+interface IChatRoom {
+  message: IMessage;
+  toggle: IToggle;
   chatId: string;
+  incrementPagination: typeof incrementPaginationNumberAction;
+  setMessages: typeof setMessagesAction;
+  setPaginatedMessages: typeof setPaginatedMessagesAction;
+  resetMessages: typeof resetMessagesAction;
+  toggleIsMatch: typeof toggleIsMatch;
 }
 
 export interface IchatInstance {
@@ -30,10 +46,10 @@ export interface IchatInstance {
   createdAt: string;
 }
 
-function ChatRoom({ chatId }: IHome) {
+function ChatRoom(props: IChatRoom) {
+  const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message, toggle } = props;
+  const { messagePageNumber, messages, show } = message;
   const route = useRouter();
-  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
   const {
     colors: { chatBg },
@@ -41,15 +57,14 @@ function ChatRoom({ chatId }: IHome) {
   const user = useAuth();
   const userId: string = cookie.get('id');
   const token: string = cookie.get('token');
-  const dispatch = useDispatch();
   const containerRef = React.useRef<null | HTMLDivElement>(null);
 
   const getRecentMessages = async () => {
     try {
       const res = await apiHelper.message.getAll({ userId, chatId, token, query: { page_size: 10, page_number: 1 } });
 
-      res.forEach((element: any) => {
-        dispatch({ type: 'MESSAGES', payload: element });
+      res.forEach((element: Record<string, any>) => {
+        setMessages(element);
       });
 
       return true;
@@ -59,29 +74,26 @@ function ChatRoom({ chatId }: IHome) {
   };
 
   useEffect(() => {
-    dispatch({ type: 'SET_IS_MATCH', payload: false });
-    if (location.href === `${constants.HOST_URL}/${chatId}`) dispatch({ type: 'SET_IS_MATCH', payload: true });
-    dispatch({ type: 'RESET_MESSAGES' });
+    toggleIsMatch(false);
+    if (location.href === `${constants.HOST_URL}/${chatId}`) toggleIsMatch(true);
+    resetMessages();
     getRecentMessages();
   }, [route.asPath]);
 
   const scrollHandler = async (e: React.UIEvent<HTMLElement>) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
-        dispatch({
-          type: 'INCREMENT_PAGE_NUMBER',
-          payload: setState.pageNumber,
-        });
+        incrementPagination(messagePageNumber);
         const res = await apiHelper.message.getAll({
           userId,
           chatId,
           token,
-          query: { page_size: 10, page_number: setState.pageNumber },
+          query: { page_size: 10, page_number: messagePageNumber },
         });
         const data = res.reversedArr;
 
-        data.forEach((element: any) => {
-          dispatch({ type: 'PAGGINATION_MESSAGES', payload: element });
+        data.forEach((element: Record<string, any>) => {
+          setPaginatedMessages(element);
         });
       }
       return true;
@@ -97,11 +109,11 @@ function ChatRoom({ chatId }: IHome) {
 
   React.useEffect(() => {
     scrollToBottom();
-  }, [messageState.messages]);
+  }, [messages]);
 
   return (
     <VStack w="full" h="100vh">
-      {setState.toggleCreateGroup && <ChatHeader />}
+      {toggle.toggleCreateGroupModal && <ChatHeader />}
 
       {user ? (
         <VStack
@@ -114,11 +126,11 @@ function ChatRoom({ chatId }: IHome) {
           ref={containerRef}
           onScroll={scrollHandler}
         >
-          {messageState.messages.map((item, index) => {
+          {messages.map((item, index) => {
             const { sender, message, createdAt } = item;
             const TimeStamp = timeStamp(createdAt);
 
-            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} message={message} />;
+            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} recievedMessage={message} />;
           })}
         </VStack>
       ) : (
@@ -130,4 +142,17 @@ function ChatRoom({ chatId }: IHome) {
   );
 }
 
-export default ChatRoom;
+const mapStateToProps = (state: STATE) => ({
+  message: state.messages,
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  incrementPagination: bindActionCreators(incrementPaginationNumberAction, dispatch),
+  setMessages: bindActionCreators(setMessagesAction, dispatch),
+  setPaginatedMessages: bindActionCreators(setPaginatedMessagesAction, dispatch),
+  toggleIsMatch: bindActionCreators(toggleIsMatch, dispatch),
+  resetMessages: bindActionCreators(resetMessagesAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

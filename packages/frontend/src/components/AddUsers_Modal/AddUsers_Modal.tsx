@@ -1,24 +1,27 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { GrClose } from 'react-icons/gr';
 import axios from 'axios';
 import { css } from '@emotion/css';
-import { IInitialSet } from '../../services/redux/reducer/setReducer/state';
-import CheckBox from '../../services/chat-ui/CheckBox';
 import { constants } from '../../constants';
-import { IAuthState } from '../../services/redux/reducer/authReducer/state';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
+import { bindActionCreators, Dispatch } from 'redux';
 
 interface IAddUserModal {
   users: string[];
   chatId: string;
+  ws: IWebSocket;
+  toggle: IToggle;
+  toggleInviteModal: typeof toggleInviteModal;
   setUsers: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-function AddUserModal({ users, chatId, setUsers }: IAddUserModal) {
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+function AddUserModal(props: IAddUserModal) {
+  const { users, chatId, setUsers, toggleInviteModal, ws, toggle } = props;
   const [invited, setInvited] = React.useState<string[]>([]);
-  const dispatch = useDispatch();
   const addMembers = async (user: string[]) => {
     try {
       await axios.put(`${constants.GRAPHQL_URL}/chat-room/${chatId}`, {
@@ -35,7 +38,7 @@ function AddUserModal({ users, chatId, setUsers }: IAddUserModal) {
       if (invited.length <= 0) return;
       await addMembers(invited);
       setUsers(users.filter((element) => !invited.includes(element)));
-      authState.ws?.emit('inviting_multiple_users', { users: invited });
+      ws.ws?.emit('inviting_multiple_users', { users: invited });
       setInvited([]);
 
       return true;
@@ -70,12 +73,7 @@ function AddUserModal({ users, chatId, setUsers }: IAddUserModal) {
       <section style={{ position: 'relative', textAlign: 'center' }} className="modalHeading flex">
         <h1 style={{ padding: '0 25%' }}>Add people</h1>
         <div
-          onClick={() => {
-            dispatch({
-              type: 'SET_MODAL_INVITE',
-              payload: !state.setModalInvite,
-            });
-          }}
+          onClick={() => toggleInviteModal(!toggle.toggleInvideModal)}
           style={{ width: '3rem', height: '3rem' }}
           className="circleBorder absoluteTopRight flex"
         >
@@ -84,9 +82,9 @@ function AddUserModal({ users, chatId, setUsers }: IAddUserModal) {
       </section>
       <div className="flex" style={{ overflowY: 'auto', width: '100%', flexDirection: 'column' }}>
         {users.length === 0 && <h1>No Chat suggestions</h1>}
-        {users.map((item, index) => (
+        {/* {users.map((item, index) => (
           <CheckBox key={index} invited={invited} setInvited={setInvited} item={item} />
-        ))}
+        ))} */}
       </div>
       <div className="modalFooter flex">
         <button onClick={handleSubmit} className="button" type="submit">
@@ -97,4 +95,13 @@ function AddUserModal({ users, chatId, setUsers }: IAddUserModal) {
   );
 }
 
-export default AddUserModal;
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  incrementPagination: bindActionCreators(toggleInviteModal, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddUserModal);

@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io-client';
 
-export interface IAuthState {
+export interface IAuth {
   remember_me: boolean;
   loginPrompt: boolean;
   good?: string;

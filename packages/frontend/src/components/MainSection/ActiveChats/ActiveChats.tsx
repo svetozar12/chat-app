@@ -1,28 +1,32 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { BsThreeDots } from 'react-icons/bs';
 import { css, cx } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
-import { IAuthState } from '../../../services/redux/reducer/authReducer/state';
-import { IInitialSet } from '../../../services/redux/reducer/setReducer/state';
 import Avatar from '../../Avatar';
 import useThemeColors from '../../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleChatSettings, toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
 
 interface IActiveChats {
   _id: string;
   members: string[];
   chatId: string;
+  toggle: IToggle;
+  ws: IWebSocket;
+  toggleCreateGroup: typeof toggleCreateGroup;
+  toggleChatSettings: typeof toggleChatSettings;
 }
 
-function ActiveChats({ _id, members, chatId }: IActiveChats) {
-  const router = useRouter();
-
-  const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+function ActiveChats(props: IActiveChats) {
+  const { _id, members, chatId, toggle, ws, toggleCreateGroup, toggleChatSettings } = props;
   const [inviter, setInviter] = React.useState<string>('');
+  const router = useRouter();
   const cookie = useCookie();
 
   const cookieName: string = cookie.get('name');
@@ -30,7 +34,7 @@ function ActiveChats({ _id, members, chatId }: IActiveChats) {
   const user2 = members[1];
 
   const joinChat = () => {
-    authState.ws?.emit('join_chat', {
+    ws.ws?.emit('join_chat', {
       rooms: [cookieName, chatId],
     });
     router.push(`${_id}`);
@@ -42,18 +46,6 @@ function ActiveChats({ _id, members, chatId }: IActiveChats) {
     setInviter(notMe[0]);
   }, []);
 
-  const dispatching = () => {
-    dispatch({
-      type: 'TOGGLE_CREATE_GROUP',
-      payload: false,
-    });
-  };
-  const chatSettings = () => {
-    dispatch({
-      type: 'SET_CHAT_SETTINGS',
-      payload: !state.setChatSettings,
-    });
-  };
   const {
     colors: { color },
   } = useThemeColors();
@@ -71,7 +63,7 @@ function ActiveChats({ _id, members, chatId }: IActiveChats) {
       data-testid="chat"
       onClick={() => {
         joinChat();
-        dispatching();
+        toggleCreateGroup(false);
       }}
       className={cx({
         [css`
@@ -149,7 +141,7 @@ function ActiveChats({ _id, members, chatId }: IActiveChats) {
                   height: 2rem;
                   color: ${color};
                 `}
-                onClick={chatSettings}
+                onClick={() => toggleChatSettings(!toggle.toggleChatSettings)}
               />
             }
           />
@@ -158,4 +150,15 @@ function ActiveChats({ _id, members, chatId }: IActiveChats) {
     </HStack>
   );
 }
-export default ActiveChats;
+
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+  ws: state.ws,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
+  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveChats);
