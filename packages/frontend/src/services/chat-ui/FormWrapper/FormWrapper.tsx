@@ -61,4 +61,5 @@ function FormWrapper(props: IFormWrapper) {
   );
 }
 
+export type { IFormWrapper };
 export default FormWrapper;

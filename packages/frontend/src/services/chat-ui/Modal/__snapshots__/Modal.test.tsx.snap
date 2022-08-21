@@ -1,0 +1,1434 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing correct behaviour of <Modal /> component <Modal /> should match snapshot 1`] = `
+<Modal
+  chakraProps={
+    Object {
+      "h": "20%",
+    }
+  }
+  closeModal={[Function]}
+  heading="Modal Heading"
+  style={
+    Object {
+      "background": "lime",
+    }
+  }
+>
+  <ScaleFade
+    animate="show"
+    background="lime"
+    exit="exit"
+    h="20%"
+    initial="hide"
+    style={
+      Object {
+        "background": "white",
+      }
+    }
+    variants={
+      Object {
+        "exit": Object {
+          "scale": 0.8,
+        },
+        "hide": Object {
+          "scale": 0.8,
+        },
+        "show": Object {
+          "scale": 1,
+          "x": "-50%",
+          "y": "-50%",
+        },
+      }
+    }
+  >
+    <AnimatePresence
+      custom={
+        Object {
+          "delay": undefined,
+          "initialScale": 0.95,
+          "reverse": true,
+          "transition": undefined,
+          "transitionEnd": undefined,
+        }
+      }
+    >
+      <PresenceChild
+        isPresent={true}
+        key=""
+        presenceAffectsLayout={true}
+      >
+        <ForwardRef(MotionComponent)
+          animate="show"
+          background="lime"
+          className="chakra-offset-slide"
+          custom={
+            Object {
+              "delay": undefined,
+              "initialScale": 0.95,
+              "reverse": true,
+              "transition": undefined,
+              "transitionEnd": undefined,
+            }
+          }
+          exit="exit"
+          h="20%"
+          initial="hide"
+          style={
+            Object {
+              "background": "white",
+            }
+          }
+          variants={
+            Object {
+              "exit": Object {
+                "scale": 0.8,
+              },
+              "hide": Object {
+                "scale": 0.8,
+              },
+              "show": Object {
+                "scale": 1,
+                "x": "-50%",
+                "y": "-50%",
+              },
+            }
+          }
+        >
+          <VisualElementHandler
+            props={
+              Object {
+                "animate": "show",
+                "background": "lime",
+                "children": Array [
+                  <Flex
+                    alignItems="center"
+                    h="5rem"
+                    justifyContent="center"
+                    justifyItems="center"
+                  >
+                    <Heading
+                      m="1rem"
+                    >
+                      Modal Heading
+                    </Heading>
+                  </Flex>,
+                  <Divider />,
+                  <CloseButton
+                    m={5}
+                    mt="-0.5px !important"
+                    onClick={[Function]}
+                    pos="absolute"
+                    right={0}
+                    size="lg"
+                    top={0}
+                  />,
+                  <div
+                    className="css-1ow1dtq"
+                  >
+                    <h1>
+                      test text
+                    </h1>
+                  </div>,
+                ],
+                "className": "chakra-offset-slide",
+                "custom": Object {
+                  "delay": undefined,
+                  "initialScale": 0.95,
+                  "reverse": true,
+                  "transition": undefined,
+                  "transitionEnd": undefined,
+                },
+                "exit": "exit",
+                "h": "20%",
+                "initial": "hide",
+                "isStatic": false,
+                "layoutId": undefined,
+                "reducedMotion": "never",
+                "style": Object {
+                  "background": "white",
+                },
+                "transformPagePoint": [Function],
+                "variants": Object {
+                  "exit": Object {
+                    "scale": 0.8,
+                  },
+                  "hide": Object {
+                    "scale": 0.8,
+                  },
+                  "show": Object {
+                    "scale": 1,
+                    "x": "-50%",
+                    "y": "-50%",
+                  },
+                },
+              }
+            }
+            visualElement={
+              Object {
+                "addValue": [Function],
+                "addVariantChild": [Function],
+                "animationState": Object {
+                  "animateChanges": [Function],
+                  "getState": [Function],
+                  "isAnimated": [Function],
+                  "setActive": [Function],
+                  "setAnimateFunction": [Function],
+                },
+                "blockInitialAnimation": false,
+                "build": [Function],
+                "children": Set {},
+                "clearAllListeners": [Function],
+                "current": <div
+                  class="chakra-offset-slide"
+                  style="background: white; transform: scale(0.8) translateZ(0);"
+                >
+                  <div
+                    class="css-0"
+                  >
+                    <h2
+                      class="chakra-heading css-0"
+                    >
+                      Modal Heading
+                    </h2>
+                  </div>
+                  <hr
+                    aria-orientation="horizontal"
+                    class="chakra-divider css-0"
+                  />
+                  <button
+                    aria-label="Close"
+                    class="css-0"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="chakra-icon css-0"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    class="css-1ow1dtq"
+                  >
+                    <h1>
+                      test text
+                    </h1>
+                  </div>
+                </div>,
+                "depth": 0,
+                "forEachValue": [Function],
+                "getBaseTarget": [Function],
+                "getClosestVariantNode": [Function],
+                "getDefaultTransition": [Function],
+                "getInstance": [Function],
+                "getLatestValues": [Function],
+                "getLayoutId": [Function],
+                "getProps": [Function],
+                "getStaticValue": [Function],
+                "getTransformPagePoint": [Function],
+                "getValue": [Function],
+                "getVariant": [Function],
+                "getVariantContext": [Function],
+                "hasValue": [Function],
+                "isMounted": [Function],
+                "isPresent": true,
+                "isVisible": undefined,
+                "makeTargetAnimatable": [Function],
+                "manuallyAnimateOnMount": false,
+                "measureViewportBox": [Function],
+                "mount": [Function],
+                "notifyAnimationComplete": [Function],
+                "notifyAnimationStart": [Function],
+                "notifyBeforeLayoutMeasure": [Function],
+                "notifyLayoutAnimationComplete": [Function],
+                "notifyLayoutAnimationStart": [Function],
+                "notifyLayoutMeasure": [Function],
+                "notifyLayoutUpdate": [Function],
+                "notifyRender": [Function],
+                "notifySetAxisTarget": [Function],
+                "notifyUnmount": [Function],
+                "notifyUpdate": [Function],
+                "notifyViewportBoxUpdate": [Function],
+                "onAnimationComplete": [Function],
+                "onAnimationStart": [Function],
+                "onBeforeLayoutMeasure": [Function],
+                "onLayoutAnimationComplete": [Function],
+                "onLayoutAnimationStart": [Function],
+                "onLayoutMeasure": [Function],
+                "onLayoutUpdate": [Function],
+                "onRender": [Function],
+                "onSetAxisTarget": [Function],
+                "onUnmount": [Function],
+                "onUpdate": [Function],
+                "onViewportBoxUpdate": [Function],
+                "parent": undefined,
+                "presenceId": 0,
+                "projection": ProjectionNode {
+                  "animationProgress": 0,
+                  "checkUpdateFailed": [Function],
+                  "children": Set {},
+                  "depth": 1,
+                  "eventHandlers": Map {},
+                  "hasProjected": false,
+                  "id": undefined,
+                  "instance": <div
+                    class="chakra-offset-slide"
+                    style="background: white; transform: scale(0.8) translateZ(0);"
+                  >
+                    <div
+                      class="css-0"
+                    >
+                      <h2
+                        class="chakra-heading css-0"
+                      >
+                        Modal Heading
+                      </h2>
+                    </div>
+                    <hr
+                      aria-orientation="horizontal"
+                      class="chakra-divider css-0"
+                    />
+                    <button
+                      aria-label="Close"
+                      class="css-0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="chakra-icon css-0"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="css-1ow1dtq"
+                    >
+                      <h1>
+                        test text
+                      </h1>
+                    </div>
+                  </div>,
+                  "isAnimationBlocked": false,
+                  "isLayoutDirty": false,
+                  "isSVG": false,
+                  "isTreeAnimating": false,
+                  "isUpdating": false,
+                  "isVisible": true,
+                  "latestValues": Object {
+                    "scale": 0.8,
+                    "x": "0%",
+                    "y": "0%",
+                  },
+                  "needsReset": false,
+                  "options": Object {
+                    "alwaysMeasureLayout": undefined,
+                    "animationType": "both",
+                    "crossfade": true,
+                    "initialPromotionConfig": Object {},
+                    "layout": undefined,
+                    "layoutId": undefined,
+                    "layoutScroll": undefined,
+                    "scheduleRender": [Function],
+                    "visualElement": [Circular],
+                  },
+                  "parent": ProjectionNode {
+                    "animationProgress": 0,
+                    "checkUpdateFailed": [Function],
+                    "children": Set {
+                      [Circular],
+                    },
+                    "depth": 0,
+                    "eventHandlers": Map {},
+                    "hasProjected": false,
+                    "id": 0,
+                    "instance": [Window],
+                    "isAnimationBlocked": false,
+                    "isLayoutDirty": false,
+                    "isSVG": false,
+                    "isTreeAnimating": false,
+                    "isUpdating": false,
+                    "isVisible": true,
+                    "latestValues": Object {},
+                    "needsReset": false,
+                    "nodes": FlatTree {
+                      "children": Array [
+                        [Circular],
+                        [Circular],
+                      ],
+                      "isDirty": true,
+                    },
+                    "options": Object {
+                      "crossfade": true,
+                      "layoutScroll": true,
+                    },
+                    "parent": undefined,
+                    "path": Array [],
+                    "potentialNodes": Map {},
+                    "root": [Circular],
+                    "sharedNodes": Map {},
+                    "shouldResetTransform": true,
+                    "treeScale": Object {
+                      "x": 1,
+                      "y": 1,
+                    },
+                    "updateBlockedByResize": false,
+                    "updateManuallyBlocked": false,
+                    "updateProjection": [Function],
+                  },
+                  "path": Array [
+                    ProjectionNode {
+                      "animationProgress": 0,
+                      "checkUpdateFailed": [Function],
+                      "children": Set {
+                        [Circular],
+                      },
+                      "depth": 0,
+                      "eventHandlers": Map {},
+                      "hasProjected": false,
+                      "id": 0,
+                      "instance": [Window],
+                      "isAnimationBlocked": false,
+                      "isLayoutDirty": false,
+                      "isSVG": false,
+                      "isTreeAnimating": false,
+                      "isUpdating": false,
+                      "isVisible": true,
+                      "latestValues": Object {},
+                      "needsReset": false,
+                      "nodes": FlatTree {
+                        "children": Array [
+                          [Circular],
+                          [Circular],
+                        ],
+                        "isDirty": true,
+                      },
+                      "options": Object {
+                        "crossfade": true,
+                        "layoutScroll": true,
+                      },
+                      "parent": undefined,
+                      "path": Array [],
+                      "potentialNodes": Map {},
+                      "root": [Circular],
+                      "sharedNodes": Map {},
+                      "shouldResetTransform": true,
+                      "treeScale": Object {
+                        "x": 1,
+                        "y": 1,
+                      },
+                      "updateBlockedByResize": false,
+                      "updateManuallyBlocked": false,
+                      "updateProjection": [Function],
+                    },
+                  ],
+                  "potentialNodes": Map {},
+                  "root": ProjectionNode {
+                    "animationProgress": 0,
+                    "checkUpdateFailed": [Function],
+                    "children": Set {
+                      [Circular],
+                    },
+                    "depth": 0,
+                    "eventHandlers": Map {},
+                    "hasProjected": false,
+                    "id": 0,
+                    "instance": [Window],
+                    "isAnimationBlocked": false,
+                    "isLayoutDirty": false,
+                    "isSVG": false,
+                    "isTreeAnimating": false,
+                    "isUpdating": false,
+                    "isVisible": true,
+                    "latestValues": Object {},
+                    "needsReset": false,
+                    "nodes": FlatTree {
+                      "children": Array [
+                        [Circular],
+                        [Circular],
+                      ],
+                      "isDirty": true,
+                    },
+                    "options": Object {
+                      "crossfade": true,
+                      "layoutScroll": true,
+                    },
+                    "parent": undefined,
+                    "path": Array [],
+                    "potentialNodes": Map {},
+                    "root": [Circular],
+                    "sharedNodes": Map {},
+                    "shouldResetTransform": true,
+                    "treeScale": Object {
+                      "x": 1,
+                      "y": 1,
+                    },
+                    "updateBlockedByResize": false,
+                    "updateManuallyBlocked": false,
+                    "updateProjection": [Function],
+                  },
+                  "sharedNodes": Map {},
+                  "shouldResetTransform": false,
+                  "treeScale": Object {
+                    "x": 1,
+                    "y": 1,
+                  },
+                  "updateBlockedByResize": false,
+                  "updateManuallyBlocked": false,
+                  "updateProjection": [Function],
+                },
+                "readValue": [Function],
+                "removeValue": [Function],
+                "scheduleRender": [Function],
+                "setBaseTarget": [Function],
+                "setProps": [Function],
+                "setStaticValue": [Function],
+                "setVisibility": [Function],
+                "shouldReduceMotion": false,
+                "sortNodePosition": [Function],
+                "syncRender": [Function],
+                "treeType": "dom",
+                "unmount": [Function],
+                "updatePropListeners": [Function],
+                "variantChildren": Set {},
+              }
+            }
+          >
+            <Component
+              animate="show"
+              background="lime"
+              className="chakra-offset-slide"
+              custom={
+                Object {
+                  "delay": undefined,
+                  "initialScale": 0.95,
+                  "reverse": true,
+                  "transition": undefined,
+                  "transitionEnd": undefined,
+                }
+              }
+              exit="exit"
+              h="20%"
+              initial="hide"
+              key="animation"
+              style={
+                Object {
+                  "background": "white",
+                }
+              }
+              variants={
+                Object {
+                  "exit": Object {
+                    "scale": 0.8,
+                  },
+                  "hide": Object {
+                    "scale": 0.8,
+                  },
+                  "show": Object {
+                    "scale": 1,
+                    "x": "-50%",
+                    "y": "-50%",
+                  },
+                }
+              }
+              visualElement={
+                Object {
+                  "addValue": [Function],
+                  "addVariantChild": [Function],
+                  "animationState": Object {
+                    "animateChanges": [Function],
+                    "getState": [Function],
+                    "isAnimated": [Function],
+                    "setActive": [Function],
+                    "setAnimateFunction": [Function],
+                  },
+                  "blockInitialAnimation": false,
+                  "build": [Function],
+                  "children": Set {},
+                  "clearAllListeners": [Function],
+                  "current": <div
+                    class="chakra-offset-slide"
+                    style="background: white; transform: scale(0.8) translateZ(0);"
+                  >
+                    <div
+                      class="css-0"
+                    >
+                      <h2
+                        class="chakra-heading css-0"
+                      >
+                        Modal Heading
+                      </h2>
+                    </div>
+                    <hr
+                      aria-orientation="horizontal"
+                      class="chakra-divider css-0"
+                    />
+                    <button
+                      aria-label="Close"
+                      class="css-0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="chakra-icon css-0"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="css-1ow1dtq"
+                    >
+                      <h1>
+                        test text
+                      </h1>
+                    </div>
+                  </div>,
+                  "depth": 0,
+                  "forEachValue": [Function],
+                  "getBaseTarget": [Function],
+                  "getClosestVariantNode": [Function],
+                  "getDefaultTransition": [Function],
+                  "getInstance": [Function],
+                  "getLatestValues": [Function],
+                  "getLayoutId": [Function],
+                  "getProps": [Function],
+                  "getStaticValue": [Function],
+                  "getTransformPagePoint": [Function],
+                  "getValue": [Function],
+                  "getVariant": [Function],
+                  "getVariantContext": [Function],
+                  "hasValue": [Function],
+                  "isMounted": [Function],
+                  "isPresent": true,
+                  "isVisible": undefined,
+                  "makeTargetAnimatable": [Function],
+                  "manuallyAnimateOnMount": false,
+                  "measureViewportBox": [Function],
+                  "mount": [Function],
+                  "notifyAnimationComplete": [Function],
+                  "notifyAnimationStart": [Function],
+                  "notifyBeforeLayoutMeasure": [Function],
+                  "notifyLayoutAnimationComplete": [Function],
+                  "notifyLayoutAnimationStart": [Function],
+                  "notifyLayoutMeasure": [Function],
+                  "notifyLayoutUpdate": [Function],
+                  "notifyRender": [Function],
+                  "notifySetAxisTarget": [Function],
+                  "notifyUnmount": [Function],
+                  "notifyUpdate": [Function],
+                  "notifyViewportBoxUpdate": [Function],
+                  "onAnimationComplete": [Function],
+                  "onAnimationStart": [Function],
+                  "onBeforeLayoutMeasure": [Function],
+                  "onLayoutAnimationComplete": [Function],
+                  "onLayoutAnimationStart": [Function],
+                  "onLayoutMeasure": [Function],
+                  "onLayoutUpdate": [Function],
+                  "onRender": [Function],
+                  "onSetAxisTarget": [Function],
+                  "onUnmount": [Function],
+                  "onUpdate": [Function],
+                  "onViewportBoxUpdate": [Function],
+                  "parent": undefined,
+                  "presenceId": 0,
+                  "projection": ProjectionNode {
+                    "animationProgress": 0,
+                    "checkUpdateFailed": [Function],
+                    "children": Set {},
+                    "depth": 1,
+                    "eventHandlers": Map {},
+                    "hasProjected": false,
+                    "id": undefined,
+                    "instance": <div
+                      class="chakra-offset-slide"
+                      style="background: white; transform: scale(0.8) translateZ(0);"
+                    >
+                      <div
+                        class="css-0"
+                      >
+                        <h2
+                          class="chakra-heading css-0"
+                        >
+                          Modal Heading
+                        </h2>
+                      </div>
+                      <hr
+                        aria-orientation="horizontal"
+                        class="chakra-divider css-0"
+                      />
+                      <button
+                        aria-label="Close"
+                        class="css-0"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="chakra-icon css-0"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        class="css-1ow1dtq"
+                      >
+                        <h1>
+                          test text
+                        </h1>
+                      </div>
+                    </div>,
+                    "isAnimationBlocked": false,
+                    "isLayoutDirty": false,
+                    "isSVG": false,
+                    "isTreeAnimating": false,
+                    "isUpdating": false,
+                    "isVisible": true,
+                    "latestValues": Object {
+                      "scale": 0.8,
+                      "x": "0%",
+                      "y": "0%",
+                    },
+                    "needsReset": false,
+                    "options": Object {
+                      "alwaysMeasureLayout": undefined,
+                      "animationType": "both",
+                      "crossfade": true,
+                      "initialPromotionConfig": Object {},
+                      "layout": undefined,
+                      "layoutId": undefined,
+                      "layoutScroll": undefined,
+                      "scheduleRender": [Function],
+                      "visualElement": [Circular],
+                    },
+                    "parent": ProjectionNode {
+                      "animationProgress": 0,
+                      "checkUpdateFailed": [Function],
+                      "children": Set {
+                        [Circular],
+                      },
+                      "depth": 0,
+                      "eventHandlers": Map {},
+                      "hasProjected": false,
+                      "id": 0,
+                      "instance": [Window],
+                      "isAnimationBlocked": false,
+                      "isLayoutDirty": false,
+                      "isSVG": false,
+                      "isTreeAnimating": false,
+                      "isUpdating": false,
+                      "isVisible": true,
+                      "latestValues": Object {},
+                      "needsReset": false,
+                      "nodes": FlatTree {
+                        "children": Array [
+                          [Circular],
+                          [Circular],
+                        ],
+                        "isDirty": true,
+                      },
+                      "options": Object {
+                        "crossfade": true,
+                        "layoutScroll": true,
+                      },
+                      "parent": undefined,
+                      "path": Array [],
+                      "potentialNodes": Map {},
+                      "root": [Circular],
+                      "sharedNodes": Map {},
+                      "shouldResetTransform": true,
+                      "treeScale": Object {
+                        "x": 1,
+                        "y": 1,
+                      },
+                      "updateBlockedByResize": false,
+                      "updateManuallyBlocked": false,
+                      "updateProjection": [Function],
+                    },
+                    "path": Array [
+                      ProjectionNode {
+                        "animationProgress": 0,
+                        "checkUpdateFailed": [Function],
+                        "children": Set {
+                          [Circular],
+                        },
+                        "depth": 0,
+                        "eventHandlers": Map {},
+                        "hasProjected": false,
+                        "id": 0,
+                        "instance": [Window],
+                        "isAnimationBlocked": false,
+                        "isLayoutDirty": false,
+                        "isSVG": false,
+                        "isTreeAnimating": false,
+                        "isUpdating": false,
+                        "isVisible": true,
+                        "latestValues": Object {},
+                        "needsReset": false,
+                        "nodes": FlatTree {
+                          "children": Array [
+                            [Circular],
+                            [Circular],
+                          ],
+                          "isDirty": true,
+                        },
+                        "options": Object {
+                          "crossfade": true,
+                          "layoutScroll": true,
+                        },
+                        "parent": undefined,
+                        "path": Array [],
+                        "potentialNodes": Map {},
+                        "root": [Circular],
+                        "sharedNodes": Map {},
+                        "shouldResetTransform": true,
+                        "treeScale": Object {
+                          "x": 1,
+                          "y": 1,
+                        },
+                        "updateBlockedByResize": false,
+                        "updateManuallyBlocked": false,
+                        "updateProjection": [Function],
+                      },
+                    ],
+                    "potentialNodes": Map {},
+                    "root": ProjectionNode {
+                      "animationProgress": 0,
+                      "checkUpdateFailed": [Function],
+                      "children": Set {
+                        [Circular],
+                      },
+                      "depth": 0,
+                      "eventHandlers": Map {},
+                      "hasProjected": false,
+                      "id": 0,
+                      "instance": [Window],
+                      "isAnimationBlocked": false,
+                      "isLayoutDirty": false,
+                      "isSVG": false,
+                      "isTreeAnimating": false,
+                      "isUpdating": false,
+                      "isVisible": true,
+                      "latestValues": Object {},
+                      "needsReset": false,
+                      "nodes": FlatTree {
+                        "children": Array [
+                          [Circular],
+                          [Circular],
+                        ],
+                        "isDirty": true,
+                      },
+                      "options": Object {
+                        "crossfade": true,
+                        "layoutScroll": true,
+                      },
+                      "parent": undefined,
+                      "path": Array [],
+                      "potentialNodes": Map {},
+                      "root": [Circular],
+                      "sharedNodes": Map {},
+                      "shouldResetTransform": true,
+                      "treeScale": Object {
+                        "x": 1,
+                        "y": 1,
+                      },
+                      "updateBlockedByResize": false,
+                      "updateManuallyBlocked": false,
+                      "updateProjection": [Function],
+                    },
+                    "sharedNodes": Map {},
+                    "shouldResetTransform": false,
+                    "treeScale": Object {
+                      "x": 1,
+                      "y": 1,
+                    },
+                    "updateBlockedByResize": false,
+                    "updateManuallyBlocked": false,
+                    "updateProjection": [Function],
+                  },
+                  "readValue": [Function],
+                  "removeValue": [Function],
+                  "scheduleRender": [Function],
+                  "setBaseTarget": [Function],
+                  "setProps": [Function],
+                  "setStaticValue": [Function],
+                  "setVisibility": [Function],
+                  "shouldReduceMotion": false,
+                  "sortNodePosition": [Function],
+                  "syncRender": [Function],
+                  "treeType": "dom",
+                  "unmount": [Function],
+                  "updatePropListeners": [Function],
+                  "variantChildren": Set {},
+                }
+              }
+            />
+            <Component
+              animate="show"
+              background="lime"
+              className="chakra-offset-slide"
+              custom={
+                Object {
+                  "delay": undefined,
+                  "initialScale": 0.95,
+                  "reverse": true,
+                  "transition": undefined,
+                  "transitionEnd": undefined,
+                }
+              }
+              exit="exit"
+              h="20%"
+              initial="hide"
+              key="exit"
+              style={
+                Object {
+                  "background": "white",
+                }
+              }
+              variants={
+                Object {
+                  "exit": Object {
+                    "scale": 0.8,
+                  },
+                  "hide": Object {
+                    "scale": 0.8,
+                  },
+                  "show": Object {
+                    "scale": 1,
+                    "x": "-50%",
+                    "y": "-50%",
+                  },
+                }
+              }
+              visualElement={
+                Object {
+                  "addValue": [Function],
+                  "addVariantChild": [Function],
+                  "animationState": Object {
+                    "animateChanges": [Function],
+                    "getState": [Function],
+                    "isAnimated": [Function],
+                    "setActive": [Function],
+                    "setAnimateFunction": [Function],
+                  },
+                  "blockInitialAnimation": false,
+                  "build": [Function],
+                  "children": Set {},
+                  "clearAllListeners": [Function],
+                  "current": <div
+                    class="chakra-offset-slide"
+                    style="background: white; transform: scale(0.8) translateZ(0);"
+                  >
+                    <div
+                      class="css-0"
+                    >
+                      <h2
+                        class="chakra-heading css-0"
+                      >
+                        Modal Heading
+                      </h2>
+                    </div>
+                    <hr
+                      aria-orientation="horizontal"
+                      class="chakra-divider css-0"
+                    />
+                    <button
+                      aria-label="Close"
+                      class="css-0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="chakra-icon css-0"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      class="css-1ow1dtq"
+                    >
+                      <h1>
+                        test text
+                      </h1>
+                    </div>
+                  </div>,
+                  "depth": 0,
+                  "forEachValue": [Function],
+                  "getBaseTarget": [Function],
+                  "getClosestVariantNode": [Function],
+                  "getDefaultTransition": [Function],
+                  "getInstance": [Function],
+                  "getLatestValues": [Function],
+                  "getLayoutId": [Function],
+                  "getProps": [Function],
+                  "getStaticValue": [Function],
+                  "getTransformPagePoint": [Function],
+                  "getValue": [Function],
+                  "getVariant": [Function],
+                  "getVariantContext": [Function],
+                  "hasValue": [Function],
+                  "isMounted": [Function],
+                  "isPresent": true,
+                  "isVisible": undefined,
+                  "makeTargetAnimatable": [Function],
+                  "manuallyAnimateOnMount": false,
+                  "measureViewportBox": [Function],
+                  "mount": [Function],
+                  "notifyAnimationComplete": [Function],
+                  "notifyAnimationStart": [Function],
+                  "notifyBeforeLayoutMeasure": [Function],
+                  "notifyLayoutAnimationComplete": [Function],
+                  "notifyLayoutAnimationStart": [Function],
+                  "notifyLayoutMeasure": [Function],
+                  "notifyLayoutUpdate": [Function],
+                  "notifyRender": [Function],
+                  "notifySetAxisTarget": [Function],
+                  "notifyUnmount": [Function],
+                  "notifyUpdate": [Function],
+                  "notifyViewportBoxUpdate": [Function],
+                  "onAnimationComplete": [Function],
+                  "onAnimationStart": [Function],
+                  "onBeforeLayoutMeasure": [Function],
+                  "onLayoutAnimationComplete": [Function],
+                  "onLayoutAnimationStart": [Function],
+                  "onLayoutMeasure": [Function],
+                  "onLayoutUpdate": [Function],
+                  "onRender": [Function],
+                  "onSetAxisTarget": [Function],
+                  "onUnmount": [Function],
+                  "onUpdate": [Function],
+                  "onViewportBoxUpdate": [Function],
+                  "parent": undefined,
+                  "presenceId": 0,
+                  "projection": ProjectionNode {
+                    "animationProgress": 0,
+                    "checkUpdateFailed": [Function],
+                    "children": Set {},
+                    "depth": 1,
+                    "eventHandlers": Map {},
+                    "hasProjected": false,
+                    "id": undefined,
+                    "instance": <div
+                      class="chakra-offset-slide"
+                      style="background: white; transform: scale(0.8) translateZ(0);"
+                    >
+                      <div
+                        class="css-0"
+                      >
+                        <h2
+                          class="chakra-heading css-0"
+                        >
+                          Modal Heading
+                        </h2>
+                      </div>
+                      <hr
+                        aria-orientation="horizontal"
+                        class="chakra-divider css-0"
+                      />
+                      <button
+                        aria-label="Close"
+                        class="css-0"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="chakra-icon css-0"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        class="css-1ow1dtq"
+                      >
+                        <h1>
+                          test text
+                        </h1>
+                      </div>
+                    </div>,
+                    "isAnimationBlocked": false,
+                    "isLayoutDirty": false,
+                    "isSVG": false,
+                    "isTreeAnimating": false,
+                    "isUpdating": false,
+                    "isVisible": true,
+                    "latestValues": Object {
+                      "scale": 0.8,
+                      "x": "0%",
+                      "y": "0%",
+                    },
+                    "needsReset": false,
+                    "options": Object {
+                      "alwaysMeasureLayout": undefined,
+                      "animationType": "both",
+                      "crossfade": true,
+                      "initialPromotionConfig": Object {},
+                      "layout": undefined,
+                      "layoutId": undefined,
+                      "layoutScroll": undefined,
+                      "scheduleRender": [Function],
+                      "visualElement": [Circular],
+                    },
+                    "parent": ProjectionNode {
+                      "animationProgress": 0,
+                      "checkUpdateFailed": [Function],
+                      "children": Set {
+                        [Circular],
+                      },
+                      "depth": 0,
+                      "eventHandlers": Map {},
+                      "hasProjected": false,
+                      "id": 0,
+                      "instance": [Window],
+                      "isAnimationBlocked": false,
+                      "isLayoutDirty": false,
+                      "isSVG": false,
+                      "isTreeAnimating": false,
+                      "isUpdating": false,
+                      "isVisible": true,
+                      "latestValues": Object {},
+                      "needsReset": false,
+                      "nodes": FlatTree {
+                        "children": Array [
+                          [Circular],
+                          [Circular],
+                        ],
+                        "isDirty": true,
+                      },
+                      "options": Object {
+                        "crossfade": true,
+                        "layoutScroll": true,
+                      },
+                      "parent": undefined,
+                      "path": Array [],
+                      "potentialNodes": Map {},
+                      "root": [Circular],
+                      "sharedNodes": Map {},
+                      "shouldResetTransform": true,
+                      "treeScale": Object {
+                        "x": 1,
+                        "y": 1,
+                      },
+                      "updateBlockedByResize": false,
+                      "updateManuallyBlocked": false,
+                      "updateProjection": [Function],
+                    },
+                    "path": Array [
+                      ProjectionNode {
+                        "animationProgress": 0,
+                        "checkUpdateFailed": [Function],
+                        "children": Set {
+                          [Circular],
+                        },
+                        "depth": 0,
+                        "eventHandlers": Map {},
+                        "hasProjected": false,
+                        "id": 0,
+                        "instance": [Window],
+                        "isAnimationBlocked": false,
+                        "isLayoutDirty": false,
+                        "isSVG": false,
+                        "isTreeAnimating": false,
+                        "isUpdating": false,
+                        "isVisible": true,
+                        "latestValues": Object {},
+                        "needsReset": false,
+                        "nodes": FlatTree {
+                          "children": Array [
+                            [Circular],
+                            [Circular],
+                          ],
+                          "isDirty": true,
+                        },
+                        "options": Object {
+                          "crossfade": true,
+                          "layoutScroll": true,
+                        },
+                        "parent": undefined,
+                        "path": Array [],
+                        "potentialNodes": Map {},
+                        "root": [Circular],
+                        "sharedNodes": Map {},
+                        "shouldResetTransform": true,
+                        "treeScale": Object {
+                          "x": 1,
+                          "y": 1,
+                        },
+                        "updateBlockedByResize": false,
+                        "updateManuallyBlocked": false,
+                        "updateProjection": [Function],
+                      },
+                    ],
+                    "potentialNodes": Map {},
+                    "root": ProjectionNode {
+                      "animationProgress": 0,
+                      "checkUpdateFailed": [Function],
+                      "children": Set {
+                        [Circular],
+                      },
+                      "depth": 0,
+                      "eventHandlers": Map {},
+                      "hasProjected": false,
+                      "id": 0,
+                      "instance": [Window],
+                      "isAnimationBlocked": false,
+                      "isLayoutDirty": false,
+                      "isSVG": false,
+                      "isTreeAnimating": false,
+                      "isUpdating": false,
+                      "isVisible": true,
+                      "latestValues": Object {},
+                      "needsReset": false,
+                      "nodes": FlatTree {
+                        "children": Array [
+                          [Circular],
+                          [Circular],
+                        ],
+                        "isDirty": true,
+                      },
+                      "options": Object {
+                        "crossfade": true,
+                        "layoutScroll": true,
+                      },
+                      "parent": undefined,
+                      "path": Array [],
+                      "potentialNodes": Map {},
+                      "root": [Circular],
+                      "sharedNodes": Map {},
+                      "shouldResetTransform": true,
+                      "treeScale": Object {
+                        "x": 1,
+                        "y": 1,
+                      },
+                      "updateBlockedByResize": false,
+                      "updateManuallyBlocked": false,
+                      "updateProjection": [Function],
+                    },
+                    "sharedNodes": Map {},
+                    "shouldResetTransform": false,
+                    "treeScale": Object {
+                      "x": 1,
+                      "y": 1,
+                    },
+                    "updateBlockedByResize": false,
+                    "updateManuallyBlocked": false,
+                    "updateProjection": [Function],
+                  },
+                  "readValue": [Function],
+                  "removeValue": [Function],
+                  "scheduleRender": [Function],
+                  "setBaseTarget": [Function],
+                  "setProps": [Function],
+                  "setStaticValue": [Function],
+                  "setVisibility": [Function],
+                  "shouldReduceMotion": false,
+                  "sortNodePosition": [Function],
+                  "syncRender": [Function],
+                  "treeType": "dom",
+                  "unmount": [Function],
+                  "updatePropListeners": [Function],
+                  "variantChildren": Set {},
+                }
+              }
+            />
+            <div
+              className="chakra-offset-slide"
+              style={
+                Object {
+                  "background": "white",
+                  "transform": "scale(0.8) translateZ(0)",
+                }
+              }
+            >
+              <Flex
+                alignItems="center"
+                h="5rem"
+                justifyContent="center"
+                justifyItems="center"
+              >
+                <Styled(div)
+                  __css={
+                    Object {
+                      "alignItems": undefined,
+                      "display": "flex",
+                      "flexBasis": undefined,
+                      "flexDirection": undefined,
+                      "flexGrow": undefined,
+                      "flexShrink": undefined,
+                      "flexWrap": undefined,
+                      "justifyContent": undefined,
+                    }
+                  }
+                  alignItems="center"
+                  h="5rem"
+                  justifyContent="center"
+                  justifyItems="center"
+                >
+                  <Noop />
+                  <div
+                    className="css-0"
+                  >
+                    <Heading
+                      m="1rem"
+                    >
+                      <Styled(h2)
+                        __css={Object {}}
+                        className="chakra-heading"
+                        m="1rem"
+                      >
+                        <Noop />
+                        <h2
+                          className="chakra-heading css-0"
+                        >
+                          Modal Heading
+                        </h2>
+                      </Styled(h2)>
+                    </Heading>
+                  </div>
+                </Styled(div)>
+              </Flex>
+              <Divider>
+                <Styled(hr)
+                  __css={
+                    Object {
+                      "border": "0",
+                      "borderBottomWidth": "1px",
+                      "borderColor": undefined,
+                      "borderStyle": undefined,
+                      "width": "100%",
+                    }
+                  }
+                  aria-orientation="horizontal"
+                  className="chakra-divider"
+                >
+                  <Noop />
+                  <hr
+                    aria-orientation="horizontal"
+                    className="chakra-divider css-0"
+                  />
+                </Styled(hr)>
+              </Divider>
+              <CloseButton
+                m={5}
+                mt="-0.5px !important"
+                onClick={[Function]}
+                pos="absolute"
+                right={0}
+                size="lg"
+                top={0}
+              >
+                <Styled(button)
+                  __css={
+                    Object {
+                      "alignItems": "center",
+                      "display": "flex",
+                      "flexShrink": 0,
+                      "justifyContent": "center",
+                      "outline": 0,
+                    }
+                  }
+                  aria-label="Close"
+                  m={5}
+                  mt="-0.5px !important"
+                  onClick={[Function]}
+                  pos="absolute"
+                  right={0}
+                  top={0}
+                  type="button"
+                >
+                  <Noop />
+                  <button
+                    aria-label="Close"
+                    className="css-0"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <CloseIcon
+                      height="1em"
+                      width="1em"
+                    >
+                      <Icon
+                        aria-hidden={true}
+                        focusable="false"
+                        height="1em"
+                        width="1em"
+                      >
+                        <Styled(svg)
+                          __css={
+                            Object {
+                              "color": "currentColor",
+                              "display": "inline-block",
+                              "flexShrink": 0,
+                              "h": "1em",
+                              "lineHeight": "1em",
+                              "w": "1em",
+                            }
+                          }
+                          aria-hidden={true}
+                          className="chakra-icon"
+                          focusable="false"
+                          height="1em"
+                          verticalAlign="middle"
+                          viewBox="0 0 24 24"
+                          width="1em"
+                        >
+                          <Noop />
+                          <svg
+                            aria-hidden={true}
+                            className="chakra-icon css-0"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        </Styled(svg)>
+                      </Icon>
+                    </CloseIcon>
+                  </button>
+                </Styled(button)>
+              </CloseButton>
+              <div
+                className="css-1ow1dtq"
+              >
+                <h1>
+                  test text
+                </h1>
+              </div>
+            </div>
+          </VisualElementHandler>
+        </ForwardRef(MotionComponent)>
+      </PresenceChild>
+    </AnimatePresence>
+  </ScaleFade>
+</Modal>
+`;

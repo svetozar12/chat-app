@@ -7,6 +7,8 @@ import Modal from 'services/chat-ui/Modal';
 import RadioCard from 'services/chat-ui/RadioCards/RadioCards';
 // types
 import { IBaseComponent } from 'services/chat-ui/types';
+import { IAlerts } from 'services/chat-ui/Alerts/Alerts';
+import { IFormWrapper } from 'services/chat-ui/FormWrapper/FormWrapper';
 
 export { Alerts, CheckBox_component, DefaultLink, FormWrapper, HamburgerMenu, Modal, RadioCard };
-export type { IBaseComponent };
+export type { IBaseComponent, IAlerts, IFormWrapper };

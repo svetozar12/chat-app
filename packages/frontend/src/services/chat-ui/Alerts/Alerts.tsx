@@ -38,5 +38,5 @@ function Alerts(props: IAlerts) {
     </HStack>
   );
 }
-
+export type { IAlerts };
 export default Alerts;

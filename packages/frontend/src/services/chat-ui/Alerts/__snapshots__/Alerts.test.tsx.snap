@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing correct behaviour of <Alerts /> component <Alerts /> should match snapshot 1`] = `
+<Alerts
+  chakraProps={
+    Object {
+      "h": "20%",
+    }
+  }
+  closeAlert={[Function]}
+  message="test message"
+  style={
+    Object {
+      "background": "lime",
+    }
+  }
+  type="success"
+>
+  <HStack
+    background="lime"
+    h="20%"
+    pos="absolute"
+    right="50%"
+    top="50%"
+    transform="translate(50%,-600%)"
+    w="60%"
+  >
+    <Stack
+      align="center"
+      background="lime"
+      direction="row"
+      h="20%"
+      pos="absolute"
+      right="50%"
+      top="50%"
+      transform="translate(50%,-600%)"
+      w="60%"
+    >
+      <Styled(div)
+        __css={
+          Object {
+            "& > *:not(style) ~ *:not(style)": Object {
+              "marginBottom": 0,
+              "marginEnd": 0,
+              "marginStart": "0.5rem",
+              "marginTop": 0,
+            },
+          }
+        }
+        alignItems="center"
+        background="lime"
+        className="chakra-stack"
+        display="flex"
+        flexDirection="row"
+        h="20%"
+        pos="absolute"
+        right="50%"
+        top="50%"
+        transform="translate(50%,-600%)"
+        w="60%"
+      >
+        <Noop />
+        <div
+          className="chakra-stack css-0"
+        >
+          <Alert
+            key=".0"
+            status="success"
+          >
+            <Styled(div)
+              __css={
+                Object {
+                  "alignItems": "center",
+                  "display": "flex",
+                  "overflow": "hidden",
+                  "position": "relative",
+                  "width": "100%",
+                }
+              }
+              className="chakra-alert"
+              role="alert"
+            >
+              <Noop />
+              <div
+                className="chakra-alert css-0"
+                role="alert"
+              >
+                <AlertIcon>
+                  <Styled(span)
+                    className="chakra-alert__icon"
+                    display="inherit"
+                  >
+                    <Noop />
+                    <span
+                      className="chakra-alert__icon css-0"
+                    >
+                      <CheckIcon
+                        h="100%"
+                        w="100%"
+                      >
+                        <Icon
+                          h="100%"
+                          viewBox="0 0 24 24"
+                          w="100%"
+                        >
+                          <Styled(svg)
+                            __css={
+                              Object {
+                                "color": "currentColor",
+                                "display": "inline-block",
+                                "flexShrink": 0,
+                                "h": "1em",
+                                "lineHeight": "1em",
+                                "w": "1em",
+                              }
+                            }
+                            className="chakra-icon"
+                            focusable={false}
+                            h="100%"
+                            verticalAlign="middle"
+                            viewBox="0 0 24 24"
+                            w="100%"
+                          >
+                            <Noop />
+                            <svg
+                              className="chakra-icon css-0"
+                              focusable={false}
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </Styled(svg)>
+                        </Icon>
+                      </CheckIcon>
+                    </span>
+                  </Styled(span)>
+                </AlertIcon>
+                <AlertTitle
+                  textAlign="center"
+                  w="full"
+                >
+                  <Styled(div)
+                    className="chakra-alert__title"
+                    textAlign="center"
+                    w="full"
+                  >
+                    <Noop />
+                    <div
+                      className="chakra-alert__title css-0"
+                    >
+                      test message
+                    </div>
+                  </Styled(div)>
+                </AlertTitle>
+                <CloseButton
+                  alignSelf="flex-start"
+                  onClick={[Function]}
+                  position="relative"
+                  right={0}
+                  top={0}
+                >
+                  <Styled(button)
+                    __css={
+                      Object {
+                        "alignItems": "center",
+                        "display": "flex",
+                        "flexShrink": 0,
+                        "justifyContent": "center",
+                        "outline": 0,
+                      }
+                    }
+                    alignSelf="flex-start"
+                    aria-label="Close"
+                    onClick={[Function]}
+                    position="relative"
+                    right={0}
+                    top={0}
+                    type="button"
+                  >
+                    <Noop />
+                    <button
+                      aria-label="Close"
+                      className="css-0"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <CloseIcon
+                        height="1em"
+                        width="1em"
+                      >
+                        <Icon
+                          aria-hidden={true}
+                          focusable="false"
+                          height="1em"
+                          width="1em"
+                        >
+                          <Styled(svg)
+                            __css={
+                              Object {
+                                "color": "currentColor",
+                                "display": "inline-block",
+                                "flexShrink": 0,
+                                "h": "1em",
+                                "lineHeight": "1em",
+                                "w": "1em",
+                              }
+                            }
+                            aria-hidden={true}
+                            className="chakra-icon"
+                            focusable="false"
+                            height="1em"
+                            verticalAlign="middle"
+                            viewBox="0 0 24 24"
+                            width="1em"
+                          >
+                            <Noop />
+                            <svg
+                              aria-hidden={true}
+                              className="chakra-icon css-0"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </Styled(svg)>
+                        </Icon>
+                      </CloseIcon>
+                    </button>
+                  </Styled(button)>
+                </CloseButton>
+              </div>
+            </Styled(div)>
+          </Alert>
+        </div>
+      </Styled(div)>
+    </Stack>
+  </HStack>
+</Alerts>
+`;

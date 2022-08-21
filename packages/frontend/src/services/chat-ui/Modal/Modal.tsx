@@ -2,7 +2,6 @@ import React from 'react';
 // import PendingChats from "components/Notifications_Modal/PendingChats";
 import { css } from '@emotion/css';
 import { CloseButton, Divider, Flex, Heading, ScaleFade, ScaleFadeProps } from '@chakra-ui/react';
-import { Iinvites } from '../../../pages/[acc]';
 import s from './Notifications_Modal.module.css';
 import { IBaseComponent } from '../types';
 import useThemeColors from '../../../hooks/useThemeColors';
@@ -10,7 +9,6 @@ import useThemeColors from '../../../hooks/useThemeColors';
 type Base = IBaseComponent<ScaleFadeProps>;
 interface IModal extends Base {
   closeModal: () => void;
-  contacts: Iinvites[];
   heading: string;
   children: JSX.Element | JSX.Element[];
 }
