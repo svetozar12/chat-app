@@ -1,18 +1,22 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { api } from '../apiHelper';
+import { CreateChatMessage, Invite } from "@chat-app/graphql-server";
+import { api } from "..";
 
-const rootUrl = '';
+const rootUrl = "";
 
 export interface IInvite {
   userId: string;
   token: string;
-  status?: 'accepted' | 'declined' | 'recieved';
+  status?: "accepted" | "declined" | "recieved";
 }
 
 const invite = {
-  getAllByReciever: async ({ userId, token, status }: IInvite) => {
+  getAllByReciever: async ({
+    userId,
+    token,
+    status,
+  }: IInvite): Promise<Invite[]> => {
     try {
-      const condition = status ? `status:"${status}"` : '';
+      const condition = status ? `status:"${status}"` : "";
 
       const res = await api(rootUrl, {
         data: {
@@ -43,14 +47,18 @@ const invite = {
         throw Error(message);
       }
       return getInvitesByReciever;
-    } catch (error) {
+    } catch (error: any) {
       return error;
     }
   },
 
-  getAllByInviter: async ({ userId, token, status }: IInvite) => {
+  getAllByInviter: async ({
+    userId,
+    token,
+    status,
+  }: IInvite): Promise<Invite[]> => {
     try {
-      const condition = status ? `status:"${status}"` : '';
+      const condition = status ? `status:"${status}"` : "";
       const res = await api(rootUrl, {
         data: {
           query: `
@@ -80,12 +88,16 @@ const invite = {
         throw Error(message);
       }
       return getInvitesByInviter;
-    } catch (error) {
+    } catch (error: any) {
       return error;
     }
   },
 
-  create: async (userId: string, reciever: string, token: string) => {
+  create: async (
+    userId: string,
+    reciever: string,
+    token: string,
+  ): Promise<Invite> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -118,11 +130,11 @@ const invite = {
 
       return createInvite;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
-  createGroupChat: async (usersData: string[]) => {
+  createGroupChat: async (usersData: string[]): Promise<CreateChatMessage> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -152,11 +164,16 @@ const invite = {
       }
       return createInviteGroupChat;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
-  update: async (userId: string, inviteId: string, status: string, token: string) => {
+  update: async (
+    userId: string,
+    inviteId: string,
+    status: string,
+    token: string,
+  ): Promise<Invite> => {
     try {
       console.log(`
         mutation {
@@ -198,7 +215,7 @@ const invite = {
       }
       return updateInvite;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 };

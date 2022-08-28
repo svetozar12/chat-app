@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface ICreateChat {
+export interface ICreateChat {
   chat: {
     user_id: string;
     invite_id: string;

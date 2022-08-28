@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface ILoginUser {
+export interface ILoginUser {
   username: string;
   password: string;
 }

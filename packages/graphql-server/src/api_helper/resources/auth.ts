@@ -1,12 +1,12 @@
-import { api } from "..";
-import AxiosErrorHandler from "../../utils/AxiosErrorHandler";
+import { api } from '..';
+import AxiosErrorHandler from '../../utils/AxiosErrorHandler';
 
-interface IAuthLogin {
+export interface IAuthLogin {
   username: string;
   password: string;
 }
 
-const rootUrl = "/auth";
+const rootUrl = '/auth';
 
 const auth = {
   login: async (userCredentials: IAuthLogin) => {

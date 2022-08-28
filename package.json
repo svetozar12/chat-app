@@ -4,7 +4,8 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --force-local && lerna link --force-local",
+    "prebuild": "yarn bootstrap",
     "build": "lerna run build",
     "kill": "taskkill /f /im node.exe",
     "predev": "yarn kill",

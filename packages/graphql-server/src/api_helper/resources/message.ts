@@ -1,18 +1,18 @@
-import AxiosErrorHandler from "../../utils/AxiosErrorHandler";
-import { api } from "../index";
+import AxiosErrorHandler from '../../utils/AxiosErrorHandler';
+import { api } from '../index';
 
-interface IQuery {
+export interface IQuery {
   page_size: number;
   page_number: number;
 }
 
-const rootUrl = "/messages";
+const rootUrl = '/messages';
 
 const message = {
   getAll: async (chat_id: string, user_id: string, query: IQuery, token: string) => {
     try {
       const res = await api.get(
-        `${rootUrl}/${chat_id}?user_id=${user_id}${query ? `&&page_size=${query.page_size}&&page_number=${query.page_number}` : ""}`,
+        `${rootUrl}/${chat_id}?user_id=${user_id}${query ? `&&page_size=${query.page_size}&&page_number=${query.page_number}` : ''}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

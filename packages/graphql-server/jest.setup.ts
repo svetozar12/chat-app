@@ -1,12 +1,11 @@
-import buildUrl from "./src/utils/buildUrl";
-import axios from "axios";
+import axios from 'axios';
 
-const testUser = { username: "vanka", password: "vanka", email: "vanka@.com", gender: "Male" };
+const testUser = { username: 'vanka', password: 'vanka', email: 'vanka@.com', gender: 'Male' };
 
 beforeAll(async () => {
   try {
-    const url = buildUrl("users/register");
-    await axios.post(url, testUser);
+    // const url = buildUrl('users/register');
+    // await axios.post(url, testUser);
     return true;
   } catch (error) {
     return false;
@@ -15,8 +14,8 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-    const url = buildUrl("users", undefined, testUser.username);
-    await axios.delete(url);
+    // const url = buildUrl('users', undefined, testUser.username);
+    // await axios.delete(url);
     return true;
   } catch (error) {
     return false;

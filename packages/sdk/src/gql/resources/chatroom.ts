@@ -1,6 +1,7 @@
-import { api } from '../apiHelper';
+import { Chat, CreateChatMessage, Message } from "@chat-app/graphql-server";
+import { api } from "..";
 
-const rootUrl = '';
+const rootUrl = "";
 
 export interface IChat {
   userId: string;
@@ -10,7 +11,7 @@ export interface IChat {
 }
 
 const chat = {
-  getAll: async (userId: string, token: string) => {
+  getAll: async (userId: string, token: string): Promise<Chat[]> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -40,12 +41,16 @@ const chat = {
       }
 
       return getAllChats;
-    } catch (error) {
+    } catch (error: any) {
       return error;
     }
   },
 
-  getById: async (chatId: string, userId: string, token: string) => {
+  getById: async (
+    chatId: string,
+    userId: string,
+    token: string,
+  ): Promise<Chat> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -75,11 +80,11 @@ const chat = {
       }
       return getChatById;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
-  create: async (chat: IChat, token: string) => {
+  create: async (chat: IChat, token: string): Promise<CreateChatMessage> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -112,14 +117,22 @@ const chat = {
       }
       return createChat;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
-  update: async (userId: string, chatId: string, token: string, username?: string, usersData?: string[]) => {
+  update: async (
+    userId: string,
+    chatId: string,
+    token: string,
+    username?: string,
+    usersData?: string[],
+  ): Promise<Chat> => {
     try {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
+      const condition = username
+        ? `username:"${username}"`
+        : `usersData:"${usersData}"`;
 
       const res = await api(rootUrl, {
         data: {
@@ -149,11 +162,15 @@ const chat = {
       }
       return updateChat;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 
-  delete: async (userId: string, chatId: string, token: string) => {
+  delete: async (
+    userId: string,
+    chatId: string,
+    token: string,
+  ): Promise<Message> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -181,7 +198,7 @@ const chat = {
       }
       return deleteChat;
     } catch (error) {
-      return false;
+      return error;
     }
   },
 };

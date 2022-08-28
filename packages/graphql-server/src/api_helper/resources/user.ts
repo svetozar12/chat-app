@@ -1,13 +1,13 @@
-import AxiosErrorHandler from "../../utils/AxiosErrorHandler";
-import { api } from "../index";
+import AxiosErrorHandler from '../../utils/AxiosErrorHandler';
+import { api } from '../index';
 
-interface IUser {
+export interface IUser {
   username: string;
   email: string;
-  gender: "Male" | "Female" | "Other";
+  gender: 'Male' | 'Female' | 'Other';
 }
 
-const rootUrl = "/users";
+const rootUrl = '/users';
 
 const user = {
   getById: async (id: string, token: string) => {

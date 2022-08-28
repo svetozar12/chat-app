@@ -1,12 +1,12 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IUpdateUser {
+export interface IUpdateUser {
   user_id: string;
   token: string;
   user: {
     username: string;
     email: string;
-    gender: "Male" | "Female" | "Other";
+    gender: 'Male' | 'Female' | 'Other';
   };
 }
 

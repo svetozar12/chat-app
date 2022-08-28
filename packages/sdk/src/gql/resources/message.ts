@@ -1,6 +1,7 @@
-import { api } from '../apiHelper';
+import { CreateChatMessage, Message, Messages } from "@chat-app/graphql-server";
+import { api } from "..";
 
-const rootUrl = '';
+const rootUrl = "";
 
 export interface IGetMessages {
   userId: string;
@@ -13,9 +14,17 @@ export interface IGetMessages {
 }
 
 const message = {
-  getAll: async ({ userId, chatId, token, query }: IGetMessages) => {
+  getAll: async ({
+    userId,
+    chatId,
+    token,
+    query,
+  }: IGetMessages): Promise<Messages[]> => {
     try {
-      const condition = query != null ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : '';
+      const condition =
+        query != null
+          ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}`
+          : "";
 
       const res = await api(rootUrl, {
         data: {
@@ -48,12 +57,17 @@ const message = {
       }
 
       return getAllMessages;
-    } catch (error) {
+    } catch (error: any) {
       return error;
     }
   },
 
-  create: async (userId: string, chatId: string, _message: string, token: string) => {
+  create: async (
+    userId: string,
+    chatId: string,
+    _message: string,
+    token: string,
+  ): Promise<CreateChatMessage> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -91,7 +105,12 @@ const message = {
     }
   },
 
-  update: async (userId: string, messageId: string, newMessage: string, token: string) => {
+  update: async (
+    userId: string,
+    messageId: string,
+    newMessage: string,
+    token: string,
+  ): Promise<Message> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -124,7 +143,11 @@ const message = {
     }
   },
 
-  delete: async (userId: string, messageId: string, token: string) => {
+  delete: async (
+    userId: string,
+    messageId: string,
+    token: string,
+  ): Promise<Message> => {
     try {
       const res = await api(rootUrl, {
         data: {

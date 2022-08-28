@@ -1,37 +1,43 @@
 import { Box, HStack } from '@chakra-ui/react';
 import { useCookie } from 'next-cookie';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { io, Socket } from 'socket.io-client';
 import PropTypes from 'prop-types';
 import HamburgerMenu from '../../../services/chat-ui/HamburgerMenu';
 import MainSection from '../../MainSection';
 import MessagesSection from '../../MessagesSection';
-import { Ichats, Iinvites } from '../../../pages/[acc]';
-import apiHelper from '../../../services/graphql/apiHelper';
-import ISave_inputState from '../../../services/redux/reducer/save_inputReducer/state';
-
+import { gqlSdk } from '@chat-app/sdk';
+import { connect } from 'react-redux';
+import { setWSConnection } from 'services/redux/reducer/websocket/actions';
+import { bindActionCreators, Dispatch } from 'redux';
+import { STATE } from 'services/redux/reducer';
+import { setNotifNumber } from 'services/redux/reducer/invites/actions';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import IInvite from 'services/redux/reducer/invites/state';
+import { Invite as IInviteGql, Chat } from '@chat-app/graphql-server';
 interface IApp {
   chatRoom: string;
   cookie: string;
+  invite: IInvite;
+  setWSConnection: typeof setWSConnection;
+  setNotifNumber: typeof setNotifNumber;
+  toggleQuickLogin: typeof toggleQuickLogin;
 }
 
 function App(props: IApp) {
-  const { chatRoom, cookie: cookieProp } = props;
+  const { chatRoom, cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin } = props;
   const cookie = useCookie(cookieProp);
   const userId: string = cookie.get('id');
   const token: string = cookie.get('token');
   const chatId = chatRoom.split('/')[0];
   // hooks
-  const dispatch = useDispatch();
-  const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [contacts, setContacts] = useState<Iinvites[]>([]);
-  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const [chatRooms, setChatRooms] = useState<Chat[]>([]);
+  const [contacts, setContacts] = useState<IInviteGql[]>([]);
 
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await apiHelper.chatroom.getAll(userId, token);
+      const res = await gqlSdk.chatroom.getAll(userId, token);
 
       setChatRooms(res);
       return true;
@@ -44,12 +50,12 @@ function App(props: IApp) {
     try {
       setContacts([]);
       if (InvitesOrigin === 'reciever') {
-        const res = await apiHelper.invite.getAllByReciever({ userId, token, status });
+        const res = await gqlSdk.invite.getAllByReciever({ userId, token, status });
         if (res instanceof Error) throw Error(res.message);
         setContacts(res);
         return res;
       }
-      const res = await apiHelper.invite.getAllByInviter({ userId, token, status: 'accepted' });
+      const res = await gqlSdk.invite.getAllByInviter({ userId, token, status: 'accepted' });
       if (res instanceof Error) throw Error(res.message);
       setContacts(res);
       return res;
@@ -62,23 +68,24 @@ function App(props: IApp) {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await apiHelper.invite.getAllByReciever({ userId, token, status: 'recieved' });
+      const res = await gqlSdk.invite.getAllByReciever({ userId, token, status: 'recieved' });
       if (res instanceof Error) throw Error(res.message);
-      dispatch({ type: 'NOTIFICATION_NUMBER', payload: res.length });
-
+      setNotifNumber(res.length);
       setContacts(res);
-      if (res.status === 'declined') return false;
+      res.forEach((item) => {
+        if (item.status === 'declined') return false;
+      });
       return true;
     } catch (error) {
-      dispatch({ type: 'NOTIFICATION_NUMBER', payload: 0 });
+      setNotifNumber(0);
       return false;
     }
   };
 
   useEffect(() => {
-    dispatch({ type: 'QUICK_LOGIN', payload: false });
+    toggleQuickLogin(false);
     checkNotification();
-  }, [inputState.notification_number]);
+  }, [invite.notificationNumber]);
 
   useEffect(() => {
     getChatRoom();
@@ -95,14 +102,12 @@ function App(props: IApp) {
 
     socketConnect.on('send_friend_request', () => {
       console.log('recieved');
-
       checkNotification();
     });
-
-    dispatch({ type: 'SET_WS_CONNECTED', payload: socketConnect });
+    setWSConnection(socketConnect);
     return () => {
       socketConnect.disconnect();
-      dispatch({ type: 'SET_WS_CONNECTED', payload: null });
+      setWSConnection(null);
     };
   }, []);
 
@@ -126,4 +131,14 @@ App.prototype = {
   },
 };
 
-export default App;
+const mapStateToProps = (state: STATE) => ({
+  invite: state.invite,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setWSConnection: bindActionCreators(setWSConnection, dispatch),
+  setNotifNumber: bindActionCreators(setNotifNumber, dispatch),
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

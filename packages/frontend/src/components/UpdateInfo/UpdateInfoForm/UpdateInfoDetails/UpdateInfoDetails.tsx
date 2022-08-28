@@ -1,7 +1,7 @@
 import { Flex, FormLabel, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { GrEdit } from 'react-icons/gr';
-import Single_avatar from '../../../Avatar/Single_avatar';
+import SingleAvatar from 'components/Avatar/SingleAvatar';
 
 interface IUpdateInfoDetails {
   image: string;
@@ -14,7 +14,7 @@ function UpdateInfoDetails({ image }: IUpdateInfoDetails) {
         Profile Avatar
       </FormLabel>
       <VStack align={{ base: 'flex-start', lg: 'center' }} pos="relative">
-        <Single_avatar width="10rem" height="10rem" preview={image} />
+        <SingleAvatar width="10rem" height="10rem" preview={image} />
         <FormLabel
           w="10rem"
           h="10rem"

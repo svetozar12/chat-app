@@ -1,22 +1,21 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "target": "es5",
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "moduleResolution": "node",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
+    "target": "esnext",
+    "module": "commonjs",
     "esModuleInterop": true,
-    "incremental": true
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": ["./**/*.ts", "src"],
-  "exclude": ["node_modules/**/*", "cypress"],
-  "lib": ["es2017", "dom", "ES6", "es2015.core"]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

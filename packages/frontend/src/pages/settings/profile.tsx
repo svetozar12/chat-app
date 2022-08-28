@@ -1,9 +1,7 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useCookie } from 'next-cookie';
 // services
 import { HStack } from '@chakra-ui/react';
-import ISave_inputState from '../../services/redux/reducer/save_inputReducer/state';
 import apiHelper from '../../services/graphql/apiHelper';
 // utils
 import generic from '../../utils/generic';
@@ -15,12 +13,23 @@ import UpdateInfo from '../../components/UpdateInfo';
 import SkelletonUserSettings from '../../components/Loading/SkelletonUserSettings';
 import UpdateInfoForm from '../../components/UpdateInfo/UpdateInfoForm';
 import useThemeColors from '../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { setInputEmail, setInputGender } from 'services/redux/reducer/inputs/actions';
+import { connect } from 'react-redux';
+import IInputs from 'services/redux/reducer/inputs/state';
 
-function Profile(props: { cookie: string }) {
+interface IProfile {
+  cookie: string;
+  inputs: IInputs;
+  setInputEmail: typeof setInputEmail;
+  setInputGender: typeof setInputGender;
+}
+
+function Profile(props: IProfile) {
+  const { inputs, setInputEmail, setInputGender } = props;
   const [image, setImage] = React.useState('');
   const cookie = useCookie(props.cookie);
-  const dispatch = useDispatch();
-  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
   const { user } = useAuth();
 
   React.useEffect(() => {
@@ -37,14 +46,14 @@ function Profile(props: { cookie: string }) {
       getAuth();
       const formData = new FormData();
       formData.append('username', user.username);
-      if (state.input_email) formData.append('email', state.input_email);
-      if (state.input_gender) formData.append('gender', state.input_gender);
+      if (inputs.input_email) formData.append('email', inputs.input_email);
+      if (inputs.input_gender) formData.append('gender', inputs.input_gender);
       if (image) formData.append('userAvatar', image);
 
       e.preventDefault();
       await apiHelper.user.update(user._id, cookie.get('token'), formData as any);
-      dispatch({ type: 'SAVE_INPUT_EMAIL', payload: '' });
-      dispatch({ type: 'SAVE_INPUT_GENDER', payload: '' });
+      setInputEmail('');
+      setInputGender('');
     } catch (error) {
       return false;
     }
@@ -73,4 +82,13 @@ export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
   return { props: {} };
 });
 
-export default Profile;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setInputEmail: bindActionCreators(setInputEmail, dispatch),
+  setInputGender: bindActionCreators(setInputGender, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

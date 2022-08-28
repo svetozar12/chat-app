@@ -25,6 +25,7 @@
   "dependencies": {
     "@azure/identity": "^2.0.5",
     "@azure/storage-blob": "^12.10.0",
+    "@openapitools/openapi-generator-cli": "^2.5.1",
     "azurite": "^3.17.1",
     "bcrypt": "^5.0.1",
     "concurrently": "^6.4.0",

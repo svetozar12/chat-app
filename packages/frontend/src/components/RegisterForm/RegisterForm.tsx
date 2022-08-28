@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 // services
 import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import React from 'react';
 import { useFormik } from 'formik';
-import { IAuthState } from '../../services/redux/reducer/authReducer/state';
 import DefaultLink from '../../services/chat-ui/DefaultLink';
 import RadioCard from '../../services/chat-ui/RadioCards/RadioCards';
 import api_helper from '../../services/graphql/apiHelper';
@@ -13,15 +12,24 @@ import { RegisterSchema } from '../../utils/validation';
 import QuickLogin_Modal from './QuickLogin_Modal';
 import FormWrapper from '../../services/chat-ui/FormWrapper';
 import useThemeColors from '../../hooks/useThemeColors';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import { bindActionCreators, Dispatch } from 'redux';
+import { STATE } from 'services/redux/reducer';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 
 interface IRegisterForm {
   quickLogin: () => Promise<boolean>;
+  toggle: IToggle;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  setInputEmail: typeof setInputEmail;
+  setInputGender: typeof setInputGender;
+  setInputPassword: typeof setInputPassword;
+  setInputUsername: typeof setInputUsername;
 }
 
-function RegisterForm({ quickLogin }: IRegisterForm) {
-  const dispatch = useDispatch();
-  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-
+function RegisterForm(props: IRegisterForm) {
+  const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername } = props;
   interface IValues {
     username: string;
     email: string;
@@ -31,24 +39,21 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
     const register = await api_helper.user.create(username, email, password, gender);
-    dispatch({ type: 'SAVE_INPUT_USERNAME', payload: username });
-    dispatch({ type: 'SAVE_INPUT_PASSWORD', payload: password });
-    dispatch({ type: 'SAVE_INPUT_EMAIL', payload: email });
-    dispatch({ type: 'SAVE_INPUT_GENDER', payload: gender });
-    if (await register) dispatch({ type: 'QUICK_LOGIN', payload: true });
+    setInputUsername(username);
+    setInputEmail(email);
+    setInputPassword(password);
+    setInputGender(gender);
+    if (await register) toggleQuickLogin(false);
     else {
-      dispatch({ type: 'SAVE_INPUT_USERNAME', payload: '' });
-      dispatch({ type: 'SAVE_INPUT_PASSWORD', payload: '' });
-      dispatch({ type: 'SAVE_INPUT_EMAIL', payload: '' });
-      dispatch({ type: 'SAVE_INPUT_GENDER', payload: '' });
+      setInputUsername('');
+      setInputEmail('');
+      setInputPassword('');
+      setInputGender('');
     }
   };
 
   const handleGenderChange = (value: any) => {
-    dispatch({
-      type: 'SAVE_INPUT_GENDER',
-      payload: value,
-    });
+    setInputGender(value);
   };
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -149,9 +154,21 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
           <DefaultLink href="/" text="Already have an account?" />
         </Flex>
       </FormWrapper>
-      {state.loginPrompt && <QuickLogin_Modal quickLogin={quickLogin} />}
+      {toggle.toggleQuickLogin && <QuickLogin_Modal quickLogin={quickLogin} />}
     </>
   );
 }
 
-export default RegisterForm;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  setInputUsername: bindActionCreators(setInputUsername, dispatch),
+  setInputPassword: bindActionCreators(setInputPassword, dispatch),
+  setInputEmail: bindActionCreators(setInputEmail, dispatch),
+  setInputGender: bindActionCreators(setInputGender, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

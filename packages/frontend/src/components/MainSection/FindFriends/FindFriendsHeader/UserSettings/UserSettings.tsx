@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useCookie } from 'next-cookie';
 import Link from 'next/link';
@@ -11,8 +11,11 @@ import { IoMdLogOut } from 'react-icons/io';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { FiSettings } from 'react-icons/fi';
 import { getAuth } from '../../../../../utils/authMethods';
-import apiHelper from '../../../../../services/graphql/apiHelper';
+import { gqlSdk } from '@chat-app/sdk';
 import useThemeColors from '../../../../../hooks/useThemeColors';
+import { bindActionCreators, Dispatch } from 'redux';
+import { toggleUserSettings } from 'services/redux/reducer/toggles/actions';
+import { signOut } from 'services/redux/reducer/auth/actions';
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -21,25 +24,30 @@ const buttonStyles = css`
   height: 1.5rem;
 `;
 
-function UserSettings() {
+interface IUserSettings {
+  toggleUserSettings: typeof toggleUserSettings;
+  signOut: typeof signOut;
+}
+
+function UserSettings(props: IUserSettings) {
+  const { toggleUserSettings, signOut } = props;
   const router = useRouter();
-  const dispatch = useDispatch();
   const cookie = useCookie();
 
   const deleteCookies = async () => {
     getAuth();
     const cookies = cookie.getAll();
-    await apiHelper.auth.logout(cookie.get('id'), cookie.get('token'));
+    await gqlSdk.auth.logout(cookie.get('id'), cookie.get('token'));
     for (const key in cookies) cookie.remove(key);
 
     router.push('/');
-    dispatch({ type: 'SIGN_OUT' });
+    signOut();
   };
 
   const deleteUser = async () => {
     try {
       getAuth();
-      await apiHelper.user.delete(cookie.get('id'), cookie.get('token'));
+      await gqlSdk.user.delete(cookie.get('id'), cookie.get('token'));
       deleteCookies();
       return true;
     } catch (error) {
@@ -51,7 +59,7 @@ function UserSettings() {
     {
       href: '/settings/profile',
       onClick: () => {
-        dispatch({ type: 'SET_USER_SETTINGS', payload: false });
+        toggleUserSettings(false);
       },
       Icon: FiSettings,
       title: 'User settings',
@@ -117,4 +125,9 @@ function UserSettings() {
   );
 }
 
-export default UserSettings;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleUserSettings: bindActionCreators(toggleUserSettings, dispatch),
+  signOut: bindActionCreators(signOut, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(UserSettings);

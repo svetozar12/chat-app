@@ -1,11 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
 import { Button, GridItem, HStack, SimpleGrid } from '@chakra-ui/react';
 import Loading from '../../Loading';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 
-function QuickLoginModal({ quickLogin }: { quickLogin: () => Promise<boolean> }) {
-  const dispatch = useDispatch();
+interface IQuickLoginModal {
+  toggleQuickLogin: typeof toggleQuickLogin;
+  quickLogin: () => Promise<boolean>;
+}
+
+function QuickLoginModal(props: IQuickLoginModal) {
+  const { toggleQuickLogin, quickLogin } = props;
   const [isLoading, setIsLoading] = React.useState(false);
 
   return (
@@ -35,7 +42,7 @@ function QuickLoginModal({ quickLogin }: { quickLogin: () => Promise<boolean> })
         </GridItem>
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Link href="/" passHref>
-            <Button colorScheme="blue" w="full" onClick={() => dispatch({ type: 'QUICK_LOGIN', payload: false })}>
+            <Button colorScheme="blue" w="full" onClick={() => toggleQuickLogin(false)}>
               Sign up
             </Button>
           </Link>
@@ -45,4 +52,8 @@ function QuickLoginModal({ quickLogin }: { quickLogin: () => Promise<boolean> })
   );
 }
 
-export default QuickLoginModal;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(QuickLoginModal);

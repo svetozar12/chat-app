@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IUpdateChat {
+export interface IUpdateChat {
   user_id: string;
   chat_id: string;
   username?: string;

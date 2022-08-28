@@ -1,11 +1,11 @@
-import resource from "../api_helper";
+import resource from '../api_helper';
 
-interface ICreateUser {
+export interface ICreateUser {
   user: {
     username: string;
     password: string;
     email: string;
-    gender: "Male" | "Female" | "Other";
+    gender: 'Male' | 'Female' | 'Other';
   };
 }
 

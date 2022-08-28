@@ -2,12 +2,16 @@
   "name": "@chat-app/graphql-server",
   "version": "1.0.0",
   "description": "graphql-server that stays between fe and be",
-  "main": "/dist/server.js",
-  "repository": "https://github.com/svetozar12/chat-app",
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svetozar12/chat-app.git"
+  },
   "author": "svetozar gospodinov",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --build",
+    "prebuild": "rimraf src/generated && yarn codegen",
+    "build": "rimraf dist  && tsc && vite build",
     "server": "nodemon src/server.ts",
     "watch": "tsc --watch",
     "lint": "eslint src",
@@ -15,10 +19,11 @@
     "dev:backend": "concurrently --kill-others \"yarn server\" \"yarn watch\"",
     "start:production": "node dist/server.js",
     "test": "jest",
-    "format": "prettier --write **/*.{js,ts,tsx}"
+    "format": "prettier --write **/*.{js,ts,tsx}",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "apollo-server": "^3.6.7",
+    "@chat-app/sdk": "*",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
@@ -26,9 +31,14 @@
     "graphql": "^16.3.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.11.8",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
     "@jsdragon12/eslint-config": "latest",
     "@jsdragon12/prettier-config": "latest",
     "@jsdragon12/typescript-config": "latest",
+    "@rollup/plugin-typescript": "^8.4.0",
     "@types/node-fetch": "^2.6.1",
     "babel-jest": "^28.1.0",
     "eslint": "^8.17.0",
@@ -37,6 +47,26 @@
     "jest": "^28.1.0",
     "kill-port": "^2.0.0",
     "nodemon": "^2.0.16",
-    "ts-node": "^10.8.1"
+    "rollup": "^2.78.1",
+    "rollup-plugin-dts": "^4.2.2",
+    "ts-node": "^10.8.1",
+    "vite": "^2.9.5",
+    "vite-plugin-checker": "^0.4.6",
+    "vite-plugin-dts": "^1.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/svetozar12/chat-app/issues"
+  },
+  "homepage": "https://github.com/svetozar12/chat-app#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "directory": "dist",
+    "access": "public"
   }
 }

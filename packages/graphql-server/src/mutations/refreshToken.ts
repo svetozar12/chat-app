@@ -1,6 +1,5 @@
-import resource from "../api_helper/index";
-
-interface IRefreshToken {
+import resource from '../api_helper/index';
+export interface IRefreshToken {
   user_id: string;
   token: string;
 }

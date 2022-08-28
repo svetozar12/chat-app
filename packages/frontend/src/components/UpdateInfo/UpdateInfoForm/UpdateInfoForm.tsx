@@ -1,17 +1,26 @@
 import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import ISave_inputState from '../../../services/redux/reducer/save_inputReducer/state';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { STATE } from 'services/redux/reducer';
+import { setInputEmail, setInputFile, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
+import IInputs from 'services/redux/reducer/inputs/state';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import UpdateInfoDetails from './UpdateInfoDetails';
 
 interface IUpdateInfoForm {
   image: string;
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  inputs: IInputs;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  setInputEmail: typeof setInputEmail;
+  setInputGender: typeof setInputGender;
+  setInputPassword: typeof setInputPassword;
+  setInputUsername: typeof setInputUsername;
 }
 
-function UpdateInfoForm({ image }: IUpdateInfoForm) {
-  const dispatch = useDispatch();
-  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+function UpdateInfoForm(props: IUpdateInfoForm) {
+  const { image, inputs, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername } = props;
   const color = useColorModeValue('black', 'white');
 
   const InputsLayout = [
@@ -25,14 +34,10 @@ function UpdateInfoForm({ image }: IUpdateInfoForm) {
       props: {
         variant: 'FormInput',
         type: 'username',
-        value: state.input_username,
+        value: inputs.input_username,
         id: 'username',
         w: 'full',
-        onChange: (e: any) =>
-          dispatch({
-            type: 'SAVE_INPUT_USERNAME',
-            payload: e.target.value,
-          }),
+        onChange: (e: any) => setInputUsername(e.target.value),
         color,
       },
     },
@@ -46,15 +51,11 @@ function UpdateInfoForm({ image }: IUpdateInfoForm) {
       props: {
         variant: 'FormInput',
         type: 'email',
-        value: state.input_email,
+        value: inputs.input_email,
         w: 'full',
         id: 'email',
         color,
-        onChange: (e: any) =>
-          dispatch({
-            type: 'SAVE_INPUT_EMAIL',
-            payload: e.target.value,
-          }),
+        onChange: (e: any) => setInputEmail(e.target.value),
       },
     },
     {
@@ -69,13 +70,9 @@ function UpdateInfoForm({ image }: IUpdateInfoForm) {
         type: 'file',
         id: 'file',
         color,
-        value: state.input_file,
+        value: inputs.input_file,
         display: 'none',
-        onChange: (e: any) =>
-          dispatch({
-            type: 'SAVE_INPUT_FILE',
-            payload: e.target.value,
-          }),
+        onChange: (e: any) => setInputFile(e.target.value),
       },
     },
   ];
@@ -115,4 +112,17 @@ function UpdateInfoForm({ image }: IUpdateInfoForm) {
   );
 }
 
-export default UpdateInfoForm;
+const mapStateToProps = (state: STATE) => ({
+  inputs: state.inputs,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  setInputUsername: bindActionCreators(setInputUsername, dispatch),
+  setInputPassword: bindActionCreators(setInputPassword, dispatch),
+  setInputEmail: bindActionCreators(setInputEmail, dispatch),
+  setInputGender: bindActionCreators(setInputGender, dispatch),
+  setInputFile: bindActionCreators(setInputFile, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateInfoForm);

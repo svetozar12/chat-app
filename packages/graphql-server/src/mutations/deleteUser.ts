@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IDeleteUser {
+export interface IDeleteUser {
   user_id: string;
   token: string;
 }

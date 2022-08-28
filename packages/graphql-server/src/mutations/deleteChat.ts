@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IDeleteChat {
+export interface IDeleteChat {
   user_id: string;
   chat_id: string;
   token: string;

@@ -1,10 +1,10 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IupdateInvite {
+export interface IupdateInvite {
   user_id: string;
   token: string;
   invite_id: string;
-  status: "recieved" | "accepted" | "declined";
+  status: 'recieved' | 'accepted' | 'declined';
 }
 
 const updateInvite = async (args: IupdateInvite) => {

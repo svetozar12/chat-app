@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCookie } from 'next-cookie';
-import apiHelper from '../../../services/graphql/apiHelper';
+import { gqlSdk } from '@chat-app/sdk';
 import SingleAvatar from '../SingleAvatar';
 
 interface IGroup_avatar {
@@ -13,7 +13,7 @@ function GroupAvatar({ members }: IGroup_avatar) {
   const username: string = cookie.get('username');
   const getUserImage = async (image: string) => {
     try {
-      const res = await apiHelper.user.getById(cookie.get('id'), cookie.get('token'));
+      const res = await gqlSdk.user.getById(cookie.get('id'), cookie.get('token'));
       const { userAvatar } = res;
       if (!userAvatar) {
         return false;
@@ -27,8 +27,8 @@ function GroupAvatar({ members }: IGroup_avatar) {
     }
   };
   React.useEffect(() => {
-    members.forEach((element) => {
-      getUserImage(element);
+    members?.forEach((element) => {
+      if (element) getUserImage(element);
     });
   }, []);
   return (

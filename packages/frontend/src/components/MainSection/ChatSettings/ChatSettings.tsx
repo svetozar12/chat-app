@@ -2,34 +2,37 @@ import { css, cx } from '@emotion/css';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from 'react-icons/ai';
-import { useSelector, useDispatch } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
 import generic from '../../../utils/generic';
 // services
-import { IInitialSet } from '../../../services/redux/reducer/setReducer/state';
 import apiHelper from '../../../services/graphql/apiHelper';
-import { IAuthState } from '../../../services/redux/reducer/authReducer/state';
 import s from './ChatSettings.module.css';
 import useThemeColors from '../../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
+import { connect } from 'react-redux';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
 
 interface IChatSettings {
   chatId: string;
+  ws: IWebSocket;
+  toggle: IToggle;
+  toggleInviteModal: typeof toggleInviteModal;
 }
 
-function ChatSettings({ chatId }: IChatSettings) {
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-
+function ChatSettings(props: IChatSettings) {
+  const { chatId, ws, toggle } = props;
   const [users, setUsers] = React.useState<string[]>([]);
-  const dispatch = useDispatch();
   const route = useRouter();
   const cookie = useCookie();
   const id: string = cookie.get('id');
   const token: string = cookie.get('token');
 
   const emitFriendRequest = async () => {
-    authState.ws?.emit('friend_request');
+    ws.ws?.emit('friend_request');
   };
   const getMembers = async () => {
     try {
@@ -55,7 +58,7 @@ function ChatSettings({ chatId }: IChatSettings) {
   React.useEffect(() => {
     setUsers([]);
     getMembers();
-    authState.ws?.on('inviting_multiple_users', ({ users }) => {
+    ws.ws?.on('inviting_multiple_users', ({ users }) => {
       setUsers((prev) => [...prev, ...users]);
     });
   }, [route.asPath]);
@@ -75,7 +78,7 @@ function ChatSettings({ chatId }: IChatSettings) {
   } = useThemeColors();
 
   return (
-    <VStack mt={5} gap={5} pos="relative" transition="ease" w="full" opacity={state.setChatSettings ? 1 : 0}>
+    <VStack mt={5} gap={5} pos="relative" transition="ease" w="full" opacity={toggle.toggleChatSettings ? 1 : 0}>
       <Heading w="70%" color={color} textAlign="center" whiteSpace="nowrap" fontSize={{ base: '4vw', md: '2vw' }}>
         Members in chat
       </Heading>
@@ -95,12 +98,7 @@ function ChatSettings({ chatId }: IChatSettings) {
       ))}
       {users.length > 2 && (
         <div
-          onClick={() => {
-            dispatch({
-              type: 'SET_MODAL_INVITE',
-              payload: !state.setModalInvite,
-            });
-          }}
+          onClick={() => toggleInviteModal(!toggle.toggleInvideModal)}
           className={cx(
             'flex',
             css`
@@ -147,4 +145,13 @@ function ChatSettings({ chatId }: IChatSettings) {
   );
 }
 
-export default ChatSettings;
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleInviteModal: bindActionCreators(toggleInviteModal, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatSettings);

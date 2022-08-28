@@ -6,7 +6,6 @@ import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { BsFillSunFill, BsThreeDots } from 'react-icons/bs';
 import { IoNotifications } from 'react-icons/io5';
 // services
-import { useDispatch, useSelector } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import {
   Center,
@@ -23,22 +22,41 @@ import {
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import s from './FindFriendsHeader.module.css';
-import ISave_inputState from '../../../../services/redux/reducer/save_inputReducer/state';
-import { IInitialSet } from '../../../../services/redux/reducer/setReducer/state';
 import apiHelper from '../../../../services/graphql/apiHelper';
 // hooks
 import UserSettings from './UserSettings';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import {
+  toggleChatSettings,
+  toggleCreateGroup,
+  toggleFriendRequestAction,
+  toggleMobileNav,
+  toggleUserSettings,
+} from 'services/redux/reducer/toggles/actions';
+import { STATE } from 'services/redux/reducer';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { setNotifNumber } from 'services/redux/reducer/invites/actions';
+import IInvite from 'services/redux/reducer/invites/state';
 
-function FindFriendsHeader() {
-  const dispatch = useDispatch();
+interface IFindFriendsHeader {
+  toggle: IToggle;
+  invite: IInvite;
+  toggleChatSettings: typeof toggleChatSettings;
+  toggleMobileNav: typeof toggleMobileNav;
+  toggleCreateGroup: typeof toggleCreateGroup;
+  toggleFriendRequest: typeof toggleFriendRequestAction;
+  toggleUserSettings: typeof toggleUserSettings;
+}
+
+function FindFriendsHeader(props: IFindFriendsHeader) {
+  const { toggle, invite, toggleChatSettings, toggleCreateGroup, toggleMobileNav, toggleFriendRequest, toggleUserSettings } = props;
   const cookie = useCookie();
   const userId: string = cookie.get('id');
   const token: string = cookie.get('token');
 
   const { toggleColorMode } = useColorMode();
   const [image, setImage] = React.useState('');
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   const getUserImage = async () => {
     try {
@@ -57,18 +75,9 @@ function FindFriendsHeader() {
   }, []);
 
   const toggleGroupCreate = () => {
-    dispatch({
-      type: 'TOGGLE_CREATE_GROUP',
-      payload: !state.toggleCreateGroup,
-    });
-    dispatch({
-      type: 'SET_MOBILE_NAV',
-      payload: !state.setMobileNav,
-    });
-    dispatch({
-      type: 'SET_CHAT_SETTINGS',
-      payload: false,
-    });
+    toggleChatSettings(false);
+    toggleCreateGroup(!toggle.toggleCreateGroupModal);
+    toggleMobileNav(!toggleMobileNav);
   };
 
   return (
@@ -107,18 +116,9 @@ function FindFriendsHeader() {
               <IconButton w="full" h="3rem" aria-label="" icon={<MdDarkMode className={s.icon} />} />,
             )}
           </Center>
-          <Center
-            w="25%"
-            pos="relative"
-            onClick={() => {
-              dispatch({
-                type: 'SET_FRIEND_REQUEST',
-                payload: !state.setFriendRequest,
-              });
-            }}
-          >
+          <Center w="25%" pos="relative" onClick={() => toggleFriendRequest(!toggle.toggleFriendReqModal)}>
             <IconButton w="full" h="3rem" aria-label="button for recieved invites" icon={<IoNotifications className={s.icon} />} />
-            {notifState.notification_number > 0 && (
+            {invite.notificationNumber > 0 && (
               <Circle
                 display="flex"
                 justifyContent="center"
@@ -132,25 +132,16 @@ function FindFriendsHeader() {
                 fontWeight="semibold"
                 color="white"
               >
-                {notifState.notification_number}
+                {invite.notificationNumber}
               </Circle>
             )}
           </Center>
           <Center onClick={toggleGroupCreate} w="25%">
             <IconButton w="full" h="3rem" aria-label="creates group chat" icon={<AiOutlineUsergroupAdd className={s.icon} />} />
           </Center>
-          <Center
-            w="25%"
-            pos="relative"
-            onClick={() =>
-              dispatch({
-                type: 'SET_USER_SETTINGS',
-                payload: !state.setUserSettings,
-              })
-            }
-          >
+          <Center w="25%" pos="relative" onClick={() => toggleUserSettings(toggle.toggleUserSettings)}>
             <AnimatePresence>
-              {state.setUserSettings && (
+              {toggle.toggleUserSettings && (
                 <motion.div
                   className={s.box}
                   style={{ position: 'absolute', top: 0, right: 0 }}
@@ -172,4 +163,17 @@ function FindFriendsHeader() {
   );
 }
 
-export default React.memo(FindFriendsHeader);
+const mapStateToProps = (state: STATE) => ({
+  invite: state.invite,
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
+  toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
+  toggleMobileNav: bindActionCreators(toggleMobileNav, dispatch),
+  toggleFriendRequest: bindActionCreators(toggleFriendRequestAction, dispatch),
+  toggleUserSettings: bindActionCreators(toggleUserSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(FindFriendsHeader));

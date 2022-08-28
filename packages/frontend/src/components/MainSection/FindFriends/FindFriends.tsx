@@ -1,11 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 // services
-import { IInitialSet } from 'services/redux/reducer/setReducer/state';
 import apiHelper from 'services/graphql/apiHelper';
-import { IAuthState } from 'services/redux/reducer/authReducer/state';
 import { getAuth } from 'utils/authMethods';
 import { useAuth } from 'utils/SessionProvider';
 // components
@@ -13,20 +11,27 @@ import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHea
 import { Skeleton, VStack, FormControl } from '@chakra-ui/react';
 import FindFriendsHeader from './FindFriendsHeader';
 import FindFriendsSearch from './FindFriendsSearch';
+import { STATE } from 'services/redux/reducer';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import IInvite from 'services/redux/reducer/invites/state';
 
-function FindFriends() {
+interface IFindFriends {
+  ws: IWebSocket;
+  invite: IInvite;
+}
+
+function FindFriends(props: IFindFriends) {
+  const { ws, invite } = props;
   const dispatch = useDispatch();
 
   const cookie = useCookie();
   const { user } = useAuth();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await apiHelper.invite.create(cookie.get('id'), state.reciever, cookie.get('token'));
-      authState.ws?.emit('send_friend_request', {
+      const res = await apiHelper.invite.create(cookie.get('id'), invite.reciever, cookie.get('token'));
+      ws.ws?.emit('send_friend_request', {
         inviter: res.inviter,
         reciever: res.reciever,
       });
@@ -40,7 +45,7 @@ function FindFriends() {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
-    if (state.reciever) {
+    if (invite.reciever) {
       await sendInvite();
       dispatch({ type: 'SET_RECIEVER', payload: '' });
     }
@@ -65,4 +70,9 @@ function FindFriends() {
   );
 }
 
-export default React.memo(FindFriends);
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+  invite: state.invite,
+});
+
+export default connect(mapStateToProps)(React.memo(FindFriends));

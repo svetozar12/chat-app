@@ -1,23 +1,27 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/css';
 import { CloseButton, Divider, Flex, Heading, ScaleFade } from '@chakra-ui/react';
 import PendingChats from './PendingChats/PendingChats';
-import { IInitialSet } from '../../services/redux/reducer/setReducer/state';
 import { Iinvites } from '../../pages/[acc]';
 import s from './Notifications_Modal.module.css';
 import useThemeColors from '../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { toggleFriendRequestAction } from 'services/redux/reducer/toggles/actions';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { IToggle } from 'services/redux/reducer/toggles/state';
 
 interface INotifications {
   contacts: Iinvites[];
+  toggle: IToggle;
+  toggleFriendRequest: typeof toggleFriendRequestAction;
 }
 
-function Notifications({ contacts }: INotifications) {
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+function Notifications(props: INotifications) {
+  const { contacts, toggle, toggleFriendRequest } = props;
   const {
     colors: { fromBg },
   } = useThemeColors();
-  const dispatch = useDispatch();
 
   const modalVariant = {
     hide: {
@@ -47,10 +51,7 @@ function Notifications({ contacts }: INotifications) {
         m={5}
         mt="-0.5px !important"
         onClick={() => {
-          dispatch({
-            type: 'SET_FRIEND_REQUEST',
-            payload: !state.setFriendRequest,
-          });
+          toggleFriendRequest(!toggle.toggleFriendReqModal);
         }}
       />
       <div
@@ -71,4 +72,12 @@ function Notifications({ contacts }: INotifications) {
   );
 }
 
-export default Notifications;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleFriendRequest: bindActionCreators(toggleFriendRequestAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notifications);

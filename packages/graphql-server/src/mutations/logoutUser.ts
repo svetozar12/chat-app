@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface ILogoutUser {
+export interface ILogoutUser {
   user_id: string;
   token: string;
 }

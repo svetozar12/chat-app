@@ -1,15 +1,15 @@
-import { api } from "../index";
-import AxiosErrorHandler from "../../utils/AxiosErrorHandler";
-import { AxiosError } from "axios";
+import { api } from '../index';
+import AxiosErrorHandler from '../../utils/AxiosErrorHandler';
+import { AxiosError } from 'axios';
 
-interface IChat {
+export interface IChat {
   user_id: string;
   invite_id: string;
   user1: string;
   user2: string;
 }
 
-const rootUrl = "/chat-room";
+const rootUrl = '/chat-room';
 
 const chats = {
   getAll: async (user_id: string, token: string) => {

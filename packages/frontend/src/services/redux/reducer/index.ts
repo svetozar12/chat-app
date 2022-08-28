@@ -14,6 +14,8 @@ import toggleReducer from 'services/redux/reducer/toggles/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import IInvite from 'services/redux/reducer/invites/state';
 import inviteReducer from 'services/redux/reducer/invites/reducer';
+import { IAlert } from 'services/redux/reducer/alert/state';
+import alertReducer from 'services/redux/reducer/alert/reducer';
 
 export interface STATE {
   auth: IAuth;
@@ -22,6 +24,7 @@ export interface STATE {
   inputs: IInputs;
   toggle: IToggle;
   invite: IInvite;
+  alert: IAlert;
 }
 
 const combiReducers = combineReducers({
@@ -31,6 +34,7 @@ const combiReducers = combineReducers({
   inputs: inputReducer,
   toggle: toggleReducer,
   invite: inviteReducer,
+  alert: alertReducer,
 });
 
 const combReducers = (state: any, action: AnyAction) => {

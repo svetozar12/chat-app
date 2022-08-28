@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IUpdateMessage {
+export interface IUpdateMessage {
   message_id: string;
   user_id: string;
   newMessage: string;

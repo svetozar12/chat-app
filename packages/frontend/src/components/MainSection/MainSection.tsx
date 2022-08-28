@@ -8,18 +8,23 @@ import FindFriends from './FindFriends';
 import ChatSettings from './ChatSettings';
 // other
 import { useAuth } from '../../utils/SessionProvider';
-// import { IInitialSet } from 'services/redux/reducer/setReducer/state';
-import { Ichats } from '../../pages/[acc]';
 import useThemeColors from '../../hooks/useThemeColors';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { Chat } from '@chat-app/graphql-server';
 
 interface IMainSection {
   chatId: string;
-  chatRooms: Ichats[];
+  chatRooms: Chat[];
+  toggle: IToggle;
+  toggleChatSettings: typeof toggleChatSettings;
 }
 
-function MainSection({ chatRooms, chatId }: IMainSection) {
-  // const dispatch = useDispatch();
-  // const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+function MainSection(props: IMainSection) {
+  const { chatRooms, chatId, toggle, toggleChatSettings } = props;
   const { user } = useAuth();
   const {
     colors: { fromBg, color },
@@ -29,7 +34,7 @@ function MainSection({ chatRooms, chatId }: IMainSection) {
     <VStack
       mr="-0.5rem !important"
       ml="-0.5rem !important"
-      // w={{ base: !state.setMobileNav ? 0 : '102%', xl: '50%', '2xl': '40%' }}
+      w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '40%' }}
       h="100vh"
       pos={{ base: 'absolute', lg: 'relative' }}
       bg={fromBg}
@@ -46,7 +51,7 @@ function MainSection({ chatRooms, chatId }: IMainSection) {
         <VStack overflow="auto" w="94%" h="100vh">
           <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in>
             <VStack
-              // w={{ base: !state.setMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
+              w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
               h="100vh"
               top={0}
               left={0}
@@ -69,12 +74,7 @@ function MainSection({ chatRooms, chatId }: IMainSection) {
                     background:${color},
                     z-index: 9999;
                   `)}
-                  // onClick={() =>
-                  //   dispatch({
-                  //     type: 'SET_CHAT_SETTINGS',
-                  //     payload: !state.setChatSettings,
-                  //   })
-                  // }
+                  onClick={() => toggleChatSettings(!toggle.toggleChatSettings)}
                 />
               </Flex>
               <ChatSettings chatId={chatId} />
@@ -87,10 +87,17 @@ function MainSection({ chatRooms, chatId }: IMainSection) {
         </VStack>
       ) : (
         <div>loading</div>
-        // <SkeletonActiveInvites />
       )}
     </VStack>
   );
 }
 
-export default MainSection;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainSection);

@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IGetAll {
+export interface IGetAll {
   user_id: string;
   token: string;
   status?: string | any;

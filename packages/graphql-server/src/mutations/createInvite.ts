@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface ICreateInvite {
+export interface ICreateInvite {
   user_id: string;
   reciever: string;
   token: string;

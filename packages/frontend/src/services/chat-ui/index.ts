@@ -1,5 +1,4 @@
 import Alerts from 'services/chat-ui/Alerts';
-import CheckBox_component from 'services/chat-ui/CheckBox';
 import DefaultLink from 'services/chat-ui/DefaultLink';
 import FormWrapper from 'services/chat-ui/FormWrapper';
 import HamburgerMenu from 'services/chat-ui/HamburgerMenu';
@@ -10,5 +9,5 @@ import { IBaseComponent } from 'services/chat-ui/types';
 import { IAlerts } from 'services/chat-ui/Alerts/Alerts';
 import { IFormWrapper } from 'services/chat-ui/FormWrapper/FormWrapper';
 
-export { Alerts, CheckBox_component, DefaultLink, FormWrapper, HamburgerMenu, Modal, RadioCard };
+export { Alerts, DefaultLink, FormWrapper, HamburgerMenu, Modal, RadioCard };
 export type { IBaseComponent, IAlerts, IFormWrapper };

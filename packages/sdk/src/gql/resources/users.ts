@@ -1,15 +1,16 @@
-import { api } from '../apiHelper';
+import { GetUser, Message } from "@chat-app/graphql-server";
+import { api } from "..";
 
-const rootUrl = '';
+const rootUrl = "";
 
 export interface IUser {
   username: string;
   email: string;
-  gender: 'male' | 'female';
+  gender: "male" | "female";
 }
 
 const user = {
-  getById: async (userId: string, token: string): Promise<any> => {
+  getById: async (userId: string, token: string): Promise<GetUser> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -46,7 +47,12 @@ const user = {
     }
   },
 
-  create: async (username: string, email: string, password: string, gender: 'Male' | 'Female' | 'Other') => {
+  create: async (
+    username: string,
+    email: string,
+    password: string,
+    gender: "Male" | "Female" | "Other",
+  ): Promise<Message> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -79,7 +85,11 @@ const user = {
     }
   },
 
-  update: async (userId: string, token: string, user: IUser) => {
+  update: async (
+    userId: string,
+    token: string,
+    user: IUser,
+  ): Promise<Message> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -112,7 +122,7 @@ const user = {
     }
   },
 
-  delete: async (userId: string, token: string) => {
+  delete: async (userId: string, token: string): Promise<Message> => {
     try {
       const res = await api(rootUrl, {
         data: {

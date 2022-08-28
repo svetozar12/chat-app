@@ -101,7 +101,7 @@ const mapStateToProps = (state: STATE) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  incrementPagination: bindActionCreators(toggleInviteModal, dispatch),
+  toggleInviteModal: bindActionCreators(toggleInviteModal, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddUserModal);

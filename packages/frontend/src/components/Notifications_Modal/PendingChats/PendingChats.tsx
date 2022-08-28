@@ -2,35 +2,37 @@ import React from 'react';
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
-import { useSelector } from 'react-redux';
 import { Button, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
-import { Iinvites } from '../../../pages/[acc]';
-import Single_avatar from '../../Avatar/Single_avatar';
+import { Iinvites } from 'pages/[acc]';
+import SingleAvatar from 'components/Avatar/SingleAvatar';
 // services
-import api_helper from '../../../services/graphql/apiHelper';
-import { IAuthState } from '../../../services/redux/reducer/authReducer/state';
+import apiHelper from 'services/graphql/apiHelper';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
 
 interface IPendingChats extends Iinvites {
   _id: string;
   inviter: string;
   status: string;
   reciever: string;
+  ws: IWebSocket;
 }
 
-function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+function PendingChats(props: IPendingChats) {
+  const { _id, inviter, reciever, status, ws } = props;
   const cookie = useCookie();
   const id: string = cookie.get('id');
   const inviteId = _id;
   const token: string = cookie.get('token');
 
   const emitFriendRequest = async () => {
-    authState.ws?.emit('friend_request');
+    ws.ws?.emit('friend_request');
   };
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await api_helper.invite.update(id, inviteId, param, token);
+      await apiHelper.invite.update(id, inviteId, param, token);
       emitFriendRequest();
 
       return true;
@@ -41,7 +43,7 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
 
   const createChatRoom = async () => {
     try {
-      await api_helper.chatroom.create({ userId: id, invite_id: _id, user1: inviter, user2: reciever }, token);
+      await apiHelper.chatroom.create({ userId: id, invite_id: _id, user1: inviter, user2: reciever }, token);
       emitFriendRequest();
     } catch (error) {
       return false;
@@ -80,7 +82,7 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
       {isRecieved && (
         <HStack w="98.5%" m={2} h="20vh">
           <VStack align="center">
-            <Single_avatar width="3rem" height="3rem" />
+            <SingleAvatar width="3rem" height="3rem" />
             <Heading>{inviter}</Heading>
           </VStack>
           <Spacer />
@@ -106,4 +108,8 @@ function PendingChats({ _id, inviter, reciever, status }: IPendingChats) {
   );
 }
 
-export default PendingChats;
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+});
+
+export default connect(mapStateToProps)(PendingChats);

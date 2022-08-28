@@ -4,4 +4,9 @@ const signOut = () => ({
   type: ActionType.SIGN_OUT,
 });
 
-export { signOut };
+const setRememberMe = (check: boolean) => ({
+  type: ActionType.REMEMBER_ME_CHECK,
+  payload: check,
+});
+
+export { signOut, setRememberMe };

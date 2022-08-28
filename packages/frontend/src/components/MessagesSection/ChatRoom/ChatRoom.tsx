@@ -13,7 +13,7 @@ import ChatRoomForm from './ChatRoomForm';
 import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // hooks
 // services
-import apiHelper from '../../../services/graphql/apiHelper';
+import { gqlSdk } from '@chat-app/sdk';
 import { useAuth } from '../../../utils/SessionProvider';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
@@ -61,7 +61,7 @@ function ChatRoom(props: IChatRoom) {
 
   const getRecentMessages = async () => {
     try {
-      const res = await apiHelper.message.getAll({ userId, chatId, token, query: { page_size: 10, page_number: 1 } });
+      const res = await gqlSdk.message.getAll({ userId, chatId, token, query: { page_size: 10, page_number: 1 } });
 
       res.forEach((element: Record<string, any>) => {
         setMessages(element);
@@ -84,7 +84,7 @@ function ChatRoom(props: IChatRoom) {
     try {
       if (e.currentTarget.scrollTop === 0) {
         incrementPagination(messagePageNumber);
-        const res = await apiHelper.message.getAll({
+        const res = await gqlSdk.message.getAll({
           userId,
           chatId,
           token,

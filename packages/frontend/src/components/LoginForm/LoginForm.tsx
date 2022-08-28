@@ -1,4 +1,3 @@
-import { IAuthState } from 'services/redux/reducer/authReducer/state';
 import React from 'react';
 import apiHelper from 'services/graphql/apiHelper';
 import generic from 'utils/generic';
@@ -16,7 +15,6 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 // hooks
-import { useSelector, useDispatch } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
 // components
@@ -27,18 +25,32 @@ import { LoginSchema } from 'utils/validation';
 import { ILogin } from 'pages';
 import useThemeColors from 'hooks/useThemeColors';
 import Loading from '../Loading';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { IAuth } from 'services/redux/reducer/auth/state';
+import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
+import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
+import { setLoginError } from 'services/redux/reducer/alert/actions';
+import { setRememberMe } from 'services/redux/reducer/auth/actions';
 
-type ILoginForm = ILogin;
+interface ILoginForm extends ILogin {
+  auth: IAuth;
+  setInputUsername: typeof setInputUsername;
+  setInputPassword: typeof setInputPassword;
+  togglelIsLoading: typeof togglelIsLoading;
+  setLoginError: typeof setLoginError;
+  setRememberMe: typeof setRememberMe;
+}
 
-function LoginForm({ callback }: ILoginForm) {
-  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+function LoginForm(props: ILoginForm) {
+  const { callback, auth, setInputUsername, setInputPassword, togglelIsLoading, setLoginError } = props;
   const [isLoading, setIsLoading] = React.useState(false);
-  const dispatch = useDispatch();
   const router = useRouter();
   const cookie = useCookie();
 
-  const rememberMe = state.remember_me ? 31556952 : 3600;
-  const refreshRememberMe = state.remember_me ? 63113904 : 7200;
+  const rememberMe = auth.remember_me ? 31556952 : 3600;
+  const refreshRememberMe = auth.remember_me ? 63113904 : 7200;
 
   interface IValues {
     username: string;
@@ -49,7 +61,7 @@ function LoginForm({ callback }: ILoginForm) {
     try {
       const { username, password } = values;
       const login = await apiHelper.auth.login(username, password);
-      if (login instanceof Error) return dispatch({ type: 'LOGIN_POST_ERROR', bad: login.message });
+      if (login instanceof Error) return setLoginError(login.message);
 
       if (login) {
         setIsLoading(true);
@@ -72,12 +84,10 @@ function LoginForm({ callback }: ILoginForm) {
 
         cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
         router.push(callback || `/${chatInstance}`);
-        dispatch({
-          type: 'SET_IS_LOADING',
-          payload: false,
-        });
+        togglelIsLoading(false);
         setIsLoading(false);
-        dispatch({ type: 'SAVE_INPUT', payload: '' });
+        setInputUsername('');
+        setInputPassword('');
       }
     } catch (error) {
       setIsLoading(false);
@@ -179,13 +189,8 @@ function LoginForm({ callback }: ILoginForm) {
                 data-testid="checkbox"
                 type="checkbox"
                 id="checkbox"
-                checked={state.remember_me}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'REMEMBER_ME_CHECK',
-                    payload: e.target.checked,
-                  })
-                }
+                checked={auth.remember_me}
+                onChange={(e) => setRememberMe(e.target.checked)}
               />
               <FormLabel cursor="pointer" htmlFor="checkbox">
                 Remember me
@@ -198,4 +203,17 @@ function LoginForm({ callback }: ILoginForm) {
   );
 }
 
-export default LoginForm;
+const mapStateToProps = (state: STATE) => ({
+  auth: state.messages,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setInputUsername: bindActionCreators(setInputUsername, dispatch),
+  setInputPassword: bindActionCreators(setInputPassword, dispatch),
+  togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
+  setLoginError: bindActionCreators(setLoginError, dispatch),
+  setRememberMe: bindActionCreators(setRememberMe, dispatch),
+});
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

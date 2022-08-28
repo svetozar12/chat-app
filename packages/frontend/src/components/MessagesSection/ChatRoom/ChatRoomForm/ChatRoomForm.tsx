@@ -2,14 +2,17 @@ import React, { useEffect } from 'react';
 import { MdSend } from 'react-icons/md';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
-import { useDispatch, useSelector } from 'react-redux';
 import { Center, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
-import apiHelper from '../../../../services/graphql/apiHelper';
-import { IAuthState } from '../../../../services/redux/reducer/authReducer/state';
-import { getAuth } from '../../../../utils/authMethods';
-import generic from '../../../../utils/generic';
+import { gqlSdk } from '@chat-app/sdk';
+import { getAuth } from 'utils/authMethods';
+import generic from 'utils/generic';
 import s from './ChatRoomForm.module.css';
-import useThemeColors from '../../../../hooks/useThemeColors';
+import useThemeColors from 'hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { connect } from 'react-redux';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { bindActionCreators, Dispatch } from 'redux';
+import { setMessagesAction } from 'services/redux/reducer/messages/actions';
 
 interface IPropsState {
   name?: string;
@@ -19,12 +22,13 @@ interface IPropsState {
 
 interface IChatRoomForm {
   chatId: string;
+  ws: IWebSocket;
+  setMessages: typeof setMessagesAction;
 }
 
-function ChatRoomForm({ chatId }: IChatRoomForm) {
+function ChatRoomForm(props: IChatRoomForm) {
+  const { chatId, ws, setMessages } = props;
   const cookie = useCookie();
-  const dispatch = useDispatch();
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [state, setState] = React.useState<IPropsState>({
     name: cookie.get('name'),
     message: '',
@@ -34,14 +38,11 @@ function ChatRoomForm({ chatId }: IChatRoomForm) {
 
   useEffect(() => {
     inputTextArea.current.focus();
-
-    authState.ws?.on('message', ({ messages }) => {
-      console.log(messages, 'fr message');
-
+    ws.ws?.on('message', ({ messages }) => {
       const [message] = messages;
-      dispatch({ type: 'MESSAGES', payload: message });
+      setMessages(message);
     });
-  }, [authState.ws]);
+  }, [ws.ws]);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
     inputTextArea.current.style.height = '20px';
@@ -57,7 +58,7 @@ function ChatRoomForm({ chatId }: IChatRoomForm) {
 
   const saveMessage = async () => {
     try {
-      await apiHelper.message.create(cookie.get('id'), chatId, state.message as string, cookie.get('token'));
+      await gqlSdk.message.create(cookie.get('id'), chatId, state.message as string, cookie.get('token'));
       return true;
     } catch (error) {
       return false;
@@ -70,7 +71,7 @@ function ChatRoomForm({ chatId }: IChatRoomForm) {
       await getAuth();
       const { name, message, time } = state;
       await saveMessage();
-      authState.ws?.emit('message', {
+      ws.ws?.emit('message', {
         chatInstance: chatId,
         sender: cookie.get('name'),
         message,
@@ -142,4 +143,12 @@ function ChatRoomForm({ chatId }: IChatRoomForm) {
   );
 }
 
-export default React.memo(ChatRoomForm);
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setMessages: bindActionCreators(setMessagesAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(ChatRoomForm));

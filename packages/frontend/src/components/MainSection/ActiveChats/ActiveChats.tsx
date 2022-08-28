@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { BsThreeDots } from 'react-icons/bs';
 import { css, cx } from '@emotion/css';
 import { useCookie } from 'next-cookie';
@@ -12,10 +12,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleChatSettings, toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
+import { Chat } from '@chat-app/graphql-server';
 
-interface IActiveChats {
-  _id: string;
-  members: string[];
+interface IActiveChats extends Chat {
   chatId: string;
   toggle: IToggle;
   ws: IWebSocket;
@@ -30,8 +29,8 @@ function ActiveChats(props: IActiveChats) {
   const cookie = useCookie();
 
   const cookieName: string = cookie.get('name');
-  const user1 = members[0];
-  const user2 = members[1];
+  const user1 = members?.[0];
+  const user2 = members?.[1];
 
   const joinChat = () => {
     ws.ws?.emit('join_chat', {
@@ -42,7 +41,9 @@ function ActiveChats(props: IActiveChats) {
 
   React.useEffect(() => {
     joinChat();
-    const notMe: string[] = members.filter((element) => element !== cookieName);
+    const notMe = members?.filter((element) => element !== cookieName);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     setInviter(notMe[0]);
   }, []);
 
@@ -81,7 +82,7 @@ function ActiveChats(props: IActiveChats) {
         `}
       >
         <HStack>
-          <Avatar members={members} inviter={inviter} cookieName={cookieName} />
+          <Avatar members={members as string[]} />
           <VStack align="flex-start">
             <div
               className={css`
@@ -90,17 +91,17 @@ function ActiveChats(props: IActiveChats) {
                 display: flex;
               `}
             >
-              {members.length > 2
+              {members && members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return null;
                     return (
                       <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
                         {element}
-                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? '...' : ''}` : ','}
+                        {element?.[members.length - 1] === element?.[index] ? `${members.length > 3 ? '...' : ''}` : ','}
                       </Heading>
                     );
                   })
-                : (members.length === 1 && (
+                : (members && members.length === 1 && (
                     <Heading color={color} size="md" m={0}>
                       {user1}
                     </Heading>

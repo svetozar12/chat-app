@@ -10,4 +10,9 @@ const setInviter = (inviter: string) => ({
   payload: inviter,
 });
 
-export { setReciever, setInviter };
+const setNotifNumber = (number: number) => ({
+  type: ActionType.NOTIFICATION_NUMBER,
+  payload: number,
+});
+
+export { setReciever, setInviter, setNotifNumber };

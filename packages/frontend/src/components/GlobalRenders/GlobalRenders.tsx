@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import Head from 'next/dist/shared/lib/head';
 import { css } from '@emotion/css';
 import { useColorMode } from '@chakra-ui/react';

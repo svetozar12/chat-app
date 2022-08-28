@@ -1,14 +1,14 @@
-import AxiosErrorHandler from "../../utils/AxiosErrorHandler";
-import { api } from "../index";
+import AxiosErrorHandler from '../../utils/AxiosErrorHandler';
+import { api } from '../index';
 
-type Status = "accepted" | "recieved" | "declined";
+export type Status = 'accepted' | 'recieved' | 'declined';
 
-const rootUrl = "/invites";
+const rootUrl = '/invites';
 
 const invite = {
   getAllByReciever: async (user_id: string, token: string, status?: Status) => {
     try {
-      return await api.get(`${rootUrl}/${user_id}${status ? "?status=".concat(status) : ""}`, {
+      return await api.get(`${rootUrl}/${user_id}${status ? '?status='.concat(status) : ''}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error: any) {
@@ -17,7 +17,7 @@ const invite = {
   },
   getAllByInviter: async (user_id: string, token: string, status?: Status) => {
     try {
-      return await api.get(`${rootUrl}/inviter/${user_id}${status ? "?".concat(status) : ""}`, {
+      return await api.get(`${rootUrl}/inviter/${user_id}${status ? '?'.concat(status) : ''}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error: any) {

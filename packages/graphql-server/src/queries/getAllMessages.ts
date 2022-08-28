@@ -1,6 +1,6 @@
-import resource from "../api_helper/index";
+import resource from '../api_helper/index';
 
-interface IMessage {
+export interface IMessage {
   user_id: string;
   chat_id: string;
   query: {

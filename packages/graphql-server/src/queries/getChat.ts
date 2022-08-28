@@ -1,6 +1,6 @@
-import resource from "../api_helper";
+import resource from '../api_helper';
 
-interface IChat {
+export interface IChat {
   user_id: string;
   chat_id: string;
   token: string;

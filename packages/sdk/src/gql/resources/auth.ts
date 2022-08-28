@@ -1,9 +1,9 @@
-import { api } from '../apiHelper';
-
-const rootUrl = '';
+import { api } from "..";
+const rootUrl = "";
+import { LoginUser } from "@chat-app/graphql-server";
 
 const auth = {
-  login: async (username: string, password: string) => {
+  login: async (username: string, password: string): Promise<LoginUser> => {
     try {
       const res = await api(rootUrl, {
         data: {
@@ -38,7 +38,7 @@ const auth = {
     }
   },
 
-  refresh: async (userId: string, token: string) => {
+  refresh: async (userId: string, token: string): Promise<LoginUser> => {
     try {
       const res = await api(rootUrl, {
         data: {
