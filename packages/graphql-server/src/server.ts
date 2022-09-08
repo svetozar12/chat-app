@@ -6,6 +6,8 @@ import Schema from './schemas';
 // Construct a schema, using GraphQL schema language
 import handleError from './middleware/handleError';
 import cors from 'cors';
+import './utils/gqlLoader';
+
 const app = express();
 app.use(cors());
 app.use(

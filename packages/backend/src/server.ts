@@ -1,24 +1,18 @@
-import * as express from "express";
-import * as cors from "cors";
-import handleError from "./middlewares/error-handler.middleware";
+import './config/beforeStart';
+import './connection/wsConnection';
+import express from 'express';
+import cors from 'cors';
+import handleError from './middlewares/error-handler.middleware';
+import initRoutes from './routes';
+
 // config
-import config_init from "./config";
-// routes function
-import { routes } from "./routes";
 const app = express();
 
-// middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("uploads"));
-// ws connection
-import "./connection/wsConnection";
-// config_init
-config_init();
-// routes
-routes(app);
-// error handling
+app.use(express.static('uploads'));
+// routes init
+initRoutes(app);
 app.use(handleError);
-
 export { app };

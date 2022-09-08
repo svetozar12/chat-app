@@ -1,0 +1,8 @@
+type Query {
+  getUser(user_id: String!, token: String!): getUser!
+  getChatById(chat_id: String!, user_id: String!, token: String!): Chat!
+  getAllChats(user_id: String!, token: String!): [Chat!]!
+  getAllMessages(user_id: String!, chat_id: String!, token: String!, query: Pagination): [Messages!]!
+  getInvitesByReciever(user_id: String!, token: String!, status: String): [Invite!]!
+  getInvitesByInviter(user_id: String!, token: String!, status: String): [Invite!]!
+}

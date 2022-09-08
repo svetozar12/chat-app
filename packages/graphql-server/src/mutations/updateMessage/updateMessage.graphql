@@ -1,0 +1,5 @@
+mutation updateMessage($user_id: String!, $message_id: String!, $newMessage: String!, $token: String!) {
+  updateMessage(user_id: $user_id, message_id: $message_id, newMessage: $newMessage, token: $token) {
+    Message
+  }
+}

@@ -1,0 +1,5 @@
+mutation logoutUser($user_id: String!, $token: String!) {
+  logoutUser(user_id: $user_id, token: $token) {
+    Message
+  }
+}

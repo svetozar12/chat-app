@@ -1,16 +1,9 @@
 overwrite: true
-schema: './src/**/*.ts'
+schema: './src/**/*.graphql'
+documents: './src/**/*.graphql'
 generates:
   src/generated/graphql.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
-  ./graphql.schema.json:
-    plugins:
-      - 'introspection'
-config:
-  avoidOptionals:
-    field: true
-    object: false
-    inputValue: false
-    defaultValue: false
+      - 'typescript-graphql-request'

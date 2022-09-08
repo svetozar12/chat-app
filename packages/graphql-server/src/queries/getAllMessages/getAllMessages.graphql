@@ -1,0 +1,10 @@
+query getAllMessages($user_id: String!, $token: String!, $chat_id: String!, $query: Pagination) {
+  getAllMessages(user_id: $user_id, token: $token, chat_id: $chat_id, query: $query) {
+    _id
+    user_id
+    chat_id
+    sender
+    message
+    seenBy
+  }
+}

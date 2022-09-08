@@ -1,0 +1,6 @@
+mutation updateChat($user_id: String!, $chat_id: String!, $token: String!, $username: String, $usersData: [String]) {
+  updateChat(user_id: $user_id, chat_id: $chat_id, token: $token, username: $username, usersData: $usersData) {
+    _id
+    members
+  }
+}

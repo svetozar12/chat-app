@@ -91,13 +91,13 @@ function ActiveChats(props: IActiveChats) {
                 display: flex;
               `}
             >
-              {members && members.length > 2
+              {members.length > 2
                 ? members.map((element, index) => {
                     if (index === 3) return null;
                     return (
                       <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
                         {element}
-                        {element?.[members.length - 1] === element?.[index] ? `${members.length > 3 ? '...' : ''}` : ','}
+                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? '...' : ''}` : ','}
                       </Heading>
                     );
                   })

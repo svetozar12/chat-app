@@ -1,0 +1,8 @@
+query getUser($user_id: String!, $token: String!) {
+  getUser(user_id: $user_id, token: $token) {
+    _id
+    username
+    email
+    userAvatar
+  }
+}

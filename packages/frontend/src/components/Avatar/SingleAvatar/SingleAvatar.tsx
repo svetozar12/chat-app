@@ -4,6 +4,8 @@ import { useCookie } from 'next-cookie';
 import { Image, Box } from '@chakra-ui/react';
 import { gqlSdk } from '@chat-app/sdk';
 import s from './SingleAvatar.module.css';
+import { getSdk } from '@chat-app/graphql-server';
+import axios from 'axios';
 
 function SingleAvatar({
   width,
@@ -23,6 +25,8 @@ function SingleAvatar({
 
   const getUserImage = async () => {
     try {
+      // gqlSdk.
+      gqlSdk;
       const res = await gqlSdk.user.getById(cookie.get('id'), cookie.get('token'));
       const { userAvatar } = res;
 

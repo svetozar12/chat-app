@@ -1,0 +1,5 @@
+mutation createUser($user: UserModel!) {
+  createUser(user: $user) {
+    Message
+  }
+}

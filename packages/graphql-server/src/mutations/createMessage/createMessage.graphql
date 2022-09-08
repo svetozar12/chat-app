@@ -1,0 +1,10 @@
+mutation createMessage($chat_id: String!, $user_id: String!, $message: String!, $token: String!) {
+  createMessage(chat_id: $chat_id, user_id: $user_id, message: $message, token: $token) {
+    _id
+    user_id
+    chat_id
+    sender
+    message
+    seenBy
+  }
+}

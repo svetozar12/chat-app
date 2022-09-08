@@ -1,0 +1,8 @@
+mutation createInvite($user_id: String!, $reciever: String!, $token: String!) {
+  createInvite(user_id: $user_id, reciever: $reciever, token: $token) {
+    _id
+    inviter
+    reciever
+    status
+  }
+}

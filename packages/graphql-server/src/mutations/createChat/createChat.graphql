@@ -1,0 +1,9 @@
+mutation createChat($chat: ChatModel!, $token: String!) {
+  createChat(chat: $chat, token: $token) {
+    Message
+    data {
+      _id
+      members
+    }
+  }
+}

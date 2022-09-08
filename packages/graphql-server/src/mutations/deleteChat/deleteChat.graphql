@@ -1,0 +1,5 @@
+mutation deleteChat($user_id: String!, $chat_id: String!, $token: String!) {
+  deleteChat(user_id: $user_id, chat_id: $chat_id, token: $token) {
+    Message
+  }
+}

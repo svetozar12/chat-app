@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "graphql-server that stays between fe and be",
   "main": "src/index.ts",
+  "types": "dist/generated/graphql.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/svetozar12/chat-app.git"
@@ -10,7 +11,7 @@
   "author": "svetozar gospodinov",
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf src/generated && yarn codegen",
+    "prebuild": "yarn codegen",
     "build": "rimraf dist  && tsc && vite build",
     "server": "nodemon src/server.ts",
     "watch": "tsc --watch",
@@ -20,21 +21,32 @@
     "start:production": "node dist/server.js",
     "test": "jest",
     "format": "prettier --write **/*.{js,ts,tsx}",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "get:schema": "graphql get-schema",
+    "graphql:diff": "graphql diff",
+    "graphql:similar": "graphql similar"
   },
   "dependencies": {
-    "@chat-app/sdk": "*",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.3",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express-graphql": "^0.12.0",
-    "graphql": "^16.3.0"
+    "graphql": "^16.3.0",
+    "graphql-cli": "^4.1.0",
+    "graphql-tools": "^8.3.4"
   },
   "devDependencies": {
+    "@graphql-cli/codegen": "2.3.13",
+    "@graphql-cli/diff": "2.1.0",
+    "@graphql-cli/similar": "2.1.0",
     "@graphql-codegen/cli": "2.11.8",
     "@graphql-codegen/introspection": "2.2.1",
     "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-generic-sdk": "^3.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.3",
     "@graphql-codegen/typescript-operations": "^2.5.3",
+    "@graphql-codegen/typescript-resolvers": "^2.7.3",
     "@jsdragon12/eslint-config": "latest",
     "@jsdragon12/prettier-config": "latest",
     "@jsdragon12/typescript-config": "latest",
@@ -44,6 +56,7 @@
     "eslint": "^8.17.0",
     "eslint-plugin-graphql": "^4.0.0",
     "express": "^4.17.3",
+    "graphql-cli": "4.1.0",
     "jest": "^28.1.0",
     "kill-port": "^2.0.0",
     "nodemon": "^2.0.16",

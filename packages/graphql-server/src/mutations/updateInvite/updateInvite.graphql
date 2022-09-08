@@ -1,0 +1,8 @@
+mutation updateInvite($user_id: String!, $token: String!, $status: String!, $invite_id: String!) {
+  updateInvite(user_id: $user_id, token: $token, status: $status, invite_id: $invite_id) {
+    _id
+    inviter
+    reciever
+    status
+  }
+}
