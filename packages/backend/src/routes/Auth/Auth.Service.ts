@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import User from '../../models/User.model';
 import signTokens from '../../utils/signToken';
 import { CustomError } from '../../utils/custom-error.model';
-import { constants } from '../../constants';
-import { client } from '../../config/redis_config';
+import { client } from '../../config/nosql/redis_config';
 import TokenSession from '../../models/TokenSession.model';
+import { jwtEnv } from '../../config/env';
 
 class AuthService {
   public async Login(req: Request, res: Response, next: NextFunction) {
@@ -31,8 +31,8 @@ class AuthService {
       refresh: remember_me ? '30d' : '1d',
     };
 
-    const access = await signTokens(user, constants.ACCESS_TOKEN, expire.access);
-    const refresh = await signTokens(user, constants.REFRESH_TOKEN, expire.refresh);
+    const access = await signTokens(user, jwtEnv.JWT_SECRET, expire.access);
+    const refresh = await signTokens(user, jwtEnv.JWT_REFRESH_SECRET, expire.refresh);
 
     return res.status(201).json({ data: { user_id: _id, Access_token: access, Refresh_token: refresh } });
   }
@@ -52,8 +52,8 @@ class AuthService {
         refresh: remember_me ? '30d' : '1d',
       };
 
-      const accessToken = await signTokens(user, constants.ACCESS_TOKEN || '', expire.access);
-      const refreshToken = await signTokens(user, constants.REFRESH_TOKEN || '', expire.refresh);
+      const accessToken = await signTokens(user, jwtEnv.JWT_SECRET, expire.access);
+      const refreshToken = await signTokens(user, jwtEnv.JWT_REFRESH_SECRET, expire.refresh);
 
       return res.status(201).json({
         data: { user_id: refresh._id, Access_token: accessToken, Refresh_token: refreshToken },

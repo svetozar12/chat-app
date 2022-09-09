@@ -1,5 +1,4 @@
-import './config/beforeStart';
-import './connection/wsConnection';
+import './config';
 import express from 'express';
 import cors from 'cors';
 import handleError from './middlewares/error-handler.middleware';

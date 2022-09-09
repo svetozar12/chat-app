@@ -1,6 +1,9 @@
-import blob_connection from './blob_config';
-import mongo_connection from './mongo_config';
-import redis_connection from './redis_config';
+import './env/requiredEnvs';
+import '../libs/webSocket';
+
+// import blob_connection from './nosql/blob_config';
+import mongo_connection from './nosql/mongo_config';
+import redis_connection from './nosql/redis_config';
 
 const configInit = () => {
   // blob_connection();
@@ -8,4 +11,4 @@ const configInit = () => {
   redis_connection();
 };
 
-export default configInit;
+export default configInit();
