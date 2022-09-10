@@ -1,9 +1,8 @@
-import { NextFunction, Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
-import { CustomError } from "../utils/custom-error.model";
-import { client } from "../config/redis_config";
-import TokenBL from "../models/TokenBL.model";
-import { constants } from "../constants";
+import { NextFunction, Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
+import { CustomError } from '../utils/custom-error.model';
+import { client } from '../config/nosql/redis_config';
+import TokenBL from '../models/TokenBL.model';
 /**
  * verifyToken is an middleware function
  * this function compares the user_id with the jwt user_id
@@ -31,17 +30,17 @@ const blackListCheck = async (token: string) => {
 
 const Auth = (secret: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader === "undefined") return next(CustomError.forbidden("Forbidden"));
+    const bearerHeader = req.headers['authorization'];
+    if (typeof bearerHeader === 'undefined') return next(CustomError.forbidden('Forbidden'));
 
     const user_id = req.body.user_id || req.params.user_id || req.query.user_id;
-    const bearer = bearerHeader.split(" ");
+    const bearer = bearerHeader.split(' ');
     const bearerToken = bearer[1];
     const isTokenBlackListed = await blackListCheck(bearerToken);
 
-    if (isTokenBlackListed) return next(CustomError.forbidden("Token has been blacklisted"));
+    if (isTokenBlackListed) return next(CustomError.forbidden('Token has been blacklisted'));
     jwt.verify(bearerToken, secret, async (err: any, decoded: any) => {
-      if (err) return next(CustomError.forbidden("Token has expired or invalid secret"));
+      if (err) return next(CustomError.forbidden('Token has expired or invalid secret'));
       const current_id = decoded._id;
 
       // process.env.NODE_ENV !== "production" && console.log(current_id, user_id);

@@ -1,7 +1,7 @@
 import { BlobServiceClient } from '@azure/storage-blob';
-import { constants } from '../../constants';
+import { dbsConfigEnv } from '../env';
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(constants.BLOB_URL);
+const blobServiceClient = BlobServiceClient.fromConnectionString(dbsConfigEnv.BLOB_CONNECTION_STRING);
 
 const blob_connection = async () => {
   try {

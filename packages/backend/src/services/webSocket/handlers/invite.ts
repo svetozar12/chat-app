@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import User from '../../models/User.model';
+import User from '../../../models/User.model';
 import { ioType } from '../wsConnection';
 
 const InviteHandler = (io: ioType, socket: Socket) => {

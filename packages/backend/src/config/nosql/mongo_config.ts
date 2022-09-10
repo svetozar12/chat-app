@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
-import { constants } from '../constants';
+import { dbsConfigEnv } from '../env';
 
 const mongo_connection = async () => {
-  await mongoose.connect(constants.MONGO_URL, {
+  console.log(dbsConfigEnv.MONGO_URL);
+
+  await mongoose.connect(dbsConfigEnv.MONGO_URL, {
     autoIndex: true,
   });
   console.log('Mongo:✅');

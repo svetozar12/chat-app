@@ -1,5 +1,5 @@
 import { Socket, Server } from 'socket.io';
-import { externalUrlsEnv, portsEnv } from '../config/env';
+import { externalUrlsEnv, portsEnv } from '../../config/env';
 // handlers
 import ChatHandler from './handlers/chat';
 import ErrorHandler from './handlers/error';

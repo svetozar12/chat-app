@@ -14,6 +14,8 @@ export interface IExternalUrlsEnv {
 }
 
 export interface IDbsConfigEnv {
+  MONGO_URL: string;
+  REDIS_URL: string;
   DB_NAME: string;
   BLOB_CONNECTION_STRING: string;
 }

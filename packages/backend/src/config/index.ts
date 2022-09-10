@@ -1,5 +1,5 @@
 import './env/requiredEnvs';
-import '../libs/webSocket';
+import '../services/webSocket/wsConnection';
 
 // import blob_connection from './nosql/blob_config';
 import mongo_connection from './nosql/mongo_config';

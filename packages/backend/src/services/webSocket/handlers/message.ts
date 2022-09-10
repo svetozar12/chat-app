@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import Chats from '../../models/chatRoom.model';
+import Chats from '../../../models/chatRoom.model';
 import { ioType } from '../wsConnection';
 
 const MessageHandler = (io: ioType, socket: Socket) => {
