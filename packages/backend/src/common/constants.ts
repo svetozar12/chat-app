@@ -1,6 +1,10 @@
 const resMessages = {
   user: {
-    NOT_FOUND: `User  not found`,
+    CREATE: (user: string) => `User ${user} was created !`,
+    NOT_FOUND: `User not found !`,
+    ALREADY_EXIST: 'User already exists !',
+    UPDATE: 'User info was updated !',
+    DELETE: 'User was deleted !',
   },
   chat: {
     YOU_HAVE_CHATS: 'You have active chat-rooms',
@@ -13,6 +17,9 @@ const resMessages = {
   },
   invite: {
     NOT_FOUND: 'Invite not found',
+  },
+  messages: {
+    YOU_HAVE_MESSAGES: 'You have messages.',
   },
 };
 

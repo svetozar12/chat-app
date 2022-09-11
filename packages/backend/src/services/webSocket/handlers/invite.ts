@@ -11,12 +11,10 @@ const InviteHandler = (io: ioType, socket: Socket) => {
   };
   const sendFriendRequest = async ({ inviter, reciever }: { inviter: string; reciever: string }) => {
     const reciever_field = await User.findOne({ username: reciever });
-    console.log(reciever_field);
 
     if (!reciever_field) return;
     if (inviter === reciever) return;
     const _id = reciever_field.username;
-    console.log(_id, socket.rooms);
     io.to(_id).emit('send_friend_request');
   };
 

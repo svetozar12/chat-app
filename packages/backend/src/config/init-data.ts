@@ -5,37 +5,26 @@ import Invites from '../models/Invites.model';
 import mongo_connection from './nosql/mongo_config';
 import constants from '../__test__/testConstants';
 
-const { chatIds, inviteIds, userIds, messageIds } = constants;
+const { chats, invites, users, messages } = constants;
 
 mongo_connection();
 
 const genUsers = async () => {
-  await Promise.all([
-    User.createCollection(),
-    User.create({ _id: userIds[0], username: 'admin', password: 'admin', email: 'admin@abv.bg', gender: 'Male' }),
-    User.create({ _id: userIds[1], username: 'test1', password: 'test1', email: 'test1@abv.bg', gender: 'Female' }),
-    User.create({ _id: userIds[2], username: 'test2', password: 'test2', email: 'test2@abv.bg', gender: 'Others' }),
-  ]).catch((err) => {
+  await Promise.all([User.createCollection(), User.create(users[0]), User.create(users[1]), User.create(users[2])]).catch((err) => {
     console.error(err);
     process.exit(1);
   });
 };
 
 const genChatRooms = async () => {
-  await Promise.all([
-    Chats.createCollection(),
-    Chats.create({ _id: chatIds[0], members: ['admin', 'test2'] }, { _id: chatIds[1], members: ['admin', 'test1'] }),
-  ]).catch((err) => {
+  await Promise.all([Chats.createCollection(), Chats.create(chats[0], chats[1])]).catch((err) => {
     console.error(err);
     process.exit(1);
   });
 };
 
 const genMessages = async () => {
-  await Promise.all([
-    Messages.createCollection(),
-    Messages.create({ _id: messageIds[0], chat_id: chatIds[0], user_id: userIds[0], message: 'hello', sender: 'test2' }),
-  ]).catch((err) => {
+  await Promise.all([Messages.createCollection(), Messages.create(messages[0]), Messages.create(messages[1])]).catch((err) => {
     console.error(err);
     process.exit(1);
   });
@@ -44,8 +33,10 @@ const genMessages = async () => {
 const genInvites = async () => {
   await Promise.all([
     Invites.createCollection(),
-    Invites.create({ _id: inviteIds[0], inviter: 'test2', reciever: 'admin', status: 'accepted', user_id: [userIds[0], userIds[2]] }),
-    Invites.create({ _id: inviteIds[1], inviter: 'test1', reciever: 'admin', status: 'accepted', user_id: [userIds[0], userIds[1]] }),
+    Invites.create(invites[0]),
+    Invites.create(invites[1]),
+    Invites.create(invites[2]),
+    Invites.create(invites[3]),
   ]).catch((err) => {
     console.error(err);
     process.exit(1);

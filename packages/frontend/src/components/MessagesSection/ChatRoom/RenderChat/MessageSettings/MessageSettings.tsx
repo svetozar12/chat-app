@@ -27,7 +27,6 @@ interface IMessageSettings {
 function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSettings) {
   const dispatch = useDispatch();
   const cookie = useCookie();
-  console.log(cookie.get('id'), id);
 
   const handleDelete = async () => {
     try {

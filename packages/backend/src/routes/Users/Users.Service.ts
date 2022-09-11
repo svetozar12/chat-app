@@ -6,12 +6,13 @@ import Chats from '../../models/chatRoom.model';
 import { CustomError } from '../../utils/custom-error.model';
 import { v4 as uuidv4 } from 'uuid';
 import Invites from '../../models/Invites.model';
+import { resMessages } from '../../common/constants';
 
 class UsersService {
   async GetUser(req: Request, res: Response, next: NextFunction) {
     const _id = req.params.user_id;
     const users = await User.findOne({ _id }).exec();
-    if (!users) return next(CustomError.notFound(`User: ${_id} wasn't found`));
+    if (!users) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
     return res.status(200).send({ user: users });
   }
 
@@ -22,7 +23,7 @@ class UsersService {
     const gender = req.body.gender;
 
     const users = await User.findOne({ username }).exec();
-    if (users) return next(CustomError.conflict(`User already exists !`));
+    if (users) return next(CustomError.conflict(resMessages.user.ALREADY_EXIST));
 
     const avatarGenerator = () => {
       return `${externalUrlsEnv.AVATAR_URL}/${uuidv4()}.svg`;
@@ -43,7 +44,7 @@ class UsersService {
 
     await user.save();
     await chat.save();
-    return res.status(201).send({ Message: `User ${req.body.username} created` });
+    return res.status(201).send({ Message: resMessages.user.CREATE(req.body.username) });
   }
 
   async UpdateUser(req: Request, res: Response, next: NextFunction) {
@@ -56,7 +57,7 @@ class UsersService {
     const users = await User.findOne({ _id: id }).exec();
     const user_id = users?._id;
     if (!email) email = users?.email;
-    if (!users) return next(CustomError.notFound("User wasn't found !" + id));
+    if (!users) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
     await User.findByIdAndUpdate(user_id, {
       username: username ? username : users.username,
@@ -64,14 +65,14 @@ class UsersService {
       gender: gender ? gender : users.gender,
       userAvatar: email ? userAvatar : users.userAvatar,
     });
-    return res.status(200).send({ Message: `User ${username || users.username} info updated` });
+    return res.status(200).send({ Message: resMessages.user.UPDATE });
   }
 
   async DeleteUser(req: Request, res: Response, next: NextFunction) {
     const user_id = req.params.user_id;
     const user = await User.findOne({ _id: user_id }).exec();
 
-    if (!user) return next(CustomError.notFound(`User: ${user_id} wasn't found`));
+    if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
     await User.deleteOne({ _id: user_id }).exec();
     await Invites.deleteMany({
@@ -83,7 +84,7 @@ class UsersService {
     await Chats.deleteMany({
       members: { $all: [user_id] },
     }).exec();
-    return res.status(200).json({ Message: `User ${user_id} deleted` });
+    return res.status(200).json({ Message: resMessages.user.DELETE });
   }
 }
 

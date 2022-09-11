@@ -7,7 +7,7 @@ describe('testing expireDate utils func', () => {
     const res = expireDate('2s');
     const now = new Date().getTime();
     const newDate = new Date(res as Date).getTime();
-    expect((newDate - now) / 1000).toBe(2);
+    expect((newDate - now) / 1000).toBe(1.999);
   });
 
   invalidTypes.forEach((element) => {

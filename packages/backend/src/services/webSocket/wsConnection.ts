@@ -1,3 +1,4 @@
+import { createServer } from 'http';
 import { Socket, Server } from 'socket.io';
 import { externalUrlsEnv, portsEnv } from '../../config/env';
 // handlers
@@ -6,9 +7,9 @@ import ErrorHandler from './handlers/error';
 import InviteHandler from './handlers/invite';
 import MessageHandler from './handlers/message';
 
-const io = new Server(parseInt(portsEnv.WS_PORT), { cors: { origin: externalUrlsEnv.CLIENT_URL } });
+const httpServer = createServer();
+const io = new Server(httpServer, { cors: { origin: externalUrlsEnv.CLIENT_URL } });
 export type ioType = typeof io;
-
 const onConnection = (socket: Socket) => {
   MessageHandler(io, socket);
   ChatHandler(io, socket);
@@ -17,5 +18,7 @@ const onConnection = (socket: Socket) => {
 };
 
 io.on('connection', onConnection);
-
+if (process.env.NODE_ENV !== 'test') {
+  httpServer.listen(portsEnv.WS_PORT);
+}
 export default io;
