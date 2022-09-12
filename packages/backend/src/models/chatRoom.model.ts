@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 export interface ChatRoom {
   members: [string];
@@ -13,5 +13,5 @@ const chatRoomSchema = new Schema<ChatRoom>({
   ],
 });
 
-const chatRoom = model<ChatRoom>("chatRoom", chatRoomSchema);
+const chatRoom = model<ChatRoom>('chatRoom', chatRoomSchema);
 export default chatRoom;

@@ -5,10 +5,7 @@ const constants = {
     { _id: '631b9cdf5dceea5b959ce9de', username: 'test1', password: 'test1', email: 'test1@abv.bg', gender: 'Female' },
     { _id: '631b9ce6fd213a5ec6df2949', username: 'test2', password: 'test2', email: 'test2@abv.bg', gender: 'Others' },
   ],
-  chats: [
-    { _id: '631b9d3174dc3f55b7d4684c', members: ['admin', 'test2'] },
-    { _id: '631b3d3174dc3f55b7d4684c', members: ['admin', 'test1'] },
-  ],
+  chats: [{ _id: '631b9d3174dc3f55b7d4684c', members: ['admin', 'test2'] }],
   messages: [
     {
       _id: '610b3d3174dc3f55b7d4682c',
@@ -34,8 +31,8 @@ const constants = {
     },
     {
       _id: '611b3d3174dc3f55b7d4681c',
-      inviter: 'test1',
-      reciever: 'admin',
+      inviter: 'admin',
+      reciever: 'test1',
       status: 'accepted',
     },
     {

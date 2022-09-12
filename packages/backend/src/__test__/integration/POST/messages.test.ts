@@ -21,13 +21,10 @@ describe(`POST ${baseEndpoint}`, () => {
         .post(`${baseEndpoint}/${chats[0]._id}?user_id=${users[0]._id}`)
         .set('Authorization', `Bearer ${jwt}`)
         .send(tempMessage);
-      console.log(res.body, 'kiro');
 
       expect(res.status).toBe(201);
 
       Object.keys(tempMessage).forEach((key) => {
-        console.log(key);
-
         expect(JSON.stringify(res.body.data[key])).toBe(JSON.stringify(tempMessage[key as keyof typeof tempMessage]));
       });
     });
