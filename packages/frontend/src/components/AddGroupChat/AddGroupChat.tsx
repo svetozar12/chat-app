@@ -1,7 +1,7 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
 import { CloseButton, HStack, IconButton, Input, Spacer } from '@chakra-ui/react';
-import { gqlSdk } from '@chat-app/sdk';
+import sdk from 'services/sdk';
 import { useCookie } from 'next-cookie';
 import { getAuth } from 'utils/authMethods';
 import useThemeColors from 'hooks/useThemeColors';
@@ -47,7 +47,7 @@ function AddGroupChat(props: IAddGroupChat) {
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);
-      await gqlSdk.invite.createGroupChat(usersData);
+      await sdk.invite.createGroupChat({ usersData });
       emitFriendRequest();
       setUsersData([]);
       toggleCreateGroup(!toggle.toggleCreateGroupModal);

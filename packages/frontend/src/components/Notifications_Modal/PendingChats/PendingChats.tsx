@@ -6,10 +6,10 @@ import { Button, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
 import { Iinvites } from 'pages/[acc]';
 import SingleAvatar from 'components/Avatar/SingleAvatar';
 // services
-import apiHelper from 'services/graphql/apiHelper';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import sdk from 'services/sdk';
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -22,9 +22,7 @@ interface IPendingChats extends Iinvites {
 function PendingChats(props: IPendingChats) {
   const { _id, inviter, reciever, status, ws } = props;
   const cookie = useCookie();
-  const id: string = cookie.get('id');
   const inviteId = _id;
-  const token: string = cookie.get('token');
 
   const emitFriendRequest = async () => {
     ws.ws?.emit('friend_request');
@@ -32,7 +30,11 @@ function PendingChats(props: IPendingChats) {
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await apiHelper.invite.update(id, inviteId, param, token);
+      await sdk.invite.updateInvite({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        invite_id: inviteId,
+        status: param,
+      });
       emitFriendRequest();
 
       return true;
@@ -43,7 +45,10 @@ function PendingChats(props: IPendingChats) {
 
   const createChatRoom = async () => {
     try {
-      await apiHelper.chatroom.create({ userId: id, invite_id: _id, user1: inviter, user2: reciever }, token);
+      await sdk.chat.createChat({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
+      });
       emitFriendRequest();
     } catch (error) {
       return false;

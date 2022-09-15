@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 // services
-import apiHelper from 'services/graphql/apiHelper';
 import { getAuth } from 'utils/authMethods';
 import { useAuth } from 'utils/SessionProvider';
 // components
@@ -14,15 +13,18 @@ import FindFriendsSearch from './FindFriendsSearch';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import IInvite from 'services/redux/reducer/invites/state';
+import sdk from 'services/sdk';
+import { bindActionCreators, Dispatch } from 'redux';
+import { setReciever } from 'services/redux/reducer/invites/actions';
 
 interface IFindFriends {
   ws: IWebSocket;
   invite: IInvite;
+  setReciever: typeof setReciever;
 }
 
 function FindFriends(props: IFindFriends) {
-  const { ws, invite } = props;
-  const dispatch = useDispatch();
+  const { ws, invite, setReciever } = props;
 
   const cookie = useCookie();
   const { user } = useAuth();
@@ -30,10 +32,16 @@ function FindFriends(props: IFindFriends) {
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await apiHelper.invite.create(cookie.get('id'), invite.reciever, cookie.get('token'));
+      const res = await sdk.invite.createInvite({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        reciever: invite.reciever,
+      });
+
+      const { createInvite } = res;
+
       ws.ws?.emit('send_friend_request', {
-        inviter: res.inviter,
-        reciever: res.reciever,
+        inviter: createInvite.inviter,
+        reciever: createInvite.reciever,
       });
 
       return true;
@@ -47,7 +55,7 @@ function FindFriends(props: IFindFriends) {
     e.preventDefault();
     if (invite.reciever) {
       await sendInvite();
-      dispatch({ type: 'SET_RECIEVER', payload: '' });
+      setReciever('');
     }
   };
 
@@ -75,4 +83,8 @@ const mapStateToProps = (state: STATE) => ({
   invite: state.invite,
 });
 
-export default connect(mapStateToProps)(React.memo(FindFriends));
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setReciever: bindActionCreators(setReciever, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(FindFriends));

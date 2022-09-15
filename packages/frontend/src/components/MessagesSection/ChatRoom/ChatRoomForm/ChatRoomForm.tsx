@@ -3,7 +3,7 @@ import { MdSend } from 'react-icons/md';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Center, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
-import { gqlSdk } from '@chat-app/sdk';
+import sdk from 'services/sdk';
 import { getAuth } from 'utils/authMethods';
 import generic from 'utils/generic';
 import s from './ChatRoomForm.module.css';
@@ -58,7 +58,12 @@ function ChatRoomForm(props: IChatRoomForm) {
 
   const saveMessage = async () => {
     try {
-      await gqlSdk.message.create(cookie.get('id'), chatId, state.message as string, cookie.get('token'));
+      if (state.message)
+        await sdk.message.createMessage({
+          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          chat_id: chatId,
+          message: state.message,
+        });
       return true;
     } catch (error) {
       return false;

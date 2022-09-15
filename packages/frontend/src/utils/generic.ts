@@ -1,4 +1,4 @@
-import apiHelper from '../services/graphql/apiHelper';
+import sdk from 'services/sdk';
 
 const timeStamp = (createdAt: string) => {
   if (typeof createdAt !== 'string') return 'Bad input';
@@ -10,13 +10,13 @@ const timeStamp = (createdAt: string) => {
   return TimeStamp;
 };
 
-const getFirstChat = async (userId: string, token: string) => {
+const getFirstChat = async (userId: string, token: string): Promise<any> => {
   try {
-    const res = await apiHelper.chatroom.getAll(userId, token);
-    if (res.length <= 0) return;
-    const [{ _id: getAllChats }] = res;
+    const res = await sdk.chat.getAllChats({ auth: { userId, AccessToken: token } });
+    const { getAllChats } = res;
+    if (getAllChats.length <= 0) return;
 
-    return getAllChats;
+    return getAllChats[0];
   } catch (error) {
     console.error(error);
 

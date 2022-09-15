@@ -1,10 +1,11 @@
+import { GetUser } from '@chat-app/graphql-server';
 import { useCookie } from 'next-cookie';
 import { useEffect, useState } from 'react';
-import apiHelper from '../services/graphql/apiHelper';
+import sdk from 'services/sdk';
 import { checkTokens, logout } from './authMethods';
 
 function useProvideAuth() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<GetUser | null>(null);
   const cookie = useCookie();
 
   const checkSession = async () => {
@@ -19,9 +20,10 @@ function useProvideAuth() {
   const getUser = async () => {
     const userId: string = cookie.get('id');
     const token: string = cookie.get('token');
-    // setTimeout(async () => {}, 10000);
-    const res = await apiHelper.user.getById(userId, token);
-    setUser(res);
+    const auth = { userId, AccessToken: token };
+    const res = await sdk.user.getUser({ auth });
+    const { getUser } = res;
+    setUser(getUser);
   };
 
   useEffect(() => {
@@ -29,10 +31,11 @@ function useProvideAuth() {
     getUser();
   }, []);
 
-  if (cookie.getAll() === {}) return { user: '' };
+  if (!cookie.getAll()) return { user: null };
 
   return {
     user,
+    auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
     logout,
   };
 }

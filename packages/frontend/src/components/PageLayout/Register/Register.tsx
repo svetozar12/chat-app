@@ -2,7 +2,6 @@ import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
 import React from 'react';
 import RegisterForm from 'components/RegisterForm';
-import apiHelper from 'services/graphql/apiHelper';
 import generic from 'utils/generic';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -10,6 +9,7 @@ import { togglelIsLoading, toggleQuickLogin } from 'services/redux/reducer/toggl
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
+import sdk from 'services/sdk';
 
 interface IRegisterLayout {
   inputs: IInputs;
@@ -28,16 +28,17 @@ function RegisterLayout(props: IRegisterLayout) {
 
   const quickLogin = async () => {
     try {
-      const res = await apiHelper.auth.login(inputs.input_username, inputs.input_password);
-      if (res) {
+      const res = await sdk.auth.login({ username: inputs.input_username, password: inputs.input_password });
+      const { loginUser } = res;
+      if (loginUser) {
         toggleQuickLogin(true);
         togglelIsLoading(true);
 
         const cookies = [
           { name: 'name', value: inputs.input_username, options: { sameSite: 'strict', path: '/' } },
-          { name: 'id', value: res.user_id, options: { sameSite: 'strict', path: '/' } },
-          { name: 'token', value: res.Access_token, options: { sameSite: 'strict', path: '/' } },
-          { name: 'refresh_token', value: res.Refresh_token, options: { sameSite: 'strict', path: '/' } },
+          { name: 'id', value: loginUser.user_id, options: { sameSite: 'strict', path: '/' } },
+          { name: 'token', value: loginUser.Access_token, options: { sameSite: 'strict', path: '/' } },
+          { name: 'refresh_token', loginUser: loginUser.Refresh_token, options: { sameSite: 'strict', path: '/' } },
         ];
 
         cookies.forEach((element) => {

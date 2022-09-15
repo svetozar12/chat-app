@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import HamburgerMenu from '../../../services/chat-ui/HamburgerMenu';
 import MainSection from '../../MainSection';
 import MessagesSection from '../../MessagesSection';
-import { gqlSdk } from '@chat-app/sdk';
+import sdk from 'services/sdk';
 import { connect } from 'react-redux';
 import { setWSConnection } from 'services/redux/reducer/websocket/actions';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -15,6 +15,7 @@ import { setNotifNumber } from 'services/redux/reducer/invites/actions';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
 import { Invite as IInviteGql, Chat } from '@chat-app/graphql-server';
+
 interface IApp {
   chatRoom: string;
   cookie: string;
@@ -37,9 +38,9 @@ function App(props: IApp) {
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await gqlSdk.chatroom.getAll(userId, token);
-
-      setChatRooms(res);
+      const res = await sdk.chat.getAllChats({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+      const { getAllChats } = res;
+      setChatRooms(getAllChats);
       return true;
     } catch (error) {
       return false;
@@ -50,14 +51,22 @@ function App(props: IApp) {
     try {
       setContacts([]);
       if (InvitesOrigin === 'reciever') {
-        const res = await gqlSdk.invite.getAllByReciever({ userId, token, status });
+        const res = await sdk.invite.getAllInvitesByReciever({
+          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          status,
+        });
         if (res instanceof Error) throw Error(res.message);
-        setContacts(res);
+        const { getInvitesByReciever } = res;
+        setContacts(getInvitesByReciever);
         return res;
       }
-      const res = await gqlSdk.invite.getAllByInviter({ userId, token, status: 'accepted' });
+      const res = await sdk.invite.getAllInvitesByInviter({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        status: 'accepted',
+      });
       if (res instanceof Error) throw Error(res.message);
-      setContacts(res);
+      const { getInvitesByInviter } = res;
+      setContacts(getInvitesByInviter);
       return res;
     } catch (error) {
       setContacts([]);
@@ -68,11 +77,15 @@ function App(props: IApp) {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await gqlSdk.invite.getAllByReciever({ userId, token, status: 'recieved' });
+      const res = await sdk.invite.getAllInvitesByReciever({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        status: 'recieved',
+      });
       if (res instanceof Error) throw Error(res.message);
-      setNotifNumber(res.length);
-      setContacts(res);
-      res.forEach((item) => {
+      const { getInvitesByReciever } = res;
+      setNotifNumber(getInvitesByReciever.length);
+      setContacts(getInvitesByReciever);
+      getInvitesByReciever.forEach((item) => {
         if (item.status === 'declined') return false;
       });
       return true;

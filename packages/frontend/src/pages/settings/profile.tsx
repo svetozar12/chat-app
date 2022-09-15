@@ -2,7 +2,6 @@ import React from 'react';
 import { useCookie } from 'next-cookie';
 // services
 import { HStack } from '@chakra-ui/react';
-import apiHelper from '../../services/graphql/apiHelper';
 // utils
 import generic from '../../utils/generic';
 import withAuthSync, { ICtx } from '../../utils/auth';
@@ -18,6 +17,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { setInputEmail, setInputGender } from 'services/redux/reducer/inputs/actions';
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
+import sdk from 'services/sdk';
+import { UserModel } from '@chat-app/graphql-server';
 
 interface IProfile {
   cookie: string;
@@ -51,7 +52,7 @@ function Profile(props: IProfile) {
       if (image) formData.append('userAvatar', image);
 
       e.preventDefault();
-      await apiHelper.user.update(user._id, cookie.get('token'), formData as any);
+      await sdk.user.updateUser({ auth: { userId: user._id, AccessToken: cookie.get('token') }, user: formData as unknown as UserModel });
       setInputEmail('');
       setInputGender('');
     } catch (error) {

@@ -6,7 +6,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --force-local && lerna link --force-local",
     "prebuild": "yarn bootstrap",
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "kill": "taskkill /f /im node.exe",
     "predev": "yarn kill",
     "dev": "lerna run dev --no-sort --stream",

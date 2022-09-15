@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCookie } from 'next-cookie';
-import { gqlSdk } from '@chat-app/sdk';
+import sdk from 'services/sdk';
 import SingleAvatar from '../SingleAvatar';
 
 interface IGroup_avatar {
@@ -13,8 +13,10 @@ function GroupAvatar({ members }: IGroup_avatar) {
   const username: string = cookie.get('username');
   const getUserImage = async (image: string) => {
     try {
-      const res = await gqlSdk.user.getById(cookie.get('id'), cookie.get('token'));
-      const { userAvatar } = res;
+      const res = await sdk.user.getUser({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+      const {
+        getUser: { userAvatar },
+      } = res;
       if (!userAvatar) {
         return false;
       }

@@ -3,9 +3,9 @@ import { NextPageContext } from 'next';
 import { Cookie, useCookie } from 'next-cookie';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-import apiHelper from '../services/graphql/apiHelper';
 import redirectTo from './routing';
 import { ICtx } from './auth';
+import sdk from 'services/sdk';
 
 interface IToken {
   _id: string;
@@ -33,27 +33,30 @@ const getTokenExpirationSeconds = (token: string) => {
  * */
 export const checkTokens = async (cookie: Cookie) => {
   const userId: string = cookie.get('id');
-  const accessToken: string = cookie.get('token');
-  const refreshToken: string = cookie.get('refresh_token');
-  if (!accessToken) {
-    if (refreshToken) {
-      const refreshedToken = await apiHelper.auth.refresh(userId, refreshToken);
-      if (axios.isAxiosError(refreshedToken)) {
+  const AccessToken: string = cookie.get('token');
+  const RefreshToken: string = cookie.get('refresh_token');
+  if (!AccessToken) {
+    if (RefreshToken) {
+      const res = await sdk.auth.refresh({ user_id: userId, RefreshToken });
+
+      const { refreshToken } = res;
+
+      if (axios.isAxiosError(RefreshToken)) {
         const cookies = cookie.getAll();
-        await apiHelper.auth.logout(cookie.get('id'), cookie.get('token'));
+        await sdk.auth.logout(cookie.get('id'), cookie.get('token'));
         for (const key in cookies) cookie.remove(key);
         return false;
       }
-      const accessExpirationTime = getTokenExpirationSeconds(refreshedToken.Access_token);
-      const refresbExpirationTime = getTokenExpirationSeconds(refreshedToken.Refresh_token);
+      const accessExpirationTime = getTokenExpirationSeconds(refreshToken.Access_token);
+      const refresbExpirationTime = getTokenExpirationSeconds(refreshToken.Refresh_token);
 
-      cookie.set('token', refreshedToken.access_token, { expires: new Date(accessExpirationTime) });
-      cookie.set('refresh_token', refreshedToken.refresh_token, { expires: new Date(refresbExpirationTime) });
+      cookie.set('token', refreshToken.Access_token, { expires: new Date(accessExpirationTime) });
+      cookie.set('refresh_token', refreshToken.Access_token, { expires: new Date(refresbExpirationTime) });
 
       return true;
     }
     const cookies = cookie.getAll();
-    await apiHelper.auth.logout(cookie.get('id'), cookie.get('token'));
+    await sdk.auth.logout(cookie.get('id'), cookie.get('token'));
     for (const key in cookies) cookie.remove(key);
     return false;
   }
@@ -63,7 +66,7 @@ export const checkTokens = async (cookie: Cookie) => {
 export const logout = async (ctx: ICtx) => {
   const cookie = useCookie(ctx);
   const cookies = cookie.getAll();
-  await apiHelper.auth.logout(cookie.get('id'), cookie.get('token'));
+  await sdk.auth.logout(cookie.get('id'), cookie.get('token'));
   for (const key in cookies) cookie.remove(key);
   return redirectTo('/', ctx);
 };

@@ -21,9 +21,10 @@ const sdk = {
     deleteUser: instance.deleteUser,
   },
   invite: {
-    getInviteByInviter: instance.getInvitesByInviter,
-    getInviteByReciever: instance.getInvitesByReciever,
+    getAllInvitesByInviter: instance.getInvitesByInviter,
+    getAllInvitesByReciever: instance.getInvitesByReciever,
     createInvite: instance.createInvite,
+    createGroupChat: instance.createInviteGroupChat,
     updateInvite: instance.updateInvite,
   },
   chat: {

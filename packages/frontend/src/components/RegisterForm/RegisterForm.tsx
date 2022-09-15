@@ -6,7 +6,6 @@ import React from 'react';
 import { useFormik } from 'formik';
 import DefaultLink from '../../services/chat-ui/DefaultLink';
 import RadioCard from '../../services/chat-ui/RadioCards/RadioCards';
-import api_helper from '../../services/graphql/apiHelper';
 import { RegisterSchema } from '../../utils/validation';
 // components
 import QuickLogin_Modal from './QuickLogin_Modal';
@@ -17,6 +16,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
+import sdk from 'services/sdk';
 
 interface IRegisterForm {
   quickLogin: () => Promise<boolean>;
@@ -38,7 +38,7 @@ function RegisterForm(props: IRegisterForm) {
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    const register = await api_helper.user.create(username, email, password, gender);
+    const register = await sdk.user.createUser({ user: { username, email, password, gender } });
     setInputUsername(username);
     setInputEmail(email);
     setInputPassword(password);

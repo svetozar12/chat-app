@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useCookie } from 'next-cookie';
 import Link from 'next/link';
@@ -11,11 +11,11 @@ import { IoMdLogOut } from 'react-icons/io';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { FiSettings } from 'react-icons/fi';
 import { getAuth } from '../../../../../utils/authMethods';
-import { gqlSdk } from '@chat-app/sdk';
 import useThemeColors from '../../../../../hooks/useThemeColors';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleUserSettings } from 'services/redux/reducer/toggles/actions';
 import { signOut } from 'services/redux/reducer/auth/actions';
+import sdk from 'services/sdk';
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -37,7 +37,7 @@ function UserSettings(props: IUserSettings) {
   const deleteCookies = async () => {
     getAuth();
     const cookies = cookie.getAll();
-    await gqlSdk.auth.logout(cookie.get('id'), cookie.get('token'));
+    await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
     for (const key in cookies) cookie.remove(key);
 
     router.push('/');
@@ -47,7 +47,7 @@ function UserSettings(props: IUserSettings) {
   const deleteUser = async () => {
     try {
       getAuth();
-      await gqlSdk.user.delete(cookie.get('id'), cookie.get('token'));
+      await sdk.user.deleteUser({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
       deleteCookies();
       return true;
     } catch (error) {

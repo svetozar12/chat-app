@@ -13,7 +13,7 @@ import ChatRoomForm from './ChatRoomForm';
 import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // hooks
 // services
-import { gqlSdk } from '@chat-app/sdk';
+import sdk from 'services/sdk';
 import { useAuth } from '../../../utils/SessionProvider';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
@@ -48,7 +48,7 @@ export interface IchatInstance {
 
 function ChatRoom(props: IChatRoom) {
   const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message, toggle } = props;
-  const { messagePageNumber, messages, show } = message;
+  const { messagePageNumber, messages } = message;
   const route = useRouter();
   const cookie = useCookie();
   const {
@@ -61,9 +61,13 @@ function ChatRoom(props: IChatRoom) {
 
   const getRecentMessages = async () => {
     try {
-      const res = await gqlSdk.message.getAll({ userId, chatId, token, query: { page_size: 10, page_number: 1 } });
-
-      res.forEach((element: Record<string, any>) => {
+      const res = await sdk.message.getAllMessages({
+        auth: { userId, AccessToken: token },
+        chat_id: chatId,
+        query: { page_size: 10, page_number: 1 },
+      });
+      const { getAllMessages } = res;
+      getAllMessages.forEach((element: Record<string, any>) => {
         setMessages(element);
       });
 
@@ -84,15 +88,15 @@ function ChatRoom(props: IChatRoom) {
     try {
       if (e.currentTarget.scrollTop === 0) {
         incrementPagination(messagePageNumber);
-        const res = await gqlSdk.message.getAll({
-          userId,
-          chatId,
-          token,
+        const res = await sdk.message.getAllMessages({
+          auth: { userId, AccessToken: token },
+          chat_id: chatId,
           query: { page_size: 10, page_number: messagePageNumber },
         });
-        const data = res.reversedArr;
 
-        data.forEach((element: Record<string, any>) => {
+        const { getAllMessages } = res;
+
+        getAllMessages.forEach((element: Record<string, any>) => {
           setPaginatedMessages(element);
         });
       }

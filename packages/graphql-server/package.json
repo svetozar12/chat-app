@@ -2,11 +2,16 @@
   "name": "@chat-app/graphql-server",
   "version": "1.0.0",
   "description": "graphql-server that stays between fe and be",
-  "main": "src/index.ts",
-  "types": "dist/generated/graphql.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/svetozar12/chat-app.git"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/bundle.cjs.js",
+      "import": "./dist/bundle.es.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "author": "svetozar gospodinov",
   "license": "MIT",

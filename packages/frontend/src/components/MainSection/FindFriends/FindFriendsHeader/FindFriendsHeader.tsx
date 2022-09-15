@@ -22,7 +22,6 @@ import {
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import s from './FindFriendsHeader.module.css';
-import apiHelper from '../../../../services/graphql/apiHelper';
 // hooks
 import UserSettings from './UserSettings';
 import { connect } from 'react-redux';
@@ -36,8 +35,8 @@ import {
 } from 'services/redux/reducer/toggles/actions';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import { setNotifNumber } from 'services/redux/reducer/invites/actions';
 import IInvite from 'services/redux/reducer/invites/state';
+import sdk from 'services/sdk';
 
 interface IFindFriendsHeader {
   toggle: IToggle;
@@ -60,8 +59,10 @@ function FindFriendsHeader(props: IFindFriendsHeader) {
 
   const getUserImage = async () => {
     try {
-      const res = await apiHelper.user.getById(userId, token);
-      const { userAvatar } = res;
+      const res = await sdk.user.getUser({ auth: { userId, AccessToken: token } });
+      const {
+        getUser: { userAvatar },
+      } = res;
 
       setImage(userAvatar);
       return true;

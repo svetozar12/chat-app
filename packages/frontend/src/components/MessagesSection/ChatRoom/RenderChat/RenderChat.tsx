@@ -8,13 +8,13 @@ import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
 import MessageSettings from './MessageSettings';
 import { IchatInstance } from '../ChatRoom';
 // services
-import apiHelper from 'services/graphql/apiHelper';
 import useThemeColors from 'hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { resetMessagesAction, setMessagesAction } from 'services/redux/reducer/messages/actions';
 import { IMessage } from 'services/redux/reducer/messages/state';
 import { toggleMessageSettings } from 'services/redux/reducer/toggles/actions';
+import sdk from 'services/sdk';
 
 interface IRenderChat {
   id: string;
@@ -99,7 +99,11 @@ function RenderChat(props: IRenderChat) {
       for (const obj of messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          await apiHelper.message.update(cookie.get('id'), id, editedMessage, cookie.get('token'));
+          await sdk.message.updateMessage({
+            auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+            message_id: id,
+            newMessage: editedMessage,
+          });
           resetMessages();
         }
         messageArr.push(obj);

@@ -1,5 +1,4 @@
 import React from 'react';
-import apiHelper from 'services/graphql/apiHelper';
 import generic from 'utils/generic';
 import {
   Flex,
@@ -33,6 +32,7 @@ import { setInputPassword, setInputUsername } from 'services/redux/reducer/input
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
 import { setLoginError } from 'services/redux/reducer/alert/actions';
 import { setRememberMe } from 'services/redux/reducer/auth/actions';
+import sdk from 'services/sdk';
 
 interface ILoginForm extends ILogin {
   auth: IAuth;
@@ -60,17 +60,17 @@ function LoginForm(props: ILoginForm) {
   const handleSubmit = async (values: IValues) => {
     try {
       const { username, password } = values;
-      const login = await apiHelper.auth.login(username, password);
-      if (login instanceof Error) return setLoginError(login.message);
-
-      if (login) {
+      const res = await sdk.auth.login({ username, password });
+      if (res instanceof Error) return setLoginError('login error');
+      const { loginUser } = res;
+      if (loginUser) {
         setIsLoading(true);
 
         const cookies = [
           { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'id', value: login.user_id, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'token', value: login.Access_token, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'refresh_token', value: login.Refresh_token, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
+          { name: 'id', value: loginUser.user_id, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'token', value: loginUser.Access_token, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'refresh_token', value: loginUser.Refresh_token, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
         ];
 
         cookies.forEach((element) => {

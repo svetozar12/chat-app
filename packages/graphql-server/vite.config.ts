@@ -15,9 +15,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'genTypes',
-      formats: ['es', 'umd'],
-      fileName: (format) => `genTypes.${format}.js`,
+      name: 'bundle',
+      formats: ['es', 'cjs'],
+      fileName: (format) => `bundle.${format}.js`,
     },
   },
 });

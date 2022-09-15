@@ -6,7 +6,6 @@ import { useCookie } from 'next-cookie';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
 import generic from '../../../utils/generic';
 // services
-import apiHelper from '../../../services/graphql/apiHelper';
 import s from './ChatSettings.module.css';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
@@ -15,6 +14,7 @@ import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
+import sdk from 'services/sdk';
 
 interface IChatSettings {
   chatId: string;
@@ -36,10 +36,11 @@ function ChatSettings(props: IChatSettings) {
   };
   const getMembers = async () => {
     try {
-      const res = await apiHelper.chatroom.getById(chatId, id, token);
-      const data = res.members;
-
-      setUsers(data);
+      const res = await sdk.chat.getChatById({ auth: { userId: id, AccessToken: token }, chat_id: chatId });
+      const {
+        getChatById: { members },
+      } = res;
+      setUsers(members);
       return true;
     } catch (error) {
       return false;
@@ -48,7 +49,7 @@ function ChatSettings(props: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await apiHelper.chatroom.update(id, chatId, token, user);
+      await sdk.chat.updateChat({ auth: { userId: id, AccessToken: token }, chat_id: chatId, username: user });
       return true;
     } catch (error) {
       return false;

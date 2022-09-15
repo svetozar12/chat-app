@@ -1,6 +1,6 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 // components
 import { useCookie } from 'next-cookie';
@@ -9,11 +9,11 @@ import ChatRoom from './ChatRoom';
 import Notifications_Modal from '../Notifications_Modal';
 import AddUsers_Modal from '../AddUsers_Modal';
 // services
-import api_helper from 'services/graphql/apiHelper';
 import { useAuth } from 'utils/SessionProvider';
 import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
+import sdk from 'services/sdk';
 
 interface IContacts {
   _id: string;
@@ -38,10 +38,14 @@ function MessageSection(props: IMessageSection) {
   const { user } = useAuth();
   const getMembersSuggestions = async () => {
     try {
-      const resChat = await api_helper.chatroom.getById(window.location.pathname, cookie.get('id'), cookie.get('token'));
-      const [{ members: Message }] = resChat;
+      const res = await sdk.chat.getChatById({
+        chat_id: window.location.pathname,
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+      });
 
-      const membersInChat = Message;
+      const {
+        getChatById: { members },
+      } = res;
 
       const data: any[] = [];
       const usersArr: string[] = [];
@@ -55,7 +59,7 @@ function MessageSection(props: IMessageSection) {
           uniqueUsers.push(element);
         }
       });
-      uniqueUsers = uniqueUsers.filter((element) => !membersInChat.includes(element));
+      uniqueUsers = uniqueUsers.filter((element) => !members.includes(element));
       setUsers(uniqueUsers);
       return true;
     } catch (error) {
