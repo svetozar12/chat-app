@@ -1,5 +1,5 @@
-mutation createChat($chat: ChatModel!, $token: String!) {
-  createChat(chat: $chat, token: $token) {
+mutation createChat($chat: ChatModel!, $auth: AuthModel!) {
+  createChat(chat: $chat, auth: $auth) {
     Message
     data {
       _id

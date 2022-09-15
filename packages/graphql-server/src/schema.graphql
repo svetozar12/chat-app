@@ -65,3 +65,13 @@ type Invite {
   reciever: String!
   status: String!
 }
+
+type Auth {
+  userId: String!
+  AccessToken: String!
+}
+
+input AuthModel {
+  userId: String!
+  AccessToken: String!
+}

@@ -1,5 +1,5 @@
-query getAllChats($user_id: String!, $token: String!) {
-  getAllChats(user_id: $user_id, token: $token) {
+query getAllChats($auth: AuthModel!) {
+  getAllChats(auth: $auth) {
     _id
     members
   }

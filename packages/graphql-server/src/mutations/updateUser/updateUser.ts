@@ -1,19 +1,22 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
+import { Gender } from '../../utils/sdk/types/common';
 
-export interface IUpdateUser {
-  user_id: string;
-  token: string;
+export interface IUpdateUser extends AuthBase {
   user: {
     username: string;
     email: string;
-    gender: 'Male' | 'Female' | 'Other';
+    gender: Gender;
   };
 }
 
 const updateUser = async (args: IUpdateUser) => {
-  const res = await resource.user.update(args.user, args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+  try {
+    const res = await sdk.user.updateUser(args.auth, args.user);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default updateUser;

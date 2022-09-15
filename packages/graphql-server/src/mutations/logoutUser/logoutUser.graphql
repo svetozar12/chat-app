@@ -1,5 +1,5 @@
-mutation logoutUser($user_id: String!, $token: String!) {
-  logoutUser(user_id: $user_id, token: $token) {
+mutation logoutUser($auth: AuthModel!) {
+  logoutUser(auth: $auth) {
     Message
   }
 }

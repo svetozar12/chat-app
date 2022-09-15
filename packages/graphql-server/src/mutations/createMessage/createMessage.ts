@@ -1,16 +1,18 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface ICreateMessage {
+export interface ICreateMessage extends AuthBase {
   chat_id: string;
-  user_id: string;
   message: string;
-  token: string;
 }
 
 const createMessage = async (args: ICreateMessage) => {
-  const res = await resource.message.create(args.chat_id, args.user_id, args.message, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+  try {
+    const res = await sdk.message.createMessage(args.auth, args.chat_id, { message: args.message });
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default createMessage;

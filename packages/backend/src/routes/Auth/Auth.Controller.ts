@@ -25,7 +25,7 @@ const AuthController: IBaseController[] = [
   {
     type: RequestTypes.POST,
     route: '/logout/:user_id',
-    handler: errorHandler(authService.Login),
+    handler: errorHandler(authService.Logout),
     preMethods: [Validator(Schema.UserIdSchema, 'params'), Auth(jwtEnv.JWT_SECRET)],
   },
 ];

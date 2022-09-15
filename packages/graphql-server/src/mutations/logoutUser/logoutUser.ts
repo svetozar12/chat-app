@@ -1,14 +1,15 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface ILogoutUser {
-  user_id: string;
-  token: string;
-}
+export interface ILogoutUser extends AuthBase {}
 
 const logoutUser = async (args: ILogoutUser) => {
-  const res = await resource.auth.logout(args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+  try {
+    const res = await sdk.auth.logout(args.auth);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default logoutUser;

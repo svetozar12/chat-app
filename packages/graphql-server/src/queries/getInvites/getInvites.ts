@@ -1,22 +1,27 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
+import { Status } from '../../utils/sdk/types/common';
 
-export interface IGetAll {
-  user_id: string;
-  token: string;
-  status?: string | any;
+export interface IGetAll extends AuthBase {
+  status?: Status;
 }
 
 const getInvitesByReciever = async (args: IGetAll) => {
-  const res = await resource.invite.getAllByReciever(args.user_id, args.token, args.status);
-
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+  try {
+    const res = await sdk.invite.getAllByReciever(args.auth, args.status);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 const getInvitesByInviter = async (args: IGetAll) => {
-  const res = await resource.invite.getAllByInviter(args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+  try {
+    const res = await sdk.invite.getAllByInviter(args.auth, args.status);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 const getInvites = { getInvitesByReciever, getInvitesByInviter };

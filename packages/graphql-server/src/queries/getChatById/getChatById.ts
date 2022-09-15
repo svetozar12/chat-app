@@ -1,19 +1,17 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface IChat {
-  user_id: string;
+export interface IChat extends AuthBase {
   chat_id: string;
-  token: string;
 }
 
 const getChatById = async (args: IChat) => {
-  const res = await resource.chats.getById(args.chat_id, args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  const {
-    data: { data },
-  } = res;
-
-  return data;
+  try {
+    const res = await sdk.chat.getChatById(args.auth, args.chat_id);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default getChatById;

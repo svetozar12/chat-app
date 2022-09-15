@@ -1,15 +1,17 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface ICreateInvite {
-  user_id: string;
+export interface ICreateInvite extends AuthBase {
   reciever: string;
-  token: string;
 }
 
 const createInvite = async (args: ICreateInvite) => {
-  const res = await resource.invite.create(args.user_id, args.reciever, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+  try {
+    const res = await sdk.invite.create(args.auth, args.reciever);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default createInvite;

@@ -1,4 +1,4 @@
-import resource from '../../utils/api_helper';
+import sdk from '../../utils/sdk';
 
 export interface ILoginUser {
   username: string;
@@ -6,10 +6,12 @@ export interface ILoginUser {
 }
 
 const loginUser = async (args: ILoginUser) => {
-  const res = await resource.auth.login(args);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-
-  return res.data.data;
+  try {
+    const res = await sdk.auth.login(args);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default loginUser;

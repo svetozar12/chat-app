@@ -1,20 +1,23 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface ICreateChat {
+export interface ICreateChat extends AuthBase {
   chat: {
     user_id: string;
     invite_id: string;
     user1: string;
     user2: string;
   };
-  token: string;
 }
 
 const createChat = async (args: ICreateChat) => {
-  const res = await resource.chats.create(args.chat, args.token);
+  try {
+    const res = await sdk.chat.createChat(args.auth, args.chat);
 
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default createChat;

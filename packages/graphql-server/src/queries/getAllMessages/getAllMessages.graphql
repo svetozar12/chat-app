@@ -1,5 +1,5 @@
-query getAllMessages($user_id: String!, $token: String!, $chat_id: String!, $query: Pagination) {
-  getAllMessages(user_id: $user_id, token: $token, chat_id: $chat_id, query: $query) {
+query getAllMessages($auth: AuthModel!, $chat_id: String!, $query: Pagination) {
+  getAllMessages(auth: $auth, chat_id: $chat_id, query: $query) {
     _id
     user_id
     chat_id

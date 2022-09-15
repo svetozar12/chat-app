@@ -1,5 +1,5 @@
-query getChatById($chat_id: String!, $user_id: String!, $token: String!) {
-  getChatById(chat_id: $chat_id, user_id: $user_id, token: $token) {
+query getChatById($chat_id: String!, $auth: AuthModel!) {
+  getChatById(chat_id: $chat_id, auth: $auth) {
     _id
     members
   }

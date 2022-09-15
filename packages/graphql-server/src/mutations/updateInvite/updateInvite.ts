@@ -1,16 +1,19 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
+import { Status } from '../../utils/sdk/types/common';
 
-export interface IupdateInvite {
-  user_id: string;
-  token: string;
+export interface IupdateInvite extends AuthBase {
   invite_id: string;
-  status: 'recieved' | 'accepted' | 'declined';
+  status: Status;
 }
 
 const updateInvite = async (args: IupdateInvite) => {
-  const res = await resource.invite.update(args.user_id, args.invite_id, args.status, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+  try {
+    const res = await sdk.invite.update(args.auth, args.invite_id, args.status);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default updateInvite;

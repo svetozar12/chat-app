@@ -1,5 +1,5 @@
-mutation deleteUser($user_id: String!, $token: String!) {
-  deleteUser(user_id: $user_id, token: $token) {
+mutation deleteUser($auth: AuthModel!) {
+  deleteUser(auth: $auth) {
     Message
   }
 }

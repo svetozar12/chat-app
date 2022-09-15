@@ -11,8 +11,8 @@
   "author": "svetozar gospodinov",
   "license": "MIT",
   "scripts": {
-    "prebuild": "yarn codegen",
-    "build": "rimraf dist  && tsc && vite build",
+    "prebuild": "rimraf src/generated && yarn codegen",
+    "build": "rimraf dist && tsc && vite build",
     "server": "nodemon src/server.ts",
     "watch": "tsc --watch",
     "lint": "eslint src",

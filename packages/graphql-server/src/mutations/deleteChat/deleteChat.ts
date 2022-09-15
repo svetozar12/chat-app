@@ -1,15 +1,19 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface IDeleteChat {
+export interface IDeleteChat extends AuthBase {
   user_id: string;
   chat_id: string;
   token: string;
 }
 
 const deleteChat = async (args: IDeleteChat) => {
-  const res = await resource.chats.delete(args.chat_id, args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+  try {
+    const res = await sdk.chat.deleteChat(args.chat_id, args.auth);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default deleteChat;

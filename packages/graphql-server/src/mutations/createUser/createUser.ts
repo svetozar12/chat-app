@@ -1,18 +1,23 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
+import { Gender } from '../../utils/sdk/types/common';
 
 export interface ICreateUser {
   user: {
     username: string;
     password: string;
     email: string;
-    gender: 'Male' | 'Female' | 'Other';
+    gender: Gender;
   };
 }
 
 const createUser = async (args: ICreateUser) => {
-  const res = await resource.user.create(args.user);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+  try {
+    const res = await sdk.user.createUser(args.user);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default createUser;

@@ -14,7 +14,7 @@ class ChatRoomService {
 
     const contacts = await Chats.find({ members: user.username }).exec();
     if (contacts.length <= 0) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
-    return res.status(200).json({ data: resMessages.chat.YOU_HAVE_CHATS, contacts });
+    return res.status(200).json({ Message: resMessages.chat.YOU_HAVE_CHATS, contacts });
   }
 
   async GetChatRoom(req: Request, res: Response, next: NextFunction) {
@@ -24,17 +24,21 @@ class ChatRoomService {
     const user = await User.findOne({ _id: user_id });
 
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
-    const users_rooms = await Chats.findOne({ _id: chat_id, members: user.username }).exec();
-    if (!users_rooms) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
-    return res.status(200).json({ data: users_rooms });
+    const chat = await Chats.findOne({ _id: chat_id, members: user.username }).exec();
+    if (!chat) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
+    return res.status(200).json({ chat });
   }
 
   async CreateChatRoom(req: Request, res: Response, next: NextFunction) {
-    const invite_id = req.body.invite_id;
-    const user1 = req.body.user1;
-    const user2 = req.body.user2;
+    const chatObject = {
+      inviteId: req.body.invite_id,
+      user1: req.body.user1,
+      user2: req.body.user2,
+    };
 
-    const checkIfInviteExist = await Invites.findOne({ _id: invite_id });
+    const { inviteId, user1, user2 } = chatObject;
+
+    const checkIfInviteExist = await Invites.findOne({ _id: inviteId });
 
     const isUser1 = await User.findOne({ username: user1 });
     const isUser2 = await User.findOne({ username: user2 });
@@ -45,7 +49,7 @@ class ChatRoomService {
     if (checkIfRoomExist) return next(CustomError.conflict(resMessages.chat.ALREADY_EXIST));
     if (!checkIfInviteExist) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 
-    const findInvite = await Invites.findByIdAndUpdate(invite_id, { status: 'accepted' }, { new: true });
+    const findInvite = await Invites.findByIdAndUpdate(inviteId, { status: 'accepted' }, { new: true });
 
     if (!findInvite) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 
@@ -54,7 +58,7 @@ class ChatRoomService {
     });
 
     await chat.save();
-    return res.status(201).json({ Message: resMessages.chat.CREATE, data: chat });
+    return res.status(201).json({ Message: resMessages.chat.CREATE, chat });
   }
 
   async UpdateChatRoom(req: Request, res: Response, next: NextFunction) {

@@ -1,13 +1,13 @@
-query getInvitesByReciever($user_id: String!, $token: String!, $status: String) {
-  getInvitesByReciever(user_id: $user_id, token: $token, status: $status) {
+query getInvitesByReciever($auth: AuthModel!, $status: String) {
+  getInvitesByReciever(auth: $auth, status: $status) {
     _id
     inviter
     reciever
     status
   }
 }
-query getInvitesByInviter($user_id: String!, $token: String!, $status: String) {
-  getInvitesByInviter(user_id: $user_id, token: $token, status: $status) {
+query getInvitesByInviter($auth: AuthModel!, $status: String) {
+  getInvitesByInviter(auth: $auth, status: $status) {
     _id
     inviter
     reciever

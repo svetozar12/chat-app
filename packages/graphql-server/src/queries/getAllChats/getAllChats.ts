@@ -1,14 +1,15 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface IGetAll {
-  user_id: string;
-  token: string;
-}
+export interface IGetAll extends AuthBase {}
 
 const getAllChats = async (args: IGetAll) => {
-  const res = await resource.chats.getAll(args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.contacts;
+  try {
+    const res = await sdk.chat.getChats(args.auth);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default getAllChats;

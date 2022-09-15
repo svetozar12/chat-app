@@ -1,5 +1,5 @@
-mutation createInvite($user_id: String!, $reciever: String!, $token: String!) {
-  createInvite(user_id: $user_id, reciever: $reciever, token: $token) {
+mutation createInvite($auth: AuthModel!, $reciever: String!) {
+  createInvite(auth: $auth, reciever: $reciever) {
     _id
     inviter
     reciever

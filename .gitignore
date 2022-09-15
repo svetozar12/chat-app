@@ -2,6 +2,7 @@
 # dependencies
 **/lerna-debug.log
 **/coverage
+src/generated
 data/
 node_modules/
 /.pnp

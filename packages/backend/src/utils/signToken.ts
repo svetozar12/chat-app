@@ -1,6 +1,6 @@
-import { CustomError } from "./custom-error.model";
-import * as jwt from "jsonwebtoken";
-import manageSessions from "./manageSessions";
+import { CustomError } from './custom-error.model';
+import * as jwt from 'jsonwebtoken';
+import manageSessions from './manageSessions';
 
 /**
  * signTokens utility function
@@ -18,11 +18,11 @@ const signTokens = (
   },
   secret: string,
   expires: string,
-) => {
+): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
     jwt.sign(data, secret, { expiresIn: expires }, async (err, token) => {
       if (err) {
-        return reject(CustomError.forbidden("Token has expired or invalid secret"));
+        return reject(CustomError.forbidden('Token has expired or invalid secret'));
       }
       manageSessions(data._id, token as string, expires);
       return resolve(token);

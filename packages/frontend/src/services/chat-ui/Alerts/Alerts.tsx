@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Alert, AlertIcon, AlertTitle, CloseButton, HStack, StackProps } from '@chakra-ui/react';
 import { IBaseComponent } from 'services/chat-ui';
-
 type Base = IBaseComponent<StackProps>;
 
 interface IAlerts extends Base {

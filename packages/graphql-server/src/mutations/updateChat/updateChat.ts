@@ -1,17 +1,22 @@
-import resource from '../../utils/api_helper';
+import { AuthBase } from '../../constants';
+import sdk from '../../utils/sdk';
 
-export interface IUpdateChat {
-  user_id: string;
+export interface IUpdateChat extends AuthBase {
   chat_id: string;
   username?: string;
   usersData?: string[];
-  token: string;
 }
 
 const updateChat = async (args: IUpdateChat) => {
-  const res = await resource.chats.update(args.chat_id, args.username as string, args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data;
+  try {
+    const res = await sdk.chat.updateChat(args.chat_id, args.auth, {
+      username: args.username as string,
+      usernames: args.usersData as string[],
+    });
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default updateChat;

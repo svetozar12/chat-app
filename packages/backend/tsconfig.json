@@ -7,6 +7,7 @@
     "strict": true,
     "types": ["node", "@types/jest"],
     "skipLibCheck": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true
   }
 }

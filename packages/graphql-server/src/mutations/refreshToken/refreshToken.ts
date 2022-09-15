@@ -1,14 +1,17 @@
-import resource from '../../utils/api_helper';
+import sdk from '../../utils/sdk';
 
 export interface IRefreshToken {
   user_id: string;
-  token: string;
+  RefreshToken: string;
 }
 
 const refreshToken = async (args: IRefreshToken) => {
-  const res = await resource.auth.refresh(args.user_id, args.token);
-  if (res.ErrorMsg) throw Error(res.ErrorMsg);
-  return res.data.data;
+  try {
+    const res = await sdk.auth.refresh(args.user_id, args.RefreshToken);
+    return res;
+  } catch (error) {
+    return error;
+  }
 };
 
 export default refreshToken;

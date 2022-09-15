@@ -15,7 +15,6 @@ describe(`GET ${baseEndpoint}`, () => {
       expect(res.status).toBe(200);
       expect(res.body.data).toBe(resMessages.chat.YOU_HAVE_CHATS);
       expect(JSON.stringify(res.body.contacts[0])).toBe(JSON.stringify({ ...chats[0], __v: 0 }));
-      expect(JSON.stringify(res.body.contacts[1])).toBe(JSON.stringify({ ...chats[1], __v: 0 }));
     });
   });
   describe('/:chat_id', () => {
