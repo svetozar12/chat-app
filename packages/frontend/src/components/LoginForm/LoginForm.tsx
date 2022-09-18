@@ -60,7 +60,7 @@ function LoginForm(props: ILoginForm) {
   const handleSubmit = async (values: IValues) => {
     try {
       const { username, password } = values;
-      const res = await sdk.auth.login({ username, password });
+      const res = await sdk.auth.login(username, password);
       if (res instanceof Error) return setLoginError('login error');
       const { loginUser } = res;
       if (loginUser) {

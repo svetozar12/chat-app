@@ -1,4 +1,4 @@
-import { GetUser } from '@chat-app/graphql-server';
+import { GetUser } from '@chat-app/gql-server';
 import { useCookie } from 'next-cookie';
 import { useEffect, useState } from 'react';
 import sdk from 'services/sdk';
@@ -21,9 +21,8 @@ function useProvideAuth() {
     const userId: string = cookie.get('id');
     const token: string = cookie.get('token');
     const auth = { userId, AccessToken: token };
-    const res = await sdk.user.getUser({ auth });
-    const { getUser } = res;
-    setUser(getUser);
+    const res = await sdk.user.getById(auth);
+    setUser(res);
   };
 
   useEffect(() => {

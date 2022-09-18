@@ -14,7 +14,7 @@ import { STATE } from 'services/redux/reducer';
 import { setNotifNumber } from 'services/redux/reducer/invites/actions';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
-import { Invite as IInviteGql, Chat } from '@chat-app/graphql-server';
+import { Invite as IInviteGql, Chat } from '@chat-app/gql-server';
 
 interface IApp {
   chatRoom: string;

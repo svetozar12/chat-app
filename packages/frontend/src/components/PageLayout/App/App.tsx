@@ -3,6 +3,8 @@ import GlobalRenders from 'components/GlobalRenders';
 import React from 'react';
 import theme from 'styles/theme';
 import SessionProvider from 'utils/SessionProvider';
+import { ApolloProvider } from '@apollo/client';
+import { client } from 'services/sdk';
 
 interface IApp {
   children: JSX.Element | JSX.Element[];

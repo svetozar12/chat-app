@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import RequestLogger from '../middlewares/RequestLogger';
 
 export enum RequestTypes {
   GET = 'get',

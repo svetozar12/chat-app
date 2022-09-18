@@ -1,45 +1,21 @@
-import { GraphQLClient } from 'graphql-request';
-import { getSdk } from '@chat-app/graphql-server';
+// resources
+import user from './resources/users';
+import auth from './resources/auth';
+import message from './resources/message';
+import invite from './resources/invite';
+import chatroom from './resources/chatroom';
+// types
 import axios from 'axios';
-
-export const client = new GraphQLClient('http://localhost:4001/graphql', {
-  fetch: axios,
-});
-
-const instance = getSdk(client);
+import { constants } from '../../constants';
+const client = axios.create({ baseURL: constants.GRAPHQL_URL, method: 'POST', headers: { 'Content-Type': 'application/json' } });
 
 const sdk = {
-  auth: {
-    login: instance.loginUser,
-    refresh: instance.refreshToken,
-    logout: instance.logoutUser,
-  },
-  user: {
-    getUser: instance.getUser,
-    createUser: instance.createUser,
-    updateUser: instance.updateUser,
-    deleteUser: instance.deleteUser,
-  },
-  invite: {
-    getAllInvitesByInviter: instance.getInvitesByInviter,
-    getAllInvitesByReciever: instance.getInvitesByReciever,
-    createInvite: instance.createInvite,
-    createGroupChat: instance.createInviteGroupChat,
-    updateInvite: instance.updateInvite,
-  },
-  chat: {
-    getChatById: instance.getChatById,
-    getAllChats: instance.getAllChats,
-    createChat: instance.createChat,
-    updateChat: instance.updateChat,
-    deleteChat: instance.deleteChat,
-  },
-  message: {
-    getAllMessages: instance.getAllMessages,
-    createMessage: instance.createMessage,
-    updateMessage: instance.updateMessage,
-    deleteMessage: instance.deleteMessage,
-  },
+  user,
+  auth,
+  message,
+  invite,
+  chatroom,
 };
 
+export { client };
 export default sdk;

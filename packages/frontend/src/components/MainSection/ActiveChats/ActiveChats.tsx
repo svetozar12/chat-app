@@ -12,7 +12,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleChatSettings, toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
-import { Chat } from '@chat-app/graphql-server';
+import { Chat } from '@chat-app/gql-server';
 
 interface IActiveChats extends Chat {
   chatId: string;

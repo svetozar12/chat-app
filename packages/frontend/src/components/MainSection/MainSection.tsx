@@ -14,7 +14,7 @@ import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import { Chat } from '@chat-app/graphql-server';
+import { Chat } from '@chat-app/gql-server';
 
 interface IMainSection {
   chatId: string;

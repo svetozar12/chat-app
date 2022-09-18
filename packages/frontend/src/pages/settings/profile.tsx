@@ -18,7 +18,7 @@ import { setInputEmail, setInputGender } from 'services/redux/reducer/inputs/act
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
 import sdk from 'services/sdk';
-import { UserModel } from '@chat-app/graphql-server';
+import { UserModel } from '@chat-app/gql-server';
 
 interface IProfile {
   cookie: string;

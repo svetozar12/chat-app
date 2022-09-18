@@ -10,6 +10,7 @@ const requiredEnvs: string[] = [
   'JWT_REFRESH_SECRET',
   'AVATAR_URL',
   'BLOB_CONNECTION_STRING',
+  'DEBUG',
 ];
 
 requiredEnvs.forEach((env) => {

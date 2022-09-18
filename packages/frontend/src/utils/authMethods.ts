@@ -43,7 +43,7 @@ export const checkTokens = async (cookie: Cookie) => {
 
       if (axios.isAxiosError(RefreshToken)) {
         const cookies = cookie.getAll();
-        await sdk.auth.logout(cookie.get('id'), cookie.get('token'));
+        await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
         for (const key in cookies) cookie.remove(key);
         return false;
       }
@@ -56,7 +56,7 @@ export const checkTokens = async (cookie: Cookie) => {
       return true;
     }
     const cookies = cookie.getAll();
-    await sdk.auth.logout(cookie.get('id'), cookie.get('token'));
+    await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
     for (const key in cookies) cookie.remove(key);
     return false;
   }
@@ -66,7 +66,7 @@ export const checkTokens = async (cookie: Cookie) => {
 export const logout = async (ctx: ICtx) => {
   const cookie = useCookie(ctx);
   const cookies = cookie.getAll();
-  await sdk.auth.logout(cookie.get('id'), cookie.get('token'));
+  await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
   for (const key in cookies) cookie.remove(key);
   return redirectTo('/', ctx);
 };

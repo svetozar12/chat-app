@@ -23,4 +23,8 @@ const dbsConfigEnv: IDbsConfigEnv = {
   BLOB_CONNECTION_STRING: getEnv('BLOB_CONNECTION_STRING'),
 };
 
-export { jwtEnv, portsEnv, externalUrlsEnv, dbsConfigEnv };
+const developEnv = {
+  DEBUG: getEnv('DEBUG'),
+};
+
+export { jwtEnv, portsEnv, externalUrlsEnv, dbsConfigEnv, developEnv };
