@@ -1,9 +1,0 @@
-mutation createInviteGroupChat($usersData: [String!]) {
-  createInviteGroupChat(usersData: $usersData) {
-    Message
-    data {
-      _id
-      members
-    }
-  }
-}

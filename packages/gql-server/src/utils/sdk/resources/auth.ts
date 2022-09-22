@@ -1,7 +1,3 @@
-import { GraphQLYogaError } from "@graphql-yoga/node";
-import { AxiosError } from "axios";
-import { instance } from "..";
-import AxiosErrorHandler from "../../AxiosErrorHandler";
 import { JWT, Login } from "../types/auth";
 import { Auth, Message, Response } from "../types/common";
 import makeRequest, { Method } from "../../makeRequest";
@@ -19,15 +15,14 @@ const auth = {
   },
   logout: async (auth: Auth): Response<Message> => {
     const { userId, AccessToken } = auth;
-    try {
-      return await instance.post(`${basePath}/refresh/${userId}`, null, {
+    return makeRequest(
+      Method.POST,
+      `${basePath}/refresh/${userId}`,
+      undefined,
+      {
         headers: { Authorization: `Bearer ${AccessToken}` },
-      });
-    } catch (error: any) {
-      console.log(error.response.data.ErrorMsg, "axios");
-
-      return new GraphQLYogaError(error.message);
-    }
+      },
+    );
   },
 };
 

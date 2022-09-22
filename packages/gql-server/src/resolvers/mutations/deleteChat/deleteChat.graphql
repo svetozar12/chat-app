@@ -1,5 +1,0 @@
-mutation deleteChat($chat_id: String!, $auth: AuthModel!) {
-  deleteChat(chat_id: $chat_id, auth: $auth) {
-    Message
-  }
-}

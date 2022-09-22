@@ -1,4 +1,5 @@
 import axios from "axios";
+import { env } from "../../config/env";
 
 import auth from "./resources/auth";
 import user from "./resources/user";
@@ -6,10 +7,8 @@ import chat from "./resources/chat";
 import message from "./resources/message";
 import invite from "./resources/invite";
 
-export const apiHost = "http://localhost:4002";
-
 export const instance = axios.create({
-  baseURL: apiHost,
+  baseURL: env.API_URL,
 });
 
 const sdk = {

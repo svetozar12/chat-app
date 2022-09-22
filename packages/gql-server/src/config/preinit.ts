@@ -1,3 +1,4 @@
+import "./env";
 var fs = require("fs");
 
 require.extensions[".graphql"] = function (module, filename) {

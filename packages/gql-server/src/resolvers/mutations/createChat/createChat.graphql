@@ -1,9 +1,0 @@
-mutation createChat($chat: ChatModel!, $auth: AuthModel!) {
-  createChat(chat: $chat, auth: $auth) {
-    Message
-    data {
-      _id
-      members
-    }
-  }
-}

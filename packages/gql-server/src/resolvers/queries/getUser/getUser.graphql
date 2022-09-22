@@ -1,8 +1,0 @@
-query getUser($auth: AuthModel!) {
-  getUser(auth: $auth) {
-    _id
-    username
-    email
-    userAvatar
-  }
-}

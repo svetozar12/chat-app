@@ -1,7 +1,0 @@
-mutation loginUser($username: String!, $password: String!) {
-  loginUser(username: $username, password: $password) {
-    user_id
-    Access_token
-    Refresh_token
-  }
-}

@@ -1,6 +1,0 @@
-query getChatById($chat_id: String!, $auth: AuthModel!) {
-  getChatById(chat_id: $chat_id, auth: $auth) {
-    _id
-    members
-  }
-}

@@ -1,8 +1,4 @@
-import { GraphQLYogaError } from "@graphql-yoga/node";
-import { AxiosError } from "axios";
-import { instance } from "..";
-import AxiosErrorHandler from "../../AxiosErrorHandler";
-import { Chat, CreateChat, UpdateChat } from "../types/chat";
+import makeRequest, { Method } from "../../makeRequest";
 import { Auth, Message, Response } from "../types/common";
 import { ChatMessage, CreateMessage, PaginationQuery } from "../types/message";
 
@@ -16,17 +12,14 @@ const message = {
   ): Response<{ Message: string; data: ChatMessage[] }> => {
     const { userId, AccessToken } = auth;
     const { page_size, page_number } = query as PaginationQuery;
-    try {
-      const res = await instance.get(
-        `${basePath}/${chatId}?user_id=${userId}&&page_size=${page_size}&&page_number=${page_number}`,
-        {
-          headers: { Authorization: `Bearer ${AccessToken}` },
-        },
-      );
-      return res.data;
-    } catch (error: any) {
-      return new GraphQLYogaError(error.message);
-    }
+    return makeRequest(
+      Method.GET,
+      `${basePath}/${chatId}?user_id=${userId}&&page_size=${page_size}&&page_number=${page_number}`,
+      undefined,
+      {
+        headers: { Authorization: `Bearer ${AccessToken}` },
+      },
+    );
   },
   createMessage: async (
     auth: Auth,
@@ -35,14 +28,9 @@ const message = {
   ): Response<{ data: ChatMessage }> => {
     const { userId, AccessToken } = auth;
     const Body = { ...body, user_id: userId };
-    try {
-      const res = await instance.post(`${basePath}/${chatId}`, Body, {
-        headers: { Authorization: `Bearer ${AccessToken}` },
-      });
-      return res.data;
-    } catch (error: any) {
-      return new GraphQLYogaError(error.message);
-    }
+    return makeRequest(Method.POST, `${basePath}/${chatId}`, Body, {
+      headers: { Authorization: `Bearer ${AccessToken}` },
+    });
   },
   updateMessage: async (
     auth: Auth,
@@ -51,28 +39,20 @@ const message = {
   ): Response<Message> => {
     const { userId, AccessToken } = auth;
     const Body = { ...body, user_id: userId };
-    try {
-      const res = await instance.put(`${basePath}/${messageId}`, Body, {
-        headers: { Authorization: `Bearer ${AccessToken}` },
-      });
-      return res.data;
-    } catch (error: any) {
-      return new GraphQLYogaError(error.message);
-    }
+    return makeRequest(Method.PUT, `${basePath}/${messageId}`, Body, {
+      headers: { Authorization: `Bearer ${AccessToken}` },
+    });
   },
   deleteMessage: async (auth: Auth, messageId: string): Response<Message> => {
     const { userId, AccessToken } = auth;
-    try {
-      const res = await instance.delete(
-        `${basePath}/${messageId}?user_id=${userId}`,
-        {
-          headers: { Authorization: `Bearer ${AccessToken}` },
-        },
-      );
-      return res.data;
-    } catch (error: any) {
-      return new GraphQLYogaError(error.message);
-    }
+    return makeRequest(
+      Method.DELETE,
+      `${basePath}/${messageId}?user_id=${userId}`,
+      undefined,
+      {
+        headers: { Authorization: `Bearer ${AccessToken}` },
+      },
+    );
   },
 };
 

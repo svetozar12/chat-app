@@ -1,8 +1,0 @@
-mutation updateInvite($auth: AuthModel!, $status: String!, $invite_id: String!) {
-  updateInvite(auth: $auth, status: $status, invite_id: $invite_id) {
-    _id
-    inviter
-    reciever
-    status
-  }
-}

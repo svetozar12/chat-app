@@ -1,6 +1,0 @@
-query getAllChats($auth: AuthModel!) {
-  getAllChats(auth: $auth) {
-    _id
-    members
-  }
-}

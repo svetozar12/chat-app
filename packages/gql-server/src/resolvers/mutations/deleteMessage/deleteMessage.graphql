@@ -1,5 +1,0 @@
-mutation deleteMessage($auth: AuthModel!, $message_id: String!) {
-  deleteMessage(auth: $auth, message_id: $message_id) {
-    Message
-  }
-}

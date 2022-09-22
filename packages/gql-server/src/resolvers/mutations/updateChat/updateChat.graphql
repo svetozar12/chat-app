@@ -1,6 +1,0 @@
-mutation updateChat($auth: AuthModel!, $chat_id: String!, $username: String, $usersData: [String]) {
-  updateChat(auth: $auth, chat_id: $chat_id, username: $username, usersData: $usersData) {
-    _id
-    members
-  }
-}
