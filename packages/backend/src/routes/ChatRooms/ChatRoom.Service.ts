@@ -12,45 +12,46 @@ class ChatRoomService {
     const user = await User.findOne({ _id: user_id }).exec();
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
-    const contacts = await Chats.find({ members: user.username }).exec();
-    if (contacts.length <= 0) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
-    return res.status(200).json({ Message: resMessages.chat.YOU_HAVE_CHATS, contacts });
+    const chatRooms = await Chats.find({ members: user.username }).exec();
+    if (chatRooms.length <= 0) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
+    return res.status(200).json(chatRooms);
   }
 
   async GetChatRoom(req: Request, res: Response, next: NextFunction) {
     const user_id = req.query.user_id as unknown as Schema.Types.ObjectId;
     const chat_id = req.params.chat_id;
 
-    const user = await User.findOne({ _id: user_id });
-
+    const user = await User.findOne({ _id: user_id }).exec();
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
+
     const chat = await Chats.findOne({ _id: chat_id, members: user.username }).exec();
     if (!chat) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
-    return res.status(200).json({ chat });
+
+    return res.status(200).json(chat);
   }
 
   async CreateChatRoom(req: Request, res: Response, next: NextFunction) {
-    const chatObject = {
+    const chatReqObject = {
       inviteId: req.body.invite_id,
       user1: req.body.user1,
       user2: req.body.user2,
     };
 
-    const { inviteId, user1, user2 } = chatObject;
+    const { inviteId, user1, user2 } = chatReqObject;
 
     const checkIfInviteExist = await Invites.findOne({ _id: inviteId });
-
-    const isUser1 = await User.findOne({ username: user1 });
-    const isUser2 = await User.findOne({ username: user2 });
-    if (!isUser1) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
-    if (!isUser2) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
-    const checkIfRoomExist = await Chats.findOne({ members: [isUser1._id, isUser2._id] });
-
-    if (checkIfRoomExist) return next(CustomError.conflict(resMessages.chat.ALREADY_EXIST));
     if (!checkIfInviteExist) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 
-    const findInvite = await Invites.findByIdAndUpdate(inviteId, { status: 'accepted' }, { new: true });
+    const isUser1 = await User.findOne({ username: user1 });
+    if (!isUser1) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
+    const isUser2 = await User.findOne({ username: user2 });
+    if (!isUser2) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
+
+    const checkIfRoomExist = await Chats.findOne({ members: [isUser1._id, isUser2._id] });
+    if (checkIfRoomExist) return next(CustomError.conflict(resMessages.chat.ALREADY_EXIST));
+
+    const findInvite = await Invites.findByIdAndUpdate(inviteId, { status: 'accepted' }, { new: true });
     if (!findInvite) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 
     const chat = await new Chats({
@@ -58,56 +59,61 @@ class ChatRoomService {
     });
 
     await chat.save();
-    return res.status(201).json({ Message: resMessages.chat.CREATE, chat });
+    return res.status(201).json(chat);
   }
 
   async UpdateChatRoom(req: Request, res: Response, next: NextFunction) {
-    const chat_id = req.params.chat_id;
-    const added_user = req.body.usernames || [];
-    const deleted_user = req.body.username || '';
+    const chatReqObject = {
+      chatId: req.params.chat_id,
+      addedUsers: req.body.usernames || [],
+      removedUser: req.body.username || '',
+    };
+    const { chatId, addedUsers, removedUser } = chatReqObject;
 
-    const users_rooms = await Chats.findOne({ _id: chat_id, members: req.body.user_id }).exec();
+    const chatRoom = await Chats.findOne({ _id: chatId, members: req.body.user_id }).exec();
+    if (!chatRoom) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
+    const chatMembers = chatRoom && chatRoom.members;
 
-    const users_array = users_rooms && users_rooms.members;
-    let updated;
+    let updatedChatRoom;
     let updated_array: string[] = [];
 
-    if (!users_rooms) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
-    if (users_array && deleted_user) updated_array = users_array.filter((item) => item !== deleted_user);
+    if (chatMembers && removedUser) updated_array = chatMembers.filter((item) => item !== removedUser);
     if (updated_array.length < 2) {
-      const isDublicate = await Chats.findOne({ _id: chat_id, data: updated_array });
+      const isDublicate = await Chats.findOne({ _id: chatId, data: updated_array });
       if (isDublicate) {
-        await Chats.deleteOne({ _id: chat_id }).exec();
+        await Chats.deleteOne({ _id: chatId }).exec();
         return res.status(200).json({ Message: resMessages.chat.DELETE });
       }
     }
-    if (deleted_user) {
-      updated = await Chats.findByIdAndUpdate(
-        { _id: chat_id },
+    if (removedUser) {
+      updatedChatRoom = await Chats.findByIdAndUpdate(
+        { _id: chatId },
         {
           members: updated_array,
         },
       );
     }
-    if (added_user.length > 0) {
-      updated = await Chats.findByIdAndUpdate(
-        { _id: chat_id },
+    if (addedUsers.length > 0) {
+      updatedChatRoom = await Chats.findByIdAndUpdate(
+        { _id: chatId },
         {
-          $push: { members: added_user },
+          $push: { members: addedUsers },
         },
       );
     }
-
-    return res.status(200).json({ Message: resMessages.chat.UPDATE, data: updated });
+    return res.status(200).json(updatedChatRoom);
   }
 
   async DeleteChatRoom(req: Request, res: Response, next: NextFunction) {
-    const chat_id = req.params.chat_id;
-    const user_id = req.body.user_id;
-    const isExist = await Chats.findOne({ _id: chat_id, members: user_id }).exec();
+    const chatReqObject = {
+      chatId: req.params.chat_id,
+      userId: req.body.user_id,
+    };
+    const { userId, chatId } = chatReqObject;
+    const chatRoom = await Chats.findOne({ _id: chatId, members: userId }).exec();
+    if (!chatRoom) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
 
-    if (!isExist) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
-    await Chats.deleteOne({ _id: chat_id }).exec();
+    await Chats.deleteOne({ _id: chatId }).exec();
     return res.status(200).json({ Message: resMessages.chat.DELETE });
   }
 }

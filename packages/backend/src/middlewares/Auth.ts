@@ -43,7 +43,6 @@ const Auth = (secret: string) => {
       if (err) return next(CustomError.forbidden('Token has expired or invalid secret'));
       const current_id = decoded._id;
 
-      // process.env.NODE_ENV !== "production" && console.log(current_id, user_id);
       if (current_id !== user_id) return next(CustomError.unauthorized("Can't access other users data"));
       req.token = decoded;
       next();

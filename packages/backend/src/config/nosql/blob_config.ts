@@ -10,7 +10,7 @@ const blob_connection = async () => {
     const createContainerResponse = await containerClient.create();
     console.log(`Create container ${containerName} succesfully`, createContainerResponse);
   } catch (error) {
-    console.log(error);
+    console.log(error, 'blob erro');
 
     return false;
   }

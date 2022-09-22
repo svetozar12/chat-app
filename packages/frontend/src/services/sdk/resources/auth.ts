@@ -1,15 +1,13 @@
 import { AuthModel, LoginUser, Message } from '@chat-app/gql-server';
-import tryCatchWrapper from 'utils/tsWrapper';
+import makeRequest from 'utils/makeRequest';
 import { client } from '../index';
 
-const rootUrl = '';
+const path = '';
 
 const auth = {
-  login: async (username: string, password: string) => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+  login: async (username: string, password: string): Promise<LoginUser> => {
+    return makeRequest({
+      gqlQuery: `
         mutation {
           loginUser(username: "${username}", password: "${password}") {
             user_id
@@ -17,35 +15,14 @@ const auth = {
             Refresh_token
           }
          }`,
-        },
-      });
-      const {
-        data: {
-          data: { loginUser },
-        },
-      } = res;
-
-      if (!loginUser) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return loginUser;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   refresh: async (auth: AuthModel): Promise<LoginUser> => {
-    try {
-      const { userId, AccessToken } = auth;
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
           refreshToken(auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
             user_id
@@ -53,62 +30,21 @@ const auth = {
             Refresh_token
           }
         }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { refreshToken },
-        },
-      } = res;
-
-      if (!refreshToken) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return refreshToken;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   logout: async (auth: AuthModel): Promise<Message> => {
-    try {
-      const { userId, AccessToken } = auth;
-
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
           logoutUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
             Message
           }
         }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { logoutUser },
-        },
-      } = res;
-
-      if (!logoutUser) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return logoutUser;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 };
 

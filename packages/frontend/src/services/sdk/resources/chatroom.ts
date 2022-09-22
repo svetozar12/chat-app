@@ -1,81 +1,43 @@
 import { AuthModel, Chat, ChatModel, CreateChatMessage, Message } from '@chat-app/gql-server';
-import { client } from '../index';
-const rootUrl = '';
+import makeRequest from 'utils/makeRequest';
+
+const path = '';
 
 const chat = {
   getAll: async (auth: AuthModel): Promise<Chat[]> => {
     const { userId, AccessToken } = auth;
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    return makeRequest({
+      gqlQuery: `
           query {
             getAllChats(auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
               _id
               members
             }
           }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { getAllChats },
-        },
-      } = res;
-
-      if (!getAllChats) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return getAllChats;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   getById: async (chat_id: string, auth: AuthModel): Promise<Chat> => {
     const { userId, AccessToken } = auth;
-    const res = await client(rootUrl, {
-      data: {
-        query: `
+    return makeRequest({
+      gqlQuery: `
         query {
           getChatById(chat_id: "${chat_id}",auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
             _id
             members
           }
          }`,
-      },
+      path,
     });
-
-    const {
-      data: {
-        data: { getChatById },
-      },
-    } = res;
-
-    if (!getChatById) {
-      const {
-        data: {
-          errors: [{ message }],
-        },
-      } = res;
-      throw Error(message);
-    }
-    return getChatById;
   },
 
   create: async (chat: ChatModel, auth: AuthModel): Promise<CreateChatMessage> => {
-    const res = await client(rootUrl, {
-      data: {
-        query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          createChat(chat:${chat},auth:${auth}) {
+          createChat(chat:${chat},auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
             data {
               _id
               members
@@ -83,84 +45,38 @@ const chat = {
             Message
           }
          }`,
-      },
+      path,
     });
-
-    const {
-      data: {
-        data: { createChat },
-      },
-    } = res;
-
-    if (!createChat) {
-      const {
-        data: {
-          errors: [{ message }],
-        },
-      } = res;
-      throw Error(message);
-    }
-    return createChat;
   },
 
   update: async (auth: AuthModel, chat_id: string, username?: string, usersData?: string[]): Promise<Chat> => {
     const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
+    const { userId, AccessToken } = auth;
 
-    const res = await client(rootUrl, {
-      data: {
-        query: `
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          updateChat(auth:"${auth}",chat_id:"${chat_id}",${condition}) {
+          updateChat(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},chat_id:"${chat_id}",${condition}) {
             _id
             memberrs
           }
          }`,
-      },
+      path,
     });
-
-    const {
-      data: {
-        data: { updateChat },
-      },
-    } = res;
-
-    if (!updateChat) {
-      const {
-        data: {
-          errors: [{ message }],
-        },
-      } = res;
-      throw Error(message);
-    }
-    return updateChat;
   },
 
   delete: async (auth: AuthModel, chat_id: string): Promise<Message> => {
-    const res = await client(rootUrl, {
-      data: {
-        query: `
+    const { userId, AccessToken } = auth;
+
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          deleteChat(auth:"${auth}",chat_id:"${chat_id}") {
+          deleteChat(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},chat_id:"${chat_id}") {
             Message
           }
          }`,
-      },
+      path,
     });
-
-    const {
-      data: {
-        data: { deleteChat },
-      },
-    } = res;
-    if (!deleteChat) {
-      const {
-        data: {
-          errors: [{ message }],
-        },
-      } = res;
-      throw Error(message);
-    }
-    return deleteChat;
   },
 };
 

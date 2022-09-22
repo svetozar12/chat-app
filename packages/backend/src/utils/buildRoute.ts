@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import RequestLogger from '../middlewares/RequestLogger';
+import { CustomError } from './custom-error.model';
+import errorHandler from './error-helper';
 
 export enum RequestTypes {
   GET = 'get',
@@ -21,10 +22,10 @@ const buildRoute = (routeControllers: Array<IBaseController>): Router => {
     const { handler, route, type, preMethods } = element;
     !!preMethods
       ? router[type](route, ...preMethods, (req: Request, res: Response, next: NextFunction) => {
-          return handler(req, res, next);
+          return errorHandler(handler(req, res, next));
         })
-      : router[type](route, (req, res, next) => {
-          return handler(req, res, next);
+      : router[type](route, (req: Request, res: Response, next: NextFunction) => {
+          return errorHandler(handler(req, res, next));
         });
   });
   return router;

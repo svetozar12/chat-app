@@ -21,7 +21,6 @@ describe(`POST ${baseEndpoint}`, () => {
   describe('/', () => {
     it('expect 200 OK', async () => {
       const res = await request(app).post(`${baseEndpoint}`).send(tempChat).set('Authorization', `Bearer ${jwt}`);
-      console.log(res.body, 'body');
       expect(res.status).toBe(201);
       expect(res.body.Message).toBe(resMessages.chat.CREATE);
       expect((res.body.data.members as Array<string>).includes(users[0].username)).toBe(true);

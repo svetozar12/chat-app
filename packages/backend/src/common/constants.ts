@@ -1,4 +1,8 @@
 const resMessages = {
+  auth: {
+    INVALID_PASSWORD: 'Password is invalid',
+    NOT_FOUND_SESSION: "You don't have sessions",
+  },
   user: {
     CREATE: (user: string) => `User ${user} was created !`,
     NOT_FOUND: `User not found !`,
@@ -16,10 +20,19 @@ const resMessages = {
     DELETE: 'Chat room was deleted',
   },
   invite: {
-    NOT_FOUND: 'Invite not found',
+    NOT_FOUND: 'You don`t have invites',
+    CONFLICT: 'Invite is already sent !',
+    CANT_SEND_TO_YOURSELF: 'You can`t send invites to yourself !',
   },
   messages: {
     YOU_HAVE_MESSAGES: 'You have messages.',
+    NOT_FOUND: 'You don`t have messages.',
+    UPDATE: 'Message was updated',
+    DELETE: 'Message was deleted',
+  },
+  common: {
+    SUCCESFUL: 'succesful',
+    NO_CHANGES: 'No changes were made',
   },
 };
 

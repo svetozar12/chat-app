@@ -4,26 +4,18 @@ import { instance } from "..";
 import AxiosErrorHandler from "../../AxiosErrorHandler";
 import { JWT, Login } from "../types/auth";
 import { Auth, Message, Response } from "../types/common";
+import makeRequest, { Method } from "../../makeRequest";
 
 const basePath = "/auth";
 
 const auth = {
   login: async (body: Login): Response<JWT> => {
-    try {
-      const res = await instance.post(`${basePath}/login`, body);
-      return res.data;
-    } catch (error: any) {
-      return new GraphQLYogaError(error.message);
-    }
+    return makeRequest(Method.POST, `${basePath}/login`, body);
   },
   refresh: async (userId: string, RefreshToken: string): Response<JWT> => {
-    try {
-      return await instance.post(`${basePath}/refresh/${userId}`, {
-        RefreshToken,
-      });
-    } catch (error: any) {
-      return new GraphQLYogaError(error.message);
-    }
+    return await makeRequest(Method.POST, `${basePath}/refresh/${userId}`, {
+      RefreshToken,
+    });
   },
   logout: async (auth: Auth): Response<Message> => {
     const { userId, AccessToken } = auth;

@@ -2,9 +2,8 @@ import './config';
 import express from 'express';
 import cors from 'cors';
 import handleError from './middlewares/error-handler.middleware';
-import initRoutes from './routes';
 import RequestLogger from './middlewares/RequestLogger';
-import logger from './utils/logger';
+import route from './routes';
 
 const app = express();
 
@@ -14,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('uploads'));
 // routes init
 app.use(RequestLogger);
-initRoutes(app);
+app.use(route);
 app.use(handleError);
 
 export { app };

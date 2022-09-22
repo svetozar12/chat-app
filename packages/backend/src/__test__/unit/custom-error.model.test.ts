@@ -1,17 +1,13 @@
 import { CustomError } from '../../utils/custom-error.model';
 
 describe('CustomError new instance', () => {
-  const error = new CustomError('Bad', 404, 'Item not found');
+  const error = new CustomError('Bad', 404);
   it('errorMsg should be Bad', () => {
-    expect(error.ErrorMsg).toBe('Bad');
+    expect(error.Message).toBe('Bad');
   });
 
   it('status should be 404', () => {
     expect(error.status).toBe(404);
-  });
-
-  it('additionalInfo should be Item not found', () => {
-    expect(error.additionalInfo).toBe('Item not found');
   });
 });
 
@@ -55,8 +51,7 @@ describe('CustomError static methods', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       expect(CustomError[type](element.message)).toEqual({
-        ErrorMsg: element.message,
-        additionalInfo: {},
+        Message: element.message,
         status: element.status,
       });
     });

@@ -1,18 +1,17 @@
 import { AuthModel, Message, Messages, Pagination } from '@chat-app/gql-server';
+import makeRequest from 'utils/makeRequest';
 import { client } from '../index';
 
-const rootUrl = '';
+const path = '';
 
 const message = {
   getAll: async (auth: AuthModel, chat_id: string, query: Pagination): Promise<Messages[]> => {
-    try {
-      const condition = query ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : '';
-
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const condition = query ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : '';
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
           query {
-          getAllMessages(auth: "${auth}",chat_id:"${chat_id}"${condition}) {
+          getAllMessages(auth:{userId: "${userId}", AccessToken: "${AccessToken}",chat_id:"${chat_id}"${condition}) {
             _id
             user_id
             chat_id
@@ -20,37 +19,16 @@ const message = {
             message
           }
       }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { getAllMessages },
-        },
-      } = res;
-
-      if (!getAllMessages) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return getAllMessages;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   create: async (auth: AuthModel, chat_id: string, _message: string): Promise<Messages> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          createMessage(auth: "${auth}",chat_id: "${chat_id}",message:"${_message}") {
+          createMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}",chat_id: "${chat_id}",message:"${_message}") {
             user_id
             chat_id
             sender
@@ -58,94 +36,34 @@ const message = {
             seenBy
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { createMessage },
-        },
-      } = res;
-
-      if (!createMessage) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return createMessage;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   update: async (auth: AuthModel, message_id: string, newMessage: string): Promise<Message> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          updateMessage(auth: "${auth}",message_id: "${message_id}",newMessage:"${newMessage}") {
+          updateMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}",message_id: "${message_id}",newMessage:"${newMessage}") {
             Message
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { updateMessage },
-        },
-      } = res;
-
-      if (!updateMessage) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return updateMessage;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   delete: async (auth: AuthModel, message_id: string): Promise<Message> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          deleteMessage(auth: "${auth}",message_id: "${message_id}") {
+          deleteMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}",message_id: "${message_id}") {
             Message
           }
         }`,
-        },
-      });
-      const {
-        data: {
-          data: { deleteMessage },
-        },
-      } = res;
-
-      if (!deleteMessage) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return deleteMessage;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 };
 

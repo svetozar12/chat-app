@@ -24,9 +24,9 @@ input ChatModel {
 }
 
 type LoginUser {
-  user_id: String!
-  Access_token: String!
-  Refresh_token: String!
+  userId: String!
+  AccessToken: String!
+  RefreshToken: String!
 }
 
 type getUser {

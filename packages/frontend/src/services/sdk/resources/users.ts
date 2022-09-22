@@ -1,7 +1,8 @@
 import { AuthModel, GetUser, Message, UpdateUserModel, UserModel } from '@chat-app/gql-server';
+import makeRequest from 'utils/makeRequest';
 import { client } from '../index';
 
-const rootUrl = '';
+const path = '';
 
 export interface IUser {
   username: string;
@@ -11,138 +12,57 @@ export interface IUser {
 
 const user = {
   getById: async (auth: AuthModel): Promise<GetUser> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         query {
-          getUser(auth: "${auth}") {
+          getUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}") {
             _id
             username
             email
             userAvatar
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { getUser },
-        },
-      } = res;
-
-      if (!getUser) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return getUser;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   create: async (user: UserModel): Promise<Message> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    return makeRequest({
+      gqlQuery: `
         mutation {
           createUser(user:"${user}") {
             Message
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { createUser },
-        },
-      } = res;
-      if (!createUser) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return createUser;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   update: async (auth: AuthModel, user: UpdateUserModel): Promise<Message> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          updateUser(auth:"${auth}",user:"${user}") {
+          updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:"${user}") {
             Message
           }
          }`,
-        },
-      });
-      const {
-        data: {
-          data: { updateUser },
-        },
-      } = res;
-
-      if (!updateUser) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return updateUser;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   delete: async (auth: AuthModel): Promise<Message> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          deleteUser(auth:"${auth}") {
+          updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:"${user}") {
             Message
           }
          }`,
-        },
-      });
-      const {
-        data: {
-          data: { deleteUser },
-        },
-      } = res;
-      if (!deleteUser) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return deleteUser;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 };
 

@@ -1,60 +1,69 @@
 import { NextFunction, Request, Response } from 'express';
+import { resMessages } from '../../common/constants';
 import Messages from '../../models/Message.model';
 import User from '../../models/User.model';
 import { CustomError } from '../../utils/custom-error.model';
 
 class MessagesService {
   async GetMessage(req: Request, res: Response, next: NextFunction) {
-    const page_size = Number(req.query.page_size) || 2;
-    const page_number = Number(req.query.page_number) || 1;
-    const chat_id = req.params.chat_id;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const messages = await Messages.find({ chat_id })
-      .limit(page_size)
-      .skip((page_number - 1) * page_size)
+    const messageReqObj = {
+      chatId: req.params.chat_id,
+      pageSize: Number(req.query.page_size) || 2,
+      pageNumber: Number(req.query.page_number) || 1,
+    };
+    const { chatId, pageNumber, pageSize } = messageReqObj;
+    const messages = await Messages.find({ chat_id: chatId })
+      .limit(pageSize)
+      .skip((pageNumber - 1) * pageSize)
       .sort({ createdAt: 'desc' })
       .exec();
 
-    if (messages.length <= 0 || !messages) return next(CustomError.notFound("You don't have messages."));
-    const reversedArr = messages.reverse();
-    return res.status(200).json({ Message: 'You have messages.', data: reversedArr });
+    if (messages.length <= 0 || !messages) return next(CustomError.notFound(resMessages.messages.NOT_FOUND));
+    return res.status(200).json(messages.reverse());
   }
 
   async CreateMessage(req: Request, res: Response, next: NextFunction) {
-    const chat_id = req.params.chat_id;
-    const sender_id = req.body.user_id;
-    const message = req.body.message;
+    const messageReqObj = {
+      chatId: req.params.chat_id,
+      userId: req.body.user_id,
+      reqMessage: req.body.message,
+    };
+    const { chatId, reqMessage, userId } = messageReqObj;
 
-    const sender = await User.findById(sender_id);
-    if (!sender) return next(CustomError.notFound('User not found'));
-    const messages = await new Messages({
-      user_id: req.body.user_id,
-      chat_id,
+    const sender = await User.findById(chatId);
+    if (!sender) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
+
+    const message = await new Messages({
+      user_id: userId,
+      chatId,
       sender: sender.username,
-      message,
+      message: reqMessage,
       seenBy: [],
     });
-    if (!message) return next(CustomError.badRequest(message));
+    if (!message) return next(CustomError.badRequest());
 
-    await messages.save();
-    return res.status(201).json({ data: messages });
+    await message.save();
+    return res.status(201).json(message);
   }
 
   async UpdateMessage(req: Request, res: Response, next: NextFunction) {
-    const _id = req.params._id;
-    const newMessage: string = req.body.newMessage;
-    if (newMessage === '' || newMessage === null) return res.status(200).json({ Message: "Message didn't change" });
-    const message = await Messages.findOneAndUpdate({ _id, user_id: req.body.user_id }, { message: newMessage }).exec();
-    if (!message) return next(CustomError.notFound("Message wasn't found !"));
-    return res.status(200).json({ Message: `Message has been updated` });
+    const messageReqObj = {
+      messageId: req.params._id,
+      reqMessage: req.body.message,
+    };
+    const { messageId, reqMessage } = messageReqObj;
+
+    if (reqMessage === '' || reqMessage === null) return res.status(200).json({ Message: resMessages.common.NO_CHANGES });
+    const message = await Messages.findOneAndUpdate({ _id: messageId, user_id: req.body.user_id }, { message: reqMessage }).exec();
+    if (!message) return next(CustomError.notFound(resMessages.messages.NOT_FOUND));
+    return res.status(200).json({ Message: resMessages.messages.UPDATE });
   }
 
   async DeleteMessage(req: Request, res: Response, next: NextFunction) {
     const _id = req.params._id;
     const message = await Messages.findByIdAndDelete(_id, { user_id: req.query.user_id }).exec();
-    if (!message) return next(CustomError.notFound("Message wasn't found !"));
-    return res.status(200).json({ Message: `Message has been deleted` });
+    if (!message) return next(CustomError.notFound(resMessages.messages.NOT_FOUND));
+    return res.status(200).json({ Message: resMessages.messages.DELETE });
   }
 }
 

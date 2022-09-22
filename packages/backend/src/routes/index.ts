@@ -6,6 +6,8 @@ import InvitesRoute from './Invites/index';
 import MessagesRoute from './Messages/index';
 import UsersRoute from './Users/index';
 
+const route = Router();
+
 const controllers: Array<{ Route: Router; endpoint: string }> = [
   { Route: UsersRoute, endpoint: '/users' },
   { Route: MessagesRoute, endpoint: '/messages' },
@@ -14,11 +16,10 @@ const controllers: Array<{ Route: Router; endpoint: string }> = [
   { Route: InvitesRoute, endpoint: '/invites' },
 ];
 
-const initRoutes = (app: Application) => {
-  controllers.forEach((controller) => {
-    const { Route, endpoint } = controller;
-    app.use(endpoint, Route);
-  });
-};
+controllers.forEach((controller) => {
+  const { Route, endpoint } = controller;
+  route.use(endpoint, Route);
+  console.log(endpoint, Route);
+});
 
-export default initRoutes;
+export default route;

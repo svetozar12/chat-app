@@ -1,7 +1,14 @@
 import { Schema, model } from 'mongoose';
+
+export enum InviteStatus {
+  ACCEPTED = 'accepted',
+  RECIEVED = 'recieved',
+  DECLINED = 'declined',
+}
+
 export interface InviteSchema {
   user_id: [Schema.Types.ObjectId];
-  inviter: string;
+  inviter: InviteStatus;
   reciever: string;
   status: string;
 }
@@ -24,7 +31,7 @@ const InviteSchema = new Schema<InviteSchema>({
   },
   status: {
     type: String,
-    enum: ['recieved', 'accepted', 'declined'],
+    enum: ['accepted', 'recieved', 'declined'],
     default: 'recieved',
     required: true,
   },

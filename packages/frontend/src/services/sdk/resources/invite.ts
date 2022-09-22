@@ -1,7 +1,8 @@
 import { AuthModel, Invite } from '@chat-app/gql-server';
+import makeRequest from 'utils/makeRequest';
 import { client } from '../index';
 
-const rootUrl = '';
+const path = '';
 
 export interface IInvite {
   user_id: string;
@@ -11,156 +12,73 @@ export interface IInvite {
 
 const invite = {
   getAllByReciever: async (auth: AuthModel, status: string): Promise<Invite> => {
-    try {
-      const condition = status ? `status:"${status}"` : '';
-
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+    const condition = status ? `status:"${status}"` : '';
+    return makeRequest({
+      gqlQuery: `
         query {
-          getInvitesByReciever(auth: "${auth}",status:"${status}",${condition}) {
+          getInvitesByReciever(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},status:"${status}",${condition}) {
             _id
             inviter
             reciever
             status
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { getInvitesByReciever },
-        },
-      } = res;
-
-      if (!getInvitesByReciever) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return getInvitesByReciever;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   getAllByInviter: async (auth: AuthModel, status: string): Promise<Invite> => {
-    try {
-      const condition = status ? `status:"${status}"` : '';
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const condition = status ? `status:"${status}"` : '';
+    const { userId, AccessToken } = auth;
+
+    return makeRequest({
+      gqlQuery: `
         query {
-          getInvitesByInviter(auth: "${auth}",status:"${status}",${condition}) {
+          getInvitesByInviter(auth:{userId: "${userId}", AccessToken: "${AccessToken}",status:"${status}",${condition}) {
             _id
             inviter
             reciever
             status
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { getInvitesByInviter },
-        },
-      } = res;
-
-      if (!getInvitesByInviter) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return getInvitesByInviter;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   create: async (auth: AuthModel, reciever: string): Promise<Invite> => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    const { userId, AccessToken } = auth;
+
+    return makeRequest({
+      gqlQuery: `
         mutation {
-          createInvite(auth: "${auth}",reciever:"${reciever}") {
+          createInvite(auth:{userId: "${userId}", AccessToken: "${AccessToken}",reciever:"${reciever}") {
             _id
             inviter
             reciever
             status
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { createInvite },
-        },
-      } = res;
-
-      if (!createInvite) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-
-      return createInvite;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   createGroupChat: async (usersData: string[]) => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    return makeRequest({
+      gqlQuery: `
         mutation {
           createInviteGroupChat(usersData:${usersData}) {
             data
             Message
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { createInviteGroupChat },
-        },
-      } = res;
-
-      if (!createInviteGroupChat) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return createInviteGroupChat;
-    } catch (error) {
-      return error;
-    }
+      path,
+    });
   },
 
   update: async (auth: AuthModel, invite_id: string, status: string) => {
-    try {
-      const res = await client(rootUrl, {
-        data: {
-          query: `
+    return makeRequest({
+      gqlQuery: `
         mutation {
           updateInvite(auth: "${auth}",invite_id:"${invite_id}",status:"${status}") {
             _id
@@ -169,27 +87,8 @@ const invite = {
             status
           }
          }`,
-        },
-      });
-
-      const {
-        data: {
-          data: { updateInvite },
-        },
-      } = res;
-
-      if (!updateInvite) {
-        const {
-          data: {
-            errors: [{ message }],
-          },
-        } = res;
-        throw Error(message);
-      }
-      return updateInvite;
-    } catch (error) {
-      return false;
-    }
+      path,
+    });
   },
 };
 

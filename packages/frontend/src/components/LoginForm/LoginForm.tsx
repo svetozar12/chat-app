@@ -62,15 +62,14 @@ function LoginForm(props: ILoginForm) {
       const { username, password } = values;
       const res = await sdk.auth.login(username, password);
       if (res instanceof Error) return setLoginError('login error');
-      const { loginUser } = res;
-      if (loginUser) {
+      if (res) {
         setIsLoading(true);
 
         const cookies = [
           { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'id', value: loginUser.user_id, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'token', value: loginUser.Access_token, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'refresh_token', value: loginUser.Refresh_token, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
+          { name: 'id', value: res.user_id, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'token', value: res.Access_token, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'refresh_token', value: res.Refresh_token, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
         ];
 
         cookies.forEach((element) => {

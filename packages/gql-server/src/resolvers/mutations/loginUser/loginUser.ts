@@ -5,13 +5,9 @@ export interface ILoginUser {
   password: string;
 }
 
-const loginUser = async (args: ILoginUser) => {
-  try {
-    const res = await sdk.auth.login(args);
-    return res;
-  } catch (error) {
-    return error;
-  }
+const loginUser = async (parent: unknown, args: ILoginUser) => {
+  const res = await sdk.auth.login(args);
+  return res;
 };
 
 export default loginUser;
