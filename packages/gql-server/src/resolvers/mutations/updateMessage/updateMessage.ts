@@ -1,5 +1,5 @@
-import { AuthBase } from "../../../constants";
-import sdk from "../../../utils/sdk";
+import { AuthBase } from '../../../constants';
+import sdk from '../../../utils/sdk';
 
 export interface IUpdateMessage extends AuthBase {
   message_id: string;
@@ -7,14 +7,10 @@ export interface IUpdateMessage extends AuthBase {
 }
 
 const updateMessage = async (args: IUpdateMessage) => {
-  try {
-    const res = await sdk.message.updateMessage(args.auth, args.message_id, {
-      message: args.newMessage,
-    });
-    return res;
-  } catch (error) {
-    return error;
-  }
+  const res = await sdk.message.updateMessage(args.auth, args.message_id, {
+    message: args.newMessage,
+  });
+  return res;
 };
 
 export default updateMessage;

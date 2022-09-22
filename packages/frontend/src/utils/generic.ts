@@ -12,11 +12,10 @@ const timeStamp = (createdAt: string) => {
 
 const getFirstChat = async (userId: string, token: string): Promise<any> => {
   try {
-    const res = await sdk.chat.getAllChats({ auth: { userId, AccessToken: token } });
-    const { getAllChats } = res;
-    if (getAllChats.length <= 0) return;
+    const res = await sdk.chatroom.getAll({ userId, AccessToken: token });
+    if (res.length <= 0) return;
 
-    return getAllChats[0];
+    return res[0];
   } catch (error) {
     console.error(error);
 

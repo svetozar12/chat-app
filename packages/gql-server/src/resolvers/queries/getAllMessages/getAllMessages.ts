@@ -1,7 +1,5 @@
-import { Messages, QueryGetAllMessagesArgs } from "../../../generated/graphql";
-import { AuthBase } from "../../../constants";
-import sdk from "../../../utils/sdk";
-import { query } from "express";
+import { AuthBase } from '../../../constants';
+import sdk from '../../../utils/sdk';
 
 export interface IMessage extends AuthBase {
   chat_id: string;

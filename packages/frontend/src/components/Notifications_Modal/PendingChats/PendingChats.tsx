@@ -30,13 +30,8 @@ function PendingChats(props: IPendingChats) {
 
   const updateInviteStatus = async (param: string) => {
     try {
-      await sdk.invite.updateInvite({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-        invite_id: inviteId,
-        status: param,
-      });
+      await sdk.invite.update({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, inviteId, param);
       emitFriendRequest();
-
       return true;
     } catch (error) {
       return false;
@@ -45,10 +40,10 @@ function PendingChats(props: IPendingChats) {
 
   const createChatRoom = async () => {
     try {
-      await sdk.chat.createChat({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-        chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
-      });
+      await sdk.chatroom.create(
+        { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
+        { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+      );
       emitFriendRequest();
     } catch (error) {
       return false;

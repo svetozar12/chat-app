@@ -1,6 +1,5 @@
 import { AuthModel, Invite } from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
-import { client } from '../index';
 
 const path = '';
 
@@ -11,7 +10,7 @@ export interface IInvite {
 }
 
 const invite = {
-  getAllByReciever: async (auth: AuthModel, status: string): Promise<Invite> => {
+  getAllByReciever: async (auth: AuthModel, status: string): Promise<Invite[]> => {
     const { userId, AccessToken } = auth;
     const condition = status ? `status:"${status}"` : '';
     return makeRequest({
@@ -28,7 +27,7 @@ const invite = {
     });
   },
 
-  getAllByInviter: async (auth: AuthModel, status: string): Promise<Invite> => {
+  getAllByInviter: async (auth: AuthModel, status: string): Promise<Invite[]> => {
     const condition = status ? `status:"${status}"` : '';
     const { userId, AccessToken } = auth;
 

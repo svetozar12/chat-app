@@ -38,14 +38,8 @@ function MessageSection(props: IMessageSection) {
   const { user } = useAuth();
   const getMembersSuggestions = async () => {
     try {
-      const res = await sdk.chat.getChatById({
-        chat_id: window.location.pathname,
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-      });
-
-      const {
-        getChatById: { members },
-      } = res;
+      const res = await sdk.chatroom.getById(window.location.pathname, { userId: cookie.get('id'), AccessToken: cookie.get('token') });
+      const { members } = res;
 
       const data: any[] = [];
       const usersArr: string[] = [];

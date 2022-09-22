@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 // services
 import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import React from 'react';
@@ -38,7 +38,7 @@ function RegisterForm(props: IRegisterForm) {
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    const register = await sdk.user.createUser({ user: { username, email, password, gender } });
+    const register = await sdk.user.create({ username, email, password, gender });
     setInputUsername(username);
     setInputEmail(email);
     setInputPassword(password);

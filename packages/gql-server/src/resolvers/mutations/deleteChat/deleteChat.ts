@@ -1,5 +1,5 @@
-import { AuthBase } from "../../../constants";
-import sdk from "../../../utils/sdk";
+import { AuthBase } from '../../../constants';
+import sdk from '../../../utils/sdk';
 
 export interface IDeleteChat extends AuthBase {
   user_id: string;
@@ -8,12 +8,8 @@ export interface IDeleteChat extends AuthBase {
 }
 
 const deleteChat = async (args: IDeleteChat) => {
-  try {
-    const res = await sdk.chat.deleteChat(args.chat_id, args.auth);
-    return res;
-  } catch (error) {
-    return error;
-  }
+  const res = await sdk.chat.deleteChat(args.chat_id, args.auth);
+  return res;
 };
 
 export default deleteChat;

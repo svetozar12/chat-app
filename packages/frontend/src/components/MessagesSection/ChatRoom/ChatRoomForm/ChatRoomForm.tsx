@@ -58,12 +58,7 @@ function ChatRoomForm(props: IChatRoomForm) {
 
   const saveMessage = async () => {
     try {
-      if (state.message)
-        await sdk.message.createMessage({
-          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-          chat_id: chatId,
-          message: state.message,
-        });
+      if (state.message) await sdk.message.create({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, chatId, state.message);
       return true;
     } catch (error) {
       return false;

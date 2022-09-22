@@ -37,7 +37,7 @@ function UserSettings(props: IUserSettings) {
   const deleteCookies = async () => {
     getAuth();
     const cookies = cookie.getAll();
-    await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+    await sdk.auth.logout({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
     for (const key in cookies) cookie.remove(key);
 
     router.push('/');
@@ -47,7 +47,7 @@ function UserSettings(props: IUserSettings) {
   const deleteUser = async () => {
     try {
       getAuth();
-      await sdk.user.deleteUser({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+      await sdk.user.delete({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
       deleteCookies();
       return true;
     } catch (error) {

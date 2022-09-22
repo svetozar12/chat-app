@@ -1,15 +1,10 @@
-import { AuthBase } from "../../../constants";
-import sdk from "../../../utils/sdk";
-import { GraphQLYogaError } from "@graphql-yoga/node";
+import { AuthBase } from '../../../constants';
+import sdk from '../../../utils/sdk';
 
-export interface IUser extends AuthBase {}
+export type IUser = AuthBase;
 
 const getUser = async (parent: unknown, args: IUser) => {
-  try {
-    return await sdk.user.getUser(args.auth);
-  } catch (error: any) {
-    return new GraphQLYogaError(error);
-  }
+  return await sdk.user.getUser(args.auth);
 };
 
 export default getUser;

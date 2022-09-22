@@ -61,13 +61,8 @@ function ChatRoom(props: IChatRoom) {
 
   const getRecentMessages = async () => {
     try {
-      const res = await sdk.message.getAllMessages({
-        auth: { userId, AccessToken: token },
-        chat_id: chatId,
-        query: { page_size: 10, page_number: 1 },
-      });
-      const { getAllMessages } = res;
-      getAllMessages.forEach((element: Record<string, any>) => {
+      const res = await sdk.message.getAll({ userId, AccessToken: token }, chatId, { page_size: 10, page_number: 1 });
+      res.forEach((element: Record<string, any>) => {
         setMessages(element);
       });
 
@@ -88,15 +83,8 @@ function ChatRoom(props: IChatRoom) {
     try {
       if (e.currentTarget.scrollTop === 0) {
         incrementPagination(messagePageNumber);
-        const res = await sdk.message.getAllMessages({
-          auth: { userId, AccessToken: token },
-          chat_id: chatId,
-          query: { page_size: 10, page_number: messagePageNumber },
-        });
-
-        const { getAllMessages } = res;
-
-        getAllMessages.forEach((element: Record<string, any>) => {
+        const res = await sdk.message.getAll({ userId, AccessToken: token }, chatId, { page_size: 10, page_number: messagePageNumber });
+        res.forEach((element: Record<string, any>) => {
           setPaginatedMessages(element);
         });
       }

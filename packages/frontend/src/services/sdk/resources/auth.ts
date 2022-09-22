@@ -19,12 +19,11 @@ const auth = {
     });
   },
 
-  refresh: async (auth: AuthModel): Promise<LoginUser> => {
-    const { userId, AccessToken } = auth;
+  refresh: async (userId: string, RefreshToken: string): Promise<LoginUser> => {
     return makeRequest({
       gqlQuery: `
         mutation {
-          refreshToken(auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
+          refreshToken(auth:{userId: "${userId}", RefreshToken: "${RefreshToken}"}) {
             user_id
             Access_token
             Refresh_token

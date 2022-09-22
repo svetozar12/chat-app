@@ -13,10 +13,8 @@ function GroupAvatar({ members }: IGroup_avatar) {
   const username: string = cookie.get('username');
   const getUserImage = async (image: string) => {
     try {
-      const res = await sdk.user.getUser({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
-      const {
-        getUser: { userAvatar },
-      } = res;
+      const res = await sdk.user.getById({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+      const { userAvatar } = res;
       if (!userAvatar) {
         return false;
       }

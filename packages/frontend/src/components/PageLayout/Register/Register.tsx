@@ -28,24 +28,21 @@ function RegisterLayout(props: IRegisterLayout) {
 
   const quickLogin = async () => {
     try {
-      const res = await sdk.auth.login({ username: inputs.input_username, password: inputs.input_password });
-      const { loginUser } = res;
-      if (loginUser) {
+      const res = await sdk.auth.login(inputs.input_username, inputs.input_password);
+      if (res) {
         toggleQuickLogin(true);
         togglelIsLoading(true);
-
+        const { userId, AccessToken, RefreshToken } = res;
         const cookies = [
           { name: 'name', value: inputs.input_username, options: { sameSite: 'strict', path: '/' } },
-          { name: 'id', value: loginUser.user_id, options: { sameSite: 'strict', path: '/' } },
-          { name: 'token', value: loginUser.Access_token, options: { sameSite: 'strict', path: '/' } },
-          { name: 'refresh_token', loginUser: loginUser.Refresh_token, options: { sameSite: 'strict', path: '/' } },
+          { name: 'id', value: userId, options: { sameSite: 'strict', path: '/' } },
+          { name: 'token', value: AccessToken, options: { sameSite: 'strict', path: '/' } },
+          { name: 'refresh_token', loginUser: RefreshToken, options: { sameSite: 'strict', path: '/' } },
         ];
 
         cookies.forEach((element) => {
           const { name, value, options } = element;
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          cookie.set(name, value, { ...options });
+          cookie.set(name, value, { ...(options as any) });
         });
 
         const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));

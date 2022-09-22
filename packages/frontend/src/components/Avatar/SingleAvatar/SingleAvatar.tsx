@@ -23,11 +23,8 @@ function SingleAvatar({
 
   const getUserImage = async () => {
     try {
-      const res = await sdk.user.getUser({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
-      const {
-        getUser: { userAvatar },
-      } = res;
-
+      const res = await sdk.user.getById({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+      const { userAvatar } = res;
       setImage(userAvatar);
       return true;
     } catch (error) {

@@ -59,10 +59,8 @@ function FindFriendsHeader(props: IFindFriendsHeader) {
 
   const getUserImage = async () => {
     try {
-      const res = await sdk.user.getUser({ auth: { userId, AccessToken: token } });
-      const {
-        getUser: { userAvatar },
-      } = res;
+      const res = await sdk.user.getById({ userId, AccessToken: token });
+      const { userAvatar } = res;
 
       setImage(userAvatar);
       return true;

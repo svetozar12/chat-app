@@ -67,16 +67,14 @@ function LoginForm(props: ILoginForm) {
 
         const cookies = [
           { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'id', value: res.user_id, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'token', value: res.Access_token, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'refresh_token', value: res.Refresh_token, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
+          { name: 'id', value: res.userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'token', value: res.AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'refresh_token', value: res.RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
         ];
 
         cookies.forEach((element) => {
           const { name, value, options } = element;
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          cookie.set(name, value, { ...options });
+          cookie.set(name, value, { ...(options as any) });
         });
 
         const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));

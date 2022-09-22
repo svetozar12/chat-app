@@ -1,5 +1,5 @@
-import { AuthBase } from "../../../constants";
-import sdk from "../../../utils/sdk";
+import { AuthBase } from '../../../constants';
+import sdk from '../../../utils/sdk';
 
 export interface ICreateChat extends AuthBase {
   chat: {
@@ -11,13 +11,8 @@ export interface ICreateChat extends AuthBase {
 }
 
 const createChat = async (args: ICreateChat) => {
-  try {
-    const res = await sdk.chat.createChat(args.auth, args.chat);
-
-    return res;
-  } catch (error) {
-    return error;
-  }
+  const res = await sdk.chat.createChat(args.auth, args.chat);
+  return res;
 };
 
 export default createChat;
