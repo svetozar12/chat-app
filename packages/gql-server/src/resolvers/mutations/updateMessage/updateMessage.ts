@@ -6,7 +6,7 @@ export interface IUpdateMessage extends AuthBase {
   newMessage: string;
 }
 
-const updateMessage = async (args: IUpdateMessage) => {
+const updateMessage = async (_: unknown, args: IUpdateMessage) => {
   const res = await sdk.message.updateMessage(args.auth, args.message_id, {
     message: args.newMessage,
   });

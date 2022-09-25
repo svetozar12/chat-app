@@ -16,7 +16,9 @@ interface IModal extends Base {
 function Modal(props: IModal) {
   const { closeModal, children, heading, style, baseProps, chakraProps } = props;
   const {
-    colors: { fromBg },
+    base: {
+      form: { background },
+    },
   } = useThemeColors();
 
   const modalVariant = {
@@ -35,7 +37,7 @@ function Modal(props: IModal) {
 
   return (
     <ScaleFade
-      style={{ background: fromBg }}
+      style={{ background: background }}
       className={s.box}
       variants={modalVariant}
       initial="hide"

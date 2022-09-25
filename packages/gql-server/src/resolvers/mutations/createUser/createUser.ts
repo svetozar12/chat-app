@@ -1,4 +1,4 @@
-import { AuthBase } from '../../../constants';
+import logger from '../../../utils/logger';
 import sdk from '../../../utils/sdk';
 import { Gender } from '../../../utils/sdk/types/common';
 
@@ -11,8 +11,9 @@ export interface ICreateUser {
   };
 }
 
-const createUser = async (args: ICreateUser) => {
+const createUser = async (_: unknown, args: ICreateUser) => {
   const res = await sdk.user.createUser(args.user);
+  logger('info', 'CREATE-REST-USER', [String(res)]);
   return res;
 };
 

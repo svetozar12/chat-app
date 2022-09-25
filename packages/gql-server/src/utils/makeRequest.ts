@@ -1,30 +1,33 @@
-import { GraphQLYogaError } from "@graphql-yoga/node";
-import { instance } from "./sdk/index";
+import { GraphQLYogaError } from '@graphql-yoga/node';
+import { instance } from './sdk/index';
 
 export enum Method {
-  GET = "get",
-  HEAD = "head",
+  GET = 'get',
+  HEAD = 'head',
   //   bellow methods have bodies
-  DELETE = "delete",
-  PUT = "put",
-  POST = "post",
-  PATCH = "patch",
+  DELETE = 'delete',
+  PUT = 'put',
+  POST = 'post',
+  PATCH = 'patch',
 }
 
 const makeRequest = async <T>(
   method: Method,
-  path: string = "",
+  path = '',
   body?: Record<string, any>,
   headers?: Record<string, any>,
 ): Promise<T | GraphQLYogaError> => {
   try {
-    if (method === "get" || method === "head") {
+    if (method === 'get' || method === 'head') {
       const res = await instance[method](path, headers);
       return res.data;
     }
     const res = await instance[method](path, body, headers);
     return res.data;
   } catch (error: any) {
+    // eslint-disable-next-line no-console
+    console.log();
+
     return new GraphQLYogaError(error.response.data.Message);
   }
 };

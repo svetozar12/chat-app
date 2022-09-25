@@ -82,11 +82,14 @@ function ChatRoomForm(props: IChatRoomForm) {
   };
 
   const {
-    colors: { chatBg, fromBg, color },
+    base: {
+      default: { background, color },
+      form: { background: fromBg },
+    },
   } = useThemeColors();
 
   return (
-    <Flex mt="-0.5rem !important" w="full" h="10vh" bg={chatBg} alignItems="center" justifyContent="center">
+    <Flex mt=",form:{background:fromBg-0.5rem !important" w="full" h="10vh" bg={background} alignItems="center" justifyContent="center">
       <HStack
         cursor="text"
         pos="relative"

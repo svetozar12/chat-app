@@ -7,7 +7,7 @@ export interface IDeleteChat extends AuthBase {
   token: string;
 }
 
-const deleteChat = async (args: IDeleteChat) => {
+const deleteChat = async (_: unknown, args: IDeleteChat) => {
   const res = await sdk.chat.deleteChat(args.chat_id, args.auth);
   return res;
 };

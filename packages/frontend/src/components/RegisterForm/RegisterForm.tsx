@@ -17,6 +17,7 @@ import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import sdk from 'services/sdk';
+import { Gender } from '@chat-app/gql-server';
 
 interface IRegisterForm {
   quickLogin: () => Promise<boolean>;
@@ -29,12 +30,18 @@ interface IRegisterForm {
 }
 
 function RegisterForm(props: IRegisterForm) {
+  const {
+    base: {
+      button: { color: btnColor },
+      default: { color },
+    },
+  } = useThemeColors();
   const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername } = props;
   interface IValues {
     username: string;
     email: string;
     password: string;
-    gender: 'Male' | 'Female' | 'Other';
+    gender: Gender;
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
@@ -43,7 +50,7 @@ function RegisterForm(props: IRegisterForm) {
     setInputEmail(email);
     setInputPassword(password);
     setInputGender(gender);
-    if (await register) toggleQuickLogin(false);
+    if (register) toggleQuickLogin(false);
     else {
       setInputUsername('');
       setInputEmail('');
@@ -70,6 +77,7 @@ function RegisterForm(props: IRegisterForm) {
       type: string;
       name: 'username' | 'password' | 'email';
       placeholder: string;
+      _placeholder: any;
     };
   }
   const renderInputs: IRenderInputs[] = [
@@ -79,6 +87,7 @@ function RegisterForm(props: IRegisterForm) {
         type: 'text',
         name: 'username',
         placeholder: 'username ...',
+        _placeholder: { color, opacity: 0.5 },
       },
     },
     {
@@ -87,6 +96,7 @@ function RegisterForm(props: IRegisterForm) {
         type: 'password',
         name: 'password',
         placeholder: 'password ...',
+        _placeholder: { color, opacity: 0.5 },
       },
     },
     {
@@ -95,21 +105,18 @@ function RegisterForm(props: IRegisterForm) {
         type: 'email',
         name: 'email',
         placeholder: 'email ...',
+        _placeholder: { color, opacity: 0.5 },
       },
     },
   ];
 
   const formik = useFormik({
-    initialValues: { username: '', password: '', email: '', gender: 'Male' },
+    initialValues: { username: '', password: '', email: '', gender: Gender.Male },
     validationSchema: RegisterSchema,
     onSubmit: (values: IValues) => {
       handleSubmit(values);
     },
   });
-
-  const {
-    colors: { formButton },
-  } = useThemeColors();
 
   return (
     <>
@@ -148,7 +155,7 @@ function RegisterForm(props: IRegisterForm) {
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button colorScheme={formButton} w="60%" type="submit">
+          <Button colorScheme={btnColor} w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />

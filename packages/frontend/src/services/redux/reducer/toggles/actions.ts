@@ -31,7 +31,7 @@ const toggleMobileNav = (toggle: boolean) => ({
 });
 
 const toggleChatSettings = (toggle: boolean) => ({
-  type: ActionType.TOGGLE_CHAT_TOGGLETINGS,
+  type: ActionType.TOGGLE_CHAT_SETINGS,
   payload: toggle,
 });
 

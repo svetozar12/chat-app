@@ -1,6 +1,5 @@
 import { AuthModel, GetUser, Message, UpdateUserModel, UserModel } from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
-import { client } from '../index';
 
 const path = '';
 
@@ -13,8 +12,9 @@ export interface IUser {
 const user = {
   getById: async (auth: AuthModel): Promise<GetUser> => {
     const { userId, AccessToken } = auth;
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         query {
           getUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}") {
             _id
@@ -23,46 +23,60 @@ const user = {
             userAvatar
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'getUser',
+    );
   },
 
   create: async (user: UserModel): Promise<Message> => {
-    return makeRequest({
-      gqlQuery: `
-        mutation {
-          createUser(user:"${user}") {
+    const { username, email, gender, password } = user;
+    return makeRequest(
+      {
+        gqlQuery: `
+        mutation createUser{
+          createUser(user:{username: "${username}", password: "${password}", email: "${email}", gender: ${gender}}) {
             Message
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'createUser',
+    );
   },
 
   update: async (auth: AuthModel, user: UpdateUserModel): Promise<Message> => {
     const { userId, AccessToken } = auth;
-    return makeRequest({
-      gqlQuery: `
-        mutation {
-          updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:"${user}") {
+    const { username, email, gender } = user;
+
+    return makeRequest(
+      {
+        gqlQuery: `
+        mutation updateUser{
+          updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:{username: ${username}, email: ${email}, gender: ${gender}}) {
             Message
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'updateUser',
+    );
   },
 
   delete: async (auth: AuthModel): Promise<Message> => {
     const { userId, AccessToken } = auth;
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         mutation {
           updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:"${user}") {
             Message
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'updateUser',
+    );
   },
 };
 

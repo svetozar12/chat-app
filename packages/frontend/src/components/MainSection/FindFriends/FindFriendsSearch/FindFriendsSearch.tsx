@@ -20,7 +20,9 @@ interface IFindFriendsSearch {
 function FindFriendsSearch(props: IFindFriendsSearch) {
   const { handleSubmit, invite, setReciever } = props;
   const {
-    colors: { color },
+    base: {
+      default: { color },
+    },
   } = useThemeColors();
 
   return (

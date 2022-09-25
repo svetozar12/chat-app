@@ -5,7 +5,7 @@ interface IMakeRequest {
   path: string;
 }
 
-const makeRequest = async <T>(args: IMakeRequest): Promise<T> => {
+const makeRequest = async <T>(args: IMakeRequest, resolverName: string): Promise<T> => {
   const { gqlQuery, path } = args;
   try {
     const res = await client(path, {
@@ -13,7 +13,8 @@ const makeRequest = async <T>(args: IMakeRequest): Promise<T> => {
         query: gqlQuery,
       },
     });
-    return res.data;
+
+    return res.data.data[resolverName];
   } catch (error) {
     return error;
   }

@@ -13,6 +13,7 @@ const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
 
+  if (!isUserAuth && currPath === '/logout') return redirectTo(constants.HOST_URL, ctx);
   if (!isUserAuth && currPath !== '/') return redirectTo(constants.HOST_URL, ctx, currPath);
   if (getServerSideProps) {
     const gssp = await getServerSideProps(ctx);

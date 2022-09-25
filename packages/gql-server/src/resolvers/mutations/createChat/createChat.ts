@@ -10,7 +10,7 @@ export interface ICreateChat extends AuthBase {
   };
 }
 
-const createChat = async (args: ICreateChat) => {
+const createChat = async (_: unknown, args: ICreateChat) => {
   const res = await sdk.chat.createChat(args.auth, args.chat);
   return res;
 };

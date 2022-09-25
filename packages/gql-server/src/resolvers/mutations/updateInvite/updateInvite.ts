@@ -7,7 +7,7 @@ export interface IupdateInvite extends AuthBase {
   status: Status;
 }
 
-const updateInvite = async (args: IupdateInvite) => {
+const updateInvite = async (_: unknown, args: IupdateInvite) => {
   const res = await sdk.invite.update(args.auth, args.invite_id, args.status);
   return res;
 };

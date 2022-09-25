@@ -9,7 +9,7 @@ export interface IMessage extends AuthBase {
   };
 }
 
-const getAllMessages = async (args: IMessage) => {
+const getAllMessages = async (_: unknown, args: IMessage) => {
   const res = await sdk.message.getMessages(args.auth, args.chat_id, {
     page_number: args.query.page_number,
     page_size: args.query.page_size,

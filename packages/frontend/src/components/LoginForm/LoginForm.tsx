@@ -64,6 +64,7 @@ function LoginForm(props: ILoginForm) {
       if (res instanceof Error) return setLoginError('login error');
       if (res) {
         setIsLoading(true);
+        console.log(res, 'request');
 
         const cookies = [
           { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
@@ -92,9 +93,11 @@ function LoginForm(props: ILoginForm) {
     }
   };
 
-  const color = useColorModeValue('white', '#343a40');
   const {
-    colors: { chatBorderColor, formButton },
+    base: {
+      default: { color, offColor },
+      button: { color: btnCollor },
+    },
   } = useThemeColors();
 
   interface IRenderInputs {
@@ -102,10 +105,9 @@ function LoginForm(props: ILoginForm) {
     props: {
       type: string;
       name: 'username' | 'password';
-      bg: string;
-      border: string;
-      borderColor: string;
+      color: string;
       placeholder: string;
+      _placeholder: any;
     };
   }
 
@@ -115,21 +117,19 @@ function LoginForm(props: ILoginForm) {
       props: {
         type: 'text',
         name: 'username',
-        bg: color,
-        border: '1px solid black',
-        borderColor: chatBorderColor,
+        color,
         placeholder: 'username ...',
+        _placeholder: { color: color, opacity: 0.5 },
       },
     },
     {
       label: 'Password',
       props: {
-        border: '1px solid black',
-        borderColor: chatBorderColor,
         type: 'password',
         name: 'password',
-        bg: color,
+        color,
         placeholder: 'password ...',
+        _placeholder: { color: color, opacity: 0.5 },
       },
     },
   ];
@@ -168,7 +168,7 @@ function LoginForm(props: ILoginForm) {
       </>
 
       <Flex w="full" alignItems="center" justifyContent="center">
-        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={formButton} w="60%" type="submit">
+        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={btnCollor} w="60%" type="submit">
           Log In
         </Button>
       </Flex>

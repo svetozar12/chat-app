@@ -1,21 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { css } from '@emotion/css';
+import { bindActionCreators, Dispatch } from 'redux';
+import { Skeleton, VStack, FormControl } from '@chakra-ui/react';
 import { useCookie } from 'next-cookie';
 // services
+import { setReciever } from 'services/redux/reducer/invites/actions';
 import { getAuth } from 'utils/authMethods';
 import { useAuth } from 'utils/SessionProvider';
-// components
-import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
-import { Skeleton, VStack, FormControl } from '@chakra-ui/react';
-import FindFriendsHeader from './FindFriendsHeader';
-import FindFriendsSearch from './FindFriendsSearch';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import IInvite from 'services/redux/reducer/invites/state';
 import sdk from 'services/sdk';
-import { bindActionCreators, Dispatch } from 'redux';
-import { setReciever } from 'services/redux/reducer/invites/actions';
+// components
+import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
+import FindFriendsHeader from './FindFriendsHeader';
+import FindFriendsSearch from './FindFriendsSearch';
 
 interface IFindFriends {
   ws: IWebSocket;

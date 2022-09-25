@@ -45,11 +45,11 @@ interface IFindFriendsHeader {
   toggleMobileNav: typeof toggleMobileNav;
   toggleCreateGroup: typeof toggleCreateGroup;
   toggleFriendRequest: typeof toggleFriendRequestAction;
-  toggleUserSettings: typeof toggleUserSettings;
+  toggleUserSettingsAction: typeof toggleUserSettings;
 }
 
 function FindFriendsHeader(props: IFindFriendsHeader) {
-  const { toggle, invite, toggleChatSettings, toggleCreateGroup, toggleMobileNav, toggleFriendRequest, toggleUserSettings } = props;
+  const { toggle, invite, toggleChatSettings, toggleCreateGroup, toggleMobileNav, toggleFriendRequest, toggleUserSettingsAction } = props;
   const cookie = useCookie();
   const userId: string = cookie.get('id');
   const token: string = cookie.get('token');
@@ -138,7 +138,14 @@ function FindFriendsHeader(props: IFindFriendsHeader) {
           <Center onClick={toggleGroupCreate} w="25%">
             <IconButton w="full" h="3rem" aria-label="creates group chat" icon={<AiOutlineUsergroupAdd className={s.icon} />} />
           </Center>
-          <Center w="25%" pos="relative" onClick={() => toggleUserSettings(toggle.toggleUserSettings)}>
+          <Center
+            w="25%"
+            pos="relative"
+            onClick={() => {
+              console.log(toggle.toggleUserSettings, 'toggleUserSettings');
+              toggleUserSettingsAction(!toggle.toggleUserSettings);
+            }}
+          >
             <AnimatePresence>
               {toggle.toggleUserSettings && (
                 <motion.div
@@ -172,7 +179,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
   toggleMobileNav: bindActionCreators(toggleMobileNav, dispatch),
   toggleFriendRequest: bindActionCreators(toggleFriendRequestAction, dispatch),
-  toggleUserSettings: bindActionCreators(toggleUserSettings, dispatch),
+  toggleUserSettingsAction: bindActionCreators(toggleUserSettings, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(FindFriendsHeader));

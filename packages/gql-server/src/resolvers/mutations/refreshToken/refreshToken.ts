@@ -5,7 +5,7 @@ export interface IRefreshToken {
   RefreshToken: string;
 }
 
-const refreshToken = async (args: IRefreshToken) => {
+const refreshToken = async (_: unknown, args: IRefreshToken) => {
   const res = await sdk.auth.refresh(args.user_id, args.RefreshToken);
   return res;
 };

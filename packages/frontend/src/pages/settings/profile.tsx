@@ -37,7 +37,9 @@ function Profile(props: IProfile) {
     cookie.set('REDIRECT_URL_CALLBACK', window.location.pathname, { path: '/' });
   }, []);
   const {
-    colors: { chatBg },
+    base: {
+      default: { background },
+    },
   } = useThemeColors();
 
   if (!user) return <SkelletonUserSettings />;
@@ -61,7 +63,7 @@ function Profile(props: IProfile) {
   };
 
   return (
-    <HStack w="full" h="100vh" bg={chatBg} alignItems="center" justifyContent="center">
+    <HStack w="full" h="100vh" bg={background} alignItems="center" justifyContent="center">
       <UpdateInfo handleSubmit={handleSubmit}>
         <UpdateInfoForm image={image} setImage={setImage} />
       </UpdateInfo>

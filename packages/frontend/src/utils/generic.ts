@@ -1,3 +1,4 @@
+import { Chat } from '@chat-app/gql-server';
 import sdk from 'services/sdk';
 
 const timeStamp = (createdAt: string) => {
@@ -13,9 +14,9 @@ const timeStamp = (createdAt: string) => {
 const getFirstChat = async (userId: string, token: string): Promise<any> => {
   try {
     const res = await sdk.chatroom.getAll({ userId, AccessToken: token });
-    if (res.length <= 0) return;
+    if (res.length <= 0) return false;
 
-    return res[0];
+    return res[0]._id;
   } catch (error) {
     console.error(error);
 

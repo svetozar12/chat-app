@@ -6,7 +6,7 @@ export interface ICreateMessage extends AuthBase {
   message: string;
 }
 
-const createMessage = async (args: ICreateMessage) => {
+const createMessage = async (_: unknown, args: ICreateMessage) => {
   const res = await sdk.message.createMessage(args.auth, args.chat_id, {
     message: args.message,
   });

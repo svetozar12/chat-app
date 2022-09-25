@@ -14,24 +14,17 @@ import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import sdk from 'services/sdk';
-
-interface IContacts {
-  _id: string;
-  inviter: string;
-  reciever: string;
-  status: string;
-}
+import { Status, Invite } from '@chat-app/gql-server';
 
 interface IMessageSection {
-  contacts: IContacts[];
-  // eslint-disable-next-line no-unused-vars
-  FetchInvites: (status: 'accepted' | 'recieved' | 'declined', InvitesOrigin: 'reciever' | 'inviter') => Promise<any>;
+  contacts: Invite[];
+  FetchInvites: (status: Status, InvitesOrigin: 'reciever' | 'inviter') => Promise<any>;
   chatId: string;
   toggle: IToggle;
 }
 
 function MessageSection(props: IMessageSection) {
-  const { contacts, chatId, toggle } = props;
+  const { contacts, chatId, toggle, FetchInvites } = props;
   const [users, setUsers] = React.useState<any[]>([]);
   const cookie = useCookie();
   const route = useRouter();

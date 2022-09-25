@@ -10,7 +10,7 @@ export interface IUpdateUser extends AuthBase {
   };
 }
 
-const updateUser = async (args: IUpdateUser) => {
+const updateUser = async (_: unknown, args: IUpdateUser) => {
   const res = await sdk.user.updateUser(args.auth, args.user);
   return res;
 };

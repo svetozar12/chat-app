@@ -1,5 +1,6 @@
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 import { CustomError } from '../utils/custom-error.model';
+import logger from '../utils/logger';
 
 /**
  * Custom error handler to standardize error objects returned to
@@ -18,9 +19,8 @@ const handleError = (err: ErrorRequestHandler, req: Request, res: Response, next
     return res.status(err.status).json({ Message: err.Message });
   }
 
-  // remove the log in production
-  console.log(err);
-  res.status(500).json({ ErrorMsg: 'Internal server error' });
+  logger('error', err);
+  res.status(500).json({ Message: 'Internal server error' });
 };
 
 export default handleError;

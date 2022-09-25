@@ -20,7 +20,9 @@ interface INotifications {
 function Notifications(props: INotifications) {
   const { contacts, toggle, toggleFriendRequest } = props;
   const {
-    colors: { fromBg },
+    base: {
+      form: { background },
+    },
   } = useThemeColors();
 
   const modalVariant = {
@@ -38,7 +40,7 @@ function Notifications(props: INotifications) {
   };
 
   return (
-    <ScaleFade style={{ background: fromBg }} className={s.box} variants={modalVariant} initial="hide" animate="show" exit="exit">
+    <ScaleFade style={{ background }} className={s.box} variants={modalVariant} initial="hide" animate="show" exit="exit">
       <Flex alignItems="center" h="5rem" justifyItems="center" justifyContent="center">
         <Heading m="1rem">Notifications</Heading>
       </Flex>

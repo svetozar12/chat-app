@@ -7,7 +7,7 @@ export interface IUpdateChat extends AuthBase {
   usersData?: string[];
 }
 
-const updateChat = async (args: IUpdateChat) => {
+const updateChat = async (_: unknown, args: IUpdateChat) => {
   const res = await sdk.chat.updateChat(args.chat_id, args.auth, {
     username: args.username as string,
     usernames: args.usersData as string[],

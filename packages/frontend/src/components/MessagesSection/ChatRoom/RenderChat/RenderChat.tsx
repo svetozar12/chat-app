@@ -120,7 +120,10 @@ function RenderChat(props: IRenderChat) {
   }, []);
 
   const {
-    colors: { color, chatBg, chatMessageBgColor },
+    base: {
+      default: { color, background },
+      message: { background: msgBg },
+    },
   } = useThemeColors();
 
   return (
@@ -202,7 +205,7 @@ function RenderChat(props: IRenderChat) {
             minH="3rem"
             overflow="hidden"
             color="white"
-            bg={name === sender ? chatMessageBgColor : chatBg}
+            bg={name === sender ? msgBg : background}
             ref={inputRef}
             title={timeStamp.toString()}
           >

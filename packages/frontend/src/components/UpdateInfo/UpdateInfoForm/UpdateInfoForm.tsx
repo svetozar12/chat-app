@@ -1,4 +1,5 @@
 import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react';
+import useThemeColors from 'hooks/useThemeColors';
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -21,7 +22,11 @@ interface IUpdateInfoForm {
 
 function UpdateInfoForm(props: IUpdateInfoForm) {
   const { image, inputs, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername } = props;
-  const color = useColorModeValue('black', 'white');
+  const {
+    base: {
+      default: { color },
+    },
+  } = useThemeColors();
 
   const InputsLayout = [
     {

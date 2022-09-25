@@ -19,7 +19,6 @@ const controllers: Array<{ Route: Router; endpoint: string }> = [
 controllers.forEach((controller) => {
   const { Route, endpoint } = controller;
   route.use(endpoint, Route);
-  console.log(endpoint, Route);
 });
 
 export default route;

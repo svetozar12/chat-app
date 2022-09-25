@@ -48,7 +48,9 @@ function ActiveChats(props: IActiveChats) {
   }, []);
 
   const {
-    colors: { color },
+    base: {
+      default: { color },
+    },
   } = useThemeColors();
 
   return (

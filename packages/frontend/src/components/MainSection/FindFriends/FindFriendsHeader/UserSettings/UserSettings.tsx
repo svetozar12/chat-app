@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useRouter } from 'next/router';
 import { useCookie } from 'next-cookie';
 import Link from 'next/link';
 // utils
@@ -14,8 +13,8 @@ import { getAuth } from '../../../../../utils/authMethods';
 import useThemeColors from '../../../../../hooks/useThemeColors';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleUserSettings } from 'services/redux/reducer/toggles/actions';
-import { signOut } from 'services/redux/reducer/auth/actions';
 import sdk from 'services/sdk';
+import { useRouter } from 'next/router';
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -26,29 +25,26 @@ const buttonStyles = css`
 
 interface IUserSettings {
   toggleUserSettings: typeof toggleUserSettings;
-  signOut: typeof signOut;
 }
 
 function UserSettings(props: IUserSettings) {
-  const { toggleUserSettings, signOut } = props;
-  const router = useRouter();
+  const { toggleUserSettings } = props;
   const cookie = useCookie();
+  const router = useRouter();
 
-  const deleteCookies = async () => {
-    getAuth();
-    const cookies = cookie.getAll();
-    await sdk.auth.logout({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
-    for (const key in cookies) cookie.remove(key);
-
-    router.push('/');
-    signOut();
-  };
+  const {
+    base: {
+      form: { background },
+      default: { offColor },
+    },
+  } = useThemeColors();
 
   const deleteUser = async () => {
     try {
       getAuth();
       await sdk.user.delete({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
-      deleteCookies();
+      router.push('/logout');
+
       return true;
     } catch (error) {
       return false;
@@ -65,8 +61,7 @@ function UserSettings(props: IUserSettings) {
       title: 'User settings',
     },
     {
-      href: '#',
-      onClick: deleteCookies,
+      href: '/logout',
       Icon: IoMdLogOut,
       title: 'Log out',
     },
@@ -78,16 +73,13 @@ function UserSettings(props: IUserSettings) {
     },
   ];
 
-  const {
-    colors: { fromBg },
-  } = useThemeColors();
   return (
     <VStack
       w={{ base: '15rem', lg: '15rem' }}
       pos="absolute"
       justifyContent="center"
       align="center"
-      bg={fromBg}
+      bg={background}
       textAlign="left"
       top={0}
       right={0}
@@ -96,7 +88,7 @@ function UserSettings(props: IUserSettings) {
       pb={2}
       zIndex={2000}
       transform="translate(-4px, 75px)"
-      boxShadow=" 2px 2px 22px 1px var(--main-box-shadow)"
+      boxShadow={`${offColor} 0px 1px 4px`}
     >
       {Render.map((element, index) => {
         const { href, onClick, Icon, title } = element;
@@ -127,7 +119,6 @@ function UserSettings(props: IUserSettings) {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleUserSettings: bindActionCreators(toggleUserSettings, dispatch),
-  signOut: bindActionCreators(signOut, dispatch),
 });
 
 export default connect(null, mapDispatchToProps)(UserSettings);

@@ -5,7 +5,7 @@ export interface ICreateInvite extends AuthBase {
   reciever: string;
 }
 
-const createInvite = async (args: ICreateInvite) => {
+const createInvite = async (_: unknown, args: ICreateInvite) => {
   const res = await sdk.invite.create(args.auth, args.reciever);
   return res;
 };

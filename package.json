@@ -9,7 +9,7 @@
     "postbuild": "yarn bootstrap",
     "build": "lerna run build --stream",
     "kill": "taskkill /f /im node.exe",
-    "dev": "lerna run dev --no-sort --stream",
+    "dev": "lerna run dev --stream",
     "dev:backend": "lerna run dev --scope {@chat-app/backend,@chat-app/gql-server} --stream",
     "test": "lerna run test --no-sort --stream",
     "lint": "lerna run lint --no-sort --stream",

@@ -3,7 +3,7 @@ import sdk from '../../../utils/sdk';
 
 export type IUser = AuthBase;
 
-const getUser = async (parent: unknown, args: IUser) => {
+const getUser = async (_: unknown, args: IUser) => {
   return await sdk.user.getUser(args.auth);
 };
 

@@ -13,43 +13,50 @@ const invite = {
   getAllByReciever: async (auth: AuthModel, status: string): Promise<Invite[]> => {
     const { userId, AccessToken } = auth;
     const condition = status ? `status:"${status}"` : '';
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         query {
-          getInvitesByReciever(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},status:"${status}",${condition}) {
+          getInvitesByReciever(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},${condition}) {
             _id
             inviter
             reciever
             status
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'getInvitesByReciever',
+    );
   },
 
   getAllByInviter: async (auth: AuthModel, status: string): Promise<Invite[]> => {
     const condition = status ? `status:"${status}"` : '';
     const { userId, AccessToken } = auth;
 
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         query {
-          getInvitesByInviter(auth:{userId: "${userId}", AccessToken: "${AccessToken}",status:"${status}",${condition}) {
+          getInvitesByInviter(auth:{userId: "${userId}", AccessToken: "${AccessToken}",${condition}) {
             _id
             inviter
             reciever
             status
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'getInvitesByInviter',
+    );
   },
 
   create: async (auth: AuthModel, reciever: string): Promise<Invite> => {
     const { userId, AccessToken } = auth;
 
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         mutation {
           createInvite(auth:{userId: "${userId}", AccessToken: "${AccessToken}",reciever:"${reciever}") {
             _id
@@ -58,26 +65,32 @@ const invite = {
             status
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'createInvite',
+    );
   },
 
   createGroupChat: async (usersData: string[]) => {
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         mutation {
           createInviteGroupChat(usersData:${usersData}) {
             data
             Message
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'createInviteGroupChat',
+    );
   },
 
   update: async (auth: AuthModel, invite_id: string, status: string) => {
-    return makeRequest({
-      gqlQuery: `
+    return makeRequest(
+      {
+        gqlQuery: `
         mutation {
           updateInvite(auth: "${auth}",invite_id:"${invite_id}",status:"${status}") {
             _id
@@ -86,8 +99,10 @@ const invite = {
             status
           }
          }`,
-      path,
-    });
+        path,
+      },
+      'updateInvite',
+    );
   },
 };
 

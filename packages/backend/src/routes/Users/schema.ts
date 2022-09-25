@@ -13,7 +13,7 @@ export const UpdateUserSchema = Joi.object({
     'string.min': `email should have a minimum length of {#limit}`,
     'string.max': `email should have a maximum length of {#limit}`,
   }),
-  gender: Joi.string().valid('Male', 'Female', 'Others').trim().messages({
+  gender: Joi.string().valid('MALE', 'Female', 'Others').trim().messages({
     'string.base': `gender should be of type text`,
     'string.empty': `gender cannot be an empty field`,
     'any.only': `gender is not valid`,

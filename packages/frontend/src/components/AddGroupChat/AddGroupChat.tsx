@@ -24,6 +24,13 @@ function AddGroupChat(props: IAddGroupChat) {
   const [user, setUser] = React.useState<string>('');
   const [usersData, setUsersData] = React.useState<string[]>([]);
   const cookie = useCookie();
+  const {
+    base: {
+      message: { background: messageBackground },
+      default: { background },
+    },
+  } = useThemeColors();
+
   const cookieName: string = cookie.get('name');
 
   const emitFriendRequest = async () => {
@@ -58,10 +65,6 @@ function AddGroupChat(props: IAddGroupChat) {
     }
   };
 
-  const {
-    colors: { chatMessageBgColor, chatBg },
-  } = useThemeColors();
-
   return (
     <>
       {toggle.toggleCreateGroupModal && (
@@ -73,7 +76,7 @@ function AddGroupChat(props: IAddGroupChat) {
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
-            background: ${chatBg};
+            background: ${background};
           `}
         >
           <form
@@ -111,7 +114,7 @@ function AddGroupChat(props: IAddGroupChat) {
           </form>
           <HStack mx={5} gap={5}>
             {usersData.map((element, index) => (
-              <HStack align="center" justify="center" bg={chatMessageBgColor} color="main_white" p="0.5rem 0.8rem" key={index}>
+              <HStack align="center" justify="center" bg={messageBackground} color="main_white" p="0.5rem 0.8rem" key={index}>
                 <p>{element}</p>
                 <Spacer />
                 <CloseButton

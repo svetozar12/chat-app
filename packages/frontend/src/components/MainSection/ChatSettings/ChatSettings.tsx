@@ -73,7 +73,9 @@ function ChatSettings(props: IChatSettings) {
   };
 
   const {
-    colors: { color },
+    base: {
+      default: { color },
+    },
   } = useThemeColors();
 
   return (

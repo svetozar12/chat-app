@@ -14,7 +14,9 @@ interface IFormWrapper extends Base {
 function FormWrapper(props: IFormWrapper) {
   const { type, children, handleSubmit, style, baseProps, chakraProps } = props;
   const {
-    colors: { fromBg },
+    base: {
+      form: { background },
+    },
   } = useThemeColors();
   return (
     <ScaleFade initialScale={0.7} in>
@@ -41,7 +43,7 @@ function FormWrapper(props: IFormWrapper) {
           {type}
         </Heading>
         <Box
-          bg={fromBg}
+          bg={background}
           w={{ base: '95%', sm: '90%', md: '70%', lg: '60%', xl: '40%' }}
           maxH="auto"
           minH="45vh"

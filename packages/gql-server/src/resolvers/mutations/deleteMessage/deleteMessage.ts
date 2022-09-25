@@ -5,7 +5,7 @@ export interface IDeleteMessage extends AuthBase {
   message_id: string;
 }
 
-const deleteMessage = async (args: IDeleteMessage) => {
+const deleteMessage = async (_: unknown, args: IDeleteMessage) => {
   const res = await sdk.message.deleteMessage(args.auth, args.message_id);
   return res;
 };

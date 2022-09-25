@@ -52,7 +52,9 @@ function ChatRoom(props: IChatRoom) {
   const route = useRouter();
   const cookie = useCookie();
   const {
-    colors: { chatBg },
+    base: {
+      default: { inverseColor },
+    },
   } = useThemeColors();
   const user = useAuth();
   const userId: string = cookie.get('id');
@@ -114,7 +116,7 @@ function ChatRoom(props: IChatRoom) {
           h="full"
           p="1rem"
           overflow="auto"
-          bg={chatBg}
+          bg={inverseColor}
           ref={containerRef}
           onScroll={scrollHandler}
         >

@@ -8,8 +8,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleFriendRequestAction, toggleInviteModal, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 
-// todo refactor redux implementation from loading folder to updateinfo
-
 interface IGlobals {
   toggle: IToggle;
   toggleQuickLogin: typeof toggleQuickLogin;
@@ -50,7 +48,6 @@ function Globals(props: IGlobals) {
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
-          background: ${colorMode === 'dark' ? '#1A202C' : '#FCFCFC'};
         `}
         onClick={closeModals}
       />

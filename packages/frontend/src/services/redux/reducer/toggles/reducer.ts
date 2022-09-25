@@ -31,8 +31,8 @@ const toggleReducer = (state = initialState, action: AnyAction) => {
       return { ...state, toggleCreateGroup: action.payload };
     case ActionType.TOGGLE_MOBILE_NAV:
       return { ...state, TOGGLEMobileNav: action.payload };
-    case ActionType.TOGGLE_CHAT_TOGGLETINGS:
-      return { ...state, TOGGLEChatTOGGLEtings: action.payload };
+    case ActionType.TOGGLE_CHAT_SETINGS:
+      return { ...state, toggleChatSettings: action.payload };
     case ActionType.TOGGLE_IS_MATCH:
       return { ...state, TOGGLEIsMatch: action.payload };
     case ActionType.TOGGLE_MODAL_INVITE:

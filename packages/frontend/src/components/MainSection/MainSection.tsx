@@ -27,9 +27,11 @@ function MainSection(props: IMainSection) {
   const { chatRooms, chatId, toggle, toggleChatSettings } = props;
   const { user } = useAuth();
   const {
-    colors: { fromBg, color },
+    base: {
+      default: { color },
+      form: { background },
+    },
   } = useThemeColors();
-
   return (
     <VStack
       mr="-0.5rem !important"
@@ -37,7 +39,7 @@ function MainSection(props: IMainSection) {
       w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '40%' }}
       h="100vh"
       pos={{ base: 'absolute', lg: 'relative' }}
-      bg={fromBg}
+      bg={background}
       borderRight="1px solid rgba(0, 0, 0, 0.1)"
       textAlign="center"
       overflow="hidden"
@@ -49,7 +51,7 @@ function MainSection(props: IMainSection) {
       <FindFriends />
       {user ? (
         <VStack overflow="auto" w="94%" h="100vh">
-          <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in>
+          <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in={toggle.toggleChatSettings}>
             <VStack
               w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
               h="100vh"
@@ -57,7 +59,7 @@ function MainSection(props: IMainSection) {
               left={0}
               transition="0.34s"
               zIndex={11}
-              bg={fromBg}
+              bg={background}
               color="white"
               p={0}
             >
@@ -74,13 +76,14 @@ function MainSection(props: IMainSection) {
                     background:${color},
                     z-index: 9999;
                   `)}
-                  onClick={() => toggleChatSettings(!toggle.toggleChatSettings)}
+                  onClick={() => {
+                    toggleChatSettings(!toggle.toggleChatSettings);
+                  }}
                 />
               </Flex>
               <ChatSettings chatId={chatId} />
             </VStack>
           </Slide>
-
           {chatRooms.map((item, index) => (
             <ActiveChats key={index} {...item} chatId={chatId} />
           ))}
