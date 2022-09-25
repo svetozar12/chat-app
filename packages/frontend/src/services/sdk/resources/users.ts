@@ -16,7 +16,7 @@ const user = {
       {
         gqlQuery: `
         query {
-          getUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}") {
+          getUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
             _id
             username
             email
@@ -69,7 +69,7 @@ const user = {
       {
         gqlQuery: `
         mutation {
-          updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:"${user}") {
+          updateUser(auth:{userId: "${userId}", AccessToken: "${AccessToken}",user:"${user}"}) {
             Message
           }
          }`,

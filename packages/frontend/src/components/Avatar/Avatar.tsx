@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCookie } from 'next-cookie';
 import { HStack } from '@chakra-ui/react';
-import SingleAvatar from 'components/Avatar/SingleAvatar';
+import { SingleAvatar } from 'services/chat-ui';
 import GroupAvatar from 'components/Avatar/GroupAvatar';
 
 interface IAvatar {

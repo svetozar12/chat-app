@@ -14,6 +14,7 @@ const makeRequest = async <T>(args: IMakeRequest, resolverName: string): Promise
       },
     });
 
+    if (res.data.data === null) throw Error(res.data.errors[0].message);
     return res.data.data[resolverName];
   } catch (error) {
     return error;

@@ -1,7 +1,7 @@
 import { Flex, FormLabel, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { GrEdit } from 'react-icons/gr';
-import SingleAvatar from 'components/Avatar/SingleAvatar';
+import { SingleAvatar } from 'services/chat-ui';
 
 interface IUpdateInfoDetails {
   image: string;

@@ -45,9 +45,9 @@ function ChatRoomForm(props: IChatRoomForm) {
   }, [ws.ws]);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    inputTextArea.current.style.height = '20px';
+    inputTextArea.current.style.height = '10px';
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
-    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
+    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 40)}px`;
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -83,13 +83,12 @@ function ChatRoomForm(props: IChatRoomForm) {
 
   const {
     base: {
-      default: { background, color },
-      form: { background: fromBg },
+      default: { inverseColor, color, offColor },
     },
   } = useThemeColors();
 
   return (
-    <Flex mt=",form:{background:fromBg-0.5rem !important" w="full" h="10vh" bg={background} alignItems="center" justifyContent="center">
+    <Flex mt="0.5rem !important" w="full" h="10vh" bg={inverseColor} alignItems="center" justifyContent="center">
       <HStack
         cursor="text"
         pos="relative"
@@ -97,7 +96,7 @@ function ChatRoomForm(props: IChatRoomForm) {
         w="70%"
         h="auto"
         p="2"
-        bg={fromBg}
+        bg={offColor}
         overflowWrap="break-word"
         borderRadius="3xl"
         align="center"
@@ -105,7 +104,7 @@ function ChatRoomForm(props: IChatRoomForm) {
       >
         <textarea
           rows={40}
-          style={{ height: '3rem', margin: '0 0.5rem' }}
+          style={{ margin: '0 0.5rem' }}
           className={s.messageInput}
           ref={inputTextArea}
           name="message"
@@ -114,8 +113,8 @@ function ChatRoomForm(props: IChatRoomForm) {
           value={state.message}
         />
         {!state.message && (
-          <Text pos="absolute" color={color}>
-            placeholder
+          <Text pos="absolute" color={offColor}>
+            Aa
           </Text>
         )}
         <Spacer />

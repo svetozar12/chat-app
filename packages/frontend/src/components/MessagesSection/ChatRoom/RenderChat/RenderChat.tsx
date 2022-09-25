@@ -121,7 +121,7 @@ function RenderChat(props: IRenderChat) {
 
   const {
     base: {
-      default: { color, background },
+      default: { color },
       message: { background: msgBg },
     },
   } = useThemeColors();
@@ -205,7 +205,7 @@ function RenderChat(props: IRenderChat) {
             minH="3rem"
             overflow="hidden"
             color="white"
-            bg={name === sender ? msgBg : background}
+            bg={name === sender ? 'dark_blue' : msgBg}
             ref={inputRef}
             title={timeStamp.toString()}
           >
@@ -242,18 +242,6 @@ function RenderChat(props: IRenderChat) {
               </span>
             )}
           </VStack>
-          {name !== sender && (
-            <div
-              className={css`
-                position: relative;
-              `}
-            >
-              {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="250px" />}
-              <div onClick={ToggleSettings} className={optionsPadding}>
-                <BsThreeDotsVertical className={dothStyle} />
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </HStack>

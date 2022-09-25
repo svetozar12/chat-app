@@ -45,6 +45,7 @@ const theme = extendTheme({
     good_alert_bgcolor: 'rgba(0, 255, 0, 0.5)',
     main_box_shadow: 'rgba(0, 0, 0, 0.2)',
     hover_bg: 'rgba(122, 122, 122, 0.3)',
+    dark_blue: '#3e7bfa',
   },
 });
 

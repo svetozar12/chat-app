@@ -1,6 +1,6 @@
+import routes from 'constants/routes';
 import { NextPageContext } from 'next';
 import { useCookie } from 'next-cookie';
-import { constants } from '../constants';
 import { isAuth } from './authMethods';
 import generic from './generic';
 import redirectTo from './routing';
@@ -10,11 +10,11 @@ export interface ICtx extends NextPageContext {
 }
 
 const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
-  const isUserAuth: any = await isAuth(ctx);
+  const isUserAuth = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
 
-  if (!isUserAuth && currPath === '/logout') return redirectTo(constants.HOST_URL, ctx);
-  if (!isUserAuth && currPath !== '/') return redirectTo(constants.HOST_URL, ctx, currPath);
+  if (!isUserAuth && currPath === '/logout') return redirectTo(routes.login, ctx);
+  if (!isUserAuth && currPath !== '/') return redirectTo(routes.login, ctx, currPath);
   if (getServerSideProps) {
     const gssp = await getServerSideProps(ctx);
     return {

@@ -2,7 +2,7 @@ import React from 'react';
 // import PendingChats from "components/Notifications_Modal/PendingChats";
 import { css } from '@emotion/css';
 import { CloseButton, Divider, Flex, Heading, ScaleFade, ScaleFadeProps } from '@chakra-ui/react';
-import s from './Notifications_Modal.module.css';
+import s from './Modal.module.css';
 import { IBaseComponent } from '../types';
 import useThemeColors from '../../../hooks/useThemeColors';
 

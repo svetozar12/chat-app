@@ -9,7 +9,7 @@ import RadioCard from '../../services/chat-ui/RadioCards/RadioCards';
 import { RegisterSchema } from '../../utils/validation';
 // components
 import QuickLogin_Modal from './QuickLogin_Modal';
-import FormWrapper from '../../services/chat-ui/FormWrapper';
+import FormWrapper from 'components/FormWrapper';
 import useThemeColors from '../../hooks/useThemeColors';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -18,6 +18,7 @@ import { IToggle } from 'services/redux/reducer/toggles/state';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import sdk from 'services/sdk';
 import { Gender } from '@chat-app/gql-server';
+import { setRegisterError } from 'services/redux/reducer/alert/actions';
 
 interface IRegisterForm {
   quickLogin: () => Promise<boolean>;
@@ -27,6 +28,7 @@ interface IRegisterForm {
   setInputGender: typeof setInputGender;
   setInputPassword: typeof setInputPassword;
   setInputUsername: typeof setInputUsername;
+  setRegisterError: typeof setRegisterError;
 }
 
 function RegisterForm(props: IRegisterForm) {
@@ -36,7 +38,8 @@ function RegisterForm(props: IRegisterForm) {
       default: { color },
     },
   } = useThemeColors();
-  const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername } = props;
+  const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername, setRegisterError } =
+    props;
   interface IValues {
     username: string;
     email: string;
@@ -50,6 +53,7 @@ function RegisterForm(props: IRegisterForm) {
     setInputEmail(email);
     setInputPassword(password);
     setInputGender(gender);
+    if (register instanceof Error) setRegisterError(register.message);
     if (register) toggleQuickLogin(false);
     else {
       setInputUsername('');
@@ -77,6 +81,7 @@ function RegisterForm(props: IRegisterForm) {
       type: string;
       name: 'username' | 'password' | 'email';
       placeholder: string;
+      boxShadow: string;
       _placeholder: any;
     };
   }
@@ -87,6 +92,7 @@ function RegisterForm(props: IRegisterForm) {
         type: 'text',
         name: 'username',
         placeholder: 'username ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
         _placeholder: { color, opacity: 0.5 },
       },
     },
@@ -96,6 +102,7 @@ function RegisterForm(props: IRegisterForm) {
         type: 'password',
         name: 'password',
         placeholder: 'password ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
         _placeholder: { color, opacity: 0.5 },
       },
     },
@@ -105,6 +112,7 @@ function RegisterForm(props: IRegisterForm) {
         type: 'email',
         name: 'email',
         placeholder: 'email ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
         _placeholder: { color, opacity: 0.5 },
       },
     },
@@ -176,6 +184,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInputPassword: bindActionCreators(setInputPassword, dispatch),
   setInputEmail: bindActionCreators(setInputEmail, dispatch),
   setInputGender: bindActionCreators(setInputGender, dispatch),
+  setRegisterError: bindActionCreators(setRegisterError, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

@@ -1,7 +1,8 @@
 const routes = {
-  indexRoute: '/',
-  registerRoute: '/register',
-  settingsProfileRouter: '/settings/profile',
+  login: '/',
+  register: '/register',
+  profileSettings: '/settings/profile',
+  homeChat: (chatId: string) => `/${chatId}`,
 };
 
 export default routes;

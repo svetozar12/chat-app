@@ -2,7 +2,7 @@
 import React from 'react';
 // components
 import { css, cx } from '@emotion/css';
-import { CloseButton, Flex, Slide, VStack } from '@chakra-ui/react';
+import { CloseButton, Flex, HStack, Slide, useColorModeValue, VStack } from '@chakra-ui/react';
 import ActiveChats from './ActiveChats';
 import FindFriends from './FindFriends';
 import ChatSettings from './ChatSettings';
@@ -28,7 +28,7 @@ function MainSection(props: IMainSection) {
   const { user } = useAuth();
   const {
     base: {
-      default: { color },
+      default: { color, offColor },
       form: { background },
     },
   } = useThemeColors();
@@ -40,7 +40,7 @@ function MainSection(props: IMainSection) {
       h="100vh"
       pos={{ base: 'absolute', lg: 'relative' }}
       bg={background}
-      borderRight="1px solid rgba(0, 0, 0, 0.1)"
+      borderRight={useColorModeValue('1px solid rgba(0, 0, 0, 0.1)', '1px solid rgba(255,255,255, 0.1)')}
       textAlign="center"
       overflow="hidden"
       zIndex="20"
@@ -73,7 +73,8 @@ function MainSection(props: IMainSection) {
                     right: 0;
                     margin-top: 2.5rem;
                     position: absolute;
-                    background:${color},
+                    color: ${color};
+                    background: ${offColor};
                     z-index: 9999;
                   `)}
                   onClick={() => {

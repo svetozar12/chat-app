@@ -1,14 +1,14 @@
 import React from 'react';
 import { GrClose } from 'react-icons/gr';
-import axios from 'axios';
 import { css } from '@emotion/css';
-import { constants } from '../../constants';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { bindActionCreators, Dispatch } from 'redux';
+import sdk from 'services/sdk';
+import { useCookie } from 'next-cookie';
 
 interface IAddUserModal {
   users: string[];
@@ -21,13 +21,11 @@ interface IAddUserModal {
 
 function AddUserModal(props: IAddUserModal) {
   const { users, chatId, setUsers, toggleInviteModal, ws, toggle } = props;
+  const cookie = useCookie();
   const [invited, setInvited] = React.useState<string[]>([]);
   const addMembers = async (user: string[]) => {
     try {
-      await axios.put(`${constants.GRAPHQL_URL}/chat-room/${chatId}`, {
-        usernames: user,
-      });
-      return true;
+      await sdk.chatroom.update({ userId: cookie.get('id'), AccessToken: cookie.get('cookie') }, chatId, undefined, user);
     } catch (error) {
       return false;
     }

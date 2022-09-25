@@ -4,7 +4,8 @@ import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Button, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
 import { Iinvites } from 'pages/[acc]';
-import SingleAvatar from 'components/Avatar/SingleAvatar';
+import { SingleAvatar } from 'services/chat-ui';
+
 // services
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';

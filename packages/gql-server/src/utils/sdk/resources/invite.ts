@@ -1,39 +1,29 @@
-import { GraphQLYogaError } from "@graphql-yoga/node";
-import { instance } from "..";
-import makeRequest, { Method } from "../../makeRequest";
-import { Auth, Status } from "../types/common";
+import { GraphQLYogaError } from '@graphql-yoga/node';
+import { instance } from '..';
+import makeRequest, { Method } from '../../makeRequest';
+import { Auth, Status } from '../types/common';
 
-const basePath = "/invites";
+const basePath = '/invites';
 
 const invite = {
   getAllByReciever: async (auth: Auth, status?: Status) => {
     const { userId, AccessToken } = auth;
-    return makeRequest(
-      Method.GET,
-      `${basePath}/${userId}${status ? "?status=".concat(status) : ""}`,
-      undefined,
-      {
-        headers: { Authorization: `Bearer ${AccessToken}` },
-      },
-    );
+    return makeRequest(Method.GET, `${basePath}/${userId}${status ? '?status='.concat(status) : ''}`, undefined, {
+      headers: { Authorization: `Bearer ${AccessToken}` },
+    });
   },
   getAllByInviter: async (auth: Auth, status?: Status) => {
     const { userId, AccessToken } = auth;
-    return makeRequest(
-      Method.GET,
-      `${basePath}/inviter/${userId}${status ? "?".concat(status) : ""}`,
-      undefined,
-      {
-        headers: { Authorization: `Bearer ${AccessToken}` },
-      },
-    );
+    return makeRequest(Method.GET, `${basePath}/inviter/${userId}${status ? '?'.concat(status) : ''}`, undefined, {
+      headers: { Authorization: `Bearer ${AccessToken}` },
+    });
   },
   create: async (auth: Auth, reciever: string) => {
     const { userId, AccessToken } = auth;
     return makeRequest(
       Method.POST,
       basePath,
-      { reciever, userId },
+      { reciever, user_id: userId },
       {
         headers: { Authorization: `Bearer ${AccessToken}` },
       },

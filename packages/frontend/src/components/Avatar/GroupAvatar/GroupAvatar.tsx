@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCookie } from 'next-cookie';
 import sdk from 'services/sdk';
-import SingleAvatar from '../SingleAvatar';
+import { SingleAvatar } from 'services/chat-ui';
 
 interface IGroup_avatar {
   members: string[];

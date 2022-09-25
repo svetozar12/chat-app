@@ -4,7 +4,7 @@ import { useCookie } from 'next-cookie';
 import Link from 'next/link';
 // utils
 import { css } from '@emotion/css';
-import { Link as ALink, VStack } from '@chakra-ui/react';
+import { Link as ALink, useColorModeValue, VStack } from '@chakra-ui/react';
 // icons
 import { IoMdLogOut } from 'react-icons/io';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
@@ -15,6 +15,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { toggleUserSettings } from 'services/redux/reducer/toggles/actions';
 import sdk from 'services/sdk';
 import { useRouter } from 'next/router';
+import { BsFillSunFill } from 'react-icons/bs';
+import { MdDarkMode } from 'react-icons/md';
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -87,7 +89,7 @@ function UserSettings(props: IUserSettings) {
       pt={2}
       pb={2}
       zIndex={2000}
-      transform="translate(-4px, 75px)"
+      transform="translate(211px, -143px)"
       boxShadow={`${offColor} 0px 1px 4px`}
     >
       {Render.map((element, index) => {

@@ -1,14 +1,16 @@
 import React from 'react';
 import { css } from '@emotion/css';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import s from './Notifications_Modal.module.css';
+import useThemeColors from '../../hooks/useThemeColors';
+// components
 import { CloseButton, Divider, Flex, Heading, ScaleFade } from '@chakra-ui/react';
 import PendingChats from './PendingChats/PendingChats';
 import { Iinvites } from '../../pages/[acc]';
-import s from './Notifications_Modal.module.css';
-import useThemeColors from '../../hooks/useThemeColors';
+// services
 import { STATE } from 'services/redux/reducer';
 import { toggleFriendRequestAction } from 'services/redux/reducer/toggles/actions';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 
 interface INotifications {
@@ -28,19 +30,16 @@ function Notifications(props: INotifications) {
   const modalVariant = {
     hide: {
       scale: 0.8,
-    },
-    show: {
       y: '-50%',
       x: '-50%',
-      scale: 1,
     },
-    exit: {
-      scale: 0.8,
+    show: {
+      scale: 1,
     },
   };
 
   return (
-    <ScaleFade style={{ background }} className={s.box} variants={modalVariant} initial="hide" animate="show" exit="exit">
+    <ScaleFade style={{ background }} className={s.box} variants={modalVariant} initial="hide" animate="show">
       <Flex alignItems="center" h="5rem" justifyItems="center" justifyContent="center">
         <Heading m="1rem">Notifications</Heading>
       </Flex>

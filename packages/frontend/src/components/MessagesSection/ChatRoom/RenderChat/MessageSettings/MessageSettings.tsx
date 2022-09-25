@@ -37,21 +37,11 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
     }
   };
 
-  const handleEdit = async () => {
-    try {
-      // await api_helper.message.update(cookie.get("id"), id, ,cookie.get("token"));
-      setEditing(true);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const handleClick = (status: string) => {
     getAuth();
     setSettings(false);
     status === 'delete' && handleDelete();
-    status === 'edit' && handleEdit();
+    status === 'edit' && setEditing(true);
   };
   return (
     <div

@@ -15,6 +15,7 @@ import { setNotifNumber } from 'services/redux/reducer/invites/actions';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
 import { Chat, Invite } from '@chat-app/gql-server';
+import Sidebar from 'components/Sidebar/Sidebar';
 
 interface IApp {
   chatRoom: string;
@@ -110,12 +111,13 @@ function App(props: IApp) {
   }, []);
 
   return (
-    <HStack w="full" h="100vh">
+    <HStack w="full" h="100vh" ml="-0.5rem !important">
       <HStack h="100vh" pos="absolute">
         <Box w="95%" h="100vh" zIndex={100} pos="relative">
           <HamburgerMenu toggleHamburger={() => console.log('toggle hamburger menu')} />
         </Box>
       </HStack>
+      <Sidebar />
       <MainSection chatId={chatId} chatRooms={chatRooms} />
       <MessagesSection chatId={chatId} contacts={contacts} FetchInvites={FetchInvites} />
     </HStack>

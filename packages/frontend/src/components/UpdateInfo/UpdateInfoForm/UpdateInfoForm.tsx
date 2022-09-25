@@ -44,6 +44,7 @@ function UpdateInfoForm(props: IUpdateInfoForm) {
         w: 'full',
         onChange: (e: any) => setInputUsername(e.target.value),
         color,
+        boxShadow: `0px 0px 2px 0px ${color}`,
       },
     },
     {
@@ -60,6 +61,7 @@ function UpdateInfoForm(props: IUpdateInfoForm) {
         w: 'full',
         id: 'email',
         color,
+        boxShadow: `0px 0px 2px 0px ${color}`,
         onChange: (e: any) => setInputEmail(e.target.value),
       },
     },
@@ -98,7 +100,7 @@ function UpdateInfoForm(props: IUpdateInfoForm) {
         <FormLabel fontWeight="bold" fontSize="xl" mt={1}>
           Gender
         </FormLabel>
-        <RadioGroup defaultValue="2">
+        <RadioGroup>
           <HStack spacing={5} direction="row">
             <Radio colorScheme="blue" value="1">
               Male

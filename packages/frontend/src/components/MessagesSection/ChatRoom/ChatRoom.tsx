@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import { VStack } from '@chakra-ui/react';
 import timeStamp from '../../../utils/timeStamp';
-import { constants } from '../../../constants/index';
 // components
 import RenderChat from './RenderChat';
 import ChatHeader from './ChatHeader';
@@ -76,7 +75,7 @@ function ChatRoom(props: IChatRoom) {
 
   useEffect(() => {
     toggleIsMatch(false);
-    if (location.href === `${constants.HOST_URL}/${chatId}`) toggleIsMatch(true);
+    if (location.href === `${location.host}/${chatId}`) toggleIsMatch(true);
     resetMessages();
     getRecentMessages();
   }, [route.asPath]);

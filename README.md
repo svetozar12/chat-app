@@ -1,50 +1,18 @@
-<h1 align="center">Welcome to chat-app 👋</h1>
+# @chat-app
 
-> chat-app for sending messages
+Chat-app
 
-## Build with
+# How to run the app
 
-- [NextJs](https://nextjs.org/)
-- [chakra-ui](https://chakra-ui.com/)
-- [Redux](https://redux.js.org/)
-- [socket-io](https://socket.io/)
-- [Express](https://expressjs.com/)
-- [MongoDb](https://www.mongodb.com/)
-- [JWT](https://jwt.io/)
+## Prerequisites
 
-## Install
+`install lerna globally: npm i -g lerna`\
+`install docker and run it`
 
-```sh
-yarn
-```
+## Development mode
 
-## Usage
-
-```sh
-yarn build
-```
-
-## Format
-
-```sh
-yarn format
-```
-
-## Run tests
-
-```sh
-yarn test
-```
-
-## Build and Run Docker container
-
-```sh
-docker-compose build
-docker-compose up
-```
-
-## Author
-
-👤 **Svetozar Gospodinov**
-
-- Github: [@svetozar12](https://github.com/svetozar12)
+`1. yarn`\
+`2. yarn db:up`\
+`3. lerna run init-data --scope=@chat-app/backend`\
+`4. yarn build`\
+`5. yarn dev`

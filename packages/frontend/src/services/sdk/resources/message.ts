@@ -12,7 +12,7 @@ const message = {
       {
         gqlQuery: `
           query {
-          getAllMessages(auth:{userId: "${userId}", AccessToken: "${AccessToken}",chat_id:"${chat_id}"${condition}) {
+          getAllMessages(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},chat_id:"${chat_id}"${condition}) {
             _id
             user_id
             chat_id
@@ -32,7 +32,7 @@ const message = {
       {
         gqlQuery: `
         mutation {
-          createMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}",chat_id: "${chat_id}",message:"${_message}") {
+          createMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},chat_id: "${chat_id}",message:"${_message}") {
             user_id
             chat_id
             sender
@@ -52,7 +52,7 @@ const message = {
       {
         gqlQuery: `
         mutation {
-          updateMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}",message_id: "${message_id}",newMessage:"${newMessage}") {
+          updateMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},message_id: "${message_id}",newMessage:"${newMessage}") {
             Message
           }
          }`,
@@ -68,7 +68,7 @@ const message = {
       {
         gqlQuery: `
         mutation {
-          deleteMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}",message_id: "${message_id}") {
+          deleteMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},message_id: "${message_id}") {
             Message
           }
         }`,

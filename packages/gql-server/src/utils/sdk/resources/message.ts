@@ -1,15 +1,12 @@
-import makeRequest, { Method } from "../../makeRequest";
-import { Auth, Message, Response } from "../types/common";
-import { ChatMessage, CreateMessage, PaginationQuery } from "../types/message";
+import logger from '../../logger';
+import makeRequest, { Method } from '../../makeRequest';
+import { Auth, Message, Response } from '../types/common';
+import { ChatMessage, CreateMessage, PaginationQuery } from '../types/message';
 
-const basePath = "/messages";
+const basePath = '/messages';
 
 const message = {
-  getMessages: async (
-    auth: Auth,
-    chatId: string,
-    query?: PaginationQuery,
-  ): Response<{ Message: string; data: ChatMessage[] }> => {
+  getMessages: async (auth: Auth, chatId: string, query?: PaginationQuery): Response<{ Message: string; data: ChatMessage[] }> => {
     const { userId, AccessToken } = auth;
     const { page_size, page_number } = query as PaginationQuery;
     return makeRequest(
@@ -21,22 +18,14 @@ const message = {
       },
     );
   },
-  createMessage: async (
-    auth: Auth,
-    chatId: string,
-    body: CreateMessage,
-  ): Response<{ data: ChatMessage }> => {
+  createMessage: async (auth: Auth, chatId: string, body: CreateMessage): Response<{ data: ChatMessage }> => {
     const { userId, AccessToken } = auth;
     const Body = { ...body, user_id: userId };
     return makeRequest(Method.POST, `${basePath}/${chatId}`, Body, {
       headers: { Authorization: `Bearer ${AccessToken}` },
     });
   },
-  updateMessage: async (
-    auth: Auth,
-    messageId: string,
-    body: CreateMessage,
-  ): Response<Message> => {
+  updateMessage: async (auth: Auth, messageId: string, body: CreateMessage): Response<Message> => {
     const { userId, AccessToken } = auth;
     const Body = { ...body, user_id: userId };
     return makeRequest(Method.PUT, `${basePath}/${messageId}`, Body, {
@@ -45,14 +34,11 @@ const message = {
   },
   deleteMessage: async (auth: Auth, messageId: string): Response<Message> => {
     const { userId, AccessToken } = auth;
-    return makeRequest(
-      Method.DELETE,
-      `${basePath}/${messageId}?user_id=${userId}`,
-      undefined,
-      {
-        headers: { Authorization: `Bearer ${AccessToken}` },
-      },
-    );
+    logger('info', auth, ['gql,sdk']);
+
+    return makeRequest(Method.DELETE, `${basePath}/${messageId}?user_id=${userId}`, undefined, {
+      headers: { Authorization: `Bearer ${AccessToken}` },
+    });
   },
 };
 

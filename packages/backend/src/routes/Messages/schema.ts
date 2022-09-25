@@ -17,11 +17,11 @@ export const CreateMessageSchema = Schema.UserIdSchema.keys({
 });
 
 export const UpdateMessageSchema = Schema.UserIdSchema.keys({
-  newMessage: Joi.string().trim().min(1).max(100).required().messages({
-    'string.base': `newMessage should be of type text`,
-    'string.empty': `newMessage cannot be an empty field`,
-    'string.min': `newMessage should have a minimum length of {#limit}`,
-    'string.max': `newMessage should have a maximum length of {#limit}`,
-    'any.required': `newMessage is a required field`,
+  message: Joi.string().trim().min(1).max(100).required().messages({
+    'string.base': `message should be of type text`,
+    'string.empty': `message cannot be an empty field`,
+    'string.min': `message should have a minimum length of {#limit}`,
+    'string.max': `message should have a maximum length of {#limit}`,
+    'any.required': `message is a required field`,
   }),
 });

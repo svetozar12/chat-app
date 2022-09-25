@@ -58,7 +58,7 @@ class InvitesService {
 
   async CreateInvite(req: Request, res: Response, next: NextFunction) {
     const invitesReqObj = {
-      userId: req.params.user_id,
+      userId: req.body.user_id,
       reciever: req.body.reciever,
     };
     const { userId, reciever } = invitesReqObj;

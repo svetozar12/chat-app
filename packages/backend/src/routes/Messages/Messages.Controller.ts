@@ -31,8 +31,8 @@ const MessagesController: IBaseController[] = [
   {
     type: RequestTypes.DELETE,
     route: '/:_id',
-    handler: errorHandler(messagesService.GetMessage),
-    preMethods: [Validator(Schemas.DefaultIdSchema, 'params'), Validator(Schemas.UserIdSchema, 'body'), Auth(jwtEnv.JWT_SECRET)],
+    handler: errorHandler(messagesService.DeleteMessage),
+    preMethods: [Validator(Schemas.DefaultIdSchema, 'params'), Validator(Schemas.UserIdSchema, 'query'), Auth(jwtEnv.JWT_SECRET)],
   },
 ];
 

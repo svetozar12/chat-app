@@ -22,8 +22,6 @@ const chat = {
   },
 
   getById: async (chat_id: string, auth: AuthModel): Promise<Chat> => {
-    console.log(JSON.stringify(chat_id), 'asen treti');
-
     const { userId, AccessToken } = auth;
     return makeRequest(
       {
@@ -42,11 +40,12 @@ const chat = {
 
   create: async (chat: ChatModel, auth: AuthModel): Promise<CreateChatMessage> => {
     const { userId, AccessToken } = auth;
+    const { invite_id, user1, user2, user_id } = chat;
     return makeRequest(
       {
         gqlQuery: `
         mutation {
-          createChat(chat:${chat},auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
+          createChat(chat:{invite_id:"${invite_id}",user1:"${user1}",user2:"${user2}",user_id:"${user_id}"},auth:{userId: "${userId}", AccessToken: "${AccessToken}"}) {
             data {
               _id
               members

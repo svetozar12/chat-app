@@ -86,8 +86,9 @@ function ChatSettings(props: IChatSettings) {
 
       {users.map((item, index) => (
         <HStack alignItems="center" key={index}>
-          <Heading>{item}</Heading>
+          <Heading color={color}>{item}</Heading>
           <AiOutlineUserDelete
+            style={{ color }}
             onClick={() => {
               deleteMember(item);
               emitFriendRequest();

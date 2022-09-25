@@ -1,23 +1,11 @@
 import React from 'react';
 import generic from 'utils/generic';
-import {
-  Flex,
-  FormLabel,
-  HStack,
-  Input,
-  Button,
-  Checkbox,
-  SimpleGrid,
-  GridItem,
-  FormErrorMessage,
-  FormControl,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem, FormErrorMessage, FormControl } from '@chakra-ui/react';
 // hooks
 import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
 // components
-import FormWrapper from 'services/chat-ui/FormWrapper';
+import FormWrapper from 'components/FormWrapper';
 import DefaultLink from 'services/chat-ui/DefaultLink';
 import { useFormik } from 'formik';
 import { LoginSchema } from 'utils/validation';
@@ -61,7 +49,9 @@ function LoginForm(props: ILoginForm) {
     try {
       const { username, password } = values;
       const res = await sdk.auth.login(username, password);
-      if (res instanceof Error) return setLoginError('login error');
+      console.log(res, 'component');
+
+      if (res instanceof Error) return setLoginError(res.message);
       if (res) {
         setIsLoading(true);
         console.log(res, 'request');
@@ -108,6 +98,7 @@ function LoginForm(props: ILoginForm) {
       color: string;
       placeholder: string;
       _placeholder: any;
+      boxShadow: string;
     };
   }
 
@@ -119,6 +110,7 @@ function LoginForm(props: ILoginForm) {
         name: 'username',
         color,
         placeholder: 'username ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
         _placeholder: { color: color, opacity: 0.5 },
       },
     },
@@ -128,6 +120,7 @@ function LoginForm(props: ILoginForm) {
         type: 'password',
         name: 'password',
         color,
+        boxShadow: `0px 0px 2px 0px ${color}`,
         placeholder: 'password ...',
         _placeholder: { color: color, opacity: 0.5 },
       },

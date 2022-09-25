@@ -25,6 +25,11 @@ interface IActiveChats extends Chat {
 function ActiveChats(props: IActiveChats) {
   const { _id, members, chatId, toggle, ws, toggleCreateGroup, toggleChatSettings } = props;
   const [inviter, setInviter] = React.useState<string>('');
+  const {
+    base: {
+      default: { color, inverseColor },
+    },
+  } = useThemeColors();
   const router = useRouter();
   const cookie = useCookie();
 
@@ -46,12 +51,6 @@ function ActiveChats(props: IActiveChats) {
     // @ts-ignore
     setInviter(notMe[0]);
   }, []);
-
-  const {
-    base: {
-      default: { color },
-    },
-  } = useThemeColors();
 
   return (
     <HStack
@@ -136,13 +135,14 @@ function ActiveChats(props: IActiveChats) {
           <IconButton
             borderRadius="full"
             aria-label=""
-            boxShadow="box-shadow: 0 0 5px main_black"
             icon={
               <BsThreeDots
                 className={css`
-                  width: 2rem;
-                  height: 2rem;
+                  border-radius: 50%;
+                  width: 2.5rem;
+                  height: 2.5rem;
                   color: ${color};
+                  box-shadow: 0px 0px 2px 0px ${color};
                 `}
                 onClick={() => toggleChatSettings(!toggle.toggleChatSettings)}
               />

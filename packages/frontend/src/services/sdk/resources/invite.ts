@@ -12,7 +12,7 @@ export interface IInvite {
 const invite = {
   getAllByReciever: async (auth: AuthModel, status: string): Promise<Invite[]> => {
     const { userId, AccessToken } = auth;
-    const condition = status ? `status:"${status}"` : '';
+    const condition = status ? `status:${status}` : '';
     return makeRequest(
       {
         gqlQuery: `
@@ -31,14 +31,14 @@ const invite = {
   },
 
   getAllByInviter: async (auth: AuthModel, status: string): Promise<Invite[]> => {
-    const condition = status ? `status:"${status}"` : '';
+    const condition = status ? `status:${status}` : '';
     const { userId, AccessToken } = auth;
 
     return makeRequest(
       {
         gqlQuery: `
         query {
-          getInvitesByInviter(auth:{userId: "${userId}", AccessToken: "${AccessToken}",${condition}) {
+          getInvitesByInviter(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},${condition}) {
             _id
             inviter
             reciever
@@ -58,7 +58,7 @@ const invite = {
       {
         gqlQuery: `
         mutation {
-          createInvite(auth:{userId: "${userId}", AccessToken: "${AccessToken}",reciever:"${reciever}") {
+          createInvite(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},reciever:"${reciever}") {
             _id
             inviter
             reciever
@@ -92,7 +92,7 @@ const invite = {
       {
         gqlQuery: `
         mutation {
-          updateInvite(auth: "${auth}",invite_id:"${invite_id}",status:"${status}") {
+          updateInvite(auth: "${auth}",invite_id:"${invite_id}",status:${status}) {
             _id
             inviter
             reciever

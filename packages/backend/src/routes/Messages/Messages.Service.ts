@@ -28,14 +28,16 @@ class MessagesService {
       userId: req.body.user_id,
       reqMessage: req.body.message,
     };
+    console.log(messageReqObj);
+
     const { chatId, reqMessage, userId } = messageReqObj;
 
-    const sender = await User.findById(chatId);
+    const sender = await User.findById(userId);
     if (!sender) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
     const message = await new Messages({
       user_id: userId,
-      chatId,
+      chat_id: chatId,
       sender: sender.username,
       message: reqMessage,
       seenBy: [],
