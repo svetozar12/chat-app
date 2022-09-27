@@ -11,6 +11,7 @@ import { RegisterSchema } from "../../utils/validation";
 // components
 import QuickLogin_Modal from "./QuickLogin_Modal";
 import FormWrapper from "../FormWrapper";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars
@@ -30,7 +31,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
     const register = await api_helper.user.create(username, email, password, gender);
-
+    dispatch({ type: "SAVE_INPUT_USERNAME", payload: username });
+    dispatch({ type: "SAVE_INPUT_PASSWORD", payload: password });
+    dispatch({ type: "SAVE_INPUT_EMAIL", payload: email });
+    dispatch({ type: "SAVE_INPUT_GENDER", payload: gender });
     if (await register) dispatch({ type: "QUICK_LOGIN", payload: true });
     else {
       dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
@@ -53,6 +57,10 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
     onChange: handleGenderChange,
   });
 
+  const {
+    colors: { input_bg, chat_border_color },
+  } = useThemeColors();
+
   const group = getRootProps();
   const genderOptions = ["Male", "Female"];
   const renderInputs = [
@@ -61,6 +69,8 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       props: {
         type: "text",
         name: "username",
+        bg: input_bg,
+        borderColor: chat_border_color,
         placeholder: "username ...",
       },
     },
@@ -68,6 +78,8 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       label: "Password",
       props: {
         type: "password",
+        bg: input_bg,
+        borderColor: chat_border_color,
         name: "password",
         placeholder: "password ...",
       },
@@ -76,6 +88,8 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
       label: "Email",
       props: {
         type: "email",
+        borderColor: chat_border_color,
+        bg: input_bg,
         name: "email",
         placeholder: "email ...",
       },
@@ -83,14 +97,16 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
   ];
 
   const formik = useFormik({
-    initialValues: { username: "", password: "", email: "", gender: "male" },
+    initialValues: { username: "", password: "", email: "", gender: "Male" },
     validationSchema: RegisterSchema,
     onSubmit: (values: IValues) => {
       handleSubmit(values);
     },
-    // validateOnChange: false,
-    // validateOnBlur: false,
   });
+
+  const {
+    colors: { form_button },
+  } = useThemeColors();
 
   return (
     <>
@@ -126,7 +142,7 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button colorScheme="blue" w="60%" type="submit">
+          <Button colorScheme={form_button} w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />

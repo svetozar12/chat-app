@@ -1,0 +1,25 @@
+.box {
+  width: 50% !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 999;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+}
+
+@media only screen and (min-width: 80em) {
+  .box {
+    width: 30%;
+  }
+}
+@media only screen and (min-width: 62em) {
+  .box {
+    width: 50%;
+  }
+}
+
+@media only screen and (min-width: 30em) {
+  .box {
+    width: 80%;
+  }
+}

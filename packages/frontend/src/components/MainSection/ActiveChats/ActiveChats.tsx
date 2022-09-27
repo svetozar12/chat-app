@@ -7,7 +7,8 @@ import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { useCookie } from "next-cookie";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IActiveChats {
   _id: string;
@@ -53,11 +54,13 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
       payload: !state.setChatSettings,
     });
   };
+  const {
+    colors: { color },
+  } = useThemeColors();
 
   return (
     <HStack
       w="full"
-      color="var(--main-white)"
       cursor="pointer"
       p="2rem"
       ml="2rem"
@@ -99,24 +102,24 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
                 ? members.map((element, index) => {
                     if (index === 3) return;
                     return (
-                      <Heading size="md" style={{ margin: 0 }} key={index}>
+                      <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
                         {element}
                         {element[members.length - 1] === element[index] ? `${members.length > 3 ? "..." : ""}` : ","}
                       </Heading>
                     );
                   })
                 : (members.length === 1 && (
-                    <Heading size="md" m={0}>
+                    <Heading color={color} size="md" m={0}>
                       {user1}
                     </Heading>
                   )) ||
                   (user2 === cookieName && (
-                    <Heading size="md" m={0}>
+                    <Heading color={color} size="md" m={0}>
                       {user1}
                     </Heading>
                   )) ||
                   (user1 === cookieName && (
-                    <Heading size="md" m={0}>
+                    <Heading color={color} size="md" m={0}>
                       {user2}
                     </Heading>
                   ))}
@@ -124,7 +127,7 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
             <p
               className={css`
                 margin: 0;
-                color: #65676b;
+                color: ${color};
                 justify-content: flex-start;
                 align-items: center;
                 margin: 1rem 0;
@@ -135,20 +138,21 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
           </VStack>
         </HStack>
         {_id === chatId && (
-          <BsThreeDots
-            className={css`
-              width: 2rem;
-              height: 2rem;
-              background: var(--main-white);
-              color: var(--main-black);
-              border-radius: 25px;
-              box-shadow: 0 0 5px var(--main-black);
-              &:hover {
-                color: rgba(122, 122, 122, 1);
-              }
-            `}
-            onClick={chatSettings}
-          />
+          <IconButton
+            borderRadius="full"
+            aria-label=""
+            boxShadow="box-shadow: 0 0 5px main_black"
+            icon={
+              <BsThreeDots
+                className={css`
+                  width: 2rem;
+                  height: 2rem;
+                  color: ${color};
+                `}
+                onClick={chatSettings}
+              />
+            }
+          ></IconButton>
         )}
       </div>
     </HStack>

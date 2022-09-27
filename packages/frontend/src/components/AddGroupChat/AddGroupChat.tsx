@@ -1,13 +1,14 @@
 import React from "react";
-import { Socket } from "socket.io-client";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
-import { Button, HStack, VStack } from "@chakra-ui/react";
+import { CloseButton, HStack, IconButton, Input, Spacer } from "@chakra-ui/react";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { getAuth } from "../../utils/authMethods";
+import useThemeColors from "hooks/useThemeColors";
+import { IoCreateOutline } from "react-icons/io5";
 
 const AddGroupChat = () => {
   const [user, setUser] = React.useState<string>("");
@@ -27,6 +28,12 @@ const AddGroupChat = () => {
     setUsersData((prev) => [...prev, user]);
     setUser("");
   };
+
+  const removeFromGroup = (username: string) => {
+    const newUsersData = usersData.filter((user) => user !== username);
+    setUsersData(newUsersData);
+  };
+
   const handleSumbit = async () => {
     try {
       getAuth();
@@ -47,6 +54,10 @@ const AddGroupChat = () => {
     }
   };
 
+  const {
+    colors: { chat_message_bg_color, chat_bg },
+  } = useThemeColors();
+
   return (
     <>
       {setState.toggleCreateGroup && (
@@ -58,6 +69,7 @@ const AddGroupChat = () => {
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
+            background: ${chat_bg};
           `}
         >
           <form
@@ -70,50 +82,42 @@ const AddGroupChat = () => {
             )}
             onSubmit={(e) => addToGroup(user, e)}
           >
-            <input
+            <Input
               className={css`
                 width: 70%;
-                height: 2rem;
                 margin: 0.5rem 0;
-                border: 1px solid var(--input-border-color);
-                border-radius: 5px;
                 transition: 0.3s;
                 padding: 1.3rem 0.9rem;
               `}
+              borderTopRightRadius="none"
+              borderBottomRightRadius="none"
               onChange={(e) => setUser(e.target.value)}
               value={user}
               placeholder="Add user ..."
               type="search"
             />
-            <Button
-              className={css`
-                width: 20%;
-                border-radius: 5px;
-                border: none;
-                padding: 0.8rem;
-                cursor: pointer;
-                transition: 0.4s;
-              `}
+            <IconButton
+              w="3rem"
+              borderTopLeftRadius="none"
+              borderBottomLeftRadius="none"
+              aria-label="icon"
+              icon={<IoCreateOutline />}
               onClick={handleSumbit}
-              type="button"
-            >
-              Create room
-            </Button>
+            />
           </form>
           <HStack mx={5} gap={5}>
             {usersData.map((element, index) => {
               return (
-                <p
-                  className={css`
-                    background: var(--main-blue);
-                    color: var(--main-white);
-                    padding: 0.2rem 1rem;
-                    border-radius: 5px;
-                  `}
-                  key={index}
-                >
-                  {element}
-                </p>
+                <HStack align="center" justify="center" bg={chat_message_bg_color} color="main_white" p="0.5rem 0.8rem" key={index}>
+                  <p>{element}</p>
+                  <Spacer />
+                  <CloseButton
+                    onClick={() => {
+                      removeFromGroup(element);
+                    }}
+                    borderRadius="full"
+                  />
+                </HStack>
               );
             })}
           </HStack>

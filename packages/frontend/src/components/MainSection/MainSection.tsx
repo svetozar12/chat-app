@@ -6,13 +6,13 @@ import FindFriends from "./FindFriends";
 import ChatSettings from "./ChatSettings";
 // other
 import { css, cx } from "@emotion/css";
-import { GrClose } from "react-icons/gr";
 import { Ichats } from "pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "utils/SessionProvider";
 import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import SkeletonActiveInvites from "components/Loading/SkeletonActiveInvites";
-import { Flex, VStack } from "@chakra-ui/react";
+import { CloseButton, Flex, Slide, VStack } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IMainSection {
   chatId: string;
@@ -23,7 +23,9 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const { user } = useAuth();
-
+  const {
+    colors: { color, from_bg },
+  } = useThemeColors();
   return (
     <VStack
       mr="-0.5rem !important"
@@ -31,10 +33,7 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
       w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "40%" }}
       h="100vh"
       pos={{ base: "absolute", lg: "relative" }}
-      bg="white"
-      transitionTimingFunction="ease-out"
-      transition="0.6s ease-out"
-      color="var(--main-whitre)"
+      bg={from_bg}
       borderRight="1px solid rgba(0, 0, 0, 0.1)"
       textAlign="center"
       overflow="hidden"
@@ -46,40 +45,43 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
       <FindFriends />
       {user ? (
         <VStack overflow="auto" w="94%" h="100vh">
-          <VStack
-            w={state.setChatSettings ? "100%" : 0}
-            h="100vh"
-            top={0}
-            left={0}
-            transition="0.34s"
-            pos="absolute"
-            zIndex={11}
-            bg="var(--main-white)"
-            p={0}
-          >
-            <Flex ml="2rem" align="center" pos="absolute" w="95%" m="1rem" px="1rem">
-              <GrClose
-                className={cx(css`
-                  width: 2rem;
-                  height: 2rem;
-                  cursor: pointer;
-                  right: 0;
-                  margin-top: 2.5rem;
-                  position: absolute;
-                  z-index: 9999;
-                  transition: 0.3s;
-                  opacity: ${state.setChatSettings ? "1" : "0"};
-                `)}
-                onClick={() =>
-                  dispatch({
-                    type: "SET_CHAT_SETTINGS",
-                    payload: !state.setChatSettings,
-                  })
-                }
-              />
-            </Flex>
-            <ChatSettings chatId={chatId} />
-          </VStack>
+          <Slide style={{ zIndex: 10, width: "100%" }} direction="left" in={state.setChatSettings}>
+            <VStack
+              w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "35%" }}
+              h="100vh"
+              top={0}
+              left={0}
+              transition="0.34s"
+              zIndex={11}
+              bg={from_bg}
+              color="white"
+              p={0}
+            >
+              <Flex ml="2rem" align="center" pos="relative" w="95%" m="1rem" px="1rem">
+                <CloseButton
+                  size={"lg"}
+                  className={cx(css`
+                    width: 3rem;
+                    height: 3rem;
+                    cursor: pointer;
+                    right: 0;
+                    margin-top: 2.5rem;
+                    color:${color};
+                    position: absolute;
+                    background:${color},
+                    z-index: 9999;
+                  `)}
+                  onClick={() =>
+                    dispatch({
+                      type: "SET_CHAT_SETTINGS",
+                      payload: !state.setChatSettings,
+                    })
+                  }
+                />
+              </Flex>
+              <ChatSettings chatId={chatId} />
+            </VStack>
+          </Slide>
 
           {chatRooms.map((item, index) => {
             return <ActiveChats key={index} {...item} chatId={chatId} />;

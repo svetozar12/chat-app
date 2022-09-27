@@ -1,14 +1,16 @@
 import React from "react";
-import { css, cx } from "@emotion/css";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import Loading from "../../Loading";
-import { Button, GridItem, HStack, SimpleGrid, Spacer } from "@chakra-ui/react";
-import { useAuth } from "../../../utils/SessionProvider";
+import { Button, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 
 const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = React.useState(false);
+  const {
+    colors: { chat_bg, form_button },
+  } = useThemeColors();
 
   return (
     <HStack w="full" h="100vh" alignItems="center" justifyContent="center" zIndex="200" pos="absolute" top={0}>
@@ -17,14 +19,14 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
         placeItems="center"
         columns={2}
         w={{ base: "95%", md: "80%", lg: "50%", xl: "30%" }}
-        bg="white"
+        bg={chat_bg}
         h="40%"
         p={4}
         boxShadow="default"
       >
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Button
-            colorScheme="blue"
+            colorScheme={form_button}
             w="full"
             isLoading={isLoading}
             spinner={<Loading />}
@@ -37,7 +39,7 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
         </GridItem>
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Link href="/" passHref>
-            <Button colorScheme="blue" w="full" onClick={() => dispatch({ type: "QUICK_LOGIN", payload: false })}>
+            <Button colorScheme={form_button} w="full" onClick={() => dispatch({ type: "QUICK_LOGIN", payload: false })}>
               Sign up
             </Button>
           </Link>

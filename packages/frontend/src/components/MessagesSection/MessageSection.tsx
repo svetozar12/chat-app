@@ -12,7 +12,7 @@ import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { useAuth } from "../../utils/SessionProvider";
 import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
-import { Box } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 
 interface IContacts {
   _id: string;
@@ -23,11 +23,12 @@ interface IContacts {
 
 interface IMessageSection {
   contacts: IContacts[];
+  // eslint-disable-next-line no-unused-vars
   FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => {
+const MessageSection = ({ contacts, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
@@ -42,7 +43,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
 
       const members_in_chat = Message;
 
-      let data: any[] = [];
+      const data: any[] = [];
       // if (res_inviter) data = [...res_inviter];
       // if (res) data = [...data, ...res];
       const usersArr: string[] = [];
@@ -74,7 +75,8 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
   }, [route.asPath]);
 
   return (
-    <section
+    <HStack
+      w="71%"
       title="message_section"
       className={cx(
         "flex",
@@ -82,6 +84,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
           width: 71%;
           @media (max-width: 1008px) {
             width: 100%;
+            margin-top: 0 !important;
           },`,
       )}
     >
@@ -103,7 +106,7 @@ const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => 
           {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
         </Box>
       </div>
-    </section>
+    </HStack>
   );
 };
 

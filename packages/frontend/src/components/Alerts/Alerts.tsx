@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { css } from "@emotion/css";
-import { IoClose } from "react-icons/io5";
 import { Alert, AlertIcon, AlertTitle, CloseButton, HStack } from "@chakra-ui/react";
 const Alerts = () => {
   const dispatch = useDispatch();
@@ -20,7 +18,7 @@ const Alerts = () => {
   }, []);
 
   return (
-    <HStack pos="absolute" w="60%" transform="translate(50%,-600%)" top="50%" right="50%">
+    <HStack pos="absolute" zIndex="102" w="60%" transform="translate(50%,-600%)" top="50%" right="50%">
       <Alert status={state.good ? "success" : "error"}>
         <AlertIcon />
         <AlertTitle textAlign="center" w="full">

@@ -1,6 +1,6 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDots } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 // components
 import MessageSettings from "./MessageSettings";
@@ -9,8 +9,8 @@ import { IchatInstance } from "../ChatRoom";
 import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-import { Heading, HStack } from "@chakra-ui/react";
-
+import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
+import useThemeColors from "hooks/useThemeColors";
 interface IRenderChat {
   id: string;
   sender: string;
@@ -88,7 +88,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
     e.target.style.height = `${target.scrollHeight}px`;
     e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
     if (e.key === "Enter") {
-      let messageArr: IchatInstance[] = [];
+      const messageArr: IchatInstance[] = [];
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
@@ -112,6 +112,10 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
     }
   }, []);
 
+  const {
+    colors: { color, from_bg, chat_message_bg_color },
+  } = useThemeColors();
+
   return (
     <HStack
       gap={5}
@@ -132,11 +136,11 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       )}
     >
       <Heading
+        color={color}
         fontSize="lg"
         className={css`
           justify-content: ${name === sender ? "flex-end" : "flex-start"};
           font-size: 15px;
-          color: var(--main-black);
         `}
       >
         {name === sender ? null : sender}
@@ -167,27 +171,33 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
             >
               {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="-60px" />}
               <div onClick={ToggleSettings} className={optionsPadding}>
-                <BsThreeDotsVertical className={dothStyle} />
+                <IconButton
+                  borderRadius="full"
+                  aria-label=""
+                  boxShadow="box-shadow: 0 0 5px main_black"
+                  icon={
+                    <BsThreeDots
+                      className={css`
+                        width: 2rem;
+                        height: 2rem;
+                        color: ${color};
+                      `}
+                    />
+                  }
+                ></IconButton>
               </div>
             </div>
           )}
-          <div
+          <VStack
+            wordBreak="break-word"
+            textAlign="center"
+            minW="10rem"
+            minH="3rem"
+            overflow="hidden"
+            color={name === sender ? "main_white" : color}
+            bg={name === sender ? chat_message_bg_color : from_bg}
             ref={inputRef}
             title={time_stamp.toString()}
-            className={cx(
-              css`
-                word-wrap: break-word;
-                text-align: center;
-                min-width: 10rem;
-                min-height: 3rem;
-                border-radius: 4px;
-                max-width: 40%;
-                overflow: hidden;
-                word-wrap: break-word;
-                background: ${name === sender ? "var(--main-blue)" : "var(--me-chat-buble)"};
-              `,
-              "flex",
-            )}
           >
             {editing ? (
               <textarea
@@ -195,7 +205,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                   resize: none;
                   border: none;
                   text-align: center;
-                  color: var(--main-white);
+                  color: main_white;
                   background: rgba(0, 0, 0, 0.3);
                   border-radius: 4px;
                   width: ${width}px;
@@ -221,7 +231,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                 {message}
               </span>
             )}
-          </div>
+          </VStack>
           {name !== sender && (
             <div
               className={css`
@@ -230,7 +240,20 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
             >
               {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="250px" />}
               <div onClick={ToggleSettings} className={optionsPadding}>
-                <BsThreeDotsVertical className={dothStyle} />
+                <IconButton
+                  borderRadius="full"
+                  aria-label=""
+                  boxShadow="box-shadow: 0 0 5px main_black"
+                  icon={
+                    <BsThreeDots
+                      className={css`
+                        width: 2rem;
+                        height: 2rem;
+                        color: ${color};
+                      `}
+                    />
+                  }
+                ></IconButton>
               </div>
             </div>
           )}

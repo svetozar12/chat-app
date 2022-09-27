@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { GrClose } from "react-icons/gr";
 import PendingChats from "./PendingChats/PendingChats";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { Iinvites } from "../../pages/[acc]";
-import { css, cx } from "@emotion/css";
-import { Center, CloseButton, Divider, Flex, Heading, HStack, Spacer, VStack } from "@chakra-ui/react";
+import { css } from "@emotion/css";
+import { CloseButton, Divider, Flex, Heading, ScaleFade, useColorModeValue } from "@chakra-ui/react";
+import s from "./Notifications_Modal.module.css";
 
 interface INotifications {
   contacts: Iinvites[];
@@ -14,22 +14,25 @@ interface INotifications {
 function Notifications({ contacts }: INotifications) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
 
+  const from_bg = useColorModeValue("white", "#1c2330");
   const dispatch = useDispatch();
+
+  const modalVariant = {
+    hide: {
+      scale: 0.8,
+    },
+    show: {
+      y: "-50%",
+      x: "-50%",
+      scale: 1,
+    },
+    exit: {
+      scale: 0.8,
+    },
+  };
+
   return (
-    <VStack
-      pos="fixed"
-      zIndex={999}
-      justifyContent="flex-start"
-      w={{ base: "70%", md: "50%", lg: "40%", xl: "30%" }}
-      bg="white"
-      boxShadow="default"
-      borderRadius="xl"
-      p={2}
-      overflow="hidden"
-      top="50%"
-      left="50%"
-      transform="translate(-50%,-50%)"
-    >
+    <ScaleFade style={{ background: from_bg }} className={s.box} variants={modalVariant} initial="hide" animate="show" exit="exit">
       <Flex alignItems="center" h="5rem" justifyItems="center" justifyContent="center">
         <Heading m="1rem">Notifications</Heading>
       </Flex>
@@ -56,7 +59,7 @@ function Notifications({ contacts }: INotifications) {
       >
         {contacts.length <= 0 ? (
           <Heading p={5} size="md" className="flex">
-            You don't have invites !!!
+            You don&apos;t have invites !!!
           </Heading>
         ) : (
           contacts.map((item, index) => {
@@ -64,7 +67,7 @@ function Notifications({ contacts }: INotifications) {
           })
         )}
       </div>
-    </VStack>
+    </ScaleFade>
   );
 }
 

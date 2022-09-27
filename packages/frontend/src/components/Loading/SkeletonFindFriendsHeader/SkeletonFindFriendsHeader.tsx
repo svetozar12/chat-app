@@ -8,7 +8,7 @@ const SkeletonFindFriendsHeader = () => {
       <SkeletonCircle size="3.5rem" />
       <Spacer />
       {arr.map((el, index) => {
-        return <SkeletonCircle size="3.5rem" />;
+        return <SkeletonCircle key={index} size="3.5rem" />;
       })}
     </HStack>
   );

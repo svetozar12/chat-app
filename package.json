@@ -15,10 +15,12 @@
     "format": "lerna run format --no-sort --stream",
     "dev:kill": "yarn kill && yarn dev",
     "mash-up": "yarn format && yarn lint && yarn build",
-    "mash-up:test": "yarn format && yarn lint && yarn build && yarn test"
+    "mash-up:test": "yarn format && yarn lint && yarn build && yarn test",
+    "db:up": "lerna run db:up --stream"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^5.1.8",
+    "nx": "^14.4.3"
   },
   "engines": {
     "npm": "please-use-yarn",

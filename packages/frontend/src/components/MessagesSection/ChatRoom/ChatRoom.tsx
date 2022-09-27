@@ -16,7 +16,7 @@ import { useCookie } from "next-cookie";
 import api_helper from "services/graphql/api_helper";
 import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
 import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import { VStack } from "@chakra-ui/react";
+import { useColorModeValue, VStack } from "@chakra-ui/react";
 import { useAuth } from "utils/SessionProvider";
 
 interface IHome {
@@ -97,6 +97,8 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
     scrollToBottom();
   }, [messageState.messages]);
 
+  const chat_bg = useColorModeValue("main_white", "main_black");
+
   return (
     <VStack w="full" h="100vh">
       {setState.toggleCreateGroup && <ChatHeader />}
@@ -108,7 +110,7 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
           h="full"
           p="1rem"
           overflow="auto"
-          bg="main_white"
+          bg={chat_bg}
           ref={containerRef}
           onScroll={scrollHandler}
         >

@@ -5,11 +5,8 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { initialState } from "../../services/redux/reducer/setReducer/setReducer";
 import { initialState as saveInputState } from "../../services/redux/reducer/save_inputReducer/save_inputReducer";
-import MockedSocket from "socket.io-mock";
 import configureStore from "redux-mock-store";
-import Cookies from "universal-cookie";
 
-let socket = new MockedSocket();
 const mockStore = configureStore([]);
 const store = mockStore({
   setReducer: initialState,
@@ -23,8 +20,6 @@ jest.mock("next/router", () => ({
     };
   },
 }));
-
-const cookie: any = new Cookies({ name: "TestName" });
 
 const setupRender = () => {
   const component = render(

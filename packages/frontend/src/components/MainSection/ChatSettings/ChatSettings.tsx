@@ -9,8 +9,9 @@ import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { Heading, HStack, VStack } from "@chakra-ui/react";
+import { Flex, Heading, HStack, VStack } from "@chakra-ui/react";
 import s from "./ChatSettings.module.css";
+import useThemeColors from "hooks/useThemeColors";
 
 interface IChatSettings {
   chatId: string;
@@ -68,16 +69,21 @@ function ChatSettings({ chatId }: IChatSettings) {
       route.push(`/${redirect._id}`);
     }
   };
+
+  const {
+    colors: { color },
+  } = useThemeColors();
+
   return (
     <>
-      <VStack mt={5} gap={5} pos={"relative"} zIndex="-1" transition="ease" w="full" opacity={state.setChatSettings ? 1 : 0}>
-        <Heading w="70%" color="black" textAlign="center" whiteSpace="nowrap" fontSize={{ base: "4vw", md: "2vw" }}>
+      <VStack mt={5} gap={5} pos={"relative"} transition="ease" w="full" opacity={state.setChatSettings ? 1 : 0}>
+        <Heading w="70%" color={color} textAlign="center" whiteSpace="nowrap" fontSize={{ base: "4vw", md: "2vw" }}>
           Members in chat
         </Heading>
 
         {users.map((item, index) => {
           return (
-            <HStack alignItems="center" key={index}>
+            <HStack color={color} justify="center" alignItems="center" key={index}>
               <Heading>{item}</Heading>
               <AiOutlineUserDelete
                 onClick={() => {
@@ -130,14 +136,14 @@ function ChatSettings({ chatId }: IChatSettings) {
             >
               Add more users
             </h2>
-            <div className="flex">
+            <Flex>
               <AiOutlinePlusCircle
                 className={css`
                   width: 2rem;
                   height: 2rem;
                 `}
               />
-            </div>
+            </Flex>
           </div>
         )}
       </VStack>
