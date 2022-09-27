@@ -1,36 +1,44 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import Avatar from "components/Avatar";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import { BsThreeDots } from "react-icons/bs";
-import { css, cx } from "@emotion/css";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { useCookie } from "next-cookie";
-import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
-import useThemeColors from "hooks/useThemeColors";
+import React from 'react';
+import { useRouter } from 'next/router';
+import { connect } from 'react-redux';
+import { BsThreeDots } from 'react-icons/bs';
+import { css, cx } from '@emotion/css';
+import { useCookie } from 'next-cookie';
+import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
+import Avatar from '../../Avatar';
+import useThemeColors from '../../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleChatSettings, toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
+import { Chat } from '@chat-app/gql-server';
 
-interface IActiveChats {
-  _id: string;
-  members: string[];
+interface IActiveChats extends Chat {
   chatId: string;
+  toggle: IToggle;
+  ws: IWebSocket;
+  toggleCreateGroup: typeof toggleCreateGroup;
+  toggleChatSettings: typeof toggleChatSettings;
 }
 
-const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
+function ActiveChats(props: IActiveChats) {
+  const { _id, members, chatId, toggle, ws, toggleCreateGroup, toggleChatSettings } = props;
+  const [inviter, setInviter] = React.useState<string>('');
+  const {
+    base: {
+      default: { color, inverseColor },
+    },
+  } = useThemeColors();
   const router = useRouter();
-
-  const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-  const [inviter, setInviter] = React.useState<string>("");
   const cookie = useCookie();
 
-  const cookieName = cookie.get("name") as string;
-  const user1 = members[0];
-  const user2 = members[1];
+  const cookieName: string = cookie.get('name');
+  const user1 = members?.[0];
+  const user2 = members?.[1];
 
   const joinChat = () => {
-    authState.ws?.emit("join_chat", {
+    ws.ws?.emit('join_chat', {
       rooms: [cookieName, chatId],
     });
     router.push(`${_id}`);
@@ -38,25 +46,11 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
 
   React.useEffect(() => {
     joinChat();
-    const notMe: string[] = members.filter((element) => element !== cookieName);
+    const notMe = members?.filter((element) => element !== cookieName);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     setInviter(notMe[0]);
   }, []);
-
-  const dispatching = () => {
-    dispatch({
-      type: "TOGGLE_CREATE_GROUP",
-      payload: false,
-    });
-  };
-  const chatSettings = () => {
-    dispatch({
-      type: "SET_CHAT_SETTINGS",
-      payload: !state.setChatSettings,
-    });
-  };
-  const {
-    colors: { color },
-  } = useThemeColors();
 
   return (
     <HStack
@@ -67,11 +61,11 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
       whiteSpace="nowrap"
       transition="0.2s"
       borderRadius="2xl"
-      _hover={{ borderRadius: "15px", background: " rgba(122, 122, 122, 0.1)", transition: "0.2s" }}
+      _hover={{ borderRadius: '15px', background: ' rgba(122, 122, 122, 0.1)', transition: '0.2s' }}
       data-testid="chat"
       onClick={() => {
         joinChat();
-        dispatching();
+        toggleCreateGroup(false);
       }}
       className={cx({
         [css`
@@ -89,7 +83,7 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
         `}
       >
         <HStack>
-          <Avatar members={members} inviter={inviter} cookieName={cookieName} />
+          <Avatar members={members as string[]} />
           <VStack align="flex-start">
             <div
               className={css`
@@ -100,15 +94,15 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
             >
               {members.length > 2
                 ? members.map((element, index) => {
-                    if (index === 3) return;
+                    if (index === 3) return null;
                     return (
                       <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
                         {element}
-                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? "..." : ""}` : ","}
+                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? '...' : ''}` : ','}
                       </Heading>
                     );
                   })
-                : (members.length === 1 && (
+                : (members && members.length === 1 && (
                     <Heading color={color} size="md" m={0}>
                       {user1}
                     </Heading>
@@ -141,21 +135,33 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
           <IconButton
             borderRadius="full"
             aria-label=""
-            boxShadow="box-shadow: 0 0 5px main_black"
             icon={
               <BsThreeDots
                 className={css`
-                  width: 2rem;
-                  height: 2rem;
+                  border-radius: 50%;
+                  width: 2.5rem;
+                  height: 2.5rem;
                   color: ${color};
+                  box-shadow: 0px 0px 2px 0px ${color};
                 `}
-                onClick={chatSettings}
+                onClick={() => toggleChatSettings(!toggle.toggleChatSettings)}
               />
             }
-          ></IconButton>
+          />
         )}
       </div>
     </HStack>
   );
-};
-export default ActiveChats;
+}
+
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+  ws: state.ws,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
+  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveChats);

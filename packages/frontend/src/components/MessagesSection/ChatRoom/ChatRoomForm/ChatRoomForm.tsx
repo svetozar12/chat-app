@@ -1,15 +1,18 @@
-import React, { useEffect } from "react";
-import { MdSend } from "react-icons/md";
-import { css } from "@emotion/css";
-import { useCookie } from "next-cookie";
-import api_helper from "services/graphql/api_helper";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { getAuth } from "utils/authMethods";
-import generic from "utils/generic";
-import { useDispatch, useSelector } from "react-redux";
-import { Center, Flex, HStack, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
-import s from "./ChatRoomForm.module.css";
-import useThemeColors from "hooks/useThemeColors";
+import React, { useEffect } from 'react';
+import { MdSend } from 'react-icons/md';
+import { css } from '@emotion/css';
+import { useCookie } from 'next-cookie';
+import { Center, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
+import sdk from 'services/sdk';
+import { getAuth } from 'utils/authMethods';
+import generic from 'utils/generic';
+import s from './ChatRoomForm.module.css';
+import useThemeColors from 'hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { connect } from 'react-redux';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { bindActionCreators, Dispatch } from 'redux';
+import { setMessagesAction } from 'services/redux/reducer/messages/actions';
 
 interface IPropsState {
   name?: string;
@@ -19,45 +22,48 @@ interface IPropsState {
 
 interface IChatRoomForm {
   chatId: string;
+  ws: IWebSocket;
+  setMessages: typeof setMessagesAction;
 }
 
-const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
+function ChatRoomForm(props: IChatRoomForm) {
+  const { chatId, ws, setMessages } = props;
   const cookie = useCookie();
-  const dispatch = useDispatch();
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const [state, setState] = React.useState<IPropsState>({
-    name: cookie.get("name"),
-    message: "",
-    time: "",
+    name: cookie.get('name'),
+    message: '',
+    time: '',
   });
   const inputTextArea = React.useRef<any>(null);
 
   useEffect(() => {
     inputTextArea.current.focus();
-
-    authState.ws?.on("message", ({ messages }) => {
-      console.log(messages, "fr message");
-
+    ws.ws?.on('message', ({ messages }) => {
       const [message] = messages;
-      dispatch({ type: "MESSAGES", payload: message });
+      setMessages(message);
     });
-  }, [authState.ws]);
+  }, [ws.ws]);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    inputTextArea.current.style.height = "20px";
+    inputTextArea.current.style.height = '10px';
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
-    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
+    inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 40)}px`;
 
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
-    inputTextArea.current.style.height = "20px";
+    inputTextArea.current.style.height = '20px';
   }, []);
 
   const saveMessage = async () => {
     try {
-      await api_helper.message.create(cookie.get("id"), chatId, state.message as string, cookie.get("token"));
+      if (state.message)
+        await sdk.message.create({
+          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          chat_id: chatId,
+          message: state.message,
+        });
       return true;
     } catch (error) {
       return false;
@@ -70,22 +76,24 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
       await getAuth();
       const { name, message, time } = state;
       await saveMessage();
-      authState.ws?.emit("message", {
+      ws.ws?.emit('message', {
         chatInstance: chatId,
-        sender: cookie.get("name"),
+        sender: cookie.get('name'),
         message,
         time,
       });
-      setState({ name, message: "" });
+      setState({ name, message: '' });
     }
   };
 
   const {
-    colors: { chat_bg, from_bg, color },
+    base: {
+      default: { inverseColor, color, offColor },
+    },
   } = useThemeColors();
 
   return (
-    <Flex mt="-0.5rem !important" w="full" h="10vh" bg={chat_bg} alignItems="center" justifyContent="center">
+    <Flex mt="0.5rem !important" w="full" h="10vh" bg={inverseColor} alignItems="center" justifyContent="center">
       <HStack
         cursor="text"
         pos="relative"
@@ -93,7 +101,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
         w="70%"
         h="auto"
         p="2"
-        bg={from_bg}
+        bg={offColor}
         overflowWrap="break-word"
         borderRadius="3xl"
         align="center"
@@ -101,8 +109,8 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
       >
         <textarea
           rows={40}
-          style={{ height: "3rem", margin: "0 0.5rem" }}
-          className={s.MessageInput}
+          style={{ margin: '0 0.5rem' }}
+          className={s.messageInput}
           ref={inputTextArea}
           name="message"
           onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
@@ -110,8 +118,8 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
           value={state.message}
         />
         {!state.message && (
-          <Text pos="absolute" color={color}>
-            placeholder
+          <Text pos="absolute" color={offColor}>
+            Aa
           </Text>
         )}
         <Spacer />
@@ -119,7 +127,7 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
           mr={12}
           w="2rem"
           h="2rem"
-          _hover={{ bg: "rgba(0,0,0,0.1)", borderRadius: "full" }}
+          _hover={{ bg: 'rgba(0,0,0,0.1)', borderRadius: 'full' }}
           justifyItems="center"
           alignItems="center"
           cursor="pointer"
@@ -140,6 +148,14 @@ const ChatRoomForm = ({ chatId }: IChatRoomForm) => {
       </HStack>
     </Flex>
   );
-};
+}
 
-export default React.memo(ChatRoomForm);
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setMessages: bindActionCreators(setMessagesAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(ChatRoomForm));

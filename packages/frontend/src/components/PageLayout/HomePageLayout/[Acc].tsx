@@ -1,35 +1,43 @@
-import { Box, HStack } from "@chakra-ui/react";
-import HamburgerMenu from "components/HamburgerMenu";
-import MainSection from "components/MainSection";
-import MessagesSection from "components/MessagesSection";
-import { useCookie } from "next-cookie";
-import { Ichats, Iinvites } from "pages/[acc]";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import api_helper from "services/graphql/api_helper";
-import ISave_inputState from "services/redux/reducer/save_inputReducer/state";
-import { io, Socket } from "socket.io-client";
+import { Box, HStack } from '@chakra-ui/react';
+import { useCookie } from 'next-cookie';
+import React, { useEffect, useState } from 'react';
+import { io, Socket } from 'socket.io-client';
+import PropTypes from 'prop-types';
+import HamburgerMenu from '../../../services/chat-ui/HamburgerMenu';
+import MainSection from '../../MainSection';
+import MessagesSection from '../../MessagesSection';
+import sdk from 'services/sdk';
+import { connect } from 'react-redux';
+import { setWSConnection } from 'services/redux/reducer/websocket/actions';
+import { bindActionCreators, Dispatch } from 'redux';
+import { STATE } from 'services/redux/reducer';
+import { setNotifNumber } from 'services/redux/reducer/invites/actions';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import IInvite from 'services/redux/reducer/invites/state';
+import { Chat, Invite, Status } from '@chat-app/gql-server';
+import Sidebar from 'components/Sidebar/Sidebar';
 
 interface IApp {
-  props: Record<string, any>;
+  chatRoom: string;
+  cookie: string;
+  invite: IInvite;
+  setWSConnection: typeof setWSConnection;
+  setNotifNumber: typeof setNotifNumber;
+  toggleQuickLogin: typeof toggleQuickLogin;
 }
 
-const App = ({ props }: IApp) => {
-  const cookie = useCookie(props.cookie);
-  const user_id: string = cookie.get("id");
-  const token: string = cookie.get("token");
-  const chat_id = props.chatRoom.split("/")[0];
+function App(props: IApp) {
+  const { chatRoom, cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin } = props;
+  const cookie = useCookie(cookieProp);
+  const chatId = chatRoom.split('/')[0];
   // hooks
-  const dispatch = useDispatch();
-  const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
-  const [contacts, setContacts] = useState<Iinvites[]>([]);
-  const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const [chatRooms, setChatRooms] = useState<Chat[]>([]);
+  const [contacts, setContacts] = useState<Invite[]>([]);
 
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await api_helper.chatroom.getAll(user_id, token);
-
+      const res = await sdk.chatroom.getAll({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
       setChatRooms(res);
       return true;
     } catch (error) {
@@ -37,16 +45,19 @@ const App = ({ props }: IApp) => {
     }
   };
 
-  const FetchInvites = async (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => {
+  const FetchInvites = async (status: Status, InvitesOrigin: 'reciever' | 'inviter') => {
     try {
       setContacts([]);
-      if (InvitesOrigin === "reciever") {
-        const res = await api_helper.invite.getAllByReciever({ user_id, token, status });
+      if (InvitesOrigin === 'reciever') {
+        const res = await sdk.invite.getAllByReciever({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, status });
         if (res instanceof Error) throw Error(res.message);
         setContacts(res);
         return res;
       }
-      const res = await api_helper.invite.getAllByInviter({ user_id, token, status: "accepted" });
+      const res = await sdk.invite.getAllByInviter({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        status: Status.Recieved,
+      });
       if (res instanceof Error) throw Error(res.message);
       setContacts(res);
       return res;
@@ -59,61 +70,80 @@ const App = ({ props }: IApp) => {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await api_helper.invite.getAllByReciever({ user_id, token, status: "recieved" });
+      const res = await sdk.invite.getAllByReciever({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        status: Status.Recieved,
+      });
       if (res instanceof Error) throw Error(res.message);
-      dispatch({ type: "NOTIFICATION_NUMBER", payload: res.length });
-
+      setNotifNumber(res.length);
       setContacts(res);
-      if (res.status === "declined") return false;
+      res.forEach((item) => {
+        if (item.status === Status.Declined) return false;
+      });
       return true;
     } catch (error) {
-      dispatch({ type: "NOTIFICATION_NUMBER", payload: 0 });
+      setNotifNumber(0);
       return false;
     }
   };
 
   useEffect(() => {
-    dispatch({ type: "QUICK_LOGIN", payload: false });
+    toggleQuickLogin(false);
     checkNotification();
-  }, [inputState.notification_number]);
+  }, [invite.notificationNumber]);
 
   useEffect(() => {
     getChatRoom();
     checkNotification();
-    cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname);
-    const socketConnect: Socket = io("http://localhost:4000", {
-      transports: ["websocket"],
+    cookie.set('REDIRECT_URL_CALLBACK', window.location.pathname);
+    const socketConnect: Socket = io('http://localhost:4000', {
+      transports: ['websocket'],
     });
 
-    socketConnect.on("friend_request", () => {
+    socketConnect.on('friend_request', () => {
       getChatRoom();
       checkNotification();
     });
 
-    socketConnect.on("send_friend_request", () => {
-      console.log("recieved");
-
+    socketConnect.on('send_friend_request', () => {
+      console.log('recieved');
       checkNotification();
     });
-
-    dispatch({ type: "SET_WS_CONNECTED", payload: socketConnect });
+    setWSConnection(socketConnect);
     return () => {
       socketConnect.disconnect();
-      dispatch({ type: "SET_WS_CONNECTED", payload: null });
+      setWSConnection(null);
     };
   }, []);
 
   return (
-    <HStack w="full" h="100vh">
+    <HStack w="full" h="100vh" ml="-0.5rem !important">
       <HStack h="100vh" pos="absolute">
         <Box w="95%" h="100vh" zIndex={100} pos="relative">
-          <HamburgerMenu />
+          <HamburgerMenu toggleHamburger={() => console.log('toggle hamburger menu')} />
         </Box>
       </HStack>
-      <MainSection chatId={chat_id} chatRooms={chatRooms} />
-      <MessagesSection chatId={chat_id} contacts={contacts} FetchInvites={FetchInvites} />
+      <MainSection chatId={chatId} chatRooms={chatRooms} />
+      <MessagesSection chatId={chatId} contacts={contacts} FetchInvites={FetchInvites} />
     </HStack>
   );
+}
+
+App.prototype = {
+  props: {
+    cookie: PropTypes.string.isRequired,
+    chatRoom: PropTypes.string.isRequired,
+  },
 };
 
-export default App;
+const mapStateToProps = (state: STATE) => ({
+  invite: state.invite,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setWSConnection: bindActionCreators(setWSConnection, dispatch),
+  setNotifNumber: bindActionCreators(setNotifNumber, dispatch),
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

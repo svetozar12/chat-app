@@ -1,12 +1,22 @@
-import { Schema, model } from "mongoose";
-import * as bcrypt from "bcrypt";
-export interface UserSchema {
+import { Schema, model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
+
+export enum Gender {
+  MALE = 'Male',
+  FEMALE = 'Female',
+  OTHERS = 'Others',
+}
+
+export interface User {
   username: string;
   password: string;
   email: string;
-  gender: string;
+  gender: Gender;
   userAvatar: string;
-  isValidPassword: any;
+}
+
+interface UserSchema extends User {
+  isValidPassword: (password: string) => Promise<boolean>;
 }
 
 const UserSchema = new Schema<UserSchema>({
@@ -28,15 +38,15 @@ const UserSchema = new Schema<UserSchema>({
   },
   gender: {
     type: String,
-    enum: ["Male", "Female", "Others"],
-    default: "Others",
+    enum: Gender,
+    default: Gender.OTHERS,
     required: true,
   },
   userAvatar: String,
 });
 
 // this is middleware which is executed before mongoose method save to hash the password
-UserSchema.pre("save", async function (next) {
+UserSchema.pre('save', async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(this.password, salt);
@@ -56,5 +66,5 @@ UserSchema.methods.isValidPassword = async function (password: string) {
   }
 };
 
-const User = model<UserSchema>("User", UserSchema);
+const User = model<UserSchema>('User', UserSchema);
 export default User;

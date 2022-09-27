@@ -1,7 +1,7 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
-const useFetch = (api_helper) => {
+const useFetch = (apiHelper: any) => {
   const [data, setData] = React.useState(null);
   const [error, setError] = React.useState(null);
   const dispatch = useDispatch();
@@ -9,15 +9,15 @@ const useFetch = (api_helper) => {
   const fetchData = async () => {
     try {
       dispatch({
-        type: "SET_IS_LOADING",
+        type: 'SET_IS_LOADING',
         payload: false,
       });
-      const res = await api_helper();
+      const res = await apiHelper();
       setData(res);
       return res;
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
-        type: "SET_IS_LOADING",
+        type: 'SET_IS_LOADING',
         payload: false,
       });
       setError(error);
@@ -27,7 +27,7 @@ const useFetch = (api_helper) => {
 
   React.useEffect(() => {
     fetchData();
-  }, [api_helper]);
+  }, [apiHelper]);
 
   return { data, error };
 };

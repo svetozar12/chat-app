@@ -1,22 +1,22 @@
-import api_helper from "../services/graphql/api_helper";
+import { Chat } from '@chat-app/gql-server';
+import sdk from 'services/sdk';
 
 const timeStamp = (createdAt: string) => {
-  if (typeof createdAt != "string") return "Bad input";
-  let date = new Date(createdAt);
-  let currentHours: string | number = date.getHours().toString();
-  let currentMinutes: string | number = date.getMinutes().toString();
-  const time_stamp = `${currentHours.padStart(2, "0")}:${currentMinutes.padStart(2, "0")}`;
+  if (typeof createdAt !== 'string') return 'Bad input';
+  const date = new Date(createdAt);
+  const currentHours: string | number = date.getHours().toString();
+  const currentMinutes: string | number = date.getMinutes().toString();
+  const TimeStamp = `${currentHours.padStart(2, '0')}:${currentMinutes.padStart(2, '0')}`;
 
-  return time_stamp;
+  return TimeStamp;
 };
 
-const getFirstChat = async (user_id: string, token: string) => {
+const getFirstChat = async (userId: string, token: string): Promise<any> => {
   try {
-    const res = await api_helper.chatroom.getAll(user_id, token);
-    if (res.length <= 0) return;
-    const [{ _id: getAllChats }] = res;
+    const res = await sdk.chatroom.getAll({ auth: { userId, AccessToken: token } });
+    if (res.length <= 0) return false;
 
-    return getAllChats;
+    return res[0]._id;
   } catch (error) {
     console.error(error);
 
@@ -24,8 +24,8 @@ const getFirstChat = async (user_id: string, token: string) => {
   }
 };
 
-const handleSubmitOnEnter = (e: any, SubmitFunc) => {
-  if (e.key === "Enter") {
+const handleSubmitOnEnter = (e: any, SubmitFunc: (e: any) => void) => {
+  if (e.key === 'Enter') {
     SubmitFunc(e);
   }
 };

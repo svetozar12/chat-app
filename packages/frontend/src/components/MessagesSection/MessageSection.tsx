@@ -1,51 +1,43 @@
-import React from "react";
-import { css, cx } from "@emotion/css";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import React from 'react';
+import { css, cx } from '@emotion/css';
+import { connect } from 'react-redux';
+import { useRouter } from 'next/router';
 // components
-import ChatRoom from "./ChatRoom";
-import Notifications_Modal from "../Notifications_Modal";
-import AddUsers_Modal from "../AddUsers_Modal";
+import { useCookie } from 'next-cookie';
+import { Box, HStack } from '@chakra-ui/react';
+import ChatRoom from './ChatRoom';
+import Notifications_Modal from '../Notifications_Modal';
+import AddUsers_Modal from '../AddUsers_Modal';
 // services
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import api_helper from "../../services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { useAuth } from "../../utils/SessionProvider";
-import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
-import { Box, HStack } from "@chakra-ui/react";
-
-interface IContacts {
-  _id: string;
-  inviter: string;
-  reciever: string;
-  status: string;
-}
+import { useAuth } from 'utils/SessionProvider';
+import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
+import { STATE } from 'services/redux/reducer';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import sdk from 'services/sdk';
+import { Status, Invite } from '@chat-app/gql-server';
 
 interface IMessageSection {
-  contacts: IContacts[];
-  // eslint-disable-next-line no-unused-vars
-  FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
+  contacts: Invite[];
+  FetchInvites: (status: Status, InvitesOrigin: 'reciever' | 'inviter') => Promise<any>;
   chatId: string;
+  toggle: IToggle;
 }
 
-const MessageSection = ({ contacts, chatId }: IMessageSection) => {
+function MessageSection(props: IMessageSection) {
+  const { contacts, chatId, toggle, FetchInvites } = props;
   const [users, setUsers] = React.useState<any[]>([]);
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
   const route = useRouter();
   const { user } = useAuth();
   const getMembersSuggestions = async () => {
     try {
-      // const res = await FetchInvites("accepted", "inviter");
-      // const res_inviter = await FetchInvites("accepted", "inviter");
-      const res_chat = await api_helper.chatroom.getById(window.location.pathname, cookie.get("id"), cookie.get("token"));
-      const [{ members: Message }] = res_chat;
-
-      const members_in_chat = Message;
+      const res = await sdk.chatroom.getById({
+        chat_id: window.location.pathname,
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+      });
+      const { members } = res;
 
       const data: any[] = [];
-      // if (res_inviter) data = [...res_inviter];
-      // if (res) data = [...data, ...res];
       const usersArr: string[] = [];
       data.forEach((element) => {
         usersArr.push(element.inviter);
@@ -57,7 +49,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
           uniqueUsers.push(element);
         }
       });
-      uniqueUsers = uniqueUsers.filter((element) => !members_in_chat.includes(element));
+      uniqueUsers = uniqueUsers.filter((element) => !members.includes(element));
       setUsers(uniqueUsers);
       return true;
     } catch (error) {
@@ -71,7 +63,6 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
 
   React.useEffect(() => {
     getMembersSuggestions();
-    return;
   }, [route.asPath]);
 
   return (
@@ -79,7 +70,7 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
       w="71%"
       title="message_section"
       className={cx(
-        "flex",
+        'flex',
         css`
           width: 71%;
           @media (max-width: 1008px) {
@@ -97,17 +88,29 @@ const MessageSection = ({ contacts, chatId }: IMessageSection) => {
             alignitems: center;
             padding: 0;
           `,
-          "container",
+          'container',
         )}
       >
         <Box w="full" h="100vh">
-          {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} />}
-          {state.setModalInvite && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
+          {toggle.toggleFriendReqModal && contacts && <Notifications_Modal contacts={contacts} />}
+          {toggle.toggleInvideModal && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
           {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
         </Box>
       </div>
     </HStack>
   );
-};
+}
 
-export default MessageSection;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+//   incrementPagination: bindActionCreators(incrementPaginationNumberAction, dispatch),
+//   setMessages: bindActionCreators(setMessagesAction, dispatch),
+//   setPaginatedMessages: bindActionCreators(setPaginatedMessagesAction, dispatch),
+//   toggleIsMatch: bindActionCreators(toggleIsMatch, dispatch),
+//   resetMessages: bindActionCreators(resetMessagesAction, dispatch),
+// });
+
+export default connect(mapStateToProps)(MessageSection);

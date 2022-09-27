@@ -4,14 +4,16 @@
     "packages/*"
   ],
   "scripts": {
+    "bootstrap": "lerna bootstrap && lerna link",
+    "prebuild": "yarn bootstrap",
+    "postbuild": "yarn bootstrap",
     "build": "lerna run build --stream",
-    "kill": "npx kill-port 3000 4000 4001 4002 -y",
-    "dev": "yarn kill && lerna run dev --no-sort --stream",
-    "dev:backend": "yarn kill && lerna run dev:backend --no-sort --stream",
+    "kill": "taskkill /f /im node.exe",
+    "dev": "lerna run dev --stream",
+    "dev:backend": "lerna run dev --scope {@chat-app/backend,@chat-app/gql-server} --stream",
     "test": "lerna run test --no-sort --stream",
     "lint": "lerna run lint --no-sort --stream",
     "lint-css": "lerna run lint-css --no-sort --stream",
-    "diff": "lerna diff",
     "format": "lerna run format --no-sort --stream",
     "dev:kill": "yarn kill && yarn dev",
     "mash-up": "yarn format && yarn lint && yarn build",
@@ -20,7 +22,7 @@
   },
   "devDependencies": {
     "lerna": "^5.1.8",
-    "nx": "^14.4.3"
+    "nx": "14.4.3"
   },
   "engines": {
     "npm": "please-use-yarn",

@@ -1,1 +1,1 @@
-export { default } from "./PendingChats";
+export { default } from './PendingChats';

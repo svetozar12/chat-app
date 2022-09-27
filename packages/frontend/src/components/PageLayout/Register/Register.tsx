@@ -1,63 +1,81 @@
-import RegisterForm from "components/RegisterForm";
-import { useCookie } from "next-cookie";
-import { useRouter } from "next/router";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import api_helper from "services/graphql/api_helper";
-import ISave_inputState from "services/redux/reducer/save_inputReducer/state";
-import generic from "utils/generic";
+import { useCookie } from 'next-cookie';
+import { useRouter } from 'next/router';
+import React from 'react';
+import RegisterForm from 'components/RegisterForm';
+import generic from 'utils/generic';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { togglelIsLoading, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
+import { connect } from 'react-redux';
+import IInputs from 'services/redux/reducer/inputs/state';
+import sdk from 'services/sdk';
 
-const RegisterLayout = () => {
+interface IRegisterLayout {
+  inputs: IInputs;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  setInputEmail: typeof setInputEmail;
+  setInputGender: typeof setInputGender;
+  setInputPassword: typeof setInputPassword;
+  setInputUsername: typeof setInputUsername;
+  togglelIsLoading: typeof togglelIsLoading;
+}
+
+function RegisterLayout(props: IRegisterLayout) {
+  const { inputs, setInputEmail, setInputGender, setInputPassword, togglelIsLoading, setInputUsername, toggleQuickLogin } = props;
   const router = useRouter();
   const cookie = useCookie();
-  const dispatch = useDispatch();
-  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
 
   const quickLogin = async () => {
     try {
-      const res = await api_helper.auth.login(state.input_username, state.input_password);
+      const res = await sdk.auth.login({ username: inputs.input_username, password: inputs.input_password });
       if (res) {
-        dispatch({ type: "QUICK_LOGIN", payload: true });
-        dispatch({
-          type: "SET_IS_LOADING",
-          payload: true,
-        });
-
+        toggleQuickLogin(true);
+        togglelIsLoading(true);
+        const { userId, AccessToken, RefreshToken } = res;
         const cookies = [
-          { name: "name", value: state.input_username, options: { sameSite: "strict", path: "/" } },
-          { name: "id", value: res.user_id, options: { sameSite: "strict", path: "/" } },
-          { name: "token", value: res.Access_token, options: { sameSite: "strict", path: "/" } },
-          { name: "refresh_token", value: res.Refresh_token, options: { sameSite: "strict", path: "/" } },
+          { name: 'name', value: inputs.input_username, options: { sameSite: 'strict', path: '/' } },
+          { name: 'id', value: userId, options: { sameSite: 'strict', path: '/' } },
+          { name: 'token', value: AccessToken, options: { sameSite: 'strict', path: '/' } },
+          { name: 'refresh_token', loginUser: RefreshToken, options: { sameSite: 'strict', path: '/' } },
         ];
 
         cookies.forEach((element) => {
           const { name, value, options } = element;
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          cookie.set(name, value, { ...options });
+          cookie.set(name, value, { ...(options as any) });
         });
 
-        const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
+        const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
 
         router.push(`/${chatInstance}`);
-        dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
-        dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
-        dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
-        dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+        setInputUsername('');
+        setInputEmail('');
+        setInputPassword('');
+        setInputGender('');
         return true;
       }
       return false;
     } catch (error) {
-      dispatch({
-        type: "SET_IS_LOADING",
-        payload: false,
-      });
+      togglelIsLoading(false);
       console.log(error);
       return false;
     }
   };
 
   return <RegisterForm quickLogin={quickLogin} />;
-};
+}
 
-export default RegisterLayout;
+const mapStateToProps = (state: STATE) => ({
+  inputs: state.inputs,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  setInputUsername: bindActionCreators(setInputUsername, dispatch),
+  setInputPassword: bindActionCreators(setInputPassword, dispatch),
+  setInputEmail: bindActionCreators(setInputEmail, dispatch),
+  setInputGender: bindActionCreators(setInputGender, dispatch),
+  togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterLayout);

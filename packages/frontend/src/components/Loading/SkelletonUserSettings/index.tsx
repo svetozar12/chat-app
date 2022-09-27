@@ -1,1 +1,1 @@
-export { default } from "./SkelletonUserSettings";
+export { default } from './SkelletonUserSettings';

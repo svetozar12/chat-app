@@ -1,8 +1,8 @@
-import Joi = require("joi");
-import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../utils/custom-error.model";
+import Joi from 'joi';
+import { Request, Response, NextFunction } from 'express';
+import { CustomError } from '../utils/custom-error.model';
 
-const Validator = (validator: Joi.ObjectSchema<any>, property: "body" | "params" | "query") => {
+const Validator = (validator: Joi.ObjectSchema<any>, property: 'body' | 'params' | 'query') => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await validator.validateAsync(req[property]);
@@ -12,7 +12,7 @@ const Validator = (validator: Joi.ObjectSchema<any>, property: "body" | "params"
       if (error.isJoi) {
         return next(new CustomError(error.message, 422));
       }
-      next(CustomError.badRequest("Something went wrong"));
+      next(CustomError.badRequest('Something went wrong'));
     }
   };
 };

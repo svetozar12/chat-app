@@ -1,34 +1,47 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { css } from "@emotion/css";
-import { useCookie } from "next-cookie";
+import React from 'react';
+import { connect } from 'react-redux';
+import { css } from '@emotion/css';
+import { bindActionCreators, Dispatch } from 'redux';
+import { Skeleton, VStack, FormControl } from '@chakra-ui/react';
+import { useCookie } from 'next-cookie';
 // services
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import api_helper from "services/graphql/api_helper";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { getAuth } from "utils/authMethods";
-import { useAuth } from "utils/SessionProvider";
+import { setReciever } from 'services/redux/reducer/invites/actions';
+import { getAuth } from 'utils/authMethods';
+import { useAuth } from 'utils/SessionProvider';
+import { STATE } from 'services/redux/reducer';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import IInvite from 'services/redux/reducer/invites/state';
+import sdk from 'services/sdk';
 // components
-import FindFriendsHeader from "./FindFriendsHeader";
-import SkeletonFindFriendsHeader from "components/Loading/SkeletonFindFriendsHeader";
-import FindFriendsSearch from "./FindFriendsSearch";
-import { Skeleton, VStack, FormControl } from "@chakra-ui/react";
+import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
+import FindFriendsHeader from './FindFriendsHeader';
+import FindFriendsSearch from './FindFriendsSearch';
 
-function FindFriends() {
-  const dispatch = useDispatch();
+interface IFindFriends {
+  ws: IWebSocket;
+  invite: IInvite;
+  setReciever: typeof setReciever;
+}
+
+function FindFriends(props: IFindFriends) {
+  const { ws, invite, setReciever } = props;
 
   const cookie = useCookie();
   const { user } = useAuth();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
-      authState.ws?.emit("send_friend_request", {
-        inviter: res.inviter,
-        reciever: res.reciever,
+      const res = await sdk.invite.create({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        reciever: invite.reciever,
+      });
+
+      const { reciever, inviter } = res;
+
+      ws.ws?.emit('send_friend_request', {
+        inviter,
+        reciever,
       });
 
       return true;
@@ -40,9 +53,9 @@ function FindFriends() {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGElement>) => {
     e.preventDefault();
-    if (state.reciever) {
+    if (invite.reciever) {
       await sendInvite();
-      dispatch({ type: "SET_RECIEVER", payload: "" });
+      setReciever('');
     }
   };
 
@@ -65,4 +78,13 @@ function FindFriends() {
   );
 }
 
-export default React.memo(FindFriends);
+const mapStateToProps = (state: STATE) => ({
+  ws: state.ws,
+  invite: state.invite,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setReciever: bindActionCreators(setReciever, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(FindFriends));

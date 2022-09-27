@@ -1,59 +1,75 @@
-import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable react/prop-types */
+import { connect } from 'react-redux';
 // services
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from "@chakra-ui/react";
-import React from "react";
-import DefaultLink from "../DefaultLink";
-import RadioCard from "../RadioCards/RadioCards";
-import api_helper from "../../services/graphql/api_helper";
-import { useFormik } from "formik";
-import { RegisterSchema } from "../../utils/validation";
+import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from '@chakra-ui/react';
+import React from 'react';
+import { useFormik } from 'formik';
+import DefaultLink from '../../services/chat-ui/DefaultLink';
+import RadioCard from '../../services/chat-ui/RadioCards/RadioCards';
+import { RegisterSchema } from '../../utils/validation';
 // components
-import QuickLogin_Modal from "./QuickLogin_Modal";
-import FormWrapper from "../FormWrapper";
-import useThemeColors from "hooks/useThemeColors";
+import QuickLogin_Modal from './QuickLogin_Modal';
+import FormWrapper from 'components/FormWrapper';
+import useThemeColors from '../../hooks/useThemeColors';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import { bindActionCreators, Dispatch } from 'redux';
+import { STATE } from 'services/redux/reducer';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
+import sdk from 'services/sdk';
+import { Gender } from '@chat-app/gql-server';
+import { setRegisterError } from 'services/redux/reducer/alert/actions';
 
 interface IRegisterForm {
-  // eslint-disable-next-line no-unused-vars
   quickLogin: () => Promise<boolean>;
+  toggle: IToggle;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  setInputEmail: typeof setInputEmail;
+  setInputGender: typeof setInputGender;
+  setInputPassword: typeof setInputPassword;
+  setInputUsername: typeof setInputUsername;
+  setRegisterError: typeof setRegisterError;
 }
 
-function RegisterForm({ quickLogin }: IRegisterForm) {
-  const dispatch = useDispatch();
-  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
-
+function RegisterForm(props: IRegisterForm) {
+  const {
+    base: {
+      button: { color: btnColor },
+      default: { color },
+    },
+  } = useThemeColors();
+  const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername, setRegisterError } =
+    props;
   interface IValues {
     username: string;
     email: string;
     password: string;
-    gender: "male" | "female";
+    gender: Gender;
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    const register = await api_helper.user.create(username, email, password, gender);
-    dispatch({ type: "SAVE_INPUT_USERNAME", payload: username });
-    dispatch({ type: "SAVE_INPUT_PASSWORD", payload: password });
-    dispatch({ type: "SAVE_INPUT_EMAIL", payload: email });
-    dispatch({ type: "SAVE_INPUT_GENDER", payload: gender });
-    if (await register) dispatch({ type: "QUICK_LOGIN", payload: true });
+    const register = await sdk.user.create({ user: { username, email, password, gender } });
+    setInputUsername(username);
+    setInputEmail(email);
+    setInputPassword(password);
+    setInputGender(gender);
+    if (register instanceof Error) setRegisterError(register.message);
+    if (register) toggleQuickLogin(false);
     else {
-      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
-      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
-      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
-      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+      setInputUsername('');
+      setInputEmail('');
+      setInputPassword('');
+      setInputGender('');
     }
   };
 
-  const handleGenderChange = (value) => {
-    dispatch({
-      type: "SAVE_INPUT_GENDER",
-      payload: value,
-    });
+  const handleGenderChange = (value: any) => {
+    setInputGender(value);
   };
 
   const { getRootProps, getRadioProps } = useRadioGroup({
-    name: "gender",
-    defaultValue: "Male",
+    name: 'gender',
+    defaultValue: 'Male',
     onChange: handleGenderChange,
   });
 
@@ -62,51 +78,57 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
   } = useThemeColors();
 
   const group = getRootProps();
-  const genderOptions = ["Male", "Female"];
-  const renderInputs = [
+  const genderOptions = ['Male', 'Female'];
+  interface IRenderInputs {
+    label: string;
+    props: {
+      type: string;
+      name: 'username' | 'password' | 'email';
+      placeholder: string;
+      boxShadow: string;
+      _placeholder: any;
+    };
+  }
+  const renderInputs: IRenderInputs[] = [
     {
-      label: "Username",
+      label: 'Username',
       props: {
-        type: "text",
-        name: "username",
-        bg: input_bg,
-        borderColor: chat_border_color,
-        placeholder: "username ...",
+        type: 'text',
+        name: 'username',
+        placeholder: 'username ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
+        _placeholder: { color, opacity: 0.5 },
       },
     },
     {
-      label: "Password",
+      label: 'Password',
       props: {
-        type: "password",
-        bg: input_bg,
-        borderColor: chat_border_color,
-        name: "password",
-        placeholder: "password ...",
+        type: 'password',
+        name: 'password',
+        placeholder: 'password ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
+        _placeholder: { color, opacity: 0.5 },
       },
     },
     {
-      label: "Email",
+      label: 'Email',
       props: {
-        type: "email",
-        borderColor: chat_border_color,
-        bg: input_bg,
-        name: "email",
-        placeholder: "email ...",
+        type: 'email',
+        name: 'email',
+        placeholder: 'email ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
+        _placeholder: { color, opacity: 0.5 },
       },
     },
   ];
 
   const formik = useFormik({
-    initialValues: { username: "", password: "", email: "", gender: "Male" },
+    initialValues: { username: '', password: '', email: '', gender: Gender.Male },
     validationSchema: RegisterSchema,
     onSubmit: (values: IValues) => {
       handleSubmit(values);
     },
   });
-
-  const {
-    colors: { form_button },
-  } = useThemeColors();
 
   return (
     <>
@@ -114,8 +136,11 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
         <>
           {renderInputs.map((element, index) => {
             const { props } = element;
+            const { name } = props;
+            const isInvalid = Boolean(formik.errors[name] && formik.touched[name]);
+
             return (
-              <FormControl isInvalid={formik.errors[props.name] && formik.touched[props.name]} key={index}>
+              <FormControl isInvalid={isInvalid} key={index}>
                 <FormLabel>{element.label}</FormLabel>
                 <Input {...formik.getFieldProps(props.name)} variant="FormInput" {...props} />
                 {formik.errors[props.name] && (
@@ -135,22 +160,35 @@ function RegisterForm({ quickLogin }: IRegisterForm) {
               const radio = getRadioProps({ value });
               return (
                 <RadioCard {...formik.getFieldProps(value)} key={value} {...radio}>
-                  {value}
+                  {value as any}
                 </RadioCard>
               );
             })}
           </HStack>
         </Flex>
         <Flex w="full" alignItems="center" justifyContent="center" gap={5} flexDir="column">
-          <Button colorScheme={form_button} w="60%" type="submit">
+          <Button colorScheme={btnColor} w="60%" type="submit">
             Register
           </Button>
           <DefaultLink href="/" text="Already have an account?" />
         </Flex>
       </FormWrapper>
-      {state.loginPrompt && <QuickLogin_Modal quickLogin={quickLogin} />}
+      {toggle.toggleQuickLogin && <QuickLogin_Modal quickLogin={quickLogin} />}
     </>
   );
 }
 
-export default RegisterForm;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  setInputUsername: bindActionCreators(setInputUsername, dispatch),
+  setInputPassword: bindActionCreators(setInputPassword, dispatch),
+  setInputEmail: bindActionCreators(setInputEmail, dispatch),
+  setInputGender: bindActionCreators(setInputGender, dispatch),
+  setRegisterError: bindActionCreators(setRegisterError, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

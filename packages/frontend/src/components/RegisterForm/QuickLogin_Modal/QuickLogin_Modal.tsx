@@ -1,12 +1,18 @@
-import React from "react";
-import Link from "next/link";
-import { useDispatch } from "react-redux";
-import Loading from "../../Loading";
-import { Button, GridItem, HStack, SimpleGrid } from "@chakra-ui/react";
-import useThemeColors from "hooks/useThemeColors";
+import React from 'react';
+import Link from 'next/link';
+import { Button, GridItem, HStack, SimpleGrid } from '@chakra-ui/react';
+import Loading from '../../Loading';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 
-const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }) => {
-  const dispatch = useDispatch();
+interface IQuickLoginModal {
+  toggleQuickLogin: typeof toggleQuickLogin;
+  quickLogin: () => Promise<boolean>;
+}
+
+function QuickLoginModal(props: IQuickLoginModal) {
+  const { toggleQuickLogin, quickLogin } = props;
   const [isLoading, setIsLoading] = React.useState(false);
   const {
     colors: { chat_bg, form_button },
@@ -18,8 +24,8 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
         gap={4}
         placeItems="center"
         columns={2}
-        w={{ base: "95%", md: "80%", lg: "50%", xl: "30%" }}
-        bg={chat_bg}
+        w={{ base: '95%', md: '80%', lg: '50%', xl: '30%' }}
+        bg="white"
         h="40%"
         p={4}
         boxShadow="default"
@@ -39,7 +45,7 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
         </GridItem>
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Link href="/" passHref>
-            <Button colorScheme={form_button} w="full" onClick={() => dispatch({ type: "QUICK_LOGIN", payload: false })}>
+            <Button colorScheme="blue" w="full" onClick={() => toggleQuickLogin(false)}>
               Sign up
             </Button>
           </Link>
@@ -47,6 +53,10 @@ const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => Promise<boolean> }
       </SimpleGrid>
     </HStack>
   );
-};
+}
 
-export default QuickLogin_Modal;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+});
+
+export default connect(null, mapDispatchToProps)(QuickLoginModal);

@@ -1,0 +1,15 @@
+import { AuthBase } from '../../../constants';
+import sdk from '../../../utils/sdk';
+import { Status } from '../../../utils/sdk/types/common';
+
+export interface IupdateInvite extends AuthBase {
+  invite_id: string;
+  status: Status;
+}
+
+const updateInvite = async (_: unknown, args: IupdateInvite) => {
+  const res = await sdk.invite.update(args.auth, args.invite_id, args.status);
+  return res;
+};
+
+export default updateInvite;

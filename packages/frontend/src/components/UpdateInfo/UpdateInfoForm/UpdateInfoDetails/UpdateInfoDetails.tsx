@@ -1,20 +1,20 @@
-import { Flex, FormLabel, VStack } from "@chakra-ui/react";
-import React from "react";
-import Single_avatar from "../../../Avatar/Single_avatar";
-import { GrEdit } from "react-icons/gr";
+import { Flex, FormLabel, VStack } from '@chakra-ui/react';
+import React from 'react';
+import { GrEdit } from 'react-icons/gr';
+import { SingleAvatar } from 'services/chat-ui';
 
 interface IUpdateInfoDetails {
   image: string;
 }
 
-const UpdateInfoDetails = ({ image }: IUpdateInfoDetails) => {
+function UpdateInfoDetails({ image }: IUpdateInfoDetails) {
   return (
     <>
-      <FormLabel textAlign={{ base: "start", lg: "center" }} fontWeight="bold" fontSize="xl" mt={1}>
+      <FormLabel textAlign={{ base: 'start', lg: 'center' }} fontWeight="bold" fontSize="xl" mt={1}>
         Profile Avatar
       </FormLabel>
-      <VStack align={{ base: "flex-start", lg: "center" }} pos="relative">
-        <Single_avatar width="10rem" height="10rem" preview={image} />
+      <VStack align={{ base: 'flex-start', lg: 'center' }} pos="relative">
+        <SingleAvatar width="10rem" height="10rem" preview={image} />
         <FormLabel
           w="10rem"
           h="10rem"
@@ -26,7 +26,7 @@ const UpdateInfoDetails = ({ image }: IUpdateInfoDetails) => {
           transition="0.2s"
           borderRadius="100%"
           border="none"
-          _hover={{ opacity: "0.8" }}
+          _hover={{ opacity: '0.8' }}
           htmlFor="file"
         >
           <Flex
@@ -51,6 +51,6 @@ const UpdateInfoDetails = ({ image }: IUpdateInfoDetails) => {
       </VStack>
     </>
   );
-};
+}
 
 export default UpdateInfoDetails;

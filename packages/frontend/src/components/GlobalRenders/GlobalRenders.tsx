@@ -1,70 +1,68 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { IAuthState } from "services/redux/reducer/authReducer/state";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import { Global } from "@emotion/react";
-import Head from "next/dist/shared/lib/head";
-import { css } from "@emotion/css";
+import React from 'react';
+import { connect } from 'react-redux';
+import Head from 'next/dist/shared/lib/head';
+import { css } from '@emotion/css';
+import { useColorMode } from '@chakra-ui/react';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleFriendRequestAction, toggleInviteModal, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 
-const App = () => {
-  const state = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+interface IGlobals {
+  toggle: IToggle;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  toggleFriendRequestModal: typeof toggleFriendRequestAction;
+  toggleInviteModal: typeof toggleInviteModal;
+}
 
-  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const dispatch = useDispatch();
-
+function Globals(props: IGlobals) {
+  const { toggle, toggleQuickLogin, toggleFriendRequestModal, toggleInviteModal } = props;
   const closeModals = () => {
-    dispatch({
-      type: "SET_FRIEND_REQUEST",
-      payload: false,
-    });
-    dispatch({
-      type: "SET_MODAL_INVITE",
-      payload: false,
-    });
-    dispatch({
-      type: "QUICK_LOGIN",
-      payload: false,
-    });
+    toggleFriendRequestModal(false);
+    toggleInviteModal(false);
+    toggleQuickLogin(false);
   };
 
-  const [ColorMode, setColorMode] = useState("light");
-  React.useEffect(() => {
-    setColorMode(localStorage.getItem("chakra-ui-color-mode") || "");
-  }, []);
-  const Blur: boolean = setState.setFriendRequest || setState.setModalInvite || state.loginPrompt;
+  const { colorMode } = useColorMode();
 
+  const Blur: boolean = toggle.toggleFriendReqModal || toggle.toggleInvideModal || toggle.toggleQuickLogin;
+  // styles={{
+  //         body: {
+  //           margin: 0,
+  //           padding: 0,
+  //           userSelect: Blur ? 'none' : 'select',
+  //         },
+  //         a: {
+  //           textDecoration: 'none',
+  //         },
+  //       }}
   return (
     <>
-      <Global
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        styles={{
-          body: {
-            margin: 0,
-            padding: 0,
-            userSelect: Blur ? "none" : "select",
-          },
-          a: {
-            textDecoration: "none",
-          },
-        }}
-      />
       <Head>
         <title>Chat What</title>
       </Head>
       <div
         className={css`
           position: absolute;
-          z-index: ${Blur ? "101" : "-1"};
+          z-index: ${Blur ? '101' : '-1'};
           width: 100vw;
           height: 100vh;
           opacity: 0.7;
-          background: ${ColorMode === "dark" ? "#1A202C" : "#FCFCFC"};
         `}
         onClick={closeModals}
-      ></div>
+      />
     </>
   );
-};
+}
 
-export default App;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  toggleInviteModal: bindActionCreators(toggleInviteModal, dispatch),
+  toggleFriendRequestModal: bindActionCreators(toggleFriendRequestAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Globals);

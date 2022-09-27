@@ -1,1 +1,1 @@
-export { default } from "./GlobalRenders";
+export { default } from './GlobalRenders';

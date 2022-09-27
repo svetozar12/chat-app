@@ -1,30 +1,24 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "isolatedModules": true,
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": true,
-    "removeComments": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "sourceMap": true,
+    "types": ["jest", "cypress"],
     "lib": ["dom", "dom.iterable", "esnext"],
-    "baseUrl": "src",
+    "downlevelIteration": true,
+    "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "useUnknownInCatchVariables": false,
     "noEmit": true,
     "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
+    "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": "./src"
   },
-  "include": ["./**/*.ts", "src"],
-  "exclude": ["node_modules/**/*", "cypress"],
-  "lib": ["es2017", "dom", "ES6", "es2015.core"]
+  "exclude": ["node_modules", "__mocks__"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

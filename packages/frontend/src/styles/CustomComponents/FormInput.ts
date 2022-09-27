@@ -1,11 +1,11 @@
 const Input = {
   FormInput: {
     field: {
-      border: "2px solid",
-      borderColor: "transparent",
+      border: '2px solid',
+      borderColor: 'transparent',
       _focus: {
-        borderColor: "#3182CE",
-        boxShadow: "none",
+        borderColor: '#3182CE',
+        boxShadow: 'none',
       },
     },
   },

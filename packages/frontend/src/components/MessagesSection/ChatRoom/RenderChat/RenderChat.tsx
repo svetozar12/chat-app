@@ -1,22 +1,31 @@
-import { css, cx } from "@emotion/css";
-import React from "react";
-import { BsThreeDots } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
+import { css, cx } from '@emotion/css';
+import React from 'react';
+import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
+import { connect } from 'react-redux';
 // components
-import MessageSettings from "./MessageSettings";
-import { IchatInstance } from "../ChatRoom";
+import { useCookie } from 'next-cookie';
+import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
+import MessageSettings from './MessageSettings';
+import { IchatInstance } from '../ChatRoom';
 // services
-import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
-import api_helper from "services/graphql/api_helper";
-import { useCookie } from "next-cookie";
-import { Heading, HStack, IconButton, VStack } from "@chakra-ui/react";
-import useThemeColors from "hooks/useThemeColors";
+import useThemeColors from 'hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { resetMessagesAction, setMessagesAction } from 'services/redux/reducer/messages/actions';
+import { IMessage } from 'services/redux/reducer/messages/state';
+import { toggleMessageSettings } from 'services/redux/reducer/toggles/actions';
+import sdk from 'services/sdk';
+
 interface IRenderChat {
   id: string;
   sender: string;
-  time_stamp: string | number;
-  message: string;
+  timeStamp: string | number;
+  recievedMessage: string;
   chatId: string;
+  message: IMessage;
+  toggleMessageSettings: typeof toggleMessageSettings;
+  setMessages: typeof setMessagesAction;
+  resetMessages: typeof resetMessagesAction;
 }
 
 const mineMessages = css`
@@ -33,22 +42,20 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
-  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const dispatch = useDispatch();
+function RenderChat(props: IRenderChat) {
+  const { id, sender, timeStamp, recievedMessage, message, toggleMessageSettings, resetMessages, setMessages } = props;
+  const { show, messages } = message;
   const cookie = useCookie();
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
-  const [editedMessage, setEditedMessage] = React.useState("");
+  const [editedMessage, setEditedMessage] = React.useState('');
   const [width, setWidth] = React.useState(112);
   const [height, setHeight] = React.useState(48);
   const inputRef = React.useRef<HTMLDivElement>(null);
 
-  const name = cookie.get("name");
-  const checkSettingsOpt = () => {
-    return styleBool || settings;
-  };
+  const name = cookie.get('name');
+  const checkSettingsOpt = () => styleBool || settings;
 
   const optionsPadding = cx(
     css`
@@ -60,7 +67,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       cursor: pointer;
       color: var(--main-black);
       display: flex;
-      visibility: ${checkSettingsOpt() ? "vissible" : "hidden"};
+      visibility: ${checkSettingsOpt() ? 'vissible' : 'hidden'};
       &:hover {
         background: rgba(0, 0, 0, 0.1);
       }
@@ -68,7 +75,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         border: 1px solid rgba(0, 0, 255, 0.2);
       }
     `,
-    "flex",
+    'flex',
   );
 
   const dothStyle = css`
@@ -77,43 +84,50 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   `;
 
   const ToggleSettings = () => {
-    dispatch({ type: "SHOW_SETTINGS", payload: !messageState.show });
-    if (settings === true) setEditing(false);
-    setSettings(!messageState.show);
+    toggleMessageSettings(!show);
+    if (settings) setEditing(false);
+    setSettings(!show);
   };
 
   const handleEdit = async (e: any) => {
     const target = e.target as HTMLTextAreaElement;
-    e.target.style.height = "15px";
+    e.target.style.height = '15px';
     e.target.style.height = `${target.scrollHeight}px`;
     e.target.style.height = `${Math.min(e.target.scrollHeight, 60)}px`;
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       const messageArr: IchatInstance[] = [];
-      for (const obj of messageState.messages) {
+      for (const obj of messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          await api_helper.message.update(cookie.get("id"), id, editedMessage, cookie.get("token"));
-          dispatch({ type: "RESET_MESSAGES" });
+          await sdk.message.update({
+            auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+            message_id: id,
+            newMessage: editedMessage,
+          });
+          resetMessages();
         }
         messageArr.push(obj);
       }
       messageArr.forEach((element) => {
-        dispatch({ type: "MESSAGES", payload: element });
+        setMessages(element);
       });
       setEditing(false);
     }
   };
 
   React.useEffect(() => {
-    setEditedMessage(message);
-    if (inputRef.current) {
+    setEditedMessage(recievedMessage);
+    if (inputRef.current != null) {
       setWidth(inputRef.current.offsetWidth);
       setHeight(inputRef.current.offsetHeight);
     }
   }, []);
 
   const {
-    colors: { color, from_bg, chat_message_bg_color },
+    base: {
+      default: { color },
+      message: { background: msgBg },
+    },
   } = useThemeColors();
 
   return (
@@ -126,9 +140,9 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         setStyleBool(true);
       }}
       className={cx(
-        "flex",
+        'flex',
         css`
-          justify-content: ${name === sender ? "flex-end" : "flex-start"};
+          justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
           width: 100%;
         `,
         { [mineMessages]: name === sender },
@@ -139,7 +153,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
         color={color}
         fontSize="lg"
         className={css`
-          justify-content: ${name === sender ? "flex-end" : "flex-start"};
+          justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
           font-size: 15px;
         `}
       >
@@ -147,19 +161,19 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
       </Heading>
       <div
         className={cx(
-          "flex",
+          'flex',
           css`
             width: 100%;
-            justify-content: ${name === sender ? "flex-end" : "flex-start"};
+            justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
           `,
         )}
       >
         <div
           className={cx(
-            "flex",
+            'flex',
             css`
               width: 100%;
-              justify-content: ${name === sender ? "flex-end" : "flex-start"};
+              justify-content: ${name === sender ? 'flex-end' : 'flex-start'};
             `,
           )}
         >
@@ -184,7 +198,7 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                       `}
                     />
                   }
-                ></IconButton>
+                />
               </div>
             </div>
           )}
@@ -194,10 +208,10 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
             minW="10rem"
             minH="3rem"
             overflow="hidden"
-            color={name === sender ? "main_white" : color}
-            bg={name === sender ? chat_message_bg_color : from_bg}
+            color="white"
+            bg={name === sender ? 'dark_blue' : msgBg}
             ref={inputRef}
-            title={time_stamp.toString()}
+            title={timeStamp.toString()}
           >
             {editing ? (
               <textarea
@@ -215,52 +229,37 @@ const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
                 autoFocus
                 autoCorrect="off"
                 onChange={(e) => setEditedMessage(e.target.value)}
-                onKeyDown={(e) => handleEdit(e)}
+                onKeyDown={async (e) => await handleEdit(e)}
               >
                 {editedMessage}
               </textarea>
             ) : (
               <span
                 className={cx(
-                  "flex",
+                  'flex',
                   css`
                     padding: 1rem 0.5rem;
                   `,
                 )}
               >
-                {message}
+                {recievedMessage}
               </span>
             )}
           </VStack>
-          {name !== sender && (
-            <div
-              className={css`
-                position: relative;
-              `}
-            >
-              {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="250px" />}
-              <div onClick={ToggleSettings} className={optionsPadding}>
-                <IconButton
-                  borderRadius="full"
-                  aria-label=""
-                  boxShadow="box-shadow: 0 0 5px main_black"
-                  icon={
-                    <BsThreeDots
-                      className={css`
-                        width: 2rem;
-                        height: 2rem;
-                        color: ${color};
-                      `}
-                    />
-                  }
-                ></IconButton>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </HStack>
   );
-};
+}
 
-export default React.memo(RenderChat);
+const mapStateToProps = (state: STATE) => ({
+  message: state.messages,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setMessages: bindActionCreators(setMessagesAction, dispatch),
+  resetMessages: bindActionCreators(resetMessagesAction, dispatch),
+  toggleMessageSettings: bindActionCreators(toggleMessageSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(RenderChat));

@@ -1,81 +1,85 @@
-import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from "@chakra-ui/react";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ISave_inputState from "../../../services/redux/reducer/save_inputReducer/state";
-import UpdateInfoDetails from "./UpdateInfoDetails";
+import { FormLabel, GridItem, HStack, Input, Radio, RadioGroup, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react';
+import useThemeColors from 'hooks/useThemeColors';
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { STATE } from 'services/redux/reducer';
+import { setInputEmail, setInputFile, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
+import IInputs from 'services/redux/reducer/inputs/state';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import UpdateInfoDetails from './UpdateInfoDetails';
 
 interface IUpdateInfoForm {
   image: string;
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  inputs: IInputs;
+  toggleQuickLogin: typeof toggleQuickLogin;
+  setInputEmail: typeof setInputEmail;
+  setInputGender: typeof setInputGender;
+  setInputPassword: typeof setInputPassword;
+  setInputUsername: typeof setInputUsername;
 }
 
-const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
-  const dispatch = useDispatch();
-  const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
-  const color = useColorModeValue("black", "white");
+function UpdateInfoForm(props: IUpdateInfoForm) {
+  const { image, inputs, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername } = props;
+  const {
+    base: {
+      default: { color },
+    },
+  } = useThemeColors();
 
   const InputsLayout = [
     {
-      label: "Username",
+      label: 'Username',
       labelProps: {
-        htmlFor: "username",
-        fontWeight: "bold",
-        fontSize: "xl",
+        htmlFor: 'username',
+        fontWeight: 'bold',
+        fontSize: 'xl',
       },
       props: {
-        variant: "FormInput",
-        type: "username",
-        value: state.input_username,
-        id: "username",
-        w: "full",
-        onChange: (e) =>
-          dispatch({
-            type: "SAVE_INPUT_USERNAME",
-            payload: e.target.value,
-          }),
-        color: color,
+        variant: 'FormInput',
+        type: 'username',
+        value: inputs.input_username,
+        id: 'username',
+        w: 'full',
+        onChange: (e: any) => setInputUsername(e.target.value),
+        color,
+        boxShadow: `0px 0px 2px 0px ${color}`,
       },
     },
     {
-      label: "Email",
+      label: 'Email',
       labelProps: {
-        htmlFor: "email",
-        fontWeight: "bold",
-        fontSize: "xl",
+        htmlFor: 'email',
+        fontWeight: 'bold',
+        fontSize: 'xl',
       },
       props: {
-        variant: "FormInput",
-        type: "email",
-        value: state.input_email,
-        w: "full",
-        id: "email",
-        color: color,
-        onChange: (e) =>
-          dispatch({
-            type: "SAVE_INPUT_EMAIL",
-            payload: e.target.value,
-          }),
+        variant: 'FormInput',
+        type: 'email',
+        value: inputs.input_email,
+        w: 'full',
+        id: 'email',
+        color,
+        boxShadow: `0px 0px 2px 0px ${color}`,
+        onChange: (e: any) => setInputEmail(e.target.value),
       },
     },
     {
-      label: "",
+      label: '',
       labelProps: {
-        htmlFor: "file",
-        fontWeight: "bold",
-        fontSize: "xl",
+        htmlFor: 'file',
+        fontWeight: 'bold',
+        fontSize: 'xl',
       },
       props: {
-        variant: "FormInput",
-        type: "file",
-        id: "file",
-        color: color,
-        value: state.input_file,
-        display: "none",
-        onChange: (e) =>
-          dispatch({
-            type: "SAVE_INPUT_FILE",
-            payload: e.target.value,
-          }),
+        variant: 'FormInput',
+        type: 'file',
+        id: 'file',
+        color,
+        value: inputs.input_file,
+        display: 'none',
+        onChange: (e: any) => setInputFile(e.target.value),
       },
     },
   ];
@@ -96,7 +100,7 @@ const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
         <FormLabel fontWeight="bold" fontSize="xl" mt={1}>
           Gender
         </FormLabel>
-        <RadioGroup defaultValue="2">
+        <RadioGroup>
           <HStack spacing={5} direction="row">
             <Radio colorScheme="blue" value="1">
               Male
@@ -113,6 +117,19 @@ const UpdateInfoForm = ({ image }: IUpdateInfoForm) => {
       </GridItem>
     </SimpleGrid>
   );
-};
+}
 
-export default UpdateInfoForm;
+const mapStateToProps = (state: STATE) => ({
+  inputs: state.inputs,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  setInputUsername: bindActionCreators(setInputUsername, dispatch),
+  setInputPassword: bindActionCreators(setInputPassword, dispatch),
+  setInputEmail: bindActionCreators(setInputEmail, dispatch),
+  setInputGender: bindActionCreators(setInputGender, dispatch),
+  setInputFile: bindActionCreators(setInputFile, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateInfoForm);

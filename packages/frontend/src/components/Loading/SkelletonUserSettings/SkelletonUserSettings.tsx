@@ -1,7 +1,7 @@
-import React from "react";
-import { Box, Button, Divider, Flex, GridItem, Heading, HStack, SimpleGrid, Skeleton, SkeletonCircle, VStack } from "@chakra-ui/react";
+import React from 'react';
+import { Box, Button, Divider, Flex, GridItem, Heading, HStack, SimpleGrid, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react';
 
-const SkelletonUserSettings = () => {
+function SkelletonUserSettings() {
   return (
     <VStack w="100vw" h="100vh" display="flex" direction="column" justifyContent="center" alignItems="center">
       <Flex w="95%" align="flex-start">
@@ -10,23 +10,23 @@ const SkelletonUserSettings = () => {
         </Skeleton>
       </Flex>
       <Divider w="95%" size="4rem" borderBottomWidth="1px" borderColor="#c9d1d9" />
-      <VStack w="95%" h={{ base: "80vh", lg: "50vh" }}>
-        <SimpleGrid my={5} gap={5} columns={2} h={{ base: "80vh", lg: "50vh" }} w="full">
+      <VStack w="95%" h={{ base: '80vh', lg: '50vh' }}>
+        <SimpleGrid my={5} gap={5} columns={2} h={{ base: '80vh', lg: '50vh' }} w="full">
           <GridItem w="full" h="full" colSpan={{ base: 2, lg: 1 }}>
-            <Skeleton w="20%" h="1rem" mt={5}></Skeleton>
-            <Skeleton w="full" h="3rem" mt={2}></Skeleton>
-            <Skeleton w="20%" h="1rem" mt={5}></Skeleton>
-            <Skeleton w="full" h="3rem" mt={2}></Skeleton>
-            <Skeleton w="20%" h="1rem" mt={5}></Skeleton>
-            <Skeleton w="30%" h="3rem" mt={2}></Skeleton>
-            <Flex mt={5} gap={5}></Flex>
+            <Skeleton w="20%" h="1rem" mt={5} />
+            <Skeleton w="full" h="3rem" mt={2} />
+            <Skeleton w="20%" h="1rem" mt={5} />
+            <Skeleton w="full" h="3rem" mt={2} />
+            <Skeleton w="20%" h="1rem" mt={5} />
+            <Skeleton w="30%" h="3rem" mt={2} />
+            <Flex mt={5} gap={5} />
           </GridItem>
 
           <GridItem
             w="full"
             h="full"
             colSpan={{ base: 2, lg: 1 }}
-            justifyContent={{ base: "flex-start", lg: "center" }}
+            justifyContent={{ base: 'flex-start', lg: 'center' }}
             alignItems="center"
             display="flex"
           >
@@ -49,6 +49,6 @@ const SkelletonUserSettings = () => {
       </VStack>
     </VStack>
   );
-};
+}
 
 export default SkelletonUserSettings;

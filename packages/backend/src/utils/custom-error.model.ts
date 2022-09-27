@@ -1,25 +1,22 @@
 export class CustomError {
-  ErrorMsg: string;
+  Message: string;
   status: number;
-  additionalInfo!: any;
 
   /**
    * Creates a CustomError with status code , message and additionalInfo(optional)
-   * @param {string} ErrorMsg - The error message.
+   * @param {string} Message - The error message.
    * @param {number} status - The error status code.
-   * @param {any} additionalInfo - Aditional info about the error.
    */
-  constructor(ErrorMsg: string, status: number, additionalInfo: any = {}) {
-    this.ErrorMsg = ErrorMsg;
+  constructor(Message: string, status: number) {
+    this.Message = Message;
     this.status = status;
-    this.additionalInfo = additionalInfo;
   }
 
   /**
    * Create error with status 400 and add message.
    * @param {string} msg - The error message.
    */
-  static badRequest(msg: string) {
+  static badRequest(msg = 'Bad Request') {
     return new CustomError(msg, 400);
   }
 

@@ -1,26 +1,41 @@
-import { NextPage } from "next";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 // utils
-import timeStamp from "utils/timeStamp";
-import { constants } from "constants/index";
+import { connect } from 'react-redux';
+import { useCookie } from 'next-cookie';
+import { VStack } from '@chakra-ui/react';
+import timeStamp from '../../../utils/timeStamp';
 // components
-import RenderChat from "./RenderChat";
-import ChatHeader from "./ChatHeader";
-import ChatRoomForm from "./ChatRoomForm";
-import SkelletonUserMessages from "components/Loading/SkelletonUserMessages";
+import RenderChat from './RenderChat';
+import ChatHeader from './ChatHeader';
+import ChatRoomForm from './ChatRoomForm';
+import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // hooks
-import { useDispatch, useSelector } from "react-redux";
-import { useCookie } from "next-cookie";
 // services
-import api_helper from "services/graphql/api_helper";
-import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import { useColorModeValue, VStack } from "@chakra-ui/react";
-import { useAuth } from "utils/SessionProvider";
+import sdk from 'services/sdk';
+import { useAuth } from '../../../utils/SessionProvider';
+import useThemeColors from '../../../hooks/useThemeColors';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import {
+  incrementPaginationNumberAction,
+  resetMessagesAction,
+  setMessagesAction,
+  setPaginatedMessagesAction,
+} from 'services/redux/reducer/messages/actions';
+import { IMessage } from 'services/redux/reducer/messages/state';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleIsMatch } from 'services/redux/reducer/toggles/actions';
 
-interface IHome {
-  chatId: any;
+interface IChatRoom {
+  message: IMessage;
+  toggle: IToggle;
+  chatId: string;
+  incrementPagination: typeof incrementPaginationNumberAction;
+  setMessages: typeof setMessagesAction;
+  setPaginatedMessages: typeof setPaginatedMessagesAction;
+  resetMessages: typeof resetMessagesAction;
+  toggleIsMatch: typeof toggleIsMatch;
 }
 
 export interface IchatInstance {
@@ -30,24 +45,30 @@ export interface IchatInstance {
   createdAt: string;
 }
 
-const ChatRoom: NextPage<IHome> = ({ chatId }) => {
+function ChatRoom(props: IChatRoom) {
+  const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message, toggle } = props;
+  const { messagePageNumber, messages } = message;
   const route = useRouter();
-  const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
-  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const cookie = useCookie();
-
+  const {
+    base: {
+      default: { inverseColor },
+    },
+  } = useThemeColors();
   const user = useAuth();
-  const user_id = cookie.get("id") as string;
-  const token = cookie.get("token") as string;
-  const dispatch = useDispatch();
+  const userId: string = cookie.get('id');
+  const token: string = cookie.get('token');
   const containerRef = React.useRef<null | HTMLDivElement>(null);
 
   const getRecentMessages = async () => {
     try {
-      const res = await api_helper.message.getAll({ user_id, chat_id: chatId, token, query: { page_size: 10, page_number: 1 } });
-
-      res.forEach((element) => {
-        dispatch({ type: "MESSAGES", payload: element });
+      const res = await sdk.message.getAll({
+        auth: { userId, AccessToken: token },
+        chat_id: chatId,
+        query: { page_size: 10, page_number: 1 },
+      });
+      res.forEach((element: Record<string, any>) => {
+        setMessages(element);
       });
 
       return true;
@@ -57,29 +78,23 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   };
 
   useEffect(() => {
-    dispatch({ type: "SET_IS_MATCH", payload: false });
-    if (location.href === constants.HOST_URL + "/" + chatId) dispatch({ type: "SET_IS_MATCH", payload: true });
-    dispatch({ type: "RESET_MESSAGES" });
+    toggleIsMatch(false);
+    if (location.href === `${location.host}/${chatId}`) toggleIsMatch(true);
+    resetMessages();
     getRecentMessages();
   }, [route.asPath]);
 
   const scrollHandler = async (e: React.UIEvent<HTMLElement>) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
-        dispatch({
-          type: "INCREMENT_PAGE_NUMBER",
-          payload: setState.pageNumber,
-        });
-        const res = await api_helper.message.getAll({
-          user_id,
+        incrementPagination(messagePageNumber);
+        const res = await sdk.message.getAll({
+          auth: { userId, AccessToken: token },
           chat_id: chatId,
-          token,
-          query: { page_size: 10, page_number: setState.pageNumber },
+          query: { page_size: 10, page_number: messagePageNumber },
         });
-        const data = res.reversedArr;
-
-        data.forEach((element) => {
-          dispatch({ type: "PAGGINATION_MESSAGES", payload: element });
+        res.forEach((element: Record<string, any>) => {
+          setPaginatedMessages(element);
         });
       }
       return true;
@@ -95,30 +110,28 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
 
   React.useEffect(() => {
     scrollToBottom();
-  }, [messageState.messages]);
-
-  const chat_bg = useColorModeValue("main_white", "main_black");
+  }, [messages]);
 
   return (
     <VStack w="full" h="100vh">
-      {setState.toggleCreateGroup && <ChatHeader />}
+      {toggle.toggleCreateGroupModal && <ChatHeader />}
 
       {user ? (
         <VStack
           w="full"
-          mt={{ base: "2rem", lg: "-0.5rem !important" }}
+          mt={{ base: '2rem', lg: '-0.5rem !important' }}
           h="full"
           p="1rem"
           overflow="auto"
-          bg={chat_bg}
+          bg={inverseColor}
           ref={containerRef}
           onScroll={scrollHandler}
         >
-          {messageState.messages.map((item, index) => {
+          {messages.map((item, index) => {
             const { sender, message, createdAt } = item;
-            const time_stamp = timeStamp(createdAt);
+            const TimeStamp = timeStamp(createdAt);
 
-            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />;
+            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} recievedMessage={message} />;
           })}
         </VStack>
       ) : (
@@ -128,6 +141,19 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
       <ChatRoomForm chatId={chatId} />
     </VStack>
   );
-};
+}
 
-export default ChatRoom;
+const mapStateToProps = (state: STATE) => ({
+  message: state.messages,
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  incrementPagination: bindActionCreators(incrementPaginationNumberAction, dispatch),
+  setMessages: bindActionCreators(setMessagesAction, dispatch),
+  setPaginatedMessages: bindActionCreators(setPaginatedMessagesAction, dispatch),
+  toggleIsMatch: bindActionCreators(toggleIsMatch, dispatch),
+  resetMessages: bindActionCreators(resetMessagesAction, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing correct behaviour of <RadioCard /> component <RadioCard /> should match snapshot 1`] = `
+<RadioCard
+  chakraProps={
+    Object {
+      "h": "20%",
+    }
+  }
+  closeRadioCard={[Function]}
+  heading="RadioCard Heading"
+  style={
+    Object {
+      "background": "lime",
+    }
+  }
+>
+  <Box
+    as="label"
+    background="lime"
+    h="20%"
+  >
+    <Noop />
+    <label
+      className="css-0"
+    >
+      <input
+        checked={false}
+        id="radio-:r0:"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        style={
+          Object {
+            "border": "0px",
+            "clip": "rect(0px, 0px, 0px, 0px)",
+            "height": "1px",
+            "margin": "-1px",
+            "overflow": "hidden",
+            "padding": "0px",
+            "position": "absolute",
+            "whiteSpace": "nowrap",
+            "width": "1px",
+          }
+        }
+        type="radio"
+      />
+      <Box
+        _checked={
+          Object {
+            "bg": "#3182ce",
+            "borderColor": "#3182ce",
+            "color": "white",
+          }
+        }
+        aria-hidden={true}
+        borderRadius="md"
+        borderWidth="1px"
+        boxShadow="md"
+        cursor="pointer"
+        fontWeight="semibold"
+        minW="6.25rem"
+        onMouseDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        px={5}
+        py={3}
+        textAlign="center"
+      >
+        <Noop />
+        <div
+          aria-hidden={true}
+          className="css-0"
+          onMouseDown={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+        >
+          <h1>
+            test text
+          </h1>
+        </div>
+      </Box>
+    </label>
+  </Box>
+</RadioCard>
+`;

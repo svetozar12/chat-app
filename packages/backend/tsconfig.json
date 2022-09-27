@@ -1,15 +1,13 @@
 {
-  "exclude": ["src/__test__/**/*", "src/__test__/setupTests.ts"],
   "include": ["src/**/*"],
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "esModuleInterop": false,
-    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "strict": true,
     "types": ["node", "@types/jest"],
     "skipLibCheck": true,
     "outDir": "dist",
-    "typeRoots": ["./node_modules/@types", "./src/custom_typings"]
+    "declaration": true
   }
 }

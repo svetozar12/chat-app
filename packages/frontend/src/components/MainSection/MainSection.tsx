@@ -1,40 +1,46 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 // components
-import ActiveChats from "./ActiveChats";
-import FindFriends from "./FindFriends";
-import ChatSettings from "./ChatSettings";
+import { css, cx } from '@emotion/css';
+import { CloseButton, Flex, HStack, Slide, useColorModeValue, VStack } from '@chakra-ui/react';
+import ActiveChats from './ActiveChats';
+import FindFriends from './FindFriends';
+import ChatSettings from './ChatSettings';
 // other
-import { css, cx } from "@emotion/css";
-import { Ichats } from "pages/[acc]";
-import { useSelector, useDispatch } from "react-redux";
-import { useAuth } from "utils/SessionProvider";
-import { IInitialSet } from "services/redux/reducer/setReducer/state";
-import SkeletonActiveInvites from "components/Loading/SkeletonActiveInvites";
-import { CloseButton, Flex, Slide, VStack } from "@chakra-ui/react";
-import useThemeColors from "hooks/useThemeColors";
+import { useAuth } from '../../utils/SessionProvider';
+import useThemeColors from '../../hooks/useThemeColors';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
+import { IToggle } from 'services/redux/reducer/toggles/state';
+import { Chat } from '@chat-app/gql-server';
 
 interface IMainSection {
   chatId: string;
-  chatRooms: Ichats[];
+  chatRooms: Chat[];
+  toggle: IToggle;
+  toggleChatSettings: typeof toggleChatSettings;
 }
 
-const MainSection = ({ chatRooms, chatId }: IMainSection) => {
-  const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+function MainSection(props: IMainSection) {
+  const { chatRooms, chatId, toggle, toggleChatSettings } = props;
   const { user } = useAuth();
   const {
-    colors: { color, from_bg },
+    base: {
+      default: { color, offColor },
+      form: { background },
+    },
   } = useThemeColors();
   return (
     <VStack
       mr="-0.5rem !important"
       ml="-0.5rem !important"
-      w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "40%" }}
+      w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '40%' }}
       h="100vh"
-      pos={{ base: "absolute", lg: "relative" }}
-      bg={from_bg}
-      borderRight="1px solid rgba(0, 0, 0, 0.1)"
+      pos={{ base: 'absolute', lg: 'relative' }}
+      bg={background}
+      borderRight={useColorModeValue('1px solid rgba(0, 0, 0, 0.1)', '1px solid rgba(255,255,255, 0.1)')}
       textAlign="center"
       overflow="hidden"
       zIndex="20"
@@ -45,53 +51,58 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
       <FindFriends />
       {user ? (
         <VStack overflow="auto" w="94%" h="100vh">
-          <Slide style={{ zIndex: 10, width: "100%" }} direction="left" in={state.setChatSettings}>
+          <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in={toggle.toggleChatSettings}>
             <VStack
-              w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "35%" }}
+              w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
               h="100vh"
               top={0}
               left={0}
               transition="0.34s"
               zIndex={11}
-              bg={from_bg}
+              bg={background}
               color="white"
               p={0}
             >
               <Flex ml="2rem" align="center" pos="relative" w="95%" m="1rem" px="1rem">
                 <CloseButton
-                  size={"lg"}
+                  size="lg"
                   className={cx(css`
                     width: 3rem;
                     height: 3rem;
                     cursor: pointer;
                     right: 0;
                     margin-top: 2.5rem;
-                    color:${color};
+                    color: ${color};
                     position: absolute;
-                    background:${color},
+                    color: ${color};
+                    background: ${offColor};
                     z-index: 9999;
                   `)}
-                  onClick={() =>
-                    dispatch({
-                      type: "SET_CHAT_SETTINGS",
-                      payload: !state.setChatSettings,
-                    })
-                  }
+                  onClick={() => {
+                    toggleChatSettings(!toggle.toggleChatSettings);
+                  }}
                 />
               </Flex>
               <ChatSettings chatId={chatId} />
             </VStack>
           </Slide>
-
-          {chatRooms.map((item, index) => {
-            return <ActiveChats key={index} {...item} chatId={chatId} />;
-          })}
+          {chatRooms.map((item, index) => (
+            <ActiveChats key={index} {...item} chatId={chatId} />
+          ))}
         </VStack>
       ) : (
-        <SkeletonActiveInvites />
+        <div>loading</div>
       )}
     </VStack>
   );
-};
+}
 
-export default MainSection;
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainSection);

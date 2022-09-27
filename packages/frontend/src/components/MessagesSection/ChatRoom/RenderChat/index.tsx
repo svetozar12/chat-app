@@ -1,1 +1,1 @@
-export { default } from "./RenderChat";
+export { default } from './RenderChat';
