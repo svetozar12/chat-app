@@ -17,6 +17,8 @@ const saveInputReducer = (state = initialState, action: any) => {
         ...action.payload,
       };
     case ActionType.SAVE_INPUT_USERNAME:
+      console.log({ ...state, input: action.payload });
+
       return { ...state, input_username: action.payload };
     case ActionType.SAVE_INPUT_PASSWORD:
       return { ...state, input_password: action.payload };

@@ -19,6 +19,7 @@ const user = {
             _id
             username
             email
+            userAvatar
           }
          }`,
         },

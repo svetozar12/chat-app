@@ -3,8 +3,8 @@ import MainSection from "./MainSection";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/setReducer/setReducer";
-import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer/save_inputReducer";
+import { initialState } from "../../services/redux/reducer/setReducer/setReducer";
+import { initialState as saveInputState } from "../../services/redux/reducer/save_inputReducer/save_inputReducer";
 import MockedSocket from "socket.io-mock";
 import configureStore from "redux-mock-store";
 import Cookies from "universal-cookie";
@@ -29,7 +29,7 @@ const cookie: any = new Cookies({ name: "TestName" });
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <MainSection chatRooms={[{ _id: "31231312", members: ["ivan", "greg"] }]} cookie={cookie} socketRef={socket} chatId="3213123123" />
+      <MainSection chatRooms={[{ _id: "31231312", members: ["ivan", "greg"] }]} chatId="3213123123" />
     </Provider>,
   );
   return component;
@@ -44,12 +44,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <MainSection
-              chatRooms={[{ _id: "31231312", members: ["ivan", "greg"] }]}
-              cookie={cookie}
-              socketRef={socket}
-              chatId="3213123123"
-            />
+            <MainSection chatRooms={[{ _id: "31231312", members: ["ivan", "greg"] }]} chatId="3213123123" />
           </Provider>,
         )
         .toJSON(),

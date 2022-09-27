@@ -9,6 +9,7 @@ import { css, cx } from "@emotion/css";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { Heading, HStack, VStack } from "@chakra-ui/react";
 interface IActiveChats {
   _id: string;
   members: string[];
@@ -55,36 +56,27 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
   };
 
   return (
-    <div
+    <HStack
+      w="full"
+      color="var(--main-white)"
+      cursor="pointer"
+      p="2rem"
+      ml="2rem"
+      whiteSpace="nowrap"
+      transition="0.2s"
+      borderRadius="2xl"
+      _hover={{ borderRadius: "15px", background: " rgba(122, 122, 122, 0.1)", transition: "0.2s" }}
       data-testid="chat"
       onClick={() => {
         joinChat();
         dispatching();
       }}
-      className={cx(
-        {
-          [css`
-            border-radius: 15px;
-            background: rgba(122, 122, 122, 0.1);
-          `]: _id === chatId,
-        },
-        css`
-          color: var(--main-white);
-          width: 97%;
-          cursor: pointer;
-          padding: 1rem 1rem;
-          width: 100%;
-          white-space: nowrap;
-          transition: 0.2s;
+      className={cx({
+        [css`
           border-radius: 15px;
-          white-space: nowrap;
-          &:hover {
-            border-radius: 15px;
-            background: rgba(122, 122, 122, 0.1);
-            transition: 0.2s;
-          }
-        `,
-      )}
+          background: rgba(122, 122, 122, 0.1);
+        `]: _id === chatId,
+      })}
     >
       <div
         className={css`
@@ -94,21 +86,9 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
           width: 100%;
         `}
       >
-        <section
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <HStack>
           <Avatar members={members} inviter={inviter} cookieName={cookieName} />
-          <div
-            className={css`
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;
-              justify-content: center;
-            `}
-          >
+          <VStack align="flex-start">
             <div
               className={css`
                 margin: 0;
@@ -120,15 +100,27 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
                 ? members.map((element, index) => {
                     if (index === 3) return;
                     return (
-                      <p style={{ margin: 0 }} key={index}>
+                      <Heading size="md" style={{ margin: 0 }} key={index}>
                         {element}
                         {element[members.length - 1] === element[index] ? `${members.length > 3 ? "..." : ""}` : ","}
-                      </p>
+                      </Heading>
                     );
                   })
-                : (members.length === 1 && <p style={{ margin: 0 }}>{user1}</p>) ||
-                  (user2 === cookieName && <p style={{ margin: 0 }}>{user1}</p>) ||
-                  (user1 === cookieName && <p style={{ margin: 0 }}>{user2}</p>)}
+                : (members.length === 1 && (
+                    <Heading size="md" m={0}>
+                      {user1}
+                    </Heading>
+                  )) ||
+                  (user2 === cookieName && (
+                    <Heading size="md" m={0}>
+                      {user1}
+                    </Heading>
+                  )) ||
+                  (user1 === cookieName && (
+                    <Heading size="md" m={0}>
+                      {user2}
+                    </Heading>
+                  ))}
             </div>
             <p
               className={css`
@@ -141,8 +133,8 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
             >
               Last message...
             </p>
-          </div>
-        </section>
+          </VStack>
+        </HStack>
         {_id === chatId && (
           <BsThreeDots
             className={css`
@@ -160,7 +152,7 @@ const ActiveChats = ({ _id, members, chatId }: IActiveChats) => {
           />
         )}
       </div>
-    </div>
+    </HStack>
   );
 };
 export default ActiveChats;

@@ -14,7 +14,6 @@ const route = Router();
 route.get(
   "/:user_id",
   Validator(Schema.UserIdSchema, "params"),
-  Auth(constants.ACCESS_TOKEN as string),
   errorHandler(UsersController.GetUser),
 );
 route.post("/", Validator(CreateUserSchema, "body"), errorHandler(UsersController.CreateUser));

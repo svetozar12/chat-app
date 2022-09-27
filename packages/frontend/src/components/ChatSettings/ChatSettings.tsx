@@ -3,13 +3,15 @@ import React from "react";
 import { useRouter } from "next/router";
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
-import { getFirstChat } from "../../utils/getFirstChat";
+import generic from "../../utils/generic";
 import { useSelector, useDispatch } from "react-redux";
 // services
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import api_helper from "../../services/graphql/api_helper";
 import { useCookie } from "next-cookie";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { Heading, HStack, VStack } from "@chakra-ui/react";
+import s from "./ChatSettings.module.css";
 
 interface IChatSettings {
   chatId: string;
@@ -62,88 +64,31 @@ function ChatSettings({ chatId }: IChatSettings) {
     const updated_users = users.filter((element) => element !== user);
     setUsers(updated_users);
     if (updated_users.length === 2) {
-      const redirect = await getFirstChat(id, token);
+      const redirect = await generic.getFirstChat(id, token);
 
       route.push(`/${redirect._id}`);
     }
   };
   return (
     <>
-      <div
-        className={cx(
-          "flex",
-          css`
-            position: relative;
-            bottom: 0;
-            transition: 0.3s;
-            opacity: ${state.setChatSettings ? "1" : "0"};
-            width: 100%;
-            z-index: 11;
-            height: 80vh;
-            background: var(--main-white);
-            border-left: 1px solid rgba(0, 0, 0, 0.1);
-            flex-direction: column;
-            justify-content: flex-start;
-            overflow-x: hidden;
-          `,
-        )}
-      >
-        <h1
-          className={css`
-            color: var(--main-black);
-            justify-content: center;
-            white-space: nowrap;
-            padding: 0 0.5rem;
-            width: 70%;
-            display: flex;
-            justify-content: center;
-            @media (max-width: 1000px) {
-              font-size: 4vw;
-            }
-          `}
-        >
+      <VStack mt={5} gap={5} pos={"relative"} zIndex="-1" transition="ease" w="full" opacity={state.setChatSettings ? 1 : 0}>
+        <Heading w="70%" color="black" textAlign="center" whiteSpace="nowrap" fontSize={{ base: "4vw", md: "2vw" }}>
           Members in chat
-        </h1>
+        </Heading>
 
         {users.map((item, index) => {
           return (
-            <div
-              key={index}
-              className={cx(
-                "flex",
-                css`
-                  justify-content: space-between;
-                `,
-              )}
-            >
-              <h2
-                className={cx(
-                  "flex",
-                  css`
-                    flex-direction: column;
-                    color: var(--main-black);
-                    white-space: nowrap;
-                  `,
-                )}
-              >
-                {item}
-              </h2>
+            <HStack alignItems="center" key={index}>
+              <Heading>{item}</Heading>
               <AiOutlineUserDelete
                 onClick={() => {
                   deleteMember(item);
                   emitFriendRequest();
                   redirect(item);
                 }}
-                className={css`
-                  width: 2rem;
-                  height: 2rem;
-                  cursor: pointer;
-                  &:hover {
-                    color: red;
-                  }
-                `}
+                className={s.remove_user}
               />
-            </div>
+            </HStack>
           );
         })}
         {users.length > 2 && (
@@ -196,7 +141,7 @@ function ChatSettings({ chatId }: IChatSettings) {
             </div>
           </div>
         )}
-      </div>
+      </VStack>
     </>
   );
 }

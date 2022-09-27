@@ -11,6 +11,8 @@ import { Ichats } from "../../pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "../../utils/SessionProvider";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import SkeletonActiveInvites from "../Loading/SkeletonActiveInvites";
+import { Flex, Center, VStack } from "@chakra-ui/react";
 
 interface IMainSection {
   chatId: string;
@@ -20,111 +22,73 @@ interface IMainSection {
 const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const auth = useAuth();
-  console.log(auth);
+  const { user } = useAuth();
 
   return (
-    <section
+    <VStack
+      mr="-0.5rem !important"
+      ml="-0.5rem !important"
+      w={{ base: !state.setMobileNav ? 0 : "102%", md: "50%", xl: "40%", "2xl": "40%" }}
+      h="100vh"
+      pos={{ base: "absolute", lg: "relative" }}
+      bg="white"
+      transitionTimingFunction="ease-out"
+      transition="0.6s ease-out"
+      color="var(--main-whitre)"
+      borderRight="1px solid rgba(0, 0, 0, 0.1)"
+      textAlign="center"
+      overflow="hidden"
+      zIndex="20"
+      align="center"
+      justifyItems="center"
       title="main_section"
-      className={css`
-        position: relative;
-        transition-timing-function: ease-out;
-        transition: 0.6s ease-out;
-        background: var(--main-white);
-        color: var(--main-whitre);
-        border-right: 1px solid rgba(0, 0, 0, 0.1);
-        text-align: center;
-        overflow: hidden;
-        height: 100vh;
-        z-index: 20;
-        width: 29%;
-        flex-direction: column;
-        justify-content: flex-start;
-        flex-shrink: unset;
-        display: flex;
-        align-items: center;
-        @media (max-width: 1008px) {
-          ${!state.setMobileNav ? "width:0" : "width:100%"};
-          position: absolute;
-        }
-      `}
     >
       <FindFriends />
-      <div
-        className="flex "
-        style={{
-          overflow: "auto",
-          width: "95%",
-          height: "100%",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div
-          className={cx(
-            "flex",
-            css`
-              top: 0;
-              left: 0;
-              position: absolute;
-              z-index: 11;
-              width: 0;
-              height: 88vh;
-              background: var(--main-white);
-              padding: 1rem;
-              transition: 0.4s;
-              align-items: flex-start;
-              padding: 0;
-              flex-direction: column;
-              justify-content: flex-start;
-              width: ${state.setChatSettings ? "100%" : "0"};
-              height: 100vh;
-            `,
-            {
-              ["chat-settings-open"]: state.setChatSettings,
-            },
-          )}
-        >
-          <div
-            className={cx(
-              "flex",
-              css`
-                justifycontent: flex-end;
-                position: absolute;
-                width: 95%;
-                margin: 1rem;
-                padding: 0 1rem;
-              `,
-            )}
+      {user ? (
+        <VStack overflow="auto" w="94%" h="100vh">
+          <VStack
+            w={state.setChatSettings ? "100%" : 0}
+            h="100vh"
+            top={0}
+            left={0}
+            transition="0.34s"
+            pos="absolute"
+            zIndex={11}
+            bg="var(--main-white)"
+            p={0}
           >
-            <GrClose
-              className={cx(css`
-                width: 2rem;
-                height: 2rem;
-                cursor: pointer;
-                right: 0;
-                margin-top: 2.5rem;
-                position: absolute;
-                z-index: 9999;
-                transition: 0.3s;
-                opacity: ${state.setChatSettings ? "1" : "0"};
-              `)}
-              onClick={() =>
-                dispatch({
-                  type: "SET_CHAT_SETTINGS",
-                  payload: !state.setChatSettings,
-                })
-              }
-            />
-          </div>
-          {<ChatSettings chatId={chatId} />}
-        </div>
+            <Flex ml="2rem" align="center" pos="absolute" w="95%" m="1rem" px="1rem">
+              <GrClose
+                className={cx(css`
+                  width: 2rem;
+                  height: 2rem;
+                  cursor: pointer;
+                  right: 0;
+                  margin-top: 2.5rem;
+                  position: absolute;
+                  z-index: 9999;
+                  transition: 0.3s;
+                  opacity: ${state.setChatSettings ? "1" : "0"};
+                `)}
+                onClick={() =>
+                  dispatch({
+                    type: "SET_CHAT_SETTINGS",
+                    payload: !state.setChatSettings,
+                  })
+                }
+              />
+            </Flex>
+            <ChatSettings chatId={chatId} />
+          </VStack>
 
-        {chatRooms.map((item, index) => {
-          return <ActiveChats key={index} {...item} chatId={chatId} />;
-        })}
-      </div>
-    </section>
+          {chatRooms.map((item, index) => {
+            return <ActiveChats key={index} {...item} chatId={chatId} />;
+          })}
+        </VStack>
+      ) : (
+        <SkeletonActiveInvites />
+      )}
+    </VStack>
   );
 };
 

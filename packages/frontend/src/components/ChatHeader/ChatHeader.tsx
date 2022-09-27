@@ -7,13 +7,11 @@ function ChatHeader() {
     <div
       title="chat_header"
       className={css`
-        box-shadow: 0 0 5px;
-        position: absolute;
+        position: relative;
         width: 100%;
-        height: 8rem;
+        height: 10rem;
         background: var(--main-white);
         z-index: 9999;
-        padding: 1rem;
       `}
     >
       <AddGroupChat />

@@ -12,6 +12,9 @@ function HamburgerMenu() {
       className={cx(
         "flex",
         css`
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 3rem;
           height: 3rem;
           border: 1px solid transparent;
@@ -29,7 +32,6 @@ function HamburgerMenu() {
           cursor: pointer;
           width: 2rem;
           height: 2rem;
-          left: 0;
           zindex: -11;
           @media (min-width: 1008px) {
             display: none;

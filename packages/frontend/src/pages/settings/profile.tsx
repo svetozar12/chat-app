@@ -2,13 +2,16 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
-import { getFirstChat } from "../../utils/getFirstChat";
-import UpdateInfoForm from "../../components/UpdateInfoForm";
+import generic from "../../utils/generic";
+import UpdateInfo from "../../components/UpdateInfo";
 import api_helper from "../../services/graphql/api_helper";
 import withAuthSync from "../../utils/auth";
 import { useAuth } from "../../utils/SessionProvider";
 import { getAuth } from "../../utils/authMethods";
-import protected_routes from "../../constants/routes";
+import SkelletonUserSettings from "../../components/Loading/SkelletonUserSettings";
+import { HStack, VStack } from "@chakra-ui/react";
+import UpdateInfoDetails from "../../components/UpdateInfo/UpdateInfoDetails";
+import UpdateInfoForm from "../../components/UpdateInfo/UpdateInfoForm";
 
 function Profile(props: { cookie: string }) {
   const [image, setImage] = React.useState("");
@@ -19,13 +22,17 @@ function Profile(props: { cookie: string }) {
   const { user } = useAuth();
 
   React.useEffect(() => {
-    cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname);
-    (async () => {
-      getAuth();
-      const first_id = await getFirstChat(user._id, cookie.get("token"));
-      setUrl(first_id._id);
-    })();
+    if (user) {
+      cookie.set("REDIRECT_URL_CALLBACK", window.location.pathname);
+      (async () => {
+        getAuth();
+        const first_id = await generic.getFirstChat(user._id, cookie.get("token"));
+        setUrl(first_id._id);
+      })();
+    }
   }, []);
+
+  if (!user) return <SkelletonUserSettings />;
 
   const handleSubmit = async (e: any) => {
     try {
@@ -46,11 +53,11 @@ function Profile(props: { cookie: string }) {
   };
 
   return (
-    <main style={{ height: "100vh" }} className="flex">
-      <section style={{ width: "80%" }}>
-        <UpdateInfoForm url={url} handleSubmit={handleSubmit} image={image} setImage={setImage} />
-      </section>
-    </main>
+    <HStack w="full" h="100vh" alignItems="center" justifyContent="center">
+      <UpdateInfo handleSubmit={handleSubmit} url={url}>
+        <UpdateInfoForm image={image} setImage={setImage} />
+      </UpdateInfo>
+    </HStack>
   );
 }
 

@@ -1,7 +1,7 @@
 import { NextPageContext } from "next";
 import { useCookie } from "next-cookie";
 import { isAuth } from "./authMethods";
-import { getFirstChat } from "./getFirstChat";
+import generic from "./generic";
 import redirectTo from "./routing";
 
 export interface ICtx extends NextPageContext {
@@ -14,10 +14,8 @@ const withAuthSync = (getServerSideProps?: Function) => {
     const currPath = ctx.resolvedUrl;
     const cookie = useCookie(ctx);
     const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
-    console.log(desiredURL);
 
     if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
-    console.log(cookie.getAll());
     if (getServerSideProps) {
       const gssp = await getServerSideProps(ctx);
       return {
@@ -40,10 +38,10 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
     const isUserAuth: any = await isAuth(ctx);
     const cookie = useCookie(ctx);
 
-    const currPath = await getFirstChat(cookie.get("id"), cookie.get("token"));
+    const currPath = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
     const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
     const path = desiredURL || currPath;
-    console.log(cookie.getAll());
+    console.log(path, "putq", isUserAuth);
 
     if (isUserAuth && ctx.resolvedUrl !== path) return redirectTo(`/${path}`, ctx);
 

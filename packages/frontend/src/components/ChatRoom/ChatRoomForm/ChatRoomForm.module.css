@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 10vh;
+  margin-top: -0.5rem important;
+  background: white;
+}
+
+.MessageInput {
+  resize: none;
+  word-break: break-all;
+  width: 90%;
+  background: transparent;
+  outline: none;
+}

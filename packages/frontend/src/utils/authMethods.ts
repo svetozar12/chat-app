@@ -3,6 +3,7 @@ import { Cookie, useCookie } from "next-cookie";
 import api_helper from "../services/graphql/api_helper";
 import jwtDecode from "jwt-decode";
 import redirectTo from "./routing";
+import { ICtx } from "./auth";
 
 interface IToken {
   _id: string;
@@ -29,10 +30,11 @@ const getTokenExpirationSeconds = (token: string) => {
  * @param {Cookie}cookie this is cookie instance, it`s used to get cookies from the browser
  * */
 export const checkTokens = async (cookie: Cookie) => {
+  console.log("helo");
+
   const user_id: string = cookie.get("id");
   const access_token: string = cookie.get("token");
   const refresh_token: string = cookie.get("refresh_token");
-
   if (!access_token) {
     if (refresh_token) {
       const refreshedToken = await api_helper.auth.refresh(user_id, refresh_token);
@@ -44,27 +46,34 @@ export const checkTokens = async (cookie: Cookie) => {
 
       return true;
     }
+    console.log("del");
+
+    const cookies = cookie.getAll();
+    await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
+    for (const key in cookies) cookie.remove(key);
     return false;
   }
   return true;
 };
 
-export const logout = async (ctx: NextPageContext) => {
+export const logout = async (ctx: ICtx) => {
   const cookie = useCookie(ctx);
   const cookies = cookie.getAll();
   await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
   for (const key in cookies) cookie.remove(key);
-  return redirectTo("/");
+  return redirectTo("/", ctx);
 };
 
 /**
  * This function will be used only in getServerSideProps Wrapper.
  *  It checks if avaliable cookie(token,refresh_token) are valid and returns true if they are !
  *  Also in the future all sort of user auth can be added here
- * @param {NextPageContext} ctx is Used as response from the next server
+ * @param {ICtx} ctx is Used as response from the next server
  */
 export const isAuth = async (ctx) => {
   const cookie = useCookie(ctx);
+  console.log(cookie.getAll(), "biskvitki");
+
   return checkTokens(cookie);
 };
 

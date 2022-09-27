@@ -3,11 +3,21 @@ import type { AppProps } from "next/app";
 import React from "react";
 // services
 import { wrapper } from "../services/redux/store";
-import App from "../components/App";
+import SessionProvider from "../utils/SessionProvider";
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "../styles/theme";
+import GlobalRenders from "../components/GlobalRenders";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // @ts-ignore
-  return <App Component={Component} pageProps={pageProps} />;
+  return (
+    <SessionProvider>
+      <GlobalRenders />
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </SessionProvider>
+  );
 };
 
 export default wrapper.withRedux(MyApp);

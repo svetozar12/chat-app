@@ -6,19 +6,23 @@ import { checkTokens, logout } from "./authMethods";
 function useProvideAuth() {
   const [user, setUser] = useState(null);
   const cookie = useCookie();
-  useEffect(() => {
-    // this is a function which will be executed instantly
-    (async () => checkTokens(cookie))();
-  }, []);
-  const user_id: string = cookie.get("id");
-  const token: string = cookie.get("token");
 
+  const checkSession = async () => {
+    await checkTokens(cookie);
+  };
+
+  if (cookie.getAll() === {}) return;
   const getUser = async () => {
-    const res = await api_helper.user.getById(user_id, token);
-    setUser(res);
+    const user_id: string = cookie.get("id");
+    const token: string = cookie.get("token");
+    setTimeout(async () => {
+      const res = await api_helper.user.getById(user_id, token);
+      setUser(res);
+    }, 10000);
   };
 
   useEffect(() => {
+    checkSession();
     getUser();
   }, []);
 

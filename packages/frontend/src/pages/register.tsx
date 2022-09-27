@@ -1,15 +1,15 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
-import { useCookie } from "next-cookie";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { getFirstChat } from "../utils/getFirstChat";
 // services
 import ISave_inputState from "../services/redux/reducer/save_inputReducer/state";
 import api_helper from "../services/graphql/api_helper";
+// utils
 import { isAlreadyAuth } from "../utils/auth";
-import routes from "../constants/routes";
+import generic from "../utils/generic";
 // hooks
+import { useCookie } from "next-cookie";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 
 function Register(props: { cookie: string }) {
   const router = useRouter();
@@ -27,27 +27,20 @@ function Register(props: { cookie: string }) {
           payload: true,
         });
 
-        cookie.set("name", state.input_username, {
-          sameSite: "strict",
-          path: "/",
+        const cookies = [
+          { name: "name", value: state.input_username, options: { sameSite: "strict", path: "/" } },
+          { name: "id", value: res.user_id, options: { sameSite: "strict", path: "/" } },
+          { name: "token", value: res.Access_token, options: { sameSite: "strict", path: "/" } },
+          { name: "refresh_token", value: res.Refresh_token, options: { sameSite: "strict", path: "/" } },
+        ];
+
+        cookies.forEach((element) => {
+          const { name, value, options } = element;
+          // @ts-ignore
+          cookie.set(name, value, { ...options });
         });
 
-        cookie.set("id", res.user_id, {
-          sameSite: "strict",
-          path: "/",
-        });
-
-        cookie.set("token", res.Access_token, {
-          sameSite: "strict",
-          path: "/",
-        });
-
-        cookie.set("refresh_token", res.Refresh_token, {
-          sameSite: "strict",
-          path: "/",
-        });
-
-        const chatInstance: any = await getFirstChat(cookie.get("id"), cookie.get("token"));
+        const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
 
         cookie.set("first_chat_id", chatInstance._id, {
           sameSite: "strict",
@@ -64,8 +57,9 @@ function Register(props: { cookie: string }) {
         dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
         dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
         dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
+        return true;
       }
-      return;
+      return false;
     } catch (error) {
       dispatch({
         type: "SET_IS_LOADING",
@@ -76,21 +70,7 @@ function Register(props: { cookie: string }) {
     }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const register = await api_helper.user.create(state.input_username, state.input_email, state.input_password, state.input_gender);
-
-    if (await register) {
-      dispatch({ type: "QUICK_LOGIN", payload: true });
-    } else {
-      dispatch({ type: "SAVE_INPUT_USERNAME", payload: "" });
-      dispatch({ type: "SAVE_INPUT_PASSWORD", payload: "" });
-      dispatch({ type: "SAVE_INPUT_EMAIL", payload: "" });
-      dispatch({ type: "SAVE_INPUT_GENDER", payload: "" });
-    }
-  };
-
-  return <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />;
+  return <RegisterForm quickLogin={quickLogin} />;
 }
 export const getServerSideProps = isAlreadyAuth();
 export default Register;

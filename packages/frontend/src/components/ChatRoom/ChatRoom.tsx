@@ -1,16 +1,15 @@
-import { MdSend } from "react-icons/md";
 import { NextPage } from "next";
-import { io, Socket } from "socket.io-client";
 import { useRouter } from "next/router";
 import { css } from "@emotion/css";
-import React, { useState, useEffect } from "react";
-import styled from "@emotion/styled";
+import React, { useEffect } from "react";
 // utils
 import timeStamp from "../../utils/timeStamp";
 import { constants } from "../../constants";
 // components
 import RenderChat from "./RenderChat";
 import ChatHeader from "../ChatHeader";
+import ChatRoomForm from "./ChatRoomForm";
+import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
@@ -18,8 +17,9 @@ import { useCookie } from "next-cookie";
 import api_helper from "../../services/graphql/api_helper";
 import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
 import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import ChatRoomForm from "./ChatRoomForm/ChatRoomForm";
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { VStack } from "@chakra-ui/react";
+import { useAuth } from "../../utils/SessionProvider";
 
 interface IHome {
   chatId: any;
@@ -37,8 +37,9 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-  const inputTextArea = React.useRef<any>(null);
   const cookie = useCookie();
+
+  const user = useAuth();
   const user_id = cookie.get("id") as string;
   const token = cookie.get("token") as string;
   const dispatch = useDispatch();
@@ -57,18 +58,6 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
       return false;
     }
   };
-
-  useEffect(() => {
-    inputTextArea.current.focus();
-
-    console.log("ws-connect");
-    authState.ws?.on("message", ({ messages }) => {
-      console.log(messages);
-
-      const [message] = messages;
-      dispatch({ type: "MESSAGES", payload: message });
-    });
-  }, []);
 
   useEffect(() => {
     dispatch({ type: "SET_IS_MATCH", payload: false });
@@ -112,45 +101,33 @@ const ChatRoom: NextPage<IHome> = ({ chatId }) => {
   }, [messageState.messages]);
 
   return (
-    <div
-      className={css`
-        position: relative;
-        z-index: 10;
-        justifycontent: center;
-        alignitems: center;
-        width: 100%;
-        height: 100vh;
-        padding: 0;
-      container`}
-    >
+    <VStack w="full" h="100vh">
       {setState.toggleCreateGroup && <ChatHeader />}
 
-      <div
-        ref={containerRef}
-        className={css`
-          flex-direction: column;
-          width: 100%;
-          height: 90%;
-          padding: 1rem;
-          overflow: auto;
-          background-color: var(--main-white);
-          box-shadow: 0px 0px 20px var(--off-white);
-        `}
-        onScroll={scrollHandler}
-      >
-        {messageState.messages.map((item, index) => {
-          const { sender, message, createdAt } = item;
-          const time_stamp = timeStamp(createdAt);
+      {user ? (
+        <VStack
+          mt="-0.5rem !important"
+          w="full"
+          h="full"
+          p="1rem"
+          overflow="auto"
+          bg="var(--main-white)"
+          ref={containerRef}
+          onScroll={scrollHandler}
+        >
+          {messageState.messages.map((item, index) => {
+            const { sender, message, createdAt } = item;
+            const time_stamp = timeStamp(createdAt);
 
-          return (
-            <li style={{ listStyle: "none" }} key={index}>
-              <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />
-            </li>
-          );
-        })}
-      </div>
-      <ChatRoomForm chatId={chatId} inputTextArea={inputTextArea} />
-    </div>
+            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} time_stamp={time_stamp} message={message} />;
+          })}
+        </VStack>
+      ) : (
+        <SkelletonUserMessages />
+      )}
+
+      <ChatRoomForm chatId={chatId} />
+    </VStack>
   );
 };
 
