@@ -14,6 +14,9 @@ interface IQuickLoginModal {
 function QuickLoginModal(props: IQuickLoginModal) {
   const { toggleQuickLogin, quickLogin } = props;
   const [isLoading, setIsLoading] = React.useState(false);
+  const {
+    colors: { chat_bg, form_button },
+  } = useThemeColors();
 
   return (
     <HStack w="full" h="100vh" alignItems="center" justifyContent="center" zIndex="200" pos="absolute" top={0}>
@@ -29,7 +32,7 @@ function QuickLoginModal(props: IQuickLoginModal) {
       >
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Button
-            colorScheme="blue"
+            colorScheme={form_button}
             w="full"
             isLoading={isLoading}
             spinner={<Loading />}

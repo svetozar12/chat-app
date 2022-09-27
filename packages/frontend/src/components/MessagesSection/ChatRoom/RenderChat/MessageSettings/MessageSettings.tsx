@@ -43,6 +43,11 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
     status === 'delete' && handleDelete();
     status === 'edit' && setEditing(true);
   };
+
+  const {
+    colors: { from_bg, color },
+  } = useThemeColors();
+
   return (
     <div
       title="message_settings"

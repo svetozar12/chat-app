@@ -16,7 +16,9 @@
     "lint-css": "lerna run lint-css --no-sort --stream",
     "format": "lerna run format --no-sort --stream",
     "dev:kill": "yarn kill && yarn dev",
-    "db:up": "docker compose up mongo redis azurite -d"
+    "mash-up": "yarn format && yarn lint && yarn build",
+    "mash-up:test": "yarn format && yarn lint && yarn build && yarn test",
+    "db:up": "lerna run db:up --stream"
   },
   "devDependencies": {
     "lerna": "^5.1.8",

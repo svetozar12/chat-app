@@ -39,7 +39,7 @@ function Globals(props: IGlobals) {
   return (
     <>
       <Head>
-        <title>{colorMode}</title>
+        <title>Chat What</title>
       </Head>
       <div
         className={css`

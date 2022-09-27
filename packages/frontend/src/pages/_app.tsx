@@ -15,10 +15,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on('routeChangeComplete', () => NProgress.done());
   Router.events.on('routeChangeError', () => NProgress.done());
   return (
-    <App>
+    <App cookies={pageProps.cookie}>
       <Component {...pageProps} />
     </App>
   );
 }
 
 export default wrapper.withRedux(MyApp);
+
+export { getServerSideProps } from "components/PageLayout/App/App";

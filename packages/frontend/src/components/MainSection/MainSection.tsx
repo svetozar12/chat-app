@@ -72,6 +72,7 @@ function MainSection(props: IMainSection) {
                     cursor: pointer;
                     right: 0;
                     margin-top: 2.5rem;
+                    color: ${color};
                     position: absolute;
                     color: ${color};
                     background: ${offColor};
