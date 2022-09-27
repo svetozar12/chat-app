@@ -3,9 +3,10 @@ import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
-import { initialState } from "../../redux/reducer/authReducer/authReducer";
-import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer/save_inputReducer";
 import configureStore from "redux-mock-store";
+// services
+import { initialState } from "../../services/redux/reducer/authReducer/authReducer";
+import { initialState as saveInputState } from "../../services/redux/reducer/save_inputReducer/save_inputReducer";
 const quickLogin: any = jest.fn();
 const handleSubmit = jest.fn();
 
@@ -18,7 +19,7 @@ const store = mockStore({
 const setupRender = () => {
   const component = render(
     <Provider store={store}>
-      <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+      <RegisterForm quickLogin={quickLogin} isLogging={false} handleSubmit={handleSubmit} />
     </Provider>,
   );
   return component;
@@ -33,7 +34,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <RegisterForm quickLogin={quickLogin} handleSubmit={handleSubmit} />
+            <RegisterForm quickLogin={quickLogin} isLogging={false} handleSubmit={handleSubmit} />
           </Provider>,
         )
         .toJSON(),

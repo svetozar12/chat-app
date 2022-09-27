@@ -1,25 +1,27 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
+// components
 import ActiveChats from "../ActiveChats";
 import FindFriends from "../FindFriends";
 import ChatSettings from "../ChatSettings";
+// other
 import { css, cx } from "@emotion/css";
 import { GrClose } from "react-icons/gr";
 import { Ichats } from "../../pages/[acc]";
 import { useSelector, useDispatch } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import { Socket } from "socket.io-client";
-import { Cookie } from "next-cookie";
+import { useAuth } from "../../utils/SessionProvider";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 
 interface IMainSection {
-  socketRef: Socket | null;
-  cookie: Cookie;
   chatId: string;
   chatRooms: Ichats[];
 }
 
-const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => {
+const MainSection = ({ chatRooms, chatId }: IMainSection) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const auth = useAuth();
+  console.log(auth);
 
   return (
     <section
@@ -47,7 +49,7 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
         }
       `}
     >
-      {socketRef && <FindFriends cookie={cookie} cookieName={cookie.get("name")} socketRef={socketRef} />}
+      <FindFriends />
       <div
         className="flex "
         style={{
@@ -115,14 +117,12 @@ const MainSection = ({ socketRef, chatRooms, cookie, chatId }: IMainSection) => 
               }
             />
           </div>
-
-          {socketRef && <ChatSettings socketRef={socketRef} chatId={chatId} cookieName={cookie.get("name")} />}
+          {<ChatSettings chatId={chatId} />}
         </div>
 
-        {socketRef &&
-          chatRooms.map((item, index) => {
-            return <ActiveChats key={index} {...item} cookieName={cookie.get("name")} socketRef={socketRef} chatId={chatId} />;
-          })}
+        {chatRooms.map((item, index) => {
+          return <ActiveChats key={index} {...item} chatId={chatId} />;
+        })}
       </div>
     </section>
   );

@@ -20,7 +20,7 @@ it("should create snapshot for <LoginForm/>", () => {
     renderer
       .create(
         <Provider store={store}>
-          <LoginForm handleSubmit={submit} />
+          <LoginForm isLogging={true} handleSubmit={submit} />
         </Provider>,
       )
       .toJSON(),
@@ -30,7 +30,7 @@ it("should create snapshot for <LoginForm/>", () => {
 it("should render <LoginForm/>", () => {
   render(
     <Provider store={store}>
-      <LoginForm handleSubmit={submit} />
+      <LoginForm isLogging={true} handleSubmit={submit} />
     </Provider>,
   );
   const renderedComponent = screen.getByText("Log In");

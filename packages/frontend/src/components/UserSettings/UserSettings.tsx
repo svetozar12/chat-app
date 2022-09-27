@@ -1,7 +1,5 @@
 import React from "react";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { css } from "@emotion/css";
@@ -9,6 +7,10 @@ import styled from "@emotion/styled";
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
+import { useCookie } from "next-cookie";
+import api_helper from "../../services/graphql/api_helper";
+import { getAuth } from "../../utils/authMethods";
+
 export const User_settings = styled.div`
   width: 10rem;
   position: absolute;
@@ -63,22 +65,24 @@ const buttonStyles = css`
   height: 1.5rem;
 `;
 
-function UserSettings({ cookie }: { cookie: any }) {
+function UserSettings() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const cookie = useCookie();
+  const deleteCookies = async () => {
+    getAuth();
+    const cookies = cookie.getAll();
+    await api_helper.auth.logout(cookie.get("id"), cookie.get("token"));
+    for (const key in cookies) cookie.remove(key);
 
-  const deleteCookies = () => {
-    cookie.remove("name");
-    cookie.remove("token");
-    cookie.remove("refresh_token");
     router.push("/");
     dispatch({ type: "SIGN_OUT" });
   };
 
   const deleteUser = async () => {
     try {
-      await axios.delete(`${requestUrl}/users/${cookie.get("name")}`);
-
+      getAuth();
+      await api_helper.user.delete(cookie.get("id"), cookie.get("token"));
       deleteCookies();
       return true;
     } catch (error) {

@@ -2,13 +2,23 @@ import React from "react";
 import { Button } from "../../styledComponents";
 import { css, cx } from "@emotion/css";
 import Link from "next/link";
-import Loading from "../../Loading";
 import { useDispatch } from "react-redux";
 
-const QuickLogin_Modal = ({ quickLogin, isLogging }: { quickLogin: () => void; isLogging: boolean }) => {
+const QuickLogin_Modal = ({ quickLogin }: { quickLogin: () => void }) => {
   const dispatch = useDispatch();
   return (
-    <div style={{ width: "75%", height: "30vh", position: "absolute", zIndex: "200" }} className="fRequests_modal flex">
+    <div
+      className={cx(
+        "fRequests_modal",
+        "flex",
+        css`
+          width: 75%;
+          height: 30vh;
+          position: absolute;
+          z-index: 200;
+        `,
+      )}
+    >
       <div
         className={cx(
           css`
@@ -17,7 +27,6 @@ const QuickLogin_Modal = ({ quickLogin, isLogging }: { quickLogin: () => void; i
           "flex",
         )}
       >
-        {isLogging && <Loading />}
         <Button
           className={css`
             width: 50%;

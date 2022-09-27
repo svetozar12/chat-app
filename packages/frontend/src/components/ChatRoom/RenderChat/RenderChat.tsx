@@ -1,12 +1,14 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import MessageSettings from "./MessageSettings";
 import { useDispatch, useSelector } from "react-redux";
-import { InitialStateMessage } from "../../../redux/reducer/messageReducer/state";
-import axios from "axios";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+// components
+import MessageSettings from "./MessageSettings";
 import { IchatInstance } from "../ChatRoom";
+// services
+import { InitialStateMessage } from "../../../services/redux/reducer/messageReducer/state";
+import api_helper from "../../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 interface IRenderChat {
   id: string;
@@ -14,7 +16,6 @@ interface IRenderChat {
   time_stamp: string | number;
   message: string;
   chatId: string;
-  cookie: string;
 }
 
 const mineMessages = css`
@@ -31,10 +32,10 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) => {
+const RenderChat = ({ id, sender, time_stamp, message }: IRenderChat) => {
   const messageState = useSelector((state: { messageReducer: InitialStateMessage }) => state.messageReducer);
   const dispatch = useDispatch();
-  const name = cookie;
+  const cookie = useCookie();
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
@@ -43,6 +44,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
   const [height, setHeight] = React.useState(48);
   const inputRef = React.useRef<HTMLDivElement>(null);
 
+  const name = cookie.get("name");
   const checkSettingsOpt = () => {
     return styleBool || settings;
   };
@@ -79,7 +81,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
     setSettings(!messageState.show);
   };
 
-  const handleEdit = (e: any) => {
+  const handleEdit = async (e: any) => {
     const target = e.target as HTMLTextAreaElement;
     e.target.style.height = "15px";
     e.target.style.height = `${target.scrollHeight}px`;
@@ -89,9 +91,7 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
       for (const obj of messageState.messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          const messages = messageState.messages;
-          console.log(...messages);
-          axios.put(`${requestUrl}/messages/${id}`, { newMessage: editedMessage });
+          await api_helper.message.update(cookie.get("id"), id, editedMessage, cookie.get("token"));
           dispatch({ type: "RESET_MESSAGES" });
         }
         messageArr.push(obj);
@@ -236,4 +236,4 @@ const RenderChat = ({ id, sender, time_stamp, cookie, message }: IRenderChat) =>
   );
 };
 
-export default RenderChat;
+export default React.memo(RenderChat);

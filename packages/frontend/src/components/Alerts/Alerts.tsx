@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { IAuthState } from "../../redux/reducer/authReducer/state";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { css } from "@emotion/css";
 import { IoClose } from "react-icons/io5";
 const Alerts = () => {

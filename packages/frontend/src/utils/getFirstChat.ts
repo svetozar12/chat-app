@@ -1,13 +1,14 @@
-import { requestUrl } from "./hostUrl_requestUrl";
-import axios from "axios";
-export const getFirstChat = async (name: string) => {
+import api_helper from "../services/graphql/api_helper";
+export const getFirstChat = async (user_id: string, token: string) => {
   try {
-    const res = await axios.get(`${requestUrl}/chat-room/?user_name=${name}`);
-    if (res.data.contacts.length <= 0) return;
-    const data = res.data.contacts[0];
+    const res = await api_helper.chatroom.getAll(user_id, token);
+    if (res.length <= 0) return;
+    const [{ _id: getAllChats }] = res;
 
-    return data;
+    return getAllChats;
   } catch (error) {
+    console.error(error);
+
     return false;
   }
 };

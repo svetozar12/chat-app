@@ -1,83 +1,37 @@
 import React from "react";
-import axios from "axios";
 import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
-import { BsSearch, BsThreeDots } from "react-icons/bs";
-import { AiOutlineUsergroupAdd } from "react-icons/ai";
-import { IoNotifications } from "react-icons/io5";
-import { FaUserCircle } from "react-icons/fa";
-import { css, cx } from "@emotion/css";
-import UserSettings from "../UserSettings";
+import { BsSearch } from "react-icons/bs";
+import { css } from "@emotion/css";
+import { useCookie } from "next-cookie";
+// services
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import api_helper from "../../services/graphql/api_helper";
+import FindFriendsHeader from "./FindFriendsHeader";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { getAuth } from "../../utils/authMethods";
 
-export interface IFindFriends {
-  cookieName: string;
-  socketRef: Socket;
-  cookie: any;
-}
-
-function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
+function FindFriends() {
   const dispatch = useDispatch();
-  const [hasAvatar, setHasAvatar] = React.useState(false);
-  const [image, setImage] = React.useState("");
 
-  const getUserImage = async (name: string) => {
-    try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
-      const userAvatar = res.data.user.userAvatar;
-      if (!userAvatar) {
-        setHasAvatar(false);
-        return true;
-      }
-      setHasAvatar(true);
-      const requestString = `${requestUrl}/${userAvatar}`;
-      setImage(requestString);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  React.useEffect(() => {
-    getUserImage(cookieName);
-  }, []);
+  const cookie = useCookie();
 
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
-
-  const notifState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
-
-  const toggleGroupCreate = () => {
-    dispatch({
-      type: "TOGGLE_CREATE_GROUP",
-      payload: !state.toggleCreateGroup,
-    });
-    dispatch({
-      type: "SET_MOBILE_NAV",
-      payload: !state.setMobileNav,
-    });
-    dispatch({
-      type: "SET_CHAT_SETTINGS",
-      payload: false,
-    });
-  };
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const sendInvite = async () => {
     try {
-      const res = await axios.post(`${requestUrl}/invites`, {
-        reciever: state.reciever,
-        inviter: cookieName,
-        status: "recieved",
-      });
-      const data = res.data.message;
-      socketRef.emit("send_friend_request", {
-        inviter: data.inviter,
-        reciever: state.reciever,
+      await getAuth();
+      const res = await api_helper.invite.create(cookie.get("id"), state.reciever, cookie.get("token"));
+      authState.ws?.emit("send_friend_request", {
+        inviter: res.inviter,
+        reciever: res.reciever,
       });
 
       return true;
     } catch (error) {
+      console.log(error);
+
       return false;
     }
   };
@@ -103,103 +57,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
       `}
       onSubmit={handleSubmit}
     >
-      <div
-        className={css`
-          width: 95%;
-          height: 3rem;
-          margin-bottom: 1rem;
-          position: relative;
-        `}
-      ></div>
-      <div
-        className={css`
-          display: flex;
-          width: 95%;
-          justify-content: space-between;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-          margin: 0 1rem;
-        `}
-      >
-        {/* refactor to new component bellow */}
-        <div className="flex">
-          {hasAvatar ? (
-            <img
-              alt="user_avatar"
-              src={image}
-              className={cx(
-                "click",
-                css`
-                  width: 2.8rem;
-                  height: 2.8rem;
-                  color: var(--main-logo-color);
-                  margin-right: 1rem;
-                  border-radius: 100px;
-                  position: relative;
-                  zindex: 10;
-                  &:hover {
-                    background: rgba(122, 122, 122, 0.4);
-                  }
-                `,
-              )}
-            />
-          ) : (
-            <FaUserCircle
-              className={css`
-                width: 3.25rem;
-                height: 3.25rem;
-                margin: 0;
-                color: var(--main-logo-color);
-                position: relative;
-                z-index: 10;
-              `}
-            />
-          )}
-          <h1 style={{ whiteSpace: "nowrap", margin: "0 0 0 1rem " }}>Chats</h1>
-        </div>
-        {/* refactor to new component above */}
-        <div className="flex find_friends_icons">
-          <div
-            className="flex notifications"
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              dispatch({
-                type: "SET_FRIEND_REQUEST",
-                payload: !state.setFriendRequest,
-              });
-            }}
-          >
-            <IoNotifications />
-            {notifState.notification_number != 0 && <div className="flex">{notifState.notification_number}</div>}
-          </div>
-          <div
-            className="flex add_group"
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={toggleGroupCreate}
-          >
-            <AiOutlineUsergroupAdd />
-          </div>
-          <div
-            className="flex dots"
-            style={{
-              cursor: "pointer",
-              position: "relative",
-            }}
-          >
-            <BsThreeDots
-              onClick={() =>
-                dispatch({
-                  type: "SET_USER_SETTINGS",
-                  payload: !state.setUserSettings,
-                })
-              }
-            />
-            {state.setUserSettings ? <UserSettings cookie={cookie} /> : null}
-          </div>
-        </div>
-      </div>
+      <FindFriendsHeader />
       <div className="flex" style={{ width: "95%", position: "relative" }}>
         <div
           className={css`
@@ -216,7 +74,7 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
             }
           `}
         >
-          <BsSearch style={{ cursor: "pointer", color: "black" }} onClick={handleSubmit} />
+          <BsSearch style={{ cursor: "pointer", color: "black" }} />
           <input
             className={css`
               width: 90%;
@@ -236,4 +94,4 @@ function FindFriends({ cookie, cookieName, socketRef }: IFindFriends) {
   );
 }
 
-export default FindFriends;
+export default React.memo(FindFriends);

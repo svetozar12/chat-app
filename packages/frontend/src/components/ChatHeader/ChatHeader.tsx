@@ -1,8 +1,8 @@
-import { Socket } from "socket.io-client";
 import React from "react";
 import AddGroupChat from "../AddGroupChat";
 import { css } from "@emotion/css";
-function ChatHeader({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) {
+
+function ChatHeader() {
   return (
     <div
       title="chat_header"
@@ -16,7 +16,7 @@ function ChatHeader({ cookieName, socketRef }: { cookieName: string; socketRef: 
         padding: 1rem;
       `}
     >
-      <AddGroupChat socketRef={socketRef} cookieName={cookieName} />
+      <AddGroupChat />
     </div>
   );
 }

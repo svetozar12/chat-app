@@ -1,23 +1,24 @@
 import * as express from "express";
 import * as cors from "cors";
-import "dotenv/config";
-import connectDb from "./connection/dbConnection";
-import data from "./router/router";
-require("./connection/wsConnection");
+import handleError from "./middlewares/error-handler.middleware";
+// config
+import config_init from "./config";
+// routes function
+import { routes } from "./routes";
 const app = express();
+
+// middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
-connectDb();
-app.use("/", data);
-
-const port = process.env.PORT || 4002;
-
-if (process.env.NODE_ENV !== "test") {
-  app.listen(port, (): void => {
-    console.log(`listening on port ${port}`);
-  });
-}
+// ws connection
+import "./connection/wsConnection";
+// config_init
+config_init();
+// routes
+routes(app);
+// error handling
+app.use(handleError);
 
 export { app };

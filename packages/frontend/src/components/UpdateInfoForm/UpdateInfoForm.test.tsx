@@ -1,6 +1,6 @@
 import UpdateInfoForm from "../UpdateInfoForm";
 import { Provider } from "react-redux";
-import { initialState as saveInputState } from "../../redux/reducer/save_inputReducer/save_inputReducer";
+import { initialState as saveInputState } from "../../services/redux/reducer/save_inputReducer/save_inputReducer";
 import configureStore from "redux-mock-store";
 import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
@@ -15,7 +15,7 @@ const store = mockStore({
 const setupRender = () => {
   const componet = render(
     <Provider store={store}>
-      <UpdateInfoForm url="random.png" setImage={mockFunc} cookieName="greg" handleSubmit={mockFunc} />
+      <UpdateInfoForm url="random.png" setImage={mockFunc} handleSubmit={mockFunc} />
     </Provider>,
   );
   return componet;
@@ -30,7 +30,7 @@ describe("Render connected React-redux page", () => {
       renderer
         .create(
           <Provider store={store}>
-            <UpdateInfoForm url="random.png" setImage={mockFunc} cookieName="greg" handleSubmit={mockFunc} />
+            <UpdateInfoForm url="random.png" setImage={mockFunc} handleSubmit={mockFunc} />
           </Provider>,
         )
         .toJSON(),

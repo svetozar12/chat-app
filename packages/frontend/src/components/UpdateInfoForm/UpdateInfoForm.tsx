@@ -1,24 +1,22 @@
 import React from "react";
 import Link from "next/dist/client/link";
 import { useSelector, useDispatch } from "react-redux";
-import ISave_inputState from "../../redux/reducer/save_inputReducer/state";
 import { css } from "@emotion/css";
 import Single_avatar from "../Avatar/Single_avatar/Single_avatar";
 import { Form, Button, Input, Label_button } from "../styledComponents";
 import { AiFillPlusCircle } from "react-icons/ai";
+import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
 
 const UpdateInfoForm = ({
   url,
   handleSubmit,
   image,
   setImage,
-  cookieName,
 }: {
   url?: string;
   image?: string;
   handleSubmit: any;
   setImage: React.Dispatch<React.SetStateAction<string>>;
-  cookieName: string;
 }) => {
   const dispatch = useDispatch();
   const state = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
@@ -61,7 +59,7 @@ const UpdateInfoForm = ({
           `}
         >
           {/* <p>{image}</p> */}
-          <Single_avatar inviter="" cookieName={cookieName} width="6rem" height="6rem" preview={image} />
+          <Single_avatar inviter="" width="6rem" height="6rem" preview={image} />
           <label
             className={css`
               width: 6rem;

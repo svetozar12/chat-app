@@ -1,37 +1,37 @@
 import { Socket } from "socket.io";
+import { constants } from "../constants";
 import Chats from "../models/chatRoom.model";
+import User from "../models/User.model";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createServer } = require("http");
 const server = createServer();
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const io = require("socket.io")(server, {
   cors: {
-    origin: "*",
+    origin: constants.CLIENT_URL,
   },
 });
 // sending message to specific chat room with two users(inviter,reciever)
 io.on("connection", (socket: Socket): void => {
-  socket.on("joined_chat_room", ({ user }) => {
-    socket.join(user);
-  });
+  console.log("ws connecting...");
+  console.log(socket.id);
 
   socket.on("message", async ({ chatInstance, sender, message }: { chatInstance: string; sender: string; message: string }) => {
-    const findChat = await Chats.find({ _id: chatInstance }).select("members").exec();
+    const findChat = await Chats.findOne({ _id: chatInstance }).select("members").exec();
+    if (!findChat) return null;
     const date = new Date();
     const messages = [{ sender, message, createdAt: date }];
-    findChat[0].members.forEach((element: string) => {
-      io.to(element).emit("message", {
-        messages,
-      });
+    console.log(message, chatInstance, socket.rooms);
+
+    io.to(chatInstance).emit("message", {
+      messages,
     });
   });
 
-  socket.on("join_chat", ({ chat_id }) => {
-    socket.join(chat_id);
-  });
+  socket.on("join_chat", ({ rooms }) => {
+    console.log(rooms);
 
-  socket.on("room", ({ user }) => {
-    socket.join(user);
+    socket.join(rooms);
   });
 
   socket.on("friend_request", () => {
@@ -39,12 +39,17 @@ io.on("connection", (socket: Socket): void => {
   });
 
   socket.on("inviting_multiple_users", ({ users }) => {
-    console.log(users);
     io.emit("inviting_multiple_users", { users });
   });
-  socket.on("send_friend_request", ({ inviter, reciever }) => {
+  socket.on("send_friend_request", async ({ inviter, reciever }) => {
+    console.log(inviter, reciever);
+
+    const reciever_field = await User.findOne({ username: reciever });
+    if (!reciever_field) return;
     if (inviter === reciever) return;
-    io.to(reciever).emit("send_friend_request");
+    const _id = reciever_field._id.toString().split("(");
+
+    io.to(_id[0]).emit("send_friend_request");
   });
 
   socket.on("connect_error", (err) => {
@@ -53,7 +58,7 @@ io.on("connection", (socket: Socket): void => {
 });
 
 if (process.env.NODE_ENV !== "test") {
-  server.listen(process.env.PORT || 4000);
+  server.listen(constants.WS_PORT || 4000);
 }
 
-module.exports = io;
+export default io;

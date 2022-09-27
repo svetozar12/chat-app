@@ -29,7 +29,7 @@ it("should create snapshot for <ChatHeader/>", () => {
     renderer
       .create(
         <Provider store={store}>
-          <ChatHeader cookieName={"greg"} socketRef={socketRef} />
+          <ChatHeader socketRef={socketRef} />
         </Provider>,
       )
       .toJSON(),
@@ -39,7 +39,7 @@ it("should create snapshot for <ChatHeader/>", () => {
 it("should render <ChatHeader/>", () => {
   render(
     <Provider store={store}>
-      <ChatHeader cookieName={"greg"} socketRef={socketRef} />
+      <ChatHeader socketRef={socketRef} />
     </Provider>,
   );
   const renderedComponent = screen.getByTitle("chat_header");

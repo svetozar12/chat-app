@@ -1,14 +1,16 @@
 import React from "react";
+import { css, cx } from "@emotion/css";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { Socket } from "socket.io-client";
+// components
 import ChatRoom from "../ChatRoom";
 import Notifications_Modal from "../Notifications_Modal";
 import AddUsers_Modal from "../AddUsers_Modal";
-import { css, cx } from "@emotion/css";
-import { useSelector } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { Socket } from "socket.io-client";
-import { Cookie } from "next-cookie";
+// services
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import api_helper from "../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
 
 interface IContacts {
   _id: string;
@@ -19,27 +21,28 @@ interface IContacts {
 
 interface IMessageSection {
   contacts: IContacts[];
-  socketRef: Socket | null;
-  cookie: Cookie;
-  fetchInviteStatus: () => Promise<any>;
-  fetchInviterStatus: () => Promise<any>;
+  FetchInvites: (status: "accepted" | "recieved" | "declined", InvitesOrigin: "reciever" | "inviter") => Promise<any>;
   chatId: string;
 }
 
-const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchInviterStatus, chatId }: IMessageSection) => {
+const MessageSection = ({ contacts, FetchInvites, chatId }: IMessageSection) => {
   const [users, setUsers] = React.useState<any[]>([]);
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const cookie = useCookie();
   const route = useRouter();
+
   const getMembersSuggestions = async () => {
     try {
-      const res = await fetchInviteStatus();
-      const res_inviter = await fetchInviterStatus();
-      const res_chat = await axios.get(`http://localhost:4002/chat-room${window.location.pathname}`);
-      const members_in_chat = res_chat.data.Message[0].members;
+      // const res = await FetchInvites("accepted", "inviter");
+      // const res_inviter = await FetchInvites("accepted", "inviter");
+      const res_chat = await api_helper.chatroom.getById(window.location.pathname, cookie.get("id"), cookie.get("token"));
+      const [{ members: Message }] = res_chat;
+
+      const members_in_chat = Message;
 
       let data: any[] = [];
-      if (res_inviter) data = [...res_inviter];
-      if (res) data = [...data, ...res];
+      // if (res_inviter) data = [...res_inviter];
+      // if (res) data = [...data, ...res];
       const usersArr: string[] = [];
       data.forEach((element) => {
         usersArr.push(element.inviter);
@@ -65,6 +68,7 @@ const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchI
 
   React.useEffect(() => {
     getMembersSuggestions();
+    return;
   }, [route.asPath]);
 
   return (
@@ -100,10 +104,10 @@ const MessageSection = ({ contacts, socketRef, cookie, fetchInviteStatus, fetchI
             `,
           )}
         >
-          {state.setFriendRequest && <Notifications_Modal contacts={contacts} socketRef={socketRef} />}
+          {state.setFriendRequest && contacts && <Notifications_Modal contacts={contacts} />}
 
-          {state.setModalInvite && socketRef && <AddUsers_Modal socketRef={socketRef} users={users} setUsers={setUsers} chatId={chatId} />}
-          <ChatRoom cookie={cookie} chatId={chatId} />
+          {state.setModalInvite && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
+          <ChatRoom chatId={chatId} />
         </div>
       </div>
     </section>

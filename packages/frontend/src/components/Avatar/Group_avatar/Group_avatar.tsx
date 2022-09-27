@@ -1,20 +1,25 @@
 import React from "react";
-import axios from "axios";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import api_helper from "../../../services/graphql/api_helper";
 import Single_avatar from "../Single_avatar";
+import { useCookie } from "next-cookie";
 
-function Group_avatar({ cookieName, members }: { inviter: string; cookieName: string; members: string[] }) {
+interface IGroup_avatar {
+  inviter: string;
+  members: string[];
+}
+
+function Group_avatar({ members }: IGroup_avatar) {
   const [images, setImages] = React.useState<string[]>([]);
-
-  const getUserImage = async (name: string) => {
+  const cookie = useCookie();
+  const getUserImage = async (image: string) => {
     try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
-      const userAvatar = res.data.user.userAvatar;
+      const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
+      const userAvatar = res.userAvatar;
       if (!userAvatar) {
         return false;
       }
 
-      const requestString = `${requestUrl}/${userAvatar}`;
+      const requestString = `${image}`;
       setImages([...images, requestString]);
       return true;
     } catch (error) {
@@ -27,20 +32,13 @@ function Group_avatar({ cookieName, members }: { inviter: string; cookieName: st
     });
   }, []);
   return (
-    <div title={`groupChat-${cookieName}`} className="group_logo_container">
+    <div title={`groupChat-${cookie.get("username")}`} className="group_logo_container">
       {members.map((element, index) => {
         if (index === 2) return;
 
         return (
-          <div key={index} title={cookieName}>
-            <Single_avatar
-              inviter={element}
-              cookieName={cookieName}
-              width="2.3125rem"
-              height="2.3125rem"
-              group={true}
-              overlay={index === 1 ? true : false}
-            />
+          <div key={index} title={cookie.get("username")}>
+            <Single_avatar inviter={element} width="2.3125rem" height="2.3125rem" group={true} overlay={index === 1 ? true : false} />
           </div>
         );
       })}

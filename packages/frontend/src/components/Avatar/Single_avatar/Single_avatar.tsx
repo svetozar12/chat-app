@@ -1,8 +1,8 @@
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
-import axios from "axios";
-import { requestUrl } from "../../../utils/hostUrl_requestUrl";
+import api_helper from "../../../services/graphql/api_helper";
 import { css } from "@emotion/css";
+import { useCookie } from "next-cookie";
 const logo_post_overlay = css`
   z-index: 1;
 `;
@@ -17,7 +17,6 @@ const group_logo = css`
 `;
 function Single_avatar({
   inviter,
-  cookieName,
   width,
   height,
   overlay,
@@ -25,7 +24,6 @@ function Single_avatar({
   preview,
 }: {
   inviter: string;
-  cookieName: string;
   width?: string;
   height?: string;
   overlay?: boolean;
@@ -34,17 +32,19 @@ function Single_avatar({
 }) {
   const [image, setImage] = React.useState<string>("");
   const [hasAvatar, setHasAvatar] = React.useState<boolean>(false);
+  const cookie = useCookie();
+  const cookieName = cookie.get("name") as string;
 
   const getUserImage = async (name: string) => {
     try {
-      const res = await axios.get(`${requestUrl}/users/${name}`);
-      const userAvatar = res.data.user.userAvatar;
+      const res = await api_helper.user.getById(cookie.get("id"), cookie.get("token"));
+      const userAvatar = res.userAvatar;
       if (!userAvatar) {
         setHasAvatar(false);
         return false;
       }
       setHasAvatar(true);
-      const requestString = `${requestUrl}/${userAvatar}`;
+      const requestString = `${name}`;
       setImage(requestString);
       return true;
     } catch (error) {

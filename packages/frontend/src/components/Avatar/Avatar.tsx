@@ -1,16 +1,25 @@
 import React from "react";
 import Single_avatar from "./Single_avatar";
 import Group_avatar from "./Group_avatar";
-function Avatar({ inviter, cookieName, members }: { inviter: string; cookieName: string; members: string[] }) {
+import { useCookie } from "next-cookie";
+
+interface IAvatar {
+  inviter: string;
+  cookieName: string;
+  members: string[];
+}
+
+function Avatar({ inviter, members }: IAvatar) {
+  const cookie = useCookie();
   return (
-    <section data-testid="avatar" title={cookieName}>
+    <section data-testid="avatar" title={cookie.get("username")}>
       {members.length <= 2 ? (
         <div>
-          <Single_avatar inviter={inviter} cookieName={cookieName} />
+          <Single_avatar inviter={inviter} />
         </div>
       ) : (
         <div>
-          <Group_avatar inviter={inviter} members={members} cookieName={cookieName} />
+          <Group_avatar inviter={inviter} members={members} />
         </div>
       )}
     </section>

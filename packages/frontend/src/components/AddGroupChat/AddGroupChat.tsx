@@ -1,21 +1,25 @@
 import React from "react";
-import axios from "axios";
 import { Socket } from "socket.io-client";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { useSelector, useDispatch } from "react-redux";
 import { css, cx } from "@emotion/css";
 import { Button } from "../styledComponents";
+import api_helper from "../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { getAuth } from "../../utils/authMethods";
 
-const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef: Socket }) => {
+const AddGroupChat = () => {
   const [user, setUser] = React.useState<string>("");
   const [usersData, setUsersData] = React.useState<string[]>([]);
-
+  const cookie = useCookie();
   const dispatch = useDispatch();
-
-  const state1 = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const setState = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const cookieName = cookie.get("name") as string;
 
   const emitFriendRequest = async () => {
-    socketRef?.emit("friend_request");
+    authState.ws?.emit("friend_request");
   };
 
   const addToGroup = (user: string, e: React.FormEvent<HTMLFormElement>) => {
@@ -25,17 +29,16 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
   };
   const handleSumbit = async () => {
     try {
+      getAuth();
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);
-      await axios.post("http://localhost:4002/invites/group-chat", {
-        usersData,
-      });
+      await api_helper.invite.createGroupChat(usersData);
       emitFriendRequest();
       setUsersData([]);
       dispatch({
         type: "TOGGLE_CREATE_GROUP",
-        payload: !state1.toggleCreateGroup,
+        payload: !setState.toggleCreateGroup,
       });
       return true;
     } catch (error) {
@@ -46,7 +49,7 @@ const AddGroupChat = ({ cookieName, socketRef }: { cookieName: string; socketRef
 
   return (
     <>
-      {state1.toggleCreateGroup && (
+      {setState.toggleCreateGroup && (
         <div
           className={css`
             width: 100%;

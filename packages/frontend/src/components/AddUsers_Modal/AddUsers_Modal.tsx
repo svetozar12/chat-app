@@ -1,27 +1,27 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
 import { GrClose } from "react-icons/gr";
 import CheckBox_component from "../CheckBox_component";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
-import { Socket } from "socket.io-client";
+import { constants } from "../../constants";
 import axios from "axios";
 import { css } from "@emotion/css";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 
 interface IAddUsers_Modal {
   users: string[];
-  socketRef: Socket;
   chatId: string;
   setUsers: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const AddUsers_Modal = ({ users, socketRef, chatId, setUsers }: IAddUsers_Modal) => {
+const AddUsers_Modal = ({ users, chatId, setUsers }: IAddUsers_Modal) => {
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
+  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const [invited, setInvited] = React.useState<string[]>([]);
   const dispatch = useDispatch();
-  const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
   const addMembers = async (user: string[]) => {
     try {
-      await axios.put(`${requestUrl}/chat-room/${chatId}`, {
+      await axios.put(`${constants.GRAPHQL_URL}/chat-room/${chatId}`, {
         usernames: user,
       });
       return true;
@@ -35,7 +35,7 @@ const AddUsers_Modal = ({ users, socketRef, chatId, setUsers }: IAddUsers_Modal)
       if (invited.length <= 0) return;
       await addMembers(invited);
       setUsers(users.filter((element) => !invited.includes(element)));
-      socketRef.emit("inviting_multiple_users", { users: invited });
+      authState.ws?.emit("inviting_multiple_users", { users: invited });
       setInvited([]);
 
       return true;

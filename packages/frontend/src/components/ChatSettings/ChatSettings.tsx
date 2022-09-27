@@ -1,33 +1,39 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
-import { requestUrl } from "../../utils/hostUrl_requestUrl";
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { Socket } from "socket.io-client";
 import { getFirstChat } from "../../utils/getFirstChat";
 import { useSelector, useDispatch } from "react-redux";
-import { IInitialSet } from "../../redux/reducer/setReducer/state";
+// services
+import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import api_helper from "../../services/graphql/api_helper";
+import { useCookie } from "next-cookie";
+import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 
 interface IChatSettings {
   chatId: string;
-  socketRef: Socket;
-  cookieName: string;
 }
 
-function ChatSettings({ chatId, socketRef, cookieName }: IChatSettings) {
-  const dispatch = useDispatch();
+function ChatSettings({ chatId }: IChatSettings) {
   const state = useSelector((state: { setReducer: IInitialSet }) => state.setReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const [users, setUsers] = React.useState<string[]>([]);
+  const dispatch = useDispatch();
   const route = useRouter();
+  const cookie = useCookie();
+  const id = cookie.get("id") as string;
+  const token = cookie.get("token") as string;
+
   const emitFriendRequest = async () => {
-    socketRef?.emit("friend_request");
+    authState.ws?.emit("friend_request");
   };
   const getMembers = async () => {
     try {
-      const res = await axios.get(`${requestUrl}/chat-room/${chatId}`);
-      const data = res.data.Message[0].members;
+      const res = await api_helper.chatroom.getById(chatId, id, token);
+      const data = res.members;
+
       setUsers(data);
       return true;
     } catch (error) {
@@ -37,7 +43,7 @@ function ChatSettings({ chatId, socketRef, cookieName }: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await axios.put(`${requestUrl}/chat-room/${chatId}?username=${user}`);
+      await api_helper.chatroom.update(id, chatId, token, user);
       return true;
     } catch (error) {
       return false;
@@ -47,7 +53,7 @@ function ChatSettings({ chatId, socketRef, cookieName }: IChatSettings) {
   React.useEffect(() => {
     setUsers([]);
     getMembers();
-    socketRef.on("inviting_multiple_users", ({ users }) => {
+    authState.ws?.on("inviting_multiple_users", ({ users }) => {
       setUsers((prev) => [...prev, ...users]);
     });
   }, [route.asPath]);
@@ -56,7 +62,7 @@ function ChatSettings({ chatId, socketRef, cookieName }: IChatSettings) {
     const updated_users = users.filter((element) => element !== user);
     setUsers(updated_users);
     if (updated_users.length === 2) {
-      const redirect = await getFirstChat(cookieName);
+      const redirect = await getFirstChat(id, token);
 
       route.push(`/${redirect._id}`);
     }
