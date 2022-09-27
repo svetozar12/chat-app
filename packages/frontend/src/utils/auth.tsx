@@ -1,5 +1,6 @@
 import { NextPageContext } from "next";
 import { useCookie } from "next-cookie";
+import { constants } from "../constants";
 import { isAuth } from "./authMethods";
 import generic from "./generic";
 import redirectTo from "./routing";
@@ -12,10 +13,8 @@ const withAuthSync = (getServerSideProps?: Function) => {
   return async (ctx: ICtx) => {
     const isUserAuth: any = await isAuth(ctx);
     const currPath = ctx.resolvedUrl;
-    const cookie = useCookie(ctx);
-    const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
 
-    if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
+    if (!isUserAuth && currPath !== "/") return redirectTo(constants.HOST_URL as string, ctx, currPath);
     if (getServerSideProps) {
       const gssp = await getServerSideProps(ctx);
       return {
@@ -37,11 +36,9 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
   return async (ctx: ICtx) => {
     const isUserAuth: any = await isAuth(ctx);
     const cookie = useCookie(ctx);
-
     const currPath = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
     const desiredURL: string = cookie.get("REDIRECT_URL_CALLBACK");
     const path = desiredURL || currPath;
-    console.log(path, "putq", isUserAuth);
 
     if (isUserAuth && ctx.resolvedUrl !== path) return redirectTo(`/${path}`, ctx);
 
@@ -50,6 +47,7 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
       return {
         props: {
           cookie: ctx.req?.headers.cookie || "",
+          ...ctx.query,
           ...gssp.props,
         },
       };
@@ -57,6 +55,7 @@ export const isAlreadyAuth = (getServerSideProps?: Function) => {
     return {
       props: {
         cookie: ctx.req?.headers.cookie || "",
+        ...ctx.query,
       },
     };
   };

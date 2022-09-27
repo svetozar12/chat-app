@@ -5,7 +5,7 @@ const rootUrl = "";
 export interface IUser {
   username: string;
   email: string;
-  gender: "male" | "female" | "other";
+  gender: "male" | "female";
 }
 
 const user = {

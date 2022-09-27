@@ -1,8 +1,8 @@
 import { Flex, FormLabel, VStack } from "@chakra-ui/react";
-import { css } from "@emotion/css";
 import React from "react";
 import Single_avatar from "../../../Avatar/Single_avatar";
 import { GrEdit } from "react-icons/gr";
+
 interface IUpdateInfoDetails {
   image: string;
 }
@@ -16,20 +16,17 @@ const UpdateInfoDetails = ({ image }: IUpdateInfoDetails) => {
       <VStack align={{ base: "flex-start", lg: "center" }} pos="relative">
         <Single_avatar width="10rem" height="10rem" preview={image} />
         <FormLabel
+          w="10rem"
+          h="10rem"
+          justifyContent="center"
+          alignItems="center"
+          cursor="pointer"
+          pos="absolute"
+          top={0}
+          transition="0.2s"
+          borderRadius="100%"
+          border="none"
           _hover={{ opacity: "0.8" }}
-          className={css`
-            width: 10rem;
-            height: 10rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            position: absolute;
-            top: 0;
-            transition: 0.2s;
-            border-radius: 100%;
-            border: none;
-          `}
           htmlFor="file"
         >
           <Flex

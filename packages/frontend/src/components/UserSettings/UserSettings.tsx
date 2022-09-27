@@ -1,63 +1,18 @@
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { useCookie } from "next-cookie";
 import Link from "next/link";
+// utils
+import api_helper from "../../services/graphql/api_helper";
+import { getAuth } from "../../utils/authMethods";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
+import { Link as ALink, VStack } from "@chakra-ui/react";
+// icons
 import { IoMdLogOut } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
-import { useCookie } from "next-cookie";
-import api_helper from "../../services/graphql/api_helper";
-import { getAuth } from "../../utils/authMethods";
-
-export const User_settings = styled.div`
-  width: 10rem;
-  padding: 1rem;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: var(--main-white) !important;
-  border-radius: 5px !important;
-  text-align: left;
-  top: 0;
-  right: 0;
-  margin: 0;
-  z-index: 2000;
-  transform: translate(-4px, 75px);
-  box-shadow: 2px 2px 22px 1px var(--main-box-shadow);
-  &:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    background: var(--main-white);
-    right: 14px;
-    top: -10px;
-    transform: rotate(45deg);
-    z-index: 2000;
-  }
-  @media (min-width: 1008px) {
-    width: 15rem;
-  }
-`;
-
-export const User_settings_style = css`
-  display: flex;
-  align-items: center;
-  color: black;
-  margin: 0 0.3rem;
-  border-radius: 5px;
-  padding: 1rem 0.3rem;
-  width: 98%;
-  font-size: 1.2vw;
-  cursor: pointer;
-  &:hover {
-    background: rgba(122, 122, 122, 0.3);
-  }
-`;
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -115,20 +70,58 @@ function UserSettings() {
   ];
 
   return (
-    <User_settings data-testid="user_settings">
+    <VStack
+      w={{ base: "15rem", lg: "20rem" }}
+      p="1rem"
+      pos="absolute"
+      justifyContent="center"
+      align="center"
+      bg="main_white"
+      borderRadius="xl"
+      textAlign="left"
+      top={0}
+      right={0}
+      m={0}
+      zIndex={2000}
+      transform="translate(-4px, 75px)"
+      boxShadow=" 2px 2px 22px 1px var(--main-box-shadow)"
+      _before={{
+        pos: "absolute",
+        content: `""`,
+        height: "20px",
+        width: "20px",
+        background: "main_white",
+        right: " 14px",
+        top: "-10px",
+        transform: "rotate(45deg)",
+        zIndex: "2000",
+      }}
+    >
       {Render.map((element, index) => {
         const { href, onClick, Icon, title } = element;
 
         return (
           <Link key={index} href={href} passHref>
-            <a className={User_settings_style} onClick={onClick}>
+            <ALink
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              textAlign="start"
+              w="full"
+              borderRadius="xl"
+              my="2"
+              py="2"
+              fontSize={{ base: "1.4rem", md: "3vw", lg: "2vw", xl: "1vw" }}
+              _hover={{ bg: "hover_bg" }}
+              onClick={onClick}
+            >
               <Icon className={buttonStyles} />
               {title}
-            </a>
+            </ALink>
           </Link>
         );
       })}
-    </User_settings>
+    </VStack>
   );
 }
 

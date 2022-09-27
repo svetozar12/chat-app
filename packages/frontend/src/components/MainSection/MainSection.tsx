@@ -28,7 +28,7 @@ const MainSection = ({ chatRooms, chatId }: IMainSection) => {
     <VStack
       mr="-0.5rem !important"
       ml="-0.5rem !important"
-      w={{ base: !state.setMobileNav ? 0 : "102%", md: "50%", xl: "40%", "2xl": "40%" }}
+      w={{ base: !state.setMobileNav ? 0 : "102%", xl: "50%", "2xl": "40%" }}
       h="100vh"
       pos={{ base: "absolute", lg: "relative" }}
       bg="white"

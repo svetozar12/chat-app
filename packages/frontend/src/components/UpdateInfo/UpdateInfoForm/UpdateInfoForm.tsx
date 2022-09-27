@@ -16,10 +16,16 @@ const UpdateInfoForm = ({ setImage, image }: IUpdateInfoForm) => {
   const InputsLayout = [
     {
       label: "Username",
+      labelProps: {
+        htmlFor: "username",
+        fontWeight: "bold",
+        fontSize: "xl",
+      },
       props: {
         variant: "FormInput",
-        type: "email",
+        type: "username",
         value: state.input_username,
+        id: "username",
         w: "full",
         onChange: (e) =>
           dispatch({
@@ -30,14 +36,40 @@ const UpdateInfoForm = ({ setImage, image }: IUpdateInfoForm) => {
     },
     {
       label: "Email",
+      labelProps: {
+        htmlFor: "email",
+        fontWeight: "bold",
+        fontSize: "xl",
+      },
       props: {
         variant: "FormInput",
         type: "email",
         value: state.input_email,
         w: "full",
+        id: "email",
         onChange: (e) =>
           dispatch({
             type: "SAVE_INPUT_EMAIL",
+            payload: e.target.value,
+          }),
+      },
+    },
+    {
+      label: "",
+      labelProps: {
+        htmlFor: "file",
+        fontWeight: "bold",
+        fontSize: "xl",
+      },
+      props: {
+        variant: "FormInput",
+        type: "file",
+        id: "file",
+        value: state.input_file,
+        display: "none",
+        onChange: (e) =>
+          dispatch({
+            type: "SAVE_INPUT_FILE",
             payload: e.target.value,
           }),
       },
@@ -48,12 +80,10 @@ const UpdateInfoForm = ({ setImage, image }: IUpdateInfoForm) => {
     <SimpleGrid my={5} gap={5} columns={2} w="full">
       <GridItem w="full" colSpan={{ base: 2, lg: 1 }}>
         {InputsLayout.map((element, index) => {
-          const { label, props } = element;
+          const { label, labelProps, props } = element;
           return (
             <VStack mt={1} key={index} align="flex-start" w="full">
-              <FormLabel fontWeight="bold" fontSize="xl">
-                {label}
-              </FormLabel>
+              <FormLabel {...labelProps}>{label}</FormLabel>
               <Input {...props} />
             </VStack>
           );

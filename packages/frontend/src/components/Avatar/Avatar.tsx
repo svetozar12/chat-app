@@ -2,6 +2,7 @@ import React from "react";
 import Single_avatar from "./Single_avatar";
 import Group_avatar from "./Group_avatar";
 import { useCookie } from "next-cookie";
+import { HStack } from "@chakra-ui/react";
 
 interface IAvatar {
   inviter: string;
@@ -12,7 +13,7 @@ interface IAvatar {
 function Avatar({ inviter, members }: IAvatar) {
   const cookie = useCookie();
   return (
-    <section data-testid="avatar" title={cookie.get("username")}>
+    <HStack w="4rem" h="4rem" data-testid="avatar" title={cookie.get("username")}>
       {members.length <= 2 ? (
         <div>
           <Single_avatar />
@@ -22,7 +23,7 @@ function Avatar({ inviter, members }: IAvatar) {
           <Group_avatar members={members} />
         </div>
       )}
-    </section>
+    </HStack>
   );
 }
 

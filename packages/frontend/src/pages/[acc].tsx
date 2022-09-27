@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCookie } from "next-cookie";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import { io, Socket } from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/css";
@@ -13,8 +13,9 @@ import MessageSection from "../components/MessagesSection";
 import HamburgerMenu from "../components/HamburgerMenu";
 import redirectTo from "../utils/routing";
 import { isAuth } from "../utils/authMethods";
-import withAuthSync from "../utils/auth";
+import withAuthSync, { ICtx } from "../utils/auth";
 import { HStack, Box } from "@chakra-ui/react";
+import generic from "../utils/generic";
 
 export interface Ichats {
   _id: string;
@@ -127,11 +128,25 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   );
 };
 
-export const getServerSideProps = withAuthSync(async (ctx) => {
+export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
+  const cookie = useCookie(ctx);
 
-  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, currPath);
+  if (!isUserAuth && currPath !== "/") return redirectTo("/", ctx, (ctx.query.callback as string) || currPath);
+  const chatInstance: any = await generic.getFirstChat(cookie.get("id"), cookie.get("token"));
+  console.log(cookie.getAll());
+
+  cookie.set("first_chat_id", chatInstance, {
+    sameSite: "strict",
+    path: "/",
+  });
+
+  cookie.set("last_visited_chatRoom", chatInstance, {
+    sameSite: "strict",
+    path: "/",
+  });
+  console.log(ctx.query, "kureo");
 
   return {
     props: {
