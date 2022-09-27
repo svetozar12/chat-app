@@ -1,9 +1,9 @@
 import React from "react";
 import { css } from "@emotion/css";
 import { useDispatch } from "react-redux";
-import api_helper from "../../../../services/graphql/api_helper";
+import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-import { getAuth } from "../../../../utils/authMethods";
+import { getAuth } from "utils/authMethods";
 
 const options = css`
   background: transparent;

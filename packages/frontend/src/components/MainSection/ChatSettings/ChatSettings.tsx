@@ -2,14 +2,13 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { useRouter } from "next/router";
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from "react-icons/ai";
-import { Socket } from "socket.io-client";
-import generic from "../../utils/generic";
+import generic from "utils/generic";
 import { useSelector, useDispatch } from "react-redux";
 // services
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
-import api_helper from "../../services/graphql/api_helper";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
+import api_helper from "services/graphql/api_helper";
 import { useCookie } from "next-cookie";
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
+import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
 import s from "./ChatSettings.module.css";
 

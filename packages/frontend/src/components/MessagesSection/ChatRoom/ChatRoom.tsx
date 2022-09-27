@@ -2,22 +2,22 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 // utils
-import timeStamp from "../../utils/timeStamp";
-import { constants } from "../../constants";
+import timeStamp from "utils/timeStamp";
+import { constants } from "constants/index";
 // components
 import RenderChat from "./RenderChat";
-import ChatHeader from "../ChatHeader";
+import ChatHeader from "./ChatHeader";
 import ChatRoomForm from "./ChatRoomForm";
-import SkelletonUserMessages from "../Loading/SkelletonUserMessages";
+import SkelletonUserMessages from "components/Loading/SkelletonUserMessages";
 // hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useCookie } from "next-cookie";
 // services
-import api_helper from "../../services/graphql/api_helper";
-import { InitialStateMessage } from "../../services/redux/reducer/messageReducer/state";
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import api_helper from "services/graphql/api_helper";
+import { InitialStateMessage } from "services/redux/reducer/messageReducer/state";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import { VStack } from "@chakra-ui/react";
-import { useAuth } from "../../utils/SessionProvider";
+import { useAuth } from "utils/SessionProvider";
 
 interface IHome {
   chatId: any;

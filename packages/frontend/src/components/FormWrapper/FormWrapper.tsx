@@ -4,11 +4,11 @@ import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 // components
 import Alerts from "../Alerts";
 import { FormControl, Box, Heading, VStack, Flex } from "@chakra-ui/react";
-import { Formik } from "formik";
+
 interface IFormWrapper {
   children: JSX.Element | JSX.Element[];
   type: "Register" | "Login";
-  handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+  handleSubmit: () => void;
 }
 
 const FormWrapper = ({ children, type, handleSubmit }: IFormWrapper) => {

@@ -1,15 +1,14 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { Socket } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import Avatar from "../Avatar";
-import { IInitialSet } from "../../services/redux/reducer/setReducer/state";
+import Avatar from "components/Avatar";
+import { IInitialSet } from "services/redux/reducer/setReducer/state";
 import { BsThreeDots } from "react-icons/bs";
 import { css, cx } from "@emotion/css";
-import api_helper from "../../services/graphql/api_helper";
+import { IAuthState } from "services/redux/reducer/authReducer/state";
 import { useCookie } from "next-cookie";
-import { IAuthState } from "../../services/redux/reducer/authReducer/state";
 import { Heading, HStack, VStack } from "@chakra-ui/react";
+
 interface IActiveChats {
   _id: string;
   members: string[];

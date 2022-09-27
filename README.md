@@ -2,6 +2,16 @@
 
 > chat-app for sending messages
 
+## Build with
+
+- [NextJs](https://nextjs.org/)
+- [chakra-ui](https://chakra-ui.com/)
+- [Redux](https://redux.js.org/)
+- [socket-io](https://socket.io/)
+- [Express](https://expressjs.com/)
+- [MongoDb](https://www.mongodb.com/)
+- [JWT](https://jwt.io/)
+
 ## Install
 
 ```sh

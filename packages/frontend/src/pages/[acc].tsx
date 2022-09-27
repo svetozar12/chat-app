@@ -16,6 +16,7 @@ import { isAuth } from "../utils/authMethods";
 import withAuthSync, { ICtx } from "../utils/auth";
 import { HStack, Box } from "@chakra-ui/react";
 import generic from "../utils/generic";
+import { IAuthState } from "../services/redux/reducer/authReducer/state";
 
 export interface Ichats {
   _id: string;
@@ -39,6 +40,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
   const [chatRooms, setChatRooms] = useState<Ichats[]>([]);
   const [contacts, setContacts] = useState<Iinvites[]>([]);
   const inputState = useSelector((state: { saveInputReducer: ISave_inputState }) => state.saveInputReducer);
+  const authState = useSelector((state: { authReducer: IAuthState }) => state.authReducer);
 
   const getChatRoom = async () => {
     try {
@@ -112,6 +114,7 @@ const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
     dispatch({ type: "SET_WS_CONNECTED", payload: socketConnect });
     return () => {
       socketConnect.disconnect();
+      dispatch({ type: "SET_WS_CONNECTED", payload: null });
     };
   }, []);
 
@@ -146,7 +149,6 @@ export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
     sameSite: "strict",
     path: "/",
   });
-  console.log(ctx.query, "kureo");
 
   return {
     props: {

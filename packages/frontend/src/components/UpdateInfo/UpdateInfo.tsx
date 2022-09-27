@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, FormControl, Heading, Link, SimpleGrid, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, FormControl, Heading, Link, VStack } from "@chakra-ui/react";
 import { useCookie } from "next-cookie";
 import React from "react";
 

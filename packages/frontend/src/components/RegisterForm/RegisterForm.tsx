@@ -1,18 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
-import { css } from "@emotion/css";
-import QuickLogin_Modal from "./QuickLogin_Modal";
 // services
 import { IAuthState } from "../../services/redux/reducer/authReducer/state";
-import ISave_inputState from "../../services/redux/reducer/save_inputReducer/state";
-import FormWrapper from "../FormWrapper";
-import { FormLabel, Input, Button, Flex, Spacer, useRadioGroup, HStack, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { FormLabel, Input, Button, Flex, useRadioGroup, HStack, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import React from "react";
 import DefaultLink from "../DefaultLink";
 import RadioCard from "../RadioCards/RadioCards";
 import api_helper from "../../services/graphql/api_helper";
-import generic from "../../utils/generic";
 import { useFormik } from "formik";
 import { RegisterSchema } from "../../utils/validation";
+// components
+import QuickLogin_Modal from "./QuickLogin_Modal";
+import FormWrapper from "../FormWrapper";
 
 interface IRegisterForm {
   // eslint-disable-next-line no-unused-vars

@@ -20,6 +20,8 @@ io.on("connection", (socket: Socket): void => {
     if (!findChat) return null;
     const date = new Date();
     const messages = [{ sender, message, createdAt: date }];
+    console.log(messages, "message", socket.rooms);
+
     io.to(chatInstance).emit("message", {
       messages,
     });

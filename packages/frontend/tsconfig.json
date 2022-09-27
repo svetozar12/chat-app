@@ -13,11 +13,8 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "sourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "baseUrl": "src",
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
@@ -27,18 +24,7 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": [
-    "./**/*.ts",
-    "src"
-  ],
-  "exclude": [
-    "node_modules/**/*",
-    "cypress"
-  ],
-  "lib": [
-    "es2017",
-    "dom",
-    "ES6",
-    "es2015.core"
-  ]
+  "include": ["./**/*.ts", "src"],
+  "exclude": ["node_modules/**/*", "cypress"],
+  "lib": ["es2017", "dom", "ES6", "es2015.core"]
 }
