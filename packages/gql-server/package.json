@@ -14,6 +14,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
+    "@chat-app/backend": "*",
     "@graphql-codegen/typescript-generic-sdk": "^3.0.1",
     "@types/node": "^18.7.18",
     "cross-env": "^7.0.3",

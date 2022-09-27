@@ -5,3 +5,5 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`listening on http://localhost:${port}`);
   });
 }
+
+export * from './models';

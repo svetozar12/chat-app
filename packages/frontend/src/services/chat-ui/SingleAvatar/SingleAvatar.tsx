@@ -29,8 +29,10 @@ function SingleAvatar(props: ISingleAvatar) {
 
   const getUserImage = async () => {
     try {
-      const res = await sdk.user.getById({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+      const res = await sdk.user.getById({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
       const { userAvatar } = res;
+      console.log(userAvatar);
+      if (!userAvatar) return setImage('/images/user.png');
       setImage(userAvatar);
       return true;
     } catch (error) {

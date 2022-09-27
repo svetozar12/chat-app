@@ -54,7 +54,7 @@ function AddGroupChat(props: IAddGroupChat) {
       const result = usersData.includes(cookieName);
 
       if (!result) usersData.push(cookieName);
-      await sdk.invite.createGroupChat(usersData);
+      await sdk.invite.createGroupChat({ usersData });
       emitFriendRequest();
       setUsersData([]);
       toggleCreateGroup(!toggle.toggleCreateGroupModal);

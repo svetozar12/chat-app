@@ -1,4 +1,12 @@
-import { AuthModel, Invite } from '@chat-app/gql-server';
+import {
+  AuthModel,
+  Invite,
+  MutationCreateInviteArgs,
+  MutationCreateInviteGroupChatArgs,
+  MutationUpdateInviteArgs,
+  QueryGetInvitesByInviterArgs,
+  QueryGetInvitesByRecieverArgs,
+} from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';
@@ -10,8 +18,11 @@ export interface IInvite {
 }
 
 const invite = {
-  getAllByReciever: async (auth: AuthModel, status: string): Promise<Invite[]> => {
-    const { userId, AccessToken } = auth;
+  getAllByReciever: async (args: QueryGetInvitesByRecieverArgs): Promise<Invite[]> => {
+    const {
+      auth: { userId, AccessToken },
+      status,
+    } = args;
     const condition = status ? `status:${status}` : '';
     return makeRequest(
       {
@@ -30,9 +41,12 @@ const invite = {
     );
   },
 
-  getAllByInviter: async (auth: AuthModel, status: string): Promise<Invite[]> => {
+  getAllByInviter: async (args: QueryGetInvitesByInviterArgs): Promise<Invite[]> => {
+    const {
+      auth: { userId, AccessToken },
+      status,
+    } = args;
     const condition = status ? `status:${status}` : '';
-    const { userId, AccessToken } = auth;
 
     return makeRequest(
       {
@@ -51,8 +65,11 @@ const invite = {
     );
   },
 
-  create: async (auth: AuthModel, reciever: string): Promise<Invite> => {
-    const { userId, AccessToken } = auth;
+  create: async (args: MutationCreateInviteArgs): Promise<Invite> => {
+    const {
+      auth: { userId, AccessToken },
+      reciever,
+    } = args;
 
     return makeRequest(
       {
@@ -71,7 +88,8 @@ const invite = {
     );
   },
 
-  createGroupChat: async (usersData: string[]) => {
+  createGroupChat: async (args: MutationCreateInviteGroupChatArgs) => {
+    const { usersData } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -87,7 +105,8 @@ const invite = {
     );
   },
 
-  update: async (auth: AuthModel, invite_id: string, status: string) => {
+  update: async (args: MutationUpdateInviteArgs) => {
+    const { auth, invite_id, status } = args;
     return makeRequest(
       {
         gqlQuery: `

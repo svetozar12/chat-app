@@ -31,7 +31,7 @@ const InviteSchema = new Schema<InviteSchema>({
   },
   status: {
     type: String,
-    enum: ['accepted', 'recieved', 'declined'],
+    enum: InviteStatus,
     default: 'recieved',
     required: true,
   },

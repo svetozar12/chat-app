@@ -32,7 +32,10 @@ function FindFriends(props: IFindFriends) {
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await sdk.invite.create({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, invite.reciever);
+      const res = await sdk.invite.create({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        reciever: invite.reciever,
+      });
 
       const { reciever, inviter } = res;
 

@@ -1,10 +1,10 @@
-import { HYDRATE } from 'next-redux-wrapper';
 import { IAuth } from './state';
 import { ActionType } from '../../types';
 
 export const initialState: IAuth = {
   remember_me: false,
   loginPrompt: false,
+  isAuth: false,
 };
 const authReducer = (state = initialState, action: any) => {
   switch (action.type) {
@@ -12,6 +12,8 @@ const authReducer = (state = initialState, action: any) => {
       return { ...state, remember_me: action.payload };
     case ActionType.SIGN_IN:
       return { ...state, cookie: action.payload };
+    case ActionType.IS_AUTH:
+      return { ...state, isAuth: action.payload };
     default:
       return state;
   }

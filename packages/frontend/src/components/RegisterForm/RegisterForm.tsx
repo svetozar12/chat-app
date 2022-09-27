@@ -48,7 +48,7 @@ function RegisterForm(props: IRegisterForm) {
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    const register = await sdk.user.create({ username, email, password, gender });
+    const register = await sdk.user.create({ user: { username, email, password, gender } });
     setInputUsername(username);
     setInputEmail(email);
     setInputPassword(password);

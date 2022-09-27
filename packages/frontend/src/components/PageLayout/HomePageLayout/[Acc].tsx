@@ -14,7 +14,7 @@ import { STATE } from 'services/redux/reducer';
 import { setNotifNumber } from 'services/redux/reducer/invites/actions';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
-import { Chat, Invite } from '@chat-app/gql-server';
+import { Chat, Invite, Status } from '@chat-app/gql-server';
 import Sidebar from 'components/Sidebar/Sidebar';
 
 interface IApp {
@@ -37,7 +37,7 @@ function App(props: IApp) {
   const getChatRoom = async () => {
     try {
       setChatRooms([]);
-      const res = await sdk.chatroom.getAll({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+      const res = await sdk.chatroom.getAll({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
       setChatRooms(res);
       return true;
     } catch (error) {
@@ -45,16 +45,19 @@ function App(props: IApp) {
     }
   };
 
-  const FetchInvites = async (status: 'accepted' | 'recieved' | 'declined', InvitesOrigin: 'reciever' | 'inviter') => {
+  const FetchInvites = async (status: Status, InvitesOrigin: 'reciever' | 'inviter') => {
     try {
       setContacts([]);
       if (InvitesOrigin === 'reciever') {
-        const res = await sdk.invite.getAllByReciever({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, status);
+        const res = await sdk.invite.getAllByReciever({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, status });
         if (res instanceof Error) throw Error(res.message);
         setContacts(res);
         return res;
       }
-      const res = await sdk.invite.getAllByInviter({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, 'recieved');
+      const res = await sdk.invite.getAllByInviter({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        status: Status.Recieved,
+      });
       if (res instanceof Error) throw Error(res.message);
       setContacts(res);
       return res;
@@ -67,12 +70,15 @@ function App(props: IApp) {
   const checkNotification = async () => {
     try {
       setContacts([]);
-      const res = await sdk.invite.getAllByReciever({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, 'recieved');
+      const res = await sdk.invite.getAllByReciever({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        status: Status.Recieved,
+      });
       if (res instanceof Error) throw Error(res.message);
       setNotifNumber(res.length);
       setContacts(res);
       res.forEach((item) => {
-        if (item.status === 'declined') return false;
+        if (item.status === Status.Declined) return false;
       });
       return true;
     } catch (error) {
@@ -117,7 +123,6 @@ function App(props: IApp) {
           <HamburgerMenu toggleHamburger={() => console.log('toggle hamburger menu')} />
         </Box>
       </HStack>
-      <Sidebar />
       <MainSection chatId={chatId} chatRooms={chatRooms} />
       <MessagesSection chatId={chatId} contacts={contacts} FetchInvites={FetchInvites} />
     </HStack>

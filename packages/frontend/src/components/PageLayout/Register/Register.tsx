@@ -28,7 +28,7 @@ function RegisterLayout(props: IRegisterLayout) {
 
   const quickLogin = async () => {
     try {
-      const res = await sdk.auth.login(inputs.input_username, inputs.input_password);
+      const res = await sdk.auth.login({ username: inputs.input_username, password: inputs.input_password });
       if (res) {
         toggleQuickLogin(true);
         togglelIsLoading(true);

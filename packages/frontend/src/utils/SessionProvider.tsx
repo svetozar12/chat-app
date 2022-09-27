@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { logout } from './authMethods';
-import useProvideAuth from './useSession';
+import useProvideAuth from '../hooks/useSession';
 
 const AuthContext = createContext({
   user: { _id: '', username: '', email: '' },

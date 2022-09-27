@@ -1,13 +1,23 @@
-import { AuthModel, Message, Messages, Pagination } from '@chat-app/gql-server';
+import {
+  Message,
+  Messages,
+  MutationCreateMessageArgs,
+  MutationDeleteMessageArgs,
+  MutationUpdateMessageArgs,
+  QueryGetAllMessagesArgs,
+} from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
-import { client } from '../index';
 
 const path = '';
 
 const message = {
-  getAll: async (auth: AuthModel, chat_id: string, query: Pagination): Promise<Messages[]> => {
+  getAll: async (args: QueryGetAllMessagesArgs): Promise<Messages[]> => {
+    const {
+      auth: { AccessToken, userId },
+      chat_id,
+      query,
+    } = args;
     const condition = query ? `,query:{page_size:${query.page_size},page_number:${query.page_number}}` : '';
-    const { userId, AccessToken } = auth;
     return makeRequest(
       {
         gqlQuery: `
@@ -26,13 +36,17 @@ const message = {
     );
   },
 
-  create: async (auth: AuthModel, chat_id: string, _message: string): Promise<Messages> => {
-    const { userId, AccessToken } = auth;
+  create: async (args: MutationCreateMessageArgs): Promise<Messages> => {
+    const {
+      auth: { userId, AccessToken },
+      chat_id,
+      message,
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
         mutation {
-          createMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},chat_id: "${chat_id}",message:"${_message}") {
+          createMessage(auth:{userId: "${userId}", AccessToken: "${AccessToken}"},chat_id: "${chat_id}",message:"${message}") {
             user_id
             chat_id
             sender
@@ -46,8 +60,12 @@ const message = {
     );
   },
 
-  update: async (auth: AuthModel, message_id: string, newMessage: string): Promise<Message> => {
-    const { userId, AccessToken } = auth;
+  update: async (args: MutationUpdateMessageArgs): Promise<Message> => {
+    const {
+      auth: { userId, AccessToken },
+      message_id,
+      newMessage,
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -62,8 +80,11 @@ const message = {
     );
   },
 
-  delete: async (auth: AuthModel, message_id: string): Promise<Message> => {
-    const { userId, AccessToken } = auth;
+  delete: async (args: MutationDeleteMessageArgs): Promise<Message> => {
+    const {
+      auth: { userId, AccessToken },
+      message_id,
+    } = args;
     return makeRequest(
       {
         gqlQuery: `

@@ -1,11 +1,24 @@
-import { AuthModel, Chat, ChatModel, CreateChatMessage, Message } from '@chat-app/gql-server';
+import {
+  AuthModel,
+  Chat,
+  ChatModel,
+  CreateChatMessage,
+  Message,
+  MutationCreateChatArgs,
+  MutationDeleteChatArgs,
+  MutationUpdateChatArgs,
+  QueryGetAllChatsArgs,
+  QueryGetChatByIdArgs,
+} from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';
 
 const chat = {
-  getAll: async (auth: AuthModel): Promise<Chat[]> => {
-    const { userId, AccessToken } = auth;
+  getAll: async (args: QueryGetAllChatsArgs): Promise<Chat[]> => {
+    const {
+      auth: { userId, AccessToken },
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -21,8 +34,11 @@ const chat = {
     );
   },
 
-  getById: async (chat_id: string, auth: AuthModel): Promise<Chat> => {
-    const { userId, AccessToken } = auth;
+  getById: async (args: QueryGetChatByIdArgs): Promise<Chat> => {
+    const {
+      auth: { userId, AccessToken },
+      chat_id,
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -38,9 +54,11 @@ const chat = {
     );
   },
 
-  create: async (chat: ChatModel, auth: AuthModel): Promise<CreateChatMessage> => {
-    const { userId, AccessToken } = auth;
-    const { invite_id, user1, user2, user_id } = chat;
+  create: async (args: MutationCreateChatArgs): Promise<CreateChatMessage> => {
+    const {
+      auth: { userId, AccessToken },
+      chat: { invite_id, user1, user2, user_id },
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -59,9 +77,14 @@ const chat = {
     );
   },
 
-  update: async (auth: AuthModel, chat_id: string, username?: string, usersData?: string[]): Promise<Chat> => {
+  update: async (args: MutationUpdateChatArgs): Promise<Chat> => {
+    const {
+      auth: { userId, AccessToken },
+      chat_id,
+      username,
+      usersData,
+    } = args;
     const condition = username ? `username:"${username}"` : `usersData:"${usersData}"`;
-    const { userId, AccessToken } = auth;
 
     return makeRequest(
       {
@@ -78,8 +101,11 @@ const chat = {
     );
   },
 
-  delete: async (auth: AuthModel, chat_id: string): Promise<Message> => {
-    const { userId, AccessToken } = auth;
+  delete: async (args: MutationDeleteChatArgs): Promise<Message> => {
+    const {
+      auth: { userId, AccessToken },
+      chat_id,
+    } = args;
 
     return makeRequest(
       {

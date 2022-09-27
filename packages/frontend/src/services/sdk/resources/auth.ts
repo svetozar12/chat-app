@@ -1,10 +1,18 @@
-import { AuthModel, LoginUser, Message } from '@chat-app/gql-server';
+import {
+  AuthModel,
+  LoginUser,
+  Message,
+  MutationLoginUserArgs,
+  MutationLogoutUserArgs,
+  MutationRefreshTokenArgs,
+} from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';
 
 const auth = {
-  login: async (username: string, password: string): Promise<LoginUser> => {
+  login: async (args: MutationLoginUserArgs): Promise<LoginUser> => {
+    const { username, password } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -21,12 +29,13 @@ const auth = {
     );
   },
 
-  refresh: async (userId: string, RefreshToken: string): Promise<LoginUser> => {
+  refresh: async (args: MutationRefreshTokenArgs): Promise<LoginUser> => {
+    const { user_id, RefreshToken } = args;
     return makeRequest(
       {
         gqlQuery: `
         mutation {
-          refreshToken(auth:{userId: "${userId}", RefreshToken: "${RefreshToken}"}) {
+          refreshToken(auth:{userId: "${user_id}", RefreshToken: "${RefreshToken}"}) {
             userId
             AccessToken
             RefreshToken
@@ -38,8 +47,10 @@ const auth = {
     );
   },
 
-  logout: async (auth: AuthModel): Promise<Message> => {
-    const { userId, AccessToken } = auth;
+  logout: async (args: MutationLogoutUserArgs): Promise<Message> => {
+    const {
+      auth: { userId, AccessToken },
+    } = args;
     return makeRequest(
       {
         gqlQuery: `

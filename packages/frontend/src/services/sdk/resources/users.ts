@@ -1,4 +1,14 @@
-import { AuthModel, GetUser, Message, UpdateUserModel, UserModel } from '@chat-app/gql-server';
+import {
+  AuthModel,
+  GetUser,
+  Message,
+  MutationCreateUserArgs,
+  MutationDeleteUserArgs,
+  MutationUpdateUserArgs,
+  QueryGetUserArgs,
+  UpdateUserModel,
+  UserModel,
+} from '@chat-app/gql-server';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';
@@ -10,8 +20,10 @@ export interface IUser {
 }
 
 const user = {
-  getById: async (auth: AuthModel): Promise<GetUser> => {
-    const { userId, AccessToken } = auth;
+  getById: async (args: QueryGetUserArgs): Promise<GetUser> => {
+    const {
+      auth: { userId, AccessToken },
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -29,8 +41,10 @@ const user = {
     );
   },
 
-  create: async (user: UserModel): Promise<Message> => {
-    const { username, email, gender, password } = user;
+  create: async (args: MutationCreateUserArgs): Promise<Message> => {
+    const {
+      user: { username, email, gender, password },
+    } = args;
     return makeRequest(
       {
         gqlQuery: `
@@ -45,9 +59,11 @@ const user = {
     );
   },
 
-  update: async (auth: AuthModel, user: UpdateUserModel): Promise<Message> => {
-    const { userId, AccessToken } = auth;
-    const { username, email, gender } = user;
+  update: async (args: MutationUpdateUserArgs): Promise<Message> => {
+    const {
+      auth: { userId, AccessToken },
+      user: { email, gender, username },
+    } = args;
 
     return makeRequest(
       {
@@ -63,8 +79,10 @@ const user = {
     );
   },
 
-  delete: async (auth: AuthModel): Promise<Message> => {
-    const { userId, AccessToken } = auth;
+  delete: async (args: MutationDeleteUserArgs): Promise<Message> => {
+    const {
+      auth: { userId, AccessToken },
+    } = args;
     return makeRequest(
       {
         gqlQuery: `

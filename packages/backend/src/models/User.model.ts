@@ -1,12 +1,22 @@
 import { Schema, model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-export interface UserSchema {
+
+export enum Gender {
+  MALE = 'Male',
+  FEMALE = 'Female',
+  OTHERS = 'Others',
+}
+
+export interface User {
   username: string;
   password: string;
   email: string;
-  gender: 'Male' | 'Female' | 'Others';
+  gender: Gender;
   userAvatar: string;
-  isValidPassword: any;
+}
+
+interface UserSchema extends User {
+  isValidPassword: (password: string) => Promise<boolean>;
 }
 
 const UserSchema = new Schema<UserSchema>({
@@ -28,8 +38,8 @@ const UserSchema = new Schema<UserSchema>({
   },
   gender: {
     type: String,
-    enum: ['Male', 'Female', 'Others'],
-    default: 'Others',
+    enum: Gender,
+    default: Gender.OTHERS,
     required: true,
   },
   userAvatar: String,

@@ -25,7 +25,12 @@ function AddUserModal(props: IAddUserModal) {
   const [invited, setInvited] = React.useState<string[]>([]);
   const addMembers = async (user: string[]) => {
     try {
-      await sdk.chatroom.update({ userId: cookie.get('id'), AccessToken: cookie.get('cookie') }, chatId, undefined, user);
+      await sdk.chatroom.update({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('cookie') },
+        chat_id: chatId,
+        username: undefined,
+        usersData: user,
+      });
     } catch (error) {
       return false;
     }

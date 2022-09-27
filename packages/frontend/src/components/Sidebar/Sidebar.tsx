@@ -32,6 +32,7 @@ const Sidebar = (props: ISidebar) => {
   const { toggle, toggleFriendRequest, toggleCreateGroup, toggleMobileNav, toggleUserSettingsAction } = props;
   const {
     base: {
+      default: { color },
       form: { background },
     },
   } = useThemeColors();
@@ -82,7 +83,7 @@ const Sidebar = (props: ISidebar) => {
           baseProps={{ onClick: () => toggleUserSettingsAction(!toggle.toggleUserSettings) }}
           width="2.5rem"
           height="2.5rem"
-          style={{ marginBottom: '1rem !important', cursor: 'pointer' }}
+          chakraProps={{ marginBottom: '1rem !important', cursor: 'pointer', _hover: { boxShadow: `0px 0px 7px 0px ${color}` } }}
         />
       </VStack>
     </VStack>

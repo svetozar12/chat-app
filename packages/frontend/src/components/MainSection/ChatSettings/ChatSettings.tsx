@@ -36,7 +36,7 @@ function ChatSettings(props: IChatSettings) {
   };
   const getMembers = async () => {
     try {
-      const res = await sdk.chatroom.getById(chatId, { userId: id, AccessToken: token });
+      const res = await sdk.chatroom.getById({ auth: { userId: id, AccessToken: token }, chat_id: chatId });
       const { members } = res;
       setUsers(members);
       return true;
@@ -47,7 +47,7 @@ function ChatSettings(props: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await sdk.chatroom.update({ userId: id, AccessToken: token }, chatId, user);
+      await sdk.chatroom.update({ auth: { userId: id, AccessToken: token }, chat_id: chatId, username: user });
       return true;
     } catch (error) {
       return false;

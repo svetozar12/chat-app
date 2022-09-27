@@ -13,7 +13,7 @@ const timeStamp = (createdAt: string) => {
 
 const getFirstChat = async (userId: string, token: string): Promise<any> => {
   try {
-    const res = await sdk.chatroom.getAll({ userId, AccessToken: token });
+    const res = await sdk.chatroom.getAll({ auth: { userId, AccessToken: token } });
     if (res.length <= 0) return false;
 
     return res[0]._id;

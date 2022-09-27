@@ -9,4 +9,9 @@ const setRememberMe = (check: boolean) => ({
   payload: check,
 });
 
-export { signOut, setRememberMe };
+const setIsAuth = (isAuth: boolean) => ({
+  type: ActionType.IS_AUTH,
+  payload: isAuth,
+});
+
+export { signOut, setRememberMe, setIsAuth };

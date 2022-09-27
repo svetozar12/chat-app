@@ -44,7 +44,7 @@ function UserSettings(props: IUserSettings) {
   const deleteUser = async () => {
     try {
       getAuth();
-      await sdk.user.delete({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+      await sdk.user.delete({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
       router.push('/logout');
 
       return true;

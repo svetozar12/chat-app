@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import sdk from 'services/sdk';
+import { Status } from '@chat-app/gql-server';
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -29,9 +30,9 @@ function PendingChats(props: IPendingChats) {
     ws.ws?.emit('friend_request');
   };
 
-  const updateInviteStatus = async (param: string) => {
+  const updateInviteStatus = async (param: Status) => {
     try {
-      await sdk.invite.update({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, inviteId, param);
+      await sdk.invite.update({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, invite_id: inviteId, status: param });
       emitFriendRequest();
       return true;
     } catch (error) {
@@ -41,10 +42,10 @@ function PendingChats(props: IPendingChats) {
 
   const createChatRoom = async () => {
     try {
-      await sdk.chatroom.create(
-        { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
-        { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-      );
+      await sdk.chatroom.create({
+        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
+      });
       emitFriendRequest();
     } catch (error) {
       return false;
@@ -73,7 +74,7 @@ function PendingChats(props: IPendingChats) {
         color: 'red.600',
         transition: '0.2s',
         _hover: { opacity: '0.8', transition: '0.2s' },
-        onClick: async () => await updateInviteStatus('declined'),
+        onClick: async () => await updateInviteStatus(Status.Declined),
       },
     },
   ];

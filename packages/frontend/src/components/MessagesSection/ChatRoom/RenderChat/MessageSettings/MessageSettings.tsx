@@ -30,7 +30,7 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
 
   const handleDelete = async () => {
     try {
-      await sdk.message.delete({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, id);
+      await sdk.message.delete({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, message_id: id });
       return true;
     } catch (error) {
       return false;

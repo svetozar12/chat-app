@@ -1,8 +1,9 @@
-import makeRequest, { Method } from "../../makeRequest";
-import { Auth, Message, Response } from "../types/common";
-import { CreateUser, UpdateUser, User } from "../types/user";
+import makeRequest, { Method } from '../../makeRequest';
+import { Auth, Message, Response } from '../types/common';
+import { CreateUser, UpdateUser } from '../types/user';
+const basePath = '/users';
 
-const basePath = "/users";
+import { User } from '@chat-app/backend';
 
 const user = {
   getUser: async (auth: Auth): Response<User> => {

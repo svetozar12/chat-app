@@ -54,7 +54,7 @@ function Profile(props: IProfile) {
       if (image) formData.append('userAvatar', image);
 
       e.preventDefault();
-      await sdk.user.update({ userId: user._id, AccessToken: cookie.get('token') }, formData as unknown as UserModel);
+      await sdk.user.update({ auth: { userId: user._id, AccessToken: cookie.get('token') }, user: formData as unknown as UserModel });
       setInputEmail('');
       setInputGender('');
     } catch (error) {

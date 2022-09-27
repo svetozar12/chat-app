@@ -37,13 +37,13 @@ export const checkTokens = async (cookie: Cookie) => {
   const RefreshToken: string = cookie.get('refresh_token');
   if (!AccessToken) {
     if (RefreshToken) {
-      const res = await sdk.auth.refresh(userId, RefreshToken);
+      const res = await sdk.auth.refresh({ user_id: userId, RefreshToken });
 
       const { AccessToken: Access_Token, RefreshToken: Refresh_Token } = res;
 
       if (axios.isAxiosError(RefreshToken)) {
         const cookies = cookie.getAll();
-        await sdk.auth.logout({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+        await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
         for (const key in cookies) cookie.remove(key);
         return false;
       }
@@ -56,7 +56,7 @@ export const checkTokens = async (cookie: Cookie) => {
       return true;
     }
     const cookies = cookie.getAll();
-    await sdk.auth.logout({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+    await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
     for (const key in cookies) cookie.remove(key);
     return false;
   }
@@ -66,7 +66,7 @@ export const checkTokens = async (cookie: Cookie) => {
 export const logout = async (ctx: ICtx) => {
   const cookie = useCookie(ctx);
   const cookies = cookie.getAll();
-  await sdk.auth.logout({ userId: cookie.get('id'), AccessToken: cookie.get('token') });
+  await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
   for (const key in cookies) cookie.remove(key);
   return redirectTo('/', ctx);
 };

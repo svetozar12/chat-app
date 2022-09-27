@@ -99,7 +99,11 @@ function RenderChat(props: IRenderChat) {
       for (const obj of messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          await sdk.message.update({ userId: cookie.get('id'), AccessToken: cookie.get('token') }, id, editedMessage);
+          await sdk.message.update({
+            auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+            message_id: id,
+            newMessage: editedMessage,
+          });
           resetMessages();
         }
         messageArr.push(obj);
