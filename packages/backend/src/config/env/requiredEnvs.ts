@@ -10,7 +10,6 @@ const requiredEnvs: string[] = [
   'JWT_SECRET',
   'JWT_REFRESH_SECRET',
   'AVATAR_URL',
-  'BLOB_CONNECTION_STRING',
   'DEBUG',
 ];
 
