@@ -51,10 +51,9 @@ class UsersService {
       username: req.body.username,
       email: req.body.email,
       gender: req.body.gender,
-      userAvatar: req.file?.filename,
     };
 
-    const { userId, username, email, gender, userAvatar } = userReqObj;
+    const { userId, username, email, gender } = userReqObj;
 
     const users = await User.findOne({ _id: userId }).exec();
     if (!users) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
@@ -63,7 +62,6 @@ class UsersService {
       username: username ? username : users.username,
       email: email ? email : users.email,
       gender: gender ? gender : users.gender,
-      userAvatar: email ? userAvatar : users.userAvatar,
     });
     return res.status(200).send({ Message: resMessages.user.UPDATE });
   }

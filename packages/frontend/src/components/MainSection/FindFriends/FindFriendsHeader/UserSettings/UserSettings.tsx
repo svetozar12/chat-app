@@ -55,23 +55,15 @@ function UserSettings(props: IUserSettings) {
 
   const Render = [
     {
-      href: '/settings/profile',
-      onClick: () => {
-        toggleUserSettings(false);
-      },
-      Icon: FiSettings,
-      title: 'User settings',
+      href: '#',
+      onClick: deleteUser,
+      Icon: RiDeleteBin6Fill,
+      title: ' Delete user',
     },
     {
       href: '/logout',
       Icon: IoMdLogOut,
       title: 'Log out',
-    },
-    {
-      href: '#',
-      onClick: deleteUser,
-      Icon: RiDeleteBin6Fill,
-      title: ' Delete user',
     },
   ];
 
@@ -89,7 +81,7 @@ function UserSettings(props: IUserSettings) {
       pt={2}
       pb={2}
       zIndex={2000}
-      transform="translate(211px, -143px)"
+      transform="translate(215px, -103px)"
       boxShadow={`${offColor} 0px 1px 4px`}
     >
       {Render.map((element, index) => {

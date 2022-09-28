@@ -5,7 +5,6 @@ import { BsThreeDots } from 'react-icons/bs';
 import { css, cx } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
-import Avatar from '../../Avatar';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -83,7 +82,6 @@ function ActiveChats(props: IActiveChats) {
         `}
       >
         <HStack>
-          <Avatar members={members as string[]} />
           <VStack align="flex-start">
             <div
               className={css`

@@ -40,8 +40,11 @@ const Sidebar = (props: ISidebar) => {
 
   const toggleGroupCreate = () => {
     toggleChatSettings(false);
+    console.log(!toggle.toggleCreateGroupModal);
+
     toggleCreateGroup(!toggle.toggleCreateGroupModal);
     toggleMobileNav(!toggleMobileNav);
+    console.log(toggle.toggleCreateGroupModal);
   };
 
   const renderItems = [
@@ -49,11 +52,6 @@ const Sidebar = (props: ISidebar) => {
       Icon: IoNotifications,
       onClick: () => toggleFriendRequest(!toggle.toggleFriendReqModal),
       ariaLabel: 'opens chats requests',
-    },
-    {
-      Icon: AiOutlineUsergroupAdd,
-      onClick: () => toggleGroupCreate(),
-      ariaLabel: 'creates group chat',
     },
     {
       Icon: useColorModeValue(BsFillSunFill, MdOutlineDarkMode),

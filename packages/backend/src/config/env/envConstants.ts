@@ -17,8 +17,8 @@ const externalUrlsEnv: IExternalUrlsEnv = {
 };
 
 const dbsConfigEnv: IDbsConfigEnv = {
-  MONGO_URL: `mongodb://${getEnv('NODE_ENV') === 'production' ? 'mongodb' : 'localhost'}:27017/${getEnv('DB_NAME')}`,
-  REDIS_URL: `redis://${getEnv('NODE_ENV') === 'production' ? 'redis' : 'localhost'}:6379`,
+  MONGO_URL: getEnv('MONGO_URL'),
+  REDIS_URL: getEnv('REDIS_URL'),
   DB_NAME: getEnv('DB_NAME'),
   BLOB_CONNECTION_STRING: getEnv('BLOB_CONNECTION_STRING'),
 };

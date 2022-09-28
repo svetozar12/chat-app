@@ -5,6 +5,7 @@ import Loading from '../../Loading';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import useThemeColors from 'hooks/useThemeColors';
 
 interface IQuickLoginModal {
   toggleQuickLogin: typeof toggleQuickLogin;
@@ -15,7 +16,9 @@ function QuickLoginModal(props: IQuickLoginModal) {
   const { toggleQuickLogin, quickLogin } = props;
   const [isLoading, setIsLoading] = React.useState(false);
   const {
-    colors: { chat_bg, form_button },
+    base: {
+      button: { color },
+    },
   } = useThemeColors();
 
   return (
@@ -32,7 +35,7 @@ function QuickLoginModal(props: IQuickLoginModal) {
       >
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
           <Button
-            colorScheme={form_button}
+            colorScheme={color}
             w="full"
             isLoading={isLoading}
             spinner={<Loading />}

@@ -7,10 +7,8 @@ import { VStack } from '@chakra-ui/react';
 import timeStamp from '../../../utils/timeStamp';
 // components
 import RenderChat from './RenderChat';
-import ChatHeader from './ChatHeader';
 import ChatRoomForm from './ChatRoomForm';
 import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
-// hooks
 // services
 import sdk from 'services/sdk';
 import { useAuth } from '../../../utils/SessionProvider';
@@ -114,8 +112,6 @@ function ChatRoom(props: IChatRoom) {
 
   return (
     <VStack w="full" h="100vh">
-      {toggle.toggleCreateGroupModal && <ChatHeader />}
-
       {user ? (
         <VStack
           w="full"
