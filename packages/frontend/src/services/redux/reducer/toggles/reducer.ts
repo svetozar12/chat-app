@@ -28,7 +28,7 @@ const toggleReducer = (state = initialState, action: AnyAction) => {
     case ActionType.TOGGLE_QUICK_LOGIN:
       return { ...state, toggleQuickLogin: action.payload };
     case ActionType.TOGGLE_CREATE_GROUP:
-      return { ...state, toggleCreateGroup: action.payload };
+      return { ...state, toggleCreateGroupModal: action.payload };
     case ActionType.TOGGLE_MOBILE_NAV:
       return { ...state, TOGGLEMobileNav: action.payload };
     case ActionType.TOGGLE_CHAT_SETINGS:

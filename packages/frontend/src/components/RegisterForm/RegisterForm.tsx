@@ -73,10 +73,6 @@ function RegisterForm(props: IRegisterForm) {
     onChange: handleGenderChange,
   });
 
-  const {
-    colors: { input_bg, chat_border_color },
-  } = useThemeColors();
-
   const group = getRootProps();
   const genderOptions = ['Male', 'Female'];
   interface IRenderInputs {

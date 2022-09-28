@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:profile": "yarn build --profile",
     "start": "next start",
     "lint": "next lint",
     "lint-css": "stylelint \"**/*.{css,scss}\"",

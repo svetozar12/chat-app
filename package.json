@@ -18,7 +18,8 @@
     "dev:kill": "yarn kill && yarn dev",
     "mash-up": "yarn format && yarn lint && yarn build",
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test",
-    "db:up": "lerna run db:up --stream"
+    "db:up": "lerna run db:up --stream",
+    "lerna-dockerize": "lerna-dockerize"
   },
   "devDependencies": {
     "lerna": "^5.1.8",
@@ -29,5 +30,8 @@
     "yarn": ">= 1.17.3",
     "node": ">= 12.5.0"
   },
-  "name": "chat-app"
+  "name": "chat-app",
+  "dependencies": {
+    "lerna-dockerize": "^1.0.4"
+  }
 }

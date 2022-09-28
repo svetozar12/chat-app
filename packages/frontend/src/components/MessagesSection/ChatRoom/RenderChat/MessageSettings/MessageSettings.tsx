@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import { getAuth } from 'utils/authMethods';
 import sdk from 'services/sdk';
+import useThemeColors from 'hooks/useThemeColors';
 
 const options = css`
   background: transparent;
@@ -44,9 +45,9 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
     status === 'edit' && setEditing(true);
   };
 
-  const {
-    colors: { from_bg, color },
-  } = useThemeColors();
+  // const {
+  //   colors: { from_bg, color },
+  // } = useThemeColors();
 
   return (
     <div

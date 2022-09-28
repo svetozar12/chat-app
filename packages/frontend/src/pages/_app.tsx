@@ -15,12 +15,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on('routeChangeComplete', () => NProgress.done());
   Router.events.on('routeChangeError', () => NProgress.done());
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <App cookies={pageProps.cookie}>
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+      {/* @ts-ignore*/}
       <Component {...pageProps} />
     </App>
   );
 }
 
 export default wrapper.withRedux(MyApp);
-
-export { getServerSideProps } from "components/PageLayout/App/App";

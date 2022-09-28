@@ -5,7 +5,6 @@ interface CreateUser {
   password: string;
   email: string;
   gender: Gender;
-  userAvatar?: string;
 }
 
 interface UpdateUser {
@@ -13,7 +12,6 @@ interface UpdateUser {
   password?: string;
   email?: string;
   gender?: Gender;
-  userAvatar?: string;
 }
 
 interface User {
