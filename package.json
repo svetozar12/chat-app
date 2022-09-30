@@ -19,7 +19,9 @@
     "mash-up": "yarn format && yarn lint && yarn build",
     "mash-up:test": "yarn format && yarn lint && yarn build && yarn test",
     "db:up": "lerna run db:up --stream",
-    "lerna-dockerize": "lerna-dockerize"
+    "lerna-dockerize": "lerna-dockerize",
+    "//docker commands": "",
+    "start:backend": "lerna run start --scope=@chat-app/backend --stream"
   },
   "devDependencies": {
     "lerna": "^5.1.8",
