@@ -18,10 +18,11 @@ ENV CLIENT_URL 'http://localhost:3000'
 
 # Copy or project directory (locally) in the current directory of our docker image (/app)
 COPY . .
+RUN yarn --frozen-lockfile
 RUN yarn bootstrap
 RUN npx lerna run build --scope=@chat-app/backend
 
 EXPOSE 4002
-RUN ls
+
 CMD ["yarn","start:backend"]
 # 6.56 GB
