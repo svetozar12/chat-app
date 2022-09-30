@@ -21,7 +21,9 @@
     "db:up": "lerna run db:up --stream",
     "lerna-dockerize": "lerna-dockerize",
     "//docker commands": "",
-    "start:backend": "lerna run start --scope=@chat-app/backend --stream"
+    "start:backend": "lerna run start --scope=@chat-app/backend --stream",
+    "start:gql-server": "lerna run start --scope=@chat-app/gql-server --stream",
+    "start:frontend": "lerna run start --scope=@chat-app/frontend --stream"
   },
   "devDependencies": {
     "lerna": "^5.1.8",

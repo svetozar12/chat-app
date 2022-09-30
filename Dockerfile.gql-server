@@ -1,0 +1,16 @@
+FROM node
+WORKDIR /app
+
+ENV API_URL "https://chat-what.up.railway.app/"
+ENV DEBUG false
+
+# Copy or project directory (locally) in the current directory of our docker image (/app)
+COPY . .
+RUN yarn --frozen-lockfile
+RUN yarn bootstrap
+RUN npx lerna run build --scope=@chat-app/gql-server
+
+EXPOSE 4003
+
+CMD ["yarn","start:gql-server"]
+# 6.56 GB
