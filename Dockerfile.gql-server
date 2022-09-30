@@ -7,8 +7,10 @@ ENV DEBUG false
 # Copy or project directory (locally) in the current directory of our docker image (/app)
 COPY . .
 RUN yarn --frozen-lockfile
-RUN yarn bootstrap
+
+RUN npx lerna run build --scope=@chat-app/backend
 RUN npx lerna run build --scope=@chat-app/gql-server
+RUN yarn bootstrap
 
 EXPOSE 4003
 
