@@ -4,10 +4,10 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap && lerna link",
+    "bootstrap": "npx lerna bootstrap && npx lerna link",
     "prebuild": "yarn bootstrap",
     "postbuild": "yarn bootstrap",
-    "build": "lerna run build --stream",
+    "build": "npx lerna run build --stream",
     "kill": "taskkill /f /im node.exe",
     "dev": "lerna run dev --stream",
     "dev:backend": "lerna run dev --scope {@chat-app/backend,@chat-app/gql-server} --stream",
