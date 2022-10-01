@@ -9,8 +9,8 @@
   "scripts": {
     "prebuild": "rimraf src/generated && yarn codegen",
     "build": "rimraf dist && tsc",
-    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/index.ts",
-    "start": "node dist/index.js",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/server.ts",
+    "start": "node dist/server.js",
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
