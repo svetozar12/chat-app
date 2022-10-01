@@ -8,7 +8,7 @@ async function main() {
   try {
     const server = createServer({
       schema,
-      port: 4003,
+      port: parseInt(process.env.PORT as string) || 4003,
       async context({ request, query }) {
         logger('warn', 'GRAPHQL-SERVER-REQUEST-LOG');
         logger('info', request.url, [query]);

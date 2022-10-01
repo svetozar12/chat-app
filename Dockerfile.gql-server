@@ -3,6 +3,7 @@ WORKDIR /app
 
 ENV API_URL "https://chat-what.up.railway.app/"
 ENV DEBUG false
+env PORT 4003
 
 # Copy or project directory (locally) in the current directory of our docker image (/app)
 COPY . .
