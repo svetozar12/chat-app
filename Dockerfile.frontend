@@ -1,9 +1,8 @@
 FROM node
 WORKDIR /app
 
-ENV NEXT_PUBLIC_GQL_PROTOCOL http
-ENV NEXT_PUBLIC_GQL_HOST localhost
-ENV NEXT_PUBLIC_GQL_PORT 4003
+ENV NEXT_PUBLIC_GQL_PROTOCOL https
+ENV NEXT_PUBLIC_GQL_HOST chat-app-gql.up.railway.app
 
 # Copy or project directory (locally) in the current directory of our docker image (/app)
 COPY . .
