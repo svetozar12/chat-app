@@ -1,7 +1,5 @@
 import {
-  AuthModel,
   Chat,
-  ChatModel,
   CreateChatMessage,
   Message,
   MutationCreateChatArgs,

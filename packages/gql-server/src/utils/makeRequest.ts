@@ -25,9 +25,6 @@ const makeRequest = async <T>(
     const res = await instance[method](path, body, options);
     return res.data;
   } catch (error: any) {
-    // eslint-disable-next-line no-console
-    console.log();
-
     return new GraphQLYogaError(error.response.data.Message);
   }
 };

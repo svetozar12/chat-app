@@ -84,7 +84,7 @@ function ChatSettings(props: IChatSettings) {
         Members in chat
       </Heading>
 
-      {users.map((item, index) => (
+      {users?.map((item, index) => (
         <HStack alignItems="center" key={index}>
           <Heading color={color}>{item}</Heading>
           <AiOutlineUserDelete

@@ -19,6 +19,7 @@ import { setInputEmail, setInputGender, setInputPassword, setInputUsername } fro
 import sdk from 'services/sdk';
 import { Gender } from '@chat-app/gql-server';
 import { setRegisterError } from 'services/redux/reducer/alert/actions';
+import { useCreateUserMutation } from 'generated/graphql';
 
 interface IRegisterForm {
   quickLogin: () => Promise<boolean>;
@@ -38,6 +39,7 @@ function RegisterForm(props: IRegisterForm) {
       default: { color },
     },
   } = useThemeColors();
+  const [createUserMutation] = useCreateUserMutation();
   const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername, setRegisterError } =
     props;
   interface IValues {
@@ -48,7 +50,7 @@ function RegisterForm(props: IRegisterForm) {
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    const register = await sdk.user.create({ user: { username, email, password, gender } });
+    const register = await createUserMutation({ variables: { user: { username, email, password, gender } } });
     setInputUsername(username);
     setInputEmail(email);
     setInputPassword(password);
