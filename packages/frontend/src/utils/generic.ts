@@ -1,4 +1,3 @@
-import { Chat } from 'services/generated/graphql';
 import sdk from 'services/sdk';
 
 const timeStamp = (createdAt: string) => {

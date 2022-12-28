@@ -17,7 +17,7 @@ import sdk from 'services/sdk';
 import { useRouter } from 'next/router';
 import { BsFillSunFill } from 'react-icons/bs';
 import { MdDarkMode } from 'react-icons/md';
-import { AuthModel, useDeleteUserMutation } from 'services/generated/graphql';
+import { AuthModel, useDeleteUserMutation } from 'services/generated';
 
 const buttonStyles = css`
   margin: 0 1rem;

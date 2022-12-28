@@ -14,7 +14,7 @@ import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import sdk from 'services/sdk';
-import { Status, Invite } from 'services/generated/graphql';
+import { Status, Invite } from 'services/generated';
 
 interface IMessageSection {
   contacts: Invite[];

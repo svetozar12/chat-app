@@ -1,6 +1,5 @@
 import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
-import React from 'react';
 import RegisterForm from 'components/RegisterForm';
 import generic from 'utils/generic';
 import { STATE } from 'services/redux/reducer';
@@ -9,7 +8,7 @@ import { togglelIsLoading, toggleQuickLogin } from 'services/redux/reducer/toggl
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
-import sdk from 'services/sdk';
+import { useLoginUserMutation } from 'services/generated';
 
 interface IRegisterLayout {
   inputs: IInputs;
@@ -25,14 +24,16 @@ function RegisterLayout(props: IRegisterLayout) {
   const { inputs, setInputEmail, setInputGender, setInputPassword, togglelIsLoading, setInputUsername, toggleQuickLogin } = props;
   const router = useRouter();
   const cookie = useCookie();
-
+  const [login, { data }] = useLoginUserMutation();
   const quickLogin = async () => {
     try {
-      const res = await sdk.auth.login({ username: inputs.input_username, password: inputs.input_password });
-      if (res) {
+      await login({ variables: { username: inputs.input_username, password: inputs.input_password } });
+      if (data) {
+        const {
+          loginUser: { userId, AccessToken, RefreshToken },
+        } = data;
         toggleQuickLogin(true);
         togglelIsLoading(true);
-        const { userId, AccessToken, RefreshToken } = res;
         const cookies = [
           { name: 'name', value: inputs.input_username, options: { sameSite: 'strict', path: '/' } },
           { name: 'id', value: userId, options: { sameSite: 'strict', path: '/' } },

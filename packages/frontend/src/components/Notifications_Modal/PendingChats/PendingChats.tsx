@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import sdk from 'services/sdk';
-import { Status } from 'services/generated/graphql';
+import { Status } from 'services/generated';
 
 interface IPendingChats extends Iinvites {
   _id: string;

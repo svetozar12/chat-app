@@ -1,11 +1,4 @@
-import {
-  AuthModel,
-  LoginUser,
-  Message,
-  MutationLoginUserArgs,
-  MutationLogoutUserArgs,
-  MutationRefreshTokenArgs,
-} from 'services/generated/graphql';
+import { AuthModel, LoginUser, Message, MutationLoginUserArgs, MutationLogoutUserArgs, MutationRefreshTokenArgs } from 'services/generated';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';

@@ -1,7 +1,6 @@
-import { GetUser, useGetUserByIdQuery, AuthModel } from 'services/generated/graphql';
+import { GetUser, useGetUserByIdQuery, AuthModel } from 'services/generated';
 import { useCookie } from 'next-cookie';
 import { useEffect, useState } from 'react';
-import sdk from 'services/sdk';
 import { checkTokens, logout } from '../utils/authMethods';
 
 function useProvideAuth() {
@@ -11,7 +10,7 @@ function useProvideAuth() {
   const { data: userData } = useGetUserByIdQuery({ variables: { auth } });
   const checkSession = async () => {
     try {
-      await checkTokens(cookie);
+      // await checkTokens(cookie);
       return true;
     } catch (error) {
       return false;

@@ -16,7 +16,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
-import { Gender, useCreateUserMutation } from 'services/generated/graphql';
+import { Gender, useCreateUserMutation } from 'services/generated';
 import { setRegisterError } from 'services/redux/reducer/alert/actions';
 
 interface IRegisterForm {

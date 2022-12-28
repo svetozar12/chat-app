@@ -1,0 +1,5 @@
+mutation Logout($auth: AuthModel!) {
+  logoutUser(auth: $auth) {
+    Message
+  }
+}

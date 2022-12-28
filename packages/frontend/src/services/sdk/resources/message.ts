@@ -5,7 +5,7 @@ import {
   MutationDeleteMessageArgs,
   MutationUpdateMessageArgs,
   QueryGetAllMessagesArgs,
-} from 'services/generated/graphql';
+} from 'services/generated';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';

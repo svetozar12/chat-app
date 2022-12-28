@@ -5,7 +5,7 @@ import { Image, Box, BoxProps } from '@chakra-ui/react';
 import s from './SingleAvatar.module.css';
 import useThemeColors from 'hooks/useThemeColors';
 import { IBaseComponent } from 'services/chat-ui/types';
-import { useGetUserByIdQuery, AuthModel } from 'services/generated/graphql';
+import { useGetUserByIdQuery, AuthModel } from 'services/generated';
 
 type Base = IBaseComponent<BoxProps>;
 
