@@ -7,7 +7,6 @@
   "license": "ISC",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prebuild": "rimraf src/generated && yarn codegen",
     "build": "rimraf dist && tsc",
     "dev": "cross-env NODE_ENV=development ts-node-dev --exit-child --respawn src/server.ts",
     "start": "node dist/server.js"

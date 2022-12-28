@@ -7,7 +7,7 @@ import {
   MutationUpdateChatArgs,
   QueryGetAllChatsArgs,
   QueryGetChatByIdArgs,
-} from '@chat-app/gql-server';
+} from 'services/generated/graphql';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';

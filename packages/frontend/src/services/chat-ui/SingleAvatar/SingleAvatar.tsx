@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Image, Box, BoxProps } from '@chakra-ui/react';
 import s from './SingleAvatar.module.css';
-import sdk from 'services/sdk';
 import useThemeColors from 'hooks/useThemeColors';
 import { IBaseComponent } from 'services/chat-ui/types';
+import { useGetUserByIdQuery, AuthModel } from 'services/generated/graphql';
 
 type Base = IBaseComponent<BoxProps>;
 
@@ -20,30 +20,12 @@ interface ISingleAvatar extends Base {
 
 function SingleAvatar(props: ISingleAvatar) {
   const { baseProps, chakraProps, group, height, overlay, preview, style, width, imageSrc } = props;
-  const [image, setImage] = React.useState<string>('');
-  const cookie = useCookie();
+  const { image } = useGetUserImage();
   const {
     base: {
       default: { color },
     },
   } = useThemeColors();
-
-  const getUserImage = async () => {
-    try {
-      const res = await sdk.user.getById({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
-      const { userAvatar } = res;
-      console.log(userAvatar);
-      if (!userAvatar) return setImage('/images/user.png');
-      setImage(userAvatar);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  (() => {
-    getUserImage();
-  })();
 
   return (
     <Box {...chakraProps} {...style} {...baseProps} boxShadow={`0px 0px 3px 0px ${color}`} borderRadius="full">
@@ -77,3 +59,26 @@ function SingleAvatar(props: ISingleAvatar) {
 }
 
 export default SingleAvatar;
+
+const useGetUserImage = () => {
+  const [image, setImage] = React.useState<string>('');
+  const cookie = useCookie();
+  const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+  const { data: user } = useGetUserByIdQuery({ variables: { auth } });
+  const getUserImage = async () => {
+    try {
+      const { userAvatar } = user?.getUser || {};
+      if (!userAvatar) return setImage('/images/user.png');
+      setImage(userAvatar);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    getUserImage();
+  }, []);
+
+  return { image, setImage };
+};

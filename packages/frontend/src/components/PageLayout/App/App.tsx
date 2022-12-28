@@ -9,8 +9,8 @@ import { STATE } from 'services/redux/reducer';
 import { setIsAuth } from 'services/redux/reducer/auth/actions';
 import { IAuth } from 'services/redux/reducer/auth/state';
 import theme from 'styles/theme';
-import { checkTokens } from 'utils/authMethods';
 import SessionProvider from 'utils/SessionProvider';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 interface IApp {
   children: JSX.Element | JSX.Element[];
@@ -21,6 +21,12 @@ interface IApp {
 function App(props: IApp) {
   const { auth, children, setIsAuth } = props;
   const cookie = useCookie();
+  const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://${process.env.NEXT_PUBLIC_GQL_HOST}:${process.env.NEXT_PUBLIC_GQL_PORT}/graphql`;
+  const client = new ApolloClient({
+    uri: gqlUrl,
+    cache: new InMemoryCache(),
+  });
+
   const checkAuth = async () => {
     return setIsAuth(!!cookie.get('id'));
   };
@@ -28,19 +34,21 @@ function App(props: IApp) {
     checkAuth();
   }, []);
   return (
-    <SessionProvider>
-      <GlobalRenders />
-      <ChakraProvider theme={theme}>
-        {!!cookie.get('id') ? (
-          <HStack>
-            <Sidebar />
-            {children}
-          </HStack>
-        ) : (
-          children
-        )}
-      </ChakraProvider>
-    </SessionProvider>
+    <ApolloProvider client={client}>
+      <SessionProvider>
+        <GlobalRenders />
+        <ChakraProvider theme={theme}>
+          {!!cookie.get('id') ? (
+            <HStack>
+              <Sidebar />
+              {children}
+            </HStack>
+          ) : (
+            children
+          )}
+        </ChakraProvider>
+      </SessionProvider>
+    </ApolloProvider>
   );
 }
 

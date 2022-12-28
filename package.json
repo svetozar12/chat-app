@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "yarn lint",
     "pretest": "yarn build",
-    "build": "npx lerna run build --stream",
+    "build": "npx lerna run build --stream --no-sort",
     "dev": "lerna run dev --stream --no-sort",
     "test": "lerna run test --stream",
     "lint": "lerna run lint --stream"

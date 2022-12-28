@@ -1,14 +1,11 @@
 import {
-  AuthModel,
   GetUser,
   Message,
   MutationCreateUserArgs,
   MutationDeleteUserArgs,
   MutationUpdateUserArgs,
   QueryGetUserArgs,
-  UpdateUserModel,
-  UserModel,
-} from '@chat-app/gql-server';
+} from 'services/generated/graphql';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';

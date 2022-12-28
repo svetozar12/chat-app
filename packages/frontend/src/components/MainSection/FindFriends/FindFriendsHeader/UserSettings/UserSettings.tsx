@@ -17,6 +17,7 @@ import sdk from 'services/sdk';
 import { useRouter } from 'next/router';
 import { BsFillSunFill } from 'react-icons/bs';
 import { MdDarkMode } from 'react-icons/md';
+import { AuthModel, useDeleteUserMutation } from 'services/generated/graphql';
 
 const buttonStyles = css`
   margin: 0 1rem;
@@ -33,7 +34,7 @@ function UserSettings(props: IUserSettings) {
   const { toggleUserSettings } = props;
   const cookie = useCookie();
   const router = useRouter();
-
+  const [deleteUserMutation] = useDeleteUserMutation();
   const {
     base: {
       form: { background },
@@ -44,7 +45,8 @@ function UserSettings(props: IUserSettings) {
   const deleteUser = async () => {
     try {
       getAuth();
-      await sdk.user.delete({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+      const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+      await deleteUserMutation({ variables: { auth } });
       router.push('/logout');
 
       return true;

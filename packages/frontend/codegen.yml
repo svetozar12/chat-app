@@ -1,8 +1,8 @@
 overwrite: true
 schema: 'http://127.0.0.1:4003/graphql'
-documents: './src/services/gql/user/*.gql'
+documents: './src/services/gql/**/*.gql'
 generates:
-  src/generated/graphql.ts:
+  src/services/generated/graphql.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'

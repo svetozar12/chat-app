@@ -16,10 +16,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
-import sdk from 'services/sdk';
-import { Gender } from '@chat-app/gql-server';
+import { Gender, useCreateUserMutation } from 'services/generated/graphql';
 import { setRegisterError } from 'services/redux/reducer/alert/actions';
-import { useCreateUserMutation } from 'generated/graphql';
 
 interface IRegisterForm {
   quickLogin: () => Promise<boolean>;

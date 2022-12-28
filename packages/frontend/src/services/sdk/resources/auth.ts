@@ -5,7 +5,7 @@ import {
   MutationLoginUserArgs,
   MutationLogoutUserArgs,
   MutationRefreshTokenArgs,
-} from '@chat-app/gql-server';
+} from 'services/generated/graphql';
 import makeRequest from 'utils/makeRequest';
 
 const path = '';

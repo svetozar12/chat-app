@@ -1,0 +1,8 @@
+query GetUserById($auth: AuthModel!) {
+  getUser(auth: $auth) {
+    _id
+    email
+    userAvatar
+    username
+  }
+}

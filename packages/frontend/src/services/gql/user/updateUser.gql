@@ -1,0 +1,5 @@
+mutation UpdateUser($auth: AuthModel!, $user: UpdateUserModel!) {
+  updateUser(auth: $auth, user: $user) {
+    Message
+  }
+}
