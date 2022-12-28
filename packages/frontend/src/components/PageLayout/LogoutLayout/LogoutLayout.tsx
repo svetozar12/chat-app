@@ -34,10 +34,10 @@ const Logout = (props: ILogout) => {
     getAuth();
     const cookies = cookie.getAll();
     const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
-    await logout({ variables: { auth } });
     for (const key in cookies) cookie.remove(key);
     setIsAuth(!authProps.isAuth);
     signOut();
+    await logout({ variables: { auth } });
     router.push('/');
     setIsLoading(false);
   };

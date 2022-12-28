@@ -61,7 +61,6 @@ export const checkTokens = async (cookie: Cookie) => {
         },
         'refreshToken',
       );
-      console.log(data, 'pedali s');
 
       const { AccessToken: Access_Token, RefreshToken: Refresh_Token } = data || {};
 
@@ -109,7 +108,7 @@ export const checkTokens = async (cookie: Cookie) => {
     for (const key in cookies) cookie.remove(key);
     return false;
   }
-  return false;
+  return true;
 };
 
 export const logout = async (ctx: ICtx) => {
