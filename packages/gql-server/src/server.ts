@@ -13,7 +13,11 @@ async function main() {
         logger('warn', 'GRAPHQL-SERVER-REQUEST-LOG');
         logger('info', request.url, [query]);
       },
+      cors: {
+        origin: '*',
+      },
     });
+
     await server.start();
   } catch (error) {
     logger('error', error, ['server failed to start']);

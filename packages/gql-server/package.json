@@ -28,6 +28,7 @@
     "@graphql-tools/schema": "^9.0.4",
     "@graphql-yoga/node": "^2.13.13",
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "graphql": "^16.6.0"
   },
   "publishConfig": {

@@ -2,16 +2,18 @@ import { GetUser, useGetUserByIdQuery, AuthModel } from 'services/generated';
 import { useCookie } from 'next-cookie';
 import { useEffect, useState } from 'react';
 import { checkTokens, logout } from '../utils/authMethods';
+import { useDispatch } from 'react-redux';
+import { setIsAuth } from 'services/redux/reducer/auth/actions';
 
 function useProvideAuth() {
   const [user, setUser] = useState<GetUser | undefined>(undefined);
   const cookie = useCookie();
   const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
   const { data: userData } = useGetUserByIdQuery({ variables: { auth } });
+  const dispatch = useDispatch();
   const checkSession = async () => {
     try {
-      // await checkTokens(cookie);
-      return true;
+      return await checkTokens(cookie);
     } catch (error) {
       return false;
     }
@@ -22,7 +24,10 @@ function useProvideAuth() {
   };
 
   useEffect(() => {
-    checkSession();
+    checkSession().then((isAuth) => {
+      console.log(isAuth, 'asen');
+      dispatch(setIsAuth(isAuth));
+    });
     getUser();
   }, []);
 

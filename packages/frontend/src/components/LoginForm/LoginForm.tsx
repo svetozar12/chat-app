@@ -36,7 +36,7 @@ function LoginForm(props: ILoginForm) {
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie();
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, { data }] = useLoginUserMutation();
 
   const rememberMe = auth.remember_me ? 31556952 : 3600;
   const refreshRememberMe = auth.remember_me ? 63113904 : 7200;
@@ -44,14 +44,13 @@ function LoginForm(props: ILoginForm) {
   const handleSubmit = async (values: LoginUserMutationVariables) => {
     try {
       const { username } = values;
-      const res = await loginUser({ variables: { ...values } });
+      await loginUser({ variables: { ...values } });
 
-      if (res instanceof Error) return setLoginError(res.message);
-      if (res) {
-        const { loginUser } = res.data || {};
+      if (data instanceof Error) return setLoginError(data.message);
+      if (data) {
+        const { loginUser } = data || {};
         const { AccessToken, RefreshToken, userId } = loginUser || {};
         setIsLoading(true);
-        console.log(res, 'request');
 
         const cookies = [
           { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
