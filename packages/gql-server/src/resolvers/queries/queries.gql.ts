@@ -1,11 +1,11 @@
 const querySchema = `
 type Query {
-  getUser(auth: AuthModel!): getUser!
-  getChatById(chat_id: String!, auth: AuthModel!): Chat!
-  getAllChats(auth: AuthModel!): [Chat!]!
-  getAllMessages(auth: AuthModel!, chat_id: String!, query: Pagination): [Messages!]!
-  getInvitesByReciever(auth: AuthModel!, status: Status): [Invite!]!
-  getInvitesByInviter(auth: AuthModel!, status: Status): [Invite!]!
+  getUser(auth: AuthModel!): GetUserUnion!
+  getChatById(chat_id: String!, auth: AuthModel!): ChatUnion!
+  getAllChats(auth: AuthModel!): [ChatUnion!]!
+  getAllMessages(auth: AuthModel!, chat_id: String!, query: Pagination): [MessagesUnion!]!
+  getInvitesByReciever(auth: AuthModel!, status: Status): [InviteUnion!]!
+  getInvitesByInviter(auth: AuthModel!, status: Status): [InviteUnion!]!
 }`;
 
 export default querySchema;

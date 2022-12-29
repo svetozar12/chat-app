@@ -20,7 +20,10 @@ interface ISingleAvatar extends Base {
 
 function SingleAvatar(props: ISingleAvatar) {
   const { baseProps, chakraProps, group, height, overlay, preview, style, width, imageSrc } = props;
-  const { image } = useGetUserImage();
+  const cookie = useCookie();
+  const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+  const { data } = useGetUserByIdQuery({ variables: { auth } });
+  const { getUser } = data || {};
   const {
     base: {
       default: { color },
@@ -31,12 +34,12 @@ function SingleAvatar(props: ISingleAvatar) {
     <Box {...chakraProps} {...style} {...baseProps} boxShadow={`0px 0px 3px 0px ${color}`} borderRadius="full">
       {preview ? (
         <Box resize="none" w={width ?? '3.5rem'} h={height ?? '3.5rem'} color="var(--main-logo-color)" zIndex={overlay ? 1 : 0}>
-          <Image src={imageSrc || image} alt="random" className={`${group ? s.groupLogo : s.singleLogo} `} />
+          <Image src={imageSrc || getUser?.userAvatar} alt="random" className={`${group ? s.groupLogo : s.singleLogo} `} />
         </Box>
       ) : (
         <Box resize="none" zIndex={overlay ? 1 : 0}>
           <Image
-            src={imageSrc || image}
+            src={imageSrc || getUser?.userAvatar}
             alt="random"
             className={`${
               group
@@ -59,26 +62,3 @@ function SingleAvatar(props: ISingleAvatar) {
 }
 
 export default SingleAvatar;
-
-const useGetUserImage = () => {
-  const [image, setImage] = React.useState<string>('');
-  const cookie = useCookie();
-  const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
-  const { data: user } = useGetUserByIdQuery({ variables: { auth } });
-  const getUserImage = async () => {
-    try {
-      const { userAvatar } = user?.getUser || {};
-      if (!userAvatar) return setImage('/images/user.png');
-      setImage(userAvatar);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  useEffect(() => {
-    getUserImage();
-  }, []);
-
-  return { image, setImage };
-};

@@ -1,4 +1,5 @@
 import { AuthBase } from '../../../constants';
+import { CHAT } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface IUpdateChat extends AuthBase {
@@ -12,7 +13,7 @@ const updateChat = async (_: unknown, args: IUpdateChat) => {
     username: args.username as string,
     usernames: args.usersData as string[],
   });
-  return res;
+  return { __typename: CHAT, ...res };
 };
 
 export default updateChat;

@@ -10,6 +10,7 @@ const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://${process.env.NEXT_PUB
 const client = axios.create({ baseURL: gqlUrl, method: 'POST', headers: { 'Content-Type': 'application/json' } });
 
 const sdk = {
+  auth,
   message,
   invite,
   chatroom,

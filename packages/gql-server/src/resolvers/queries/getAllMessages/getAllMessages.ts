@@ -1,4 +1,5 @@
 import { AuthBase } from '../../../constants';
+import { MESSAGES } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface IMessage extends AuthBase {
@@ -14,7 +15,7 @@ const getAllMessages = async (_: unknown, args: IMessage) => {
     page_number: args.query.page_number,
     page_size: args.query.page_size,
   });
-  return res;
+  return { __typename: MESSAGES, ...res };
 };
 
 export default getAllMessages;

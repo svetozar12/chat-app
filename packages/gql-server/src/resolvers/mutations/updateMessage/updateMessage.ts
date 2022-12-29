@@ -1,4 +1,5 @@
 import { AuthBase } from '../../../constants';
+import { MESSAGE } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface IUpdateMessage extends AuthBase {
@@ -10,7 +11,7 @@ const updateMessage = async (_: unknown, args: IUpdateMessage) => {
   const res = await sdk.message.updateMessage(args.auth, args.message_id, {
     message: args.newMessage,
   });
-  return res;
+  return { __typename: MESSAGE, ...res };
 };
 
 export default updateMessage;

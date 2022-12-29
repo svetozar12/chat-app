@@ -31,13 +31,14 @@ const Logout = (props: ILogout) => {
   const cookie = useCookie();
 
   const deleteCookies = async () => {
-    getAuth();
+    getAuth().then(async () => {
+      const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+      await logout({ variables: { auth } });
+    });
     const cookies = cookie.getAll();
-    const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
     for (const key in cookies) cookie.remove(key);
     setIsAuth(!authProps.isAuth);
     signOut();
-    await logout({ variables: { auth } });
     router.push('/');
     setIsLoading(false);
   };

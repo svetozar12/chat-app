@@ -16,7 +16,7 @@ const makeRequest = async <T>(
   path = '',
   body?: Record<string, any>,
   options?: Record<string, any>,
-): Promise<T | GraphQLYogaError> => {
+): Promise<T | { __typename: 'Error'; message: string }> => {
   try {
     if (method === 'get' || method === 'head' || method === 'delete') {
       const res = await instance[method](path, options);
@@ -25,7 +25,7 @@ const makeRequest = async <T>(
     const res = await instance[method](path, body, options);
     return res.data;
   } catch (error: any) {
-    return new GraphQLYogaError(error.response.data.Message);
+    return { __typename: 'Error', message: error.response.data.Message };
   }
 };
 
