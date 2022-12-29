@@ -46,30 +46,33 @@ function LoginForm(props: ILoginForm) {
       const { username } = values;
       await loginUserMutation({ variables: { ...values } });
       const { loginUser } = data || {};
-      if (loginUser?.__typename === 'Error') return setAlert(loginUser?.message, 'error');
-      const { AccessToken, RefreshToken, userId } = loginUser || {};
-      setIsLoading(true);
 
-      const cookies = [
-        { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-        { name: 'id', value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-        { name: 'token', value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-        { name: 'refresh_token', value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
-      ];
+      if (loginUser?.__typename === 'Error') setAlert(loginUser?.message, 'error');
+      else if (loginUser?.__typename === 'LoginUser') {
+        const { AccessToken, RefreshToken, userId } = loginUser || {};
+        setIsLoading(true);
 
-      cookies.forEach((element) => {
-        const { name, value, options } = element;
-        cookie.set(name, value, { ...(options as any) });
-      });
+        const cookies = [
+          { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'id', value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'token', value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+          { name: 'refresh_token', value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
+        ];
 
-      const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
+        cookies.forEach((element) => {
+          const { name, value, options } = element;
+          cookie.set(name, value, { ...(options as any) });
+        });
 
-      cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
-      router.push(callback || `/${chatInstance}`);
-      togglelIsLoading(false);
-      setIsLoading(false);
-      setInputUsername('');
-      setInputPassword('');
+        const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
+
+        cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
+        router.push(callback || `/${chatInstance}`);
+        togglelIsLoading(false);
+        setIsLoading(false);
+        setInputUsername('');
+        setInputPassword('');
+      }
     } catch (error) {
       setIsLoading(false);
       return error;

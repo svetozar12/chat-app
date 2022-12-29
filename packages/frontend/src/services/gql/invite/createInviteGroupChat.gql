@@ -1,0 +1,15 @@
+mutation CreateInviteGrup($usersData: [String!]) {
+  createInviteGroupChat(usersData: $usersData) {
+    __typename
+    ... on CreateChatMessage {
+      data {
+        _id
+        members
+      }
+      Message
+    }
+    ... on Error {
+      message
+    }
+  }
+}

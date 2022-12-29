@@ -1,0 +1,15 @@
+mutation CreateChat($chat: ChatModel!, $auth: AuthModel!) {
+  createChat(chat: $chat, auth: $auth) {
+    __typename
+    ... on CreateChatMessage {
+      data {
+        _id
+        members
+      }
+      Message
+    }
+    ... on Error {
+      message
+    }
+  }
+}

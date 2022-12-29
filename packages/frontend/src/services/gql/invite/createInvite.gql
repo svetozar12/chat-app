@@ -1,0 +1,14 @@
+mutation CreateInvite($auth: AuthModel!, $reciever: String!) {
+  createInvite(auth: $auth, reciever: $reciever) {
+    __typename
+    ... on Invite {
+      _id
+      inviter
+      reciever
+      status
+    }
+    ... on Error {
+      message
+    }
+  }
+}

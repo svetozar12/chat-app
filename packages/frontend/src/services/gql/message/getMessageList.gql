@@ -1,0 +1,15 @@
+query GetMessageList($auth: AuthModel!, $chat_id: String!, $query: Pagination) {
+  getAllMessages(auth: $auth, chat_id: $chat_id, query: $query) {
+    __typename
+    ... on Messages {
+      _id
+      user_id
+      chat_id
+      sender
+      message
+    }
+    ... on Error {
+      message
+    }
+  }
+}

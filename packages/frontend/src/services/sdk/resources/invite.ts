@@ -1,5 +1,4 @@
 import {
-  AuthModel,
   Invite,
   MutationCreateInviteArgs,
   MutationCreateInviteGroupChatArgs,
