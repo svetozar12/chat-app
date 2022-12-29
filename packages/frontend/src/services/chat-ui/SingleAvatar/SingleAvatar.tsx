@@ -30,6 +30,8 @@ function SingleAvatar(props: ISingleAvatar) {
     },
   } = useThemeColors();
 
+  if (getUser?.__typename == 'Error') return <></>;
+
   return (
     <Box {...chakraProps} {...style} {...baseProps} boxShadow={`0px 0px 3px 0px ${color}`} borderRadius="full">
       {preview ? (

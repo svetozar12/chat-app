@@ -9,15 +9,10 @@ import { setInputEmail, setInputGender, setInputPassword, setInputUsername } fro
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
 import { useLoginUserMutation } from 'services/generated';
+import { setAlert } from 'services/redux/reducer/alert/actions';
 
-interface IRegisterLayout {
+interface IRegisterLayout extends ReturnType<typeof mapDispatchToProps> {
   inputs: IInputs;
-  toggleQuickLogin: typeof toggleQuickLogin;
-  setInputEmail: typeof setInputEmail;
-  setInputGender: typeof setInputGender;
-  setInputPassword: typeof setInputPassword;
-  setInputUsername: typeof setInputUsername;
-  togglelIsLoading: typeof togglelIsLoading;
 }
 
 function RegisterLayout(props: IRegisterLayout) {
@@ -25,13 +20,13 @@ function RegisterLayout(props: IRegisterLayout) {
   const router = useRouter();
   const cookie = useCookie();
   const [login, { data }] = useLoginUserMutation();
-  const quickLogin = async () => {
+  const quickLogin = async (): Promise<void> => {
     try {
       await login({ variables: { username: inputs.input_username, password: inputs.input_password } });
-      if (data) {
-        const {
-          loginUser: { userId, AccessToken, RefreshToken },
-        } = data;
+      const { loginUser } = data || {};
+      if (loginUser?.__typename === 'Error') setAlert(loginUser.message, 'error');
+      else {
+        const { userId, AccessToken, RefreshToken } = loginUser || {};
         toggleQuickLogin(true);
         togglelIsLoading(true);
         const cookies = [
@@ -53,13 +48,9 @@ function RegisterLayout(props: IRegisterLayout) {
         setInputEmail('');
         setInputPassword('');
         setInputGender('');
-        return true;
       }
-      return false;
     } catch (error) {
       togglelIsLoading(false);
-      console.log(error);
-      return false;
     }
   };
 
@@ -77,6 +68,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInputEmail: bindActionCreators(setInputEmail, dispatch),
   setInputGender: bindActionCreators(setInputGender, dispatch),
   togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
+  setAlert: bindActionCreators(setAlert, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterLayout);

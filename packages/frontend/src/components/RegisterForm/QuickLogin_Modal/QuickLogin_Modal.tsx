@@ -9,7 +9,7 @@ import useThemeColors from 'hooks/useThemeColors';
 
 interface IQuickLoginModal {
   toggleQuickLogin: typeof toggleQuickLogin;
-  quickLogin: () => Promise<boolean>;
+  quickLogin: () => Promise<void>;
 }
 
 function QuickLoginModal(props: IQuickLoginModal) {
@@ -34,15 +34,7 @@ function QuickLoginModal(props: IQuickLoginModal) {
         boxShadow="default"
       >
         <GridItem w="full" colSpan={{ base: 2, md: 1 }}>
-          <Button
-            colorScheme={color}
-            w="full"
-            isLoading={isLoading}
-            spinner={<Loading />}
-            onClick={async () => {
-              setIsLoading(await quickLogin());
-            }}
-          >
+          <Button colorScheme={color} w="full" isLoading={isLoading} spinner={<Loading />} onClick={async () => await quickLogin()}>
             Click me to Quick login
           </Button>
         </GridItem>

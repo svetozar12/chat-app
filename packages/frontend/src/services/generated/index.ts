@@ -33,16 +33,27 @@ export type ChatModel = {
   user_id: Scalars['String'];
 };
 
+export type ChatUnion = Chat | Error;
+
 export type CreateChatMessage = {
   __typename?: 'CreateChatMessage';
   Message: Scalars['String'];
   data: Chat;
 };
 
+export type CreateChatMessageUnion = CreateChatMessage | Error;
+
+export type Error = {
+  __typename?: 'Error';
+  message: Scalars['String'];
+};
+
 export enum Gender {
   Female = 'Female',
   Male = 'Male'
 }
+
+export type GetUserUnion = Error | GetUser;
 
 export type Invite = {
   __typename?: 'Invite';
@@ -52,6 +63,8 @@ export type Invite = {
   status: Scalars['String'];
 };
 
+export type InviteUnion = Error | Invite;
+
 export type LoginUser = {
   __typename?: 'LoginUser';
   AccessToken: Scalars['String'];
@@ -59,10 +72,14 @@ export type LoginUser = {
   userId: Scalars['String'];
 };
 
+export type LoginUserUnion = Error | LoginUser;
+
 export type Message = {
   __typename?: 'Message';
   Message: Scalars['String'];
 };
+
+export type MessageUnion = Error | Message;
 
 export type Messages = {
   __typename?: 'Messages';
@@ -74,23 +91,25 @@ export type Messages = {
   user_id: Scalars['String'];
 };
 
+export type MessagesUnion = Error | Messages;
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createChat: CreateChatMessage;
-  createInvite: Invite;
-  createInviteGroupChat: CreateChatMessage;
-  createMessage: Messages;
-  createUser: Message;
-  deleteChat: Message;
-  deleteMessage: Message;
-  deleteUser: Message;
-  loginUser: LoginUser;
-  logoutUser: Message;
-  refreshToken: LoginUser;
-  updateChat: Chat;
-  updateInvite: Invite;
-  updateMessage: Message;
-  updateUser: Message;
+  createChat: CreateChatMessageUnion;
+  createInvite: InviteUnion;
+  createInviteGroupChat: CreateChatMessageUnion;
+  createMessage: MessagesUnion;
+  createUser: MessageUnion;
+  deleteChat: MessageUnion;
+  deleteMessage: MessageUnion;
+  deleteUser: MessageUnion;
+  loginUser: LoginUserUnion;
+  logoutUser: MessageUnion;
+  refreshToken: LoginUserUnion;
+  updateChat: ChatUnion;
+  updateInvite: InviteUnion;
+  updateMessage: MessageUnion;
+  updateUser: MessageUnion;
 };
 
 
@@ -191,12 +210,12 @@ export type Pagination = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllChats: Array<Chat>;
-  getAllMessages: Array<Messages>;
-  getChatById: Chat;
-  getInvitesByInviter: Array<Invite>;
-  getInvitesByReciever: Array<Invite>;
-  getUser: GetUser;
+  getAllChats: Array<ChatUnion>;
+  getAllMessages: Array<MessagesUnion>;
+  getChatById: ChatUnion;
+  getInvitesByInviter: Array<InviteUnion>;
+  getInvitesByReciever: Array<InviteUnion>;
+  getUser: GetUserUnion;
 };
 
 
@@ -267,14 +286,14 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename: 'Error', message: string } | { __typename: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
 
 export type LogoutMutationVariables = Exact<{
   auth: AuthModel;
 }>;
 
 
-export type LogoutMutation = { __typename?: 'Mutation', logoutUser: { __typename?: 'Message', Message: string } };
+export type LogoutMutation = { __typename?: 'Mutation', logoutUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type RefreshTokenMutationVariables = Exact<{
   userId: Scalars['String'];
@@ -282,28 +301,28 @@ export type RefreshTokenMutationVariables = Exact<{
 }>;
 
 
-export type RefreshTokenMutation = { __typename?: 'Mutation', refreshToken: { __typename?: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
+export type RefreshTokenMutation = { __typename?: 'Mutation', refreshToken: { __typename: 'Error', message: string } | { __typename: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
 
 export type CreateUserMutationVariables = Exact<{
   user: UserModel;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'Message', Message: string } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type DeleteUserMutationVariables = Exact<{
   auth: AuthModel;
 }>;
 
 
-export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'Message', Message: string } };
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type GetUserByIdQueryVariables = Exact<{
   auth: AuthModel;
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', getUser: { __typename?: 'getUser', _id: string, email: string, userAvatar: string, username: string } };
+export type GetUserByIdQuery = { __typename?: 'Query', getUser: { __typename: 'Error', message: string } | { __typename: 'getUser', _id: string, email: string, userAvatar: string, username: string } };
 
 export type UpdateUserMutationVariables = Exact<{
   auth: AuthModel;
@@ -311,15 +330,21 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'Message', Message: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 
 export const LoginUserDocument = gql`
     mutation LoginUser($username: String!, $password: String!) {
   loginUser(username: $username, password: $password) {
-    userId
-    AccessToken
-    RefreshToken
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;
@@ -353,7 +378,13 @@ export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutat
 export const LogoutDocument = gql`
     mutation Logout($auth: AuthModel!) {
   logoutUser(auth: $auth) {
-    Message
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;
@@ -386,9 +417,15 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, L
 export const RefreshTokenDocument = gql`
     mutation RefreshToken($userId: String!, $RefreshToken: String!) {
   refreshToken(user_id: $userId, RefreshToken: $RefreshToken) {
-    userId
-    AccessToken
-    RefreshToken
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;
@@ -422,7 +459,13 @@ export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<RefreshToke
 export const CreateUserDocument = gql`
     mutation CreateUser($user: UserModel!) {
   createUser(user: $user) {
-    Message
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;
@@ -455,7 +498,13 @@ export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMut
 export const DeleteUserDocument = gql`
     mutation DeleteUser($auth: AuthModel!) {
   deleteUser(auth: $auth) {
-    Message
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;
@@ -488,10 +537,16 @@ export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMut
 export const GetUserByIdDocument = gql`
     query GetUserById($auth: AuthModel!) {
   getUser(auth: $auth) {
-    _id
-    email
-    userAvatar
-    username
+    __typename
+    ... on getUser {
+      _id
+      email
+      userAvatar
+      username
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;
@@ -526,7 +581,13 @@ export type GetUserByIdQueryResult = Apollo.QueryResult<GetUserByIdQuery, GetUse
 export const UpdateUserDocument = gql`
     mutation UpdateUser($auth: AuthModel!, $user: UpdateUserModel!) {
   updateUser(auth: $auth, user: $user) {
-    Message
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
   }
 }
     `;

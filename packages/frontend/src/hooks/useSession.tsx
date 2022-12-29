@@ -20,7 +20,9 @@ function useProvideAuth() {
   };
 
   const getUser = async () => {
-    setUser(userData?.getUser);
+    const { getUser } = userData || {};
+    if (getUser?.__typename === 'Error') return setUser(undefined);
+    setUser(getUser);
   };
 
   useEffect(() => {

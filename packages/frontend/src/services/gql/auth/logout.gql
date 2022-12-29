@@ -1,5 +1,11 @@
 mutation Logout($auth: AuthModel!) {
   logoutUser(auth: $auth) {
-    Message
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
   }
 }

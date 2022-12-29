@@ -17,17 +17,11 @@ import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { Gender, useCreateUserMutation } from 'services/generated';
-import { setRegisterError } from 'services/redux/reducer/alert/actions';
+import { setAlert } from 'services/redux/reducer/alert/actions';
 
-interface IRegisterForm {
-  quickLogin: () => Promise<boolean>;
+interface IRegisterForm extends ReturnType<typeof mapDispatchToProps> {
+  quickLogin: () => Promise<void>;
   toggle: IToggle;
-  toggleQuickLogin: typeof toggleQuickLogin;
-  setInputEmail: typeof setInputEmail;
-  setInputGender: typeof setInputGender;
-  setInputPassword: typeof setInputPassword;
-  setInputUsername: typeof setInputUsername;
-  setRegisterError: typeof setRegisterError;
 }
 
 function RegisterForm(props: IRegisterForm) {
@@ -37,9 +31,8 @@ function RegisterForm(props: IRegisterForm) {
       default: { color },
     },
   } = useThemeColors();
-  const [createUserMutation] = useCreateUserMutation();
-  const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername, setRegisterError } =
-    props;
+  const [createUserMutation, { data }] = useCreateUserMutation();
+  const { quickLogin, toggle, toggleQuickLogin, setInputEmail, setInputGender, setInputPassword, setInputUsername, setAlert } = props;
   interface IValues {
     username: string;
     email: string;
@@ -48,19 +41,20 @@ function RegisterForm(props: IRegisterForm) {
   }
 
   const handleSubmit = async ({ username, password, email, gender }: IValues) => {
-    const register = await createUserMutation({ variables: { user: { username, email, password, gender } } });
+    await createUserMutation({ variables: { user: { username, email, password, gender } } });
     setInputUsername(username);
     setInputEmail(email);
     setInputPassword(password);
     setInputGender(gender);
-    if (register instanceof Error) setRegisterError(register.message);
-    if (register) toggleQuickLogin(false);
+    if (data?.createUser.__typename === 'Error') setAlert(data.createUser.message, 'error');
+    if (data) toggleQuickLogin(false);
     else {
       setInputUsername('');
       setInputEmail('');
       setInputPassword('');
       setInputGender('');
     }
+    console.log(data);
   };
 
   const handleGenderChange = (value: any) => {
@@ -184,7 +178,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInputPassword: bindActionCreators(setInputPassword, dispatch),
   setInputEmail: bindActionCreators(setInputEmail, dispatch),
   setInputGender: bindActionCreators(setInputGender, dispatch),
-  setRegisterError: bindActionCreators(setRegisterError, dispatch),
+  setAlert: bindActionCreators(setAlert, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

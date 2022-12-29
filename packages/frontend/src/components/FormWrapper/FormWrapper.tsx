@@ -1,41 +1,38 @@
 import React from 'react';
 // components
-import { FormControl, Box, Heading, VStack, Flex, ScaleFade, FlexProps } from '@chakra-ui/react';
+import { FormControl, Box, Heading, VStack, Flex, ScaleFade } from '@chakra-ui/react';
 import useThemeColors from 'hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { connect } from 'react-redux';
 import { IAlert } from 'services/redux/reducer/alert/state';
 import Alerts from 'services/chat-ui/Alerts';
 import { bindActionCreators, Dispatch } from 'redux';
-import { setLoginError, setRegisterError } from 'services/redux/reducer/alert/actions';
+import { setAlert } from 'services/redux/reducer/alert/actions';
 
 interface IFormWrapper {
   alert: IAlert;
   children: JSX.Element | JSX.Element[];
   type: 'Register' | 'Login';
   handleSubmit: () => void;
-  setLoginError: typeof setLoginError;
-  setRegisterError: typeof setRegisterError;
+  setAlert: typeof setAlert;
 }
 
 function FormWrapper(props: IFormWrapper) {
-  const { type, children, handleSubmit, alert, setLoginError, setRegisterError } = props;
+  const { type, children, handleSubmit, alert, setAlert } = props;
   const {
     base: {
       form: { background },
     },
   } = useThemeColors();
-  const isAlert = alert.good || alert.bad;
   return (
     <ScaleFade initialScale={0.7} in>
-      {!!isAlert && (
+      {!!alert.message && (
         <Alerts
           chakraProps={{ zIndex: 999 }}
-          message={isAlert}
-          type={alert.good ? 'success' : 'error'}
+          message={alert.message}
+          type={alert.type}
           closeAlert={() => {
-            setLoginError('');
-            setRegisterError('');
+            setAlert('', 'info');
           }}
         />
       )}
@@ -78,8 +75,7 @@ const mapStateToProps = (state: STATE) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setLoginError: bindActionCreators(setLoginError, dispatch),
-  setRegisterError: bindActionCreators(setRegisterError, dispatch),
+  setAlert: bindActionCreators(setAlert, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormWrapper);

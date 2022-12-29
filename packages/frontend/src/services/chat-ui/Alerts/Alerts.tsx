@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Alert, AlertIcon, AlertTitle, CloseButton, HStack, ScaleFade, StackProps } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertStatus, AlertTitle, CloseButton, HStack, ScaleFade, StackProps } from '@chakra-ui/react';
 import { IBaseComponent } from 'services/chat-ui';
 type Base = IBaseComponent<StackProps>;
 
 interface IAlerts extends Base {
   message: string;
   closeAlert: () => void;
-  type: 'info' | 'warning' | 'success' | 'error';
+  type: AlertStatus;
 }
 
 function Alerts(props: IAlerts) {

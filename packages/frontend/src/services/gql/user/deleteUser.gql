@@ -1,5 +1,11 @@
 mutation DeleteUser($auth: AuthModel!) {
   deleteUser(auth: $auth) {
-    Message
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
   }
 }

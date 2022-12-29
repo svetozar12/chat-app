@@ -18,7 +18,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IAuth } from 'services/redux/reducer/auth/state';
 import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
-import { setLoginError } from 'services/redux/reducer/alert/actions';
+import { setAlert } from 'services/redux/reducer/alert/actions';
 import { setRememberMe } from 'services/redux/reducer/auth/actions';
 import { useLoginUserMutation, LoginUserMutationVariables } from 'services/generated';
 
@@ -27,16 +27,16 @@ interface ILoginForm extends ILogin {
   setInputUsername: typeof setInputUsername;
   setInputPassword: typeof setInputPassword;
   togglelIsLoading: typeof togglelIsLoading;
-  setLoginError: typeof setLoginError;
+  setAlert: typeof setAlert;
   setRememberMe: typeof setRememberMe;
 }
 
 function LoginForm(props: ILoginForm) {
-  const { callback, auth, setInputUsername, setInputPassword, togglelIsLoading, setLoginError } = props;
+  const { callback, auth, setInputUsername, setInputPassword, togglelIsLoading, setAlert } = props;
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
   const cookie = useCookie();
-  const [loginUser, { data }] = useLoginUserMutation();
+  const [loginUserMutation, { data }] = useLoginUserMutation();
 
   const rememberMe = auth.remember_me ? 31556952 : 3600;
   const refreshRememberMe = auth.remember_me ? 63113904 : 7200;
@@ -44,35 +44,32 @@ function LoginForm(props: ILoginForm) {
   const handleSubmit = async (values: LoginUserMutationVariables) => {
     try {
       const { username } = values;
-      await loginUser({ variables: { ...values } });
+      await loginUserMutation({ variables: { ...values } });
+      const { loginUser } = data || {};
+      if (loginUser?.__typename === 'Error') return setAlert(loginUser?.message, 'error');
+      const { AccessToken, RefreshToken, userId } = loginUser || {};
+      setIsLoading(true);
 
-      if (data instanceof Error) return setLoginError(data.message);
-      if (data) {
-        const { loginUser } = data || {};
-        const { AccessToken, RefreshToken, userId } = loginUser || {};
-        setIsLoading(true);
+      const cookies = [
+        { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+        { name: 'id', value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+        { name: 'token', value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+        { name: 'refresh_token', value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
+      ];
 
-        const cookies = [
-          { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'id', value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'token', value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'refresh_token', value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
-        ];
+      cookies.forEach((element) => {
+        const { name, value, options } = element;
+        cookie.set(name, value, { ...(options as any) });
+      });
 
-        cookies.forEach((element) => {
-          const { name, value, options } = element;
-          cookie.set(name, value, { ...(options as any) });
-        });
+      const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
 
-        const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
-
-        cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
-        router.push(callback || `/${chatInstance}`);
-        togglelIsLoading(false);
-        setIsLoading(false);
-        setInputUsername('');
-        setInputPassword('');
-      }
+      cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
+      router.push(callback || `/${chatInstance}`);
+      togglelIsLoading(false);
+      setIsLoading(false);
+      setInputUsername('');
+      setInputPassword('');
     } catch (error) {
       setIsLoading(false);
       return error;
@@ -197,7 +194,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInputUsername: bindActionCreators(setInputUsername, dispatch),
   setInputPassword: bindActionCreators(setInputPassword, dispatch),
   togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
-  setLoginError: bindActionCreators(setLoginError, dispatch),
+  setAlert: bindActionCreators(setAlert, dispatch),
   setRememberMe: bindActionCreators(setRememberMe, dispatch),
 });
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
