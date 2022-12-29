@@ -10,8 +10,7 @@ import { SingleAvatar } from 'services/chat-ui';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
-import sdk from 'services/sdk';
-import { Status } from 'services/generated';
+import { Status, useCreateChatMutation, useUpdateInviteMutation } from 'services/generated';
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -25,6 +24,8 @@ function PendingChats(props: IPendingChats) {
   const { _id, inviter, reciever, status, ws } = props;
   const cookie = useCookie();
   const inviteId = _id;
+  const [updateInvite] = useUpdateInviteMutation();
+  const [createChat] = useCreateChatMutation();
 
   const emitFriendRequest = async () => {
     ws.ws?.emit('friend_request');
@@ -32,7 +33,9 @@ function PendingChats(props: IPendingChats) {
 
   const updateInviteStatus = async (param: Status) => {
     try {
-      await sdk.invite.update({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, invite_id: inviteId, status: param });
+      await updateInvite({
+        variables: { auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, invite_id: inviteId, status: param },
+      });
       emitFriendRequest();
       return true;
     } catch (error) {
@@ -42,9 +45,11 @@ function PendingChats(props: IPendingChats) {
 
   const createChatRoom = async () => {
     try {
-      await sdk.chatroom.create({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-        chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
+      await createChat({
+        variables: {
+          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
+        },
       });
       emitFriendRequest();
     } catch (error) {

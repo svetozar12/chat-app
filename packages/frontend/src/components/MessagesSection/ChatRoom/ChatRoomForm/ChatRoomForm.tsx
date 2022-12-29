@@ -3,7 +3,6 @@ import { MdSend } from 'react-icons/md';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Center, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
-import sdk from 'services/sdk';
 import { getAuth } from 'utils/authMethods';
 import generic from 'utils/generic';
 import s from './ChatRoomForm.module.css';
@@ -13,6 +12,7 @@ import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { bindActionCreators, Dispatch } from 'redux';
 import { setMessagesAction } from 'services/redux/reducer/messages/actions';
+import { useCreateMessageMutation } from 'services/generated';
 
 interface IPropsState {
   name?: string;
@@ -35,7 +35,7 @@ function ChatRoomForm(props: IChatRoomForm) {
     time: '',
   });
   const inputTextArea = React.useRef<any>(null);
-
+  const [createMessage] = useCreateMessageMutation();
   useEffect(() => {
     inputTextArea.current.focus();
     ws.ws?.on('message', ({ messages }) => {
@@ -59,10 +59,12 @@ function ChatRoomForm(props: IChatRoomForm) {
   const saveMessage = async () => {
     try {
       if (state.message)
-        await sdk.message.create({
-          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-          chat_id: chatId,
-          message: state.message,
+        await createMessage({
+          variables: {
+            auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+            chat_id: chatId,
+            message: state.message,
+          },
         });
       return true;
     } catch (error) {

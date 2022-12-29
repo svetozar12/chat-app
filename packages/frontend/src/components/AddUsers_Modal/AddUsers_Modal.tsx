@@ -7,8 +7,8 @@ import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { bindActionCreators, Dispatch } from 'redux';
-import sdk from 'services/sdk';
 import { useCookie } from 'next-cookie';
+import { useUpdateChatMutation } from 'services/generated';
 
 interface IAddUserModal {
   users: string[];
@@ -23,13 +23,16 @@ function AddUserModal(props: IAddUserModal) {
   const { users, chatId, setUsers, toggleInviteModal, ws, toggle } = props;
   const cookie = useCookie();
   const [invited, setInvited] = React.useState<string[]>([]);
+  const [updateChat] = useUpdateChatMutation();
   const addMembers = async (user: string[]) => {
     try {
-      await sdk.chatroom.update({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('cookie') },
-        chat_id: chatId,
-        username: undefined,
-        usersData: user,
+      await updateChat({
+        variables: {
+          auth: { userId: cookie.get('id'), AccessToken: cookie.get('cookie') },
+          chat_id: chatId,
+          username: undefined,
+          usersData: user,
+        },
       });
     } catch (error) {
       return false;

@@ -3,8 +3,7 @@ import { css } from '@emotion/css';
 import { useDispatch } from 'react-redux';
 import { useCookie } from 'next-cookie';
 import { getAuth } from 'utils/authMethods';
-import sdk from 'services/sdk';
-import useThemeColors from 'hooks/useThemeColors';
+import { useDeleteMessageMutation } from 'services/generated';
 
 const options = css`
   background: transparent;
@@ -28,10 +27,11 @@ interface IMessageSettings {
 function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSettings) {
   const dispatch = useDispatch();
   const cookie = useCookie();
+  const [deleteMessage] = useDeleteMessageMutation();
 
   const handleDelete = async () => {
     try {
-      await sdk.message.delete({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, message_id: id });
+      await deleteMessage({ variables: { auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, message_id: id } });
       return true;
     } catch (error) {
       return false;

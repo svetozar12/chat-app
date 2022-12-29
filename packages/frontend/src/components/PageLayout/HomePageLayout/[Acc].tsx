@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import HamburgerMenu from '../../../services/chat-ui/HamburgerMenu';
 import MainSection from '../../MainSection';
 import MessagesSection from '../../MessagesSection';
-import sdk from 'services/sdk';
 import { connect } from 'react-redux';
 import { setWSConnection } from 'services/redux/reducer/websocket/actions';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -14,16 +13,12 @@ import { STATE } from 'services/redux/reducer';
 import { setNotifNumber } from 'services/redux/reducer/invites/actions';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
-import { Chat, Invite, Status } from 'services/generated';
-import Sidebar from 'components/Sidebar/Sidebar';
+import { AuthModel, Chat, Invite, Status, useGetChatListQuery } from 'services/generated';
 
-interface IApp {
+interface IApp extends ReturnType<typeof mapDispatchToProps> {
   chatRoom: string;
   cookie: string;
   invite: IInvite;
-  setWSConnection: typeof setWSConnection;
-  setNotifNumber: typeof setNotifNumber;
-  toggleQuickLogin: typeof toggleQuickLogin;
 }
 
 function App(props: IApp) {
@@ -33,17 +28,6 @@ function App(props: IApp) {
   // hooks
   const [chatRooms, setChatRooms] = useState<Chat[]>([]);
   const [contacts, setContacts] = useState<Invite[]>([]);
-
-  const getChatRoom = async () => {
-    try {
-      setChatRooms([]);
-      const res = await sdk.chatroom.getAll({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
-      setChatRooms(res);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
 
   const FetchInvites = async (status: Status, InvitesOrigin: 'reciever' | 'inviter') => {
     try {
@@ -93,7 +77,6 @@ function App(props: IApp) {
   }, [invite.notificationNumber]);
 
   useEffect(() => {
-    getChatRoom();
     checkNotification();
     cookie.set('REDIRECT_URL_CALLBACK', window.location.pathname);
     const socketConnect: Socket = io('http://localhost:4000', {
@@ -101,7 +84,6 @@ function App(props: IApp) {
     });
 
     socketConnect.on('friend_request', () => {
-      getChatRoom();
       checkNotification();
     });
 
@@ -123,7 +105,7 @@ function App(props: IApp) {
           <HamburgerMenu toggleHamburger={() => console.log('toggle hamburger menu')} />
         </Box>
       </HStack>
-      <MainSection chatId={chatId} chatRooms={chatRooms} />
+      <MainSection chatId={chatId} />
       <MessagesSection chatId={chatId} contacts={contacts} FetchInvites={FetchInvites} />
     </HStack>
   );

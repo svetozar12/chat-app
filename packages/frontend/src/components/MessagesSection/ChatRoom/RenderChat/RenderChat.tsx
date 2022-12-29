@@ -14,7 +14,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { resetMessagesAction, setMessagesAction } from 'services/redux/reducer/messages/actions';
 import { IMessage } from 'services/redux/reducer/messages/state';
 import { toggleMessageSettings } from 'services/redux/reducer/toggles/actions';
-import sdk from 'services/sdk';
+import { useUpdateMessageMutation } from 'services/generated';
 
 interface IRenderChat {
   id: string;
@@ -53,7 +53,7 @@ function RenderChat(props: IRenderChat) {
   const [width, setWidth] = React.useState(112);
   const [height, setHeight] = React.useState(48);
   const inputRef = React.useRef<HTMLDivElement>(null);
-
+  const [updateMessage] = useUpdateMessageMutation();
   const name = cookie.get('name');
   const checkSettingsOpt = () => styleBool || settings;
 
@@ -99,10 +99,12 @@ function RenderChat(props: IRenderChat) {
       for (const obj of messages) {
         if (obj._id === id) {
           obj.message = editedMessage;
-          await sdk.message.update({
-            auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-            message_id: id,
-            newMessage: editedMessage,
+          await updateMessage({
+            variables: {
+              auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+              message_id: id,
+              newMessage: editedMessage,
+            },
           });
           resetMessages();
         }

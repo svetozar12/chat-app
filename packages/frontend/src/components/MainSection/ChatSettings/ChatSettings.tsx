@@ -14,7 +14,7 @@ import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import sdk from 'services/sdk';
+import { useGetChatQuery, useUpdateChatMutation } from 'services/generated';
 
 interface IChatSettings {
   chatId: string;
@@ -30,14 +30,18 @@ function ChatSettings(props: IChatSettings) {
   const cookie = useCookie();
   const id: string = cookie.get('id');
   const token: string = cookie.get('token');
+  const [updateChat] = useUpdateChatMutation();
+  const { data } = useGetChatQuery({ variables: { auth: { userId: id, AccessToken: token }, chat_id: chatId } });
 
   const emitFriendRequest = async () => {
     ws.ws?.emit('friend_request');
   };
   const getMembers = async () => {
     try {
-      const res = await sdk.chatroom.getById({ auth: { userId: id, AccessToken: token }, chat_id: chatId });
-      const { members } = res;
+      const { getChatById } = data || {};
+      if (getChatById?.__typename === 'Error') throw new Error(getChatById.message);
+      if (!getChatById) return;
+      const { members } = getChatById;
       setUsers(members);
       return true;
     } catch (error) {
@@ -47,7 +51,7 @@ function ChatSettings(props: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await sdk.chatroom.update({ auth: { userId: id, AccessToken: token }, chat_id: chatId, username: user });
+      await updateChat({ variables: { auth: { userId: id, AccessToken: token }, chat_id: chatId, username: user } });
       return true;
     } catch (error) {
       return false;

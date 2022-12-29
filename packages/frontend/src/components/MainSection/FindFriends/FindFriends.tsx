@@ -11,11 +11,11 @@ import { useAuth } from 'utils/SessionProvider';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import IInvite from 'services/redux/reducer/invites/state';
-import sdk from 'services/sdk';
 // components
 import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
 import FindFriendsHeader from './FindFriendsHeader';
 import FindFriendsSearch from './FindFriendsSearch';
+import { useCreateInviteMutation } from 'services/generated';
 
 interface IFindFriends {
   ws: IWebSocket;
@@ -25,19 +25,21 @@ interface IFindFriends {
 
 function FindFriends(props: IFindFriends) {
   const { ws, invite, setReciever } = props;
-
   const cookie = useCookie();
   const { user } = useAuth();
-
+  const [createInviteMutation, { data }] = useCreateInviteMutation();
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await sdk.invite.create({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-        reciever: invite.reciever,
+      await createInviteMutation({
+        variables: {
+          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          reciever: invite.reciever,
+        },
       });
-
-      const { reciever, inviter } = res;
+      const { createInvite } = data || {};
+      if (createInvite?.__typename === 'Error') throw new Error(createInvite.message);
+      const { reciever, inviter } = createInvite || {};
 
       ws.ws?.emit('send_friend_request', {
         inviter,

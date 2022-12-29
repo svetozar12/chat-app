@@ -27,17 +27,16 @@ function useProvideAuth() {
 
   useEffect(() => {
     checkSession().then((isAuth) => {
-      console.log(isAuth, 'asen');
       dispatch(setIsAuth(isAuth));
     });
     getUser();
   }, []);
 
-  if (!cookie.getAll()) return { user: undefined };
-
+  const authObj: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+  if (!cookie.getAll()) return { user: undefined, auth: authObj };
   return {
     user,
-    auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+    auth: authObj,
     logout,
   };
 }

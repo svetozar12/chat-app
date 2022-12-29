@@ -24,6 +24,7 @@ import {
 import { IMessage } from 'services/redux/reducer/messages/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleIsMatch } from 'services/redux/reducer/toggles/actions';
+import useProvideAuth from 'hooks/useSession';
 
 interface IChatRoom {
   message: IMessage;
@@ -47,21 +48,19 @@ function ChatRoom(props: IChatRoom) {
   const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message, toggle } = props;
   const { messagePageNumber, messages } = message;
   const route = useRouter();
-  const cookie = useCookie();
   const {
     base: {
       default: { inverseColor },
     },
   } = useThemeColors();
   const user = useAuth();
-  const userId: string = cookie.get('id');
-  const token: string = cookie.get('token');
+  const { auth } = useProvideAuth();
   const containerRef = React.useRef<null | HTMLDivElement>(null);
 
   const getRecentMessages = async () => {
     try {
       const res = await sdk.message.getAll({
-        auth: { userId, AccessToken: token },
+        auth,
         chat_id: chatId,
         query: { page_size: 10, page_number: 1 },
       });
@@ -87,7 +86,7 @@ function ChatRoom(props: IChatRoom) {
       if (e.currentTarget.scrollTop === 0) {
         incrementPagination(messagePageNumber);
         const res = await sdk.message.getAll({
-          auth: { userId, AccessToken: token },
+          auth,
           chat_id: chatId,
           query: { page_size: 10, page_number: messagePageNumber },
         });

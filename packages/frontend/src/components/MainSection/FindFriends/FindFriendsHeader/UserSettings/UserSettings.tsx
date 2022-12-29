@@ -13,7 +13,6 @@ import { getAuth } from '../../../../../utils/authMethods';
 import useThemeColors from '../../../../../hooks/useThemeColors';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleUserSettings } from 'services/redux/reducer/toggles/actions';
-import sdk from 'services/sdk';
 import { useRouter } from 'next/router';
 import { BsFillSunFill } from 'react-icons/bs';
 import { MdDarkMode } from 'react-icons/md';

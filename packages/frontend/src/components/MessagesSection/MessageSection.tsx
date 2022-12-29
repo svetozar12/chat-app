@@ -13,8 +13,7 @@ import { useAuth } from 'utils/SessionProvider';
 import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import sdk from 'services/sdk';
-import { Status, Invite } from 'services/generated';
+import { Status, Invite, useGetChatQuery } from 'services/generated';
 
 interface IMessageSection {
   contacts: Invite[];
@@ -29,13 +28,14 @@ function MessageSection(props: IMessageSection) {
   const cookie = useCookie();
   const route = useRouter();
   const { user } = useAuth();
+  const { data: chatData } = useGetChatQuery({
+    variables: { chat_id: window.location.pathname, auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } },
+  });
   const getMembersSuggestions = async () => {
     try {
-      const res = await sdk.chatroom.getById({
-        chat_id: window.location.pathname,
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-      });
-      const { members } = res;
+      const { getChatById } = chatData || {};
+      if (getChatById?.__typename === 'Error') throw new Error(getChatById.message);
+      const { members } = getChatById || {};
 
       const data: any[] = [];
       const usersArr: string[] = [];
@@ -49,7 +49,7 @@ function MessageSection(props: IMessageSection) {
           uniqueUsers.push(element);
         }
       });
-      uniqueUsers = uniqueUsers.filter((element) => !members.includes(element));
+      uniqueUsers = uniqueUsers.filter((element) => !members?.includes(element));
       setUsers(uniqueUsers);
       return true;
     } catch (error) {
