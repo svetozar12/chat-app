@@ -1,8 +1,9 @@
+import { client } from 'components/PageLayout/App/App';
 import routes from 'constants/routes';
 import { NextPageContext } from 'next';
 import { useCookie } from 'next-cookie';
+import { GetChatDocument, GetChatListDocument, useGetChatListQuery } from 'services/generated';
 import { isAuth } from './authMethods';
-import generic from './generic';
 import redirectTo from './routing';
 
 export interface ICtx extends NextPageContext {
@@ -34,9 +35,25 @@ const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
 export const isAlreadyAuth = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
   const cookie = useCookie(ctx);
-  const currPath = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
+  let dataRes;
+  client
+    .query({
+      query: GetChatListDocument,
+      variables: { auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') } },
+    })
+    .then(({ data }) => {
+      console.log(data);
+
+      dataRes = data;
+    })
+    .catch((err) => console.log(err));
+  console.log(dataRes, 'SHARO PEDALA');
+
+  const { getAllChats } = dataRes || {};
+  if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+  const firstChatid = getAllChats?.res[0]._id;
   const desiredURL: string = cookie.get('REDIRECT_URL_CALLBACK');
-  const path: string = desiredURL || currPath;
+  const path: string = desiredURL || (firstChatid as string);
 
   if (isUserAuth && ctx.resolvedUrl !== path) return redirectTo(`/${path}`, ctx);
 

@@ -89,7 +89,7 @@ export const isAuth = async (ctx: ICtx) => {
  */
 export const getAuth = async (ctx?: NextPageContext) => {
   let cookie: Cookie;
-  if (ctx != null) {
+  if (ctx) {
     cookie = useCookie(ctx);
     return await checkTokens(cookie);
   }

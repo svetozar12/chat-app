@@ -17,8 +17,9 @@ import { setInputPassword, setInputUsername } from 'services/redux/reducer/input
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { setRememberMe } from 'services/redux/reducer/auth/actions';
-import { useLoginUserMutation } from 'services/generated';
+import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
 import { handleSubmit } from 'components/LoginForm/utils';
+import useProvideAuth from 'hooks/useSession';
 
 interface ILoginForm extends ILogin, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {}
 interface IRenderInputs {
@@ -37,8 +38,12 @@ function LoginForm(props: ILoginForm) {
   const { callback, auth, isLoading, setInputUsername, setInputPassword, togglelIsLoading, setAlert } = props;
   const router = useRouter();
   const cookie = useCookie();
+  const { auth: authObj } = useProvideAuth();
   const [loginUserMutation, { data }] = useLoginUserMutation();
-
+  const { data: chatListData } = useGetChatListQuery({ variables: { auth: authObj } });
+  const { getAllChats } = chatListData || {};
+  if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+  const firstChatid = getAllChats?.res[0]._id;
   const {
     base: {
       default: { color },
@@ -88,6 +93,7 @@ function LoginForm(props: ILoginForm) {
           setInputUsernameSetter: setInputUsername,
           togglelIsLoadingSetter: togglelIsLoading,
         },
+        firstChatid as string,
       );
       resetForm();
     },

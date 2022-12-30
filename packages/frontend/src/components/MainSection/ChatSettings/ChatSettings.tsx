@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from 'react-icons/ai';
 import { useCookie } from 'next-cookie';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
-import generic from '../../../utils/generic';
 // services
 import s from './ChatSettings.module.css';
 import useThemeColors from '../../../hooks/useThemeColors';
@@ -14,7 +13,7 @@ import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import { useGetChatQuery, useUpdateChatMutation } from 'services/generated';
+import { useGetChatListQuery, useGetChatQuery, useUpdateChatMutation } from 'services/generated';
 
 interface IChatSettings {
   chatId: string;
@@ -32,6 +31,7 @@ function ChatSettings(props: IChatSettings) {
   const token: string = cookie.get('token');
   const [updateChat] = useUpdateChatMutation();
   const { data } = useGetChatQuery({ variables: { auth: { userId: id, AccessToken: token }, chat_id: chatId } });
+  const { data: chatListData } = useGetChatListQuery({ variables: { auth: { userId: id, AccessToken: token } } });
 
   const emitFriendRequest = async () => {
     ws.ws?.emit('friend_request');
@@ -70,9 +70,10 @@ function ChatSettings(props: IChatSettings) {
     const updatedUsers = users.filter((element) => element !== user);
     setUsers(updatedUsers);
     if (updatedUsers.length === 2) {
-      const redirect: { _id: string } = await generic.getFirstChat(id, token);
-
-      route.push(`/${redirect._id}`);
+      const { getAllChats } = chatListData || {};
+      if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+      const firstChatid = getAllChats?.res[0]._id;
+      route.push(`/${firstChatid}`);
     }
   };
 

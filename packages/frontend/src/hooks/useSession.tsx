@@ -1,6 +1,6 @@
 import { GetUser, useGetUserByIdQuery, AuthModel } from 'services/generated';
 import { useCookie } from 'next-cookie';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { checkTokens, logout } from '../utils/authMethods';
 import { useDispatch } from 'react-redux';
 import { setIsAuth } from 'services/redux/reducer/auth/actions';
@@ -19,7 +19,7 @@ function useProvideAuth() {
     }
   };
 
-  const getUser = async () => {
+  const getUser = () => {
     const { getUser } = userData || {};
     if (getUser?.__typename === 'Error') return setUser(undefined);
     setUser(getUser);

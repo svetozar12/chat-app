@@ -1,5 +1,6 @@
 import { VStack } from '@chakra-ui/react';
 import Loading from 'components/Loading';
+import useProvideAuth from 'hooks/useSession';
 import useThemeColors from 'hooks/useThemeColors';
 import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
@@ -10,18 +11,17 @@ import { AuthModel, useLogoutMutation } from 'services/generated';
 import { STATE } from 'services/redux/reducer';
 import { setIsAuth, signOut } from 'services/redux/reducer/auth/actions';
 import { IAuth } from 'services/redux/reducer/auth/state';
-import { getAuth } from 'utils/authMethods';
 
 interface ILogout {
-  auth: IAuth;
   signOut: typeof signOut;
   setIsAuth: typeof setIsAuth;
 }
 
 const Logout = (props: ILogout) => {
-  const { signOut, setIsAuth, auth: authProps } = props;
+  const { signOut, setIsAuth } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [logout] = useLogoutMutation();
+  const { auth } = useProvideAuth();
   const {
     base: {
       form: { background },
@@ -31,16 +31,17 @@ const Logout = (props: ILogout) => {
   const cookie = useCookie();
 
   const deleteCookies = async () => {
-    getAuth().then(async () => {
-      const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+    try {
       await logout({ variables: { auth } });
-    });
-    const cookies = cookie.getAll();
-    for (const key in cookies) cookie.remove(key);
-    setIsAuth(!authProps.isAuth);
-    signOut();
-    router.push('/');
-    setIsLoading(false);
+      const cookies = cookie.getAll();
+      for (const key in cookies) cookie.remove(key);
+      setIsAuth(false);
+      signOut();
+      await router.push('/');
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

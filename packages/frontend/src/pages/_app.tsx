@@ -1,6 +1,5 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import React from 'react';
 // services
 import App from 'components/PageLayout/App';
 import { wrapper } from '../services/redux/store';
@@ -15,9 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on('routeChangeComplete', () => NProgress.done());
   Router.events.on('routeChangeError', () => NProgress.done());
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    <App cookies={pageProps.cookie}>
+    <App>
       {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
       {/* @ts-ignore*/}
       <Component {...pageProps} />

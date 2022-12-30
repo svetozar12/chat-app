@@ -10,25 +10,12 @@ const timeStamp = (createdAt: string) => {
   return TimeStamp;
 };
 
-const getFirstChat = async (userId: string, token: string): Promise<any> => {
-  try {
-    const res = await sdk.chatroom.getAll({ auth: { userId, AccessToken: token } });
-    if (res.length <= 0) return false;
-
-    return res[0]._id;
-  } catch (error) {
-    console.error(error);
-
-    return false;
-  }
-};
-
 const handleSubmitOnEnter = (e: any, SubmitFunc: (e: any) => void) => {
   if (e.key === 'Enter') {
     SubmitFunc(e);
   }
 };
 
-const generic = { handleSubmitOnEnter, getFirstChat, timeStamp };
+const generic = { handleSubmitOnEnter, timeStamp };
 
 export default generic;

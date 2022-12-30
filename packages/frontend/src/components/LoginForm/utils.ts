@@ -5,7 +5,6 @@ import { setAlert } from 'services/redux/reducer/alert/actions';
 import { IAuth } from 'services/redux/reducer/auth/state';
 import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
-import generic from 'utils/generic';
 
 export const handleSubmit = async (
   values: LoginUserMutationVariables,
@@ -20,6 +19,7 @@ export const handleSubmit = async (
     togglelIsLoadingSetter: typeof togglelIsLoading;
     setAlertSetter: typeof setAlert;
   },
+  firstChatId: string,
 ) => {
   const { setInputUsernameSetter, setAlertSetter, setInputPasswordSetter, togglelIsLoadingSetter } = setters;
   const { data, loginUserMutation } = mutation;
@@ -47,10 +47,8 @@ export const handleSubmit = async (
         cookie.set(name, value, { ...(options as any) });
       });
 
-      const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
-
-      cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
-      router.push(callback || `/${chatInstance}`);
+      cookie.set('REDIRECT_URL_CALLBACK', callback || `/${firstChatId}`);
+      router.push(callback || `/${firstChatId}`);
 
       setInputUsernameSetter('');
       setInputPasswordSetter('');

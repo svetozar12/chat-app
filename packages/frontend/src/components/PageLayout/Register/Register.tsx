@@ -1,15 +1,15 @@
 import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
 import RegisterForm from 'components/RegisterForm';
-import generic from 'utils/generic';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { togglelIsLoading, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
-import { useLoginUserMutation } from 'services/generated';
+import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
 import { setAlert } from 'services/redux/reducer/alert/actions';
+import useProvideAuth from 'hooks/useSession';
 
 interface IRegisterLayout extends ReturnType<typeof mapDispatchToProps> {
   inputs: IInputs;
@@ -20,6 +20,9 @@ function RegisterLayout(props: IRegisterLayout) {
   const router = useRouter();
   const cookie = useCookie();
   const [login, { data }] = useLoginUserMutation();
+  const { auth } = useProvideAuth();
+  const { data: chatListData } = useGetChatListQuery({ variables: { auth } });
+
   const quickLogin = async (): Promise<void> => {
     try {
       await login({ variables: { username: inputs.input_username, password: inputs.input_password } });
@@ -41,9 +44,11 @@ function RegisterLayout(props: IRegisterLayout) {
           cookie.set(name, value, { ...(options as any) });
         });
 
-        const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
+        const { getAllChats } = chatListData || {};
+        if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+        const firstChatid = getAllChats?.res[0]._id;
 
-        router.push(`/${chatInstance}`);
+        router.push(`/${firstChatid}`);
         setInputUsername('');
         setInputEmail('');
         setInputPassword('');
