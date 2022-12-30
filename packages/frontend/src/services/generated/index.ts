@@ -28,7 +28,7 @@ export type Chat = {
 
 export type ChatList = {
   __typename?: 'ChatList';
-  res?: Maybe<Array<Maybe<Chat>>>;
+  res: Array<Chat>;
 };
 
 export type ChatListUnion = ChatList | Error;
@@ -72,7 +72,7 @@ export type Invite = {
 
 export type InviteList = {
   __typename?: 'InviteList';
-  res?: Maybe<Array<Maybe<Invite>>>;
+  res: Array<Invite>;
 };
 
 export type InviteListUnion = Error | InviteList;
@@ -107,7 +107,7 @@ export type Messages = {
 
 export type MessagesList = {
   __typename?: 'MessagesList';
-  res?: Maybe<Array<Maybe<Messages>>>;
+  res: Array<Messages>;
 };
 
 export type MessagesListUnion = Error | MessagesList;
@@ -260,13 +260,13 @@ export type QueryGetChatByIdArgs = {
 
 export type QueryGetInvitesByInviterArgs = {
   auth: AuthModel;
-  status?: InputMaybe<Status>;
+  status: Status;
 };
 
 
 export type QueryGetInvitesByRecieverArgs = {
   auth: AuthModel;
-  status?: InputMaybe<Status>;
+  status: Status;
 };
 
 
@@ -353,7 +353,7 @@ export type GetChatListQueryVariables = Exact<{
 }>;
 
 
-export type GetChatListQuery = { __typename?: 'Query', getAllChats: { __typename: 'ChatList', res?: Array<{ __typename?: 'Chat', _id: string, members: Array<string> } | null> | null } | { __typename: 'Error', message: string } };
+export type GetChatListQuery = { __typename?: 'Query', getAllChats: { __typename: 'ChatList', res: Array<{ __typename?: 'Chat', _id: string, members: Array<string> }> } | { __typename: 'Error', message: string } };
 
 export type UpdateChatMutationVariables = Exact<{
   auth: AuthModel;
@@ -382,19 +382,19 @@ export type CreateInviteGrupMutation = { __typename?: 'Mutation', createInviteGr
 
 export type GetInvitesByInviterQueryVariables = Exact<{
   auth: AuthModel;
-  status?: InputMaybe<Status>;
+  status: Status;
 }>;
 
 
-export type GetInvitesByInviterQuery = { __typename?: 'Query', getInvitesByInviter: { __typename: 'Error', message: string } | { __typename: 'InviteList', res?: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string } | null> | null } };
+export type GetInvitesByInviterQuery = { __typename?: 'Query', getInvitesByInviter: { __typename: 'Error', message: string } | { __typename: 'InviteList', res: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string }> } };
 
 export type GetInvitesByRecieverQueryVariables = Exact<{
   auth: AuthModel;
-  status?: InputMaybe<Status>;
+  status: Status;
 }>;
 
 
-export type GetInvitesByRecieverQuery = { __typename?: 'Query', getInvitesByReciever: { __typename: 'Error', message: string } | { __typename: 'InviteList', res?: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string } | null> | null } };
+export type GetInvitesByRecieverQuery = { __typename?: 'Query', getInvitesByReciever: { __typename: 'Error', message: string } | { __typename: 'InviteList', res: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string }> } };
 
 export type UpdateInviteMutationVariables = Exact<{
   auth: AuthModel;
@@ -429,7 +429,7 @@ export type GetMessageListQueryVariables = Exact<{
 }>;
 
 
-export type GetMessageListQuery = { __typename?: 'Query', getAllMessages: { __typename: 'Error', message: string } | { __typename: 'MessagesList', res?: Array<{ __typename?: 'Messages', _id: string, user_id: string, chat_id: string, sender: string, message: string } | null> | null } };
+export type GetMessageListQuery = { __typename?: 'Query', getAllMessages: { __typename: 'Error', message: string } | { __typename: 'MessagesList', res: Array<{ __typename?: 'Messages', _id: string, user_id: string, chat_id: string, sender: string, message: string }> } };
 
 export type UpdateMessageMutationVariables = Exact<{
   message_id: Scalars['String'];
@@ -899,7 +899,7 @@ export type CreateInviteGrupMutationHookResult = ReturnType<typeof useCreateInvi
 export type CreateInviteGrupMutationResult = Apollo.MutationResult<CreateInviteGrupMutation>;
 export type CreateInviteGrupMutationOptions = Apollo.BaseMutationOptions<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>;
 export const GetInvitesByInviterDocument = gql`
-    query GetInvitesByInviter($auth: AuthModel!, $status: Status) {
+    query GetInvitesByInviter($auth: AuthModel!, $status: Status!) {
   getInvitesByInviter(auth: $auth, status: $status) {
     __typename
     ... on InviteList {
@@ -946,7 +946,7 @@ export type GetInvitesByInviterQueryHookResult = ReturnType<typeof useGetInvites
 export type GetInvitesByInviterLazyQueryHookResult = ReturnType<typeof useGetInvitesByInviterLazyQuery>;
 export type GetInvitesByInviterQueryResult = Apollo.QueryResult<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>;
 export const GetInvitesByRecieverDocument = gql`
-    query GetInvitesByReciever($auth: AuthModel!, $status: Status) {
+    query GetInvitesByReciever($auth: AuthModel!, $status: Status!) {
   getInvitesByReciever(auth: $auth, status: $status) {
     __typename
     ... on InviteList {

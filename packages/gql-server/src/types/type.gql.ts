@@ -35,7 +35,7 @@ export const typeSchema = `
   }
 
   type MessagesList {
-    res: [Messages]
+    res: [Messages!]!
   }
 
   type Chat {
@@ -44,7 +44,7 @@ export const typeSchema = `
   }
 
   type ChatList {
-    res: [Chat]
+    res: [Chat!]!
   }
 
   type Invite {
@@ -55,6 +55,6 @@ export const typeSchema = `
   }
 
   type InviteList {
-    res: [Invite]
+    res: [Invite!]!
   }
 `;

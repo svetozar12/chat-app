@@ -9,11 +9,11 @@ import ChatRoom from './ChatRoom';
 import Notifications_Modal from '../Notifications_Modal';
 import AddUsers_Modal from '../AddUsers_Modal';
 // services
-import { useAuth } from 'utils/SessionProvider';
 import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { Status, Invite, useGetChatQuery } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IMessageSection {
   contacts: Invite[];
@@ -27,7 +27,7 @@ function MessageSection(props: IMessageSection) {
   const [users, setUsers] = React.useState<any[]>([]);
   const cookie = useCookie();
   const route = useRouter();
-  const { user } = useAuth();
+  const { user } = useProvideAuth();
   const { acc } = route.query;
   const { data: chatData } = useGetChatQuery({
     ssr: false,

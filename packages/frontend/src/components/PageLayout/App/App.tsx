@@ -1,9 +1,7 @@
 import { ChakraProvider, HStack } from '@chakra-ui/react';
 import GlobalRenders from 'components/GlobalRenders';
 import Sidebar from 'components/Sidebar/Sidebar';
-import { useCookie } from 'next-cookie';
 import theme from 'styles/theme';
-import SessionProvider from 'utils/SessionProvider';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
@@ -25,19 +23,17 @@ function App(props: IApp) {
   } = props;
   return (
     <ApolloProvider client={client}>
-      <SessionProvider>
-        <GlobalRenders />
-        <ChakraProvider theme={theme}>
-          {isAuth ? (
-            <HStack>
-              <Sidebar />
-              {children}
-            </HStack>
-          ) : (
-            children
-          )}
-        </ChakraProvider>
-      </SessionProvider>
+      <GlobalRenders />
+      <ChakraProvider theme={theme}>
+        {isAuth ? (
+          <HStack>
+            <Sidebar />
+            {children}
+          </HStack>
+        ) : (
+          children
+        )}
+      </ChakraProvider>
     </ApolloProvider>
   );
 }

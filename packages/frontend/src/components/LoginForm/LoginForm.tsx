@@ -1,5 +1,3 @@
-import React from 'react';
-import generic from 'utils/generic';
 import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem, FormErrorMessage, FormControl } from '@chakra-ui/react';
 // hooks
 import { useCookie } from 'next-cookie';
@@ -15,69 +13,31 @@ import Loading from '../Loading';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
-import { IAuth } from 'services/redux/reducer/auth/state';
 import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { setRememberMe } from 'services/redux/reducer/auth/actions';
-import { useLoginUserMutation, LoginUserMutationVariables } from 'services/generated';
+import { useLoginUserMutation } from 'services/generated';
+import { handleSubmit } from 'components/LoginForm/utils';
 
-interface ILoginForm extends ILogin {
-  auth: IAuth;
-  setInputUsername: typeof setInputUsername;
-  setInputPassword: typeof setInputPassword;
-  togglelIsLoading: typeof togglelIsLoading;
-  setAlert: typeof setAlert;
-  setRememberMe: typeof setRememberMe;
+interface ILoginForm extends ILogin, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {}
+interface IRenderInputs {
+  label: string;
+  props: {
+    type: string;
+    name: 'username' | 'password';
+    color: string;
+    placeholder: string;
+    _placeholder: any;
+    boxShadow: string;
+  };
 }
 
 function LoginForm(props: ILoginForm) {
-  const { callback, auth, setInputUsername, setInputPassword, togglelIsLoading, setAlert } = props;
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { callback, auth, isLoading, setInputUsername, setInputPassword, togglelIsLoading, setAlert } = props;
   const router = useRouter();
   const cookie = useCookie();
   const [loginUserMutation, { data }] = useLoginUserMutation();
-
-  const rememberMe = auth.remember_me ? 31556952 : 3600;
-  const refreshRememberMe = auth.remember_me ? 63113904 : 7200;
-
-  const handleSubmit = async (values: LoginUserMutationVariables) => {
-    try {
-      const { username } = values;
-      await loginUserMutation({ variables: { ...values } });
-      const { loginUser } = data || {};
-
-      if (loginUser?.__typename === 'Error') setAlert(loginUser?.message, 'error');
-      else if (loginUser?.__typename === 'LoginUser') {
-        const { AccessToken, RefreshToken, userId } = loginUser || {};
-        setIsLoading(true);
-
-        const cookies = [
-          { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'id', value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'token', value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-          { name: 'refresh_token', value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
-        ];
-
-        cookies.forEach((element) => {
-          const { name, value, options } = element;
-          cookie.set(name, value, { ...(options as any) });
-        });
-
-        const chatInstance: string = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
-
-        cookie.set('REDIRECT_URL_CALLBACK', callback || `/${chatInstance}`);
-        router.push(callback || `/${chatInstance}`);
-        togglelIsLoading(false);
-        setIsLoading(false);
-        setInputUsername('');
-        setInputPassword('');
-      }
-    } catch (error) {
-      setIsLoading(false);
-      return error;
-    }
-  };
 
   const {
     base: {
@@ -85,18 +45,6 @@ function LoginForm(props: ILoginForm) {
       button: { color: btnCollor },
     },
   } = useThemeColors();
-
-  interface IRenderInputs {
-    label: string;
-    props: {
-      type: string;
-      name: 'username' | 'password';
-      color: string;
-      placeholder: string;
-      _placeholder: any;
-      boxShadow: string;
-    };
-  }
 
   const renderInputs: IRenderInputs[] = [
     {
@@ -127,7 +75,20 @@ function LoginForm(props: ILoginForm) {
     initialValues: { username: '', password: '' },
     validationSchema: LoginSchema,
     onSubmit: (values, { resetForm }) => {
-      handleSubmit(values);
+      handleSubmit(
+        values,
+        auth,
+        cookie,
+        router,
+        callback,
+        { loginUserMutation, data },
+        {
+          setAlertSetter: setAlert,
+          setInputPasswordSetter: setInputPassword,
+          setInputUsernameSetter: setInputUsername,
+          togglelIsLoadingSetter: togglelIsLoading,
+        },
+      );
       resetForm();
     },
     validateOnChange: false,
@@ -190,7 +151,8 @@ function LoginForm(props: ILoginForm) {
 }
 
 const mapStateToProps = (state: STATE) => ({
-  auth: state.messages,
+  auth: state.auth,
+  isLoading: state.toggle.toggeleIsLoading,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -198,8 +160,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   setInputPassword: bindActionCreators(setInputPassword, dispatch),
   togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
   setAlert: bindActionCreators(setAlert, dispatch),
-  setRememberMe: bindActionCreators(setRememberMe, dispatch),
 });
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

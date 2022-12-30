@@ -22,13 +22,12 @@ export interface Iinvites {
 const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => <HomePageLayout {...props} />;
 
 export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
-  const isUserAuth: any = await isAuth(ctx);
+  const isUserAuth = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
   const cookie = useCookie(ctx);
 
   if (!isUserAuth && currPath !== '/') return redirectTo('/', ctx, (ctx.query.callback as string) || currPath);
   const chatInstance: any = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
-  console.log(cookie.getAll());
 
   cookie.set('first_chat_id', chatInstance, {
     sameSite: 'strict',

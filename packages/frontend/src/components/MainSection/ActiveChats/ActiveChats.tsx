@@ -26,7 +26,7 @@ function ActiveChats(props: IActiveChats) {
   const [inviter, setInviter] = React.useState<string>('');
   const {
     base: {
-      default: { color, inverseColor },
+      default: { color },
     },
   } = useThemeColors();
   const router = useRouter();
@@ -35,6 +35,7 @@ function ActiveChats(props: IActiveChats) {
   const cookieName: string = cookie.get('name');
   const user1 = members?.[0];
   const user2 = members?.[1];
+  console.log(props);
 
   const joinChat = () => {
     ws.ws?.emit('join_chat', {

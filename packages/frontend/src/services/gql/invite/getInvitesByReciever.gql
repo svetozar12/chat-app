@@ -1,4 +1,4 @@
-query GetInvitesByReciever($auth: AuthModel!, $status: Status) {
+query GetInvitesByReciever($auth: AuthModel!, $status: Status!) {
   getInvitesByReciever(auth: $auth, status: $status) {
     __typename
     ... on InviteList {

@@ -10,7 +10,6 @@ import RenderChat from './RenderChat';
 import ChatRoomForm from './ChatRoomForm';
 import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // services
-import { useAuth } from '../../../utils/SessionProvider';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -45,7 +44,7 @@ export interface IchatInstance {
 }
 
 function ChatRoom(props: IChatRoom) {
-  const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message, toggle } = props;
+  const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message } = props;
   const { messagePageNumber, messages } = message;
   const route = useRouter();
   const {
@@ -53,7 +52,7 @@ function ChatRoom(props: IChatRoom) {
       default: { inverseColor },
     },
   } = useThemeColors();
-  const user = useAuth();
+  const { user } = useProvideAuth();
   const { auth } = useProvideAuth();
   const containerRef = React.useRef<null | HTMLDivElement>(null);
   const { data, refetch } = useGetMessageListQuery({ variables: { auth, chat_id: chatId, query: { page_size: 10, page_number: 1 } } });

@@ -7,7 +7,6 @@ import { useCookie } from 'next-cookie';
 // services
 import { setReciever } from 'services/redux/reducer/invites/actions';
 import { getAuth } from 'utils/authMethods';
-import { useAuth } from 'utils/SessionProvider';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import IInvite from 'services/redux/reducer/invites/state';
@@ -16,6 +15,7 @@ import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHea
 import FindFriendsHeader from './FindFriendsHeader';
 import FindFriendsSearch from './FindFriendsSearch';
 import { useCreateInviteMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IFindFriends {
   ws: IWebSocket;
@@ -26,7 +26,7 @@ interface IFindFriends {
 function FindFriends(props: IFindFriends) {
   const { ws, invite, setReciever } = props;
   const cookie = useCookie();
-  const { user } = useAuth();
+  const { user } = useProvideAuth();
   const [createInviteMutation, { data }] = useCreateInviteMutation();
   const sendInvite = async () => {
     try {

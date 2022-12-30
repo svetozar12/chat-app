@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
 // components
 import { css, cx } from '@emotion/css';
-import { CloseButton, Flex, HStack, Slide, useColorModeValue, VStack } from '@chakra-ui/react';
+import { CloseButton, Flex, Slide, useColorModeValue, VStack } from '@chakra-ui/react';
 import ActiveChats from './ActiveChats';
 import FindFriends from './FindFriends';
 import ChatSettings from './ChatSettings';
 // other
-import { useAuth } from '../../utils/SessionProvider';
 import useThemeColors from '../../hooks/useThemeColors';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
@@ -16,6 +14,7 @@ import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { AuthModel, useGetChatListQuery } from 'services/generated';
 import { useCookie } from 'next-cookie';
+import useProvideAuth from 'hooks/useSession';
 
 interface IMainSection {
   chatId: string;
@@ -26,7 +25,7 @@ interface IMainSection {
 function MainSection(props: IMainSection) {
   const cookie = useCookie();
   const { chatId, toggle, toggleChatSettings } = props;
-  const { user } = useAuth();
+  const { user } = useProvideAuth();
   const {
     base: {
       default: { color, offColor },
@@ -34,9 +33,11 @@ function MainSection(props: IMainSection) {
     },
   } = useThemeColors();
   const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
-  const { data, refetch } = useGetChatListQuery({ variables: { auth } });
+  const { data } = useGetChatListQuery({ variables: { auth } });
   const { getAllChats } = data || {};
-  // if (getAllChats)
+  if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+  console.log(getAllChats);
+
   return (
     <VStack
       mr="-0.5rem !important"
@@ -91,7 +92,7 @@ function MainSection(props: IMainSection) {
               <ChatSettings chatId={chatId} />
             </VStack>
           </Slide>
-          {chatRooms.map((item, index) => (
+          {getAllChats?.res.map((item, index) => (
             <ActiveChats key={index} {...item} chatId={chatId} />
           ))}
         </VStack>
