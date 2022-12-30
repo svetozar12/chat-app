@@ -23,13 +23,15 @@ interface IMessageSection {
 }
 
 function MessageSection(props: IMessageSection) {
-  const { contacts, chatId, toggle, FetchInvites } = props;
+  const { contacts, chatId, toggle } = props;
   const [users, setUsers] = React.useState<any[]>([]);
   const cookie = useCookie();
   const route = useRouter();
   const { user } = useAuth();
+  const { acc } = route.query;
   const { data: chatData } = useGetChatQuery({
-    variables: { chat_id: window.location.pathname, auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } },
+    ssr: false,
+    variables: { chat_id: acc as string, auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } },
   });
   const getMembersSuggestions = async () => {
     try {
@@ -104,13 +106,5 @@ function MessageSection(props: IMessageSection) {
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,
 });
-
-// const mapDispatchToProps = (dispatch: Dispatch) => ({
-//   incrementPagination: bindActionCreators(incrementPaginationNumberAction, dispatch),
-//   setMessages: bindActionCreators(setMessagesAction, dispatch),
-//   setPaginatedMessages: bindActionCreators(setPaginatedMessagesAction, dispatch),
-//   toggleIsMatch: bindActionCreators(toggleIsMatch, dispatch),
-//   resetMessages: bindActionCreators(resetMessagesAction, dispatch),
-// });
 
 export default connect(mapStateToProps)(MessageSection);

@@ -34,9 +34,17 @@ export const typeSchema = `
     seenBy: [String!]!
   }
 
+  type MessagesList {
+    res: [Messages]
+  }
+
   type Chat {
     _id: String!
     members: [String!]!
+  }
+
+  type ChatList {
+    res: [Chat]
   }
 
   type Invite {
@@ -44,5 +52,9 @@ export const typeSchema = `
     inviter: String!
     reciever: String!
     status: String!
+  }
+
+  type InviteList {
+    res: [Invite]
   }
 `;

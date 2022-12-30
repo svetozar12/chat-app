@@ -10,7 +10,6 @@ import RenderChat from './RenderChat';
 import ChatRoomForm from './ChatRoomForm';
 import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // services
-import sdk from 'services/sdk';
 import { useAuth } from '../../../utils/SessionProvider';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
@@ -25,6 +24,7 @@ import { IMessage } from 'services/redux/reducer/messages/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleIsMatch } from 'services/redux/reducer/toggles/actions';
 import useProvideAuth from 'hooks/useSession';
+import { useGetMessageListQuery } from 'services/generated';
 
 interface IChatRoom {
   message: IMessage;
@@ -56,15 +56,12 @@ function ChatRoom(props: IChatRoom) {
   const user = useAuth();
   const { auth } = useProvideAuth();
   const containerRef = React.useRef<null | HTMLDivElement>(null);
-
+  const { data, refetch } = useGetMessageListQuery({ variables: { auth, chat_id: chatId, query: { page_size: 10, page_number: 1 } } });
   const getRecentMessages = async () => {
     try {
-      const res = await sdk.message.getAll({
-        auth,
-        chat_id: chatId,
-        query: { page_size: 10, page_number: 1 },
-      });
-      res.forEach((element: Record<string, any>) => {
+      const { getAllMessages } = data || {};
+      if (getAllMessages?.__typename === 'Error') throw new Error(getAllMessages.message);
+      getAllMessages?.res?.forEach((element) => {
         setMessages(element);
       });
 
@@ -85,12 +82,10 @@ function ChatRoom(props: IChatRoom) {
     try {
       if (e.currentTarget.scrollTop === 0) {
         incrementPagination(messagePageNumber);
-        const res = await sdk.message.getAll({
-          auth,
-          chat_id: chatId,
-          query: { page_size: 10, page_number: messagePageNumber },
-        });
-        res.forEach((element: Record<string, any>) => {
+        refetch({ auth, chat_id: chatId, query: { page_size: 10, page_number: messagePageNumber } });
+        const { getAllMessages } = data || {};
+        if (getAllMessages?.__typename === 'Error') throw new Error(getAllMessages.message);
+        getAllMessages?.res?.forEach((element) => {
           setPaginatedMessages(element);
         });
       }

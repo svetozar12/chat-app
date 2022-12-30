@@ -1,4 +1,3 @@
-import { GraphQLYogaError } from '@graphql-yoga/node';
 import { instance } from './sdk/index';
 
 export enum Method {
@@ -23,6 +22,7 @@ const makeRequest = async <T>(
       return res.data;
     }
     const res = await instance[method](path, body, options);
+
     return res.data;
   } catch (error: any) {
     return { __typename: 'Error', message: error.response.data.Message };

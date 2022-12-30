@@ -26,6 +26,13 @@ export type Chat = {
   members: Array<Scalars['String']>;
 };
 
+export type ChatList = {
+  __typename?: 'ChatList';
+  res?: Maybe<Array<Maybe<Chat>>>;
+};
+
+export type ChatListUnion = ChatList | Error;
+
 export type ChatModel = {
   invite_id: Scalars['String'];
   user1: Scalars['String'];
@@ -63,6 +70,13 @@ export type Invite = {
   status: Scalars['String'];
 };
 
+export type InviteList = {
+  __typename?: 'InviteList';
+  res?: Maybe<Array<Maybe<Invite>>>;
+};
+
+export type InviteListUnion = Error | InviteList;
+
 export type InviteUnion = Error | Invite;
 
 export type LoginUser = {
@@ -90,6 +104,13 @@ export type Messages = {
   sender: Scalars['String'];
   user_id: Scalars['String'];
 };
+
+export type MessagesList = {
+  __typename?: 'MessagesList';
+  res?: Maybe<Array<Maybe<Messages>>>;
+};
+
+export type MessagesListUnion = Error | MessagesList;
 
 export type MessagesUnion = Error | Messages;
 
@@ -210,11 +231,11 @@ export type Pagination = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllChats: Array<ChatUnion>;
-  getAllMessages: Array<MessagesUnion>;
+  getAllChats: ChatListUnion;
+  getAllMessages: MessagesListUnion;
   getChatById: ChatUnion;
-  getInvitesByInviter: Array<InviteUnion>;
-  getInvitesByReciever: Array<InviteUnion>;
+  getInvitesByInviter: InviteListUnion;
+  getInvitesByReciever: InviteListUnion;
   getUser: GetUserUnion;
 };
 
@@ -332,7 +353,7 @@ export type GetChatListQueryVariables = Exact<{
 }>;
 
 
-export type GetChatListQuery = { __typename?: 'Query', getAllChats: Array<{ __typename: 'Chat', _id: string, members: Array<string> } | { __typename: 'Error', message: string }> };
+export type GetChatListQuery = { __typename?: 'Query', getAllChats: { __typename: 'ChatList', res?: Array<{ __typename?: 'Chat', _id: string, members: Array<string> } | null> | null } | { __typename: 'Error', message: string } };
 
 export type UpdateChatMutationVariables = Exact<{
   auth: AuthModel;
@@ -365,7 +386,7 @@ export type GetInvitesByInviterQueryVariables = Exact<{
 }>;
 
 
-export type GetInvitesByInviterQuery = { __typename?: 'Query', getInvitesByInviter: Array<{ __typename: 'Error', message: string } | { __typename: 'Invite', _id: string, inviter: string, reciever: string, status: string }> };
+export type GetInvitesByInviterQuery = { __typename?: 'Query', getInvitesByInviter: { __typename: 'Error', message: string } | { __typename: 'InviteList', res?: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string } | null> | null } };
 
 export type GetInvitesByRecieverQueryVariables = Exact<{
   auth: AuthModel;
@@ -373,7 +394,7 @@ export type GetInvitesByRecieverQueryVariables = Exact<{
 }>;
 
 
-export type GetInvitesByRecieverQuery = { __typename?: 'Query', getInvitesByReciever: Array<{ __typename: 'Error', message: string } | { __typename: 'Invite', _id: string, inviter: string, reciever: string, status: string }> };
+export type GetInvitesByRecieverQuery = { __typename?: 'Query', getInvitesByReciever: { __typename: 'Error', message: string } | { __typename: 'InviteList', res?: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string } | null> | null } };
 
 export type UpdateInviteMutationVariables = Exact<{
   auth: AuthModel;
@@ -408,7 +429,7 @@ export type GetMessageListQueryVariables = Exact<{
 }>;
 
 
-export type GetMessageListQuery = { __typename?: 'Query', getAllMessages: Array<{ __typename: 'Error', message: string } | { __typename: 'Messages', _id: string, user_id: string, chat_id: string, sender: string, message: string }> };
+export type GetMessageListQuery = { __typename?: 'Query', getAllMessages: { __typename: 'Error', message: string } | { __typename: 'MessagesList', res?: Array<{ __typename?: 'Messages', _id: string, user_id: string, chat_id: string, sender: string, message: string } | null> | null } };
 
 export type UpdateMessageMutationVariables = Exact<{
   message_id: Scalars['String'];
@@ -703,9 +724,11 @@ export const GetChatListDocument = gql`
     query GetChatList($auth: AuthModel!) {
   getAllChats(auth: $auth) {
     __typename
-    ... on Chat {
-      _id
-      members
+    ... on ChatList {
+      res {
+        _id
+        members
+      }
     }
     ... on Error {
       message
@@ -879,11 +902,13 @@ export const GetInvitesByInviterDocument = gql`
     query GetInvitesByInviter($auth: AuthModel!, $status: Status) {
   getInvitesByInviter(auth: $auth, status: $status) {
     __typename
-    ... on Invite {
-      _id
-      inviter
-      reciever
-      status
+    ... on InviteList {
+      res {
+        _id
+        inviter
+        reciever
+        status
+      }
     }
     ... on Error {
       message
@@ -924,11 +949,13 @@ export const GetInvitesByRecieverDocument = gql`
     query GetInvitesByReciever($auth: AuthModel!, $status: Status) {
   getInvitesByReciever(auth: $auth, status: $status) {
     __typename
-    ... on Invite {
-      _id
-      inviter
-      reciever
-      status
+    ... on InviteList {
+      res {
+        _id
+        inviter
+        reciever
+        status
+      }
     }
     ... on Error {
       message
@@ -1098,12 +1125,14 @@ export const GetMessageListDocument = gql`
     query GetMessageList($auth: AuthModel!, $chat_id: String!, $query: Pagination) {
   getAllMessages(auth: $auth, chat_id: $chat_id, query: $query) {
     __typename
-    ... on Messages {
-      _id
-      user_id
-      chat_id
-      sender
-      message
+    ... on MessagesList {
+      res {
+        _id
+        user_id
+        chat_id
+        sender
+        message
+      }
     }
     ... on Error {
       message

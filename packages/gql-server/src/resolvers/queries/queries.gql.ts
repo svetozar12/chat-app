@@ -2,10 +2,10 @@ const querySchema = `
 type Query {
   getUser(auth: AuthModel!): GetUserUnion!
   getChatById(chat_id: String!, auth: AuthModel!): ChatUnion!
-  getAllChats(auth: AuthModel!): [ChatUnion!]!
-  getAllMessages(auth: AuthModel!, chat_id: String!, query: Pagination): [MessagesUnion!]!
-  getInvitesByReciever(auth: AuthModel!, status: Status): [InviteUnion!]!
-  getInvitesByInviter(auth: AuthModel!, status: Status): [InviteUnion!]!
+  getAllChats(auth: AuthModel!): ChatListUnion!
+  getAllMessages(auth: AuthModel!, chat_id: String!, query: Pagination): MessagesListUnion!
+  getInvitesByReciever(auth: AuthModel!, status: Status): InviteListUnion!
+  getInvitesByInviter(auth: AuthModel!, status: Status): InviteListUnion!
 }`;
 
 export default querySchema;
