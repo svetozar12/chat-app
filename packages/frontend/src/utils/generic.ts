@@ -1,5 +1,3 @@
-import sdk from 'services/sdk';
-
 const timeStamp = (createdAt: string) => {
   if (typeof createdAt !== 'string') return 'Bad input';
   const date = new Date(createdAt);

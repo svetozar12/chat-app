@@ -3,8 +3,7 @@ import routes from 'constants/routes';
 import { NextPageContext } from 'next';
 import { useCookie } from 'next-cookie';
 import { GetChatListDocument, GetChatListQueryResult, GetChatListQueryVariables } from 'services/generated';
-import { ssrGetChatList } from 'services/generated/ssr';
-import sdk from 'services/sdk';
+import { gqlMakeRequest } from 'utils/makeRequest';
 import { isAuth } from './authMethods';
 import redirectTo from './routing';
 
@@ -13,52 +12,32 @@ export interface ICtx extends NextPageContext {
 }
 
 const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
-  try {
-    const isUserAuth = await isAuth(ctx);
-    const currPath = ctx.resolvedUrl;
+  const isUserAuth = await isAuth(ctx);
+  const currPath = ctx.resolvedUrl;
 
-    if (!isUserAuth && currPath === '/logout') return redirectTo(routes.login, ctx);
-    if (!isUserAuth && currPath !== '/') return redirectTo(routes.login, ctx, currPath);
-    if (getServerSideProps) {
-      const gssp = await getServerSideProps(ctx);
-      return {
-        props: {
-          cookie: ctx.req?.headers.cookie ?? '',
-          ...gssp.props,
-        },
-      };
-    }
+  if (!isUserAuth && currPath === '/logout') return redirectTo(routes.login, ctx);
+  if (!isUserAuth && currPath !== '/') return redirectTo(routes.login, ctx, currPath);
+  if (getServerSideProps) {
+    const gssp = await getServerSideProps(ctx);
     return {
       props: {
         cookie: ctx.req?.headers.cookie ?? '',
+        ...gssp.props,
       },
     };
-  } catch (error) {
-    if (getServerSideProps) {
-      const gssp = await getServerSideProps(ctx);
-      return {
-        props: {
-          cookie: ctx.req?.headers.cookie ?? '',
-          ...gssp.props,
-        },
-      };
-    }
-    console.log(error, 'dragan');
-    return { props: {} };
   }
+  return {
+    props: {
+      cookie: ctx.req?.headers.cookie ?? '',
+    },
+  };
 };
 
 export const isAlreadyAuth = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
   const cookie = useCookie(ctx);
-  const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://127.0.0.1:${process.env.NEXT_PUBLIC_GQL_PORT}/graphql`;
-  const {
-    data: { data },
-  } = await axios.post<GetChatListQueryResult>(gqlUrl, {
-    query: GetChatListDocument,
-    variables: {
-      auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') },
-    } as GetChatListQueryVariables,
+  const { data } = await gqlMakeRequest<GetChatListQueryResult, GetChatListQueryVariables>(GetChatListDocument, {
+    auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') },
   });
   const { getAllChats } = data || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);

@@ -69,8 +69,7 @@
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-testing-library": "^5.0.5",
-    "graphql-codegen-apollo-next-ssr": "^1.7.4"
+    "eslint-plugin-testing-library": "^5.0.5"
   },
   "main": "index.js",
   "license": "MIT"

@@ -5,7 +5,15 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import redirectTo from './routing';
 import { ICtx } from './auth';
-import sdk from 'services/sdk';
+import { gqlMakeRequest } from 'utils/makeRequest';
+import {
+  LogoutDocument,
+  LogoutMutationResult,
+  LogoutMutationVariables,
+  RefreshTokenDocument,
+  RefreshTokenMutationResult,
+  RefreshTokenMutationVariables,
+} from 'services/generated';
 
 interface IToken {
   _id: string;
@@ -37,18 +45,24 @@ export const checkTokens = async (cookie: Cookie) => {
   const RefreshToken: string = cookie.get('refresh_token');
   if (!AccessToken) {
     if (RefreshToken) {
-      const res = await sdk.auth.refresh({ user_id: userId, RefreshToken });
-
-      const { AccessToken: Access_Token, RefreshToken: Refresh_Token } = res;
+      const { data } = await gqlMakeRequest<RefreshTokenMutationResult, RefreshTokenMutationVariables>(RefreshTokenDocument, {
+        userId,
+        RefreshToken: cookie.get('RefreshToken'),
+      });
+      const { refreshToken } = data || {};
+      if (refreshToken?.__typename === 'Error') throw new Error(refreshToken.message);
+      const { AccessToken: Access_Token, RefreshToken: Refresh_Token } = refreshToken || {};
 
       if (axios.isAxiosError(RefreshToken)) {
         const cookies = cookie.getAll();
-        await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+        await gqlMakeRequest<LogoutMutationResult, LogoutMutationVariables>(LogoutDocument, {
+          auth: { userId, AccessToken: cookie.get('AccessToken') },
+        });
         for (const key in cookies) cookie.remove(key);
         return false;
       }
-      const accessExpirationTime = getTokenExpirationSeconds(Access_Token);
-      const refresbExpirationTime = getTokenExpirationSeconds(Refresh_Token);
+      const accessExpirationTime = getTokenExpirationSeconds(Access_Token as string);
+      const refresbExpirationTime = getTokenExpirationSeconds(Refresh_Token as string);
 
       cookie.set('token', Access_Token, { expires: new Date(accessExpirationTime) });
       cookie.set('refresh_token', Refresh_Token, { expires: new Date(refresbExpirationTime) });
@@ -56,7 +70,9 @@ export const checkTokens = async (cookie: Cookie) => {
       return true;
     }
     const cookies = cookie.getAll();
-    await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+    await gqlMakeRequest<LogoutMutationResult, LogoutMutationVariables>(LogoutDocument, {
+      auth: { userId, AccessToken: cookie.get('AccessToken') },
+    });
     for (const key in cookies) cookie.remove(key);
     return false;
   }
@@ -66,7 +82,9 @@ export const checkTokens = async (cookie: Cookie) => {
 export const logout = async (ctx: ICtx) => {
   const cookie = useCookie(ctx);
   const cookies = cookie.getAll();
-  await sdk.auth.logout({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } });
+  await gqlMakeRequest<LogoutMutationResult, LogoutMutationVariables>(LogoutDocument, {
+    auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') },
+  });
   for (const key in cookies) cookie.remove(key);
   return redirectTo('/', ctx);
 };
