@@ -10,21 +10,23 @@ import { setWSConnection } from 'services/redux/reducer/websocket/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { STATE } from 'services/redux/reducer';
 import { setNotifNumber } from 'services/redux/reducer/invites/actions';
-import { toggleIsLogedIn, togglelIsLoading, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
 import { Invite, Status, useGetInvitesByInviterQuery, useGetInvitesByRecieverQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
+import { useRouter } from 'next/router';
 
 interface IApp extends ReturnType<typeof mapDispatchToProps> {
-  chatRoom: string;
   cookie: string;
   invite: IInvite;
 }
 
 function App(props: IApp) {
-  const { chatRoom, cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin } = props;
+  const { cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin } = props;
   const cookie = useCookie(cookieProp);
-  const chatId = chatRoom.split('/')[0];
+  const router = useRouter();
+  const { acc } = router.query;
+  const chatId = acc as string;
   // hooks
   const { auth } = useProvideAuth();
   const [contacts, setContacts] = useState<Invite[]>([]);
@@ -135,7 +137,6 @@ const useNotifications = (
     });
 
     socketConnect.on('send_friend_request', () => {
-      console.log('recieved');
       checkNotification();
     });
     setWSConnectionSetter(socketConnect);

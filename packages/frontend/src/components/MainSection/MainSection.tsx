@@ -35,8 +35,8 @@ function MainSection(props: IMainSection) {
   const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
   const { data } = useGetChatListQuery({ variables: { auth } });
   const { getAllChats } = data || {};
+  console.log(getAllChats, 'sergei stanishev', user);
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
-  console.log(getAllChats);
 
   return (
     <VStack

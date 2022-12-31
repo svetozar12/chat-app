@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-import { ApolloClient, NormalizedCacheObject, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
+import { ApolloClient, NormalizedCacheObject, InMemoryCache, ApolloProvider, createHttpLink, ApolloLink } from '@apollo/client';
 
 import { IncomingMessage } from 'http';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
@@ -11,7 +11,7 @@ export type ApolloClientContext = {
   };
 };
 
-export const withApollo = (Comp: NextPage) => (props: any) => {
+export const withApollo = (Comp: NextPage<any, any>) => (props: any) => {
   return (
     <ApolloProvider client={getApolloClient(undefined, props.apolloState)}>
       <Comp />
@@ -33,6 +33,7 @@ export const getApolloClient = (ctx?: ApolloClientContext, initialState?: Normal
   });
   const cache = new InMemoryCache().restore(initialState || {});
   return new ApolloClient({
+    ssrMode: typeof window === 'undefined',
     link: httpLink,
     cache,
   });
