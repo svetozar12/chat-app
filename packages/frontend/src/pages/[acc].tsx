@@ -5,9 +5,7 @@ import HomePageLayout from 'components/PageLayout/HomePageLayout';
 import redirectTo from 'utils/routing';
 import { isAuth } from 'utils/authMethods';
 import withAuthSync, { ICtx } from '../utils/auth';
-import generic from '../utils/generic';
-import { useGetChatListQuery } from 'services/generated';
-import useProvideAuth from 'hooks/useSession';
+import { ssrGetChatList } from 'services/generated/ssr';
 
 export interface Ichats {
   _id: string;
@@ -21,18 +19,27 @@ export interface Iinvites {
   status: string;
 }
 
-const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => <HomePageLayout {...props} />;
+const HomePage: NextPage<{ cookie: string; chatRoom: string }> = (props) => {
+  return <HomePageLayout {...props} />;
+};
 
 export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
   const isUserAuth = await isAuth(ctx);
-  const { auth } = useProvideAuth();
   const currPath = ctx.resolvedUrl;
   const cookie = useCookie(ctx);
 
   if (!isUserAuth && currPath !== '/') return redirectTo('/', ctx, (ctx.query.callback as string) || currPath);
-  const { data: chatListData } = useGetChatListQuery({ variables: { auth } });
-  const { getAllChats } = chatListData || {};
+  const {
+    props: { data },
+  } = await ssrGetChatList.getServerPage(
+    { variables: { auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') } } },
+    ctx as any,
+  );
+
+  const { getAllChats } = data;
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+  console.log(getAllChats, 'PETUR');
+
   const firstChatid = getAllChats?.res[0]._id;
 
   cookie.set('first_chat_id', firstChatid, {

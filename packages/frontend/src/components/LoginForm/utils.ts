@@ -20,6 +20,7 @@ export const handleSubmit = async (
     setAlertSetter: typeof setAlert;
   },
   firstChatId: string,
+  refetch: () => any,
 ) => {
   const { setInputUsernameSetter, setAlertSetter, setInputPasswordSetter, togglelIsLoadingSetter } = setters;
   const { data, loginUserMutation } = mutation;
@@ -46,7 +47,7 @@ export const handleSubmit = async (
         const { name, value, options } = element;
         cookie.set(name, value, { ...(options as any) });
       });
-
+      await refetch();
       cookie.set('REDIRECT_URL_CALLBACK', callback || `/${firstChatId}`);
       router.push(callback || `/${firstChatId}`);
 

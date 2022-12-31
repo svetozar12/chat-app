@@ -7,3 +7,17 @@ generates:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
+  src/services/generated/ssr.tsx:
+    config:
+      documentMode: external
+      reactApolloVersion: 3
+      withHooks: true
+      contextType: 'ApolloClientContext'
+      contextTypeRequired: true
+      apolloClientInstanceImport: '../../utils/withApollo'
+      importDocumentNodeExternallyFrom: ./index
+    preset: import-types
+    presetConfig:
+      typesPath: ./index
+    plugins:
+      - 'graphql-codegen-apollo-next-ssr' # replace by - graphql-codegen-apollo-next-ssr

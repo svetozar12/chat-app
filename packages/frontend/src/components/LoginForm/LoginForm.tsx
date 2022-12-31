@@ -40,7 +40,7 @@ function LoginForm(props: ILoginForm) {
   const cookie = useCookie();
   const { auth: authObj } = useProvideAuth();
   const [loginUserMutation, { data }] = useLoginUserMutation();
-  const { data: chatListData } = useGetChatListQuery({ variables: { auth: authObj } });
+  const { data: chatListData, refetch } = useGetChatListQuery({ variables: { auth: authObj } });
   const { getAllChats } = chatListData || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
   const firstChatid = getAllChats?.res[0]._id;
@@ -94,6 +94,7 @@ function LoginForm(props: ILoginForm) {
           togglelIsLoadingSetter: togglelIsLoading,
         },
         firstChatid as string,
+        () => refetch({ auth: authObj }),
       );
       resetForm();
     },
