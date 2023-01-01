@@ -1,13 +1,6 @@
 import { IFields } from 'components/FormWrapper/FormWrapper';
 import { Gender } from 'services/generated';
 
-interface IValues {
-  username: string;
-  email: string;
-  password: string;
-  gender: Gender;
-}
-
 export const renderInputs = (color: string): IFields[] => [
   {
     props: {

@@ -83,14 +83,3 @@ function FormWrapper(props: IFormWrapper) {
 export type { IFormWrapper };
 
 export default FormWrapper;
-
-// {!!alert.message && (
-//   <Alerts
-//     chakraProps={{ zIndex: 999 }}
-//     message={alert.message}
-//     type={alert.type}
-//     closeAlert={() => {
-//       setAlert('', 'info');
-//     }}
-//   />
-// )}
