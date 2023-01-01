@@ -20,8 +20,8 @@ function Alerts(props: IAlerts) {
 
   return (
     <HStack pos="absolute" transform="translate(50%,-50%)" top="20%" right="50%" {...chakraProps} {...style} {...baseProps}>
-      <Alert status={type} zIndex="99999">
-        <AlertIcon w="20" h="20" />
+      <Alert status={type}>
+        <AlertIcon />
         <AlertTitle textAlign="center" w="full">
           {message}
         </AlertTitle>

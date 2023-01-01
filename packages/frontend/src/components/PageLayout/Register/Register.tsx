@@ -4,7 +4,6 @@ import RegisterForm from 'components/RegisterForm';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { togglelIsLoading, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
-import { setInputEmail, setInputGender, setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { connect } from 'react-redux';
 import IInputs from 'services/redux/reducer/inputs/state';
 import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
@@ -16,7 +15,7 @@ interface IRegisterLayout extends ReturnType<typeof mapDispatchToProps> {
 }
 
 function RegisterLayout(props: IRegisterLayout) {
-  const { inputs, setInputEmail, setInputGender, setInputPassword, togglelIsLoading, setInputUsername, toggleQuickLogin } = props;
+  const { inputs, togglelIsLoading, toggleQuickLogin } = props;
   const router = useRouter();
   const cookie = useCookie();
   const [login, { data }] = useLoginUserMutation();
@@ -49,10 +48,6 @@ function RegisterLayout(props: IRegisterLayout) {
         const firstChatid = getAllChats?.res[0]._id;
 
         router.push(`/${firstChatid}`);
-        setInputUsername('');
-        setInputEmail('');
-        setInputPassword('');
-        setInputGender('');
       }
     } catch (error) {
       togglelIsLoading(false);
@@ -68,10 +63,6 @@ const mapStateToProps = (state: STATE) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
-  setInputUsername: bindActionCreators(setInputUsername, dispatch),
-  setInputPassword: bindActionCreators(setInputPassword, dispatch),
-  setInputEmail: bindActionCreators(setInputEmail, dispatch),
-  setInputGender: bindActionCreators(setInputGender, dispatch),
   togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
   setAlert: bindActionCreators(setAlert, dispatch),
 });

@@ -16,7 +16,7 @@ const toggleCreateGroup = (toggle: boolean) => ({
 });
 
 const toggleQuickLogin = (toggle: boolean) => ({
-  type: ActionType.TOGGLE_CREATE_GROUP,
+  type: ActionType.TOGGLE_QUICK_LOGIN,
   payload: toggle,
 });
 

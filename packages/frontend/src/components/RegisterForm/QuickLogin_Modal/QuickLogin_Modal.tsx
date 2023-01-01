@@ -18,6 +18,7 @@ function QuickLoginModal(props: IQuickLoginModal) {
   const {
     base: {
       button: { color },
+      default: { background },
     },
   } = useThemeColors();
 
@@ -28,7 +29,7 @@ function QuickLoginModal(props: IQuickLoginModal) {
         placeItems="center"
         columns={2}
         w={{ base: '95%', md: '80%', lg: '50%', xl: '30%' }}
-        bg="white"
+        bg={background}
         h="40%"
         p={4}
         boxShadow="default"

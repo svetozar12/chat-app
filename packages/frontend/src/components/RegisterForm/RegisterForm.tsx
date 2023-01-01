@@ -30,9 +30,14 @@ const RegisterForm: FC<IRegisterForm> = ({ quickLogin, setAlert, toggle, toggleQ
   const [createUserMutation, { data }] = useCreateUserMutation();
 
   const handleSubmit = async ({ username, password, email, gender }: FormValues) => {
+    if (!username || !password || !email || !gender) return;
     await createUserMutation({ variables: { user: { username, email, password, gender } } });
-    if (data?.createUser.__typename === 'Error') setAlert(data.createUser.message, 'error');
-    if (data) toggleQuickLogin(false);
+    const { createUser } = data || {};
+    if (createUser?.__typename === 'Error') setAlert(createUser.message, 'error');
+    else {
+      setAlert(createUser?.Message as string, 'success');
+      toggleQuickLogin(true);
+    }
   };
 
   return (

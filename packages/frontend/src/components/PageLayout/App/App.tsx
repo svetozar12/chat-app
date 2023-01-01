@@ -27,8 +27,8 @@ function App(props: IApp) {
   } = props;
   return (
     <ApolloProvider client={client}>
-      <GlobalRenders />
       <ChakraProvider theme={theme}>
+        <GlobalRenders />
         {isAuth ? (
           <HStack>
             <Sidebar />
