@@ -1,30 +1,26 @@
-import { Flex, FormLabel, HStack, Input, Button, Checkbox, SimpleGrid, GridItem, FormErrorMessage, FormControl } from '@chakra-ui/react';
-// hooks
 import { useCookie } from 'next-cookie';
 import { useRouter } from 'next/router';
 // components
 import FormWrapper from 'components/FormWrapper';
-import DefaultLink from 'services/chat-ui/DefaultLink';
-import { useFormik } from 'formik';
-import { LoginSchema } from 'utils/validation';
 import { ILogin } from 'pages';
 import useThemeColors from 'hooks/useThemeColors';
-import Loading from '../Loading';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
-import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
 import { setAlert } from 'services/redux/reducer/alert/actions';
-import { setRememberMe } from 'services/redux/reducer/auth/actions';
 import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
 import { handleSubmit, renderInputs } from 'components/LoginForm/utils';
 import useProvideAuth from 'hooks/useSession';
+import { FC } from 'react';
+import { DefaultLink } from 'services/chat-ui';
+import { Flex, Heading } from '@chakra-ui/react';
 
 interface ILoginForm extends ILogin, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {}
+export type FormValues = { username: string; password: string };
 
-function LoginForm(props: ILoginForm) {
-  const { callback, auth, isLoading, setInputUsername, setInputPassword, togglelIsLoading, setAlert } = props;
+const LoginForm: FC<ILoginForm> = (props) => {
+  const { callback, auth, togglelIsLoading, setAlert } = props;
   const router = useRouter();
   const cookie = useCookie();
   const { auth: authObj } = useProvideAuth();
@@ -40,95 +36,41 @@ function LoginForm(props: ILoginForm) {
     },
   } = useThemeColors();
 
-  const formik = useFormik({
-    initialValues: { username: '', password: '' },
-    validationSchema: LoginSchema,
-    onSubmit: (values, { resetForm }) => {
-      handleSubmit(
-        values,
-        auth,
-        cookie,
-        router,
-        callback,
-        { loginUserMutation, data },
-        {
-          setAlertSetter: setAlert,
-          setInputPasswordSetter: setInputPassword,
-          setInputUsernameSetter: setInputUsername,
-          togglelIsLoadingSetter: togglelIsLoading,
-        },
-        firstChatid as string,
-        () => refetch({ auth: authObj }),
-      );
-      resetForm();
-    },
-    validateOnChange: false,
-    validateOnBlur: false,
-  });
-
   return (
-    <FormWrapper handleSubmit={formik.handleSubmit} type="Login">
-      <>
-        {renderInputs(color).map((element, index) => {
-          const { props } = element;
-          const { name } = props;
-          const isInvalid = Boolean(formik.errors[name] && formik.touched[name]);
-
-          return (
-            <FormControl isInvalid={isInvalid} key={index}>
-              <FormLabel>{element.label}</FormLabel>
-              <Input {...formik.getFieldProps(name)} variant="FormInput" {...props} />
-              {formik.errors[name] && (
-                <FormErrorMessage fontSize="xl" fontWeight="semibold">
-                  {formik.errors[name]}
-                </FormErrorMessage>
-              )}
-            </FormControl>
-          );
-        })}
-      </>
-
-      <Flex w="full" alignItems="center" justifyContent="center">
-        <Button isLoading={isLoading} spinner={<Loading />} colorScheme={btnCollor} w="60%" type="submit">
-          Log In
-        </Button>
-      </Flex>
-      <HStack spacing="5" alignItems="center" justifyContent="center" w="full">
-        <SimpleGrid gap={5} w="full" columns={2}>
-          <GridItem colSpan={{ base: 2, lg: 1 }}>
-            <DefaultLink href="/register" text="Sign up for chatApp" />
-          </GridItem>
-          <GridItem colSpan={{ base: 2, lg: 1 }}>
-            <HStack alignItems="center" justifyContent="center">
-              <Checkbox
-                variant="solid"
-                border="1px"
-                cursor="pointer"
-                data-testid="checkbox"
-                type="checkbox"
-                id="checkbox"
-                checked={auth.remember_me}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-              <FormLabel cursor="pointer" htmlFor="checkbox">
-                Remember me
-              </FormLabel>
-            </HStack>
-          </GridItem>
-        </SimpleGrid>
-      </HStack>
-    </FormWrapper>
+    <FormWrapper
+      onSubmit={(values: FormValues) =>
+        handleSubmit(
+          values,
+          auth,
+          cookie,
+          router,
+          callback,
+          { loginUserMutation, data },
+          {
+            setAlertSetter: setAlert,
+            togglelIsLoadingSetter: togglelIsLoading,
+          },
+          firstChatid as string,
+          () => refetch({ auth: authObj }),
+        )
+      }
+      header={
+        <Flex w="full" justifyContent="center" gap={2} mb="2" flexDir="column">
+          <Heading>Login</Heading>
+          <DefaultLink href="/register" text="Already have an account?" />
+        </Flex>
+      }
+      fields={renderInputs(color)}
+      buttons={[{ value: 'Login', props: { colorScheme: btnCollor, w: '30%', type: 'submit' } }]}
+    />
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   auth: state.auth,
-  isLoading: state.toggle.toggeleIsLoading,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setInputUsername: bindActionCreators(setInputUsername, dispatch),
-  setInputPassword: bindActionCreators(setInputPassword, dispatch),
   togglelIsLoading: bindActionCreators(togglelIsLoading, dispatch),
   setAlert: bindActionCreators(setAlert, dispatch),
 });

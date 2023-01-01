@@ -1,52 +1,55 @@
-import React from 'react';
-// components
-import { FormControl, Box, Heading, VStack, Flex, ScaleFade } from '@chakra-ui/react';
+import {
+  FormControl,
+  Box,
+  VStack,
+  Flex,
+  ScaleFade,
+  Button,
+  ButtonProps,
+  HStack,
+  InputProps,
+  CheckboxProps,
+  RadioProps,
+} from '@chakra-ui/react';
+import Fields from 'components/FormWrapper/subcomponents/Fields';
 import useThemeColors from 'hooks/useThemeColors';
-import { STATE } from 'services/redux/reducer';
-import { connect } from 'react-redux';
-import { IAlert } from 'services/redux/reducer/alert/state';
-import Alerts from 'services/chat-ui/Alerts';
-import { bindActionCreators, Dispatch } from 'redux';
-import { setAlert } from 'services/redux/reducer/alert/actions';
+import { ReactNode } from 'react';
+import { useForm } from 'react-hook-form';
+
+export type RadioButtons = {
+  value: string;
+  props?: RadioProps;
+};
+
+export interface IFields {
+  props?: InputProps & CheckboxProps;
+  label?: string;
+  radioButtons?: RadioButtons[];
+}
+
+interface IButtons {
+  props?: ButtonProps;
+  value: string;
+}
 
 interface IFormWrapper {
-  alert: IAlert;
-  children: JSX.Element | JSX.Element[];
-  type: 'Register' | 'Login';
-  handleSubmit: () => void;
-  setAlert: typeof setAlert;
+  onSubmit: (date: any) => Promise<any>;
+  fields: IFields[];
+  buttons: IButtons[];
+  header?: ReactNode;
 }
 
 function FormWrapper(props: IFormWrapper) {
-  const { type, children, handleSubmit, alert, setAlert } = props;
+  const { onSubmit, fields, buttons, header } = props;
   const {
     base: {
       form: { background },
     },
   } = useThemeColors();
+  const { register, handleSubmit } = useForm();
   return (
     <ScaleFade initialScale={0.7} in>
-      {!!alert.message && (
-        <Alerts
-          chakraProps={{ zIndex: 999 }}
-          message={alert.message}
-          type={alert.type}
-          closeAlert={() => {
-            setAlert('', 'info');
-          }}
-        />
-      )}
       <Flex h="100vh" flexDir="column" alignItems="center" justifyContent="center" pos="relative" zIndex="101">
-        <Heading
-          w={{ base: '95%', sm: '90%', md: '70%', lg: '60%', xl: '40%' }}
-          p="0.5rem"
-          color="white"
-          borderTopRadius="5px"
-          textAlign="center"
-          bg="form_gray"
-        >
-          {type}
-        </Heading>
         <Box
           bg={background}
           w={{ base: '95%', sm: '90%', md: '70%', lg: '60%', xl: '40%' }}
@@ -55,10 +58,19 @@ function FormWrapper(props: IFormWrapper) {
           padding="3rem"
           boxShadow="default"
         >
+          {header}
           <FormControl w="full" borderRadius="5px">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <VStack w="full" alignItems="flex-start" spacing={5}>
-                {children}
+                {/*Fields  */}
+                <Fields fields={fields} register={register} />
+                <HStack flexWrap="wrap" w="100%" display="flex">
+                  {buttons.map(({ props, value }) => (
+                    <Button {...props} key={value}>
+                      {value}
+                    </Button>
+                  ))}
+                </HStack>
               </VStack>
             </form>
           </FormControl>
@@ -70,12 +82,15 @@ function FormWrapper(props: IFormWrapper) {
 
 export type { IFormWrapper };
 
-const mapStateToProps = (state: STATE) => ({
-  alert: state.alert,
-});
+export default FormWrapper;
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setAlert: bindActionCreators(setAlert, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormWrapper);
+// {!!alert.message && (
+//   <Alerts
+//     chakraProps={{ zIndex: 999 }}
+//     message={alert.message}
+//     type={alert.type}
+//     closeAlert={() => {
+//       setAlert('', 'info');
+//     }}
+//   />
+// )}

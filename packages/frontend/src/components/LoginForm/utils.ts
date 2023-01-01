@@ -1,21 +1,10 @@
+import { IFields } from 'components/FormWrapper/FormWrapper';
 import { Cookie } from 'next-cookie';
 import { NextRouter } from 'next/router';
 import { LoginUserMutationVariables, LoginUserMutationFn, LoginUserMutation } from 'services/generated';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { IAuth } from 'services/redux/reducer/auth/state';
-import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
-interface IRenderInputs {
-  label: string;
-  props: {
-    type: string;
-    name: 'username' | 'password';
-    color: string;
-    placeholder: string;
-    _placeholder: any;
-    boxShadow: string;
-  };
-}
 
 export const handleSubmit = async (
   values: LoginUserMutationVariables,
@@ -25,15 +14,13 @@ export const handleSubmit = async (
   callback: string,
   mutation: { loginUserMutation: LoginUserMutationFn; data: LoginUserMutation | null | undefined },
   setters: {
-    setInputUsernameSetter: typeof setInputUsername;
-    setInputPasswordSetter: typeof setInputPassword;
     togglelIsLoadingSetter: typeof togglelIsLoading;
     setAlertSetter: typeof setAlert;
   },
   firstChatId: string,
   refetch: () => any,
 ) => {
-  const { setInputUsernameSetter, setAlertSetter, setInputPasswordSetter, togglelIsLoadingSetter } = setters;
+  const { setAlertSetter, togglelIsLoadingSetter } = setters;
   const { data, loginUserMutation } = mutation;
   const rememberMe = auth.remember_me ? 31556952 : 3600;
   const refreshRememberMe = auth.remember_me ? 63113904 : 7200;
@@ -61,9 +48,6 @@ export const handleSubmit = async (
       await refetch();
       cookie.set('REDIRECT_URL_CALLBACK', callback || `/${firstChatId}`);
       router.push(callback || `/${firstChatId}`);
-
-      setInputUsernameSetter('');
-      setInputPasswordSetter('');
     }
   } catch (error) {
     return error;
@@ -72,10 +56,9 @@ export const handleSubmit = async (
   }
 };
 
-export const renderInputs = (color: string): IRenderInputs[] => {
+export const renderInputs = (color: string): IFields[] => {
   return [
     {
-      label: 'Username',
       props: {
         type: 'text',
         name: 'username',
@@ -86,7 +69,6 @@ export const renderInputs = (color: string): IRenderInputs[] => {
       },
     },
     {
-      label: 'Password',
       props: {
         type: 'password',
         name: 'password',
@@ -94,6 +76,13 @@ export const renderInputs = (color: string): IRenderInputs[] => {
         boxShadow: `0px 0px 2px 0px ${color}`,
         placeholder: 'password ...',
         _placeholder: { color: color, opacity: 0.5 },
+      },
+    },
+    {
+      props: {
+        type: 'checkbox',
+        name: 'remember_me',
+        color,
       },
     },
   ];
