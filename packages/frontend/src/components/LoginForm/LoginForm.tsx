@@ -18,21 +18,10 @@ import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { setRememberMe } from 'services/redux/reducer/auth/actions';
 import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
-import { handleSubmit } from 'components/LoginForm/utils';
+import { handleSubmit, renderInputs } from 'components/LoginForm/utils';
 import useProvideAuth from 'hooks/useSession';
 
 interface ILoginForm extends ILogin, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {}
-interface IRenderInputs {
-  label: string;
-  props: {
-    type: string;
-    name: 'username' | 'password';
-    color: string;
-    placeholder: string;
-    _placeholder: any;
-    boxShadow: string;
-  };
-}
 
 function LoginForm(props: ILoginForm) {
   const { callback, auth, isLoading, setInputUsername, setInputPassword, togglelIsLoading, setAlert } = props;
@@ -50,31 +39,6 @@ function LoginForm(props: ILoginForm) {
       button: { color: btnCollor },
     },
   } = useThemeColors();
-
-  const renderInputs: IRenderInputs[] = [
-    {
-      label: 'Username',
-      props: {
-        type: 'text',
-        name: 'username',
-        color,
-        placeholder: 'username ...',
-        boxShadow: `0px 0px 2px 0px ${color}`,
-        _placeholder: { color: color, opacity: 0.5 },
-      },
-    },
-    {
-      label: 'Password',
-      props: {
-        type: 'password',
-        name: 'password',
-        color,
-        boxShadow: `0px 0px 2px 0px ${color}`,
-        placeholder: 'password ...',
-        _placeholder: { color: color, opacity: 0.5 },
-      },
-    },
-  ];
 
   const formik = useFormik({
     initialValues: { username: '', password: '' },
@@ -105,7 +69,7 @@ function LoginForm(props: ILoginForm) {
   return (
     <FormWrapper handleSubmit={formik.handleSubmit} type="Login">
       <>
-        {renderInputs.map((element, index) => {
+        {renderInputs(color).map((element, index) => {
           const { props } = element;
           const { name } = props;
           const isInvalid = Boolean(formik.errors[name] && formik.touched[name]);

@@ -1,6 +1,6 @@
 import { Box, HStack } from '@chakra-ui/react';
 import { useCookie } from 'next-cookie';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import HamburgerMenu from '../../../services/chat-ui/HamburgerMenu';
 import MainSection from '../../MainSection';
@@ -10,19 +10,19 @@ import { setWSConnection } from 'services/redux/reducer/websocket/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { STATE } from 'services/redux/reducer';
 import { setNotifNumber } from 'services/redux/reducer/invites/actions';
-import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import { toggleMobileNav, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import IInvite from 'services/redux/reducer/invites/state';
 import { Invite, Status, useGetInvitesByInviterQuery, useGetInvitesByRecieverQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
 import { useRouter } from 'next/router';
 
-interface IApp extends ReturnType<typeof mapDispatchToProps> {
+interface IApp extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {
   cookie: string;
   invite: IInvite;
 }
 
 function App(props: IApp) {
-  const { cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin } = props;
+  const { cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin, toggleMobileNav, toggle } = props;
   const cookie = useCookie(cookieProp);
   const router = useRouter();
   const { acc } = router.query;
@@ -63,7 +63,13 @@ function App(props: IApp) {
     <HStack w="full" h="100vh" ml="-0.5rem !important">
       <HStack h="100vh" pos="absolute">
         <Box w="95%" h="100vh" zIndex={100} pos="relative">
-          <HamburgerMenu toggleHamburger={() => console.log('toggle hamburger menu')} />
+          <HamburgerMenu
+            toggleHamburger={() => {
+              console.log(!toggle.toggleMobileNav, toggle.toggleMobileNav);
+
+              toggleMobileNav(!toggle.toggleMobileNav);
+            }}
+          />
         </Box>
       </HStack>
       <MainSection chatId={chatId} />
@@ -74,12 +80,14 @@ function App(props: IApp) {
 
 const mapStateToProps = (state: STATE) => ({
   invite: state.invite,
+  toggle: state.toggle,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   setWSConnection: bindActionCreators(setWSConnection, dispatch),
   setNotifNumber: bindActionCreators(setNotifNumber, dispatch),
   toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
+  toggleMobileNav: bindActionCreators(toggleMobileNav, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

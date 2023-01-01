@@ -2,7 +2,6 @@ import { IconButton, Spacer, useColorMode, useColorModeValue, VStack } from '@ch
 import UserSettings from 'components/MainSection/FindFriends/FindFriendsHeader/UserSettings';
 import useThemeColors from 'hooks/useThemeColors';
 import React from 'react';
-import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { BsFillSunFill } from 'react-icons/bs';
 import { IoNotifications } from 'react-icons/io5';
 import { MdOutlineDarkMode } from 'react-icons/md';
@@ -40,11 +39,8 @@ const Sidebar = (props: ISidebar) => {
 
   const toggleGroupCreate = () => {
     toggleChatSettings(false);
-    console.log(!toggle.toggleCreateGroupModal);
-
     toggleCreateGroup(!toggle.toggleCreateGroupModal);
     toggleMobileNav(!toggleMobileNav);
-    console.log(toggle.toggleCreateGroupModal);
   };
 
   const renderItems = [

@@ -5,6 +5,17 @@ import { setAlert } from 'services/redux/reducer/alert/actions';
 import { IAuth } from 'services/redux/reducer/auth/state';
 import { setInputPassword, setInputUsername } from 'services/redux/reducer/inputs/actions';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
+interface IRenderInputs {
+  label: string;
+  props: {
+    type: string;
+    name: 'username' | 'password';
+    color: string;
+    placeholder: string;
+    _placeholder: any;
+    boxShadow: string;
+  };
+}
 
 export const handleSubmit = async (
   values: LoginUserMutationVariables,
@@ -59,4 +70,31 @@ export const handleSubmit = async (
   } finally {
     togglelIsLoadingSetter(false);
   }
+};
+
+export const renderInputs = (color: string): IRenderInputs[] => {
+  return [
+    {
+      label: 'Username',
+      props: {
+        type: 'text',
+        name: 'username',
+        color,
+        placeholder: 'username ...',
+        boxShadow: `0px 0px 2px 0px ${color}`,
+        _placeholder: { color: color, opacity: 0.5 },
+      },
+    },
+    {
+      label: 'Password',
+      props: {
+        type: 'password',
+        name: 'password',
+        color,
+        boxShadow: `0px 0px 2px 0px ${color}`,
+        placeholder: 'password ...',
+        _placeholder: { color: color, opacity: 0.5 },
+      },
+    },
+  ];
 };
