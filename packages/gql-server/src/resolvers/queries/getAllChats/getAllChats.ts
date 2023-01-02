@@ -7,6 +7,7 @@ export type IGetAll = AuthBase;
 const getAllChats = async (_: unknown, args: IGetAll) => {
   const res: any = await sdk.chat.getChats(args.auth);
   if (res.__typename === ERROR) return res;
+
   return { __typename: CHAT_LIST, res };
 };
 

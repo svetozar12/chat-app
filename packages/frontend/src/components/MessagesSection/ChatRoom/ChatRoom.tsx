@@ -25,15 +25,10 @@ import { toggleIsMatch } from 'services/redux/reducer/toggles/actions';
 import useProvideAuth from 'hooks/useSession';
 import { useGetMessageListQuery } from 'services/generated';
 
-interface IChatRoom {
+interface IChatRoom extends ReturnType<typeof mapDispatchToProps> {
   message: IMessage;
   toggle: IToggle;
   chatId: string;
-  incrementPagination: typeof incrementPaginationNumberAction;
-  setMessages: typeof setMessagesAction;
-  setPaginatedMessages: typeof setPaginatedMessagesAction;
-  resetMessages: typeof resetMessagesAction;
-  toggleIsMatch: typeof toggleIsMatch;
 }
 
 export interface IchatInstance {
@@ -52,13 +47,16 @@ function ChatRoom(props: IChatRoom) {
       default: { inverseColor },
     },
   } = useThemeColors();
-  const { user } = useProvideAuth();
   const { auth } = useProvideAuth();
   const containerRef = React.useRef<null | HTMLDivElement>(null);
-  const { data, refetch } = useGetMessageListQuery({ variables: { auth, chat_id: chatId, query: { page_size: 10, page_number: 1 } } });
+  const { data, refetch, loading } = useGetMessageListQuery({
+    variables: { auth, chat_id: chatId, query: { page_size: 10, page_number: 1 } },
+  });
   const getRecentMessages = async () => {
     try {
       const { getAllMessages } = data || {};
+      console.log(loading, data);
+
       if (getAllMessages?.__typename === 'Error') throw new Error(getAllMessages.message);
       getAllMessages?.res?.forEach((element) => {
         setMessages(element);
@@ -75,7 +73,7 @@ function ChatRoom(props: IChatRoom) {
     if (location.href === `${location.host}/${chatId}`) toggleIsMatch(true);
     resetMessages();
     getRecentMessages();
-  }, [route.asPath]);
+  }, [route.asPath, data]);
 
   const scrollHandler = async (e: React.UIEvent<HTMLElement>) => {
     try {
@@ -102,6 +100,10 @@ function ChatRoom(props: IChatRoom) {
   React.useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <VStack w="full" h="100vh">

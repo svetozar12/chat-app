@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import Fields from 'components/FormWrapper/subcomponents/Fields';
 import useThemeColors from 'hooks/useThemeColors';
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 
 export type RadioButtons = {
@@ -39,7 +39,7 @@ interface IFormWrapper {
   header?: ReactNode;
 }
 
-function FormWrapper(props: IFormWrapper) {
+const FormWrapper: FC<IFormWrapper> = (props) => {
   const { onSubmit, fields, buttons, header } = props;
   const {
     base: {
@@ -62,7 +62,6 @@ function FormWrapper(props: IFormWrapper) {
           <FormControl w="full" borderRadius="5px">
             <form onSubmit={handleSubmit(onSubmit)}>
               <VStack w="full" alignItems="flex-start" spacing={5}>
-                {/*Fields  */}
                 <Fields fields={fields} register={register} />
                 <HStack flexWrap="wrap" w="100%" display="flex">
                   {buttons.map(({ props, value }) => (
@@ -78,7 +77,7 @@ function FormWrapper(props: IFormWrapper) {
       </Flex>
     </ScaleFade>
   );
-}
+};
 
 export type { IFormWrapper };
 

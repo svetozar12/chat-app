@@ -15,6 +15,7 @@ const getAllMessages = async (_: unknown, args: IMessage) => {
     page_number: args.query.page_number,
     page_size: args.query.page_size,
   });
+
   if (res.__typename === ERROR) return res;
   return { __typename: MESSAGES_LIST, res };
 };

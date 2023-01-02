@@ -24,7 +24,7 @@ const LoginForm: FC<ILoginForm> = (props) => {
   const router = useRouter();
   const cookie = useCookie();
   const { auth: authObj } = useProvideAuth();
-  const [loginUserMutation, { data }] = useLoginUserMutation();
+  const [loginUserMutation, { data, loading }] = useLoginUserMutation();
   const { data: chatListData, refetch } = useGetChatListQuery({ variables: { auth: authObj } });
   const { getAllChats } = chatListData || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);

@@ -23,7 +23,6 @@
     "@graphql-codegen/typescript-operations": "^2.5.3",
     "@graphql-codegen/typescript-react-apollo": "^3.3.3",
     "@graphql-tools/schema": "^9.0.4",
-    "apollo-client": "^2.6.10",
     "axios": "^0.21.4",
     "cookie": "^0.4.1",
     "framer-motion": "^6",
