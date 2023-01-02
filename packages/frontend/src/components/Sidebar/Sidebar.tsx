@@ -1,34 +1,20 @@
-import { IconButton, Spacer, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Button, IconButton, Menu, MenuButton, Spacer, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
 import UserSettings from 'components/MainSection/FindFriends/FindFriendsHeader/UserSettings';
+import { renderItems } from 'components/Sidebar/utils';
 import useThemeColors from 'hooks/useThemeColors';
-import React from 'react';
+import { FC } from 'react';
 import { BsFillSunFill } from 'react-icons/bs';
-import { IoNotifications } from 'react-icons/io5';
 import { MdOutlineDarkMode } from 'react-icons/md';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { SingleAvatar } from 'services/chat-ui';
 import { STATE } from 'services/redux/reducer';
-import {
-  toggleChatSettings,
-  toggleCreateGroup,
-  toggleFriendRequestAction,
-  toggleMobileNav,
-  toggleUserSettings,
-} from 'services/redux/reducer/toggles/actions';
-import { IToggle } from 'services/redux/reducer/toggles/state';
+import { toggleChatSettings, toggleCreateGroup, toggleFriendRequestAction, toggleMobileNav } from 'services/redux/reducer/toggles/actions';
 import s from './Sidebar.module.css';
 
-interface ISidebar {
-  toggle: IToggle;
-  toggleFriendRequest: typeof toggleFriendRequestAction;
-  toggleCreateGroup: typeof toggleCreateGroup;
-  toggleMobileNav: typeof toggleMobileNav;
-  toggleUserSettingsAction: typeof toggleUserSettings;
-}
+type SidebarProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
-const Sidebar = (props: ISidebar) => {
-  const { toggle, toggleFriendRequest, toggleCreateGroup, toggleMobileNav, toggleUserSettingsAction } = props;
+const Sidebar: FC<SidebarProps> = ({ toggle, toggleChatSettings, toggleCreateGroup, toggleFriendRequest, toggleMobileNav }) => {
   const {
     base: {
       default: { color },
@@ -43,19 +29,6 @@ const Sidebar = (props: ISidebar) => {
     toggleMobileNav(!toggleMobileNav);
   };
 
-  const renderItems = [
-    {
-      Icon: IoNotifications,
-      onClick: () => toggleFriendRequest(!toggle.toggleFriendReqModal),
-      ariaLabel: 'opens chats requests',
-    },
-    {
-      Icon: useColorModeValue(BsFillSunFill, MdOutlineDarkMode),
-      onClick: toggleColorMode,
-      ariaLabel: ' Change theme',
-    },
-  ];
-
   return (
     <VStack
       height="100vh"
@@ -65,27 +38,40 @@ const Sidebar = (props: ISidebar) => {
       borderRight={useColorModeValue('1px solid rgba(0, 0, 0, 0.1)', '1px solid rgba(255,255,255, 0.1)')}
     >
       <VStack gap={2}>
-        {renderItems.map((item, index) => {
+        {renderItems(
+          toggleFriendRequest,
+          toggle.toggleFriendReqModal,
+          toggleColorMode,
+          toggleGroupCreate,
+          useColorModeValue(MdOutlineDarkMode, BsFillSunFill),
+        ).map((item, index) => {
           const { Icon, onClick, ariaLabel } = item;
           return <IconButton mt={4} key={index} aria-label={ariaLabel} icon={<Icon className={s.icon} />} onClick={onClick} />;
         })}
       </VStack>
       <Spacer />
-      <VStack pos="relative">
-        {toggle.toggleUserSettings && <UserSettings />}
-        <SingleAvatar
-          baseProps={{ onClick: () => toggleUserSettingsAction(!toggle.toggleUserSettings) }}
-          width="2.5rem"
-          height="2.5rem"
-          chakraProps={{ marginBottom: '1rem !important', cursor: 'pointer', _hover: { boxShadow: `0px 0px 7px 0px ${color}` } }}
-        />
-      </VStack>
+      <Menu>
+        <MenuButton
+          style={{ height: 'unset' }}
+          m="0 !important"
+          as={IconButton}
+          background="transparent"
+          _hover={{ background: 'transparent' }}
+          _active={{ background: 'transparent' }}
+        >
+          <SingleAvatar
+            width="2.5rem"
+            height="2.5rem"
+            chakraProps={{ marginBottom: '1rem !important', cursor: 'pointer', _hover: { boxShadow: `0px 0px 7px 0px ${color}` } }}
+          />
+        </MenuButton>
+        <UserSettings />
+      </Menu>
     </VStack>
   );
 };
 
 const mapStateToProps = (state: STATE) => ({
-  invite: state.invite,
   toggle: state.toggle,
 });
 
@@ -94,7 +80,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
   toggleMobileNav: bindActionCreators(toggleMobileNav, dispatch),
   toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
-  toggleUserSettingsAction: bindActionCreators(toggleUserSettings, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

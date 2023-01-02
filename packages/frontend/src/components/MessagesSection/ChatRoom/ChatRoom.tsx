@@ -105,27 +105,23 @@ function ChatRoom(props: IChatRoom) {
 
   return (
     <VStack w="full" h="100vh">
-      {user ? (
-        <VStack
-          w="full"
-          mt={{ base: '2rem', lg: '-0.5rem !important' }}
-          h="full"
-          p="1rem"
-          overflow="auto"
-          bg={inverseColor}
-          ref={containerRef}
-          onScroll={scrollHandler}
-        >
-          {messages.map((item, index) => {
-            const { sender, message, createdAt } = item;
-            const TimeStamp = timeStamp(createdAt);
+      <VStack
+        w="full"
+        mt={{ base: '2rem', lg: '-0.5rem !important' }}
+        h="full"
+        p="1rem"
+        overflow="auto"
+        bg={inverseColor}
+        ref={containerRef}
+        onScroll={scrollHandler}
+      >
+        {messages.map((item, index) => {
+          const { sender, message, createdAt } = item;
+          const TimeStamp = timeStamp(createdAt);
 
-            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} recievedMessage={message} />;
-          })}
-        </VStack>
-      ) : (
-        <SkelletonUserMessages />
-      )}
+          return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} recievedMessage={message} />;
+        })}
+      </VStack>
 
       <ChatRoomForm chatId={chatId} />
     </VStack>

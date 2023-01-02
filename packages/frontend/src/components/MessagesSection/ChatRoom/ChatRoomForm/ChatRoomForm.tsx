@@ -13,6 +13,7 @@ import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { bindActionCreators, Dispatch } from 'redux';
 import { setMessagesAction } from 'services/redux/reducer/messages/actions';
 import { useCreateMessageMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IPropsState {
   name?: string;
@@ -29,6 +30,7 @@ interface IChatRoomForm {
 function ChatRoomForm(props: IChatRoomForm) {
   const { chatId, ws, setMessages } = props;
   const cookie = useCookie();
+  const { auth } = useProvideAuth();
   const [state, setState] = React.useState<IPropsState>({
     name: cookie.get('name'),
     message: '',
@@ -61,7 +63,7 @@ function ChatRoomForm(props: IChatRoomForm) {
       if (state.message)
         await createMessage({
           variables: {
-            auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+            auth,
             chat_id: chatId,
             message: state.message,
           },
@@ -90,7 +92,7 @@ function ChatRoomForm(props: IChatRoomForm) {
 
   const {
     base: {
-      default: { inverseColor, color, offColor },
+      default: { inverseColor, offColor },
     },
   } = useThemeColors();
 

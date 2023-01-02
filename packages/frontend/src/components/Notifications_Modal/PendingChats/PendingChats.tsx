@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { Status, useCreateChatMutation, useUpdateInviteMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -20,9 +21,9 @@ interface IPendingChats extends Iinvites {
   ws: IWebSocket;
 }
 
-function PendingChats(props: IPendingChats) {
-  const { _id, inviter, reciever, status, ws } = props;
+const PendingChats: FC<IPendingChats> = ({ _id, inviter, reciever, status, ws }) => {
   const cookie = useCookie();
+  const { auth } = useProvideAuth();
   const inviteId = _id;
   const [updateInvite] = useUpdateInviteMutation();
   const [createChat] = useCreateChatMutation();
@@ -34,7 +35,7 @@ function PendingChats(props: IPendingChats) {
   const updateInviteStatus = async (param: Status) => {
     try {
       await updateInvite({
-        variables: { auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, invite_id: inviteId, status: param },
+        variables: { auth, invite_id: inviteId, status: param },
       });
       emitFriendRequest();
       return true;
@@ -47,7 +48,7 @@ function PendingChats(props: IPendingChats) {
     try {
       await createChat({
         variables: {
-          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          auth,
           chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
         },
       });
@@ -113,7 +114,7 @@ function PendingChats(props: IPendingChats) {
       )}
     </HStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   ws: state.ws,

@@ -15,6 +15,7 @@ import { resetMessagesAction, setMessagesAction } from 'services/redux/reducer/m
 import { IMessage } from 'services/redux/reducer/messages/state';
 import { toggleMessageSettings } from 'services/redux/reducer/toggles/actions';
 import { useUpdateMessageMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IRenderChat {
   id: string;
@@ -46,6 +47,7 @@ function RenderChat(props: IRenderChat) {
   const { id, sender, timeStamp, recievedMessage, message, toggleMessageSettings, resetMessages, setMessages } = props;
   const { show, messages } = message;
   const cookie = useCookie();
+  const { auth } = useProvideAuth();
   const [styleBool, setStyleBool] = React.useState(false);
   const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
@@ -78,11 +80,6 @@ function RenderChat(props: IRenderChat) {
     'flex',
   );
 
-  const dothStyle = css`
-    width: 1.5rem;
-    height: 1.5rem;
-  `;
-
   const ToggleSettings = () => {
     toggleMessageSettings(!show);
     if (settings) setEditing(false);
@@ -101,7 +98,7 @@ function RenderChat(props: IRenderChat) {
           obj.message = editedMessage;
           await updateMessage({
             variables: {
-              auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+              auth,
               message_id: id,
               newMessage: editedMessage,
             },

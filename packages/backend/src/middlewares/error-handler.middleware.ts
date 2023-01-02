@@ -13,13 +13,9 @@ import logger from '../utils/logger';
  */
 
 const handleError = (err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
-  console.log(err);
-
   if (err instanceof CustomError) {
     return res.status(err.status).json({ Message: err.Message });
   }
-
-  logger('error', err);
   res.status(500).json({ Message: 'Internal server error' });
 };
 

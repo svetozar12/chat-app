@@ -5,11 +5,6 @@ const toggleFriendRequestAction = (toggle: boolean) => ({
   payload: toggle,
 });
 
-const toggleUserSettings = (toggle: boolean) => ({
-  type: ActionType.TOGGLE_USER_SETTINGS,
-  payload: toggle,
-});
-
 const toggleCreateGroup = (toggle: boolean) => ({
   type: ActionType.TOGGLE_CREATE_GROUP,
   payload: toggle,
@@ -57,7 +52,6 @@ const togglelIsLoading = (toggle: boolean) => ({
 
 export {
   toggleFriendRequestAction,
-  toggleUserSettings,
   toggleCreateGroup,
   toggleMobileNav,
   toggleChatSettings,

@@ -9,6 +9,7 @@ import IInputs from 'services/redux/reducer/inputs/state';
 import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import useProvideAuth from 'hooks/useSession';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from 'constants/cookieNames';
 
 interface IRegisterLayout extends ReturnType<typeof mapDispatchToProps> {
   inputs: IInputs;
@@ -34,8 +35,8 @@ function RegisterLayout(props: IRegisterLayout) {
         const cookies = [
           { name: 'name', value: inputs.input_username, options: { sameSite: 'strict', path: '/' } },
           { name: 'id', value: userId, options: { sameSite: 'strict', path: '/' } },
-          { name: 'token', value: AccessToken, options: { sameSite: 'strict', path: '/' } },
-          { name: 'refresh_token', loginUser: RefreshToken, options: { sameSite: 'strict', path: '/' } },
+          { name: ACCESS_TOKEN, value: AccessToken, options: { sameSite: 'strict', path: '/' } },
+          { name: REFRESH_TOKEN, loginUser: RefreshToken, options: { sameSite: 'strict', path: '/' } },
         ];
 
         cookies.forEach((element) => {

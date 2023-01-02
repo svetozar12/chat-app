@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { css } from '@emotion/css';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -11,7 +11,6 @@ import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import IInvite from 'services/redux/reducer/invites/state';
 // components
-import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
 import FindFriendsHeader from './FindFriendsHeader';
 import FindFriendsSearch from './FindFriendsSearch';
 import { useCreateInviteMutation } from 'services/generated';
@@ -23,17 +22,15 @@ interface IFindFriends {
   setReciever: typeof setReciever;
 }
 
-function FindFriends(props: IFindFriends) {
-  const { ws, invite, setReciever } = props;
-  const cookie = useCookie();
-  const { user } = useProvideAuth();
+const FindFriends: FC<IFindFriends> = ({ invite, setReciever, ws }) => {
+  const { auth } = useProvideAuth();
   const [createInviteMutation, { data }] = useCreateInviteMutation();
   const sendInvite = async () => {
     try {
       await getAuth();
       await createInviteMutation({
         variables: {
-          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+          auth,
           reciever: invite.reciever,
         },
       });
@@ -74,11 +71,13 @@ function FindFriends(props: IFindFriends) {
         align-items: center;
       `}
     >
-      {user ? <FindFriendsHeader /> : <SkeletonFindFriendsHeader />}
-      <FormControl>{user ? <FindFriendsSearch handleSubmit={handleSubmit} /> : <Skeleton w="100%" mt={1} h="2.6875rem" />}</FormControl>
+      <FindFriendsHeader />
+      <FormControl>
+        <FindFriendsSearch handleSubmit={handleSubmit} />
+      </FormControl>
     </VStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   ws: state.ws,

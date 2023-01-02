@@ -3,7 +3,6 @@ import { ActionType } from '../../types';
 import { IToggle } from './state';
 
 const initialState: IToggle = {
-  toggleUserSettings: false,
   toggleFriendReqModal: false,
   toggleCreateGroupModal: false,
   toggleMobileNav: false,
@@ -23,8 +22,6 @@ const toggleReducer = (state = initialState, action: AnyAction) => {
         ...state,
         show: action.payload,
       };
-    case ActionType.TOGGLE_USER_SETTINGS:
-      return { ...state, toggleUserSettings: action.payload };
     case ActionType.TOGGLE_QUICK_LOGIN:
       return { ...state, toggleQuickLogin: action.payload };
     case ActionType.TOGGLE_CREATE_GROUP:

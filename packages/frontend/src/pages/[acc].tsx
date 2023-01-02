@@ -7,6 +7,7 @@ import { isAuth } from 'utils/authMethods';
 import withAuthSync, { ICtx } from '../utils/auth';
 import { gqlMakeRequest } from 'utils/makeRequest';
 import { GetChatListDocument, GetChatListQueryResult, GetChatListQueryVariables } from 'services/generated';
+import { ACCESS_TOKEN, USER_ID } from 'constants/cookieNames';
 
 export interface Ichats {
   _id: string;
@@ -32,7 +33,7 @@ export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
   if (!isUserAuth && currPath !== '/') return redirectTo('/', ctx, (ctx.query.callback as string) || currPath);
 
   const { data } = await gqlMakeRequest<GetChatListQueryResult, GetChatListQueryVariables>(GetChatListDocument, {
-    auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') },
+    auth: { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) },
   });
   const { getAllChats } = data || {};
   console.log(getAllChats);

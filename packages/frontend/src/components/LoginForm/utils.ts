@@ -1,4 +1,5 @@
 import { IFields } from 'components/FormWrapper/FormWrapper';
+import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from 'constants/cookieNames';
 import { Cookie } from 'next-cookie';
 import { NextRouter } from 'next/router';
 import { LoginUserMutationVariables, LoginUserMutationFn, LoginUserMutation } from 'services/generated';
@@ -36,9 +37,9 @@ export const handleSubmit = async (
 
       const cookies = [
         { name: 'name', value: username, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-        { name: 'id', value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-        { name: 'token', value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
-        { name: 'refresh_token', value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
+        { name: USER_ID, value: userId, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+        { name: ACCESS_TOKEN, value: AccessToken, options: { sameSite: 'strict', maxAge: rememberMe, path: '/' } },
+        { name: REFRESH_TOKEN, value: RefreshToken, options: { sameSite: 'strict', maxAge: refreshRememberMe, path: '/' } },
       ];
 
       cookies.forEach((element) => {

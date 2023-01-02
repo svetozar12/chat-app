@@ -25,17 +25,15 @@ interface IMainSection {
 function MainSection(props: IMainSection) {
   const cookie = useCookie();
   const { chatId, toggle, toggleChatSettings } = props;
-  const { user } = useProvideAuth();
+  const { auth } = useProvideAuth();
   const {
     base: {
       default: { color, offColor },
       form: { background },
     },
   } = useThemeColors();
-  const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
   const { data } = useGetChatListQuery({ variables: { auth } });
   const { getAllChats } = data || {};
-  console.log(getAllChats, 'sergei stanishev', user);
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
 
   return (
@@ -55,50 +53,46 @@ function MainSection(props: IMainSection) {
       title="main_section"
     >
       <FindFriends />
-      {user ? (
-        <VStack overflow="auto" w="94%" h="100vh">
-          <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in={toggle.toggleChatSettings}>
-            <VStack
-              w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
-              h="100vh"
-              top={0}
-              left={0}
-              transition="0.34s"
-              zIndex={11}
-              bg={background}
-              color="white"
-              p={0}
-            >
-              <Flex ml="2rem" align="center" pos="relative" w="95%" m="1rem" px="1rem">
-                <CloseButton
-                  size="lg"
-                  className={cx(css`
-                    width: 3rem;
-                    height: 3rem;
-                    cursor: pointer;
-                    right: 0;
-                    margin-top: 2.5rem;
-                    color: ${color};
-                    position: absolute;
-                    color: ${color};
-                    background: ${offColor};
-                    z-index: 9999;
-                  `)}
-                  onClick={() => {
-                    toggleChatSettings(!toggle.toggleChatSettings);
-                  }}
-                />
-              </Flex>
-              <ChatSettings chatId={chatId} />
-            </VStack>
-          </Slide>
-          {getAllChats?.res.map((item, index) => (
-            <ActiveChats key={index} {...item} chatId={chatId} />
-          ))}
-        </VStack>
-      ) : (
-        <div>loading</div>
-      )}
+      <VStack overflow="auto" w="94%" h="100vh">
+        <Slide style={{ zIndex: 10, width: '100%' }} direction="left" in={toggle.toggleChatSettings}>
+          <VStack
+            w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '35%' }}
+            h="100vh"
+            top={0}
+            left={0}
+            transition="0.34s"
+            zIndex={11}
+            bg={background}
+            color="white"
+            p={0}
+          >
+            <Flex ml="2rem" align="center" pos="relative" w="95%" m="1rem" px="1rem">
+              <CloseButton
+                size="lg"
+                className={cx(css`
+                  width: 3rem;
+                  height: 3rem;
+                  cursor: pointer;
+                  right: 0;
+                  margin-top: 2.5rem;
+                  color: ${color};
+                  position: absolute;
+                  color: ${color};
+                  background: ${offColor};
+                  z-index: 9999;
+                `)}
+                onClick={() => {
+                  toggleChatSettings(!toggle.toggleChatSettings);
+                }}
+              />
+            </Flex>
+            <ChatSettings chatId={chatId} />
+          </VStack>
+        </Slide>
+        {getAllChats?.res.map((item, index) => (
+          <ActiveChats key={index} {...item} chatId={chatId} />
+        ))}
+      </VStack>
     </VStack>
   );
 }

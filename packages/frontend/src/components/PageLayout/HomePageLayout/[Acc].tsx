@@ -1,6 +1,6 @@
 import { Box, HStack } from '@chakra-ui/react';
 import { useCookie } from 'next-cookie';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import HamburgerMenu from '../../../services/chat-ui/HamburgerMenu';
 import MainSection from '../../MainSection';
@@ -21,13 +21,9 @@ interface IApp extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof 
   invite: IInvite;
 }
 
-function App(props: IApp) {
-  const { cookie: cookieProp, invite, setWSConnection, setNotifNumber, toggleQuickLogin, toggleMobileNav, toggle } = props;
+const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnection, toggle, toggleMobileNav, toggleQuickLogin }) => {
   const cookie = useCookie(cookieProp);
   const router = useRouter();
-  const { acc } = router.query;
-  const chatId = acc as string;
-  // hooks
   const { auth } = useProvideAuth();
   const [contacts, setContacts] = useState<Invite[]>([]);
   const { refetch: refetchByInviter, data: dataInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Accepted } });
@@ -37,17 +33,20 @@ function App(props: IApp) {
     setNotifNumberSetter: setNotifNumber,
     toggleQuickLoginSetter: toggleQuickLogin,
   });
+
+  const { acc } = router.query;
+  const chatId = acc as string;
   const FetchInvites = async (status: Status, InvitesOrigin: 'reciever' | 'inviter') => {
     try {
       setContacts([]);
       if (InvitesOrigin === 'reciever') {
-        refetchByReciever({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, status });
+        refetchByReciever({ auth, status });
         const { getInvitesByReciever } = dataReciever || {};
         if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
         setContacts(getInvitesByReciever?.res as Invite[]);
         return getInvitesByReciever;
       } else {
-        refetchByInviter({ auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, status });
+        refetchByInviter({ auth, status });
         const { getInvitesByInviter } = dataInviter || {};
         if (getInvitesByInviter?.__typename === 'Error') throw Error(getInvitesByInviter.message);
         setContacts(getInvitesByInviter?.res as Invite[]);
@@ -63,20 +62,14 @@ function App(props: IApp) {
     <HStack w="full" h="100vh" ml="-0.5rem !important">
       <HStack h="100vh" pos="absolute">
         <Box w="95%" h="100vh" zIndex={100} pos="relative">
-          <HamburgerMenu
-            toggleHamburger={() => {
-              console.log(!toggle.toggleMobileNav, toggle.toggleMobileNav);
-
-              toggleMobileNav(!toggle.toggleMobileNav);
-            }}
-          />
+          <HamburgerMenu toggleHamburger={() => toggleMobileNav(!toggle.toggleMobileNav)} />
         </Box>
       </HStack>
       <MainSection chatId={chatId} />
       <MessagesSection chatId={chatId} contacts={contacts} FetchInvites={FetchInvites} />
     </HStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   invite: state.invite,
@@ -110,7 +103,7 @@ const useNotifications = (
     try {
       setContacts([]);
       refetchByReciever({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+        auth,
         status: Status.Recieved,
       });
       const { getInvitesByReciever } = dataReciever || {};

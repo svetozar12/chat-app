@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ACCESS_TOKEN, USER_ID } from 'constants/cookieNames';
 import routes from 'constants/routes';
 import { NextPageContext } from 'next';
 import { useCookie } from 'next-cookie';
@@ -35,9 +36,10 @@ const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
 
 export const isAlreadyAuth = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
+  console.log(isUserAuth, 'ISUERAUTH');
   const cookie = useCookie(ctx);
   const { data } = await gqlMakeRequest<GetChatListQueryResult, GetChatListQueryVariables>(GetChatListDocument, {
-    auth: { userId: cookie.get('id'), AccessToken: cookie.get('AccessToken') },
+    auth: { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) },
   });
   const { getAllChats } = data || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);

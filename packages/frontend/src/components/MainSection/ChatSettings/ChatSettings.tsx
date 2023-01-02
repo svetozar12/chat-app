@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import React from 'react';
+import React, { FC } from 'react';
 import { useRouter } from 'next/router';
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from 'react-icons/ai';
 import { useCookie } from 'next-cookie';
@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { useGetChatListQuery, useGetChatQuery, useUpdateChatMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IChatSettings {
   chatId: string;
@@ -22,16 +23,14 @@ interface IChatSettings {
   toggleInviteModal: typeof toggleInviteModal;
 }
 
-function ChatSettings(props: IChatSettings) {
+const ChatSettings: FC<IChatSettings> = (props) => {
   const { chatId, ws, toggle } = props;
   const [users, setUsers] = React.useState<string[]>([]);
   const route = useRouter();
-  const cookie = useCookie();
-  const id: string = cookie.get('id');
-  const token: string = cookie.get('token');
+  const { auth } = useProvideAuth();
   const [updateChat] = useUpdateChatMutation();
-  const { data } = useGetChatQuery({ variables: { auth: { userId: id, AccessToken: token }, chat_id: chatId } });
-  const { data: chatListData } = useGetChatListQuery({ variables: { auth: { userId: id, AccessToken: token } } });
+  const { data } = useGetChatQuery({ variables: { auth, chat_id: chatId } });
+  const { data: chatListData } = useGetChatListQuery({ variables: { auth } });
 
   const emitFriendRequest = async () => {
     ws.ws?.emit('friend_request');
@@ -51,7 +50,7 @@ function ChatSettings(props: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await updateChat({ variables: { auth: { userId: id, AccessToken: token }, chat_id: chatId, username: user } });
+      await updateChat({ variables: { auth, chat_id: chatId, username: user } });
       return true;
     } catch (error) {
       return false;
@@ -150,7 +149,7 @@ function ChatSettings(props: IChatSettings) {
       )}
     </VStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   ws: state.ws,

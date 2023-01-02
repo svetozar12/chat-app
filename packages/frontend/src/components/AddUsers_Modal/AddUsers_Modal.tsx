@@ -9,6 +9,7 @@ import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { useCookie } from 'next-cookie';
 import { useUpdateChatMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IAddUserModal {
   users: string[];
@@ -21,14 +22,14 @@ interface IAddUserModal {
 
 function AddUserModal(props: IAddUserModal) {
   const { users, chatId, setUsers, toggleInviteModal, ws, toggle } = props;
-  const cookie = useCookie();
+  const { auth } = useProvideAuth();
   const [invited, setInvited] = React.useState<string[]>([]);
   const [updateChat] = useUpdateChatMutation();
   const addMembers = async (user: string[]) => {
     try {
       await updateChat({
         variables: {
-          auth: { userId: cookie.get('id'), AccessToken: cookie.get('cookie') },
+          auth,
           chat_id: chatId,
           username: undefined,
           usersData: user,

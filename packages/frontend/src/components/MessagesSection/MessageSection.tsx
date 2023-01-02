@@ -3,13 +3,11 @@ import { css, cx } from '@emotion/css';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 // components
-import { useCookie } from 'next-cookie';
 import { Box, HStack } from '@chakra-ui/react';
 import ChatRoom from './ChatRoom';
 import Notifications_Modal from '../Notifications_Modal';
 import AddUsers_Modal from '../AddUsers_Modal';
 // services
-import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { Status, Invite, useGetChatQuery } from 'services/generated';
@@ -25,13 +23,12 @@ interface IMessageSection {
 function MessageSection(props: IMessageSection) {
   const { contacts, chatId, toggle } = props;
   const [users, setUsers] = React.useState<any[]>([]);
-  const cookie = useCookie();
   const route = useRouter();
-  const { user } = useProvideAuth();
+  const { auth } = useProvideAuth();
   const { acc } = route.query;
   const { data: chatData } = useGetChatQuery({
     ssr: false,
-    variables: { chat_id: acc as string, auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') } },
+    variables: { chat_id: acc as string, auth },
   });
   const getMembersSuggestions = async () => {
     try {
@@ -96,7 +93,7 @@ function MessageSection(props: IMessageSection) {
         <Box w="full" h="100vh">
           {toggle.toggleFriendReqModal && contacts && <Notifications_Modal contacts={contacts} />}
           {toggle.toggleInvideModal && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
-          {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
+          <ChatRoom chatId={chatId} />
         </Box>
       </div>
     </HStack>

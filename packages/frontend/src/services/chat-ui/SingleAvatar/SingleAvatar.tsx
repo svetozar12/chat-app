@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { css } from '@emotion/css';
-import { useCookie } from 'next-cookie';
 import { Image, Box, BoxProps } from '@chakra-ui/react';
 import s from './SingleAvatar.module.css';
 import useThemeColors from 'hooks/useThemeColors';
 import { IBaseComponent } from 'services/chat-ui/types';
 import { useGetUserByIdQuery, AuthModel } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 type Base = IBaseComponent<BoxProps>;
 
@@ -18,10 +18,8 @@ interface ISingleAvatar extends Base {
   imageSrc?: string;
 }
 
-function SingleAvatar(props: ISingleAvatar) {
-  const { baseProps, chakraProps, group, height, overlay, preview, style, width, imageSrc } = props;
-  const cookie = useCookie();
-  const auth: AuthModel = { userId: cookie.get('id'), AccessToken: cookie.get('token') };
+const SingleAvatar: FC<ISingleAvatar> = ({ baseProps, chakraProps, group, height, imageSrc, overlay, preview, style, width }) => {
+  const { auth } = useProvideAuth();
   const { data } = useGetUserByIdQuery({ variables: { auth } });
   const { getUser } = data || {};
   const {
@@ -33,7 +31,7 @@ function SingleAvatar(props: ISingleAvatar) {
   if (getUser?.__typename == 'Error') return <></>;
 
   return (
-    <Box {...chakraProps} {...style} {...baseProps} boxShadow={`0px 0px 3px 0px ${color}`} borderRadius="full">
+    <Box mb="0 !important" {...chakraProps} {...style} {...baseProps} boxShadow={`0px 0px 3px 0px ${color}`} borderRadius="full">
       {preview ? (
         <Box resize="none" w={width ?? '3.5rem'} h={height ?? '3.5rem'} color="var(--main-logo-color)" zIndex={overlay ? 1 : 0}>
           <Image src={imageSrc || getUser?.userAvatar} alt="random" className={`${group ? s.groupLogo : s.singleLogo} `} />
@@ -61,6 +59,6 @@ function SingleAvatar(props: ISingleAvatar) {
       )}
     </Box>
   );
-}
+};
 
 export default SingleAvatar;

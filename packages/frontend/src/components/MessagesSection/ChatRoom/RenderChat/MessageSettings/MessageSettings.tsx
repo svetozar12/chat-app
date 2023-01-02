@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { css } from '@emotion/css';
 import { useDispatch } from 'react-redux';
-import { useCookie } from 'next-cookie';
 import { getAuth } from 'utils/authMethods';
 import { useDeleteMessageMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 const options = css`
   background: transparent;
@@ -24,14 +24,14 @@ interface IMessageSettings {
   setSettings: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSettings) {
+const MessageSettings: FC<IMessageSettings> = ({ id, translateX, setEditing, setSettings }) => {
   const dispatch = useDispatch();
-  const cookie = useCookie();
+  const { auth } = useProvideAuth();
   const [deleteMessage] = useDeleteMessageMutation();
 
   const handleDelete = async () => {
     try {
-      await deleteMessage({ variables: { auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') }, message_id: id } });
+      await deleteMessage({ variables: { auth, message_id: id } });
       return true;
     } catch (error) {
       return false;
@@ -44,10 +44,6 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
     status === 'delete' && handleDelete();
     status === 'edit' && setEditing(true);
   };
-
-  // const {
-  //   colors: { from_bg, color },
-  // } = useThemeColors();
 
   return (
     <div
@@ -89,6 +85,6 @@ function MessageSettings({ id, translateX, setEditing, setSettings }: IMessageSe
       </button>
     </div>
   );
-}
+};
 
 export default MessageSettings;
