@@ -22,12 +22,11 @@ interface IApp extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof 
 }
 
 const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnection, toggle, toggleMobileNav, toggleQuickLogin }) => {
-  const cookie = useCookie(cookieProp);
   const router = useRouter();
   const { auth } = useProvideAuth();
   const [contacts, setContacts] = useState<Invite[]>([]);
-  const { refetch: refetchByInviter, data: dataInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Accepted } });
-  const { refetch: refetchByReciever, data: dataReciever } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Accepted } });
+  const { data: dataInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Recieved } });
+  const { data: dataReciever } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Recieved } });
   useNotifications(setContacts, invite, {
     setWSConnectionSetter: setWSConnection,
     setNotifNumberSetter: setNotifNumber,
@@ -36,27 +35,6 @@ const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnec
 
   const { acc } = router.query;
   const chatId = acc as string;
-  const FetchInvites = async (status: Status, InvitesOrigin: 'reciever' | 'inviter') => {
-    try {
-      setContacts([]);
-      if (InvitesOrigin === 'reciever') {
-        refetchByReciever({ auth, status });
-        const { getInvitesByReciever } = dataReciever || {};
-        if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
-        setContacts(getInvitesByReciever?.res as Invite[]);
-        return getInvitesByReciever;
-      } else {
-        refetchByInviter({ auth, status });
-        const { getInvitesByInviter } = dataInviter || {};
-        if (getInvitesByInviter?.__typename === 'Error') throw Error(getInvitesByInviter.message);
-        setContacts(getInvitesByInviter?.res as Invite[]);
-        return getInvitesByInviter;
-      }
-    } catch (error) {
-      setContacts([]);
-      return false;
-    }
-  };
 
   return (
     <HStack w="full" h="100vh" ml="-0.5rem !important">
@@ -66,7 +44,7 @@ const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnec
         </Box>
       </HStack>
       <MainSection chatId={chatId} />
-      <MessagesSection chatId={chatId} contacts={contacts} FetchInvites={FetchInvites} />
+      <MessagesSection chatId={chatId} contacts={contacts} />
     </HStack>
   );
 };
@@ -96,9 +74,12 @@ const useNotifications = (
 ) => {
   const { setNotifNumberSetter, setWSConnectionSetter, toggleQuickLoginSetter } = setters;
   const { auth } = useProvideAuth();
-  const { refetch: refetchByReciever, data: dataReciever } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Accepted } });
+  const {
+    refetch: refetchByReciever,
+    loading,
+    data: dataReciever,
+  } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Recieved } });
   const cookie = useCookie();
-
   const checkNotification = async () => {
     try {
       setContacts([]);
@@ -107,9 +88,11 @@ const useNotifications = (
         status: Status.Recieved,
       });
       const { getInvitesByReciever } = dataReciever || {};
+      console.log(getInvitesByReciever);
       if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
       const { res } = getInvitesByReciever || {};
       setNotifNumberSetter(res!.length);
+
       setContacts(getInvitesByReciever?.res as Invite[]);
       getInvitesByReciever?.res?.forEach((item) => {
         if (item?.status === Status.Declined) return false;
@@ -124,7 +107,7 @@ const useNotifications = (
   useEffect(() => {
     toggleQuickLoginSetter(false);
     checkNotification();
-  }, [invite.notificationNumber]);
+  }, [invite.notificationNumber, loading]);
 
   useEffect(() => {
     checkNotification();

@@ -10,7 +10,7 @@ function useProvideAuth() {
   const [user, setUser] = useState<GetUser | undefined>(undefined);
   const cookie = useCookie();
   const auth: AuthModel = { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) };
-  const { data: userData } = useGetUserByIdQuery({ variables: { auth } });
+  const { data: userData, ...query } = useGetUserByIdQuery({ variables: { auth } });
   const dispatch = useDispatch();
   const checkSession = async () => {
     try {
@@ -39,6 +39,7 @@ function useProvideAuth() {
     user,
     auth: authObj,
     logout,
+    query,
   };
 }
 

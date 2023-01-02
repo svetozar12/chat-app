@@ -36,7 +36,6 @@ const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
 
 export const isAlreadyAuth = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
-  console.log(isUserAuth, 'ISUERAUTH');
   const cookie = useCookie(ctx);
   const { data } = await gqlMakeRequest<GetChatListQueryResult, GetChatListQueryVariables>(GetChatListDocument, {
     auth: { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) },

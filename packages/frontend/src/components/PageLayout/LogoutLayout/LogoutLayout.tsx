@@ -40,7 +40,7 @@ const Logout = (props: ILogout) => {
       await router.push('/');
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      // catches error
     }
   };
 

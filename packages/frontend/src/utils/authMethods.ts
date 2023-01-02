@@ -44,7 +44,6 @@ export const checkTokens = async (cookie: Cookie) => {
   const userId: string = cookie.get(USER_ID);
   const AccessToken: string = cookie.get(ACCESS_TOKEN);
   const RefreshToken: string = cookie.get(REFRESH_TOKEN);
-  console.log(AccessToken, '===', RefreshToken, 'selionar');
 
   if (!AccessToken) {
     if (RefreshToken) {

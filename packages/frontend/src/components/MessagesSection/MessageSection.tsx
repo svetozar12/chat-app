@@ -15,7 +15,6 @@ import useProvideAuth from 'hooks/useSession';
 
 interface IMessageSection {
   contacts: Invite[];
-  FetchInvites: (status: Status, InvitesOrigin: 'reciever' | 'inviter') => Promise<any>;
   chatId: string;
   toggle: IToggle;
 }
