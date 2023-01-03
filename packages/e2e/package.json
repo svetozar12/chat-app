@@ -1,0 +1,17 @@
+{
+  "name": "@chat-app/e2e",
+  "version": "1.0.0",
+  "description": "e2e tests",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cypress": "^12.2.0"
+  },
+  "scripts": {
+    "cypress:open": "cypress open",
+    "dev": "cypress run"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
+}

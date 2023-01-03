@@ -55,7 +55,6 @@ function ChatRoom(props: IChatRoom) {
   const getRecentMessages = async () => {
     try {
       const { getAllMessages } = data || {};
-      console.log(loading, data);
 
       if (getAllMessages?.__typename === 'Error') throw new Error(getAllMessages.message);
       getAllMessages?.res?.forEach((element) => {

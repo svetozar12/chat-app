@@ -1,11 +1,10 @@
 import { css, cx } from '@emotion/css';
 import React from 'react';
-import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
+import { BsThreeDots } from 'react-icons/bs';
 import { connect } from 'react-redux';
 // components
 import { useCookie } from 'next-cookie';
-import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
-import MessageSettings from './MessageSettings';
+import { Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack } from '@chakra-ui/react';
 import { IchatInstance } from '../ChatRoom';
 // services
 import useThemeColors from 'hooks/useThemeColors';
@@ -14,7 +13,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { resetMessagesAction, setMessagesAction } from 'services/redux/reducer/messages/actions';
 import { IMessage } from 'services/redux/reducer/messages/state';
 import { toggleMessageSettings } from 'services/redux/reducer/toggles/actions';
-import { useUpdateMessageMutation } from 'services/generated';
+import { useDeleteMessageMutation, useUpdateMessageMutation } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
 
 interface IRenderChat {
@@ -49,7 +48,6 @@ function RenderChat(props: IRenderChat) {
   const cookie = useCookie();
   const { auth } = useProvideAuth();
   const [styleBool, setStyleBool] = React.useState(false);
-  const [settings, setSettings] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
   const [editedMessage, setEditedMessage] = React.useState('');
   const [width, setWidth] = React.useState(112);
@@ -57,34 +55,7 @@ function RenderChat(props: IRenderChat) {
   const inputRef = React.useRef<HTMLDivElement>(null);
   const [updateMessage] = useUpdateMessageMutation();
   const name = cookie.get('name');
-  const checkSettingsOpt = () => styleBool || settings;
-
-  const optionsPadding = cx(
-    css`
-      position: relative;
-      margin: 0 0.5rem;
-      border-radius: 100%;
-      width: 2.5rem;
-      height: 2.5rem;
-      cursor: pointer;
-      color: var(--main-black);
-      display: flex;
-      visibility: ${checkSettingsOpt() ? 'vissible' : 'hidden'};
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
-      &:active {
-        border: 1px solid rgba(0, 0, 255, 0.2);
-      }
-    `,
-    'flex',
-  );
-
-  const ToggleSettings = () => {
-    toggleMessageSettings(!show);
-    if (settings) setEditing(false);
-    setSettings(!show);
-  };
+  const [deleteMessage] = useDeleteMessageMutation();
 
   const handleEdit = async (e: any) => {
     const target = e.target as HTMLTextAreaElement;
@@ -182,23 +153,31 @@ function RenderChat(props: IRenderChat) {
                 position: relative;
               `}
             >
-              {settings && <MessageSettings setSettings={setSettings} setEditing={setEditing} id={id} translateX="-60px" />}
-              <div onClick={ToggleSettings} className={optionsPadding}>
-                <IconButton
-                  borderRadius="full"
-                  aria-label=""
-                  boxShadow="box-shadow: 0 0 5px main_black"
-                  icon={
+              <Menu>
+                <MenuButton
+                  w="3rem"
+                  h="3rem"
+                  mr="1rem"
+                  flex="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  as={Button}
+                  rightIcon={
                     <BsThreeDots
                       className={css`
                         width: 2rem;
                         height: 2rem;
+                        margin-right: 0.4rem;
                         color: ${color};
                       `}
                     />
                   }
                 />
-              </div>
+                <MenuList>
+                  <MenuItem onClick={() => setEditing(true)}>Edit</MenuItem>
+                  <MenuItem onClick={() => deleteMessage({ variables: { auth, message_id: id } })}>Delete</MenuItem>
+                </MenuList>
+              </Menu>
             </div>
           )}
           <VStack

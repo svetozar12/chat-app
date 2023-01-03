@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Menu, MenuButton, Spacer, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
+import { IconButton, Menu, MenuButton, Spacer, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
 import UserSettings from 'components/MainSection/FindFriends/FindFriendsHeader/UserSettings';
 import { renderItems } from 'components/Sidebar/utils';
 import useThemeColors from 'hooks/useThemeColors';
@@ -8,6 +8,7 @@ import { MdOutlineDarkMode } from 'react-icons/md';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { SingleAvatar } from 'services/chat-ui';
+import ToolTip from 'services/chat-ui/ToolTip';
 import { STATE } from 'services/redux/reducer';
 import { toggleChatSettings, toggleCreateGroup, toggleFriendRequestAction, toggleMobileNav } from 'services/redux/reducer/toggles/actions';
 import s from './Sidebar.module.css';
@@ -46,7 +47,11 @@ const Sidebar: FC<SidebarProps> = ({ toggle, toggleChatSettings, toggleCreateGro
           useColorModeValue(MdOutlineDarkMode, BsFillSunFill),
         ).map((item, index) => {
           const { Icon, onClick, ariaLabel } = item;
-          return <IconButton mt={4} key={index} aria-label={ariaLabel} icon={<Icon className={s.icon} />} onClick={onClick} />;
+          return (
+            <ToolTip label={ariaLabel} key={index}>
+              <IconButton mt={4} aria-label={ariaLabel} icon={<Icon className={s.icon} />} onClick={onClick} />
+            </ToolTip>
+          );
         })}
       </VStack>
       <Spacer />
