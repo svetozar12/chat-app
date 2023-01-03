@@ -24,6 +24,7 @@ const LoginForm: FC<ILoginForm> = (props) => {
   const router = useRouter();
   const cookie = useCookie();
   const { auth: authObj } = useProvideAuth();
+  useLoginUserMutation({});
   const [loginUserMutation, { data, loading }] = useLoginUserMutation();
   const { data: chatListData, refetch } = useGetChatListQuery({ variables: { auth: authObj } });
   const { getAllChats } = chatListData || {};
@@ -45,13 +46,12 @@ const LoginForm: FC<ILoginForm> = (props) => {
           cookie,
           router,
           callback,
-          { loginUserMutation, data },
+          { loginUserMutation },
           {
             setAlertSetter: setAlert,
             togglelIsLoadingSetter: togglelIsLoading,
           },
           firstChatid as string,
-          () => refetch({ auth: authObj }),
         )
       }
       header={

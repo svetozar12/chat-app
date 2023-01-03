@@ -2,7 +2,7 @@ import { IFields } from 'components/FormWrapper/FormWrapper';
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from 'constants/cookieNames';
 import { Cookie } from 'next-cookie';
 import { NextRouter } from 'next/router';
-import { LoginUserMutationVariables, LoginUserMutationFn, LoginUserMutation } from 'services/generated';
+import { LoginUserMutationVariables, LoginUserMutation, LoginUserMutationFn } from 'services/generated';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { IAuth } from 'services/redux/reducer/auth/state';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
@@ -13,22 +13,21 @@ export const handleSubmit = async (
   cookie: Cookie,
   router: NextRouter,
   callback: string,
-  mutation: { loginUserMutation: LoginUserMutationFn; data: LoginUserMutation | null | undefined },
+  mutation: { loginUserMutation: LoginUserMutationFn },
   setters: {
     togglelIsLoadingSetter: typeof togglelIsLoading;
     setAlertSetter: typeof setAlert;
   },
   firstChatId: string,
-  refetch: () => any,
 ) => {
   const { setAlertSetter, togglelIsLoadingSetter } = setters;
-  const { data, loginUserMutation } = mutation;
+  const { loginUserMutation } = mutation;
   const rememberMe = auth.remember_me ? 31556952 : 3600;
   const refreshRememberMe = auth.remember_me ? 63113904 : 7200;
   togglelIsLoadingSetter(true);
   try {
     const { username } = values;
-    await loginUserMutation({ variables: { ...values } });
+    const { data } = await loginUserMutation({ variables: { ...values } });
     const { loginUser } = data || {};
 
     if (loginUser?.__typename === 'Error') setAlertSetter(loginUser?.message, 'error');
@@ -46,7 +45,6 @@ export const handleSubmit = async (
         const { name, value, options } = element;
         cookie.set(name, value, { ...(options as any) });
       });
-      await refetch();
       cookie.set('REDIRECT_URL_CALLBACK', callback || `/${firstChatId}`);
       router.push(callback || `/${firstChatId}`);
     }

@@ -5,6 +5,7 @@ import theme from 'styles/theme';
 import { ApolloClient, ApolloProvider, createHttpLink, HttpLink, InMemoryCache } from '@apollo/client';
 import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
+import { QueryClient } from '@tanstack/react-query';
 
 interface IApp extends ReturnType<typeof mapStateToProps> {
   children: JSX.Element | JSX.Element[];

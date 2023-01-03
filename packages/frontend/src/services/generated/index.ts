@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-import * as ApolloReactHooks from '../../hooks/useQuery';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -58,7 +57,7 @@ export type Error = {
 
 export enum Gender {
   Female = 'Female',
-  Male = 'Male',
+  Male = 'Male'
 }
 
 export type GetUserUnion = Error | GetUser;
@@ -134,19 +133,23 @@ export type Mutation = {
   updateUser: MessageUnion;
 };
 
+
 export type MutationCreateChatArgs = {
   auth: AuthModel;
   chat: ChatModel;
 };
+
 
 export type MutationCreateInviteArgs = {
   auth: AuthModel;
   reciever: Scalars['String'];
 };
 
+
 export type MutationCreateInviteGroupChatArgs = {
   usersData?: InputMaybe<Array<Scalars['String']>>;
 };
+
 
 export type MutationCreateMessageArgs = {
   auth: AuthModel;
@@ -154,37 +157,45 @@ export type MutationCreateMessageArgs = {
   message: Scalars['String'];
 };
 
+
 export type MutationCreateUserArgs = {
   user: UserModel;
 };
+
 
 export type MutationDeleteChatArgs = {
   auth: AuthModel;
   chat_id: Scalars['String'];
 };
 
+
 export type MutationDeleteMessageArgs = {
   auth: AuthModel;
   message_id: Scalars['String'];
 };
 
+
 export type MutationDeleteUserArgs = {
   auth: AuthModel;
 };
+
 
 export type MutationLoginUserArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
 };
 
+
 export type MutationLogoutUserArgs = {
   auth: AuthModel;
 };
+
 
 export type MutationRefreshTokenArgs = {
   RefreshToken: Scalars['String'];
   user_id: Scalars['String'];
 };
+
 
 export type MutationUpdateChatArgs = {
   auth: AuthModel;
@@ -193,17 +204,20 @@ export type MutationUpdateChatArgs = {
   usersData?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+
 export type MutationUpdateInviteArgs = {
   auth: AuthModel;
   invite_id: Scalars['String'];
   status: Status;
 };
 
+
 export type MutationUpdateMessageArgs = {
   auth: AuthModel;
   message_id: Scalars['String'];
   newMessage: Scalars['String'];
 };
+
 
 export type MutationUpdateUserArgs = {
   auth: AuthModel;
@@ -225,9 +239,11 @@ export type Query = {
   getUser: GetUserUnion;
 };
 
+
 export type QueryGetAllChatsArgs = {
   auth: AuthModel;
 };
+
 
 export type QueryGetAllMessagesArgs = {
   auth: AuthModel;
@@ -235,20 +251,24 @@ export type QueryGetAllMessagesArgs = {
   query?: InputMaybe<Pagination>;
 };
 
+
 export type QueryGetChatByIdArgs = {
   auth: AuthModel;
   chat_id: Scalars['String'];
 };
+
 
 export type QueryGetInvitesByInviterArgs = {
   auth: AuthModel;
   status: Status;
 };
 
+
 export type QueryGetInvitesByRecieverArgs = {
   auth: AuthModel;
   status: Status;
 };
+
 
 export type QueryGetUserArgs = {
   auth: AuthModel;
@@ -257,7 +277,7 @@ export type QueryGetUserArgs = {
 export enum Status {
   Accepted = 'accepted',
   Declined = 'declined',
-  Recieved = 'recieved',
+  Recieved = 'recieved'
 }
 
 export type UpdateUserModel = {
@@ -286,76 +306,54 @@ export type LoginUserMutationVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-export type LoginUserMutation = {
-  __typename?: 'Mutation';
-  loginUser:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'LoginUser'; userId: string; AccessToken: string; RefreshToken: string };
-};
+
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename: 'Error', message: string } | { __typename: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
 
 export type LogoutMutationVariables = Exact<{
   auth: AuthModel;
 }>;
 
-export type LogoutMutation = {
-  __typename?: 'Mutation';
-  logoutUser: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type LogoutMutation = { __typename?: 'Mutation', logoutUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type RefreshTokenMutationVariables = Exact<{
   userId: Scalars['String'];
   RefreshToken: Scalars['String'];
 }>;
 
-export type RefreshTokenMutation = {
-  __typename?: 'Mutation';
-  refreshToken:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'LoginUser'; userId: string; AccessToken: string; RefreshToken: string };
-};
+
+export type RefreshTokenMutation = { __typename?: 'Mutation', refreshToken: { __typename: 'Error', message: string } | { __typename: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
 
 export type CreateChatMutationVariables = Exact<{
   chat: ChatModel;
   auth: AuthModel;
 }>;
 
-export type CreateChatMutation = {
-  __typename?: 'Mutation';
-  createChat:
-    | { __typename: 'CreateChatMessage'; Message: string; data: { __typename?: 'Chat'; _id: string; members: Array<string> } }
-    | { __typename: 'Error'; message: string };
-};
+
+export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename: 'CreateChatMessage', Message: string, data: { __typename?: 'Chat', _id: string, members: Array<string> } } | { __typename: 'Error', message: string } };
 
 export type DeleteChatMutationVariables = Exact<{
   auth: AuthModel;
   chat_id: Scalars['String'];
 }>;
 
-export type DeleteChatMutation = {
-  __typename?: 'Mutation';
-  deleteChat: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type DeleteChatMutation = { __typename?: 'Mutation', deleteChat: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type GetChatQueryVariables = Exact<{
   chat_id: Scalars['String'];
   auth: AuthModel;
 }>;
 
-export type GetChatQuery = {
-  __typename?: 'Query';
-  getChatById: { __typename: 'Chat'; _id: string; members: Array<string> } | { __typename: 'Error'; message: string };
-};
+
+export type GetChatQuery = { __typename?: 'Query', getChatById: { __typename: 'Chat', _id: string, members: Array<string> } | { __typename: 'Error', message: string } };
 
 export type GetChatListQueryVariables = Exact<{
   auth: AuthModel;
 }>;
 
-export type GetChatListQuery = {
-  __typename?: 'Query';
-  getAllChats:
-    | { __typename: 'ChatList'; res: Array<{ __typename?: 'Chat'; _id: string; members: Array<string> }> }
-    | { __typename: 'Error'; message: string };
-};
+
+export type GetChatListQuery = { __typename?: 'Query', getAllChats: { __typename: 'ChatList', res: Array<{ __typename?: 'Chat', _id: string, members: Array<string> }> } | { __typename: 'Error', message: string } };
 
 export type UpdateChatMutationVariables = Exact<{
   auth: AuthModel;
@@ -364,57 +362,39 @@ export type UpdateChatMutationVariables = Exact<{
   usersData?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
-export type UpdateChatMutation = {
-  __typename?: 'Mutation';
-  updateChat: { __typename: 'Chat'; _id: string; members: Array<string> } | { __typename: 'Error'; message: string };
-};
+
+export type UpdateChatMutation = { __typename?: 'Mutation', updateChat: { __typename: 'Chat', _id: string, members: Array<string> } | { __typename: 'Error', message: string } };
 
 export type CreateInviteMutationVariables = Exact<{
   auth: AuthModel;
   reciever: Scalars['String'];
 }>;
 
-export type CreateInviteMutation = {
-  __typename?: 'Mutation';
-  createInvite:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'Invite'; _id: string; inviter: string; reciever: string; status: string };
-};
+
+export type CreateInviteMutation = { __typename?: 'Mutation', createInvite: { __typename: 'Error', message: string } | { __typename: 'Invite', _id: string, inviter: string, reciever: string, status: string } };
 
 export type CreateInviteGrupMutationVariables = Exact<{
   usersData?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
-export type CreateInviteGrupMutation = {
-  __typename?: 'Mutation';
-  createInviteGroupChat:
-    | { __typename: 'CreateChatMessage'; Message: string; data: { __typename?: 'Chat'; _id: string; members: Array<string> } }
-    | { __typename: 'Error'; message: string };
-};
+
+export type CreateInviteGrupMutation = { __typename?: 'Mutation', createInviteGroupChat: { __typename: 'CreateChatMessage', Message: string, data: { __typename?: 'Chat', _id: string, members: Array<string> } } | { __typename: 'Error', message: string } };
 
 export type GetInvitesByInviterQueryVariables = Exact<{
   auth: AuthModel;
   status: Status;
 }>;
 
-export type GetInvitesByInviterQuery = {
-  __typename?: 'Query';
-  getInvitesByInviter:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'InviteList'; res: Array<{ __typename?: 'Invite'; _id: string; inviter: string; reciever: string; status: string }> };
-};
+
+export type GetInvitesByInviterQuery = { __typename?: 'Query', getInvitesByInviter: { __typename: 'Error', message: string } | { __typename: 'InviteList', res: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string }> } };
 
 export type GetInvitesByRecieverQueryVariables = Exact<{
   auth: AuthModel;
   status: Status;
 }>;
 
-export type GetInvitesByRecieverQuery = {
-  __typename?: 'Query';
-  getInvitesByReciever:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'InviteList'; res: Array<{ __typename?: 'Invite'; _id: string; inviter: string; reciever: string; status: string }> };
-};
+
+export type GetInvitesByRecieverQuery = { __typename?: 'Query', getInvitesByReciever: { __typename: 'Error', message: string } | { __typename: 'InviteList', res: Array<{ __typename?: 'Invite', _id: string, inviter: string, reciever: string, status: string }> } };
 
 export type UpdateInviteMutationVariables = Exact<{
   auth: AuthModel;
@@ -422,12 +402,8 @@ export type UpdateInviteMutationVariables = Exact<{
   invite_id: Scalars['String'];
 }>;
 
-export type UpdateInviteMutation = {
-  __typename?: 'Mutation';
-  updateInvite:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'Invite'; _id: string; inviter: string; reciever: string; status: string };
-};
+
+export type UpdateInviteMutation = { __typename?: 'Mutation', updateInvite: { __typename: 'Error', message: string } | { __typename: 'Invite', _id: string, inviter: string, reciever: string, status: string } };
 
 export type CreateMessageMutationVariables = Exact<{
   chat_id: Scalars['String'];
@@ -435,22 +411,16 @@ export type CreateMessageMutationVariables = Exact<{
   message: Scalars['String'];
 }>;
 
-export type CreateMessageMutation = {
-  __typename?: 'Mutation';
-  createMessage:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'Messages'; user_id: string; chat_id: string; sender: string; message: string; seenBy: Array<string> };
-};
+
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename: 'Error', message: string } | { __typename: 'Messages', user_id: string, chat_id: string, sender: string, message: string, seenBy: Array<string> } };
 
 export type DeleteMessageMutationVariables = Exact<{
   message_id: Scalars['String'];
   auth: AuthModel;
 }>;
 
-export type DeleteMessageMutation = {
-  __typename?: 'Mutation';
-  deleteMessage: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type DeleteMessageMutation = { __typename?: 'Mutation', deleteMessage: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type GetMessageListQueryVariables = Exact<{
   auth: AuthModel;
@@ -458,15 +428,8 @@ export type GetMessageListQueryVariables = Exact<{
   query?: InputMaybe<Pagination>;
 }>;
 
-export type GetMessageListQuery = {
-  __typename?: 'Query';
-  getAllMessages:
-    | { __typename: 'Error'; message: string }
-    | {
-        __typename: 'MessagesList';
-        res: Array<{ __typename?: 'Messages'; _id: string; user_id: string; chat_id: string; sender: string; message: string }>;
-      };
-};
+
+export type GetMessageListQuery = { __typename?: 'Query', getAllMessages: { __typename: 'Error', message: string } | { __typename: 'MessagesList', res: Array<{ __typename?: 'Messages', _id: string, user_id: string, chat_id: string, sender: string, message: string }> } };
 
 export type UpdateMessageMutationVariables = Exact<{
   message_id: Scalars['String'];
@@ -474,65 +437,54 @@ export type UpdateMessageMutationVariables = Exact<{
   auth: AuthModel;
 }>;
 
-export type UpdateMessageMutation = {
-  __typename?: 'Mutation';
-  updateMessage: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type UpdateMessageMutation = { __typename?: 'Mutation', updateMessage: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type CreateUserMutationVariables = Exact<{
   user: UserModel;
 }>;
 
-export type CreateUserMutation = {
-  __typename?: 'Mutation';
-  createUser: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type DeleteUserMutationVariables = Exact<{
   auth: AuthModel;
 }>;
 
-export type DeleteUserMutation = {
-  __typename?: 'Mutation';
-  deleteUser: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
 
 export type GetUserByIdQueryVariables = Exact<{
   auth: AuthModel;
 }>;
 
-export type GetUserByIdQuery = {
-  __typename?: 'Query';
-  getUser:
-    | { __typename: 'Error'; message: string }
-    | { __typename: 'getUser'; _id: string; email: string; userAvatar: string; username: string };
-};
+
+export type GetUserByIdQuery = { __typename?: 'Query', getUser: { __typename: 'Error', message: string } | { __typename: 'getUser', _id: string, email: string, userAvatar: string, username: string } };
 
 export type UpdateUserMutationVariables = Exact<{
   auth: AuthModel;
   user: UpdateUserModel;
 }>;
 
-export type UpdateUserMutation = {
-  __typename?: 'Mutation';
-  updateUser: { __typename: 'Error'; message: string } | { __typename: 'Message'; Message: string };
-};
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
+
 
 export const LoginUserDocument = gql`
-  mutation LoginUser($username: String!, $password: String!) {
-    loginUser(username: $username, password: $password) {
-      __typename
-      ... on LoginUser {
-        userId
-        AccessToken
-        RefreshToken
-      }
-      ... on Error {
-        message
-      }
+    mutation LoginUser($username: String!, $password: String!) {
+  loginUser(username: $username, password: $password) {
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
 
 /**
@@ -553,26 +505,26 @@ export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, Log
  *   },
  * });
  */
-export function useLoginUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
-}
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
 export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
 export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
 export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
 export const LogoutDocument = gql`
-  mutation Logout($auth: AuthModel!) {
-    logoutUser(auth: $auth) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation Logout($auth: AuthModel!) {
+  logoutUser(auth: $auth) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
 /**
@@ -592,28 +544,28 @@ export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMut
  *   },
  * });
  */
-export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
-}
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RefreshTokenDocument = gql`
-  mutation RefreshToken($userId: String!, $RefreshToken: String!) {
-    refreshToken(user_id: $userId, RefreshToken: $RefreshToken) {
-      __typename
-      ... on LoginUser {
-        userId
-        AccessToken
-        RefreshToken
-      }
-      ... on Error {
-        message
-      }
+    mutation RefreshToken($userId: String!, $RefreshToken: String!) {
+  refreshToken(user_id: $userId, RefreshToken: $RefreshToken) {
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type RefreshTokenMutationFn = Apollo.MutationFunction<RefreshTokenMutation, RefreshTokenMutationVariables>;
 
 /**
@@ -634,32 +586,30 @@ export type RefreshTokenMutationFn = Apollo.MutationFunction<RefreshTokenMutatio
  *   },
  * });
  */
-export function useRefreshTokenMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<RefreshTokenMutation, RefreshTokenMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<RefreshTokenMutation, RefreshTokenMutationVariables>(RefreshTokenDocument, options);
-}
+export function useRefreshTokenMutation(baseOptions?: Apollo.MutationHookOptions<RefreshTokenMutation, RefreshTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RefreshTokenMutation, RefreshTokenMutationVariables>(RefreshTokenDocument, options);
+      }
 export type RefreshTokenMutationHookResult = ReturnType<typeof useRefreshTokenMutation>;
 export type RefreshTokenMutationResult = Apollo.MutationResult<RefreshTokenMutation>;
 export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<RefreshTokenMutation, RefreshTokenMutationVariables>;
 export const CreateChatDocument = gql`
-  mutation CreateChat($chat: ChatModel!, $auth: AuthModel!) {
-    createChat(chat: $chat, auth: $auth) {
-      __typename
-      ... on CreateChatMessage {
-        data {
-          _id
-          members
-        }
-        Message
+    mutation CreateChat($chat: ChatModel!, $auth: AuthModel!) {
+  createChat(chat: $chat, auth: $auth) {
+    __typename
+    ... on CreateChatMessage {
+      data {
+        _id
+        members
       }
-      ... on Error {
-        message
-      }
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type CreateChatMutationFn = Apollo.MutationFunction<CreateChatMutation, CreateChatMutationVariables>;
 
 /**
@@ -680,26 +630,26 @@ export type CreateChatMutationFn = Apollo.MutationFunction<CreateChatMutation, C
  *   },
  * });
  */
-export function useCreateChatMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateChatMutation, CreateChatMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<CreateChatMutation, CreateChatMutationVariables>(CreateChatDocument, options);
-}
+export function useCreateChatMutation(baseOptions?: Apollo.MutationHookOptions<CreateChatMutation, CreateChatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateChatMutation, CreateChatMutationVariables>(CreateChatDocument, options);
+      }
 export type CreateChatMutationHookResult = ReturnType<typeof useCreateChatMutation>;
 export type CreateChatMutationResult = Apollo.MutationResult<CreateChatMutation>;
 export type CreateChatMutationOptions = Apollo.BaseMutationOptions<CreateChatMutation, CreateChatMutationVariables>;
 export const DeleteChatDocument = gql`
-  mutation DeleteChat($auth: AuthModel!, $chat_id: String!) {
-    deleteChat(chat_id: $chat_id, auth: $auth) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation DeleteChat($auth: AuthModel!, $chat_id: String!) {
+  deleteChat(chat_id: $chat_id, auth: $auth) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type DeleteChatMutationFn = Apollo.MutationFunction<DeleteChatMutation, DeleteChatMutationVariables>;
 
 /**
@@ -720,27 +670,27 @@ export type DeleteChatMutationFn = Apollo.MutationFunction<DeleteChatMutation, D
  *   },
  * });
  */
-export function useDeleteChatMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteChatMutation, DeleteChatMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<DeleteChatMutation, DeleteChatMutationVariables>(DeleteChatDocument, options);
-}
+export function useDeleteChatMutation(baseOptions?: Apollo.MutationHookOptions<DeleteChatMutation, DeleteChatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteChatMutation, DeleteChatMutationVariables>(DeleteChatDocument, options);
+      }
 export type DeleteChatMutationHookResult = ReturnType<typeof useDeleteChatMutation>;
 export type DeleteChatMutationResult = Apollo.MutationResult<DeleteChatMutation>;
 export type DeleteChatMutationOptions = Apollo.BaseMutationOptions<DeleteChatMutation, DeleteChatMutationVariables>;
 export const GetChatDocument = gql`
-  query GetChat($chat_id: String!, $auth: AuthModel!) {
-    getChatById(chat_id: $chat_id, auth: $auth) {
-      __typename
-      ... on Chat {
-        _id
-        members
-      }
-      ... on Error {
-        message
-      }
+    query GetChat($chat_id: String!, $auth: AuthModel!) {
+  getChatById(chat_id: $chat_id, auth: $auth) {
+    __typename
+    ... on Chat {
+      _id
+      members
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 
 /**
  * __useGetChatQuery__
@@ -759,33 +709,33 @@ export const GetChatDocument = gql`
  *   },
  * });
  */
-export function useGetChatQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetChatQuery, GetChatQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<GetChatQuery, GetChatQueryVariables>(GetChatDocument, options);
-}
-export function useGetChatLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChatQuery, GetChatQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<GetChatQuery, GetChatQueryVariables>(GetChatDocument, options);
-}
+export function useGetChatQuery(baseOptions: Apollo.QueryHookOptions<GetChatQuery, GetChatQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetChatQuery, GetChatQueryVariables>(GetChatDocument, options);
+      }
+export function useGetChatLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetChatQuery, GetChatQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetChatQuery, GetChatQueryVariables>(GetChatDocument, options);
+        }
 export type GetChatQueryHookResult = ReturnType<typeof useGetChatQuery>;
 export type GetChatLazyQueryHookResult = ReturnType<typeof useGetChatLazyQuery>;
 export type GetChatQueryResult = Apollo.QueryResult<GetChatQuery, GetChatQueryVariables>;
 export const GetChatListDocument = gql`
-  query GetChatList($auth: AuthModel!) {
-    getAllChats(auth: $auth) {
-      __typename
-      ... on ChatList {
-        res {
-          _id
-          members
-        }
-      }
-      ... on Error {
-        message
+    query GetChatList($auth: AuthModel!) {
+  getAllChats(auth: $auth) {
+    __typename
+    ... on ChatList {
+      res {
+        _id
+        members
       }
     }
+    ... on Error {
+      message
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useGetChatListQuery__
@@ -803,31 +753,36 @@ export const GetChatListDocument = gql`
  *   },
  * });
  */
-export function useGetChatListQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetChatListQuery, GetChatListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<GetChatListQuery, GetChatListQueryVariables>(GetChatListDocument, options);
-}
-export function useGetChatListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChatListQuery, GetChatListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<GetChatListQuery, GetChatListQueryVariables>(GetChatListDocument, options);
-}
+export function useGetChatListQuery(baseOptions: Apollo.QueryHookOptions<GetChatListQuery, GetChatListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetChatListQuery, GetChatListQueryVariables>(GetChatListDocument, options);
+      }
+export function useGetChatListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetChatListQuery, GetChatListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetChatListQuery, GetChatListQueryVariables>(GetChatListDocument, options);
+        }
 export type GetChatListQueryHookResult = ReturnType<typeof useGetChatListQuery>;
 export type GetChatListLazyQueryHookResult = ReturnType<typeof useGetChatListLazyQuery>;
 export type GetChatListQueryResult = Apollo.QueryResult<GetChatListQuery, GetChatListQueryVariables>;
 export const UpdateChatDocument = gql`
-  mutation UpdateChat($auth: AuthModel!, $chat_id: String!, $username: String, $usersData: [String]) {
-    updateChat(chat_id: $chat_id, auth: $auth, username: $username, usersData: $usersData) {
-      __typename
-      ... on Chat {
-        _id
-        members
-      }
-      ... on Error {
-        message
-      }
+    mutation UpdateChat($auth: AuthModel!, $chat_id: String!, $username: String, $usersData: [String]) {
+  updateChat(
+    chat_id: $chat_id
+    auth: $auth
+    username: $username
+    usersData: $usersData
+  ) {
+    __typename
+    ... on Chat {
+      _id
+      members
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type UpdateChatMutationFn = Apollo.MutationFunction<UpdateChatMutation, UpdateChatMutationVariables>;
 
 /**
@@ -850,29 +805,29 @@ export type UpdateChatMutationFn = Apollo.MutationFunction<UpdateChatMutation, U
  *   },
  * });
  */
-export function useUpdateChatMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateChatMutation, UpdateChatMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<UpdateChatMutation, UpdateChatMutationVariables>(UpdateChatDocument, options);
-}
+export function useUpdateChatMutation(baseOptions?: Apollo.MutationHookOptions<UpdateChatMutation, UpdateChatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateChatMutation, UpdateChatMutationVariables>(UpdateChatDocument, options);
+      }
 export type UpdateChatMutationHookResult = ReturnType<typeof useUpdateChatMutation>;
 export type UpdateChatMutationResult = Apollo.MutationResult<UpdateChatMutation>;
 export type UpdateChatMutationOptions = Apollo.BaseMutationOptions<UpdateChatMutation, UpdateChatMutationVariables>;
 export const CreateInviteDocument = gql`
-  mutation CreateInvite($auth: AuthModel!, $reciever: String!) {
-    createInvite(auth: $auth, reciever: $reciever) {
-      __typename
-      ... on Invite {
-        _id
-        inviter
-        reciever
-        status
-      }
-      ... on Error {
-        message
-      }
+    mutation CreateInvite($auth: AuthModel!, $reciever: String!) {
+  createInvite(auth: $auth, reciever: $reciever) {
+    __typename
+    ... on Invite {
+      _id
+      inviter
+      reciever
+      status
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type CreateInviteMutationFn = Apollo.MutationFunction<CreateInviteMutation, CreateInviteMutationVariables>;
 
 /**
@@ -893,32 +848,30 @@ export type CreateInviteMutationFn = Apollo.MutationFunction<CreateInviteMutatio
  *   },
  * });
  */
-export function useCreateInviteMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<CreateInviteMutation, CreateInviteMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<CreateInviteMutation, CreateInviteMutationVariables>(CreateInviteDocument, options);
-}
+export function useCreateInviteMutation(baseOptions?: Apollo.MutationHookOptions<CreateInviteMutation, CreateInviteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInviteMutation, CreateInviteMutationVariables>(CreateInviteDocument, options);
+      }
 export type CreateInviteMutationHookResult = ReturnType<typeof useCreateInviteMutation>;
 export type CreateInviteMutationResult = Apollo.MutationResult<CreateInviteMutation>;
 export type CreateInviteMutationOptions = Apollo.BaseMutationOptions<CreateInviteMutation, CreateInviteMutationVariables>;
 export const CreateInviteGrupDocument = gql`
-  mutation CreateInviteGrup($usersData: [String!]) {
-    createInviteGroupChat(usersData: $usersData) {
-      __typename
-      ... on CreateChatMessage {
-        data {
-          _id
-          members
-        }
-        Message
+    mutation CreateInviteGrup($usersData: [String!]) {
+  createInviteGroupChat(usersData: $usersData) {
+    __typename
+    ... on CreateChatMessage {
+      data {
+        _id
+        members
       }
-      ... on Error {
-        message
-      }
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type CreateInviteGrupMutationFn = Apollo.MutationFunction<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>;
 
 /**
@@ -938,33 +891,31 @@ export type CreateInviteGrupMutationFn = Apollo.MutationFunction<CreateInviteGru
  *   },
  * });
  */
-export function useCreateInviteGrupMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>(CreateInviteGrupDocument, options);
-}
+export function useCreateInviteGrupMutation(baseOptions?: Apollo.MutationHookOptions<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>(CreateInviteGrupDocument, options);
+      }
 export type CreateInviteGrupMutationHookResult = ReturnType<typeof useCreateInviteGrupMutation>;
 export type CreateInviteGrupMutationResult = Apollo.MutationResult<CreateInviteGrupMutation>;
 export type CreateInviteGrupMutationOptions = Apollo.BaseMutationOptions<CreateInviteGrupMutation, CreateInviteGrupMutationVariables>;
 export const GetInvitesByInviterDocument = gql`
-  query GetInvitesByInviter($auth: AuthModel!, $status: Status!) {
-    getInvitesByInviter(auth: $auth, status: $status) {
-      __typename
-      ... on InviteList {
-        res {
-          _id
-          inviter
-          reciever
-          status
-        }
-      }
-      ... on Error {
-        message
+    query GetInvitesByInviter($auth: AuthModel!, $status: Status!) {
+  getInvitesByInviter(auth: $auth, status: $status) {
+    __typename
+    ... on InviteList {
+      res {
+        _id
+        inviter
+        reciever
+        status
       }
     }
+    ... on Error {
+      message
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useGetInvitesByInviterQuery__
@@ -983,39 +934,35 @@ export const GetInvitesByInviterDocument = gql`
  *   },
  * });
  */
-export function useGetInvitesByInviterQuery(
-  baseOptions: ApolloReactHooks.QueryHookOptions<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>(GetInvitesByInviterDocument, options);
-}
-export function useGetInvitesByInviterLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>(GetInvitesByInviterDocument, options);
-}
+export function useGetInvitesByInviterQuery(baseOptions: Apollo.QueryHookOptions<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>(GetInvitesByInviterDocument, options);
+      }
+export function useGetInvitesByInviterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>(GetInvitesByInviterDocument, options);
+        }
 export type GetInvitesByInviterQueryHookResult = ReturnType<typeof useGetInvitesByInviterQuery>;
 export type GetInvitesByInviterLazyQueryHookResult = ReturnType<typeof useGetInvitesByInviterLazyQuery>;
 export type GetInvitesByInviterQueryResult = Apollo.QueryResult<GetInvitesByInviterQuery, GetInvitesByInviterQueryVariables>;
 export const GetInvitesByRecieverDocument = gql`
-  query GetInvitesByReciever($auth: AuthModel!, $status: Status!) {
-    getInvitesByReciever(auth: $auth, status: $status) {
-      __typename
-      ... on InviteList {
-        res {
-          _id
-          inviter
-          reciever
-          status
-        }
-      }
-      ... on Error {
-        message
+    query GetInvitesByReciever($auth: AuthModel!, $status: Status!) {
+  getInvitesByReciever(auth: $auth, status: $status) {
+    __typename
+    ... on InviteList {
+      res {
+        _id
+        inviter
+        reciever
+        status
       }
     }
+    ... on Error {
+      message
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useGetInvitesByRecieverQuery__
@@ -1034,40 +981,33 @@ export const GetInvitesByRecieverDocument = gql`
  *   },
  * });
  */
-export function useGetInvitesByRecieverQuery(
-  baseOptions: ApolloReactHooks.QueryHookOptions<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>(GetInvitesByRecieverDocument, options);
-}
-export function useGetInvitesByRecieverLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>(
-    GetInvitesByRecieverDocument,
-    options,
-  );
-}
+export function useGetInvitesByRecieverQuery(baseOptions: Apollo.QueryHookOptions<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>(GetInvitesByRecieverDocument, options);
+      }
+export function useGetInvitesByRecieverLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>(GetInvitesByRecieverDocument, options);
+        }
 export type GetInvitesByRecieverQueryHookResult = ReturnType<typeof useGetInvitesByRecieverQuery>;
 export type GetInvitesByRecieverLazyQueryHookResult = ReturnType<typeof useGetInvitesByRecieverLazyQuery>;
 export type GetInvitesByRecieverQueryResult = Apollo.QueryResult<GetInvitesByRecieverQuery, GetInvitesByRecieverQueryVariables>;
 export const UpdateInviteDocument = gql`
-  mutation UpdateInvite($auth: AuthModel!, $status: Status!, $invite_id: String!) {
-    updateInvite(auth: $auth, status: $status, invite_id: $invite_id) {
-      __typename
-      ... on Invite {
-        _id
-        inviter
-        reciever
-        status
-      }
-      ... on Error {
-        message
-      }
+    mutation UpdateInvite($auth: AuthModel!, $status: Status!, $invite_id: String!) {
+  updateInvite(auth: $auth, status: $status, invite_id: $invite_id) {
+    __typename
+    ... on Invite {
+      _id
+      inviter
+      reciever
+      status
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type UpdateInviteMutationFn = Apollo.MutationFunction<UpdateInviteMutation, UpdateInviteMutationVariables>;
 
 /**
@@ -1089,32 +1029,30 @@ export type UpdateInviteMutationFn = Apollo.MutationFunction<UpdateInviteMutatio
  *   },
  * });
  */
-export function useUpdateInviteMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateInviteMutation, UpdateInviteMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<UpdateInviteMutation, UpdateInviteMutationVariables>(UpdateInviteDocument, options);
-}
+export function useUpdateInviteMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInviteMutation, UpdateInviteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateInviteMutation, UpdateInviteMutationVariables>(UpdateInviteDocument, options);
+      }
 export type UpdateInviteMutationHookResult = ReturnType<typeof useUpdateInviteMutation>;
 export type UpdateInviteMutationResult = Apollo.MutationResult<UpdateInviteMutation>;
 export type UpdateInviteMutationOptions = Apollo.BaseMutationOptions<UpdateInviteMutation, UpdateInviteMutationVariables>;
 export const CreateMessageDocument = gql`
-  mutation CreateMessage($chat_id: String!, $auth: AuthModel!, $message: String!) {
-    createMessage(chat_id: $chat_id, auth: $auth, message: $message) {
-      __typename
-      ... on Messages {
-        user_id
-        chat_id
-        sender
-        message
-        seenBy
-      }
-      ... on Error {
-        message
-      }
+    mutation CreateMessage($chat_id: String!, $auth: AuthModel!, $message: String!) {
+  createMessage(chat_id: $chat_id, auth: $auth, message: $message) {
+    __typename
+    ... on Messages {
+      user_id
+      chat_id
+      sender
+      message
+      seenBy
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
 
 /**
@@ -1136,28 +1074,26 @@ export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutat
  *   },
  * });
  */
-export function useCreateMessageMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
-}
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const DeleteMessageDocument = gql`
-  mutation DeleteMessage($message_id: String!, $auth: AuthModel!) {
-    deleteMessage(message_id: $message_id, auth: $auth) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation DeleteMessage($message_id: String!, $auth: AuthModel!) {
+  deleteMessage(message_id: $message_id, auth: $auth) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type DeleteMessageMutationFn = Apollo.MutationFunction<DeleteMessageMutation, DeleteMessageMutationVariables>;
 
 /**
@@ -1178,34 +1114,32 @@ export type DeleteMessageMutationFn = Apollo.MutationFunction<DeleteMessageMutat
  *   },
  * });
  */
-export function useDeleteMessageMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteMessageMutation, DeleteMessageMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<DeleteMessageMutation, DeleteMessageMutationVariables>(DeleteMessageDocument, options);
-}
+export function useDeleteMessageMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMessageMutation, DeleteMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMessageMutation, DeleteMessageMutationVariables>(DeleteMessageDocument, options);
+      }
 export type DeleteMessageMutationHookResult = ReturnType<typeof useDeleteMessageMutation>;
 export type DeleteMessageMutationResult = Apollo.MutationResult<DeleteMessageMutation>;
 export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<DeleteMessageMutation, DeleteMessageMutationVariables>;
 export const GetMessageListDocument = gql`
-  query GetMessageList($auth: AuthModel!, $chat_id: String!, $query: Pagination) {
-    getAllMessages(auth: $auth, chat_id: $chat_id, query: $query) {
-      __typename
-      ... on MessagesList {
-        res {
-          _id
-          user_id
-          chat_id
-          sender
-          message
-        }
-      }
-      ... on Error {
+    query GetMessageList($auth: AuthModel!, $chat_id: String!, $query: Pagination) {
+  getAllMessages(auth: $auth, chat_id: $chat_id, query: $query) {
+    __typename
+    ... on MessagesList {
+      res {
+        _id
+        user_id
+        chat_id
+        sender
         message
       }
     }
+    ... on Error {
+      message
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useGetMessageListQuery__
@@ -1225,32 +1159,30 @@ export const GetMessageListDocument = gql`
  *   },
  * });
  */
-export function useGetMessageListQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetMessageListQuery, GetMessageListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<GetMessageListQuery, GetMessageListQueryVariables>(GetMessageListDocument, options);
-}
-export function useGetMessageListLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMessageListQuery, GetMessageListQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<GetMessageListQuery, GetMessageListQueryVariables>(GetMessageListDocument, options);
-}
+export function useGetMessageListQuery(baseOptions: Apollo.QueryHookOptions<GetMessageListQuery, GetMessageListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessageListQuery, GetMessageListQueryVariables>(GetMessageListDocument, options);
+      }
+export function useGetMessageListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessageListQuery, GetMessageListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessageListQuery, GetMessageListQueryVariables>(GetMessageListDocument, options);
+        }
 export type GetMessageListQueryHookResult = ReturnType<typeof useGetMessageListQuery>;
 export type GetMessageListLazyQueryHookResult = ReturnType<typeof useGetMessageListLazyQuery>;
 export type GetMessageListQueryResult = Apollo.QueryResult<GetMessageListQuery, GetMessageListQueryVariables>;
 export const UpdateMessageDocument = gql`
-  mutation UpdateMessage($message_id: String!, $newMessage: String!, $auth: AuthModel!) {
-    updateMessage(message_id: $message_id, auth: $auth, newMessage: $newMessage) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation UpdateMessage($message_id: String!, $newMessage: String!, $auth: AuthModel!) {
+  updateMessage(message_id: $message_id, auth: $auth, newMessage: $newMessage) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type UpdateMessageMutationFn = Apollo.MutationFunction<UpdateMessageMutation, UpdateMessageMutationVariables>;
 
 /**
@@ -1272,28 +1204,26 @@ export type UpdateMessageMutationFn = Apollo.MutationFunction<UpdateMessageMutat
  *   },
  * });
  */
-export function useUpdateMessageMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateMessageMutation, UpdateMessageMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<UpdateMessageMutation, UpdateMessageMutationVariables>(UpdateMessageDocument, options);
-}
+export function useUpdateMessageMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMessageMutation, UpdateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMessageMutation, UpdateMessageMutationVariables>(UpdateMessageDocument, options);
+      }
 export type UpdateMessageMutationHookResult = ReturnType<typeof useUpdateMessageMutation>;
 export type UpdateMessageMutationResult = Apollo.MutationResult<UpdateMessageMutation>;
 export type UpdateMessageMutationOptions = Apollo.BaseMutationOptions<UpdateMessageMutation, UpdateMessageMutationVariables>;
 export const CreateUserDocument = gql`
-  mutation CreateUser($user: UserModel!) {
-    createUser(user: $user) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation CreateUser($user: UserModel!) {
+  createUser(user: $user) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 
 /**
@@ -1313,26 +1243,26 @@ export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, C
  *   },
  * });
  */
-export function useCreateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, options);
-}
+export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, options);
+      }
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
 export const DeleteUserDocument = gql`
-  mutation DeleteUser($auth: AuthModel!) {
-    deleteUser(auth: $auth) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation DeleteUser($auth: AuthModel!) {
+  deleteUser(auth: $auth) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
 
 /**
@@ -1352,29 +1282,29 @@ export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, D
  *   },
  * });
  */
-export function useDeleteUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
-}
+export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
+      }
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
 export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
 export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
 export const GetUserByIdDocument = gql`
-  query GetUserById($auth: AuthModel!) {
-    getUser(auth: $auth) {
-      __typename
-      ... on getUser {
-        _id
-        email
-        userAvatar
-        username
-      }
-      ... on Error {
-        message
-      }
+    query GetUserById($auth: AuthModel!) {
+  getUser(auth: $auth) {
+    __typename
+    ... on getUser {
+      _id
+      email
+      userAvatar
+      username
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 
 /**
  * __useGetUserByIdQuery__
@@ -1392,30 +1322,30 @@ export const GetUserByIdDocument = gql`
  *   },
  * });
  */
-export function useGetUserByIdQuery(baseOptions: ApolloReactHooks.QueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
-}
-export function useGetUserByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useLazyQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
-}
+export function useGetUserByIdQuery(baseOptions: Apollo.QueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
+      }
+export function useGetUserByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
+        }
 export type GetUserByIdQueryHookResult = ReturnType<typeof useGetUserByIdQuery>;
 export type GetUserByIdLazyQueryHookResult = ReturnType<typeof useGetUserByIdLazyQuery>;
 export type GetUserByIdQueryResult = Apollo.QueryResult<GetUserByIdQuery, GetUserByIdQueryVariables>;
 export const UpdateUserDocument = gql`
-  mutation UpdateUser($auth: AuthModel!, $user: UpdateUserModel!) {
-    updateUser(auth: $auth, user: $user) {
-      __typename
-      ... on Message {
-        Message
-      }
-      ... on Error {
-        message
-      }
+    mutation UpdateUser($auth: AuthModel!, $user: UpdateUserModel!) {
+  updateUser(auth: $auth, user: $user) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
     }
   }
-`;
+}
+    `;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -1436,10 +1366,10 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *   },
  * });
  */
-export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
-}
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
