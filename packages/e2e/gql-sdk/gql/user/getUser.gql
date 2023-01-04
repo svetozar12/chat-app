@@ -1,0 +1,14 @@
+query GetUserById($auth: AuthModel!) {
+  getUser(auth: $auth) {
+    __typename
+    ... on getUser {
+      _id
+      email
+      userAvatar
+      username
+    }
+    ... on Error {
+      message
+    }
+  }
+}

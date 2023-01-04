@@ -1,0 +1,16 @@
+query GetInvitesByInviter($auth: AuthModel!, $status: Status!) {
+  getInvitesByInviter(auth: $auth, status: $status) {
+    __typename
+    ... on InviteList {
+      res {
+        _id
+        inviter
+        reciever
+        status
+      }
+    }
+    ... on Error {
+      message
+    }
+  }
+}

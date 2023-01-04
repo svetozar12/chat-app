@@ -1,0 +1,11 @@
+mutation UpdateMessage($message_id: String!, $newMessage: String!, $auth: AuthModel!) {
+  updateMessage(message_id: $message_id, auth: $auth, newMessage: $newMessage) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
+  }
+}

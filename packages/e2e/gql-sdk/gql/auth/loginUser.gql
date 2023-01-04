@@ -1,0 +1,13 @@
+mutation LoginUser($username: String!, $password: String!) {
+  loginUser(username: $username, password: $password) {
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
+    }
+  }
+}

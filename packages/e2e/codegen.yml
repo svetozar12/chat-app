@@ -1,0 +1,9 @@
+overwrite: true
+schema: "http://127.0.0.1:4003/graphql"
+documents: "gql-sdk/gql/**/*.gql"
+generates:
+  gql-sdk/generated/index.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-graphql-request"

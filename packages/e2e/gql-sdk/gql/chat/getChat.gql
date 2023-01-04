@@ -1,0 +1,12 @@
+query GetChat($chat_id: String!, $auth: AuthModel!) {
+  getChatById(chat_id: $chat_id, auth: $auth) {
+    __typename
+    ... on Chat {
+      _id
+      members
+    }
+    ... on Error {
+      message
+    }
+  }
+}

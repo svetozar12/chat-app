@@ -5,13 +5,20 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "cypress": "^12.2.0"
+    "axios": "^1.2.2",
+    "cypress": "^12.2.0",
+    "graphql-request": "^5.1.0"
   },
   "scripts": {
     "cypress:open": "cypress open",
-    "dev": "cypress run"
+    "cypress:run": "cypress run",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
+    "@graphql-codegen/typescript": "^2.7.3",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.8",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
+    "@types/axios": "^0.14.0",
     "typescript": "^4.9.4"
   }
 }

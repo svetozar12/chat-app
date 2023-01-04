@@ -1,0 +1,14 @@
+mutation UpdateInvite($auth: AuthModel!, $status: Status!, $invite_id: String!) {
+  updateInvite(auth: $auth, status: $status, invite_id: $invite_id) {
+    __typename
+    ... on Invite {
+      _id
+      inviter
+      reciever
+      status
+    }
+    ... on Error {
+      message
+    }
+  }
+}

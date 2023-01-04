@@ -1,0 +1,11 @@
+mutation DeleteMessage($message_id: String!, $auth: AuthModel!) {
+  deleteMessage(message_id: $message_id, auth: $auth) {
+    __typename
+    ... on Message {
+      Message
+    }
+    ... on Error {
+      message
+    }
+  }
+}
