@@ -4,15 +4,15 @@ describe("example to-do app", () => {
   const fields = [
     {
       name: "input[name=username]",
-      value: "svetozar",
+      value: "test",
     },
     {
       name: "input[name=password]",
-      value: "svetozar",
+      value: "test",
     },
     {
       name: "input[name=email]",
-      value: "svetozar@test.com",
+      value: "test@test.com",
     },
   ];
   beforeEach(() => {
@@ -20,12 +20,7 @@ describe("example to-do app", () => {
     cy.url().should("eq", "http://localhost:3000/register");
   });
   after(async () => {
-    const { loginUser } = await sdk.LoginUser({
-      password: "svetozar",
-      username: "svetozar",
-    });
-    if (loginUser.__typename === "Error") throw new Error(loginUser.message);
-    const { userId, AccessToken } = loginUser || {};
+    const { userId, AccessToken } = await cy.getAuth("test", "test");
     await sdk.DeleteUser({ auth: { userId, AccessToken } });
   });
 
