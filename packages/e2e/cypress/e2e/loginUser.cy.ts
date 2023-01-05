@@ -1,5 +1,5 @@
-import { Gender } from "../../../gql-sdk/generated";
-import { sdk } from "../../support/commands";
+import { Gender } from "../../gql-sdk/generated";
+import { sdk } from "../support/commands";
 
 describe("example to-do app", () => {
   const fields = [
@@ -37,11 +37,10 @@ describe("example to-do app", () => {
     });
     cy.get("button").contains("Login").click();
 
-    cy.getAuth("test", "test").then(async ({ userId, AccessToken }) => {
-      cy.getAllChats({ userId, AccessToken }).then(({ res: [{ _id }] }) => {
-        const chatId = _id;
-        cy.url().should("eq", `http://localhost:3000/${chatId}`);
-      });
+    cy.getAuth("test", "test");
+    cy.getAllChats().then(({ res: [{ _id }] }) => {
+      const chatId = _id;
+      cy.url().should("eq", `http://localhost:3000/${chatId}`);
     });
   });
 });

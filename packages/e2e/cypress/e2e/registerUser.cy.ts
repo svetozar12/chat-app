@@ -1,4 +1,4 @@
-import { sdk } from "../../support/commands";
+import { sdk } from "../support/commands";
 
 describe("example to-do app", () => {
   const fields = [
