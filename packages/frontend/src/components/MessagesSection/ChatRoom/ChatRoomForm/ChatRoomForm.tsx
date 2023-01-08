@@ -40,9 +40,12 @@ function ChatRoomForm(props: IChatRoomForm) {
   const [createMessage] = useCreateMessageMutation();
   useEffect(() => {
     inputTextArea.current.focus();
+    console.log(ws.ws);
+
     ws.ws?.on('message', ({ messages }) => {
       const [message] = messages;
       setMessages(message);
+      console.log(messages);
     });
   }, [ws.ws]);
   const handleKeyPress = (e: any) => {
@@ -80,6 +83,8 @@ function ChatRoomForm(props: IChatRoomForm) {
       await getAuth();
       const { name, message, time } = state;
       await saveMessage();
+
+      console.log('submit', ws.ws);
       ws.ws?.emit('message', {
         chatInstance: chatId,
         sender: cookie.get('name'),
@@ -117,7 +122,7 @@ function ChatRoomForm(props: IChatRoomForm) {
           className={s.messageInput}
           ref={inputTextArea}
           name="message"
-          onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
+          // onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
           onChange={(e) => handleKeyPress(e)}
           value={state.message}
         />

@@ -121,10 +121,7 @@ const useNotifications = (
       socketConnect.on('friend_request', () => {
         checkNotification();
       });
-      console.log(socketConnect.connected);
-
       socketConnect.on('send_friend_request', () => {
-        console.log('recieved fr req');
         refetchByReciever().then(({ data }) => {
           const { getInvitesByReciever } = data || {};
           console.log(getInvitesByReciever);
@@ -136,5 +133,11 @@ const useNotifications = (
       });
     });
     setWSConnectionSetter(socketConnect);
+    return () => {
+      socketConnect.off('connect');
+      socketConnect.off('disconnect');
+      socketConnect.off('pong');
+      socketConnect.off('message');
+    };
   }, []);
 };
