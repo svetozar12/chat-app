@@ -37,6 +37,7 @@ const FindFriends: FC<IFindFriends> = ({ invite, setReciever, ws }) => {
       const { createInvite } = data || {};
       if (createInvite?.__typename === 'Error') throw new Error(createInvite.message);
       const { reciever, inviter } = createInvite || {};
+      console.log(ws, 'send-fr-req');
 
       ws.ws?.emit('send_friend_request', {
         inviter,

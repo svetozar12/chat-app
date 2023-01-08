@@ -79,6 +79,7 @@ const useNotifications = (
     loading,
     data: dataReciever,
   } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Recieved } });
+  const { refetch: refetchByInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Recieved } });
   const cookie = useCookie();
   const checkNotification = async () => {
     try {
@@ -116,17 +117,24 @@ const useNotifications = (
       transports: ['websocket'],
     });
 
-    socketConnect.on('friend_request', () => {
-      checkNotification();
-    });
+    socketConnect.on('connect', () => {
+      socketConnect.on('friend_request', () => {
+        checkNotification();
+      });
+      console.log(socketConnect.connected);
 
-    socketConnect.on('send_friend_request', () => {
-      checkNotification();
+      socketConnect.on('send_friend_request', () => {
+        console.log('recieved fr req');
+        refetchByReciever().then(({ data }) => {
+          const { getInvitesByReciever } = data || {};
+          console.log(getInvitesByReciever);
+          if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
+          setContacts(getInvitesByReciever);
+        });
+        refetchByInviter();
+        checkNotification();
+      });
     });
     setWSConnectionSetter(socketConnect);
-    return () => {
-      socketConnect.disconnect();
-      setWSConnectionSetter(null);
-    };
   }, []);
 };

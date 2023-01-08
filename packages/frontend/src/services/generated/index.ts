@@ -116,7 +116,7 @@ export type MessagesUnion = Error | Messages;
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createChat: CreateChatMessageUnion;
+  createChat: ChatUnion;
   createInvite: InviteUnion;
   createInviteGroupChat: CreateChatMessageUnion;
   createMessage: MessagesUnion;
@@ -330,7 +330,7 @@ export type CreateChatMutationVariables = Exact<{
 }>;
 
 
-export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename: 'CreateChatMessage', Message: string, data: { __typename?: 'Chat', _id: string, members: Array<string> } } | { __typename: 'Error', message: string } };
+export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename: 'Chat', _id: string, members: Array<string> } | { __typename: 'Error', message: string } };
 
 export type DeleteChatMutationVariables = Exact<{
   auth: AuthModel;
@@ -597,12 +597,9 @@ export const CreateChatDocument = gql`
     mutation CreateChat($chat: ChatModel!, $auth: AuthModel!) {
   createChat(chat: $chat, auth: $auth) {
     __typename
-    ... on CreateChatMessage {
-      data {
-        _id
-        members
-      }
-      Message
+    ... on Chat {
+      _id
+      members
     }
     ... on Error {
       message

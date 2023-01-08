@@ -3,6 +3,8 @@ import { ioType } from '../wsConnection';
 
 const ChatHandler = (io: ioType, socket: Socket) => {
   const joinChat = async ({ rooms }: any) => {
+    console.log(rooms);
+
     socket.join(rooms);
   };
 

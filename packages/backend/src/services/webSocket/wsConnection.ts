@@ -3,7 +3,6 @@ import { Socket, Server } from 'socket.io';
 import { externalUrlsEnv, portsEnv } from '../../config/env';
 // handlers
 import ChatHandler from './handlers/chat';
-import ErrorHandler from './handlers/error';
 import InviteHandler from './handlers/invite';
 import MessageHandler from './handlers/message';
 
@@ -14,7 +13,6 @@ const onConnection = (socket: Socket) => {
   MessageHandler(io, socket);
   ChatHandler(io, socket);
   InviteHandler(io, socket);
-  ErrorHandler(io, socket);
 };
 
 io.on('connection', onConnection);

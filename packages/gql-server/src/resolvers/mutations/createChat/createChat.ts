@@ -1,5 +1,5 @@
 import { AuthBase } from '../../../constants';
-import { CREATE_CHAT_MESSAGE } from '../../../constants/typenames';
+import { CHAT, ERROR } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface ICreateChat extends AuthBase {
@@ -12,8 +12,10 @@ export interface ICreateChat extends AuthBase {
 }
 
 const createChat = async (_: unknown, args: ICreateChat) => {
-  const res = await sdk.chat.createChat(args.auth, args.chat);
-  return { __typename: CREATE_CHAT_MESSAGE, ...res };
+  const res: any = await sdk.chat.createChat(args.auth, args.chat);
+  if (res.__typename === ERROR) return res;
+
+  return { __typename: CHAT, ...res };
 };
 
 export default createChat;

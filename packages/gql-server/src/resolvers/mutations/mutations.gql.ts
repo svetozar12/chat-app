@@ -3,7 +3,7 @@ type Mutation {
   loginUser(username: String!, password: String!): LoginUserUnion!
   refreshToken(user_id: String!, RefreshToken: String!): LoginUserUnion!
   logoutUser(auth: AuthModel!): MessageUnion!
-  createChat(chat: ChatModel!, auth: AuthModel!): CreateChatMessageUnion!
+  createChat(chat: ChatModel!, auth: AuthModel!): ChatUnion!
   createUser(user: UserModel!): MessageUnion!
   createInvite(auth: AuthModel!, reciever: String!): InviteUnion!
   createInviteGroupChat(usersData: [String!]): CreateChatMessageUnion!

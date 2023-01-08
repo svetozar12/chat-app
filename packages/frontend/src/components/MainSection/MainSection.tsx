@@ -11,21 +11,20 @@ import { connect } from 'react-redux';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
-import { IToggle } from 'services/redux/reducer/toggles/state';
-import { AuthModel, useGetChatListQuery } from 'services/generated';
-import { useCookie } from 'next-cookie';
+import { useGetChatListQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { useEffect } from 'react';
 
-interface IMainSection {
+interface IMainSection extends ReturnType<typeof mapStateToProps> {
   chatId: string;
-  toggle: IToggle;
   toggleChatSettings: typeof toggleChatSettings;
 }
 
 function MainSection(props: IMainSection) {
-  const cookie = useCookie();
-  const { chatId, toggle, toggleChatSettings } = props;
+  const { chatId, toggle, ws, toggleChatSettings } = props;
   const { auth } = useProvideAuth();
+  useInvitationUpdate(ws);
   const {
     base: {
       default: { color, offColor },
@@ -99,10 +98,19 @@ function MainSection(props: IMainSection) {
 
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,
+  ws: state.ws,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
 });
+
+const useInvitationUpdate = (ws: IWebSocket) => {
+  useEffect(() => {
+    ws.ws?.on('friend_request', () => {
+      console.log('FRIENT REQUeST UPDATE');
+    });
+  }, []);
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainSection);

@@ -10,11 +10,15 @@ const InviteHandler = (io: ioType, socket: Socket) => {
     io.emit('inviting_multiple_users', { users });
   };
   const sendFriendRequest = async ({ inviter, reciever }: { inviter: string; reciever: string }) => {
+    console.log('recieved fr req in bakcend');
+
     const reciever_field = await User.findOne({ username: reciever });
 
     if (!reciever_field) return;
     if (inviter === reciever) return;
     const _id = reciever_field.username;
+    console.log('I WILL EMIT THIS SHIT', _id, socket.rooms);
+
     io.to(_id).emit('send_friend_request');
   };
 

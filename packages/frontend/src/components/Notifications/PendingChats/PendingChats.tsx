@@ -35,9 +35,9 @@ const PendingChats: FC<IPendingChats> = ({ _id, inviter, reciever, status, ws })
 
   const updateInviteStatus = async (param: Status) => {
     try {
-      await updateInvite({
-        variables: { auth, invite_id: inviteId, status: param },
-      });
+      // await updateInvite({
+      //   variables: { auth, invite_id: inviteId, status: param },
+      // });
       emitFriendRequest();
       return true;
     } catch (error) {
@@ -70,7 +70,10 @@ const PendingChats: FC<IPendingChats> = ({ _id, inviter, reciever, status, ws })
         color: 'green.500',
         transition: '0.2s',
         _hover: { opacity: '0.8', transition: '0.2s' },
-        onClick: async () => await createChatRoom(),
+        onClick: async () => {
+          await updateInviteStatus(Status.Accepted);
+          // await createChatRoom();
+        },
       },
     },
     {
