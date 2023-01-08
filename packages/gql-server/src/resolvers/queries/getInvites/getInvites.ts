@@ -10,13 +10,13 @@ export interface IGetAll extends AuthBase {
 const getInvitesByReciever = async (_: unknown, args: IGetAll) => {
   const res: any = await sdk.invite.getAllByReciever(args.auth, args.status);
   if (res.__typename === ERROR) return res;
-  return { typename: INVITE_LIST, res };
+  return { __typename: INVITE_LIST, res };
 };
 
 const getInvitesByInviter = async (_: unknown, args: IGetAll) => {
   const res: any = await sdk.invite.getAllByInviter(args.auth, args.status);
   if (res.__typename === ERROR) return res;
-  return { typename: INVITE_LIST, res };
+  return { __typename: INVITE_LIST, res };
 };
 
 const getInvites = { getInvitesByReciever, getInvitesByInviter };

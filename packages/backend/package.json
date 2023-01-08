@@ -5,16 +5,14 @@
   "main": "src/index.ts",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prebuild": "yarn lint",
+    "prebuild": "yarn && yarn lint",
     "build": "tsc --build",
     "test": "set NODE_ENV=test && jest",
     "lint": "eslint src",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "db:up": "docker compose -f ./local_db_compose/docker-compose.yml up -d",
     "start": "ts-node src/index.ts",
     "format": "prettier --write **/*.{js,ts,tsx}",
-    "preinit-data": "yarn build",
-    "init-data": "node ./dist/config/init-data.js"
+    "init-data": "ts-node src/config/init-data.ts"
   },
   "keywords": [],
   "author": "",

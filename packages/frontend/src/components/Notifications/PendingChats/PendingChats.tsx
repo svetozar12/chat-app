@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
-import { Button, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
+import { Button, Heading, HStack, Spacer } from '@chakra-ui/react';
 import { Iinvites } from 'pages/[acc]';
 import { SingleAvatar } from 'services/chat-ui';
 
@@ -12,6 +12,7 @@ import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { Status, useCreateChatMutation, useUpdateInviteMutation } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
+import { USER_ID } from 'constants/cookieNames';
 
 interface IPendingChats extends Iinvites {
   _id: string;
@@ -49,7 +50,7 @@ const PendingChats: FC<IPendingChats> = ({ _id, inviter, reciever, status, ws })
       await createChat({
         variables: {
           auth,
-          chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get('id') },
+          chat: { invite_id: _id, user1: inviter, user2: reciever, user_id: cookie.get(USER_ID) },
         },
       });
       emitFriendRequest();
@@ -89,10 +90,10 @@ const PendingChats: FC<IPendingChats> = ({ _id, inviter, reciever, status, ws })
     <HStack w="full">
       {isRecieved && (
         <HStack w="98.5%" m={2} h="20vh">
-          <VStack align="center">
+          <HStack justifyContent="center" justifyItems="center" align="center">
             <SingleAvatar width="3rem" height="3rem" />
             <Heading>{inviter}</Heading>
-          </VStack>
+          </HStack>
           <Spacer />
           <HStack>
             {buttons.map((element, index) => {

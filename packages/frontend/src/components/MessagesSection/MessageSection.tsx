@@ -1,27 +1,67 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 // components
 import { Box, HStack } from '@chakra-ui/react';
 import ChatRoom from './ChatRoom';
-import Notifications_Modal from '../Notifications_Modal';
-import AddUsers_Modal from '../AddUsers_Modal';
+import Notifications from '../Notifications';
 // services
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import { Status, Invite, useGetChatQuery } from 'services/generated';
+import { Invite, useGetChatQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
 
-interface IMessageSection {
+interface Props {
   contacts: Invite[];
   chatId: string;
   toggle: IToggle;
 }
 
-function MessageSection(props: IMessageSection) {
-  const { contacts, chatId, toggle } = props;
-  const [users, setUsers] = React.useState<any[]>([]);
+const MessageSection: FC<Props> = ({ chatId, contacts, toggle }) => {
+  const [users, setUsers] = useState<any[]>([]);
+  useMemberSuggestions(setUsers);
+  return (
+    <HStack
+      w="71%"
+      title="message_section"
+      className={cx(
+        'flex',
+        css`
+          width: 71%;
+          @media (max-width: 1008px) {
+            width: 100%;
+            margin-top: 0 !important;
+          },`,
+      )}
+    >
+      <div
+        className={cx(
+          css`
+            width: 100%;
+            height: 100vh;
+            justify-content: center;
+            alignitems: center;
+            padding: 0;
+          `,
+          'container',
+        )}
+      >
+        <Box w="full" h="100vh">
+          {toggle.toggleFriendReqModal && contacts && <Notifications contacts={contacts} />}
+          {/* {toggle.toggleInvideModal && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />} */}
+          <ChatRoom chatId={chatId} />
+        </Box>
+      </div>
+    </HStack>
+  );
+};
+
+const mapStateToProps = (state: STATE) => ({
+  toggle: state.toggle,
+});
+
+const useMemberSuggestions = (setUsers: React.Dispatch<React.SetStateAction<any[]>>) => {
   const route = useRouter();
   const { auth } = useProvideAuth();
   const { acc } = route.query;
@@ -55,52 +95,9 @@ function MessageSection(props: IMessageSection) {
     }
   };
 
-  React.useEffect(() => {
-    getMembersSuggestions();
-  }, []);
-
-  React.useEffect(() => {
+  useEffect(() => {
     getMembersSuggestions();
   }, [route.asPath]);
-
-  return (
-    <HStack
-      w="71%"
-      title="message_section"
-      className={cx(
-        'flex',
-        css`
-          width: 71%;
-          @media (max-width: 1008px) {
-            width: 100%;
-            margin-top: 0 !important;
-          },`,
-      )}
-    >
-      <div
-        className={cx(
-          css`
-            width: 100%;
-            height: 100vh;
-            justify-content: center;
-            alignitems: center;
-            padding: 0;
-          `,
-          'container',
-        )}
-      >
-        <Box w="full" h="100vh">
-          {toggle.toggleFriendReqModal && contacts && <Notifications_Modal contacts={contacts} />}
-          {toggle.toggleInvideModal && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
-          <ChatRoom chatId={chatId} />
-        </Box>
-      </div>
-    </HStack>
-  );
-}
-
-const mapStateToProps = (state: STATE) => ({
-  toggle: state.toggle,
-});
+};
 
 export default connect(mapStateToProps)(MessageSection);

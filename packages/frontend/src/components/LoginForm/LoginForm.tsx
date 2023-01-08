@@ -57,7 +57,7 @@ const LoginForm: FC<ILoginForm> = (props) => {
       header={
         <Flex w="full" justifyContent="center" gap={2} mb="2" flexDir="column">
           <Heading>Login</Heading>
-          <DefaultLink href="/register" text="Already have an account?" />
+          <DefaultLink href="/register" text="Don`t have an account?" />
         </Flex>
       }
       fields={renderInputs(color)}

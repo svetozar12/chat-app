@@ -67,7 +67,12 @@ const Sidebar: FC<SidebarProps> = ({ toggle, toggleChatSettings, toggleCreateGro
           <SingleAvatar
             width="2.5rem"
             height="2.5rem"
-            chakraProps={{ marginBottom: '1rem !important', cursor: 'pointer', _hover: { boxShadow: `0px 0px 7px 0px ${color}` } }}
+            chakraProps={{
+              marginBottom: '1rem !important',
+              background: 'white',
+              cursor: 'pointer',
+              _hover: { boxShadow: `0px 0px 7px 0px ${color}` },
+            }}
           />
         </MenuButton>
         <UserSettings />

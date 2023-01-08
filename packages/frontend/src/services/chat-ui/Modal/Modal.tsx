@@ -59,15 +59,6 @@ function Modal(props: IModal) {
         `}
       >
         {children}
-        {/* {contacts.length <= 0 ? (
-          <Heading p={5} size="md" className="flex">
-            You don&apos;t have invites !!!
-          </Heading>
-        ) : (
-          contacts.map((item, index) => {
-            return <PendingChats key={index} {...item} />;
-          })
-        )} */}
       </div>
     </ScaleFade>
   );

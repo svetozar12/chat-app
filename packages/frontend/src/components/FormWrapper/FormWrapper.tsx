@@ -50,14 +50,7 @@ const FormWrapper: FC<IFormWrapper> = (props) => {
   return (
     <ScaleFade initialScale={0.7} in>
       <Flex h="100vh" flexDir="column" alignItems="center" justifyContent="center" pos="relative" zIndex="101">
-        <Box
-          bg={background}
-          w={{ base: '95%', sm: '90%', md: '70%', lg: '60%', xl: '40%' }}
-          maxH="auto"
-          minH="45vh"
-          padding="3rem"
-          boxShadow="default"
-        >
+        <Box bg={background} w={{ base: '95%', sm: '90%', md: '70%', lg: '60%', xl: '40%' }} maxH="auto" padding="3rem" boxShadow="default">
           {header}
           <FormControl w="full" borderRadius="5px">
             <form onSubmit={handleSubmit(onSubmit)}>
