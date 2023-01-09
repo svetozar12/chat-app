@@ -8,13 +8,11 @@ const MessageHandler = (io: ioType, socket: Socket) => {
     if (!findChat) return null;
     const date = new Date();
     const messages = [{ sender, message, createdAt: date }];
+    console.log(messages, 'socket');
 
-    socket.to(chatInstance).emit('message', {
+    io.to(chatInstance).emit('message', {
       messages,
     });
-    // io.to(chatInstance).emit('message', {
-    //   messages,
-    // });
   };
 
   socket.on('message', senMessage);

@@ -42,12 +42,13 @@ function ChatRoomForm(props: IChatRoomForm) {
     inputTextArea.current.focus();
     console.log(ws.ws);
 
-    ws.ws?.on('message', ({ messages }) => {
+    ws.ws?.off('message').on('message', ({ messages }) => {
       const [message] = messages;
-      setMessages(message);
       console.log(messages);
+
+      setMessages(message);
     });
-  }, [ws.ws]);
+  }, []);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
     inputTextArea.current.style.height = '10px';
@@ -122,7 +123,7 @@ function ChatRoomForm(props: IChatRoomForm) {
           className={s.messageInput}
           ref={inputTextArea}
           name="message"
-          // onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
+          onKeyDown={(e) => generic.handleSubmitOnEnter(e, onMessageSubmit)}
           onChange={(e) => handleKeyPress(e)}
           value={state.message}
         />

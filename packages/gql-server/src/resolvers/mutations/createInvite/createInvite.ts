@@ -1,5 +1,5 @@
 import { AuthBase } from '../../../constants';
-import { INVITE } from '../../../constants/typenames';
+import { ERROR, INVITE } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface ICreateInvite extends AuthBase {
@@ -7,7 +7,8 @@ export interface ICreateInvite extends AuthBase {
 }
 
 const createInvite = async (_: unknown, args: ICreateInvite) => {
-  const res = await sdk.invite.create(args.auth, args.reciever);
+  const res: any = await sdk.invite.create(args.auth, args.reciever);
+  if (res.__typename === ERROR) return res;
   return { __typename: INVITE, ...(res as any) };
 };
 

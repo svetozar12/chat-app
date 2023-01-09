@@ -89,7 +89,6 @@ const useNotifications = (
         status: Status.Recieved,
       });
       const { getInvitesByReciever } = dataReciever || {};
-      console.log(getInvitesByReciever);
       if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
       const { res } = getInvitesByReciever || {};
       setNotifNumberSetter(res!.length);
@@ -133,11 +132,5 @@ const useNotifications = (
       });
     });
     setWSConnectionSetter(socketConnect);
-    return () => {
-      socketConnect.off('connect');
-      socketConnect.off('disconnect');
-      socketConnect.off('pong');
-      socketConnect.off('message');
-    };
   }, []);
 };
