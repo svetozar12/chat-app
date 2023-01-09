@@ -13,7 +13,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { useGetChatListQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
-import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { useEffect } from 'react';
 
 interface IMainSection extends ReturnType<typeof mapStateToProps> {
@@ -22,18 +21,26 @@ interface IMainSection extends ReturnType<typeof mapStateToProps> {
 }
 
 function MainSection(props: IMainSection) {
-  const { chatId, toggle, ws, toggleChatSettings } = props;
+  const { chatId, ws, toggle, toggleChatSettings } = props;
   const { auth } = useProvideAuth();
-  useInvitationUpdate(ws);
   const {
     base: {
       default: { color, offColor },
       form: { background },
     },
   } = useThemeColors();
-  const { data } = useGetChatListQuery({ variables: { auth } });
+  const { data, refetch } = useGetChatListQuery({ variables: { auth } });
   const { getAllChats } = data || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+
+  useEffect(() => {
+    ws.ws?.on('friend_request', () => {
+      refetch();
+    });
+    return () => {
+      ws.ws?.off('friend_request');
+    };
+  }, []);
 
   return (
     <VStack
@@ -104,13 +111,5 @@ const mapStateToProps = (state: STATE) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
 });
-
-const useInvitationUpdate = (ws: IWebSocket) => {
-  useEffect(() => {
-    ws.ws?.on('friend_request', () => {
-      console.log('FRIENT REQUeST UPDATE');
-    });
-  }, []);
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainSection);

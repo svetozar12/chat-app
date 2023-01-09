@@ -78,21 +78,20 @@ const useNotifications = (
     refetch: refetchByReciever,
     loading,
     data: dataReciever,
-  } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Recieved } });
-  const { refetch: refetchByInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Recieved } });
+  } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.WildCard } });
+  const { refetch: refetchByInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.WildCard } });
   const cookie = useCookie();
   const checkNotification = async () => {
     try {
       setContacts([]);
       refetchByReciever({
         auth,
-        status: Status.Recieved,
+        status: Status.WildCard,
       });
       const { getInvitesByReciever } = dataReciever || {};
       if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
       const { res } = getInvitesByReciever || {};
       setNotifNumberSetter(res!.length);
-
       setContacts(getInvitesByReciever?.res as Invite[]);
       getInvitesByReciever?.res?.forEach((item) => {
         if (item?.status === Status.Declined) return false;
@@ -121,16 +120,15 @@ const useNotifications = (
         checkNotification();
       });
       socketConnect.on('send_friend_request', () => {
-        refetchByReciever().then(({ data }) => {
-          const { getInvitesByReciever } = data || {};
-          console.log(getInvitesByReciever);
-          if (getInvitesByReciever?.__typename === 'Error') throw Error(getInvitesByReciever.message);
-          setContacts(getInvitesByReciever);
-        });
+        console.log('FRIEND REQUESTO');
+
         refetchByInviter();
         checkNotification();
       });
     });
     setWSConnectionSetter(socketConnect);
+    return () => {
+      socketConnect.off('send_friend_request');
+    };
   }, []);
 };

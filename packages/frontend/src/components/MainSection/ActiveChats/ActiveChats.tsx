@@ -37,6 +37,8 @@ function ActiveChats(props: IActiveChats) {
   const user2 = members?.[1];
 
   const joinChat = () => {
+    console.log(cookieName, chatId);
+
     ws.ws?.emit('join_chat', {
       rooms: [cookieName, chatId],
     });
@@ -49,6 +51,9 @@ function ActiveChats(props: IActiveChats) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setInviter(notMe[0]);
+    return () => {
+      ws.ws?.off('join_chat');
+    };
   }, []);
 
   return (

@@ -36,21 +36,22 @@ function ChatRoomForm(props: IChatRoomForm) {
     message: '',
     time: '',
   });
-  const inputTextArea = React.useRef<any>(null);
+  const inputTextArea = React.useRef<HTMLTextAreaElement>(null);
   const [createMessage] = useCreateMessageMutation();
   useEffect(() => {
-    inputTextArea.current.focus();
-    console.log(ws.ws);
-
-    ws.ws?.off('message').on('message', ({ messages }) => {
+    inputTextArea.current?.focus();
+    ws.ws?.on('message', ({ messages }) => {
       const [message] = messages;
       console.log(messages);
-
       setMessages(message);
     });
+    return () => {
+      ws.ws?.off('message');
+    };
   }, []);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
+    if (!inputTextArea.current) return;
     inputTextArea.current.style.height = '10px';
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
     inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 40)}px`;
@@ -59,6 +60,7 @@ function ChatRoomForm(props: IChatRoomForm) {
   };
 
   useEffect(() => {
+    if (!inputTextArea.current) return;
     inputTextArea.current.style.height = '20px';
   }, []);
 
@@ -115,7 +117,10 @@ function ChatRoomForm(props: IChatRoomForm) {
         overflowWrap="break-word"
         borderRadius="3xl"
         align="center"
-        onClick={() => inputTextArea.current.focus()}
+        onClick={() => {
+          if (!inputTextArea.current) return;
+          inputTextArea.current.focus();
+        }}
       >
         <textarea
           rows={40}

@@ -277,7 +277,8 @@ export type QueryGetUserArgs = {
 export enum Status {
   Accepted = 'accepted',
   Declined = 'declined',
-  Recieved = 'recieved'
+  Recieved = 'recieved',
+  WildCard = 'wildCard'
 }
 
 export type UpdateUserModel = {

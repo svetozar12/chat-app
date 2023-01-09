@@ -15,16 +15,17 @@ class InvitesService {
 
     const user = await User.findById(userId);
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
+    console.log(status);
 
     const invites =
-      status !== undefined
+      status !== 'wildCard'
         ? await Invites.find({
             reciever: user.username,
             status,
           })
         : await Invites.find({
             reciever: user.username,
-          }).select('status inviter reciever');
+          });
 
     if (invites.length <= 0) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 

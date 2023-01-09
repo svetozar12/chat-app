@@ -3,6 +3,7 @@ export const enumSchema = `
     accepted
     recieved
     declined
+    wildCard
   }
 
   enum Gender {
