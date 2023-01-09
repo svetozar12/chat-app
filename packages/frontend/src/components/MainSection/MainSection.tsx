@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 // components
 import { css, cx } from '@emotion/css';
-import { CloseButton, Flex, Slide, useColorModeValue, VStack } from '@chakra-ui/react';
+import { CloseButton, Flex, Skeleton, Slide, useColorModeValue, VStack } from '@chakra-ui/react';
 import ActiveChats from './ActiveChats';
 import FindFriends from './FindFriends';
 import ChatSettings from './ChatSettings';
@@ -29,7 +29,7 @@ function MainSection(props: IMainSection) {
       form: { background },
     },
   } = useThemeColors();
-  const { data, refetch } = useGetChatListQuery({ variables: { auth } });
+  const { data, refetch, loading } = useGetChatListQuery({ variables: { auth } });
   const { getAllChats } = data || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
 
@@ -43,7 +43,7 @@ function MainSection(props: IMainSection) {
   }, []);
 
   return (
-    <VStack
+    <Skeleton
       mr="-0.5rem !important"
       ml="-0.5rem !important"
       w={{ base: !toggle.toggleMobileNav ? 0 : '102%', xl: '50%', '2xl': '40%' }}
@@ -54,7 +54,7 @@ function MainSection(props: IMainSection) {
       textAlign="center"
       overflow="hidden"
       zIndex="20"
-      align="center"
+      isLoaded={!loading}
       justifyItems="center"
       title="main_section"
     >
@@ -99,7 +99,7 @@ function MainSection(props: IMainSection) {
           <ActiveChats key={index} {...item} chatId={chatId} />
         ))}
       </VStack>
-    </VStack>
+    </Skeleton>
   );
 }
 

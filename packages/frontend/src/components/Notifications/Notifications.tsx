@@ -9,27 +9,33 @@ import { STATE } from 'services/redux/reducer';
 import { toggleFriendRequestAction } from 'services/redux/reducer/toggles/actions';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { Modal } from 'services/chat-ui';
+import { Status } from 'services/generated';
 
 interface INotifications {
   contacts: Iinvites[];
   toggle: IToggle;
+  isLoading?: boolean;
   toggleFriendRequest: typeof toggleFriendRequestAction;
 }
 
 function Notifications(props: INotifications) {
-  const { contacts, toggle, toggleFriendRequest } = props;
+  const { contacts, toggle, isLoading = false, toggleFriendRequest } = props;
+  console.log(contacts);
+  const filterInvites = contacts.filter(({ status }) => status === Status.Recieved);
+  console.log(filterInvites);
 
   return (
     <Modal
+      isLoading={isLoading}
       heading={contacts.length ? 'Invites' : "You don't have invites !!!"}
       closeModal={() => toggleFriendRequest(!toggle.toggleFriendReqModal)}
     >
-      {contacts.length <= 0 ? (
+      {filterInvites.length <= 0 ? (
         <Heading p={5} size="md" className="flex">
           You don&apos;t have invites !!!
         </Heading>
       ) : (
-        contacts.map((item, index) => <PendingChats key={index} {...item} />)
+        filterInvites.map((item, index) => <PendingChats key={index} {...item} />)
       )}
     </Modal>
   );

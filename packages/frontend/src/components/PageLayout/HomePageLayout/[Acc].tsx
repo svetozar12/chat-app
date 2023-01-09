@@ -25,8 +25,8 @@ const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnec
   const router = useRouter();
   const { auth } = useProvideAuth();
   const [contacts, setContacts] = useState<Invite[]>([]);
-  const { data: dataInviter } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Recieved } });
-  const { data: dataReciever } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Recieved } });
+  const { loading: loadingInv } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Recieved } });
+  const { loading: loadingRec } = useGetInvitesByRecieverQuery({ variables: { auth, status: Status.Recieved } });
   useNotifications(setContacts, invite, {
     setWSConnectionSetter: setWSConnection,
     setNotifNumberSetter: setNotifNumber,
@@ -44,7 +44,7 @@ const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnec
         </Box>
       </HStack>
       <MainSection chatId={chatId} />
-      <MessagesSection chatId={chatId} contacts={contacts} />
+      <MessagesSection chatId={chatId} contacts={contacts} isLoading={loadingInv || loadingRec} />
     </HStack>
   );
 };

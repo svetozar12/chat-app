@@ -16,9 +16,10 @@ interface Props {
   contacts: Invite[];
   chatId: string;
   toggle: IToggle;
+  isLoading?: boolean;
 }
 
-const MessageSection: FC<Props> = ({ chatId, contacts, toggle }) => {
+const MessageSection: FC<Props> = ({ chatId, contacts, toggle, isLoading = false }) => {
   const [users, setUsers] = useState<any[]>([]);
   useMemberSuggestions(setUsers);
   return (

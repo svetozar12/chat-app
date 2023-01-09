@@ -37,8 +37,6 @@ function ActiveChats(props: IActiveChats) {
   const user2 = members?.[1];
 
   const joinChat = () => {
-    console.log(cookieName, chatId);
-
     ws.ws?.emit('join_chat', {
       rooms: [cookieName, chatId],
     });
