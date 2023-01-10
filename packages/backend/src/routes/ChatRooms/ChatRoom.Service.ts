@@ -55,7 +55,7 @@ class ChatRoomService {
     if (!findInvite) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 
     const chat = await new Chats({
-      members: [isUser1.username, isUser2.username],
+      members: [isUser1.id, isUser2.id],
     });
 
     await chat.save();

@@ -6,6 +6,7 @@ union ChatUnion = Chat | Error
 union MessagesUnion = Messages | Error
 union CreateChatMessageUnion = CreateChatMessage | Error
 union MessageUnion = Message | Error
+union GetUserListUnion = getUserList | Error
 union InviteListUnion = InviteList | Error
 union ChatListUnion = ChatList | Error
 union MessagesListUnion = MessagesList | Error`;

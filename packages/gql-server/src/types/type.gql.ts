@@ -16,6 +16,11 @@ export const typeSchema = `
     userAvatar: String!
   }
 
+  type getUserList {
+    res: [getUser!]!
+  }
+
+
   type Message {
     Message: String!
   }

@@ -60,6 +60,8 @@ export enum Gender {
   Male = 'Male'
 }
 
+export type GetUserListUnion = Error | GetUserList;
+
 export type GetUserUnion = Error | GetUser;
 
 export type Invite = {
@@ -237,6 +239,7 @@ export type Query = {
   getInvitesByInviter: InviteListUnion;
   getInvitesByReciever: InviteListUnion;
   getUser: GetUserUnion;
+  getUserList: GetUserListUnion;
 };
 
 
@@ -274,6 +277,12 @@ export type QueryGetUserArgs = {
   auth: AuthModel;
 };
 
+
+export type QueryGetUserListArgs = {
+  auth: AuthModel;
+  userIds: Array<InputMaybe<Scalars['String']>>;
+};
+
 export enum Status {
   Accepted = 'accepted',
   Declined = 'declined',
@@ -300,6 +309,11 @@ export type GetUser = {
   email: Scalars['String'];
   userAvatar: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type GetUserList = {
+  __typename?: 'getUserList';
+  res: Array<GetUser>;
 };
 
 export type LoginUserMutationVariables = Exact<{
@@ -461,6 +475,14 @@ export type GetUserByIdQueryVariables = Exact<{
 
 
 export type GetUserByIdQuery = { __typename?: 'Query', getUser: { __typename: 'Error', message: string } | { __typename: 'getUser', _id: string, email: string, userAvatar: string, username: string } };
+
+export type GetUserListQueryVariables = Exact<{
+  auth: AuthModel;
+  userIds: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetUserListQuery = { __typename?: 'Query', getUserList: { __typename: 'Error', message: string } | { __typename: 'getUserList', res: Array<{ __typename?: 'getUser', _id: string, email: string, userAvatar: string, username: string }> } };
 
 export type UpdateUserMutationVariables = Exact<{
   auth: AuthModel;
@@ -1331,6 +1353,53 @@ export function useGetUserByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetUserByIdQueryHookResult = ReturnType<typeof useGetUserByIdQuery>;
 export type GetUserByIdLazyQueryHookResult = ReturnType<typeof useGetUserByIdLazyQuery>;
 export type GetUserByIdQueryResult = Apollo.QueryResult<GetUserByIdQuery, GetUserByIdQueryVariables>;
+export const GetUserListDocument = gql`
+    query GetUserList($auth: AuthModel!, $userIds: [String]!) {
+  getUserList(auth: $auth, userIds: $userIds) {
+    __typename
+    ... on getUserList {
+      res {
+        _id
+        email
+        userAvatar
+        username
+      }
+    }
+    ... on Error {
+      message
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserListQuery__
+ *
+ * To run a query within a React component, call `useGetUserListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserListQuery({
+ *   variables: {
+ *      auth: // value for 'auth'
+ *      userIds: // value for 'userIds'
+ *   },
+ * });
+ */
+export function useGetUserListQuery(baseOptions: Apollo.QueryHookOptions<GetUserListQuery, GetUserListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
+      }
+export function useGetUserListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
+        }
+export type GetUserListQueryHookResult = ReturnType<typeof useGetUserListQuery>;
+export type GetUserListLazyQueryHookResult = ReturnType<typeof useGetUserListLazyQuery>;
+export type GetUserListQueryResult = Apollo.QueryResult<GetUserListQuery, GetUserListQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($auth: AuthModel!, $user: UpdateUserModel!) {
   updateUser(auth: $auth, user: $user) {

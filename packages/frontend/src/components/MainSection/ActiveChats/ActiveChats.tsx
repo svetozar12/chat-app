@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { BsThreeDots } from 'react-icons/bs';
 import { css, cx } from '@emotion/css';
 import { useCookie } from 'next-cookie';
-import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarGroup, Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -24,6 +24,8 @@ interface IActiveChats extends Chat {
 function ActiveChats(props: IActiveChats) {
   const { _id, members, chatId, toggle, ws, toggleCreateGroup, toggleChatSettings } = props;
   const [inviter, setInviter] = React.useState<string>('');
+  console.log(members);
+
   const {
     base: {
       default: { color },
@@ -33,8 +35,6 @@ function ActiveChats(props: IActiveChats) {
   const cookie = useCookie();
 
   const cookieName: string = cookie.get('name');
-  const user1 = members?.[0];
-  const user2 = members?.[1];
 
   const joinChat = () => {
     ws.ws?.emit('join_chat', {
@@ -43,11 +43,9 @@ function ActiveChats(props: IActiveChats) {
     router.push(`${_id}`);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     joinChat();
     const notMe = members?.filter((element) => element !== cookieName);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     setInviter(notMe[0]);
     return () => {
       ws.ws?.off('join_chat');
@@ -93,31 +91,16 @@ function ActiveChats(props: IActiveChats) {
                 display: flex;
               `}
             >
-              {members.length > 2
-                ? members.map((element, index) => {
-                    if (index === 3) return null;
-                    return (
-                      <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
-                        {element}
-                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? '...' : ''}` : ','}
-                      </Heading>
-                    );
-                  })
-                : (members && members.length === 1 && (
-                    <Heading color={color} size="md" m={0}>
-                      {user1}
-                    </Heading>
-                  )) ||
-                  (user2 === cookieName && (
-                    <Heading color={color} size="md" m={0}>
-                      {user1}
-                    </Heading>
-                  )) ||
-                  (user1 === cookieName && (
-                    <Heading color={color} size="md" m={0}>
-                      {user2}
-                    </Heading>
-                  ))}
+              <AvatarGroup size="md" max={2}>
+                {members.map((member) => {
+                  return (
+                    <HStack key={member} alignItems="center" justifyContent="center">
+                      <Avatar name={member} src="https://bit.ly/ryan-florence" />
+                      <Heading color={color}>{member}</Heading>
+                    </HStack>
+                  );
+                })}
+              </AvatarGroup>
             </div>
             <p
               className={css`

@@ -7,6 +7,7 @@ import { CustomError } from '../../utils/custom-error.model';
 import { v4 as uuidv4 } from 'uuid';
 import Invites from '../../models/Invites.model';
 import { resMessages } from '../../common/constants';
+import mongoose from 'mongoose';
 
 class UsersService {
   async GetUser(req: Request, res: Response, next: NextFunction) {
@@ -14,6 +15,18 @@ class UsersService {
     const user = await User.findOne({ _id: userId }).exec();
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
     return res.status(200).send(user);
+  }
+
+  async GetUserList(req: Request, res: Response, next: NextFunction) {
+    const userIds: any[] = Object.values(req.query.userIds as Record<string, string>);
+
+    const users = await User.find({
+      _id: { $in: userIds },
+    }).exec();
+    console.log(users);
+
+    if (users.length < 1) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
+    return res.status(200).send(users);
   }
 
   async CreateUser(req: Request, res: Response, next: NextFunction) {
@@ -37,7 +50,7 @@ class UsersService {
     });
 
     const chat = await new Chats({
-      members: user.username,
+      members: user.id,
     });
 
     await user.save();

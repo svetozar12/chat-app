@@ -7,5 +7,6 @@ export const CHAT = 'Chat';
 export const GET_USER = 'getUser';
 export const ERROR = 'Error';
 export const CHAT_LIST = 'ChatList';
+export const GET_USER_LIST = 'getUserList';
 export const MESSAGES_LIST = 'MessagesList';
 export const INVITE_LIST = 'InviteList';
