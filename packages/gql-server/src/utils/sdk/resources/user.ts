@@ -3,10 +3,8 @@ import { Auth, Message, Response } from '../types/common';
 import { CreateUser, UpdateUser } from '../types/user';
 const basePath = '/users';
 
-import { User } from '@chat-app/backend';
-
 const user = {
-  getUser: async (auth: Auth): Response<User | { __typename: 'Error'; message: string }> => {
+  getUser: async (auth: Auth): Response<any | { __typename: 'Error'; message: string }> => {
     const { userId, AccessToken } = auth;
     return makeRequest(Method.GET, `${basePath}/${userId}`, undefined, {
       headers: { Authorization: `Bearer ${AccessToken}` },
