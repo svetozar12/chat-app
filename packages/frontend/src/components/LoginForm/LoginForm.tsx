@@ -27,6 +27,8 @@ const LoginForm: FC<ILoginForm> = (props) => {
   useLoginUserMutation({});
   const [loginUserMutation, { data, loading }] = useLoginUserMutation();
   const { data: chatListData, refetch } = useGetChatListQuery({ variables: { auth: authObj } });
+  console.log(authObj);
+
   const { getAllChats } = chatListData || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
   const firstChatid = getAllChats?.res[0]._id;

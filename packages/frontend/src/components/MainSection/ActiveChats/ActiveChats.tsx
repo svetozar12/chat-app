@@ -11,7 +11,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleChatSettings, toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
-import { Chat } from 'services/generated';
+import { Chat, useGetUserListQuery } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IActiveChats extends Chat {
   chatId: string;
@@ -24,8 +25,11 @@ interface IActiveChats extends Chat {
 function ActiveChats(props: IActiveChats) {
   const { _id, members, chatId, toggle, ws, toggleCreateGroup, toggleChatSettings } = props;
   const [inviter, setInviter] = React.useState<string>('');
-  console.log(members);
-
+  const { auth } = useProvideAuth();
+  const { data } = useGetUserListQuery({ variables: { auth, userIds: members } });
+  const { getUserList } = data || {};
+  if (getUserList?.__typename === 'Error') throw new Error(getUserList.message);
+  const { res: users } = getUserList || {};
   const {
     base: {
       default: { color },
@@ -92,11 +96,11 @@ function ActiveChats(props: IActiveChats) {
               `}
             >
               <AvatarGroup size="md" max={2}>
-                {members.map((member) => {
+                {users?.map(({ _id, email, userAvatar, username }) => {
                   return (
-                    <HStack key={member} alignItems="center" justifyContent="center">
-                      <Avatar name={member} src="https://bit.ly/ryan-florence" />
-                      <Heading color={color}>{member}</Heading>
+                    <HStack key={username} alignItems="center" justifyContent="center">
+                      <Avatar name={username} src={userAvatar} />
+                      <Heading color={color}>{username}</Heading>
                     </HStack>
                   );
                 })}
