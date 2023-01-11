@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 // import PendingChats from "components/Notifications_Modal/PendingChats";
 import { css } from '@emotion/css';
 import { CloseButton, Divider, Flex, Heading, ScaleFade, ScaleFadeProps, Skeleton } from '@chakra-ui/react';
@@ -14,8 +14,7 @@ interface IModal extends Base {
   isLoading?: boolean;
 }
 
-function Modal(props: IModal) {
-  const { closeModal, children, heading, style, baseProps, chakraProps, isLoading = false } = props;
+const Modal: FC<IModal> = ({ closeModal, children, heading, style, baseProps, chakraProps, isLoading = false }) => {
   const {
     base: {
       form: { background },
@@ -48,7 +47,7 @@ function Modal(props: IModal) {
       {...style}
       {...baseProps}
     >
-      <Skeleton className={s.box} isLoaded={!isLoading}>
+      <Skeleton isLoaded={!isLoading}>
         <Flex alignItems="center" h="5rem" justifyItems="center" justifyContent="center">
           <Heading m="1rem">{heading}</Heading>
         </Flex>
@@ -65,6 +64,6 @@ function Modal(props: IModal) {
       </Skeleton>
     </ScaleFade>
   );
-}
+};
 
 export default Modal;

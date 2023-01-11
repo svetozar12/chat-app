@@ -16,11 +16,10 @@ import { setAlert } from 'services/redux/reducer/alert/actions';
 import { renderInputs } from 'components/RegisterForm/utils';
 
 interface IRegisterForm extends ReturnType<typeof mapDispatchToProps> {
-  quickLogin: () => Promise<void>;
   toggle: IToggle;
 }
 type FormValues = { username: string; password: string; email: string; gender: Gender };
-const RegisterForm: FC<IRegisterForm> = ({ quickLogin, setAlert, toggle, toggleQuickLogin }) => {
+const RegisterForm: FC<IRegisterForm> = ({ setAlert, toggle, toggleQuickLogin }) => {
   const {
     base: {
       button: { color: btnColor },
@@ -53,7 +52,7 @@ const RegisterForm: FC<IRegisterForm> = ({ quickLogin, setAlert, toggle, toggleQ
         fields={renderInputs(color)}
         buttons={[{ value: 'Register', props: { colorScheme: btnColor, w: '30%', type: 'submit' } }]}
       />
-      {toggle.toggleQuickLogin && <QuickLogin_Modal quickLogin={quickLogin} />}
+      {toggle.toggleQuickLogin && <QuickLogin_Modal />}
     </>
   );
 };
