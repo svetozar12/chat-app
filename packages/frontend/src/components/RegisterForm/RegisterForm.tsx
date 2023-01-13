@@ -14,6 +14,8 @@ import { IToggle } from 'services/redux/reducer/toggles/state';
 import { Gender, useCreateUserMutation } from 'services/generated';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { renderInputs } from 'components/RegisterForm/utils';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from 'constants/cookieNames';
+import { useCookie } from 'next-cookie';
 
 interface IRegisterForm extends ReturnType<typeof mapDispatchToProps> {
   toggle: IToggle;
@@ -27,14 +29,19 @@ const RegisterForm: FC<IRegisterForm> = ({ setAlert, toggle, toggleQuickLogin })
     },
   } = useThemeColors();
   const [createUserMutation, { data }] = useCreateUserMutation();
-
+  const cookie = useCookie();
+  const { createUser } = data || {};
+  if (createUser?.__typename === 'Error') {
+    setAlert(createUser.message, 'error');
+    return <>loading</>;
+  }
   const handleSubmit = async ({ username, password, email, gender }: FormValues) => {
     if (!username || !password || !email || !gender) return;
     await createUserMutation({ variables: { user: { username, email, password, gender } } });
     const { createUser } = data || {};
     if (createUser?.__typename === 'Error') setAlert(createUser.message, 'error');
     else {
-      setAlert(createUser?.Message as string, 'success');
+      setAlert('User created', 'success');
       toggleQuickLogin(true);
     }
   };
@@ -52,7 +59,9 @@ const RegisterForm: FC<IRegisterForm> = ({ setAlert, toggle, toggleQuickLogin })
         fields={renderInputs(color)}
         buttons={[{ value: 'Register', props: { colorScheme: btnColor, w: '30%', type: 'submit' } }]}
       />
-      {toggle.toggleQuickLogin && <QuickLogin_Modal />}
+      {toggle.toggleQuickLogin && (
+        <QuickLogin_Modal AccessToken={createUser?.AccessToken as string} RefreshToken={createUser?.RefreshToken as string} />
+      )}
     </>
   );
 };

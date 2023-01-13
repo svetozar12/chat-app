@@ -1,4 +1,4 @@
-import { ERROR, MESSAGE } from '../../../constants/typenames';
+import { ERROR, LOGIN_USER, MESSAGE } from '../../../constants/typenames';
 import logger from '../../../utils/logger';
 import sdk from '../../../utils/sdk';
 import { Gender } from '../../../utils/sdk/types/common';
@@ -15,7 +15,7 @@ export interface ICreateUser {
 const createUser = async (_: unknown, args: ICreateUser) => {
   const res: any = await sdk.user.createUser(args.user);
   if (res.__typename === ERROR) return res;
-  return { __typename: MESSAGE, ...res };
+  return { __typename: LOGIN_USER, ...res };
 };
 
 export default createUser;

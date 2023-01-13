@@ -122,7 +122,7 @@ export type Mutation = {
   createInvite: InviteUnion;
   createInviteGroupChat: CreateChatMessageUnion;
   createMessage: MessagesUnion;
-  createUser: MessageUnion;
+  createUser: LoginUserUnion;
   deleteChat: MessageUnion;
   deleteMessage: MessageUnion;
   deleteUser: MessageUnion;
@@ -460,7 +460,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename: 'Error', message: string } | { __typename: 'Message', Message: string } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename: 'Error', message: string } | { __typename: 'LoginUser', userId: string, AccessToken: string, RefreshToken: string } };
 
 export type DeleteUserMutationVariables = Exact<{
   auth: AuthModel;
@@ -1235,8 +1235,10 @@ export const CreateUserDocument = gql`
     mutation CreateUser($user: UserModel!) {
   createUser(user: $user) {
     __typename
-    ... on Message {
-      Message
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
     }
     ... on Error {
       message

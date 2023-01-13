@@ -1,8 +1,10 @@
 mutation CreateUser($user: UserModel!) {
   createUser(user: $user) {
     __typename
-    ... on Message {
-      Message
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
     }
     ... on Error {
       message
