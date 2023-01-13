@@ -6,7 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
 import useThemeColors from 'hooks/useThemeColors';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from 'constants/cookieNames';
+import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from 'constants/cookieNames';
 import { useRouter } from 'next/router';
 import { useCookie } from 'next-cookie';
 import routes from 'constants/routes';
@@ -14,11 +14,12 @@ import { useGetChatListQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
 
 type Props = {
+  UserId: string;
   AccessToken: string;
   RefreshToken: string;
 } & ReturnType<typeof mapDispatchToProps>;
 
-const QuickLoginModal: FC<Props> = ({ toggleQuickLogin, AccessToken, RefreshToken }) => {
+const QuickLogin: FC<Props> = ({ toggleQuickLogin, UserId, AccessToken, RefreshToken }) => {
   const {
     base: {
       button: { color },
@@ -49,6 +50,8 @@ const QuickLoginModal: FC<Props> = ({ toggleQuickLogin, AccessToken, RefreshToke
             onClick={async () => {
               cookie.set(ACCESS_TOKEN, AccessToken);
               cookie.set(REFRESH_TOKEN, RefreshToken);
+              cookie.set(USER_ID, UserId);
+
               refetch();
               const { getAllChats } = data || {};
               if (getAllChats?.__typename === 'Error') return;
@@ -83,4 +86,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
 });
 
-export default connect(null, mapDispatchToProps)(QuickLoginModal);
+export default connect(null, mapDispatchToProps)(QuickLogin);

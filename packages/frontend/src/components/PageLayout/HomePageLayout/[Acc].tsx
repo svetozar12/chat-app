@@ -17,12 +17,13 @@ import useProvideAuth from 'hooks/useSession';
 import { useRouter } from 'next/router';
 
 interface IApp extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {
-  cookie: string;
+  chatRoom: string;
   invite: IInvite;
 }
 
-const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnection, toggle, toggleMobileNav, toggleQuickLogin }) => {
+const App: FC<IApp> = ({ invite, chatRoom, ws, setNotifNumber, setWSConnection, toggle, toggleMobileNav, toggleQuickLogin }) => {
   const router = useRouter();
+  const cookie = useCookie();
   const { auth } = useProvideAuth();
   const [contacts, setContacts] = useState<Invite[]>([]);
   const { loading: loadingInv } = useGetInvitesByInviterQuery({ variables: { auth, status: Status.Recieved } });
@@ -32,9 +33,17 @@ const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnec
     setNotifNumberSetter: setNotifNumber,
     toggleQuickLoginSetter: toggleQuickLogin,
   });
-
   const { acc } = router.query;
   const chatId = acc as string;
+
+  useEffect(() => {
+    ws.ws?.emit('join_chat', {
+      rooms: [cookie.get('name'), chatRoom],
+    });
+    return () => {
+      ws.ws?.off('join_chat');
+    };
+  }, [ws.ws]);
 
   return (
     <HStack w="full" h="100vh" ml="-0.5rem !important">
@@ -52,6 +61,7 @@ const App: FC<IApp> = ({ cookie: cookieProp, invite, setNotifNumber, setWSConnec
 const mapStateToProps = (state: STATE) => ({
   invite: state.invite,
   toggle: state.toggle,
+  ws: state.ws,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -120,8 +130,6 @@ const useNotifications = (
         checkNotification();
       });
       socketConnect.on('send_friend_request', () => {
-        console.log('FRIEND REQUESTO');
-
         refetchByInviter();
         checkNotification();
       });

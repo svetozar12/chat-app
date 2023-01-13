@@ -4,7 +4,7 @@ import { Flex, Heading } from '@chakra-ui/react';
 import React, { FC } from 'react';
 import DefaultLink from '../../services/chat-ui/DefaultLink';
 // components
-import QuickLogin_Modal from './QuickLogin_Modal';
+import QuickLogin from './QuickLogin';
 import FormWrapper from 'components/FormWrapper';
 import useThemeColors from '../../hooks/useThemeColors';
 import { toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
@@ -14,8 +14,6 @@ import { IToggle } from 'services/redux/reducer/toggles/state';
 import { Gender, useCreateUserMutation } from 'services/generated';
 import { setAlert } from 'services/redux/reducer/alert/actions';
 import { renderInputs } from 'components/RegisterForm/utils';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from 'constants/cookieNames';
-import { useCookie } from 'next-cookie';
 
 interface IRegisterForm extends ReturnType<typeof mapDispatchToProps> {
   toggle: IToggle;
@@ -29,12 +27,12 @@ const RegisterForm: FC<IRegisterForm> = ({ setAlert, toggle, toggleQuickLogin })
     },
   } = useThemeColors();
   const [createUserMutation, { data }] = useCreateUserMutation();
-  const cookie = useCookie();
   const { createUser } = data || {};
   if (createUser?.__typename === 'Error') {
     setAlert(createUser.message, 'error');
-    return <>loading</>;
+    return <></>;
   }
+
   const handleSubmit = async ({ username, password, email, gender }: FormValues) => {
     if (!username || !password || !email || !gender) return;
     await createUserMutation({ variables: { user: { username, email, password, gender } } });
@@ -60,7 +58,11 @@ const RegisterForm: FC<IRegisterForm> = ({ setAlert, toggle, toggleQuickLogin })
         buttons={[{ value: 'Register', props: { colorScheme: btnColor, w: '30%', type: 'submit' } }]}
       />
       {toggle.toggleQuickLogin && (
-        <QuickLogin_Modal AccessToken={createUser?.AccessToken as string} RefreshToken={createUser?.RefreshToken as string} />
+        <QuickLogin
+          UserId={createUser?.userId as string}
+          AccessToken={createUser?.AccessToken as string}
+          RefreshToken={createUser?.RefreshToken as string}
+        />
       )}
     </>
   );

@@ -54,6 +54,7 @@
     "@babel/core": "^7.17.4",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "7.16.0",
+    "@graphql-codegen/import-types-preset": "^2.2.6",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@graphql-codegen/typescript-react-query": "^4.0.6",
     "@types/cookie": "^0.4.1",
@@ -70,7 +71,8 @@
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-testing-library": "^5.0.5"
+    "eslint-plugin-testing-library": "^5.0.5",
+    "graphql-codegen-apollo-next-ssr": "^1.7.4"
   },
   "main": "index.js",
   "license": "MIT"

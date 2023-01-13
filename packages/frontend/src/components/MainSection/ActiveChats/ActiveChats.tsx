@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { css, cx } from '@emotion/css';
@@ -14,12 +14,9 @@ interface IActiveChats extends Chat, ReturnType<typeof mapStateToProps>, ReturnT
   chatId: string;
 }
 
-function ActiveChats(props: IActiveChats) {
-  const { _id, members, chatId, ws, toggleCreateGroup } = props;
-
+const ActiveChats: FC<IActiveChats> = ({ _id, members, chatId, ws, toggleCreateGroup }) => {
   const router = useRouter();
   const cookie = useCookie();
-
   const cookieName: string = cookie.get('name');
 
   useEffect(() => {
@@ -60,7 +57,7 @@ function ActiveChats(props: IActiveChats) {
       <ActiveChatDetails _id={_id} chatId={chatId} members={members} />
     </HStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   ws: state.ws,
