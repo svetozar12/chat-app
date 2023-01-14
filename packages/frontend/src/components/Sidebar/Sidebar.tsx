@@ -10,12 +10,12 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { SingleAvatar } from 'services/chat-ui';
 import ToolTip from 'services/chat-ui/ToolTip';
 import { STATE } from 'services/redux/reducer';
-import { toggleChatSettings, toggleCreateGroup, toggleFriendRequestAction, toggleMobileNav } from 'services/redux/reducer/toggles/actions';
+import { toggleFriendRequestAction } from 'services/redux/reducer/toggles/actions';
 import s from './Sidebar.module.css';
 
 type SidebarProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
-const Sidebar: FC<SidebarProps> = ({ toggle, toggleChatSettings, toggleCreateGroup, toggleFriendRequest, toggleMobileNav }) => {
+const Sidebar: FC<SidebarProps> = ({ toggle, toggleFriendRequest }) => {
   const {
     base: {
       default: { color },
@@ -23,12 +23,6 @@ const Sidebar: FC<SidebarProps> = ({ toggle, toggleChatSettings, toggleCreateGro
     },
   } = useThemeColors();
   const { toggleColorMode } = useColorMode();
-
-  const toggleGroupCreate = () => {
-    toggleChatSettings(false);
-    toggleCreateGroup(!toggle.toggleCreateGroupModal);
-    toggleMobileNav(!toggleMobileNav);
-  };
 
   return (
     <VStack
@@ -43,7 +37,6 @@ const Sidebar: FC<SidebarProps> = ({ toggle, toggleChatSettings, toggleCreateGro
           toggleFriendRequest,
           toggle.toggleFriendReqModal,
           toggleColorMode,
-          toggleGroupCreate,
           useColorModeValue(MdOutlineDarkMode, BsFillSunFill),
         ).map((item, index) => {
           const { Icon, onClick, ariaLabel } = item;
@@ -87,9 +80,6 @@ const mapStateToProps = (state: STATE) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleFriendRequest: bindActionCreators(toggleFriendRequestAction, dispatch),
-  toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
-  toggleMobileNav: bindActionCreators(toggleMobileNav, dispatch),
-  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

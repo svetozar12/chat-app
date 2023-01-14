@@ -47,7 +47,6 @@ function RenderChat(props: IRenderChat) {
   const { show, messages } = message;
   const cookie = useCookie();
   const { auth } = useProvideAuth();
-  const [styleBool, setStyleBool] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
   const [editedMessage, setEditedMessage] = React.useState('');
   const [width, setWidth] = React.useState(112);
@@ -103,12 +102,6 @@ function RenderChat(props: IRenderChat) {
   return (
     <HStack
       gap={5}
-      onMouseOut={() => {
-        setStyleBool(false);
-      }}
-      onMouseOver={() => {
-        setStyleBool(true);
-      }}
       className={cx(
         'flex',
         css`

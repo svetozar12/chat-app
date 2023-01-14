@@ -1,14 +1,15 @@
 import { Avatar, AvatarGroup, Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
 import useProvideAuth from 'hooks/useSession';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
-import { useGetUserListQuery } from 'services/generated';
+import { useGetMessageListQuery, useGetUserListQuery } from 'services/generated';
 import useThemeColors from 'hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import s from './ActiveChatDetails.module.css';
+import { IWebSocket } from 'services/redux/reducer/websocket/state';
 
 interface IActiveChatDetails extends ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
   _id: string;
@@ -16,8 +17,10 @@ interface IActiveChatDetails extends ReturnType<typeof mapStateToProps>, ReturnT
   members: string[];
 }
 
-const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, _id, chatId, toggle, toggleChatSettings }) => {
+const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, ws, _id, chatId, toggle, toggleChatSettings }) => {
   const { users } = useGetUsers(members);
+  const lastMessage = useGetLastMessage(_id, ws);
+
   const {
     base: {
       default: { color },
@@ -33,14 +36,13 @@ const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, _id, chatId, toggl
                 return (
                   <HStack key={_id} alignItems="center" justifyContent="center">
                     <Avatar background="white" name={username} src={userAvatar} />
-                    <Heading color={color}>{username}</Heading>
                   </HStack>
                 );
               })}
             </AvatarGroup>
           </div>
           <p style={{ color }} className={s.lastMessage}>
-            Last message...
+            {lastMessage}
           </p>
         </VStack>
       </HStack>
@@ -67,15 +69,39 @@ const useGetUsers = (members: string[]) => {
   const { getUserList } = data || {};
   if (getUserList?.__typename === 'Error') throw new Error(getUserList.message);
   const { res: users } = getUserList || {};
+
   return { users };
 };
 
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,
+  ws: state.ws,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
 });
+
+const useGetLastMessage = (chat_id: string, ws: IWebSocket) => {
+  const { auth, user } = useProvideAuth();
+  const { username } = user || {};
+  const { data, loading, refetch } = useGetMessageListQuery({ variables: { auth, chat_id, query: { page_size: 1, page_number: 1 } } });
+  useEffect(() => {
+    ws.ws?.on('message', ({ messages }) => {
+      refetch();
+    });
+    return () => {
+      ws.ws?.off('message');
+    };
+  }, []);
+  if (loading) return '';
+  const { getAllMessages } = data || {};
+  if (getAllMessages?.__typename === 'Error') return '';
+
+  const { res: messages } = getAllMessages || {};
+  const [{ message, sender }] = messages || [];
+
+  return `${sender === username ? 'You:' : ''} ${message}`;
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveChatDetails);
