@@ -55,9 +55,7 @@ export const getServerSideProps = withAuthSync(async (ctx: ICtx) => {
   });
 
   return {
-    props: {
-      chatRoom: firstChatid,
-    },
+    props: {},
   };
 });
 

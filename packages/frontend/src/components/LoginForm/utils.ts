@@ -11,14 +11,11 @@ export const handleSubmit = async (
   values: LoginUserMutationVariables,
   auth: IAuth,
   cookie: Cookie,
-  router: NextRouter,
-  callback: string,
   mutation: { loginUserMutation: LoginUserMutationFn },
   setters: {
     togglelIsLoadingSetter: typeof togglelIsLoading;
     setAlertSetter: typeof setAlert;
   },
-  firstChatId: string,
 ) => {
   const { setAlertSetter, togglelIsLoadingSetter } = setters;
   const { loginUserMutation } = mutation;
@@ -45,8 +42,6 @@ export const handleSubmit = async (
         const { name, value, options } = element;
         cookie.set(name, value, { ...(options as any) });
       });
-      cookie.set('REDIRECT_URL_CALLBACK', callback || `/${firstChatId}`);
-      router.push(callback || `/${firstChatId}`);
     }
   } catch (error) {
     return error;

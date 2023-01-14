@@ -9,12 +9,19 @@ import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { togglelIsLoading } from 'services/redux/reducer/toggles/actions';
 import { setAlert } from 'services/redux/reducer/alert/actions';
-import { useGetChatListQuery, useLoginUserMutation } from 'services/generated';
+import {
+  GetChatListDocument,
+  GetChatListQuery,
+  GetChatListQueryResult,
+  GetChatListQueryVariables,
+  useLoginUserMutation,
+} from 'services/generated';
 import { handleSubmit, renderInputs } from 'components/LoginForm/utils';
-import useProvideAuth from 'hooks/useSession';
 import { FC } from 'react';
 import { DefaultLink } from 'services/chat-ui';
 import { Flex, Heading } from '@chakra-ui/react';
+import { ACCESS_TOKEN, USER_ID } from 'constants/cookieNames';
+import { client } from 'components/PageLayout/App/App';
 
 interface ILoginForm extends ILogin, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {}
 export type FormValues = { username: string; password: string };
@@ -23,12 +30,8 @@ const LoginForm: FC<ILoginForm> = (props) => {
   const { callback, auth, togglelIsLoading, setAlert } = props;
   const router = useRouter();
   const cookie = useCookie();
-  const { auth: authObj } = useProvideAuth();
   const [loginUserMutation] = useLoginUserMutation();
-  const { data: chatListData } = useGetChatListQuery({ variables: { auth: authObj } });
-  const { getAllChats } = chatListData || {};
-  if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
-  const firstChatid = getAllChats?.res[0]._id;
+
   const {
     base: {
       default: { color },
@@ -43,15 +46,26 @@ const LoginForm: FC<ILoginForm> = (props) => {
           values,
           auth,
           cookie,
-          router,
-          callback,
           { loginUserMutation },
           {
             setAlertSetter: setAlert,
             togglelIsLoadingSetter: togglelIsLoading,
           },
-          firstChatid as string,
-        )
+        ).then(async () => {
+          const { data, loading } = await client.query<GetChatListQuery, GetChatListQueryVariables>({
+            query: GetChatListDocument,
+            variables: { auth: { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) } },
+          });
+
+          if (!loading) {
+            const { getAllChats } = data || {};
+            if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+            const firstChatid = getAllChats?.res[0]._id;
+            cookie.set('REDIRECT_URL_CALLBACK', callback || `/${firstChatid}`);
+
+            router.push(callback || `/${firstChatid}`);
+          }
+        })
       }
       header={
         <Flex w="full" justifyContent="center" gap={2} mb="2" flexDir="column">

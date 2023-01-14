@@ -13,15 +13,14 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { useGetChatListQuery } from 'services/generated';
 import useProvideAuth from 'hooks/useSession';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 
 interface IMainSection extends ReturnType<typeof mapStateToProps> {
   chatId: string;
   toggleChatSettings: typeof toggleChatSettings;
 }
 
-function MainSection(props: IMainSection) {
-  const { chatId, ws, toggle, toggleChatSettings } = props;
+const MainSection: FC<IMainSection> = ({ chatId, ws, toggle, toggleChatSettings }) => {
   const { auth } = useProvideAuth();
   const {
     base: {
@@ -101,7 +100,7 @@ function MainSection(props: IMainSection) {
       </VStack>
     </Skeleton>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,

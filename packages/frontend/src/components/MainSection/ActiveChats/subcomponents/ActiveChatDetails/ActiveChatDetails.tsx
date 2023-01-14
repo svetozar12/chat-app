@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarGroup, HStack, IconButton, VStack } from '@chakra-ui/react';
 import useProvideAuth from 'hooks/useSession';
 import { FC, useEffect } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
@@ -10,6 +10,7 @@ import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import s from './ActiveChatDetails.module.css';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
+import { useCookie } from 'next-cookie';
 
 interface IActiveChatDetails extends ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
   _id: string;
@@ -83,13 +84,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const useGetLastMessage = (chat_id: string, ws: IWebSocket) => {
-  const { auth, user } = useProvideAuth();
-  const { username } = user || {};
+  const { auth } = useProvideAuth();
+  const cookie = useCookie();
   const { data, loading, refetch } = useGetMessageListQuery({ variables: { auth, chat_id, query: { page_size: 1, page_number: 1 } } });
   useEffect(() => {
-    ws.ws?.on('message', ({ messages }) => {
-      refetch();
-    });
+    ws.ws?.on('message', () => refetch());
     return () => {
       ws.ws?.off('message');
     };
@@ -100,8 +99,7 @@ const useGetLastMessage = (chat_id: string, ws: IWebSocket) => {
 
   const { res: messages } = getAllMessages || {};
   const [{ message, sender }] = messages || [];
-
-  return `${sender === username ? 'You:' : ''} ${message}`;
+  return `${sender === cookie.get('name') ? 'You:' : ''} ${message}`;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveChatDetails);

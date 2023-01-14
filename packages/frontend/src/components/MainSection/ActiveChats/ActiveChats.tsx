@@ -14,10 +14,12 @@ interface IActiveChats extends Chat, ReturnType<typeof mapStateToProps>, ReturnT
   chatId: string;
 }
 
-const ActiveChats: FC<IActiveChats> = ({ _id, members, chatId, ws, toggleCreateGroup }) => {
+const ActiveChats: FC<IActiveChats> = ({ _id, members, ws, toggleCreateGroup }) => {
   const router = useRouter();
   const cookie = useCookie();
   const cookieName: string = cookie.get('name');
+  const { acc } = router.query;
+  const chatId = acc as string;
 
   useEffect(() => {
     joinChat();
@@ -27,10 +29,11 @@ const ActiveChats: FC<IActiveChats> = ({ _id, members, chatId, ws, toggleCreateG
   }, []);
 
   function joinChat() {
-    ws.ws?.emit('join_chat', {
-      rooms: [cookieName, chatId],
+    router.push(`${_id}`).then(() => {
+      ws.ws?.emit('join_chat', {
+        rooms: [cookieName, _id],
+      });
     });
-    router.push(`${_id}`);
   }
 
   return (

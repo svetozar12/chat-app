@@ -21,7 +21,7 @@ interface IApp extends ReturnType<typeof mapDispatchToProps>, ReturnType<typeof 
   invite: IInvite;
 }
 
-const App: FC<IApp> = ({ invite, chatRoom, ws, setNotifNumber, setWSConnection, toggle, toggleMobileNav, toggleQuickLogin }) => {
+const App: FC<IApp> = ({ invite, ws, setNotifNumber, setWSConnection, toggle, toggleMobileNav, toggleQuickLogin }) => {
   const router = useRouter();
   const cookie = useCookie();
   const { auth } = useProvideAuth();
@@ -33,17 +33,17 @@ const App: FC<IApp> = ({ invite, chatRoom, ws, setNotifNumber, setWSConnection, 
     setNotifNumberSetter: setNotifNumber,
     toggleQuickLoginSetter: toggleQuickLogin,
   });
+
   const { acc } = router.query;
   const chatId = acc as string;
-
   useEffect(() => {
     ws.ws?.emit('join_chat', {
-      rooms: [cookie.get('name'), chatRoom],
+      rooms: [cookie.get('name'), chatId],
     });
     return () => {
       ws.ws?.off('join_chat');
     };
-  }, [ws.ws]);
+  }, [ws.ws, chatId]);
 
   return (
     <HStack w="full" h="100vh" ml="-0.5rem !important">
