@@ -15,6 +15,8 @@ const InviteHandler = (io: ioType, socket: Socket) => {
     if (!reciever_field) return;
     if (inviter === reciever) return;
     const _id = reciever_field.username;
+    console.log('emiting invite to ', _id);
+
     io.to(_id).emit('send_friend_request');
   };
 

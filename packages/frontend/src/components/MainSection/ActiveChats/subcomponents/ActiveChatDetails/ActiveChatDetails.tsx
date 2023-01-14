@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarGroup, Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
 import useProvideAuth from 'hooks/useSession';
 import { FC, useEffect } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
@@ -19,7 +19,7 @@ interface IActiveChatDetails extends ReturnType<typeof mapStateToProps>, ReturnT
 }
 
 const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, ws, _id, chatId, toggle, toggleChatSettings }) => {
-  const { users } = useGetUsers(members);
+  const { users, chatName } = useGetUsers(members);
   const lastMessage = useGetLastMessage(_id, ws);
 
   const {
@@ -46,6 +46,7 @@ const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, ws, _id, chatId, t
             {lastMessage}
           </p>
         </VStack>
+        <Heading>{chatName}</Heading>
       </HStack>
       {_id === chatId && (
         <IconButton
@@ -67,11 +68,16 @@ const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, ws, _id, chatId, t
 const useGetUsers = (members: string[]) => {
   const { auth } = useProvideAuth();
   const { data } = useGetUserListQuery({ variables: { auth, userIds: members } });
+  const cookie = useCookie();
   const { getUserList } = data || {};
   if (getUserList?.__typename === 'Error') throw new Error(getUserList.message);
   const { res: users } = getUserList || {};
-
-  return { users };
+  let chatName: string = users?.[0].username as string;
+  (users?.length || 0) > 1 &&
+    users?.forEach(({ username }) => {
+      if (cookie.get('name') !== username) chatName = username;
+    });
+  return { users, chatName };
 };
 
 const mapStateToProps = (state: STATE) => ({

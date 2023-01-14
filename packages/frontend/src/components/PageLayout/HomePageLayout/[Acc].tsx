@@ -125,14 +125,14 @@ const useNotifications = (
       transports: ['websocket'],
     });
 
-    socketConnect.on('connect', () => {
-      socketConnect.on('friend_request', () => {
-        checkNotification();
-      });
-      socketConnect.on('send_friend_request', () => {
-        refetchByInviter();
-        checkNotification();
-      });
+    socketConnect.on('friend_request', () => {
+      checkNotification();
+    });
+    socketConnect.on('send_friend_request', () => {
+      'friend requesto to me';
+      refetchByInviter();
+      refetchByReciever();
+      checkNotification();
     });
     setWSConnectionSetter(socketConnect);
     return () => {
