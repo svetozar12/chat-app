@@ -31,8 +31,6 @@ const blackListCheck = async (token: string) => {
 const Auth = (secret: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const bearerHeader = req.headers['authorization'];
-    console.log(bearerHeader);
-
     if (typeof bearerHeader === 'undefined') return next(CustomError.forbidden('Forbidden'));
 
     const user_id = req.body.user_id || req.params.user_id || req.query.user_id;

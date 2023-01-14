@@ -24,11 +24,8 @@ const LoginForm: FC<ILoginForm> = (props) => {
   const router = useRouter();
   const cookie = useCookie();
   const { auth: authObj } = useProvideAuth();
-  useLoginUserMutation({});
-  const [loginUserMutation, { data, loading }] = useLoginUserMutation();
-  const { data: chatListData, refetch } = useGetChatListQuery({ variables: { auth: authObj } });
-  console.log(authObj);
-
+  const [loginUserMutation] = useLoginUserMutation();
+  const { data: chatListData } = useGetChatListQuery({ variables: { auth: authObj } });
   const { getAllChats } = chatListData || {};
   if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
   const firstChatid = getAllChats?.res[0]._id;

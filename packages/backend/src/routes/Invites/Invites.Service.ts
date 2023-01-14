@@ -15,8 +15,6 @@ class InvitesService {
 
     const user = await User.findById(userId);
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
-    console.log(status);
-
     const invites =
       status !== 'wildCard'
         ? await Invites.find({

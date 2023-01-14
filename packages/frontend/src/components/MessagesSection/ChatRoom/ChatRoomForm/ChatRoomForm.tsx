@@ -42,7 +42,6 @@ function ChatRoomForm(props: IChatRoomForm) {
     inputTextArea.current?.focus();
     ws.ws?.on('message', ({ messages }) => {
       const [message] = messages;
-      console.log(messages);
       setMessages(message);
     });
     return () => {
@@ -86,8 +85,6 @@ function ChatRoomForm(props: IChatRoomForm) {
       await getAuth();
       const { name, message, time } = state;
       await saveMessage();
-
-      console.log('submit', ws.ws);
       ws.ws?.emit('message', {
         chatInstance: chatId,
         sender: cookie.get('name'),

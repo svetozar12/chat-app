@@ -7,7 +7,6 @@ import { CustomError } from '../../utils/custom-error.model';
 import { v4 as uuidv4 } from 'uuid';
 import Invites from '../../models/Invites.model';
 import { resMessages } from '../../common/constants';
-import mongoose from 'mongoose';
 import signTokens from '../../utils/signToken';
 
 class UsersService {
@@ -24,7 +23,6 @@ class UsersService {
     const users = await User.find({
       _id: { $in: userIds },
     }).exec();
-    console.log(users);
 
     if (users.length < 1) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
     return res.status(200).send(users);

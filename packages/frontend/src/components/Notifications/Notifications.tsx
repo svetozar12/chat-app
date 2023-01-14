@@ -20,9 +20,7 @@ interface INotifications {
 
 function Notifications(props: INotifications) {
   const { contacts, toggle, isLoading = false, toggleFriendRequest } = props;
-  console.log(contacts);
   const filterInvites = contacts.filter(({ status }) => status === Status.Recieved);
-  console.log(filterInvites);
 
   return (
     <Modal
