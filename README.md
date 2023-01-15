@@ -6,6 +6,8 @@ This is learning project(nothing serious testing mostly graphql with codegen)
 
 ## Development mode
 
+```
 yarn
 yarn build
 yarn dev
+```
