@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import React from 'react';
+import React, { FC } from 'react';
 // components
 import { useCookie } from 'next-cookie';
 import { Heading, HStack } from '@chakra-ui/react';
@@ -29,8 +29,7 @@ const otherMessages = css`
   flex-direction: column;
 `;
 
-function RenderChat(props: IRenderChat) {
-  const { id, sender, timeStamp, recievedMessage } = props;
+const RenderChat: FC<IRenderChat> = ({ sender, timeStamp, recievedMessage }) => {
   const cookie = useCookie();
   const name = cookie.get('name');
 
@@ -72,10 +71,10 @@ function RenderChat(props: IRenderChat) {
           `,
         )}
       >
-        <Message messageId={id} recievedMessage={recievedMessage} sender={sender} timeStamp={timeStamp} />
+        <Message recievedMessage={recievedMessage} sender={sender} timeStamp={timeStamp} />
       </div>
     </HStack>
   );
-}
+};
 
 export default React.memo(RenderChat);

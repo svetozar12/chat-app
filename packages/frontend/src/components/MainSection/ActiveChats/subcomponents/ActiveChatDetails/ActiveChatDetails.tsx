@@ -1,15 +1,14 @@
 import { Avatar, AvatarGroup, Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
 import useProvideAuth from 'hooks/useSession';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
-import { useGetMessageListQuery, useGetUserListQuery } from 'services/generated';
+import { useGetUserListQuery } from 'services/generated';
 import useThemeColors from 'hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
 import { toggleChatSettings } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import s from './ActiveChatDetails.module.css';
-import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { useCookie } from 'next-cookie';
 
 interface IActiveChatDetails extends ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
@@ -18,9 +17,8 @@ interface IActiveChatDetails extends ReturnType<typeof mapStateToProps>, ReturnT
   members: string[];
 }
 
-const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, ws, _id, chatId, toggle, toggleChatSettings }) => {
+const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, _id, chatId, toggle, toggleChatSettings }) => {
   const { users, chatName } = useGetUsers(members);
-  const lastMessage = useGetLastMessage(_id, ws);
 
   const {
     base: {
@@ -42,9 +40,6 @@ const ActiveChatDetails: FC<IActiveChatDetails> = ({ members, ws, _id, chatId, t
               })}
             </AvatarGroup>
           </div>
-          <p style={{ color }} className={s.lastMessage}>
-            {lastMessage}
-          </p>
         </VStack>
         <Heading>{chatName}</Heading>
       </HStack>
@@ -82,30 +77,10 @@ const useGetUsers = (members: string[]) => {
 
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,
-  ws: state.ws,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
 });
-
-const useGetLastMessage = (chat_id: string, ws: IWebSocket) => {
-  const { auth } = useProvideAuth();
-  const cookie = useCookie();
-  const { data, loading, refetch } = useGetMessageListQuery({ variables: { auth, chat_id, query: { page_size: 1, page_number: 1 } } });
-  useEffect(() => {
-    ws.ws?.on('message', () => refetch());
-    return () => {
-      ws.ws?.off('message');
-    };
-  }, []);
-  if (loading) return '';
-  const { getAllMessages } = data || {};
-  if (getAllMessages?.__typename === 'Error') return '';
-
-  const { res: messages } = getAllMessages || {};
-  const [{ message, sender }] = messages || [];
-  return `${sender === cookie.get('name') ? 'You:' : ''} ${message}`;
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveChatDetails);
