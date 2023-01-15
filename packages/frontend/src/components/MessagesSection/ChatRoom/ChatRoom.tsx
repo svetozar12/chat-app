@@ -10,8 +10,6 @@ import RenderChat from './RenderChat';
 import ChatRoomForm from './ChatRoomForm';
 import SkelletonUserMessages from '../../Loading/SkelletonUserMessages';
 // services
-import sdk from 'services/sdk';
-import { useAuth } from '../../../utils/SessionProvider';
 import useThemeColors from '../../../hooks/useThemeColors';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -24,16 +22,13 @@ import {
 import { IMessage } from 'services/redux/reducer/messages/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleIsMatch } from 'services/redux/reducer/toggles/actions';
+import useProvideAuth from 'hooks/useSession';
+import { useGetMessageListQuery } from 'services/generated';
 
-interface IChatRoom {
+interface IChatRoom extends ReturnType<typeof mapDispatchToProps> {
   message: IMessage;
   toggle: IToggle;
   chatId: string;
-  incrementPagination: typeof incrementPaginationNumberAction;
-  setMessages: typeof setMessagesAction;
-  setPaginatedMessages: typeof setPaginatedMessagesAction;
-  resetMessages: typeof resetMessagesAction;
-  toggleIsMatch: typeof toggleIsMatch;
 }
 
 export interface IchatInstance {
@@ -44,28 +39,25 @@ export interface IchatInstance {
 }
 
 function ChatRoom(props: IChatRoom) {
-  const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message, toggle } = props;
+  const { chatId, incrementPagination, setPaginatedMessages, setMessages, resetMessages, message } = props;
   const { messagePageNumber, messages } = message;
   const route = useRouter();
-  const cookie = useCookie();
   const {
     base: {
       default: { inverseColor },
     },
   } = useThemeColors();
-  const user = useAuth();
-  const userId: string = cookie.get('id');
-  const token: string = cookie.get('token');
+  const { auth } = useProvideAuth();
   const containerRef = React.useRef<null | HTMLDivElement>(null);
-
+  const { data, refetch, loading } = useGetMessageListQuery({
+    variables: { auth, chat_id: chatId, query: { page_size: 10, page_number: 1 } },
+  });
   const getRecentMessages = async () => {
     try {
-      const res = await sdk.message.getAll({
-        auth: { userId, AccessToken: token },
-        chat_id: chatId,
-        query: { page_size: 10, page_number: 1 },
-      });
-      res.forEach((element: Record<string, any>) => {
+      const { getAllMessages } = data || {};
+
+      if (getAllMessages?.__typename === 'Error') throw new Error(getAllMessages.message);
+      getAllMessages?.res?.forEach((element) => {
         setMessages(element);
       });
 
@@ -80,18 +72,16 @@ function ChatRoom(props: IChatRoom) {
     if (location.href === `${location.host}/${chatId}`) toggleIsMatch(true);
     resetMessages();
     getRecentMessages();
-  }, [route.asPath]);
+  }, [route.asPath, data]);
 
   const scrollHandler = async (e: React.UIEvent<HTMLElement>) => {
     try {
       if (e.currentTarget.scrollTop === 0) {
         incrementPagination(messagePageNumber);
-        const res = await sdk.message.getAll({
-          auth: { userId, AccessToken: token },
-          chat_id: chatId,
-          query: { page_size: 10, page_number: messagePageNumber },
-        });
-        res.forEach((element: Record<string, any>) => {
+        refetch({ auth, chat_id: chatId, query: { page_size: 10, page_number: messagePageNumber } });
+        const { getAllMessages } = data || {};
+        if (getAllMessages?.__typename === 'Error') throw new Error(getAllMessages.message);
+        getAllMessages?.res?.forEach((element) => {
           setPaginatedMessages(element);
         });
       }
@@ -110,29 +100,29 @@ function ChatRoom(props: IChatRoom) {
     scrollToBottom();
   }, [messages]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <VStack w="full" h="100vh">
-      {user ? (
-        <VStack
-          w="full"
-          mt={{ base: '2rem', lg: '-0.5rem !important' }}
-          h="full"
-          p="1rem"
-          overflow="auto"
-          bg={inverseColor}
-          ref={containerRef}
-          onScroll={scrollHandler}
-        >
-          {messages.map((item, index) => {
-            const { sender, message, createdAt } = item;
-            const TimeStamp = timeStamp(createdAt);
+      <VStack
+        w="full"
+        mt={{ base: '2rem', lg: '-0.5rem !important' }}
+        h="full"
+        p="1rem"
+        overflow="auto"
+        bg={inverseColor}
+        ref={containerRef}
+        onScroll={scrollHandler}
+      >
+        {messages.map((item, index) => {
+          const { sender, message, createdAt } = item;
+          const TimeStamp = timeStamp(createdAt);
 
-            return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} recievedMessage={message} />;
-          })}
-        </VStack>
-      ) : (
-        <SkelletonUserMessages />
-      )}
+          return <RenderChat key={index} chatId={chatId} id={item._id} sender={sender} timeStamp={TimeStamp} recievedMessage={message} />;
+        })}
+      </VStack>
 
       <ChatRoomForm chatId={chatId} />
     </VStack>

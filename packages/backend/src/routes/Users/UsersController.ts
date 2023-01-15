@@ -13,6 +13,11 @@ const usersService = new UsersService();
 const UsersController: IBaseController[] = [
   {
     type: RequestTypes.GET,
+    route: '/',
+    handler: errorHandler(usersService.GetUserList),
+  },
+  {
+    type: RequestTypes.GET,
     route: '/:user_id',
     handler: errorHandler(usersService.GetUser),
     preMethods: [Validator(Schemas.UserIdSchema, 'params')],

@@ -1,0 +1,13 @@
+mutation CreateUser($user: UserModel!) {
+  createUser(user: $user) {
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
+    }
+  }
+}

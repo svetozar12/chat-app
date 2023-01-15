@@ -1,4 +1,6 @@
+import { AlertStatus } from '@chakra-ui/react';
+
 export interface IAlert {
-  good: string;
-  bad: string;
+  message: string;
+  type: AlertStatus;
 }

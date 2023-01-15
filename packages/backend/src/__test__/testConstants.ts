@@ -1,9 +1,30 @@
 const constants = {
   jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjI4MzYxNTAsImV4cCI6MzMyNTEyODA4MTcsImF1ZCI6IiIsInN1YiI6IiIsIl9pZCI6IjYzMWI5Y2Q1YWYzYTUwOTEzZjFlMDUxNyIsInVzZXJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6ImFkbWluIn0.rSVftNj6-DlDLDDQs21SZQq97c9TiLef0Je4u5FqRNg',
   users: [
-    { _id: '631b9cd5af3a50913f1e0517', username: 'admin', password: 'admin', email: 'admin@abv.bg', gender: 'Male' },
-    { _id: '631b9cdf5dceea5b959ce9de', username: 'test1', password: 'test1', email: 'test1@abv.bg', gender: 'Female' },
-    { _id: '631b9ce6fd213a5ec6df2949', username: 'test2', password: 'test2', email: 'test2@abv.bg', gender: 'Others' },
+    {
+      _id: '631b9cd5af3a50913f1e0517',
+      username: 'admin',
+      password: 'admin',
+      email: 'admin@abv.bg',
+      gender: 'Male',
+      userAvatar: 'https://avatars.dicebear.com/api/croodles-neutral/your-custom-seed.svg',
+    },
+    {
+      _id: '631b9cdf5dceea5b959ce9de',
+      username: 'test1',
+      password: 'test1',
+      email: 'test1@abv.bg',
+      gender: 'Female',
+      userAvatar: 'https://avatars.dicebear.com/api/croodles-neutral/test1.svg',
+    },
+    {
+      _id: '631b9ce6fd213a5ec6df2949',
+      username: 'test2',
+      password: 'test2',
+      email: 'test2@abv.bg',
+      gender: 'Others',
+      userAvatar: 'https://avatars.dicebear.com/api/croodles-neutral/test2.svg',
+    },
   ],
   chats: [{ _id: '631b9d3174dc3f55b7d4684c', members: ['admin', 'test2'] }],
   messages: [

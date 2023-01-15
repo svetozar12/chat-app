@@ -1,0 +1,13 @@
+mutation RefreshToken($userId: String!, $RefreshToken: String!) {
+  refreshToken(user_id: $userId, RefreshToken: $RefreshToken) {
+    __typename
+    ... on LoginUser {
+      userId
+      AccessToken
+      RefreshToken
+    }
+    ... on Error {
+      message
+    }
+  }
+}

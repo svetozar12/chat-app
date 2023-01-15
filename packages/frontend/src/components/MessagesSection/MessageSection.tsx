@@ -1,70 +1,27 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { connect } from 'react-redux';
 import { useRouter } from 'next/router';
 // components
-import { useCookie } from 'next-cookie';
 import { Box, HStack } from '@chakra-ui/react';
 import ChatRoom from './ChatRoom';
-import Notifications_Modal from '../Notifications_Modal';
-import AddUsers_Modal from '../AddUsers_Modal';
+import Notifications from '../Notifications';
 // services
-import { useAuth } from 'utils/SessionProvider';
-import SkelletonUserMessages from '../Loading/SkelletonUserMessages';
 import { STATE } from 'services/redux/reducer';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import sdk from 'services/sdk';
-import { Status, Invite } from '@chat-app/gql-server';
+import { Invite, useGetChatQuery } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
-interface IMessageSection {
+interface Props {
   contacts: Invite[];
-  FetchInvites: (status: Status, InvitesOrigin: 'reciever' | 'inviter') => Promise<any>;
   chatId: string;
   toggle: IToggle;
+  isLoading?: boolean;
 }
 
-function MessageSection(props: IMessageSection) {
-  const { contacts, chatId, toggle, FetchInvites } = props;
-  const [users, setUsers] = React.useState<any[]>([]);
-  const cookie = useCookie();
-  const route = useRouter();
-  const { user } = useAuth();
-  const getMembersSuggestions = async () => {
-    try {
-      const res = await sdk.chatroom.getById({
-        chat_id: window.location.pathname,
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-      });
-      const { members } = res;
-
-      const data: any[] = [];
-      const usersArr: string[] = [];
-      data.forEach((element) => {
-        usersArr.push(element.inviter);
-        usersArr.push(element.reciever);
-      });
-      let uniqueUsers: string[] = [];
-      usersArr.forEach((element) => {
-        if (!uniqueUsers.includes(element)) {
-          uniqueUsers.push(element);
-        }
-      });
-      uniqueUsers = uniqueUsers.filter((element) => !members.includes(element));
-      setUsers(uniqueUsers);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
-  React.useEffect(() => {
-    getMembersSuggestions();
-  }, []);
-
-  React.useEffect(() => {
-    getMembersSuggestions();
-  }, [route.asPath]);
-
+const MessageSection: FC<Props> = ({ chatId, contacts, toggle, isLoading = false }) => {
+  const [users, setUsers] = useState<any[]>([]);
+  useMemberSuggestions(setUsers);
   return (
     <HStack
       w="71%"
@@ -92,25 +49,56 @@ function MessageSection(props: IMessageSection) {
         )}
       >
         <Box w="full" h="100vh">
-          {toggle.toggleFriendReqModal && contacts && <Notifications_Modal contacts={contacts} />}
-          {toggle.toggleInvideModal && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />}
-          {user ? <ChatRoom chatId={chatId} /> : <SkelletonUserMessages />}
+          {toggle.toggleFriendReqModal && contacts && <Notifications contacts={contacts} />}
+          {/* {toggle.toggleInvideModal && <AddUsers_Modal users={users} setUsers={setUsers} chatId={chatId} />} */}
+          <ChatRoom chatId={chatId} />
         </Box>
       </div>
     </HStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,
 });
 
-// const mapDispatchToProps = (dispatch: Dispatch) => ({
-//   incrementPagination: bindActionCreators(incrementPaginationNumberAction, dispatch),
-//   setMessages: bindActionCreators(setMessagesAction, dispatch),
-//   setPaginatedMessages: bindActionCreators(setPaginatedMessagesAction, dispatch),
-//   toggleIsMatch: bindActionCreators(toggleIsMatch, dispatch),
-//   resetMessages: bindActionCreators(resetMessagesAction, dispatch),
-// });
+const useMemberSuggestions = (setUsers: React.Dispatch<React.SetStateAction<any[]>>) => {
+  const route = useRouter();
+  const { auth } = useProvideAuth();
+  const { acc } = route.query;
+  const { data: chatData } = useGetChatQuery({
+    ssr: false,
+    variables: { chat_id: acc as string, auth },
+  });
+  const getMembersSuggestions = async () => {
+    try {
+      const { getChatById } = chatData || {};
+      if (getChatById?.__typename === 'Error') throw new Error(getChatById.message);
+      const { members } = getChatById || {};
+
+      const data: any[] = [];
+      const usersArr: string[] = [];
+      data.forEach((element) => {
+        usersArr.push(element.inviter);
+        usersArr.push(element.reciever);
+      });
+      let uniqueUsers: string[] = [];
+      usersArr.forEach((element) => {
+        if (!uniqueUsers.includes(element)) {
+          uniqueUsers.push(element);
+        }
+      });
+      uniqueUsers = uniqueUsers.filter((element) => !members?.includes(element));
+      setUsers(uniqueUsers);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    getMembersSuggestions();
+  }, [route.asPath]);
+};
 
 export default connect(mapStateToProps)(MessageSection);

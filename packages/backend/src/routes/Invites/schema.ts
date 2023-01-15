@@ -2,7 +2,7 @@ import Joi from 'joi';
 import * as Schema from '../../common/schema';
 
 export const GetInviteSchema = Joi.object({
-  status: Joi.string().valid('accepted', 'recieved', 'declined').messages({
+  status: Joi.string().valid('accepted', 'recieved', 'declined', 'wildCard').messages({
     'string.base': `status should be of type text`,
     'string.empty': `status cannot be an empty field`,
     'any.only': `status is not valid`,

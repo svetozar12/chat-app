@@ -1,4 +1,5 @@
 import { AuthBase } from '../../../constants';
+import { ERROR, MESSAGES } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface ICreateMessage extends AuthBase {
@@ -7,10 +8,12 @@ export interface ICreateMessage extends AuthBase {
 }
 
 const createMessage = async (_: unknown, args: ICreateMessage) => {
-  const res = await sdk.message.createMessage(args.auth, args.chat_id, {
+  const res: any = await sdk.message.createMessage(args.auth, args.chat_id, {
     message: args.message,
   });
-  return res;
+
+  if (res.__typename === ERROR) return res;
+  return { __typename: MESSAGES, ...res };
 };
 
 export default createMessage;

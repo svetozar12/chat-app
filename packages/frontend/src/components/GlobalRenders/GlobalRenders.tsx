@@ -1,46 +1,39 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import Head from 'next/dist/shared/lib/head';
 import { css } from '@emotion/css';
-import { useColorMode } from '@chakra-ui/react';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
-import { IToggle } from 'services/redux/reducer/toggles/state';
 import { toggleFriendRequestAction, toggleInviteModal, toggleQuickLogin } from 'services/redux/reducer/toggles/actions';
+import { Alerts } from 'services/chat-ui';
+import { setAlert } from 'services/redux/reducer/alert/actions';
 
-interface IGlobals {
-  toggle: IToggle;
-  toggleQuickLogin: typeof toggleQuickLogin;
-  toggleFriendRequestModal: typeof toggleFriendRequestAction;
-  toggleInviteModal: typeof toggleInviteModal;
-}
+type IGlobals = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
-function Globals(props: IGlobals) {
-  const { toggle, toggleQuickLogin, toggleFriendRequestModal, toggleInviteModal } = props;
+const Globals: FC<IGlobals> = ({ alert, setAlert, toggle, toggleFriendRequestModal, toggleInviteModal, toggleQuickLogin }) => {
   const closeModals = () => {
     toggleFriendRequestModal(false);
     toggleInviteModal(false);
     toggleQuickLogin(false);
   };
 
-  const { colorMode } = useColorMode();
-
   const Blur: boolean = toggle.toggleFriendReqModal || toggle.toggleInvideModal || toggle.toggleQuickLogin;
-  // styles={{
-  //         body: {
-  //           margin: 0,
-  //           padding: 0,
-  //           userSelect: Blur ? 'none' : 'select',
-  //         },
-  //         a: {
-  //           textDecoration: 'none',
-  //         },
-  //       }}
+
   return (
     <>
       <Head>
         <title>Chat What</title>
       </Head>
+      {!!alert.message && (
+        <Alerts
+          chakraProps={{ zIndex: 999 }}
+          message={alert.message}
+          type={alert.type}
+          closeAlert={() => {
+            setAlert('', 'info');
+          }}
+        />
+      )}
       <div
         className={css`
           position: absolute;
@@ -53,16 +46,18 @@ function Globals(props: IGlobals) {
       />
     </>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   toggle: state.toggle,
+  alert: state.alert,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleQuickLogin: bindActionCreators(toggleQuickLogin, dispatch),
   toggleInviteModal: bindActionCreators(toggleInviteModal, dispatch),
   toggleFriendRequestModal: bindActionCreators(toggleFriendRequestAction, dispatch),
+  setAlert: bindActionCreators(setAlert, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Globals);

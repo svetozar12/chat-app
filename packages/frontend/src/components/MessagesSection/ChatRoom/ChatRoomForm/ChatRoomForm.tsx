@@ -3,7 +3,6 @@ import { MdSend } from 'react-icons/md';
 import { css } from '@emotion/css';
 import { useCookie } from 'next-cookie';
 import { Center, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
-import sdk from 'services/sdk';
 import { getAuth } from 'utils/authMethods';
 import generic from 'utils/generic';
 import s from './ChatRoomForm.module.css';
@@ -13,6 +12,8 @@ import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { bindActionCreators, Dispatch } from 'redux';
 import { setMessagesAction } from 'services/redux/reducer/messages/actions';
+import { useCreateMessageMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IPropsState {
   name?: string;
@@ -29,22 +30,27 @@ interface IChatRoomForm {
 function ChatRoomForm(props: IChatRoomForm) {
   const { chatId, ws, setMessages } = props;
   const cookie = useCookie();
+  const { auth } = useProvideAuth();
   const [state, setState] = React.useState<IPropsState>({
     name: cookie.get('name'),
     message: '',
     time: '',
   });
-  const inputTextArea = React.useRef<any>(null);
-
+  const inputTextArea = React.useRef<HTMLTextAreaElement>(null);
+  const [createMessage] = useCreateMessageMutation();
   useEffect(() => {
-    inputTextArea.current.focus();
+    inputTextArea.current?.focus();
     ws.ws?.on('message', ({ messages }) => {
       const [message] = messages;
       setMessages(message);
     });
-  }, [ws.ws]);
+    return () => {
+      ws.ws?.off('message');
+    };
+  }, []);
   const handleKeyPress = (e: any) => {
     const target = e.target as HTMLTextAreaElement;
+    if (!inputTextArea.current) return;
     inputTextArea.current.style.height = '10px';
     inputTextArea.current.style.height = `${target.scrollHeight}px`;
     inputTextArea.current.style.height = `${Math.min(e.target.scrollHeight, 40)}px`;
@@ -53,16 +59,19 @@ function ChatRoomForm(props: IChatRoomForm) {
   };
 
   useEffect(() => {
+    if (!inputTextArea.current) return;
     inputTextArea.current.style.height = '20px';
   }, []);
 
   const saveMessage = async () => {
     try {
       if (state.message)
-        await sdk.message.create({
-          auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-          chat_id: chatId,
-          message: state.message,
+        await createMessage({
+          variables: {
+            auth,
+            chat_id: chatId,
+            message: state.message,
+          },
         });
       return true;
     } catch (error) {
@@ -88,7 +97,7 @@ function ChatRoomForm(props: IChatRoomForm) {
 
   const {
     base: {
-      default: { inverseColor, color, offColor },
+      default: { inverseColor, offColor },
     },
   } = useThemeColors();
 
@@ -105,7 +114,10 @@ function ChatRoomForm(props: IChatRoomForm) {
         overflowWrap="break-word"
         borderRadius="3xl"
         align="center"
-        onClick={() => inputTextArea.current.focus()}
+        onClick={() => {
+          if (!inputTextArea.current) return;
+          inputTextArea.current.focus();
+        }}
       >
         <textarea
           rows={40}

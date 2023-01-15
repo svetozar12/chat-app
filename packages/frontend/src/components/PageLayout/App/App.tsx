@@ -1,37 +1,36 @@
 import { ChakraProvider, HStack } from '@chakra-ui/react';
 import GlobalRenders from 'components/GlobalRenders';
 import Sidebar from 'components/Sidebar/Sidebar';
-import { useCookie } from 'next-cookie';
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
-import { STATE } from 'services/redux/reducer';
-import { setIsAuth } from 'services/redux/reducer/auth/actions';
-import { IAuth } from 'services/redux/reducer/auth/state';
 import theme from 'styles/theme';
-import { checkTokens } from 'utils/authMethods';
-import SessionProvider from 'utils/SessionProvider';
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
+import { connect } from 'react-redux';
+import { STATE } from 'services/redux/reducer';
+import { bindActionCreators, Dispatch } from 'redux';
+import { setWSConnection } from 'services/redux/reducer/websocket/actions';
+import { FC, useEffect } from 'react';
+import { io, Socket } from 'socket.io-client';
 
-interface IApp {
+interface IApp extends ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
   children: JSX.Element | JSX.Element[];
-  auth: IAuth;
-  setIsAuth: typeof setIsAuth;
 }
 
-function App(props: IApp) {
-  const { auth, children, setIsAuth } = props;
-  const cookie = useCookie();
-  const checkAuth = async () => {
-    return setIsAuth(!!cookie.get('id'));
-  };
-  useEffect(() => {
-    checkAuth();
-  }, []);
+const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://${process.env.NEXT_PUBLIC_GQL_HOST}:${process.env.NEXT_PUBLIC_GQL_PORT}/graphql`;
+export const client = new ApolloClient({
+  ssrMode: typeof window === 'undefined',
+  link: createHttpLink({
+    uri: gqlUrl,
+    credentials: 'same-origin',
+  }),
+  cache: new InMemoryCache(),
+});
+
+const App: FC<IApp> = ({ auth: { isAuth }, children, setWs }) => {
+  useWs(setWs);
   return (
-    <SessionProvider>
-      <GlobalRenders />
+    <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
-        {!!cookie.get('id') ? (
+        <GlobalRenders />
+        {isAuth ? (
           <HStack>
             <Sidebar />
             {children}
@@ -40,16 +39,29 @@ function App(props: IApp) {
           children
         )}
       </ChakraProvider>
-    </SessionProvider>
+    </ApolloProvider>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   auth: state.auth,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setIsAuth: bindActionCreators(setIsAuth, dispatch),
+  setWs: bindActionCreators(setWSConnection, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+const useWs = (setWSConnectionSetter: typeof setWSConnection) => {
+  useEffect(() => {
+    const socketConnect: Socket = io('http://localhost:4000', {
+      transports: ['websocket'],
+    });
+
+    setWSConnectionSetter(socketConnect);
+    return () => {
+      socketConnect.disconnect();
+    };
+  }, []);
+};

@@ -1,20 +1,21 @@
 import './config/preinit';
-import { createServer } from '@graphql-yoga/node';
+import { createServer } from 'node:http';
+import { createYoga } from 'graphql-yoga';
 import { schema } from './schema';
 import logger from './utils/logger';
-// types
 
 async function main() {
   try {
-    const server = createServer({
+    const yoga = createYoga({
       schema,
-      port: parseInt(process.env.PORT as string) || 4003,
-      async context({ request, query }) {
-        logger('warn', 'GRAPHQL-SERVER-REQUEST-LOG');
-        logger('info', request.url, [query]);
+      cors: {
+        origin: '*',
       },
     });
-    await server.start();
+    const server = createServer(yoga);
+    server.listen(4003, () => {
+      logger('info', 'Server is running on http://localhost:4003/graphql');
+    });
   } catch (error) {
     logger('error', error, ['server failed to start']);
     return false;

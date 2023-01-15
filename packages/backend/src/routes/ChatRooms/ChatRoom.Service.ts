@@ -12,7 +12,7 @@ class ChatRoomService {
     const user = await User.findOne({ _id: user_id }).exec();
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
-    const chatRooms = await Chats.find({ members: user.username }).exec();
+    const chatRooms = await Chats.find({ members: user.id }).exec();
     if (chatRooms.length <= 0) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
     return res.status(200).json(chatRooms);
   }
@@ -24,7 +24,7 @@ class ChatRoomService {
     const user = await User.findOne({ _id: user_id }).exec();
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
 
-    const chat = await Chats.findOne({ _id: chat_id, members: user.username }).exec();
+    const chat = await Chats.findOne({ _id: chat_id, members: user.id }).exec();
     if (!chat) return next(CustomError.notFound(resMessages.chat.NOT_FOUND));
 
     return res.status(200).json(chat);
@@ -55,7 +55,7 @@ class ChatRoomService {
     if (!findInvite) return next(CustomError.notFound(resMessages.invite.NOT_FOUND));
 
     const chat = await new Chats({
-      members: [isUser1.username, isUser2.username],
+      members: [isUser1.id, isUser2.id],
     });
 
     await chat.save();

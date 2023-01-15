@@ -1,0 +1,22 @@
+overwrite: true
+schema: 'http://127.0.0.1:4003/graphql'
+documents: './src/services/gql/**/*.gql'
+generates:
+  src/services/generated/gql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+  src/services/generated/ssr.tsx:
+    config:
+      documentMode: external
+      importDocumentNodeExternallyFrom: ./gql
+      reactApolloVersion: 3
+      withHooks: true
+      contextType: 'ApolloClientContext'
+      contextTypeRequired: true
+    preset: import-types
+    presetConfig:
+      typesPath: ./gql
+    plugins:
+      - 'graphql-codegen-apollo-next-ssr'

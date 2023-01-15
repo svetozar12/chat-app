@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { css } from '@emotion/css';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -7,15 +7,14 @@ import { useCookie } from 'next-cookie';
 // services
 import { setReciever } from 'services/redux/reducer/invites/actions';
 import { getAuth } from 'utils/authMethods';
-import { useAuth } from 'utils/SessionProvider';
 import { STATE } from 'services/redux/reducer';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import IInvite from 'services/redux/reducer/invites/state';
-import sdk from 'services/sdk';
 // components
-import SkeletonFindFriendsHeader from 'components/Loading/SkeletonFindFriendsHeader';
 import FindFriendsHeader from './FindFriendsHeader';
 import FindFriendsSearch from './FindFriendsSearch';
+import { useCreateInviteMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IFindFriends {
   ws: IWebSocket;
@@ -23,22 +22,21 @@ interface IFindFriends {
   setReciever: typeof setReciever;
 }
 
-function FindFriends(props: IFindFriends) {
-  const { ws, invite, setReciever } = props;
-
-  const cookie = useCookie();
-  const { user } = useAuth();
-
+const FindFriends: FC<IFindFriends> = ({ invite, setReciever, ws }) => {
+  const { auth } = useProvideAuth();
+  const [createInviteMutation, { data }] = useCreateInviteMutation();
   const sendInvite = async () => {
     try {
       await getAuth();
-      const res = await sdk.invite.create({
-        auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
-        reciever: invite.reciever,
+      await createInviteMutation({
+        variables: {
+          auth,
+          reciever: invite.reciever,
+        },
       });
-
-      const { reciever, inviter } = res;
-
+      const { createInvite } = data || {};
+      if (createInvite?.__typename === 'Error') throw new Error(createInvite.message);
+      const { reciever, inviter } = createInvite || {};
       ws.ws?.emit('send_friend_request', {
         inviter,
         reciever,
@@ -46,8 +44,6 @@ function FindFriends(props: IFindFriends) {
 
       return true;
     } catch (error) {
-      console.log(error);
-
       return false;
     }
   };
@@ -72,11 +68,13 @@ function FindFriends(props: IFindFriends) {
         align-items: center;
       `}
     >
-      {user ? <FindFriendsHeader /> : <SkeletonFindFriendsHeader />}
-      <FormControl>{user ? <FindFriendsSearch handleSubmit={handleSubmit} /> : <Skeleton w="100%" mt={1} h="2.6875rem" />}</FormControl>
+      <FindFriendsHeader />
+      <FormControl>
+        <FindFriendsSearch handleSubmit={handleSubmit} />
+      </FormControl>
     </VStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   ws: state.ws,

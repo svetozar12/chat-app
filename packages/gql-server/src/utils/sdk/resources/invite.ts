@@ -14,7 +14,7 @@ const invite = {
   },
   getAllByInviter: async (auth: Auth, status?: Status) => {
     const { userId, AccessToken } = auth;
-    return makeRequest(Method.GET, `${basePath}/inviter/${userId}${status ? '?'.concat(status) : ''}`, undefined, {
+    return makeRequest(Method.GET, `${basePath}/inviter/${userId}${status ? '?status='.concat(status) : ''}`, undefined, {
       headers: { Authorization: `Bearer ${AccessToken}` },
     });
   },

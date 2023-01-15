@@ -1,24 +1,16 @@
-import { client } from 'services/sdk';
+import { DocumentNode } from '@apollo/client';
+import axios from 'axios';
 
-interface IMakeRequest {
-  gqlQuery: string;
-  path: string;
-}
+const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://${process.env.NEXT_PUBLIC_GQL_HOST}:${process.env.NEXT_PUBLIC_GQL_PORT}/graphql`;
 
-const makeRequest = async <T>(args: IMakeRequest, resolverName: string): Promise<T> => {
-  const { gqlQuery, path } = args;
+export const gqlMakeRequest = async <TResult, TArgs>(document: DocumentNode, variables: TArgs): Promise<TResult> => {
   try {
-    const res = await client(path, {
-      data: {
-        query: gqlQuery,
-      },
+    const { data } = await axios.post<TResult>(gqlUrl, {
+      query: document,
+      variables,
     });
-
-    if (res.data.data === null) throw Error(res.data.errors[0].message);
-    return res.data.data[resolverName];
+    return data;
   } catch (error) {
     return error;
   }
 };
-
-export default makeRequest;

@@ -1,0 +1,14 @@
+query GetChatList($auth: AuthModel!) {
+  getAllChats(auth: $auth) {
+    __typename
+    ... on ChatList {
+      res {
+        _id
+        members
+      }
+    }
+    ... on Error {
+      message
+    }
+  }
+}

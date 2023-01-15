@@ -1,0 +1,15 @@
+mutation CreateMessage($chat_id: String!, $auth: AuthModel!, $message: String!) {
+  createMessage(chat_id: $chat_id, auth: $auth, message: $message) {
+    __typename
+    ... on Messages {
+      user_id
+      chat_id
+      sender
+      message
+      seenBy
+    }
+    ... on Error {
+      message
+    }
+  }
+}

@@ -1,8 +1,11 @@
+import axios from 'axios';
+import { ACCESS_TOKEN, USER_ID } from 'constants/cookieNames';
 import routes from 'constants/routes';
 import { NextPageContext } from 'next';
 import { useCookie } from 'next-cookie';
+import { GetChatListDocument, GetChatListQueryResult, GetChatListQueryVariables } from 'services/generated';
+import { gqlMakeRequest } from 'utils/makeRequest';
 import { isAuth } from './authMethods';
-import generic from './generic';
 import redirectTo from './routing';
 
 export interface ICtx extends NextPageContext {
@@ -34,12 +37,16 @@ const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
 export const isAlreadyAuth = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth: any = await isAuth(ctx);
   const cookie = useCookie(ctx);
-  const currPath = await generic.getFirstChat(cookie.get('id'), cookie.get('token'));
+  const { data } = await gqlMakeRequest<GetChatListQueryResult, GetChatListQueryVariables>(GetChatListDocument, {
+    auth: { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) },
+  });
+  const { getAllChats } = data || {};
+  if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+  const firstChatid = getAllChats?.res[0]._id;
   const desiredURL: string = cookie.get('REDIRECT_URL_CALLBACK');
-  const path: string = desiredURL || currPath;
+  const path: string = desiredURL || (firstChatid as string);
 
   if (isUserAuth && ctx.resolvedUrl !== path) return redirectTo(`/${path}`, ctx);
-
   if (getServerSideProps) {
     const gssp = await getServerSideProps(ctx);
     return {

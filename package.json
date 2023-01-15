@@ -4,38 +4,18 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "npx lerna bootstrap && npx lerna link",
-    "prebuild": "yarn bootstrap",
-    "postbuild": "yarn bootstrap",
-    "build": "npx lerna run build --stream",
-    "kill": "taskkill /f /im node.exe",
-    "dev": "lerna run dev --stream",
-    "dev:backend": "lerna run dev --scope {@chat-app/backend,@chat-app/gql-server} --stream",
-    "test": "lerna run test --no-sort --stream",
-    "lint": "lerna run lint --no-sort --stream",
-    "lint-css": "lerna run lint-css --no-sort --stream",
-    "format": "lerna run format --no-sort --stream",
-    "dev:kill": "yarn kill && yarn dev",
-    "mash-up": "yarn format && yarn lint && yarn build",
-    "mash-up:test": "yarn format && yarn lint && yarn build && yarn test",
-    "db:up": "lerna run db:up --stream",
-    "lerna-dockerize": "lerna-dockerize",
-    "//docker commands": "",
-    "start:backend": "lerna run start --scope=@chat-app/backend --stream",
-    "start:gql-server": "lerna run start --scope=@chat-app/gql-server --stream",
-    "start:frontend": "lerna run start --scope=@chat-app/frontend --stream"
+    "prebuild": "yarn lint",
+    "pretest": "yarn build",
+    "build": "npx lerna run build --stream --no-sort",
+    "dev": "lerna run dev --stream --no-sort",
+    "test": "lerna run test --stream",
+    "lint": "lerna run lint --stream"
   },
   "devDependencies": {
-    "lerna": "^5.1.8",
-    "nx": "14.4.3"
+    "eslint": "^8.30.0",
+    "lerna": "^6.3.0",
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4"
   },
-  "engines": {
-    "npm": "please-use-yarn",
-    "yarn": ">= 1.17.3",
-    "node": ">= 12.5.0"
-  },
-  "name": "chat-app",
-  "dependencies": {
-    "lerna-dockerize": "^1.0.4"
-  }
+  "name": "chat-app"
 }

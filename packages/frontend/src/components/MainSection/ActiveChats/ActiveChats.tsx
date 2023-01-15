@@ -1,67 +1,51 @@
-import React from 'react';
+import React, { FC, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { BsThreeDots } from 'react-icons/bs';
 import { css, cx } from '@emotion/css';
 import { useCookie } from 'next-cookie';
-import { Heading, HStack, IconButton, VStack } from '@chakra-ui/react';
-import useThemeColors from '../../../hooks/useThemeColors';
+import { HStack } from '@chakra-ui/react';
 import { STATE } from 'services/redux/reducer';
 import { bindActionCreators, Dispatch } from 'redux';
-import { IWebSocket } from 'services/redux/reducer/websocket/state';
-import { IToggle } from 'services/redux/reducer/toggles/state';
-import { toggleChatSettings, toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
-import { Chat } from '@chat-app/gql-server';
+import { toggleCreateGroup } from 'services/redux/reducer/toggles/actions';
+import { Chat } from 'services/generated';
+import ActiveChatDetails from 'components/MainSection/ActiveChats/subcomponents/ActiveChatDetails/ActiveChatDetails';
 
-interface IActiveChats extends Chat {
+interface IActiveChats extends Chat, ReturnType<typeof mapStateToProps>, ReturnType<typeof mapDispatchToProps> {
   chatId: string;
-  toggle: IToggle;
-  ws: IWebSocket;
-  toggleCreateGroup: typeof toggleCreateGroup;
-  toggleChatSettings: typeof toggleChatSettings;
 }
 
-function ActiveChats(props: IActiveChats) {
-  const { _id, members, chatId, toggle, ws, toggleCreateGroup, toggleChatSettings } = props;
-  const [inviter, setInviter] = React.useState<string>('');
-  const {
-    base: {
-      default: { color, inverseColor },
-    },
-  } = useThemeColors();
+const ActiveChats: FC<IActiveChats> = ({ _id, members, ws, toggleCreateGroup }) => {
   const router = useRouter();
   const cookie = useCookie();
-
   const cookieName: string = cookie.get('name');
-  const user1 = members?.[0];
-  const user2 = members?.[1];
+  const { acc } = router.query;
+  const chatId = acc as string;
 
-  const joinChat = () => {
-    ws.ws?.emit('join_chat', {
-      rooms: [cookieName, chatId],
-    });
-    router.push(`${_id}`);
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     joinChat();
-    const notMe = members?.filter((element) => element !== cookieName);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    setInviter(notMe[0]);
+    return () => {
+      ws.ws?.off('join_chat');
+    };
   }, []);
+
+  function joinChat() {
+    router.push(`${_id}`).then(() => {
+      ws.ws?.emit('join_chat', {
+        rooms: [cookieName, _id],
+      });
+    });
+  }
 
   return (
     <HStack
       w="full"
       cursor="pointer"
       p="2rem"
-      ml="2rem"
+      ml="4rem"
       whiteSpace="nowrap"
       transition="0.2s"
       borderRadius="2xl"
       _hover={{ borderRadius: '15px', background: ' rgba(122, 122, 122, 0.1)', transition: '0.2s' }}
-      data-testid="chat"
       onClick={() => {
         joinChat();
         toggleCreateGroup(false);
@@ -73,93 +57,17 @@ function ActiveChats(props: IActiveChats) {
         `]: _id === chatId,
       })}
     >
-      <div
-        className={css`
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-        `}
-      >
-        <HStack>
-          <VStack align="flex-start">
-            <div
-              className={css`
-                margin: 0;
-                color: black;
-                display: flex;
-              `}
-            >
-              {members.length > 2
-                ? members.map((element, index) => {
-                    if (index === 3) return null;
-                    return (
-                      <Heading color={color} size="md" style={{ margin: 0 }} key={index}>
-                        {element}
-                        {element[members.length - 1] === element[index] ? `${members.length > 3 ? '...' : ''}` : ','}
-                      </Heading>
-                    );
-                  })
-                : (members && members.length === 1 && (
-                    <Heading color={color} size="md" m={0}>
-                      {user1}
-                    </Heading>
-                  )) ||
-                  (user2 === cookieName && (
-                    <Heading color={color} size="md" m={0}>
-                      {user1}
-                    </Heading>
-                  )) ||
-                  (user1 === cookieName && (
-                    <Heading color={color} size="md" m={0}>
-                      {user2}
-                    </Heading>
-                  ))}
-            </div>
-            <p
-              className={css`
-                margin: 0;
-                color: ${color};
-                justify-content: flex-start;
-                align-items: center;
-                margin: 1rem 0;
-              `}
-            >
-              Last message...
-            </p>
-          </VStack>
-        </HStack>
-        {_id === chatId && (
-          <IconButton
-            borderRadius="full"
-            aria-label=""
-            icon={
-              <BsThreeDots
-                className={css`
-                  border-radius: 50%;
-                  width: 2.5rem;
-                  height: 2.5rem;
-                  color: ${color};
-                  box-shadow: 0px 0px 2px 0px ${color};
-                `}
-                onClick={() => toggleChatSettings(!toggle.toggleChatSettings)}
-              />
-            }
-          />
-        )}
-      </div>
+      <ActiveChatDetails _id={_id} chatId={chatId} members={members} />
     </HStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
-  toggle: state.toggle,
   ws: state.ws,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleCreateGroup: bindActionCreators(toggleCreateGroup, dispatch),
-  toggleChatSettings: bindActionCreators(toggleChatSettings, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveChats);

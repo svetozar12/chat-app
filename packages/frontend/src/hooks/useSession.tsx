@@ -1,41 +1,45 @@
-import { GetUser } from '@chat-app/gql-server';
+import { GetUser, useGetUserByIdQuery, AuthModel } from 'services/generated';
 import { useCookie } from 'next-cookie';
-import { useEffect, useState } from 'react';
-import sdk from 'services/sdk';
+import React, { useEffect, useState } from 'react';
 import { checkTokens, logout } from '../utils/authMethods';
+import { useDispatch } from 'react-redux';
+import { setIsAuth } from 'services/redux/reducer/auth/actions';
+import { ACCESS_TOKEN, USER_ID } from 'constants/cookieNames';
 
 function useProvideAuth() {
-  const [user, setUser] = useState<GetUser | null>(null);
+  const [user, setUser] = useState<GetUser | undefined>(undefined);
   const cookie = useCookie();
-
+  const auth: AuthModel = { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) };
+  const { data: userData, ...query } = useGetUserByIdQuery({ variables: { auth } });
+  const dispatch = useDispatch();
   const checkSession = async () => {
     try {
-      await checkTokens(cookie);
-      return true;
+      return await checkTokens(cookie);
     } catch (error) {
       return false;
     }
   };
 
-  const getUser = async () => {
-    const userId: string = cookie.get('id');
-    const token: string = cookie.get('token');
-    const auth = { userId, AccessToken: token };
-    const res = await sdk.user.getById({ auth });
-    setUser(res);
+  const getUser = () => {
+    const { getUser } = userData || {};
+    if (getUser?.__typename === 'Error') return setUser(undefined);
+    setUser(getUser);
   };
 
   useEffect(() => {
-    checkSession();
+    checkSession().then((isAuth) => {
+      dispatch(setIsAuth(isAuth));
+    });
     getUser();
   }, []);
 
-  if (!cookie.getAll()) return { user: null };
-
+  const authObj: AuthModel = { userId: cookie.get(USER_ID), AccessToken: cookie.get(ACCESS_TOKEN) };
+  if (!cookie.getAll()) return { user: undefined, auth: authObj };
   return {
     user,
-    auth: { userId: cookie.get('id'), AccessToken: cookie.get('token') },
+    auth: authObj,
     logout,
+    query,
   };
 }
 

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { externalUrlsEnv } from '../../config/env';
+import { externalUrlsEnv, jwtEnv } from '../../config/env';
 import User from '../../models/User.model';
 import Chats from '../../models/chatRoom.model';
 
@@ -7,6 +7,7 @@ import { CustomError } from '../../utils/custom-error.model';
 import { v4 as uuidv4 } from 'uuid';
 import Invites from '../../models/Invites.model';
 import { resMessages } from '../../common/constants';
+import signTokens from '../../utils/signToken';
 
 class UsersService {
   async GetUser(req: Request, res: Response, next: NextFunction) {
@@ -14,6 +15,17 @@ class UsersService {
     const user = await User.findOne({ _id: userId }).exec();
     if (!user) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
     return res.status(200).send(user);
+  }
+
+  async GetUserList(req: Request, res: Response, next: NextFunction) {
+    const userIds: any[] = Object.values(req.query.userIds as Record<string, string>);
+
+    const users = await User.find({
+      _id: { $in: userIds },
+    }).exec();
+
+    if (users.length < 1) return next(CustomError.notFound(resMessages.user.NOT_FOUND));
+    return res.status(200).send(users);
   }
 
   async CreateUser(req: Request, res: Response, next: NextFunction) {
@@ -37,12 +49,22 @@ class UsersService {
     });
 
     const chat = await new Chats({
-      members: user.username,
+      members: user.id,
     });
-
+    const expire = {
+      access: '1h',
+      refresh: '1d',
+    };
     await user.save();
     await chat.save();
-    return res.status(201).send({ Message: resMessages.user.CREATE(user.username) });
+
+    const AccessToken = await signTokens({ _id: user._id.toString(), username: user.username, password }, jwtEnv.JWT_SECRET, expire.access);
+    const RefreshToken = await signTokens(
+      { _id: user._id.toString(), username: user.username, password },
+      jwtEnv.JWT_REFRESH_SECRET,
+      expire.refresh,
+    );
+    return res.status(201).json({ userId: user._id, AccessToken, RefreshToken });
   }
 
   async UpdateUser(req: Request, res: Response, next: NextFunction) {

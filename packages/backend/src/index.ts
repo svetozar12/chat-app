@@ -1,4 +1,16 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+declare namespace Express {
+  interface Request {
+    token: string;
+    username: string;
+    user: string;
+  }
+  interface Response {
+    paginatedResults: any;
+  }
+}
 import { app } from './server';
+
 const port = process.env.PORT || 4002;
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, (): void => {

@@ -1,0 +1,16 @@
+query GetUserList($auth: AuthModel!, $userIds: [String]!) {
+  getUserList(auth: $auth, userIds: $userIds) {
+    __typename
+    ... on getUserList {
+      res {
+        _id
+        email
+        userAvatar
+        username
+      }
+    }
+    ... on Error {
+      message
+    }
+  }
+}

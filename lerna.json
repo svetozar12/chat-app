@@ -1,12 +1,6 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.0.0",
-  "lerna-dockerize": {
-    "templateDockerfileName": "Dockerfile.template",
-    "baseDockerfileName": "Dockerfile.base"
-  }
+  "version": "0.0.0"
 }

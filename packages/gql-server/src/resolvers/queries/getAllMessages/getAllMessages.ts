@@ -1,4 +1,5 @@
 import { AuthBase } from '../../../constants';
+import { ERROR, MESSAGES_LIST } from '../../../constants/typenames';
 import sdk from '../../../utils/sdk';
 
 export interface IMessage extends AuthBase {
@@ -10,11 +11,13 @@ export interface IMessage extends AuthBase {
 }
 
 const getAllMessages = async (_: unknown, args: IMessage) => {
-  const res = await sdk.message.getMessages(args.auth, args.chat_id, {
+  const res: any = await sdk.message.getMessages(args.auth, args.chat_id, {
     page_number: args.query.page_number,
     page_size: args.query.page_size,
   });
-  return res;
+
+  if (res.__typename === ERROR) return res;
+  return { __typename: MESSAGES_LIST, res };
 };
 
 export default getAllMessages;

@@ -1,10 +1,9 @@
 import { css, cx } from '@emotion/css';
-import React from 'react';
+import React, { FC } from 'react';
 import { useRouter } from 'next/router';
 import { AiOutlineUserDelete, AiOutlinePlusCircle } from 'react-icons/ai';
 import { useCookie } from 'next-cookie';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
-import generic from '../../../utils/generic';
 // services
 import s from './ChatSettings.module.css';
 import useThemeColors from '../../../hooks/useThemeColors';
@@ -14,7 +13,8 @@ import { toggleInviteModal } from 'services/redux/reducer/toggles/actions';
 import { connect } from 'react-redux';
 import { IWebSocket } from 'services/redux/reducer/websocket/state';
 import { IToggle } from 'services/redux/reducer/toggles/state';
-import sdk from 'services/sdk';
+import { useGetChatListQuery, useGetChatQuery, useUpdateChatMutation } from 'services/generated';
+import useProvideAuth from 'hooks/useSession';
 
 interface IChatSettings {
   chatId: string;
@@ -23,21 +23,24 @@ interface IChatSettings {
   toggleInviteModal: typeof toggleInviteModal;
 }
 
-function ChatSettings(props: IChatSettings) {
+const ChatSettings: FC<IChatSettings> = (props) => {
   const { chatId, ws, toggle } = props;
   const [users, setUsers] = React.useState<string[]>([]);
   const route = useRouter();
-  const cookie = useCookie();
-  const id: string = cookie.get('id');
-  const token: string = cookie.get('token');
+  const { auth } = useProvideAuth();
+  const [updateChat] = useUpdateChatMutation();
+  const { data } = useGetChatQuery({ variables: { auth, chat_id: chatId } });
+  const { data: chatListData } = useGetChatListQuery({ variables: { auth } });
 
   const emitFriendRequest = async () => {
     ws.ws?.emit('friend_request');
   };
   const getMembers = async () => {
     try {
-      const res = await sdk.chatroom.getById({ auth: { userId: id, AccessToken: token }, chat_id: chatId });
-      const { members } = res;
+      const { getChatById } = data || {};
+      if (getChatById?.__typename === 'Error') throw new Error(getChatById.message);
+      if (!getChatById) return;
+      const { members } = getChatById;
       setUsers(members);
       return true;
     } catch (error) {
@@ -47,7 +50,7 @@ function ChatSettings(props: IChatSettings) {
 
   const deleteMember = async (user: string) => {
     try {
-      await sdk.chatroom.update({ auth: { userId: id, AccessToken: token }, chat_id: chatId, username: user });
+      await updateChat({ variables: { auth, chat_id: chatId, username: user } });
       return true;
     } catch (error) {
       return false;
@@ -66,9 +69,10 @@ function ChatSettings(props: IChatSettings) {
     const updatedUsers = users.filter((element) => element !== user);
     setUsers(updatedUsers);
     if (updatedUsers.length === 2) {
-      const redirect: { _id: string } = await generic.getFirstChat(id, token);
-
-      route.push(`/${redirect._id}`);
+      const { getAllChats } = chatListData || {};
+      if (getAllChats?.__typename === 'Error') throw new Error(getAllChats.message);
+      const firstChatid = getAllChats?.res[0]._id;
+      route.push(`/${firstChatid}`);
     }
   };
 
@@ -84,7 +88,7 @@ function ChatSettings(props: IChatSettings) {
         Members in chat
       </Heading>
 
-      {users.map((item, index) => (
+      {users?.map((item, index) => (
         <HStack alignItems="center" key={index}>
           <Heading color={color}>{item}</Heading>
           <AiOutlineUserDelete
@@ -145,7 +149,7 @@ function ChatSettings(props: IChatSettings) {
       )}
     </VStack>
   );
-}
+};
 
 const mapStateToProps = (state: STATE) => ({
   ws: state.ws,

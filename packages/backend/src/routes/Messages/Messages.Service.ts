@@ -28,7 +28,6 @@ class MessagesService {
       userId: req.body.user_id,
       reqMessage: req.body.message,
     };
-    console.log(messageReqObj);
 
     const { chatId, reqMessage, userId } = messageReqObj;
 

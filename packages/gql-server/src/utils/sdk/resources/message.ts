@@ -6,7 +6,11 @@ import { ChatMessage, CreateMessage, PaginationQuery } from '../types/message';
 const basePath = '/messages';
 
 const message = {
-  getMessages: async (auth: Auth, chatId: string, query?: PaginationQuery): Response<{ Message: string; data: ChatMessage[] }> => {
+  getMessages: async (
+    auth: Auth,
+    chatId: string,
+    query?: PaginationQuery,
+  ): Response<{ Message: string; data: ChatMessage[] } | { __typename: 'Error'; message: string }> => {
     const { userId, AccessToken } = auth;
     const { page_size, page_number } = query as PaginationQuery;
     return makeRequest(
@@ -18,21 +22,29 @@ const message = {
       },
     );
   },
-  createMessage: async (auth: Auth, chatId: string, body: CreateMessage): Response<{ data: ChatMessage }> => {
+  createMessage: async (
+    auth: Auth,
+    chatId: string,
+    body: CreateMessage,
+  ): Response<{ data: ChatMessage } | { __typename: 'Error'; message: string }> => {
     const { userId, AccessToken } = auth;
     const Body = { ...body, user_id: userId };
     return makeRequest(Method.POST, `${basePath}/${chatId}`, Body, {
       headers: { Authorization: `Bearer ${AccessToken}` },
     });
   },
-  updateMessage: async (auth: Auth, messageId: string, body: CreateMessage): Response<Message> => {
+  updateMessage: async (
+    auth: Auth,
+    messageId: string,
+    body: CreateMessage,
+  ): Response<Message | { __typename: 'Error'; message: string }> => {
     const { userId, AccessToken } = auth;
     const Body = { ...body, user_id: userId };
     return makeRequest(Method.PUT, `${basePath}/${messageId}`, Body, {
       headers: { Authorization: `Bearer ${AccessToken}` },
     });
   },
-  deleteMessage: async (auth: Auth, messageId: string): Response<Message> => {
+  deleteMessage: async (auth: Auth, messageId: string): Response<Message | { __typename: 'Error'; message: string }> => {
     const { userId, AccessToken } = auth;
     logger('info', auth, ['gql,sdk']);
 

@@ -14,7 +14,7 @@ function DefaultLink(props: IDefaultLink) {
   return (
     <Center w="full" {...chakraProps} {...style} {...baseProps}>
       <Link href={href}>
-        <AnchorLink textAlign="center" w="full" color="blue.500" fontWeight="bold" href="#">
+        <AnchorLink w="full" color="blue.500" fontWeight="bold" href="#">
           {text}
         </AnchorLink>
       </Link>
