@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "prestart": "yarn codegen",
+    "predev": "yarn codegen",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

@@ -14,7 +14,9 @@ interface IApp extends ReturnType<typeof mapStateToProps>, ReturnType<typeof map
   children: JSX.Element | JSX.Element[];
 }
 
-const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://${process.env.NEXT_PUBLIC_GQL_HOST}:${process.env.NEXT_PUBLIC_GQL_PORT}/graphql`;
+export const gqlUrl = `${process.env.NEXT_PUBLIC_GQL_PROTOCOL}://${process.env.NEXT_PUBLIC_GQL_HOST}:${
+  process.env.NEXT_PUBLIC_GQL_PORT || ''
+}/graphql`;
 export const client = new ApolloClient({
   ssrMode: typeof window === 'undefined',
   link: createHttpLink({
