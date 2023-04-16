@@ -26,6 +26,6 @@ const messageSchema = new Schema<IMessage>(
   { timestamps: true }
 );
 
-const Message = model<IMessage>('messages', messageSchema);
+const Message = model<IMessage>('message', messageSchema);
 
 export { Message };

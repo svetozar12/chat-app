@@ -30,8 +30,8 @@ const messageRouter = Router();
  *       200:
  *         description: message
  *         schema:
- *           type: object
- *           $ref: '#/components/MessageSwagger'
+ *           type: array
+ *           $ref: '#/components/schemas/message'
  */
 messageRouter.get('/', (req, res) => {
   return GetListMessage(req, res);
@@ -46,13 +46,13 @@ messageRouter.get('/', (req, res) => {
  *     produces:
  *       - application/json
  *     parameters:
- *       - $ref: '#/parameters/message'
+ *       - $ref: '#/components/schemas/message'
  *     responses:
  *       200:
  *         description: message
  *         schema:
  *           type: object
- *           $ref: '#/definitions/Message'
+ *           $ref: '#/components/schemas/message'
  */
 messageRouter.post('/', (req, res) => {
   return CreateMessage(req, res);

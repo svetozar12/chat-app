@@ -12,7 +12,7 @@ const app = express();
 const options: Options = {
   failOnErrors: true, // Whether or not to throw when parsing errors. Defaults to false.
   definition: {
-    openapi: '2.0.0',
+    openapi: '3.0.0',
     components: {
       schemas: SwaggerMongoose,
     },
@@ -25,24 +25,15 @@ const options: Options = {
 };
 
 const openapiSpecification = swaggerJsdoc(options);
-console.log(`http://localhost:3333${API_PREFIX}swagger/swagger.json`);
+console.log(openapiSpecification);
 // db connections
 ConnectMongo(MONGO_URL);
 // routes
 app.use(API_PREFIX, routes);
 app.use(
-  `${API_PREFIX}swagger/`,
-  swaggerUi.serveFiles(null, {
-    swaggerOptions: { openapi: '3.0.0' },
-    explorer: true,
-    // swaggerOptions: {
-    //   url: `http://localhost:3333${API_PREFIX}swagger/swagger.json`,
-    // },
-  }),
+  `${API_PREFIX}swagger`,
+  swaggerUi.serve,
   swaggerUi.setup(openapiSpecification)
 );
-// app.get(`${API_PREFIX}swagger/swagger.json`, (req, res) =>
-//   res.json(openapiSpecification)
-// );
 
 export { app };
