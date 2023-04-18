@@ -1,31 +1,24 @@
-import { Schema, model } from 'mongoose';
-interface IMessage {
-  user_id: Schema.Types.ObjectId;
-  chat_id: Schema.Types.ObjectId;
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+
+export type MessageDocument = HydratedDocument<Message>;
+
+@Schema({ timestamps: true })
+export class Message {
+  @Prop({ required: true, ref: 'User', type: Types.ObjectId })
+  user_id: string;
+
+  @Prop({ required: true, ref: 'chatRoom', type: Types.ObjectId })
+  chat_id: string;
+
+  @Prop({ required: true })
   sender: string;
-  message?: string;
+
+  @Prop({ required: true, min: 1, max: 100 })
+  message: string;
+
+  @Prop({ default: [] })
   seenBy: string[];
 }
 
-const messageSchema = new Schema<IMessage>(
-  {
-    user_id: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    chat_id: {
-      type: Schema.Types.ObjectId,
-      ref: 'chatRoom',
-      required: true,
-    },
-    sender: { type: String, required: true },
-    message: { type: String, min: 1, max: 100, required: true },
-    seenBy: [String],
-  },
-  { timestamps: true }
-);
-
-const Message = model<IMessage>('message', messageSchema);
-
-export { Message };
+export const MessageSchema = SchemaFactory.createForClass(Message);
