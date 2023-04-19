@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb://sally:sallyspassword@dbserver.example:5555/userdata?tls=true&connectionTimeout=5000"
+}
+
+model Message {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String   @db.ObjectId
+  chatId   String   @db.ObjectId
+  chatRoom ChatRoom @relation(fields: [chatId], references: [id])
+  sender   String
+  message  String
+  seenBy   String[]
+}
+
+model ChatRoom {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  members String[]
+  Message Message[]
+}
+
+model Invite {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  inviter  String
+  reciever String
+  status   Status
+}
+
+enum Status {
+  ACCEPTED
+  RECIEVED
+  DECLINED
+}

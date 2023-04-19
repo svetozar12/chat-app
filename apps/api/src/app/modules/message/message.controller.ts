@@ -8,9 +8,9 @@ import {
   Put,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { Message } from '@chat-app/api/db';
 import { ApiResponse } from '@nestjs/swagger';
 import { MessageDto } from './dto/message.dto';
+import { Message } from '@prisma/client';
 
 @Controller('message')
 export class MessageController {
