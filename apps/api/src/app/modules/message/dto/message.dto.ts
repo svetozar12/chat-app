@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Message } from '@prisma/client';
+import { Message } from '@chat-app/api/db';
 
 export class MessageDto implements Message {
   id: string;

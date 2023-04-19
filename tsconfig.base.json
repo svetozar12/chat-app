@@ -17,7 +17,8 @@
     "strictPropertyInitialization": false,
     "paths": {
       "@chat-app/api/db": ["libs/api/db/src/index.ts"],
-      "@chat-app/api/env": ["libs/api/env/src/index.ts"]
+      "@chat-app/api/env": ["libs/api/env/src/index.ts"],
+      "@chat-app/api/sdk": ["libs/api/sdk/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

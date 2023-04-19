@@ -4,14 +4,17 @@ import {
   Delete,
   Get,
   HttpStatus,
+  Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MessageDto } from './dto/message.dto';
-import { Message } from '@prisma/client';
+import { Message } from '@chat-app/api/db';
 
+ApiTags('Message');
 @Controller('message')
 export class MessageController {
   constructor(private messageService: MessageService) {}
@@ -21,7 +24,8 @@ export class MessageController {
     type: [MessageDto],
     description: 'fetch list of messages',
   })
-  findAll(user_id: string): Promise<Message[]> {
+  findAll(@Query('user_id') user_id: string): Promise<Message[]> {
+    console.log(user_id, 'ivan');
     return this.messageService.findAll(user_id);
   }
 
@@ -43,7 +47,7 @@ export class MessageController {
   })
   updateMessage(
     @Body() body: MessageDto,
-    @Body('id') id: string
+    @Param('id') id: string
   ): Promise<Message> {
     return this.messageService.updateMessage(id, body);
   }
@@ -55,7 +59,7 @@ export class MessageController {
     description: 'delete message',
   })
   deleteMessage(
-    @Body('id') id: string,
+    @Param('id') id: string,
     @Body('user_id') user_id
   ): Promise<Message> {
     return this.messageService.DeleteMessage(id, user_id);

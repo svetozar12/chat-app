@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { MessageDto } from './dto/message.dto';
 import { PrismaService } from './prisma/prisma.service';
-import { Message } from '@prisma/client';
+import { Message } from '@chat-app/api/db';
 
 @Injectable()
 export class MessageService {
@@ -12,6 +12,9 @@ export class MessageService {
         userId,
       },
     });
+    if (messages.length === 0) {
+      throw new NotFoundException();
+    }
     return messages;
   }
 

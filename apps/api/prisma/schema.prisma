@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = "mongodb://sally:sallyspassword@dbserver.example:5555/userdata?tls=true&connectionTimeout=5000"
+  url      = env("MONGO_URL")
 }
 
 model Message {
