@@ -1,13 +1,16 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { MessageDto } from './dto/message.dto';
-import { PrismaService } from './prisma/prisma.service';
 import { Message } from '@chat-app/api/db';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class MessageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectModel(Message.name, 'Message') private messageModel: Model<Message>
+  ) {}
   async findAll(userId: string): Promise<Message[]> {
-    const messages = await this.prisma.message.findMany({
+    const messages = await this.messageModel.find({
       where: {
         userId,
       },
@@ -19,12 +22,13 @@ export class MessageService {
   }
 
   async createMessage(body: MessageDto): Promise<Message> {
-    const message = await this.prisma.message.create({ data: { ...body } });
+    const message = new this.messageModel({ data: body });
+    await message.save();
     return message;
   }
 
-  async updateMessage(id: string, messageBody: MessageDto): Promise<Message> {
-    const message = await this.prisma.message.update({
+  async updateMessage(id: string, messageBody: MessageDto): Promise<any> {
+    const message = await this.messageModel.updateOne({
       where: { id },
       data: messageBody,
     });
@@ -32,14 +36,14 @@ export class MessageService {
   }
 
   async DeleteMessage(id: string, userId: string): Promise<Message> {
-    const message = await this.prisma.message.findFirst({
+    const message = (await this.messageModel.find({
       where: {
         id,
         userId,
       },
       include: {},
-    });
-    await this.prisma.message.delete({
+    })) as unknown as Message;
+    await this.messageModel.deleteOne({
       where: {
         ...message,
       },

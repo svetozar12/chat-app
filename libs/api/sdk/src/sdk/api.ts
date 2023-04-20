@@ -104,11 +104,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerDeleteMessage: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/message/{id}`;
+        messageControllerDeleteMessage: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('messageControllerDeleteMessage', 'id', id)
+            const localVarPath = `/message/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -133,10 +137,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        messageControllerFindAll: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('messageControllerFindAll', 'userId', userId)
             const localVarPath = `/message`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -148,6 +155,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (userId !== undefined) {
+                localVarQueryParameter['user_id'] = userId;
+            }
 
 
     
@@ -162,14 +173,18 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} id 
          * @param {MessageDto} messageDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerUpdateMessage: async (messageDto: MessageDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        messageControllerUpdateMessage: async (id: string, messageDto: MessageDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('messageControllerUpdateMessage', 'id', id)
             // verify required parameter 'messageDto' is not null or undefined
             assertParamExists('messageControllerUpdateMessage', 'messageDto', messageDto)
-            const localVarPath = `/message/{id}`;
+            const localVarPath = `/message/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -217,30 +232,33 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerDeleteMessage(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerDeleteMessage(options);
+        async messageControllerDeleteMessage(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerDeleteMessage(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindAll(options);
+        async messageControllerFindAll(userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindAll(userId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} id 
          * @param {MessageDto} messageDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerUpdateMessage(messageDto: MessageDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerUpdateMessage(messageDto, options);
+        async messageControllerUpdateMessage(id: string, messageDto: MessageDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerUpdateMessage(id, messageDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -264,28 +282,31 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerDeleteMessage(options?: any): AxiosPromise<MessageDto> {
-            return localVarFp.messageControllerDeleteMessage(options).then((request) => request(axios, basePath));
+        messageControllerDeleteMessage(id: string, options?: any): AxiosPromise<MessageDto> {
+            return localVarFp.messageControllerDeleteMessage(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindAll(options?: any): AxiosPromise<Array<MessageDto>> {
-            return localVarFp.messageControllerFindAll(options).then((request) => request(axios, basePath));
+        messageControllerFindAll(userId: string, options?: any): AxiosPromise<Array<MessageDto>> {
+            return localVarFp.messageControllerFindAll(userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} id 
          * @param {MessageDto} messageDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerUpdateMessage(messageDto: MessageDto, options?: any): AxiosPromise<MessageDto> {
-            return localVarFp.messageControllerUpdateMessage(messageDto, options).then((request) => request(axios, basePath));
+        messageControllerUpdateMessage(id: string, messageDto: MessageDto, options?: any): AxiosPromise<MessageDto> {
+            return localVarFp.messageControllerUpdateMessage(id, messageDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -310,33 +331,36 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public messageControllerDeleteMessage(options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).messageControllerDeleteMessage(options).then((request) => request(this.axios, this.basePath));
+    public messageControllerDeleteMessage(id: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).messageControllerDeleteMessage(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public messageControllerFindAll(options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).messageControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    public messageControllerFindAll(userId: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).messageControllerFindAll(userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} id 
      * @param {MessageDto} messageDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public messageControllerUpdateMessage(messageDto: MessageDto, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).messageControllerUpdateMessage(messageDto, options).then((request) => request(this.axios, this.basePath));
+    public messageControllerUpdateMessage(id: string, messageDto: MessageDto, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).messageControllerUpdateMessage(id, messageDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
