@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MessageDto } from './dto/message.dto';
 import { Message } from '@chat-app/api/db';
 
@@ -24,9 +24,8 @@ export class MessageController {
     type: [MessageDto],
     description: 'fetch list of messages',
   })
-  findAll(@Query('user_id') user_id: string): Promise<Message[]> {
-    console.log(user_id, 'ivan');
-    return this.messageService.findAll(user_id);
+  findAll(@Query('userId') userId: string): Promise<Message[]> {
+    return this.messageService.findAll(userId);
   }
 
   @Post()
@@ -60,8 +59,8 @@ export class MessageController {
   })
   deleteMessage(
     @Param('id') id: string,
-    @Body('user_id') user_id
+    @Body('userId') userId: string
   ): Promise<Message> {
-    return this.messageService.DeleteMessage(id, user_id);
+    return this.messageService.DeleteMessage(id, userId);
   }
 }

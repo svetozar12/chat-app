@@ -34,6 +34,12 @@ export interface MessageDto {
      * @type {string}
      * @memberof MessageDto
      */
+    '_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageDto
+     */
     'chatId': string;
     /**
      * 
@@ -76,7 +82,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         messageControllerCreateMessage: async (messageDto: MessageDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'messageDto' is not null or undefined
             assertParamExists('messageControllerCreateMessage', 'messageDto', messageDto)
-            const localVarPath = `/message`;
+            const localVarPath = `/api/message`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -111,7 +117,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         messageControllerDeleteMessage: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('messageControllerDeleteMessage', 'id', id)
-            const localVarPath = `/message/{id}`
+            const localVarPath = `/api/message/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -144,7 +150,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         messageControllerFindAll: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('messageControllerFindAll', 'userId', userId)
-            const localVarPath = `/message`;
+            const localVarPath = `/api/message`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -157,7 +163,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
             if (userId !== undefined) {
-                localVarQueryParameter['user_id'] = userId;
+                localVarQueryParameter['userId'] = userId;
             }
 
 
@@ -183,7 +189,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('messageControllerUpdateMessage', 'id', id)
             // verify required parameter 'messageDto' is not null or undefined
             assertParamExists('messageControllerUpdateMessage', 'messageDto', messageDto)
-            const localVarPath = `/message/{id}`
+            const localVarPath = `/api/message/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);

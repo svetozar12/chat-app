@@ -7,13 +7,11 @@ import { Model } from 'mongoose';
 @Injectable()
 export class MessageService {
   constructor(
-    @InjectModel(Message.name, 'Message') private messageModel: Model<Message>
+    @InjectModel(Message.name) private messageModel: Model<Message>
   ) {}
   async findAll(userId: string): Promise<Message[]> {
     const messages = await this.messageModel.find({
-      where: {
-        userId,
-      },
+      userId,
     });
     if (messages.length === 0) {
       throw new NotFoundException();
@@ -22,8 +20,7 @@ export class MessageService {
   }
 
   async createMessage(body: MessageDto): Promise<Message> {
-    const message = new this.messageModel({ data: body });
-    await message.save();
+    const message = await this.messageModel.create(body);
     return message;
   }
 
