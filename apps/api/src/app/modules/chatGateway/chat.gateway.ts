@@ -1,26 +1,22 @@
 import { Chat } from '@chat-app/api/db';
 import { InjectModel } from '@nestjs/mongoose';
 import {
-  ConnectedSocket,
-  MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Model } from 'mongoose';
 import { Socket } from 'socket.io';
+import { MESSAGE } from './events';
 
 @WebSocketGateway()
 export class ChatGateway {
   constructor(@InjectModel(Chat.name) private chatModel: Model<Chat>) {}
   @WebSocketServer()
-  server;
+  server: Socket;
 
-  @SubscribeMessage('message')
-  handleMessage(
-    @MessageBody() message: string,
-    @ConnectedSocket() client: Socket
-  ): void {
+  @SubscribeMessage(MESSAGE)
+  handleMessage(): void {
     const senMessage = async ({
       chatInstance,
       sender,
@@ -37,11 +33,11 @@ export class ChatGateway {
       if (!findChat) return null;
       const date = new Date();
       const messages = [{ sender, message, createdAt: date }];
-      client.to(chatInstance).emit('message', {
+      this.server.to(chatInstance).emit(MESSAGE, {
         messages,
       });
     };
 
-    client.on('message', senMessage);
+    this.server.on(MESSAGE, senMessage);
   }
 }

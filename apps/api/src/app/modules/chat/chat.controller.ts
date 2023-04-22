@@ -12,10 +12,15 @@ import {
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiHeader } from '@nestjs/swagger';
 import { Chat } from '@chat-app/api/db';
+import { API_KEY_HEADER } from '../../guards/ApiKey.guard';
 
 @ApiTags('chat')
+@ApiHeader({
+  name: API_KEY_HEADER,
+  description: API_KEY_HEADER,
+})
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
