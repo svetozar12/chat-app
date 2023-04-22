@@ -14,7 +14,7 @@
     "codegen": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx rimraf src/utils/sdk && npx openapi-generator-cli generate -i http://localhost:3000/api-json -o src/sdk -g typescript-axios --additional-properties=supportsES6=true --skip-validate-spec",
+        "command": "npx rimraf src/sdk && npx openapi-generator-cli generate -i http://localhost:3000/api-json -o src/sdk -g typescript-axios --additional-properties=supportsES6=true --skip-validate-spec",
         "cwd": "libs/api/sdk"
       }
     }
