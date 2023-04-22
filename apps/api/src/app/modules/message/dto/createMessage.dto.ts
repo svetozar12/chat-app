@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Message } from '@chat-app/api/db';
 import { Types } from 'mongoose';
 
-export class MessageDto implements Message {
+export class CreateMessageDto implements Message {
   @IsNotEmpty()
   @ApiProperty({ type: 'string', required: false })
   _id: Types.ObjectId;
@@ -12,8 +12,8 @@ export class MessageDto implements Message {
   chatId: Types.ObjectId;
 
   @IsNotEmpty()
-  @ApiProperty({ type: 'string' })
-  userId: Types.ObjectId;
+  @ApiProperty()
+  userId: string;
 
   @IsNotEmpty()
   @ApiProperty()

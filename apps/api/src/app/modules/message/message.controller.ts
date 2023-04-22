@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { MessageDto } from './dto/message.dto';
+import { CreateMessageDto } from './dto/createMessage.dto';
 import { Message } from '@chat-app/api/db';
 
 @ApiTags('message')
@@ -21,7 +21,7 @@ export class MessageController {
   @Get()
   @ApiResponse({
     status: HttpStatus.OK,
-    type: [MessageDto],
+    type: [CreateMessageDto],
     description: 'fetch list of messages',
   })
   findAll(@Query('userId') userId: string): Promise<Message[]> {
@@ -31,21 +31,21 @@ export class MessageController {
   @Post()
   @ApiResponse({
     status: HttpStatus.CREATED,
-    type: MessageDto,
+    type: CreateMessageDto,
     description: 'create message',
   })
-  createMessage(@Body() body: MessageDto): Promise<Message> {
+  createMessage(@Body() body: CreateMessageDto): Promise<Message> {
     return this.messageService.createMessage(body);
   }
 
   @Put(':id')
   @ApiResponse({
     status: HttpStatus.OK,
-    type: MessageDto,
+    type: CreateMessageDto,
     description: 'update message',
   })
   updateMessage(
-    @Body() body: MessageDto,
+    @Body() body: CreateMessageDto,
     @Param('id') id: string
   ): Promise<Message> {
     return this.messageService.updateMessage(id, body);
@@ -54,7 +54,7 @@ export class MessageController {
   @Delete(':id')
   @ApiResponse({
     status: HttpStatus.OK,
-    type: MessageDto,
+    type: CreateMessageDto,
     description: 'delete message',
   })
   deleteMessage(
