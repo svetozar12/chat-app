@@ -20,8 +20,7 @@ export class MessageService {
   }
 
   async createMessage(body: MessageDto): Promise<Message> {
-    const message = await this.messageModel.create(body);
-    return message;
+    return this.messageModel.create(body);
   }
 
   async updateMessage(id: string, messageBody: MessageDto): Promise<any> {

@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 
 export type InviteDocument = HydratedDocument<Invite>;
 
@@ -11,12 +11,12 @@ enum InviteStatus {
 
 @Schema()
 export class Invite {
-  @Prop({ ref: 'User', required: true })
-  userId: Types.ObjectId;
+  @Prop({ type: SchemaTypes.ObjectId, auto: true })
+  _id: Types.ObjectId;
   @Prop({ required: true })
-  inviter: string;
+  receiverId: string;
   @Prop({ required: true })
-  reciever: string;
+  senderId: string;
   @Prop({ required: true })
   status: InviteStatus;
 }

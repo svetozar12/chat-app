@@ -10,12 +10,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MessageDto } from './dto/message.dto';
 import { Message } from '@chat-app/api/db';
 
 @ApiTags('message')
-@ApiBearerAuth()
 @Controller('message')
 export class MessageController {
   constructor(private messageService: MessageService) {}
