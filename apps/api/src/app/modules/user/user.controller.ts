@@ -4,16 +4,14 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   Put,
   HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('user')
-@ApiBearerAuth('Auth')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}

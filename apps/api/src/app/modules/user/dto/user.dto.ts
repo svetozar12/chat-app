@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 
 export class UserDto implements User {
   @IsNotEmpty()
-  @ApiProperty({ type: 'string', required: false })
+  @ApiProperty({ type: 'string', required: false, readOnly: true })
   _id: Types.ObjectId;
   @IsNotEmpty()
   @ApiProperty({ type: 'string' })
