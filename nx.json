@@ -12,7 +12,7 @@
       "!{projectRoot}/jest.config.[jt]s",
       "!{projectRoot}/.eslintrc.json"
     ],
-    "sharedGlobals": []
+    "sharedGlobals": ["{workspaceRoot}/babel.config.json"]
   },
   "targetDefaults": {
     "build": {
@@ -28,6 +28,9 @@
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore"
       ]
+    },
+    "e2e": {
+      "inputs": ["default", "^production"]
     }
   },
   "tasksRunnerOptions": {
@@ -41,5 +44,18 @@
   },
   "affected": {
     "defaultBase": "master"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
   }
 }
