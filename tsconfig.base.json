@@ -19,6 +19,7 @@
       "@chat-app/api/db": ["libs/api/db/src/index.ts"],
       "@chat-app/api/env": ["libs/api/env/src/index.ts"],
       "@chat-app/api/sdk": ["libs/api/sdk/src/index.ts"],
+      "@chat-app/api/shared": ["libs/api/shared/src/index.ts"],
       "@chat-app/api/v1/message": ["libs/api/v1/message/src/index.ts"],
       "@chat-app/web/utils": ["libs/web/utils/src/index.ts"]
     }

@@ -4,6 +4,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { API_ENVS } from '@chat-app/api/env';
 import { ChatModule } from './modules/chat/chat.module';
 import { ChatGatewayModule } from './modules/chatGateway/chatGateway.module';
+import { GithubOauthModule } from './modules/auth/github/github.module';
+import { UsersModule } from './modules/user/user.module';
+import { JwtAuthModule } from './modules/auth/jwt/jwt-auth.module';
+import { AppController } from './app.controller';
 
 const { MONGO_URL } = API_ENVS;
 
@@ -13,6 +17,10 @@ const { MONGO_URL } = API_ENVS;
     MongooseModule.forRoot(MONGO_URL),
     ChatModule,
     ChatGatewayModule,
+    GithubOauthModule,
+    UsersModule,
+    JwtAuthModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
