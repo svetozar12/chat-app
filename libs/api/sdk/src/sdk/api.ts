@@ -107,11 +107,10 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @param {CreateChatDto} createChatDto 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerCreate: async (createChatDto: CreateChatDto, apiKey?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        chatControllerCreate: async (createChatDto: CreateChatDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createChatDto' is not null or undefined
             assertParamExists('chatControllerCreate', 'createChatDto', createChatDto)
             const localVarPath = `/api/chat`;
@@ -125,10 +124,6 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            if (apiKey != null) {
-                localVarHeaderParameter['api-key'] = String(apiKey);
-            }
 
 
     
@@ -147,11 +142,10 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerFindAll: async (userId: string, apiKey?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        chatControllerFindAll: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('chatControllerFindAll', 'userId', userId)
             const localVarPath = `/api/chat`;
@@ -170,10 +164,6 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['userId'] = userId;
             }
 
-            if (apiKey != null) {
-                localVarHeaderParameter['api-key'] = String(apiKey);
-            }
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -189,11 +179,10 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {string} id 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerFindOne: async (id: string, userId: string, apiKey?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        chatControllerFindOne: async (id: string, userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('chatControllerFindOne', 'id', id)
             // verify required parameter 'userId' is not null or undefined
@@ -215,10 +204,6 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['userId'] = userId;
             }
 
-            if (apiKey != null) {
-                localVarHeaderParameter['api-key'] = String(apiKey);
-            }
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -234,11 +219,10 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {string} id 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerRemove: async (id: string, userId: string, apiKey?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        chatControllerRemove: async (id: string, userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('chatControllerRemove', 'id', id)
             // verify required parameter 'userId' is not null or undefined
@@ -260,10 +244,6 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['userId'] = userId;
             }
 
-            if (apiKey != null) {
-                localVarHeaderParameter['api-key'] = String(apiKey);
-            }
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -279,11 +259,10 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {string} id 
          * @param {object} body 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerUpdate: async (id: string, body: object, apiKey?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        chatControllerUpdate: async (id: string, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('chatControllerUpdate', 'id', id)
             // verify required parameter 'body' is not null or undefined
@@ -300,10 +279,6 @@ export const ChatApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            if (apiKey != null) {
-                localVarHeaderParameter['api-key'] = String(apiKey);
-            }
 
 
     
@@ -332,59 +307,54 @@ export const ChatApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {CreateChatDto} createChatDto 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chatControllerCreate(createChatDto: CreateChatDto, apiKey?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerCreate(createChatDto, apiKey, options);
+        async chatControllerCreate(createChatDto: CreateChatDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerCreate(createChatDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chatControllerFindAll(userId: string, apiKey?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateChatDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerFindAll(userId, apiKey, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {string} userId 
-         * @param {string} [apiKey] api-key
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async chatControllerFindOne(id: string, userId: string, apiKey?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerFindOne(id, userId, apiKey, options);
+        async chatControllerFindAll(userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateChatDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerFindAll(userId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {string} id 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chatControllerRemove(id: string, userId: string, apiKey?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerRemove(id, userId, apiKey, options);
+        async chatControllerFindOne(id: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerFindOne(id, userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async chatControllerRemove(id: string, userId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerRemove(id, userId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {string} id 
          * @param {object} body 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chatControllerUpdate(id: string, body: object, apiKey?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerUpdate(id, body, apiKey, options);
+        async chatControllerUpdate(id: string, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateChatDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.chatControllerUpdate(id, body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -400,55 +370,50 @@ export const ChatApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @param {CreateChatDto} createChatDto 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerCreate(createChatDto: CreateChatDto, apiKey?: string, options?: any): AxiosPromise<CreateChatDto> {
-            return localVarFp.chatControllerCreate(createChatDto, apiKey, options).then((request) => request(axios, basePath));
+        chatControllerCreate(createChatDto: CreateChatDto, options?: any): AxiosPromise<CreateChatDto> {
+            return localVarFp.chatControllerCreate(createChatDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerFindAll(userId: string, apiKey?: string, options?: any): AxiosPromise<Array<CreateChatDto>> {
-            return localVarFp.chatControllerFindAll(userId, apiKey, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} id 
-         * @param {string} userId 
-         * @param {string} [apiKey] api-key
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        chatControllerFindOne(id: string, userId: string, apiKey?: string, options?: any): AxiosPromise<CreateChatDto> {
-            return localVarFp.chatControllerFindOne(id, userId, apiKey, options).then((request) => request(axios, basePath));
+        chatControllerFindAll(userId: string, options?: any): AxiosPromise<Array<CreateChatDto>> {
+            return localVarFp.chatControllerFindAll(userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} id 
          * @param {string} userId 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerRemove(id: string, userId: string, apiKey?: string, options?: any): AxiosPromise<CreateChatDto> {
-            return localVarFp.chatControllerRemove(id, userId, apiKey, options).then((request) => request(axios, basePath));
+        chatControllerFindOne(id: string, userId: string, options?: any): AxiosPromise<CreateChatDto> {
+            return localVarFp.chatControllerFindOne(id, userId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id 
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        chatControllerRemove(id: string, userId: string, options?: any): AxiosPromise<CreateChatDto> {
+            return localVarFp.chatControllerRemove(id, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {string} id 
          * @param {object} body 
-         * @param {string} [apiKey] api-key
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chatControllerUpdate(id: string, body: object, apiKey?: string, options?: any): AxiosPromise<CreateChatDto> {
-            return localVarFp.chatControllerUpdate(id, body, apiKey, options).then((request) => request(axios, basePath));
+        chatControllerUpdate(id: string, body: object, options?: any): AxiosPromise<CreateChatDto> {
+            return localVarFp.chatControllerUpdate(id, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -463,64 +428,157 @@ export class ChatApi extends BaseAPI {
     /**
      * 
      * @param {CreateChatDto} createChatDto 
-     * @param {string} [apiKey] api-key
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChatApi
      */
-    public chatControllerCreate(createChatDto: CreateChatDto, apiKey?: string, options?: AxiosRequestConfig) {
-        return ChatApiFp(this.configuration).chatControllerCreate(createChatDto, apiKey, options).then((request) => request(this.axios, this.basePath));
+    public chatControllerCreate(createChatDto: CreateChatDto, options?: AxiosRequestConfig) {
+        return ChatApiFp(this.configuration).chatControllerCreate(createChatDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} userId 
-     * @param {string} [apiKey] api-key
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChatApi
      */
-    public chatControllerFindAll(userId: string, apiKey?: string, options?: AxiosRequestConfig) {
-        return ChatApiFp(this.configuration).chatControllerFindAll(userId, apiKey, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} id 
-     * @param {string} userId 
-     * @param {string} [apiKey] api-key
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ChatApi
-     */
-    public chatControllerFindOne(id: string, userId: string, apiKey?: string, options?: AxiosRequestConfig) {
-        return ChatApiFp(this.configuration).chatControllerFindOne(id, userId, apiKey, options).then((request) => request(this.axios, this.basePath));
+    public chatControllerFindAll(userId: string, options?: AxiosRequestConfig) {
+        return ChatApiFp(this.configuration).chatControllerFindAll(userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} id 
      * @param {string} userId 
-     * @param {string} [apiKey] api-key
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChatApi
      */
-    public chatControllerRemove(id: string, userId: string, apiKey?: string, options?: AxiosRequestConfig) {
-        return ChatApiFp(this.configuration).chatControllerRemove(id, userId, apiKey, options).then((request) => request(this.axios, this.basePath));
+    public chatControllerFindOne(id: string, userId: string, options?: AxiosRequestConfig) {
+        return ChatApiFp(this.configuration).chatControllerFindOne(id, userId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ChatApi
+     */
+    public chatControllerRemove(id: string, userId: string, options?: AxiosRequestConfig) {
+        return ChatApiFp(this.configuration).chatControllerRemove(id, userId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {string} id 
      * @param {object} body 
-     * @param {string} [apiKey] api-key
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ChatApi
      */
-    public chatControllerUpdate(id: string, body: object, apiKey?: string, options?: AxiosRequestConfig) {
-        return ChatApiFp(this.configuration).chatControllerUpdate(id, body, apiKey, options).then((request) => request(this.axios, this.basePath));
+    public chatControllerUpdate(id: string, body: object, options?: AxiosRequestConfig) {
+        return ChatApiFp(this.configuration).chatControllerUpdate(id, body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DefaultApi - axios parameter creator
+ * @export
+ */
+export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appControllerGetProfile: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/profile`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DefaultApi - functional programming interface
+ * @export
+ */
+export const DefaultApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async appControllerGetProfile(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.appControllerGetProfile(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DefaultApi - factory interface
+ * @export
+ */
+export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DefaultApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        appControllerGetProfile(options?: any): AxiosPromise<void> {
+            return localVarFp.appControllerGetProfile(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DefaultApi - object-oriented interface
+ * @export
+ * @class DefaultApi
+ * @extends {BaseAPI}
+ */
+export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public appControllerGetProfile(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).appControllerGetProfile(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

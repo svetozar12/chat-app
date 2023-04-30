@@ -13,11 +13,13 @@ const messageIds: string[] = [];
 describe('POST /message', () => {
   afterAll(async () => {
     messageIds.forEach(async (id) => {
-      await sdk.messageControllerDeleteMessage(id);
+      await sdk.messageApi.messageControllerDeleteMessage(id);
     });
   });
   it('should create a message', async () => {
-    const res = await sdk.messageControllerCreateMessage(TEST_MESSAGE);
+    const res = await sdk.messageApi.messageControllerCreateMessage(
+      TEST_MESSAGE
+    );
     const {
       data: { _id },
     } = res;
