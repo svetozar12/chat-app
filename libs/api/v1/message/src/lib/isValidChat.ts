@@ -1,5 +1,5 @@
 import { Chat } from '@chat-app/api/db';
-import { NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
 
 export async function isValidChat(
@@ -11,8 +11,8 @@ export async function isValidChat(
     chatId,
     userId,
   });
-  if (!chat) {
-    throw new NotFoundException();
-  }
+  // if (!chat) {
+  //   throw new HttpException('Chat Not Found', HttpStatus.NOT_FOUND);
+  // }
   return true;
 }

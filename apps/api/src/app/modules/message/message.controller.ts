@@ -8,14 +8,17 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMessageDto } from './dto/createMessage.dto';
 import { Message } from '@chat-app/api/db';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
 @ApiTags('message')
 @Controller('message')
+@UseGuards(JwtAuthGuard)
 export class MessageController {
   constructor(private messageService: MessageService) {}
   @Get()
@@ -35,6 +38,8 @@ export class MessageController {
     description: 'create message',
   })
   createMessage(@Body() body: CreateMessageDto): Promise<Message> {
+    console.log('ENDPOINT');
+
     return this.messageService.createMessage(body);
   }
 
