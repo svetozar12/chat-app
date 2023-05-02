@@ -7,7 +7,8 @@ import { ChatGatewayModule } from './modules/chatGateway/chatGateway.module';
 import { GithubOauthModule } from './modules/auth/github/github.module';
 import { UsersModule } from './modules/user/user.module';
 import { JwtAuthModule } from './modules/auth/jwt/jwt-auth.module';
-import { AppController } from './app.controller';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './modules/auth/jwt/jwt-auth.guard';
 
 const { MONGO_URL } = API_ENVS;
 
@@ -21,6 +22,11 @@ const { MONGO_URL } = API_ENVS;
     UsersModule,
     JwtAuthModule,
   ],
-  controllers: [AppController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

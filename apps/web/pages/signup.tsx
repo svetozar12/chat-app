@@ -1,7 +1,7 @@
 import Home from '../components/Home/Home';
 
-function CustomApp() {
+function SignUpPage() {
   return <Home />;
 }
 
-export default CustomApp;
+export default SignUpPage;
