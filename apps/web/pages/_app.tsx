@@ -1,7 +1,7 @@
-import Home from '../components/Home/Home';
+import '../globals.css';
 
-function CustomApp() {
-  return <Home />;
+function CustomApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
 }
 
 export default CustomApp;

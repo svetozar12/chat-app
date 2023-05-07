@@ -1,7 +1,7 @@
-import Home from '../components/Home/Home';
+import SignIn from '../components/Signin/Signin';
 
 function SignInPage() {
-  return <Home />;
+  return <SignIn />;
 }
 
 export default SignInPage;
