@@ -13,13 +13,14 @@ import {
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Chat } from '@chat-app/api/db';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
 @ApiTags('chat')
-@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('chat')
+@UseGuards(JwtAuthGuard)
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 

@@ -7,6 +7,7 @@ import { GithubOauthGuard } from './github.guard';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../decorator/public.decorator';
 import { API_ENVS } from '@chat-app/api/env';
+import { TOKEN, USER_ID } from '@chat-app/common/constants';
 
 const { WEB_URL } = API_ENVS;
 @ApiTags('auth')
@@ -33,10 +34,11 @@ export class GithubOauthController {
   ) {
     const user = req.user as IUser;
     const { accessToken } = this.jwtAuthService.login(user);
-    res.cookie('jwt', accessToken, {
+    res.cookie(TOKEN, accessToken, {
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
     });
+    res.cookie(USER_ID, user.id);
     return res.redirect(WEB_URL);
   }
 }
