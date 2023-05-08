@@ -1,14 +1,17 @@
 import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { API_ENVS } from '@chat-app/api/env';
+import { JwtAuthGuard } from './app/modules/auth/jwt/jwt-auth.guard';
 
 async function bootstrap() {
   const { PORT, API_PREFIX } = API_ENVS;
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(API_PREFIX);
   app.enableCors();
+  const reflector = app.get(Reflector);
+  // app.useGlobalGuards(new JwtAuthGuard(reflector));
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('ChatApp')

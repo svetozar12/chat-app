@@ -5,6 +5,7 @@ import { IUser } from '@chat-app/api/shared';
 import { JwtAuthService } from '../jwt/jwt-auth.service';
 import { GithubOauthGuard } from './github.guard';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { Public } from '../../../decorator/public.decorator';
 
 @ApiTags('auth')
 @Controller('auth/github')
@@ -14,6 +15,7 @@ export class GithubOauthController {
   @Get()
   @UseGuards(GithubOauthGuard)
   @ApiExcludeEndpoint()
+  @Public()
   async githubAuth() {
     // With `@UseGuards(GithubOauthGuard)` we are using an AuthGuard that @nestjs/passport
     // automatically provisioned for us when we extended the passport-github strategy.
@@ -27,22 +29,13 @@ export class GithubOauthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response
   ) {
-    // Passport automatically creates a `user` object, based on the return value of our
-    // GithubOauthStrategy#validate() method, and assigns it to the Request object as `req.user`
-
     const user = req.user as IUser;
-
-    // TODO delete
-    console.log(
-      `${this.githubAuthCallback.name}(): req.user = ${JSON.stringify(
-        user,
-        null,
-        4
-      )}`
-    );
-
     const { accessToken } = this.jwtAuthService.login(user);
-    res.cookie('jwt', accessToken);
+    res.cookie('jwt', accessToken, {
+      // expires in 60 days
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
+    });
+    res.redirect('http://localhost:4200');
     return { access_token: accessToken };
   }
 }
