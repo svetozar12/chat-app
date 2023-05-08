@@ -16,7 +16,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
       IS_PUBLIC_KEY,
       context.getHandler()
     );
-    console.log(isPublic, 'ivane');
 
     if (isPublic) {
       return true;

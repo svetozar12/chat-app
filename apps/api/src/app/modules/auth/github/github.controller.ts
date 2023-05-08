@@ -6,7 +6,9 @@ import { JwtAuthService } from '../jwt/jwt-auth.service';
 import { GithubOauthGuard } from './github.guard';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../decorator/public.decorator';
+import { API_ENVS } from '@chat-app/api/env';
 
+const { WEB_URL } = API_ENVS;
 @ApiTags('auth')
 @Controller('auth/github')
 export class GithubOauthController {
@@ -35,7 +37,6 @@ export class GithubOauthController {
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
     });
-    res.redirect('http://localhost:4200');
-    return { access_token: accessToken };
+    return res.redirect(WEB_URL);
   }
 }
