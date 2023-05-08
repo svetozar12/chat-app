@@ -34,11 +34,8 @@ export class GithubOauthStrategy extends PassportStrategy(Strategy, 'github') {
     // handling pipeline can continue.
 
     const user = await this.usersService.findOrCreate(profile, 'github');
-    console.log(user, 'validate');
 
     if (!user) {
-      // TODO Depending on the concrete implementation of findOrCreate(), throwing the
-      // UnauthorizedException here might not make sense...
       throw new UnauthorizedException();
     }
     return user;

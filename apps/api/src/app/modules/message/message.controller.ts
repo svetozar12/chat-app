@@ -38,8 +38,6 @@ export class MessageController {
     description: 'create message',
   })
   createMessage(@Body() body: CreateMessageDto): Promise<Message> {
-    console.log('ENDPOINT');
-
     return this.messageService.createMessage(body);
   }
 

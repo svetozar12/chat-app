@@ -11,8 +11,6 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<IUser>) {}
   async findOrCreate(profile: Profile, provider: AuthProvider): Promise<IUser> {
     const { id, displayName, photos } = profile;
-    console.log(profile, 'id');
-
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {
       return this.userModel.create({
