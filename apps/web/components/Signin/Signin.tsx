@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal } from '../Modal';
 import { OauthButton } from './subcomponents/OauthButton';
 import { AiOutlineGithub } from 'react-icons/ai';
-
 const SignIn = () => {
   const MODAL_TITLE = 'Sign in to ChatApp';
   const GITHUB_TITLE = 'Sign in with GitHub';
@@ -17,7 +16,7 @@ const SignIn = () => {
           <OauthButton
             Icon={AiOutlineGithub}
             onClick={() =>
-              window.open('http://localhost:3000/api/auth/github', '_self')
+              window.open(`http://localhost:3000/api/auth/github`, '_self')
             }
             title={GITHUB_TITLE}
           />

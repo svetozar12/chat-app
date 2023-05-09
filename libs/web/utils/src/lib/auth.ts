@@ -28,7 +28,6 @@ export const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
 
-  if (!isUserAuth && currPath === '/logout') return redirectTo('/', ctx);
   if (!isUserAuth && currPath !== '/') return redirectTo('/', ctx, currPath);
   if (getServerSideProps) {
     const gssp = await getServerSideProps(ctx);
@@ -50,12 +49,12 @@ export const isAlreadyAuth =
   (getServerSideProps?: any) => async (ctx: ICtx) => {
     const isUserAuth = await isAuth(ctx);
     const cookie = useCookie(ctx);
-    const { data } = await sdk.chat.chatControllerFindAll(
-      cookie.get('user_id')
-    );
-    const firstChatid = data[0]._id;
+    // const { data } = await sdk.chat.chatControllerFindAll(
+    //   cookie.get('user_id')
+    // );
+    // const firstChatid = data[0]._id;
     const desiredURL: string = cookie.get('REDIRECT_URL_CALLBACK');
-    const path: string = desiredURL || (firstChatid as string);
+    const path: string = desiredURL || '/protected';
 
     if (isUserAuth && ctx.resolvedUrl !== path)
       return redirectTo(`/${path}`, ctx);

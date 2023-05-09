@@ -11,13 +11,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMessageDto } from './dto/createMessage.dto';
 import { Message } from '@chat-app/api/db';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
 @ApiTags('message')
 @Controller('message')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 export class MessageController {
   constructor(private messageService: MessageService) {}
@@ -27,8 +28,11 @@ export class MessageController {
     type: [CreateMessageDto],
     description: 'fetch list of messages',
   })
-  findAll(@Query('userId') userId: string): Promise<Message[]> {
-    return this.messageService.findAll(userId);
+  findAll(
+    @Query('userId') userId: string,
+    @Query('chatId') chatId: string
+  ): Promise<Message[]> {
+    return this.messageService.findAll(userId, chatId);
   }
 
   @Post()

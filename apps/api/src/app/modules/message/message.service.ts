@@ -11,9 +11,10 @@ export class MessageService {
     @InjectModel(Message.name) private messageModel: Model<Message>,
     @InjectModel(Chat.name) private chatModel: Model<Chat>
   ) {}
-  async findAll(userId: string): Promise<Message[]> {
+  async findAll(userId: string, chatId: string): Promise<Message[]> {
     const messages = await this.messageModel.find({
       userId,
+      chatId,
     });
     if (messages.length === 0) {
       throw new NotFoundException();

@@ -1,7 +1,8 @@
 import { withAuthSync } from '@chat-app/web/utils';
+import Home from '../components/Home/Home';
 
 function ProtectedPage() {
-  return <p>protectted</p>;
+  return <Home />;
 }
 
 export const getServerSideProps = withAuthSync();
