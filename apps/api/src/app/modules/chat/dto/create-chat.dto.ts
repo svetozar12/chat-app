@@ -6,7 +6,7 @@ import { Types } from 'mongoose';
 export class CreateChatDto implements Chat {
   @ApiProperty({ type: 'string', required: false, readOnly: true })
   _id: Types.ObjectId;
-  @ApiProperty()
+  @ApiProperty({ required: false, readOnly: true })
   @IsEmpty()
   @IsString()
   name: string;

@@ -37,17 +37,11 @@ export class ChatService {
   }
   create(createChatDto: CreateChatDto): Promise<Chat> {
     const { _id, userId } = createChatDto;
-    const chat = this.chatModel.findById(_id, {
-      members: {
-        $elemMatch: {
-          $eq: userId,
-        },
-      },
+
+    return this.chatModel.create({
+      ...createChatDto,
+      name: String(createChatDto.members),
     });
-    if (chat) {
-      throw new ConflictException();
-    }
-    return this.chatModel.create(createChatDto);
   }
 
   update(_id: string, updateChatDto: UpdateChatDto): Promise<Chat> {

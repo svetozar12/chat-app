@@ -7,6 +7,7 @@ import { ChatGatewayModule } from './modules/chatGateway/chatGateway.module';
 import { GithubOauthModule } from './modules/auth/github/github.module';
 import { UsersModule } from './modules/user/user.module';
 import { JwtAuthModule } from './modules/auth/jwt/jwt-auth.module';
+import { SearchModule } from './modules/search/search.module';
 
 const { MONGO_URL } = API_ENVS;
 
@@ -19,6 +20,7 @@ const { MONGO_URL } = API_ENVS;
     GithubOauthModule,
     UsersModule,
     JwtAuthModule,
+    SearchModule,
   ],
 })
 export class AppModule {}

@@ -9,6 +9,8 @@ export class Chat {
   _id: Types.ObjectId;
   @Prop()
   members: string[];
+  @Prop()
+  name?: string;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);
