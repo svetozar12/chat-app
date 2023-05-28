@@ -1,9 +1,8 @@
 import { NextPageContext } from 'next';
 import { redirectTo } from './redirect';
-import { config, sdk } from './sdk';
-// import { LOGIN_ROUTE } from '@chat-app/web/constants';
-// import { USER_ID } from '@chat-app/common/constants';
+import { sdk } from './sdk';
 import { useCookie } from 'next-cookie';
+import { REDIRECT_URL_CALLBACK, TOKEN } from '@chat-app/common/constants';
 
 export interface ICtx extends NextPageContext {
   resolvedUrl: string;
@@ -12,13 +11,10 @@ export interface ICtx extends NextPageContext {
 const isAuth = async (ctx: ICtx) => {
   try {
     const cookie = useCookie(ctx);
-    const req = await sdk.user.userControllerFindAll({
-      headers: { Authorization: `Bearer ${cookie.get('jwt')}` },
+    const { data: isValidToken } = await sdk.auth.jwtAuthControllerVerify({
+      headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },
     });
-    if (req.status != 403 && req.status != 401) {
-      return true;
-    }
-    return false;
+    return isValidToken === true;
   } catch {
     return false;
   }
@@ -49,11 +45,7 @@ export const isAlreadyAuth =
   (getServerSideProps?: any) => async (ctx: ICtx) => {
     const isUserAuth = await isAuth(ctx);
     const cookie = useCookie(ctx);
-    // const { data } = await sdk.chat.chatControllerFindAll(
-    //   cookie.get('user_id')
-    // );
-    // const firstChatid = data[0]._id;
-    const desiredURL: string = cookie.get('REDIRECT_URL_CALLBACK');
+    const desiredURL: string = cookie.get(REDIRECT_URL_CALLBACK);
     const path: string = desiredURL || '/protected';
 
     if (isUserAuth && ctx.resolvedUrl !== path)

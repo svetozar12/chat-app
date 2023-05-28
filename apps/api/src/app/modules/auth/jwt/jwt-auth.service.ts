@@ -19,4 +19,8 @@ export class JwtAuthService {
       accessToken: this.jwtService.sign(payload),
     };
   }
+
+  verify(token: string): boolean {
+    return !!this.jwtService.verify(token);
+  }
 }

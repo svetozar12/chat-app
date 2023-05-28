@@ -1,12 +1,16 @@
-import { ChatApi, MessageApi, UserApi, Configuration } from '@chat-app/api/sdk';
+import { MessageApi, UserApi, Configuration, AuthApi } from '@chat-app/api/sdk';
 
-export const config = new Configuration({
+const config = new Configuration({
   basePath: 'http://localhost:3000',
   accessToken: '',
 });
 
+export function setAccessToken(token: string) {
+  config.accessToken = token;
+}
+
 export const sdk = {
-  chat: new ChatApi(config),
   message: new MessageApi(config),
   user: new UserApi(config),
+  auth: new AuthApi(config),
 };

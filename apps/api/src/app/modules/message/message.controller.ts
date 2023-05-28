@@ -28,11 +28,8 @@ export class MessageController {
     type: [CreateMessageDto],
     description: 'fetch list of messages',
   })
-  findAll(
-    @Query('userId') userId: string,
-    @Query('chatId') chatId: string
-  ): Promise<Message[]> {
-    return this.messageService.findAll(userId, chatId);
+  findAll(): Promise<Message[]> {
+    return this.messageService.findAll();
   }
 
   @Post()

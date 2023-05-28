@@ -2,16 +2,11 @@ import { Module } from '@nestjs/common';
 import { MessageController } from './message.controller';
 import { MessageService } from './message.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Chat, ChatSchema, Message, MessageSchema } from '@chat-app/api/db';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
+import { Message, MessageSchema } from '@chat-app/api/db';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Message.name, schema: MessageSchema },
-      { name: Chat.name, schema: ChatSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
   ],
   controllers: [MessageController],
   providers: [MessageService],

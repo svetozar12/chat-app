@@ -1,21 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMessageDto } from './dto/createMessage.dto';
-import { Chat, Message } from '@chat-app/api/db';
+import { Message } from '@chat-app/api/db';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { isValidChat } from '@chat-app/api/v1/message';
 
 @Injectable()
 export class MessageService {
   constructor(
-    @InjectModel(Message.name) private messageModel: Model<Message>,
-    @InjectModel(Chat.name) private chatModel: Model<Chat>
+    @InjectModel(Message.name) private messageModel: Model<Message>
   ) {}
-  async findAll(userId: string, chatId: string): Promise<Message[]> {
-    const messages = await this.messageModel.find({
-      userId,
-      chatId,
-    });
+  async findAll(): Promise<Message[]> {
+    const messages = await this.messageModel.find();
     if (messages.length === 0) {
       throw new NotFoundException();
     }
@@ -23,8 +18,6 @@ export class MessageService {
   }
 
   async createMessage(body: CreateMessageDto): Promise<Message> {
-    const { userId, chatId } = body;
-    await isValidChat(this.chatModel, userId, chatId);
     return this.messageModel.create(body);
   }
 

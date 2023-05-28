@@ -11,7 +11,7 @@ export class User {
   provider: string;
   @Prop({ type: String, required: true })
   providerId: string;
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, default: 'unknown' })
   displayName: string;
   @Prop({ type: [{ value: String }], required: true })
   photos: [{ value: string }];

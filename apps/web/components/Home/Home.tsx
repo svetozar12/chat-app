@@ -1,58 +1,49 @@
 import React, { useEffect } from 'react';
 import { useCookie } from 'next-cookie';
-import { sdk } from '@chat-app/web/utils';
-import { useQuery } from 'react-query';
-import { io } from 'socket.io-client';
-import { MESSAGE } from '@chat-app/common/constants';
+import { setAccessToken } from '@chat-app/web/utils';
+import { LOGIN_ROUTE } from '@chat-app/web/constants';
+import { Socket, io } from 'socket.io-client';
+import { MessageForm, MessageList } from './subcomponets';
+import { CONNECT_EVENT, TOKEN, USER_ID } from '@chat-app/common/constants';
+import { commonEnvs } from '@chat-app/web/env';
+
 const Home = () => {
-  const cookie = useCookie();
-  const userId = cookie.get('user_id') as string;
-  const token = cookie.get('jwt') as string;
+  const { logout } = useInitApp();
 
-  useEffect(() => {
-    const socket = io('ws://localhost:3000');
-
-    socket.on('connect', () => {
-      console.log('connected');
-      socket.emit(MESSAGE, {
-        chatInstance: '',
-        sender: '',
-        message: '',
-      });
-    });
-  }, []);
-  // Queries
-  const { data, isLoading, error } = useQuery('messages', () =>
-    sdk.message
-      .messageControllerFindAll(userId, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((data) => data)
-  );
-
-  const logout = () => {
-    for (const key in cookie.getAll()) {
-      cookie.remove(key);
-    }
-    window.location.href = '/';
-  };
-  if (isLoading) return <div>Loading...</div>;
-  const { data: messages } = data || {};
   return (
     <div className="bg-chatAppGray-100 w-full h-screen">
       <button onClick={logout} className="text-white">
         LOG OUT
       </button>
-      <div className="bg-black">
-        {messages?.map(({ message, _id }) => (
-          <div className="text-white" key={_id}>
-            {message}
-          </div>
-        ))}
-      </div>
-      <input type="text" />
+      <MessageList />
+      <MessageForm />
     </div>
   );
 };
+export let socket: Socket;
+function useInitApp() {
+  const cookie = useCookie();
+  const userId = cookie.get(USER_ID) as string;
+  const token = cookie.get(TOKEN) as string;
+  const { NEXT_PUBLIC_WS_SERVER_URL } = commonEnvs;
+  useEffect(() => {
+    if (!userId || !token) return;
+    setAccessToken(token);
+    socket = io(NEXT_PUBLIC_WS_SERVER_URL);
+    socket.on(CONNECT_EVENT, () => {
+      console.log('connected');
+    });
+  }, []);
+
+  function logout() {
+    setAccessToken(undefined);
+    for (const key in cookie.getAll()) {
+      cookie.remove(key);
+    }
+    window.location.href = LOGIN_ROUTE;
+  }
+
+  return { logout };
+}
 
 export default Home;
