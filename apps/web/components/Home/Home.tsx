@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCookie } from 'next-cookie';
 import { setAccessToken } from '@chat-app/web/utils';
 import { LOGIN_ROUTE } from '@chat-app/web/constants';
@@ -8,20 +8,20 @@ import { CONNECT_EVENT, TOKEN, USER_ID } from '@chat-app/common/constants';
 import { commonEnvs } from '@chat-app/web/env';
 
 const Home = () => {
-  const { logout } = useInitApp();
-
+  const { logout, socket } = useInitApp();
+  if (!socket) return;
   return (
     <div className="bg-chatAppGray-100 w-full h-screen">
       <button onClick={logout} className="text-white">
         LOG OUT
       </button>
-      <MessageList />
-      <MessageForm />
+      <MessageList socket={socket} />
+      <MessageForm socket={socket} />
     </div>
   );
 };
-export let socket: Socket;
 function useInitApp() {
+  const [socket, setSocket] = useState<Socket>(null);
   const cookie = useCookie();
   const userId = cookie.get(USER_ID) as string;
   const token = cookie.get(TOKEN) as string;
@@ -29,10 +29,14 @@ function useInitApp() {
   useEffect(() => {
     if (!userId || !token) return;
     setAccessToken(token);
-    socket = io(NEXT_PUBLIC_WS_SERVER_URL);
-    socket.on(CONNECT_EVENT, () => {
+    const socketInstance = io(NEXT_PUBLIC_WS_SERVER_URL);
+    socketInstance.on(CONNECT_EVENT, () => {
       console.log('connected');
+      setSocket(socketInstance);
     });
+    return () => {
+      socketInstance.disconnect();
+    };
   }, []);
 
   function logout() {
@@ -43,7 +47,7 @@ function useInitApp() {
     window.location.href = LOGIN_ROUTE;
   }
 
-  return { logout };
+  return { logout, socket };
 }
 
 export default Home;

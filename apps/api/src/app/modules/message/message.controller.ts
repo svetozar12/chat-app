@@ -7,18 +7,20 @@ import {
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMessageDto } from './dto/createMessage.dto';
 import { Message } from '@chat-app/api/db';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @ApiTags('message')
 @Controller('message')
 @ApiBearerAuth()
+@UseInterceptors(CacheInterceptor)
 @UseGuards(JwtAuthGuard)
 export class MessageController {
   constructor(private messageService: MessageService) {}

@@ -8,8 +8,13 @@ import {
   USER_ID,
 } from '@chat-app/common/constants';
 import { sdk } from '@chat-app/web/utils';
-import { socket } from '../Home';
-const MessageForm: FC = () => {
+import { Socket } from 'socket.io-client';
+
+interface IMessageFormProps {
+  socket: Socket;
+}
+
+const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
   const MESSAGE_INITIAL_VALUE = '';
   const cookie = useCookie();
   const { values, handleSubmit, getFieldProps } = useFormik<CreateMessageDto>({

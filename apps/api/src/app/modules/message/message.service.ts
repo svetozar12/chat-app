@@ -1,13 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMessageDto } from './dto/createMessage.dto';
 import { Message } from '@chat-app/api/db';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class MessageService {
   constructor(
-    @InjectModel(Message.name) private messageModel: Model<Message>
+    @InjectModel(Message.name) private messageModel: Model<Message>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
   async findAll(): Promise<Message[]> {
     const messages = await this.messageModel.find();
@@ -18,6 +21,7 @@ export class MessageService {
   }
 
   async createMessage(body: CreateMessageDto): Promise<Message> {
+    await this.cacheManager.reset();
     return this.messageModel.create(body);
   }
 
@@ -25,6 +29,8 @@ export class MessageService {
     _id: string,
     messageBody: CreateMessageDto
   ): Promise<Message> {
+    await this.cacheManager.reset();
+
     return this.messageModel.findOneAndUpdate(
       {
         _id,
@@ -34,6 +40,8 @@ export class MessageService {
   }
 
   async DeleteMessage(id: string, userId: string): Promise<Message> {
+    await this.cacheManager.reset();
+
     const message = (await this.messageModel.find({
       where: {
         id,

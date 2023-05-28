@@ -1,12 +1,21 @@
-import { Controller, Get, HttpStatus, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/createUser.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('user')
 @ApiBearerAuth()
 @ApiTags('user')
+@UseInterceptors(CacheInterceptor)
 @UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private userService: UsersService) {}

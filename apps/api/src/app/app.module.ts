@@ -6,6 +6,7 @@ import { ChatGatewayModule } from './modules/chatGateway/chatGateway.module';
 import { GithubOauthModule } from './modules/auth/github/github.module';
 import { UsersModule } from './modules/user/user.module';
 import { JwtAuthModule } from './modules/auth/jwt/jwt-auth.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 const { MONGO_URL } = API_ENVS;
 
