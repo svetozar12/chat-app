@@ -1,6 +1,6 @@
 import { CreateMessageDto } from '@chat-app/api/sdk';
 import { USER_QUERY } from '@chat-app/web/constants';
-import { sdk } from '@chat-app/web/utils';
+import { formatDate, sdk } from '@chat-app/web/utils';
 import React, { FC } from 'react';
 import { useQuery } from 'react-query';
 import Avatar from './Avatar';
@@ -9,9 +9,9 @@ interface IMessageListProps {
   message: CreateMessageDto;
 }
 const Message: FC<IMessageListProps> = ({
-  message: { message, userId, _id },
+  message: { message, userId, _id, createdAt },
 }) => {
-  console.log(userId);
+  const MESSAGE_SENT_DATE = formatDate(createdAt);
   const { data, isLoading } = useQuery(USER_QUERY(userId), () =>
     sdk.user.userControllerFind(userId).then((data) => data)
   );
@@ -26,7 +26,10 @@ const Message: FC<IMessageListProps> = ({
     <div className="flex my-2">
       <Avatar src={value} />
       <div>
-        <p className="font-semibold">{displayName}</p>
+        <div className="flex gap-8 font-thin text-sm">
+          <p className="font-semibold">{displayName}</p>
+          <p>{MESSAGE_SENT_DATE}</p>
+        </div>
         {message}
       </div>
     </div>

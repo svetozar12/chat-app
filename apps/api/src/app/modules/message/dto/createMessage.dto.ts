@@ -15,4 +15,8 @@ export class CreateMessageDto implements Message {
   @IsString()
   @ApiProperty()
   message: string;
+
+  @IsString()
+  @ApiProperty()
+  createdAt: string;
 }

@@ -47,6 +47,12 @@ export interface CreateMessageDto {
      * @memberof CreateMessageDto
      */
     'message': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMessageDto
+     */
+    'createdAt': string;
 }
 /**
  * 
