@@ -17,12 +17,18 @@ const Message: FC<IMessageListProps> = ({
   );
   if (isLoading) return <div>Loading...</div>;
   const {
-    data: { photos },
+    data: {
+      photos: [{ value }],
+      displayName,
+    },
   } = data;
   return (
-    <div>
-      <Avatar src={photos[0].value} />
-      {message}
+    <div className="flex my-2">
+      <Avatar src={value} />
+      <div>
+        <p className="font-semibold">{displayName}</p>
+        {message}
+      </div>
     </div>
   );
 };

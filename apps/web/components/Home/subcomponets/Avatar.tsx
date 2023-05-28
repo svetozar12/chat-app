@@ -8,7 +8,13 @@ const Avatar: FC<IAvatarProps> = ({ src }) => {
   return (
     <div className="avatar">
       <div className="w-24 rounded-full">
-        <Image src={src} width={24} height={24} alt="avatar" />
+        <Image
+          src={src}
+          width={48}
+          height={48}
+          className="rounded-full"
+          alt="avatar"
+        />
       </div>
     </div>
   );
