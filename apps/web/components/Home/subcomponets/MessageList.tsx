@@ -15,7 +15,7 @@ interface IMessageListProps {
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
   const { data, refetch } = useQuery(
     MESSAGES_QUERY,
-    () => sdk.message.messageControllerFindAll().then((data) => data.data),
+    () => sdk.message.messageControllerFindAll(1, 5).then((data) => data.data),
     {
       keepPreviousData: true,
       initialData: [],
