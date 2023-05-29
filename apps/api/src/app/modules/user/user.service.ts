@@ -10,7 +10,6 @@ import { Profile } from 'passport-github';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<IUser>) {}
   async findOrCreate(profile: Profile, provider: AuthProvider): Promise<IUser> {
-    console.log(profile);
     const { id, displayName, photos, username } = profile;
     const user = await this.userModel.findOne({ _id: id });
     if (!user) {

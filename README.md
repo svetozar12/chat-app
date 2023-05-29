@@ -17,7 +17,5 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
 
 <!-- STUFF TO DO -->
-<!-- Add pagination to messages -->
-<!-- Add google as oauth provider -->
 <!-- Improve the ui(currently its just demo to test the backend and to write the basic functionality) -->
 <!-- AFTER ALL OF ABOVE TASKS ARE COMPLETED: deploy and test the app with some real users and fix the bugs if there are any -->

@@ -12,16 +12,13 @@ const Message: FC<IMessageListProps> = ({
   message: { message, userId, _id, createdAt },
 }) => {
   const MESSAGE_SENT_DATE = formatDate(createdAt);
-  const { data, isLoading } = useQuery(USER_QUERY(userId), () =>
-    sdk.user.userControllerFind(userId).then((data) => data)
+  const { data } = useQuery(USER_QUERY(userId), () =>
+    sdk.user.userControllerFind(userId).then((data) => data.data)
   );
-  if (isLoading) return <div>Loading...</div>;
   const {
-    data: {
-      photos: [{ value }],
-      displayName,
-    },
-  } = data;
+    photos: [{ value }],
+    displayName,
+  } = data || { photos: [{ value: '' }] };
   return (
     <div className="flex my-2">
       <Avatar src={value} />

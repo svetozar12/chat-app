@@ -7,8 +7,11 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -16,6 +19,7 @@ import { CreateMessageDto } from './dto/createMessage.dto';
 import { Message } from '@chat-app/api/db';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { PaginationQueryDto } from '../../common/dto/queryPagination.dto';
 
 @ApiTags('message')
 @Controller('message')
@@ -30,8 +34,8 @@ export class MessageController {
     type: [CreateMessageDto],
     description: 'fetch list of messages',
   })
-  findAll(): Promise<Message[]> {
-    return this.messageService.findAll();
+  findAll(@Query() getMessageDto: PaginationQueryDto): Promise<Message[]> {
+    return this.messageService.findAll(getMessageDto);
   }
 
   @Post()

@@ -2,7 +2,7 @@ import '../globals.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // Create a client
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function CustomApp({ Component, pageProps }) {
   return (

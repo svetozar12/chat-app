@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { PaginationQueryDto } from '../../common/dto/queryPagination.dto';
 
 @Injectable()
 export class MessageService {
@@ -12,8 +13,8 @@ export class MessageService {
     @InjectModel(Message.name) private messageModel: Model<Message>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
-  async findAll(): Promise<Message[]> {
-    const messages = await this.messageModel.find();
+  async findAll({ limit, page }: PaginationQueryDto): Promise<Message[]> {
+    const messages = await this.messageModel.find().limit(limit).skip(page);
     if (messages.length === 0) {
       throw new NotFoundException();
     }

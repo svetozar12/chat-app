@@ -287,10 +287,12 @@ export const MessageApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        messageControllerFindAll: async (page?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/message`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -306,6 +308,14 @@ export const MessageApiAxiosParamCreator = function (configuration?: Configurati
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
 
     
@@ -393,11 +403,13 @@ export const MessageApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateMessageDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindAll(options);
+        async messageControllerFindAll(page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateMessageDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindAll(page, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -441,11 +453,13 @@ export const MessageApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindAll(options?: any): AxiosPromise<Array<CreateMessageDto>> {
-            return localVarFp.messageControllerFindAll(options).then((request) => request(axios, basePath));
+        messageControllerFindAll(page?: number, limit?: number, options?: any): AxiosPromise<Array<CreateMessageDto>> {
+            return localVarFp.messageControllerFindAll(page, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -491,12 +505,14 @@ export class MessageApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [limit] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MessageApi
      */
-    public messageControllerFindAll(options?: AxiosRequestConfig) {
-        return MessageApiFp(this.configuration).messageControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    public messageControllerFindAll(page?: number, limit?: number, options?: AxiosRequestConfig) {
+        return MessageApiFp(this.configuration).messageControllerFindAll(page, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

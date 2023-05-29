@@ -4,7 +4,6 @@ import { Message } from '@chat-app/api/db';
 import { Types } from 'mongoose';
 
 export class CreateMessageDto implements Message {
-  @IsNotEmpty()
   @ApiProperty({ type: 'string', required: false })
   _id: Types.ObjectId;
 
@@ -16,7 +15,6 @@ export class CreateMessageDto implements Message {
   @ApiProperty()
   message: string;
 
-  @IsString()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   createdAt: string;
 }

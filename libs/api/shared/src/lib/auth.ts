@@ -1,5 +1,5 @@
 /** Social login providers by which our users can authenticate themselves */
-export type AuthProvider = 'github';
+export type AuthProvider = 'github' | 'google';
 
 /** Claims contained in the JSON Web Token we issue to our authenticated users;
  * see https://en.wikipedia.org/wiki/JSON_Web_Token#Standard_fields */

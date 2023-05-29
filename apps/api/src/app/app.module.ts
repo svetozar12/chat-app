@@ -6,7 +6,7 @@ import { ChatGatewayModule } from './modules/chatGateway/chatGateway.module';
 import { GithubOauthModule } from './modules/auth/github/github.module';
 import { UsersModule } from './modules/user/user.module';
 import { JwtAuthModule } from './modules/auth/jwt/jwt-auth.module';
-import { CacheModule } from '@nestjs/cache-manager';
+import { GoogleOauthModule } from './modules/auth/google/google.module';
 
 const { MONGO_URL } = API_ENVS;
 
@@ -16,6 +16,7 @@ const { MONGO_URL } = API_ENVS;
     MongooseModule.forRoot(MONGO_URL),
     ChatGatewayModule,
     GithubOauthModule,
+    GoogleOauthModule,
     UsersModule,
     JwtAuthModule,
   ],
