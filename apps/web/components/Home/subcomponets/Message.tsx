@@ -9,23 +9,24 @@ interface IMessageListProps {
   message: CreateMessageDto;
 }
 const Message: FC<IMessageListProps> = ({
-  message: { message, userId, _id, createdAt },
+  message: { message, userId, createdAt },
 }) => {
   const MESSAGE_SENT_DATE = formatDate(createdAt);
-  const { data } = useQuery(USER_QUERY(userId), () =>
+  const { data, isFetching } = useQuery(USER_QUERY(userId), () =>
     sdk.user.userControllerFind(userId).then((data) => data.data)
   );
+  if (!data) return <div className="flex my-2 h-12"></div>;
   const {
     photos: [{ value }],
     displayName,
-  } = data || { photos: [{ value: '' }] };
+  } = data;
   return (
     <div className="flex my-2">
       <Avatar src={value} />
       <div>
         <div className="flex gap-8 font-thin text-sm">
           <p className="font-semibold">{displayName}</p>
-          <p>{MESSAGE_SENT_DATE}</p>
+          <p>{MESSAGE_SENT_DATE === 'Invalid Date' ? '' : MESSAGE_SENT_DATE}</p>
         </div>
         {message}
       </div>

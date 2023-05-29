@@ -1,5 +1,5 @@
 import '../globals.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 
 // Create a client
 export const queryClient = new QueryClient();
@@ -7,7 +7,9 @@ export const queryClient = new QueryClient();
 function CustomApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />;
+      <Hydrate state={pageProps.dehydratedState}>
+        <Component {...pageProps} />;
+      </Hydrate>
     </QueryClientProvider>
   );
 }

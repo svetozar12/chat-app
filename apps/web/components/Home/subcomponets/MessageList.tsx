@@ -13,9 +13,10 @@ interface IMessageListProps {
 }
 
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
-  const { data, refetch } = useQuery(
+  // TODO: this should be server side rendered
+  const { data } = useQuery(
     MESSAGES_QUERY,
-    () => sdk.message.messageControllerFindAll(1, 5).then((data) => data.data),
+    () => sdk.message.messageControllerFindAll().then((data) => data.data),
     {
       keepPreviousData: true,
       initialData: [],
@@ -25,13 +26,13 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   useEffect(() => {
     socket?.on(MESSAGE_EVENT, async (newMessage: ISendMessage) => {
       try {
-        queryClient.setQueryData(
-          MESSAGES_QUERY,
-          (oldData: CreateMessageDto[]) => {
-            return [...oldData, newMessage];
-          }
-        );
-        await refetch();
+        // queryClient.setQueryData(
+        //   MESSAGES_QUERY,
+        //   (oldData: CreateMessageDto[]) => {
+        //     return [...oldData, newMessage];
+        //   }
+        // );
+        queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
       } catch (error) {
         throw new Error(error);
       }

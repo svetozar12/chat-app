@@ -9,6 +9,8 @@ import {
 } from '@chat-app/common/constants';
 import { sdk } from '@chat-app/web/utils';
 import { Socket } from 'socket.io-client';
+import { queryClient } from '../../../pages/_app';
+import { MESSAGES_QUERY } from '@chat-app/web/constants';
 
 interface IMessageFormProps {
   socket: Socket;
@@ -17,14 +19,24 @@ interface IMessageFormProps {
 const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
   const MESSAGE_INITIAL_VALUE = '';
   const cookie = useCookie();
+
   const { values, handleSubmit, getFieldProps } = useFormik<CreateMessageDto>({
     initialValues: {
       message: MESSAGE_INITIAL_VALUE,
       userId: cookie.get(USER_ID),
+      createdAt: '',
     },
     onSubmit: async () => {
       try {
+        queryClient.setQueryData(
+          MESSAGES_QUERY,
+          (oldData: CreateMessageDto[]) => {
+            console.log([...oldData, values]);
+            return [...oldData, values];
+          }
+        );
         await sdk.message.messageControllerCreateMessage(values);
+        queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
         socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
       } catch (error) {
         throw new Error(error);

@@ -9,6 +9,10 @@ export function setAccessToken(token: string) {
   config.accessToken = token;
 }
 
+export function setBasePath(basePath: string) {
+  config.basePath = basePath;
+}
+
 export const sdk = {
   message: new MessageApi(config),
   user: new UserApi(config),
