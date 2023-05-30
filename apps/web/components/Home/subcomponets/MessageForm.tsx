@@ -17,32 +17,8 @@ interface IMessageFormProps {
 }
 
 const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
-  const MESSAGE_INITIAL_VALUE = '';
-  const cookie = useCookie();
+  const { handleSubmit, getFieldProps } = useForm(socket);
 
-  const { values, handleSubmit, getFieldProps } = useFormik<CreateMessageDto>({
-    initialValues: {
-      message: MESSAGE_INITIAL_VALUE,
-      userId: cookie.get(USER_ID),
-      createdAt: '',
-    },
-    onSubmit: async () => {
-      try {
-        queryClient.setQueryData(
-          MESSAGES_QUERY,
-          (oldData: CreateMessageDto[]) => {
-            console.log([...oldData, values]);
-            return [...oldData, values];
-          }
-        );
-        await sdk.message.messageControllerCreateMessage(values);
-        queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
-        socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-  });
   return (
     <form onSubmit={handleSubmit}>
       <input {...getFieldProps('message')} />
@@ -52,3 +28,37 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
 };
 
 export default MessageForm;
+
+function useForm(socket: Socket) {
+  const MESSAGE_INITIAL_VALUE = '';
+  const cookie = useCookie();
+
+  const { values, handleSubmit, getFieldProps, resetForm } =
+    useFormik<CreateMessageDto>({
+      initialValues: {
+        message: MESSAGE_INITIAL_VALUE,
+        userId: cookie.get(USER_ID),
+        createdAt: new Date().toISOString(),
+      },
+      onSubmit: async () => {
+        try {
+          queryClient.setQueryData(
+            MESSAGES_QUERY,
+            (oldData: CreateMessageDto[]) => {
+              return [...oldData, values];
+            }
+          );
+          socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
+          await sdk.message.messageControllerCreateMessage(values);
+        } catch (error) {
+          // if error occurs refetch queries
+          queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
+          throw new Error(error);
+        } finally {
+          resetForm();
+        }
+      },
+    });
+
+  return { handleSubmit, getFieldProps };
+}

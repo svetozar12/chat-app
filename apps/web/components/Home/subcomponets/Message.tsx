@@ -12,7 +12,7 @@ const Message: FC<IMessageListProps> = ({
   message: { message, userId, createdAt },
 }) => {
   const MESSAGE_SENT_DATE = formatDate(createdAt);
-  const { data, isFetching } = useQuery(USER_QUERY(userId), () =>
+  const { data } = useQuery(USER_QUERY(userId), () =>
     sdk.user.userControllerFind(userId).then((data) => data.data)
   );
   if (!data) return <div className="flex my-2 h-12"></div>;

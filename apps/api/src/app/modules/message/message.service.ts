@@ -14,7 +14,11 @@ export class MessageService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
   async findAll({ limit, page }: PaginationQueryDto): Promise<Message[]> {
-    const messages = await this.messageModel.find().limit(limit).skip(page);
+    console.log(limit, page);
+    const messages = await this.messageModel
+      .find()
+      .limit(limit)
+      .skip((page - 1) * limit);
     if (messages.length === 0) {
       throw new NotFoundException();
     }
