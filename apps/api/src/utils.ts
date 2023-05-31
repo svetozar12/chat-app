@@ -12,3 +12,14 @@ export async function queryIfNotPrefetched<CachedResource>(
   await cacheManager.set(resourceName, resource);
   return resource;
 }
+
+type PaginatedResponse = { page: number; limit: number; total: number };
+
+export function formatPaginatedResponse<Resouce>(
+  resourceName: string,
+  data: Resouce,
+  pagination: PaginatedResponse = { limit: 10, page: 1, total: 0 }
+) {
+  // paginatedObject[]
+  return { pagination, [resourceName]: data };
+}

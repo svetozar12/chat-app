@@ -52,7 +52,7 @@ export interface CreateMessageDto {
      * @type {string}
      * @memberof CreateMessageDto
      */
-    'createdAt': string;
+    'createdAt'?: string;
 }
 /**
  * 
@@ -90,6 +90,50 @@ export interface CreateUserDto {
      * @memberof CreateUserDto
      */
     'photos': Array<PhotosDto>;
+}
+/**
+ * 
+ * @export
+ * @interface GetMessageListDto
+ */
+export interface GetMessageListDto {
+    /**
+     * 
+     * @type {PaginationResponseDto}
+     * @memberof GetMessageListDto
+     */
+    'pagination': PaginationResponseDto;
+    /**
+     * 
+     * @type {Array<CreateMessageDto>}
+     * @memberof GetMessageListDto
+     */
+    'messages': Array<CreateMessageDto>;
+}
+/**
+ * 
+ * @export
+ * @interface PaginationResponseDto
+ */
+export interface PaginationResponseDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationResponseDto
+     */
+    'page': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationResponseDto
+     */
+    'limit': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginationResponseDto
+     */
+    'total': number;
 }
 /**
  * 
@@ -408,7 +452,7 @@ export const MessageApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async messageControllerFindAll(page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateMessageDto>>> {
+        async messageControllerFindAll(page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetMessageListDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.messageControllerFindAll(page, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -458,7 +502,7 @@ export const MessageApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        messageControllerFindAll(page?: number, limit?: number, options?: any): AxiosPromise<Array<CreateMessageDto>> {
+        messageControllerFindAll(page?: number, limit?: number, options?: any): AxiosPromise<GetMessageListDto> {
             return localVarFp.messageControllerFindAll(page, limit, options).then((request) => request(axios, basePath));
         },
         /**

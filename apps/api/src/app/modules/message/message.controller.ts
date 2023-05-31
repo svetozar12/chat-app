@@ -20,6 +20,7 @@ import { Message } from '@chat-app/api/db';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { PaginationQueryDto } from '../../common/dto/queryPagination.dto';
+import { GetMessageListDto } from './dto/getMessageList.dto';
 
 @ApiTags('message')
 @Controller('message')
@@ -31,10 +32,10 @@ export class MessageController {
   @Get()
   @ApiResponse({
     status: HttpStatus.OK,
-    type: [CreateMessageDto],
+    type: GetMessageListDto,
     description: 'fetch list of messages',
   })
-  findAll(@Query() getMessageDto: PaginationQueryDto): Promise<Message[]> {
+  findAll(@Query() getMessageDto: PaginationQueryDto) {
     return this.messageService.findAll(getMessageDto);
   }
 

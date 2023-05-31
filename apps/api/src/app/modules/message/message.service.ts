@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { PaginationQueryDto } from '../../common/dto/queryPagination.dto';
+import { formatPaginatedResponse } from '../../../utils';
 
 @Injectable()
 export class MessageService {
@@ -13,16 +14,21 @@ export class MessageService {
     @InjectModel(Message.name) private messageModel: Model<Message>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
-  async findAll({ limit, page }: PaginationQueryDto): Promise<Message[]> {
+  async findAll({ limit, page }: PaginationQueryDto) {
     console.log(limit, page);
     const messages = await this.messageModel
       .find()
       .limit(limit)
       .skip((page - 1) * limit);
+    const total = await this.messageModel.find().count();
     if (messages.length === 0) {
       throw new NotFoundException();
     }
-    return messages;
+    return formatPaginatedResponse('messages', messages, {
+      limit: Number(limit),
+      page: Number(page),
+      total,
+    });
   }
 
   async createMessage(body: CreateMessageDto): Promise<Message> {
