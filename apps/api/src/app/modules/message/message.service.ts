@@ -15,16 +15,17 @@ export class MessageService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
   async findAll({ limit, page }: PaginationQueryDto) {
-    console.log(limit, page);
     const messages = await this.messageModel
       .find()
+      .sort({ createdAt: 'desc', _id: 'desc' })
+      .skip((page - 1) * limit)
       .limit(limit)
-      .skip((page - 1) * limit);
+      .exec();
     const total = await this.messageModel.find().count();
     if (messages.length === 0) {
       throw new NotFoundException();
     }
-    return formatPaginatedResponse('messages', messages, {
+    return formatPaginatedResponse('messages', messages.reverse(), {
       limit: Number(limit),
       page: Number(page),
       total,

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useFormik } from 'formik';
-import { CreateMessageDto } from '@chat-app/api/sdk';
+import { CreateMessageDto, GetMessageListDto } from '@chat-app/api/sdk';
 import { useCookie } from 'next-cookie';
 import {
   ISendMessage,
@@ -44,8 +44,10 @@ function useForm(socket: Socket) {
         try {
           queryClient.setQueryData(
             MESSAGES_QUERY,
-            (oldData: CreateMessageDto[]) => {
-              return [...oldData, values];
+            ({ messages: oldMessages, pagination }: GetMessageListDto) => {
+              const old = Array.isArray(oldMessages) ? oldMessages : [];
+              console.log(old);
+              return { messages: [...old, values], pagination };
             }
           );
           socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
