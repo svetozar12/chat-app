@@ -6,12 +6,14 @@ import { Socket, io } from 'socket.io-client';
 import { MessageForm, MessageList } from './subcomponets';
 import { CONNECT_EVENT, TOKEN, USER_ID } from '@chat-app/common/constants';
 import { commonEnvs } from '@chat-app/web/env';
+import Navbar from './subcomponets/Navbar';
 
 const Home = () => {
   const { logout, socket } = useInitApp();
   if (!socket) return;
   return (
     <div className="bg-chatAppGray-100 w-full h-screen">
+      <Navbar />
       <button onClick={logout} className="text-white">
         LOG OUT
       </button>
