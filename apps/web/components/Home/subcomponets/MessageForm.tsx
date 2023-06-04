@@ -20,9 +20,15 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
   const { handleSubmit, getFieldProps } = useForm(socket);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input {...getFieldProps('message')} />
-      <button type="submit">Submit</button>
+    <form
+      className="w-full flex justify-center px-10 h-9"
+      onSubmit={handleSubmit}
+      placeholder="Send a message..."
+    >
+      <input
+        className="w-full bg-chatAppGray-200 rounded-md text-white px-4"
+        {...getFieldProps('message')}
+      />
     </form>
   );
 };

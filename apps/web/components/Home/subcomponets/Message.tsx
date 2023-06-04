@@ -21,7 +21,7 @@ const Message: FC<IMessageListProps> = ({
     displayName,
   } = data;
   return (
-    <div className="flex my-2">
+    <div className="flex py-3 text-base">
       <Avatar src={value} />
       <div>
         <div className="flex gap-8 font-thin text-sm">

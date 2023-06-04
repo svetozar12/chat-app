@@ -3,7 +3,6 @@ import Message from './Message';
 import { MESSAGES_QUERY } from '@chat-app/web/constants';
 import { sdk } from '@chat-app/web/utils';
 import { useQuery } from 'react-query';
-import { MESSAGE_EVENT } from '@chat-app/common/constants';
 import { Socket } from 'socket.io-client';
 import { queryClient } from '../../../pages/_app';
 import { GetMessageListDto } from '@chat-app/api/sdk';
@@ -12,9 +11,9 @@ interface IMessageListProps {
   socket: Socket;
 }
 
+export const INITIAL_PAGE = 1;
+export const LIMIT = 15;
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
-  const INITIAL_PAGE = 1;
-  const LIMIT = 10;
   const [page, setPage] = React.useState(INITIAL_PAGE);
   const ref = React.useRef<HTMLDivElement>(null);
   const { data, isFetching } = useQuery(
@@ -59,9 +58,6 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
 
   useEffect(() => {
     setPage(INITIAL_PAGE);
-    // socket?.on(MESSAGE_EVENT, () => {
-    //   queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
-    // });
   }, []);
 
   useEffect(() => {
@@ -77,7 +73,7 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
     <div
       ref={ref}
       onScroll={scrollHanler}
-      className="bg-black text-white h-2/4 overflow-auto"
+      className="text-white h-5/6 overflow-auto"
     >
       {messages.map((message) => {
         return (
@@ -89,11 +85,3 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
 };
 
 export default MessageList;
-
-function useOnMessage(socket: Socket) {
-  useEffect(() => {
-    socket?.on(MESSAGE_EVENT, () => {
-      queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
-    });
-  }, []);
-}

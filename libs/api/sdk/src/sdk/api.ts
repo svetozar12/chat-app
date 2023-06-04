@@ -65,7 +65,7 @@ export interface CreateUserDto {
      * @type {string}
      * @memberof CreateUserDto
      */
-    'id': string;
+    '_id': string;
     /**
      * 
      * @type {string}

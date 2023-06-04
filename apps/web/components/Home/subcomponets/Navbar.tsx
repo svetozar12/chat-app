@@ -13,18 +13,19 @@ const Navbar = () => {
     sdk.user.userControllerFind(userId).then((data) => data.data)
   );
   if (!data) return <div></div>;
+  console.log(data);
   const {
-    id,
+    _id,
     displayName,
     photos: [{ value }],
   } = data;
 
   return (
-    <div className="flex justify-items-center items-center text-white">
-      <Avatar src={value} witdh={60} height={60} key={id} />
+    <div className="flex justify-items-center  p-2 text-white">
+      <Avatar src={value} witdh={60} height={60} key={_id} />
       <div>
-        <p>Logged in as</p>
         <p>{displayName}</p>
+        <p>id: {_id}</p>
       </div>
     </div>
   );

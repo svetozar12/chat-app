@@ -4,6 +4,10 @@ import { MESSAGES_QUERY, USER_QUERY } from '@chat-app/web/constants';
 import { QueryClient, dehydrate } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { TOKEN, USER_ID } from '@chat-app/common/constants';
+import {
+  INITIAL_PAGE,
+  LIMIT,
+} from '../components/Home/subcomponets/MessageList';
 
 function ProtectedPage() {
   return <Home />;
@@ -18,7 +22,7 @@ export const getServerSideProps = withAuthSync(async (ctx) => {
   setAccessToken(token);
   await queryClient.prefetchQuery(MESSAGES_QUERY, () =>
     sdk.message
-      .messageControllerFindAll(1, 10)
+      .messageControllerFindAll(INITIAL_PAGE, LIMIT)
       .then((data) => data.data)
       .catch(() => [])
   );

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto implements IUser {
   @ApiProperty()
-  id: string;
+  _id: string;
 
   @ApiProperty({ type: 'string' })
   provider: 'github';

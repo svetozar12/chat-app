@@ -2,15 +2,22 @@ import { NextPageContext } from 'next';
 import { redirectTo } from './redirect';
 import { sdk } from './sdk';
 import { useCookie } from 'next-cookie';
-import { REDIRECT_URL_CALLBACK, TOKEN } from '@chat-app/common/constants';
+import {
+  REDIRECT_URL_CALLBACK,
+  TOKEN,
+  USER_ID,
+} from '@chat-app/common/constants';
 
 export interface ICtx extends NextPageContext {
   resolvedUrl: string;
 }
 
-const isAuth = async (ctx: ICtx) => {
+const isAuth = async (ctx: ICtx): Promise<boolean> => {
   try {
     const cookie = useCookie(ctx);
+    const userId = cookie.get(USER_ID);
+    const token = cookie.get(TOKEN);
+    if (!userId || !token) return false;
     const { data: isValidToken } = await sdk.auth.jwtAuthControllerVerify({
       headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },
     });

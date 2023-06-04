@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         chatAppGray: {
           100: '#242D34',
+          200: '#2f3b45',
         },
       },
     },
