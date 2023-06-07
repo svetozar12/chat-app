@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@chat-app/api/db": ["libs/api/db/src/index.ts"],
+      "@chat-app/api/env": ["libs/api/env/src/index.ts"],
+      "@chat-app/api/sdk": ["libs/api/sdk/src/index.ts"],
+      "@chat-app/api/shared": ["libs/api/shared/src/index.ts"],
+      "@chat-app/api/v1/message": ["libs/api/v1/message/src/index.ts"],
+      "@chat-app/common/constants": ["libs/common/constants/src/index.ts"],
+      "@chat-app/web/constants": ["libs/web/constants/src/index.ts"],
+      "@chat-app/web/env": ["libs/web/env/src/index.ts"],
+      "@chat-app/web/utils": ["libs/web/utils/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
