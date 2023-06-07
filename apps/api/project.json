@@ -9,6 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "generatePackageJson": true,
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/apps/api",
@@ -59,46 +60,13 @@
         }
       }
     },
-    "prisma-generate": {
-      "executor": "@nx-tools/nx-prisma:generate",
+    "docker-build": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
       "options": {
-        "schema": "prisma/schema.prisma"
-      }
-    },
-    "prisma-migrate": {
-      "executor": "@nx-tools/nx-prisma:migrate",
-      "options": {
-        "schema": "prisma/schema.prisma"
-      }
-    },
-    "prisma-pull": {
-      "executor": "@nx-tools/nx-prisma:pull",
-      "options": {
-        "schema": "prisma/schema.prisma"
-      }
-    },
-    "prisma-push": {
-      "executor": "@nx-tools/nx-prisma:push",
-      "options": {
-        "schema": "prisma/schema.prisma"
-      }
-    },
-    "prisma-deploy": {
-      "executor": "@nx-tools/nx-prisma:deploy",
-      "options": {
-        "schema": "prisma/schema.prisma"
-      }
-    },
-    "prisma-status": {
-      "executor": "@nx-tools/nx-prisma:status",
-      "options": {
-        "schema": "prisma/schema.prisma"
-      }
-    },
-    "prisma-studio": {
-      "executor": "@nx-tools/nx-prisma:studio",
-      "options": {
-        "schema": "prisma/schema.prisma"
+        "commands": [
+          "cross-env-shell docker build --no-cache --force-rm -f apps/api/Dockerfile . -t chat-app/api:$npm_package_version"
+        ]
       }
     }
   },

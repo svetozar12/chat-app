@@ -3,7 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { API_ENVS } from '@chat-app/api/env';
-
+// import deps which are required but nx cant find
+import * as _ from 'envalid';
 async function bootstrap() {
   const { PORT, API_PREFIX } = API_ENVS;
   const app = await NestFactory.create(AppModule);

@@ -3,7 +3,7 @@ import { AuthProvider } from '..';
 export interface IUser {
   /** Our internal user ID – independent from the `providerId`! */
   _id: string;
-
+  id: string;
   /** With which social login provider the user has logged in */
   provider: AuthProvider;
 

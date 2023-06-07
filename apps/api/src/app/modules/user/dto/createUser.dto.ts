@@ -1,7 +1,6 @@
-import { IUser } from '@chat-app/api/shared';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto implements IUser {
+export class CreateUserDto {
   @ApiProperty()
   _id: string;
 
