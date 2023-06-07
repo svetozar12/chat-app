@@ -4,7 +4,7 @@ export interface CommonEnvs {
 }
 
 export type ClientEnvs = {
-  NEXT_API_URL: string;
+  NEXT_PUBLIC_API_URL: string;
 };
 
 export type ServerEnvs = object;
@@ -17,7 +17,7 @@ export const commonEnvs: CommonEnvs = {
 };
 
 export const clientEnvs: ClientEnvs = {
-  NEXT_API_URL: process.env['NEXT_API_URL'] || '',
+  NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'] || '',
 };
 
 export const serverEnvs: ServerEnvs = {};
