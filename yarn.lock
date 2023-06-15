@@ -6521,6 +6521,14 @@ find-cache-dir@^3.3.2:
     make-dir "^3.0.2"
     pkg-dir "^4.1.0"
 
+find-in-files@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/find-in-files/-/find-in-files-0.5.0.tgz#8e5a20ffb562e0a47cb916b7f7b821717025e691"
+  integrity sha512-VraTc6HdtdSHmAp0yJpAy20yPttGKzyBWc7b7FPnnsX9TOgmKx0g9xajizpF/iuu4IvNK4TP0SpyBT9zAlwG+g==
+  dependencies:
+    find "^0.1.5"
+    q "^1.0.1"
+
 find-up@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-1.1.2.tgz#6b2e9822b1a2ce0a60ab64d610eccad53cb24d0f"
@@ -6536,6 +6544,13 @@ find-up@^4.0.0, find-up@^4.1.0:
   dependencies:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
+
+find@^0.1.5:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/find/-/find-0.1.7.tgz#c86c87af1ab18f222bbe38dec86cbc760d16a6fb"
+  integrity sha512-jPrupTOe/pO//3a9Ty2o4NqQCp0L46UG+swUnfFtdmtQVN8pEltKpAqR7Nuf6vWn0GBXx5w+R1MyZzqwjEIqdA==
+  dependencies:
+    traverse-chain "~0.1.0"
 
 flat-cache@^3.0.4:
   version "3.0.4"
@@ -10571,6 +10586,11 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.0.2.tgz#a9c2ddcae9b68d736a8163036f088a2781c8b306"
   integrity sha512-6Yg0ekpKICSjPswYOuC5sku/TSWaRYlA0qsXqJgM/d/4pLPHPuTxK7Nbf7jFKzAeedUhR8C7K9Uv63FBsSo8xQ==
 
+q@^1.0.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
+  integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
+
 qs@6.11.0:
   version "6.11.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
@@ -12040,6 +12060,11 @@ tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
+
+traverse-chain@~0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/traverse-chain/-/traverse-chain-0.1.0.tgz#61dbc2d53b69ff6091a12a168fd7d433107e40f1"
+  integrity sha512-up6Yvai4PYKhpNp5PkYtx50m3KbwQrqDwbuZP/ItyL64YEWHAvH6Md83LFLV/GRSk/BoUVwwgUzX6SOQSbsfAg==
 
 tree-kill@1.2.2:
   version "1.2.2"

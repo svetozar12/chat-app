@@ -54,7 +54,6 @@ export const isAlreadyAuth =
     const cookie = useCookie(ctx);
     const desiredURL: string = cookie.get(REDIRECT_URL_CALLBACK);
     const path: string = desiredURL || '/protected';
-
     if (isUserAuth && ctx.resolvedUrl !== path)
       return redirectTo(`/${path}`, ctx);
     if (getServerSideProps) {

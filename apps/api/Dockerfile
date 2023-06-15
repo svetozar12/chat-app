@@ -11,6 +11,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY dist/apps/api .
 
-EXPOSE 8082
+EXPOSE 3000
 
 CMD ["node", "main.js"]

@@ -27,11 +27,11 @@ function useInitApp() {
   const cookie = useCookie();
   const userId = cookie.get(USER_ID) as string;
   const token = cookie.get(TOKEN) as string;
-  const { NEXT_PUBLIC_WS_SERVER_URL } = commonEnvs;
+  const { WS_SERVER_URL } = commonEnvs;
   useEffect(() => {
     if (!userId || !token) return;
     setAccessToken(token);
-    const socketInstance = io(NEXT_PUBLIC_WS_SERVER_URL);
+    const socketInstance = io(WS_SERVER_URL);
     socketInstance.on(CONNECT_EVENT, () => {
       console.log('connected');
       setSocket(socketInstance);

@@ -10,8 +10,10 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "apps/web",
-        "outputPath": "dist/apps/web"
+        "outputPath": "dist/apps/web",
+        "includeDevDependenciesInPackageJson": true
       },
+      "dependsOn": [],
       "configurations": {
         "development": {
           "outputPath": "apps/web"

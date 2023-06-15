@@ -1,23 +1,21 @@
+import getConfig from 'next/config';
 export interface CommonEnvs {
-  NEXT_PUBLIC_OAUTH_METHODS: string[];
-  NEXT_PUBLIC_WS_SERVER_URL: string;
+  OAUTH_METHODS: string[];
+  WS_SERVER_URL: string;
+  API_URL: string;
 }
-
-export type ClientEnvs = {
-  NEXT_PUBLIC_API_URL: string;
+console.log(getConfig());
+const { publicRuntimeConfig } = getConfig() as {
+  publicRuntimeConfig: CommonEnvs;
 };
 
 export type ServerEnvs = object;
 
 export const commonEnvs: CommonEnvs = {
-  NEXT_PUBLIC_OAUTH_METHODS:
-    process.env['NEXT_PUBLIC_OAUTH_METHODS']?.split(',') || [],
-  NEXT_PUBLIC_WS_SERVER_URL:
-    process.env['NEXT_PUBLIC_WS_SERVER_URL'] || 'ws://localhost:3000',
-};
-
-export const clientEnvs: ClientEnvs = {
-  NEXT_PUBLIC_API_URL: process.env['NEXT_PUBLIC_API_URL'] || '',
+  OAUTH_METHODS:
+    (publicRuntimeConfig.OAUTH_METHODS as unknown as string)?.split(',') || [],
+  WS_SERVER_URL: publicRuntimeConfig['WS_SERVER_URL'] || 'ws://localhost:3000',
+  API_URL: publicRuntimeConfig['API_URL'] || '',
 };
 
 export const serverEnvs: ServerEnvs = {};
