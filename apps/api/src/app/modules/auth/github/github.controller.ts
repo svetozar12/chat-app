@@ -38,9 +38,7 @@ export class GithubOauthController {
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
       domain:
-        process.env.NODE_ENV === 'development'
-          ? 'localhost'
-          : 'chat-app-five-gules.vercel.app',
+        process.env.NODE_ENV === 'development' ? 'localhost' : 'vercel.app',
     });
     res.cookie(USER_ID, user.id);
     return res.redirect(WEB_URL);
