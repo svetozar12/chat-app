@@ -37,6 +37,10 @@ export class GoogleOauthController {
     res.cookie(TOKEN, accessToken, {
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
+      domain:
+        process.env.NODE_ENV === 'development'
+          ? 'localhost'
+          : 'chat-app-production-34c6.up.railway.app',
     });
     res.cookie(USER_ID, user.id);
     return res.redirect(WEB_URL);
