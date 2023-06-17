@@ -40,7 +40,12 @@ export class GithubOauthController {
       domain:
         process.env.NODE_ENV === 'development' ? 'localhost' : 'vercel.app',
     });
-    res.cookie(USER_ID, user.id);
+    res.cookie(USER_ID, user.id, {
+      // expires in 60 days
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
+      domain:
+        process.env.NODE_ENV === 'development' ? 'localhost' : 'netlify.app',
+    });
     return res.redirect(WEB_URL);
   }
 }
