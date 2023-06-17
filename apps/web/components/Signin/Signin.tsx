@@ -1,10 +1,34 @@
 import React from 'react';
 import { Modal } from '../Modal';
 import { OauthButton } from './subcomponents/OauthButton';
-import { renderOauthButtons } from './utils';
+import { AiOutlineGithub } from 'react-icons/ai';
+import { FcGoogle } from 'react-icons/fc';
+import { getEnv } from 'libs/web/utils/src/lib/env';
 
 const SignIn = () => {
   const MODAL_TITLE = 'Sign in to ChatApp';
+  const renderOauthButtons = [
+    {
+      Icon: AiOutlineGithub,
+      title: 'Sign in with Github',
+      onClick: () => {
+        window.open(
+          `${getEnv('NEXT_PUBLIC_API_URL')}/api/auth/github`,
+          '_self'
+        );
+      },
+    },
+    {
+      Icon: FcGoogle,
+      title: 'Sign in with Google',
+      onClick: () => {
+        window.open(
+          `${getEnv('NEXT_PUBLIC_API_URL')}/api/auth/google`,
+          '_self'
+        );
+      },
+    },
+  ];
 
   return (
     <div className="bg-chatAppGray-100 w-full h-screen flex justify-center items-center">

@@ -7,11 +7,11 @@ interface IAvatarProps {
   height?: number;
 }
 const Avatar: FC<IAvatarProps> = ({ src, witdh, height }) => {
-  console.log(witdh, height);
+  console.log(src);
   return (
     <div className="px-3">
       <div>
-        <Image
+        <img
           src={src}
           width={witdh}
           height={height}

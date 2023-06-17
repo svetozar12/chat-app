@@ -71,7 +71,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "cross-env-shell docker build --no-cache --force-rm -f apps/web/Dockerfile . -t chat-app/web:$npm_package_version"
+          "docker build . -t sgospodinov02/chat-fe -f ./apps/web/Dockerfile"
         ]
       }
     }

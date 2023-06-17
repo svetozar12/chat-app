@@ -4,7 +4,7 @@ export function getEnv(key: string) {
   return publicConfig[key];
 }
 
-export let publicConfig = {};
+export let publicConfig: Record<string, any> = {};
 
 export function setPublicConfig(object: Record<any, string>) {
   publicConfig = { ...publicConfig, ...object };

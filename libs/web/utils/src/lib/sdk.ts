@@ -1,7 +1,8 @@
 import { MessageApi, UserApi, Configuration, AuthApi } from '@chat-app/api/sdk';
+import { getEnv } from './env';
 
 const config = new Configuration({
-  basePath: 'http://localhost:3000',
+  basePath: getEnv('NEXT_PUBLIC_API_URL'),
   accessToken: '',
 });
 

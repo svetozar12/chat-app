@@ -8,11 +8,8 @@ import {
   INITIAL_PAGE,
   LIMIT,
 } from '../components/Home/subcomponets/MessageList';
-import { getEnv } from '../util';
 
 function ProtectedPage() {
-  console.log(getEnv('STAGE'), 'client');
-
   return <Home />;
 }
 
