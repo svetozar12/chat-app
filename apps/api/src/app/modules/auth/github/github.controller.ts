@@ -41,6 +41,7 @@ export class GithubOauthController {
         process.env.NODE_ENV === 'development' ? 'localhost' : 'vercel.app',
       httpOnly: true,
       sameSite: 'none',
+      secure: true,
     });
     res.cookie(USER_ID, user.id, {
       // expires in 60 days
@@ -49,6 +50,7 @@ export class GithubOauthController {
         process.env.NODE_ENV === 'development' ? 'localhost' : 'netlify.app',
       httpOnly: true,
       sameSite: 'none',
+      secure: true,
     });
     return res.redirect(WEB_URL);
   }
