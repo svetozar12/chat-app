@@ -9,7 +9,7 @@ async function bootstrap() {
   const { PORT, API_PREFIX } = API_ENVS;
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(API_PREFIX);
-  app.enableCors();
+  app.enableCors({ origin: '*', credentials: true });
   const config = new DocumentBuilder()
     .setTitle('ChatApp')
     .addBearerAuth()
