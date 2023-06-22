@@ -1,6 +1,6 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
-
+import { serialize } from 'cookie';
 import { IUser } from '@chat-app/api/shared';
 import { JwtAuthService } from '../jwt/jwt-auth.service';
 import { GithubOauthGuard } from './github.guard';
@@ -41,6 +41,14 @@ export class GithubOauthController {
       sameSite: 'none',
       secure: true,
     });
+    res.setHeader(
+      'Set-Cookie',
+      serialize('test', 'test', {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
+    );
     res.cookie(USER_ID, user.id, {
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
