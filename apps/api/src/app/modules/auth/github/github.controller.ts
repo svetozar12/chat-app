@@ -35,6 +35,7 @@ export class GithubOauthController {
     const user = req.user as IUser;
     const { accessToken } = this.jwtAuthService.login(user);
     res.cookie(TOKEN, accessToken, {
+      domain: 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
       httpOnly: true,
@@ -50,6 +51,7 @@ export class GithubOauthController {
       })
     );
     res.cookie(USER_ID, user.id, {
+      domain: 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
       httpOnly: true,
