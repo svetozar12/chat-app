@@ -42,14 +42,7 @@ export class GithubOauthController {
       sameSite: 'none',
       secure: true,
     });
-    res.setHeader(
-      'Set-Cookie',
-      serialize('test', 'test', {
-        httpOnly: true,
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      })
-    );
+
     res.cookie(USER_ID, user.id, {
       domain: 'gospodinovs.com',
       // expires in 60 days
