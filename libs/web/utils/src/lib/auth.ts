@@ -17,6 +17,7 @@ const isAuth = async (ctx: ICtx): Promise<boolean> => {
     const cookie = useCookie(ctx);
     const userId = cookie.get(USER_ID);
     const token = cookie.get(TOKEN);
+    console.log(userId, token, 'cookies');
     if (!userId || !token) return false;
     const { data: isValidToken } = await sdk.auth.jwtAuthControllerVerify({
       headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },

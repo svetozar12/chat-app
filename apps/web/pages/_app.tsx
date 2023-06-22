@@ -2,8 +2,7 @@ import '../globals.css';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { setBasePath } from '@chat-app/web/utils';
-import { getEnv, setPublicConfig } from 'libs/web/utils/src/lib/env';
+import { getEnv, setBasePath, setPublicConfig } from '@chat-app/web/utils';
 // Create a client
 export const queryClient = new QueryClient();
 

@@ -4,6 +4,7 @@ import { OauthButton } from './subcomponents/OauthButton';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { getEnv } from 'libs/web/utils/src/lib/env';
+import axios from 'axios';
 
 const SignIn = () => {
   const MODAL_TITLE = 'Sign in to ChatApp';
@@ -11,7 +12,7 @@ const SignIn = () => {
     {
       Icon: AiOutlineGithub,
       title: 'Sign in with Github',
-      onClick: () => {
+      onClick: async () => {
         window.open(
           `${getEnv('NEXT_PUBLIC_API_URL')}/api/auth/github`,
           '_self'
