@@ -25,9 +25,6 @@ const isAuth = async (ctx: ICtx): Promise<boolean> => {
     console.log(isValidToken, token);
     return isValidToken === true;
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    console.log(error);
     return false;
   }
 };
@@ -56,7 +53,6 @@ export const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
 export const isAlreadyAuth =
   (getServerSideProps?: any) => async (ctx: ICtx) => {
     const isUserAuth = await isAuth(ctx);
-    console.log('IS ALREADY AUTH', isUserAuth);
     const cookie = useCookie(ctx);
     const desiredURL: string = cookie.get(REDIRECT_URL_CALLBACK);
     const path: string = desiredURL || '/protected';
