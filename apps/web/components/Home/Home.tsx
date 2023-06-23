@@ -31,6 +31,7 @@ function useInitApp() {
     if (!userId || !token) return;
     setAccessToken(token);
     const socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
+    console.log(socketInstance, getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
     socketInstance.on(CONNECT_EVENT, () => {
       console.log('connected');
       setSocket(socketInstance);
