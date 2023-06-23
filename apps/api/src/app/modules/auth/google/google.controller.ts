@@ -35,14 +35,21 @@ export class GoogleOauthController {
     const user = req.user as IUser;
     const { accessToken } = this.jwtAuthService.login(user);
     res.cookie(TOKEN, accessToken, {
+      domain: 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
-      domain:
-        process.env.NODE_ENV === 'development'
-          ? 'localhost'
-          : 'chat-app-production-34c6.up.railway.app',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     });
-    res.cookie(USER_ID, user.id);
+    res.cookie(USER_ID, user.id, {
+      domain: 'gospodinovs.com',
+      // expires in 60 days
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
     return res.redirect(WEB_URL);
   }
 }

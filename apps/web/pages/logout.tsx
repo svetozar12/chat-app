@@ -3,7 +3,6 @@ import SignIn from '../components/Signin/Signin';
 import { TOKEN, USER_ID } from '@chat-app/common/constants';
 import { LOGIN_ROUTE } from '@chat-app/web/constants';
 const SignInPage = () => {
-  console.log('SIGN IN');
   return <SignIn />;
 };
 

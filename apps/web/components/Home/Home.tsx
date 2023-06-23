@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useCookie } from 'next-cookie';
 import { sdk, setAccessToken } from '@chat-app/web/utils';
-import { LOGIN_ROUTE } from '@chat-app/web/constants';
 import { Socket, io } from 'socket.io-client';
 import { MessageForm, MessageList } from './subcomponets';
 import { CONNECT_EVENT, TOKEN, USER_ID } from '@chat-app/common/constants';
 import Navbar from './subcomponets/Navbar';
 import { getEnv } from 'libs/web/utils/src/lib/env';
+import Link from 'next/link';
 
 const Home = () => {
-  const { logout, socket } = useInitApp();
+  const { socket } = useInitApp();
   if (!socket) return <>websocket did not load</>;
   return (
     <div className="bg-chatAppGray-100 w-full h-screen">
       <Navbar />
-      <button onClick={logout} className="text-white">
-        LOG OUT
-      </button>
+      <Link href="/logout">LOGOUT</Link>
       <MessageList socket={socket} />
       <MessageForm socket={socket} />
     </div>
@@ -38,15 +36,7 @@ function useInitApp() {
     };
   }, []);
 
-  function logout() {
-    setAccessToken(undefined);
-    for (const key in cookie.getAll()) {
-      cookie.remove(key);
-    }
-    window.location.href = LOGIN_ROUTE;
-  }
-
-  return { logout, socket };
+  return { socket };
 }
 
 export default Home;
