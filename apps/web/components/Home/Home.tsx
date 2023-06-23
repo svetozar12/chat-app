@@ -10,7 +10,7 @@ import { getEnv } from 'libs/web/utils/src/lib/env';
 
 const Home = () => {
   const { logout, socket } = useInitApp();
-  if (!socket) return;
+  if (!socket) return <>websocket did not load</>;
   return (
     <div className="bg-chatAppGray-100 w-full h-screen">
       <Navbar />
@@ -31,7 +31,11 @@ function useInitApp() {
     if (!userId || !token) return;
     setAccessToken(token);
     const socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
-    console.log(socketInstance, getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
+    console.log(
+      socketInstance,
+      getEnv('NEXT_PUBLIC_WS_SERVER_URL'),
+      'websocket'
+    );
     socketInstance.on(CONNECT_EVENT, () => {
       console.log('connected');
       setSocket(socketInstance);
