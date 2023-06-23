@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCookie } from 'next-cookie';
-import { setAccessToken } from '@chat-app/web/utils';
+import { sdk, setAccessToken } from '@chat-app/web/utils';
 import { LOGIN_ROUTE } from '@chat-app/web/constants';
 import { Socket, io } from 'socket.io-client';
 import { MessageForm, MessageList } from './subcomponets';
@@ -25,22 +25,27 @@ const Home = () => {
 function useInitApp() {
   const [socket, setSocket] = useState<Socket>(null);
   const cookie = useCookie();
-  const userId = cookie.get(USER_ID) as string;
   const token = cookie.get(TOKEN) as string;
   useEffect(() => {
-    console.log(userId, token, 'cookie');
-    if (!userId || !token) return;
-    setAccessToken(token);
-    const socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
-    console.log(
-      socketInstance,
-      getEnv('NEXT_PUBLIC_WS_SERVER_URL'),
-      'websocket'
-    );
-    socketInstance.on(CONNECT_EVENT, () => {
-      console.log('connected');
-      setSocket(socketInstance);
-    });
+    let socketInstance: Socket;
+    sdk.auth
+      .jwtAuthControllerVerify({
+        headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },
+      })
+      .then(({ data: isValidToken }) => {
+        if (isValidToken) return;
+        setAccessToken(token);
+        socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
+        console.log(
+          socketInstance,
+          getEnv('NEXT_PUBLIC_WS_SERVER_URL'),
+          'websocket'
+        );
+        socketInstance.on(CONNECT_EVENT, () => {
+          console.log('connected');
+          setSocket(socketInstance);
+        });
+      });
     return () => {
       socketInstance.disconnect();
     };
