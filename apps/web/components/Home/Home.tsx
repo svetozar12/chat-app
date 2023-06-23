@@ -27,25 +27,12 @@ function useInitApp() {
   const cookie = useCookie();
   const token = cookie.get(TOKEN) as string;
   useEffect(() => {
-    let socketInstance: Socket;
-    sdk.auth
-      .jwtAuthControllerVerify({
-        headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },
-      })
-      .then(({ data: isValidToken }) => {
-        if (isValidToken) return;
-        setAccessToken(token);
-        socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
-        console.log(
-          socketInstance,
-          getEnv('NEXT_PUBLIC_WS_SERVER_URL'),
-          'websocket'
-        );
-        socketInstance.on(CONNECT_EVENT, () => {
-          console.log('connected');
-          setSocket(socketInstance);
-        });
-      });
+    setAccessToken(token);
+    const socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
+    socketInstance.on(CONNECT_EVENT, () => {
+      console.log('connected');
+      setSocket(socketInstance);
+    });
     return () => {
       socketInstance.disconnect();
     };
