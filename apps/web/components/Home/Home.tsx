@@ -28,6 +28,7 @@ function useInitApp() {
   const userId = cookie.get(USER_ID) as string;
   const token = cookie.get(TOKEN) as string;
   useEffect(() => {
+    console.log(userId, token, 'cookie');
     if (!userId || !token) return;
     setAccessToken(token);
     const socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
