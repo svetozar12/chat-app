@@ -3,8 +3,7 @@ import { Modal } from '../Modal';
 import { OauthButton } from './subcomponents/OauthButton';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import { getEnv } from 'libs/web/utils/src/lib/env';
-import axios from 'axios';
+import { getEnv } from '@chat-app/web/utils';
 
 const SignIn = () => {
   const MODAL_TITLE = 'Sign in to ChatApp';
@@ -34,7 +33,7 @@ const SignIn = () => {
   return (
     <div className="bg-chatAppGray-100 w-full h-screen flex justify-center items-center">
       <Modal
-        className="bg-black min-w-[500px]"
+        className="bg-black min-w-[400px]"
         isOpen={true}
         title={MODAL_TITLE}
       >
