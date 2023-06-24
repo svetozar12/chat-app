@@ -17,7 +17,6 @@ const isAuth = async (ctx: ICtx): Promise<boolean> => {
     const cookie = useCookie(ctx);
     const userId = cookie.get(USER_ID);
     const token = cookie.get(TOKEN);
-    console.log(userId, token, 'cookies');
     if (!userId || !token) return false;
     const { data: isValidToken } = await sdk.auth.jwtAuthControllerVerify({
       headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },
@@ -32,20 +31,21 @@ const isAuth = async (ctx: ICtx): Promise<boolean> => {
 export const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
   const isUserAuth = await isAuth(ctx);
   const currPath = ctx.resolvedUrl;
-
+  const cookie = useCookie(ctx);
   if (!isUserAuth && currPath !== '/') return redirectTo('/', ctx, currPath);
   if (getServerSideProps) {
     const gssp = await getServerSideProps(ctx);
     return {
       props: {
-        cookie: ctx.req?.headers.cookie ?? '',
+        cookie: cookie.getAll() ?? '',
         ...gssp.props,
       },
     };
   }
+  console.log(cookie.getAll(), 'SSR');
   return {
     props: {
-      cookie: ctx.req?.headers.cookie ?? '',
+      cookie: cookie.getAll() ?? '',
     },
   };
 };
@@ -56,6 +56,7 @@ export const isAlreadyAuth =
     const cookie = useCookie(ctx);
     const desiredURL: string = cookie.get(REDIRECT_URL_CALLBACK);
     const path: string = desiredURL || '/protected';
+    console.log('TRIGGER', path);
     if (isUserAuth && ctx.resolvedUrl !== path)
       return redirectTo(`/${path}`, ctx);
     if (getServerSideProps) {

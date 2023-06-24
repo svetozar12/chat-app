@@ -38,17 +38,11 @@ export class GoogleOauthController {
       domain: 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
     });
     res.cookie(USER_ID, user.id, {
       domain: 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
     });
     return res.redirect(WEB_URL);
   }
