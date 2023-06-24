@@ -59,7 +59,6 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
 
   useEffect(() => {
     socket.on(MESSAGE_EVENT, (message) => {
-      console.log(message.messages, 'WS');
       queryClient.setQueryData(
         MESSAGES_QUERY,
         ({ messages: oldMessages, pagination }: GetMessageListDto) => {
@@ -87,7 +86,7 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
     <div
       ref={ref}
       onScroll={scrollHanler}
-      className="text-white h-5/6 overflow-auto"
+      className="text-white h-4/6 overflow-auto"
     >
       {messages.map((message) => {
         return (
