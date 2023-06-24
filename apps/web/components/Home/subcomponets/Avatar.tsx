@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { FC } from 'react';
 
 interface IAvatarProps {
@@ -7,7 +6,6 @@ interface IAvatarProps {
   height?: number;
 }
 const Avatar: FC<IAvatarProps> = ({ src, witdh, height }) => {
-  console.log(src);
   return (
     <div className="px-3">
       <div>

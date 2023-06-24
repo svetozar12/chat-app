@@ -48,14 +48,13 @@ function useForm(socket: Socket) {
       },
       onSubmit: async () => {
         try {
-          queryClient.setQueryData(
-            MESSAGES_QUERY,
-            ({ messages: oldMessages, pagination }: GetMessageListDto) => {
-              const old = Array.isArray(oldMessages) ? oldMessages : [];
-              console.log(old);
-              return { messages: [...old, values], pagination };
-            }
-          );
+          // queryClient.setQueryData(
+          //   MESSAGES_QUERY,
+          //   ({ messages: oldMessages, pagination }: GetMessageListDto) => {
+          //     const old = Array.isArray(oldMessages) ? oldMessages : [];
+          //     return { messages: [...old, values], pagination };
+          //   }
+          // );
           socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
           await sdk.message.messageControllerCreateMessage(values);
         } catch (error) {

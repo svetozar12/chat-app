@@ -13,7 +13,6 @@ const Navbar = () => {
     sdk.user.userControllerFind(userId).then((data) => data.data)
   );
   if (!data) return <div></div>;
-  console.log(data);
   const {
     _id,
     displayName,

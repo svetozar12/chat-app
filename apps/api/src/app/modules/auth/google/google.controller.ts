@@ -35,12 +35,18 @@ export class GoogleOauthController {
     const user = req.user as IUser;
     const { accessToken } = this.jwtAuthService.login(user);
     res.cookie(TOKEN, accessToken, {
-      domain: 'gospodinovs.com',
+      domain:
+        process.env.NODE_ENV === 'development'
+          ? 'localhost'
+          : 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
     });
     res.cookie(USER_ID, user.id, {
-      domain: 'gospodinovs.com',
+      domain:
+        process.env.NODE_ENV === 'development'
+          ? 'localhost'
+          : 'gospodinovs.com',
       // expires in 60 days
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 60),
     });

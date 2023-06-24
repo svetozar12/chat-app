@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setAccessToken } from '@chat-app/web/utils';
 import { Socket, io } from 'socket.io-client';
 import { MessageForm, MessageList } from './subcomponets';

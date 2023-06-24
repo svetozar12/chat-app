@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import { Socket } from 'socket.io-client';
 import { queryClient } from '../../../pages/_app';
 import { GetMessageListDto } from '@chat-app/api/sdk';
+import { MESSAGE_EVENT } from '@chat-app/common/constants';
 
 interface IMessageListProps {
   socket: Socket;
@@ -16,7 +17,7 @@ export const LIMIT = 15;
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
   const [page, setPage] = React.useState(INITIAL_PAGE);
   const ref = React.useRef<HTMLDivElement>(null);
-  const { data, isFetching } = useQuery(
+  const { data, isFetching, refetch } = useQuery(
     MESSAGES_QUERY,
     () =>
       sdk.message
@@ -57,6 +58,19 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   };
 
   useEffect(() => {
+    socket.on(MESSAGE_EVENT, (message) => {
+      console.log(message.messages, 'WS');
+      queryClient.setQueryData(
+        MESSAGES_QUERY,
+        ({ messages: oldMessages, pagination }: GetMessageListDto) => {
+          const old = Array.isArray(oldMessages) ? oldMessages : [];
+          return { messages: [...old, ...message.messages], pagination };
+        }
+      );
+    });
+  }, []);
+
+  useEffect(() => {
     setPage(INITIAL_PAGE);
   }, []);
 
@@ -68,7 +82,7 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   }, [messages]);
 
   if (isFetching && messages.length < 1) return <p>Loading...</p>;
-
+  console.log(messages, 'FETCHED');
   return (
     <div
       ref={ref}

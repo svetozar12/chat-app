@@ -21,7 +21,6 @@ const isAuth = async (ctx: ICtx): Promise<boolean> => {
     const { data: isValidToken } = await sdk.auth.jwtAuthControllerVerify({
       headers: { Authorization: `Bearer ${cookie.get(TOKEN)}` },
     });
-    console.log(isValidToken, token);
     return isValidToken === true;
   } catch (error) {
     return false;
@@ -42,7 +41,6 @@ export const withAuthSync = (getServerSideProps?: any) => async (ctx: ICtx) => {
       },
     };
   }
-  console.log(cookie.getAll(), 'SSR');
   return {
     props: {
       cookie: cookie.getAll() ?? '',
@@ -56,7 +54,6 @@ export const isAlreadyAuth =
     const cookie = useCookie(ctx);
     const desiredURL: string = cookie.get(REDIRECT_URL_CALLBACK);
     const path: string = desiredURL || '/protected';
-    console.log('TRIGGER', path);
     if (isUserAuth && ctx.resolvedUrl !== path)
       return redirectTo(`/${path}`, ctx);
     if (getServerSideProps) {
