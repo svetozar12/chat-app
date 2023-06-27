@@ -1,13 +1,9 @@
 import { sdk, setAccessToken, withAuthSync } from '@chat-app/web/utils';
-import Home from '../components/Home/Home';
 import { MESSAGES_QUERY, USER_QUERY } from '@chat-app/web/constants';
 import { QueryClient, dehydrate } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { TOKEN, USER_ID } from '@chat-app/shared/common-constants';
-import {
-  INITIAL_PAGE,
-  LIMIT,
-} from '../components/Home/subcomponets/MessageList';
+import { Home, INITIAL_PAGE, LIMIT } from '@chat-app/web/protected';
 
 function ProtectedPage() {
   return <Home />;

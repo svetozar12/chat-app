@@ -4,9 +4,9 @@ import { MESSAGES_QUERY } from '@chat-app/web/constants';
 import { sdk } from '@chat-app/web/utils';
 import { useQuery } from 'react-query';
 import { Socket } from 'socket.io-client';
-import { queryClient } from '../../../pages/_app';
 import { GetMessageListDto } from '@chat-app/api/sdk';
 import { MESSAGE_EVENT } from '@chat-app/shared/common-constants';
+import { queryClient } from '@chat-app/web/root-app';
 
 interface IMessageListProps {
   socket: Socket;
@@ -32,8 +32,8 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
     }
   );
 
-  const messages = data.messages || [];
-  const { total } = data.pagination || { total: 0, limit: LIMIT, page: 1 };
+  const messages = data?.messages || [];
+  const { total } = data?.pagination || { total: 0, limit: LIMIT, page: 1 };
   const scrollHanler = async ({
     currentTarget: { scrollTop },
   }: React.UIEvent<HTMLElement>) => {

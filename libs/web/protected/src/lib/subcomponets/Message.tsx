@@ -11,7 +11,7 @@ interface IMessageListProps {
 const Message: FC<IMessageListProps> = ({
   message: { message, userId, createdAt },
 }) => {
-  const MESSAGE_SENT_DATE = formatDate(createdAt);
+  const MESSAGE_SENT_DATE = (createdAt && formatDate(createdAt)) || '';
   const { data } = useQuery(USER_QUERY(userId), () =>
     sdk.user.userControllerFind(userId).then((data) => data.data)
   );

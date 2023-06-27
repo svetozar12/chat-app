@@ -10,9 +10,9 @@ import {
 } from '@chat-app/shared/common-constants';
 import { sdk } from '@chat-app/web/utils';
 import { Socket } from 'socket.io-client';
-import { queryClient } from '../../../pages/_app';
 import { MESSAGES_QUERY } from '@chat-app/web/constants';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
+import { queryClient } from '@chat-app/web/root-app';
 // import { Theme } from 'emoji-picker-react';
 
 // const Picker = dynamic(
@@ -83,7 +83,7 @@ function useForm(socket: Socket) {
         } catch (error) {
           // if error occurs refetch queries
           queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
-          throw new Error(error);
+          throw new Error(error as string);
         } finally {
           resetForm();
         }
