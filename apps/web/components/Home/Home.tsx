@@ -10,7 +10,8 @@ import { useCookie } from 'next-cookie';
 
 const Home = () => {
   const { socket } = useInitApp();
-  if (!socket) return <>websocket did not load</>;
+  if (!socket)
+    return <div className="bg-chatAppGray-100 w-full h-screen"></div>;
   return (
     <div className="bg-chatAppGray-100 w-full h-screen">
       <Navbar />

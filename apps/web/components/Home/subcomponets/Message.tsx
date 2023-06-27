@@ -1,6 +1,6 @@
 import { CreateMessageDto } from '@chat-app/api/sdk';
 import { USER_QUERY } from '@chat-app/web/constants';
-import { formatDate, sdk } from '@chat-app/web/utils';
+import { formatDate, isValidUrl, sdk } from '@chat-app/web/utils';
 import React, { FC } from 'react';
 import { useQuery } from 'react-query';
 import Avatar from './Avatar';
@@ -28,7 +28,18 @@ const Message: FC<IMessageListProps> = ({
           <p className="font-semibold">{displayName}</p>
           <p>{MESSAGE_SENT_DATE === 'Invalid Date' ? '' : MESSAGE_SENT_DATE}</p>
         </div>
-        {message}
+        {isValidUrl(message) ? (
+          <a
+            className="underline text-blue-400"
+            target="_blank"
+            href={message}
+            rel="noreferrer"
+          >
+            {message}
+          </a>
+        ) : (
+          message
+        )}
       </div>
     </div>
   );
