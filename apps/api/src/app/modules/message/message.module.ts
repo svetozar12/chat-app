@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { MessageController } from './message.controller';
 import { MessageService } from './message.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Message, MessageSchema } from '@chat-app/api/db';
 import { CacheModule } from '@nestjs/cache-manager';
+import { Message, MessageSchema } from '../../utils/mongo';
 
 @Module({
   imports: [

@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Message } from '@chat-app/api/db';
 import { Types } from 'mongoose';
+import { Message } from '../../../utils/mongo';
 
 export class CreateMessageDto implements Message {
   @ApiProperty({ type: 'string', required: false })

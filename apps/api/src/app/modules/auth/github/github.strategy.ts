@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-github';
 
 import { UsersService } from '../../user/user.service';
-import { API_ENVS } from '@chat-app/api/env';
+import { API_ENVS } from '../../../utils/env';
 
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_CALLBACK_URL } =
   API_ENVS;

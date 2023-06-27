@@ -10,17 +10,15 @@ import {
   Query,
   UseGuards,
   UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMessageDto } from './dto/createMessage.dto';
-import { Message } from '@chat-app/api/db';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { PaginationQueryDto } from '../../common/dto/queryPagination.dto';
 import { GetMessageListDto } from './dto/getMessageList.dto';
+import { Message } from '../../utils/mongo';
 
 @ApiTags('message')
 @Controller('message')

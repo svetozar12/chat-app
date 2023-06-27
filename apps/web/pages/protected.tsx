@@ -3,7 +3,7 @@ import Home from '../components/Home/Home';
 import { MESSAGES_QUERY, USER_QUERY } from '@chat-app/web/constants';
 import { QueryClient, dehydrate } from 'react-query';
 import { useCookie } from 'next-cookie';
-import { TOKEN, USER_ID } from '@chat-app/common/constants';
+import { TOKEN, USER_ID } from '@chat-app/shared/common-constants';
 import {
   INITIAL_PAGE,
   LIMIT,

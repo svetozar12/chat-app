@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { setAccessToken } from '@chat-app/web/utils';
 import { Socket, io } from 'socket.io-client';
 import { MessageForm, MessageList } from './subcomponets';
-import { CONNECT_EVENT, TOKEN } from '@chat-app/common/constants';
+import { CONNECT_EVENT, TOKEN } from '@chat-app/shared/common-constants';
 import Navbar from './subcomponets/Navbar';
 import { getEnv } from '@chat-app/web/utils';
 import Link from 'next/link';

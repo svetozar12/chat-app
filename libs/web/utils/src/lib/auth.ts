@@ -6,7 +6,7 @@ import {
   REDIRECT_URL_CALLBACK,
   TOKEN,
   USER_ID,
-} from '@chat-app/common/constants';
+} from '@chat-app/shared/common-constants';
 
 export interface ICtx extends NextPageContext {
   resolvedUrl: string;

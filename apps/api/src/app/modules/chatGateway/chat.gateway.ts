@@ -5,7 +5,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { ISendMessage, MESSAGE_EVENT } from '@chat-app/common/constants';
+import { ISendMessage, MESSAGE_EVENT } from '@chat-app/shared/common-constants';
 
 @WebSocketGateway({
   cors: {
