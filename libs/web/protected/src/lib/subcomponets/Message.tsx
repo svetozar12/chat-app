@@ -1,9 +1,8 @@
 import { CreateMessageDto } from '@chat-app/api/sdk';
-import { USER_QUERY } from '@chat-app/web/constants';
-import { formatDate, isValidUrl, sdk } from '@chat-app/web/utils';
 import React, { FC } from 'react';
 import { useQuery } from 'react-query';
 import Avatar from './Avatar';
+import { USER_QUERY, formatDate, isValidUrl, sdk } from '@chat-app/web/shared';
 
 interface IMessageListProps {
   message: CreateMessageDto;

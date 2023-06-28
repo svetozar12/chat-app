@@ -1,6 +1,6 @@
-import SignIn from '../components/Signin/Signin';
+import { SignIn } from '@chat-app/web/login';
 import { TOKEN, USER_ID } from '@chat-app/shared/common-constants';
-import { LOGIN_ROUTE } from '@chat-app/web/constants';
+import { LOGIN_ROUTE } from '@chat-app/web/shared';
 import { useCookie } from 'next-cookie';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';

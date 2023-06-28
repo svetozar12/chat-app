@@ -1,31 +1,28 @@
 import React from 'react';
-import { Modal } from '../Modal';
+import { Modal } from 'apps/web/components/Modal';
 import { OauthButton } from './subcomponents/OauthButton';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import { getEnv } from '@chat-app/web/utils';
+import { WEB_ENVS } from '@chat-app/web/shared';
 
+const { NEXT_PUBLIC_API_HOST, NEXT_PUBLIC_API_PORT, NEXT_PUBLIC_API_SCHEME } =
+  WEB_ENVS;
 const SignIn = () => {
+  const BASE_URL = `${NEXT_PUBLIC_API_SCHEME}://${NEXT_PUBLIC_API_HOST}:${NEXT_PUBLIC_API_PORT}`;
   const MODAL_TITLE = 'Sign in to ChatApp';
   const renderOauthButtons = [
     {
       Icon: AiOutlineGithub,
       title: 'Sign in with Github',
       onClick: async () => {
-        window.open(
-          `${getEnv('NEXT_PUBLIC_API_URL')}/api/auth/github`,
-          '_self'
-        );
+        window.open(`${BASE_URL}/api/auth/github`, '_self');
       },
     },
     {
       Icon: FcGoogle,
       title: 'Sign in with Google',
       onClick: () => {
-        window.open(
-          `${getEnv('NEXT_PUBLIC_API_URL')}/api/auth/google`,
-          '_self'
-        );
+        window.open(`${BASE_URL}/api/auth/google`, '_self');
       },
     },
   ];

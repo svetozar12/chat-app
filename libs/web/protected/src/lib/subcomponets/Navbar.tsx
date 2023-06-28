@@ -1,6 +1,5 @@
 import { USER_ID } from '@chat-app/shared/common-constants';
-import { USER_QUERY } from '@chat-app/web/constants';
-import { sdk } from '@chat-app/web/utils';
+import { USER_QUERY, sdk } from '@chat-app/web/shared';
 import { useCookie } from 'next-cookie';
 import React from 'react';
 import { useQuery } from 'react-query';

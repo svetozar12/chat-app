@@ -1,14 +1,14 @@
 {
-  "name": "web-constants",
+  "name": "web-login",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/web/constants/src",
+  "sourceRoot": "libs/web/login/src",
   "projectType": "library",
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/web/constants/**/*.ts"]
+        "lintFilePatterns": ["libs/web/login/**/*.ts"]
       }
     }
   },

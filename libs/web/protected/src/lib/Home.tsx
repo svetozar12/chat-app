@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { setAccessToken } from '@chat-app/web/utils';
 import { Socket, io } from 'socket.io-client';
 import { MessageForm, MessageList } from './subcomponets';
 import { CONNECT_EVENT, TOKEN } from '@chat-app/shared/common-constants';
 import Navbar from './subcomponets/Navbar';
-import { getEnv } from '@chat-app/web/utils';
 import Link from 'next/link';
 import { useCookie } from 'next-cookie';
+import { WEB_ENVS, setAccessToken } from '@chat-app/web/shared';
 
+const { NEXT_PUBLIC_API_HOST, NEXT_PUBLIC_API_PORT, NEXT_PUBLIC_API_SCHEME } =
+  WEB_ENVS;
 const Home = () => {
   const { socket } = useInitApp();
   if (!socket)
@@ -25,11 +26,13 @@ function useInitApp() {
   const cookie = useCookie();
   const token: string = cookie.get(TOKEN);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const wsScheme = NEXT_PUBLIC_API_SCHEME === 'https' ? 'wss' : 'ws';
+  const wsUrl = `${wsScheme}://${NEXT_PUBLIC_API_HOST}:${NEXT_PUBLIC_API_PORT}`;
+  console.log(wsUrl);
   useEffect(() => {
     setAccessToken(token);
-    const socketInstance = io(getEnv('NEXT_PUBLIC_WS_SERVER_URL'));
+    const socketInstance = io(wsUrl);
     socketInstance.on(CONNECT_EVENT, () => {
-      console.log('connected');
       setSocket(socketInstance);
     });
     return () => {

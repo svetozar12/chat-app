@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import Message from './Message';
-import { MESSAGES_QUERY } from '@chat-app/web/constants';
-import { sdk } from '@chat-app/web/utils';
+import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
 import { useQuery } from 'react-query';
 import { Socket } from 'socket.io-client';
 import { GetMessageListDto } from '@chat-app/api/sdk';
@@ -17,7 +16,7 @@ export const LIMIT = 15;
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
   const [page, setPage] = React.useState(INITIAL_PAGE);
   const ref = React.useRef<HTMLDivElement>(null);
-  const { data, isFetching, refetch } = useQuery(
+  const { data, isFetching } = useQuery(
     MESSAGES_QUERY,
     () =>
       sdk.message

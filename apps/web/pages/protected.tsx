@@ -1,5 +1,10 @@
-import { sdk, setAccessToken, withAuthSync } from '@chat-app/web/utils';
-import { MESSAGES_QUERY, USER_QUERY } from '@chat-app/web/constants';
+import {
+  sdk,
+  setAccessToken,
+  withAuthSync,
+  MESSAGES_QUERY,
+  USER_QUERY,
+} from '@chat-app/web/shared';
 import { QueryClient, dehydrate } from 'react-query';
 import { useCookie } from 'next-cookie';
 import { TOKEN, USER_ID } from '@chat-app/shared/common-constants';

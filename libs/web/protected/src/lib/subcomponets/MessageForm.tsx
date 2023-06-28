@@ -8,9 +8,8 @@ import {
   MESSAGE_EVENT,
   USER_ID,
 } from '@chat-app/shared/common-constants';
-import { sdk } from '@chat-app/web/utils';
 import { Socket } from 'socket.io-client';
-import { MESSAGES_QUERY } from '@chat-app/web/constants';
+import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
 // import dynamic from 'next/dynamic';
 import { queryClient } from '@chat-app/web/root-app';
 // import { Theme } from 'emoji-picker-react';
