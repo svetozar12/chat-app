@@ -4,8 +4,13 @@ import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
 import { useQuery } from 'react-query';
 import { Socket } from 'socket.io-client';
 import { GetMessageListDto } from '@chat-app/api/sdk';
-import { MESSAGE_EVENT } from '@chat-app/shared/common-constants';
+import {
+  ISendTyping,
+  MESSAGE_EVENT,
+  TYPING_EVENT,
+} from '@chat-app/shared/common-constants';
 import { queryClient } from '@chat-app/web/root-app';
+import Typing from './Typing';
 
 interface IMessageListProps {
   socket: Socket;
@@ -15,6 +20,10 @@ export const INITIAL_PAGE = 1;
 export const LIMIT = 15;
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
   const [page, setPage] = React.useState(INITIAL_PAGE);
+  const [isTyping, setIsTyping] = React.useState<ISendTyping>({
+    isTyping: false,
+    userId: '',
+  });
   const ref = React.useRef<HTMLDivElement>(null);
   const { data, isFetching } = useQuery(
     MESSAGES_QUERY,
@@ -55,6 +64,15 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   };
 
   useEffect(() => {
+    socket.on(TYPING_EVENT, (data) => {
+      console.log(data);
+      setIsTyping((prev) => {
+        return {
+          ...prev,
+          [data.userId]: data.isTyping,
+        };
+      });
+    });
     socket.on(MESSAGE_EVENT, (message) => {
       queryClient.setQueryData(
         MESSAGES_QUERY,
@@ -86,9 +104,13 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
     >
       {messages.map((message) => {
         return (
-          <Message key={message._id + message.createdAt} message={message} />
+          <Message key={message?._id + message?.createdAt} message={message} />
         );
       })}
+      {Object.keys(isTyping).map((id) => {
+        return <>{isTyping[id as keyof ISendTyping] && <Typing id={id} />}</>;
+      })}
+      {JSON.stringify(isTyping, null, 2)}
     </div>
   );
 };

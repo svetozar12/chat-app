@@ -18,7 +18,7 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 
 <!-- STUFF TO DO -->
 <!-- REFACTOR sdk functions into try catch functions for increased readability -->
-<!-- refactor codebase -->
+<!-- refactor MessageList component into smaller components and functions -->
 <!-- ideas for new features -->
 <!-- add images -->
 <!-- add tagging -->

@@ -5,5 +5,6 @@ export * from './Message';
 export * from './MessageForm';
 export * from './MessageList';
 export * from './Navbar';
+export * from './Typing';
 
 export { MessageForm, MessageList };

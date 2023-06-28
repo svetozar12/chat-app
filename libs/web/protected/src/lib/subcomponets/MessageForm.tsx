@@ -1,11 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { CreateMessageDto } from '@chat-app/api/sdk';
 import { useCookie } from 'next-cookie';
 // import { BsFillEmojiDizzyFill } from 'react-icons/bs';
 import {
   ISendMessage,
+  ISendTyping,
   MESSAGE_EVENT,
+  TYPING_EVENT,
   USER_ID,
 } from '@chat-app/shared/common-constants';
 import { Socket } from 'socket.io-client';
@@ -76,7 +78,6 @@ function useForm(socket: Socket) {
       },
       onSubmit: async () => {
         try {
-          const newMessage = { ...values };
           socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
           await sdk.message.messageControllerCreateMessage(values);
         } catch (error) {
@@ -88,6 +89,21 @@ function useForm(socket: Socket) {
         }
       },
     });
-
+  useEffect(() => {
+    values.message &&
+      socket.emit(TYPING_EVENT, {
+        isTyping: true,
+        userId: cookie.get(USER_ID),
+      } as ISendTyping);
+    const current = setTimeout(() => {
+      socket.emit(TYPING_EVENT, {
+        isTyping: false,
+        userId: cookie.get(USER_ID),
+      } as ISendTyping);
+    }, 4000);
+    return () => {
+      clearTimeout(current);
+    };
+  }, [values]);
   return { handleSubmit, getFieldProps };
 }
