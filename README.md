@@ -23,3 +23,4 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 <!-- add images -->
 <!-- add tagging -->
 <!-- add indicator if someone is typing -->
+<!-- add popup if error occurs -->

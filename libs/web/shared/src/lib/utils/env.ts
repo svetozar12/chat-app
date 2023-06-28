@@ -12,7 +12,5 @@ export const WEB_ENVS: WebEnvsType = {
   NEXT_PUBLIC_API_PORT: process.env['NEXT_PUBLIC_API_PORT'] || '3000',
   NEXT_PUBLIC_API_SCHEME: process.env['NEXT_PUBLIC_API_SCHEME'] || 'http',
   NEXT_PUBLIC_OAUTH_METHODS:
-    (Array.isArray(process.env['NEXT_PUBLIC_OAUTH_METHODS']) &&
-      process.env['NEXT_PUBLIC_OAUTH_METHODS']) ||
-    [],
+    process.env['NEXT_PUBLIC_OAUTH_METHODS']?.split(',') || [],
 };

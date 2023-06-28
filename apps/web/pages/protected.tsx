@@ -21,14 +21,14 @@ export const getServerSideProps = withAuthSync(async (ctx) => {
   const userId = cookie.get(USER_ID) as string;
 
   setAccessToken(token);
-  await queryClient.prefetchQuery(MESSAGES_QUERY, () =>
+  const messages = queryClient.prefetchQuery(MESSAGES_QUERY, () =>
     sdk.message
       .messageControllerFindAll(INITIAL_PAGE, LIMIT)
       .then((data) => data.data)
       .catch(() => [])
   );
 
-  await queryClient.prefetchQuery(USER_QUERY(userId), () =>
+  const user = queryClient.prefetchQuery(USER_QUERY(userId), () =>
     sdk.user
       .userControllerFind(userId)
       .then((data) => data.data)
@@ -36,6 +36,7 @@ export const getServerSideProps = withAuthSync(async (ctx) => {
         return {};
       })
   );
+  await Promise.all([messages, user]);
 
   return {
     props: {

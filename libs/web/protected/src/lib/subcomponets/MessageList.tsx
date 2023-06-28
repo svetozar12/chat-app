@@ -36,8 +36,6 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   const scrollHanler = async ({
     currentTarget: { scrollTop },
   }: React.UIEvent<HTMLElement>) => {
-    console.log(messages.length, total);
-
     if (isFetching) return;
     if (scrollTop !== 0) return;
     if (messages.length >= total) return;
@@ -80,7 +78,6 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   }, [messages]);
 
   if (isFetching && messages.length < 1) return <p>Loading...</p>;
-  console.log(messages, 'FETCHED');
   return (
     <div
       ref={ref}

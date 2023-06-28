@@ -5,13 +5,18 @@ import { AiOutlineGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { WEB_ENVS } from '@chat-app/web/shared';
 
-const { NEXT_PUBLIC_API_HOST, NEXT_PUBLIC_API_PORT, NEXT_PUBLIC_API_SCHEME } =
-  WEB_ENVS;
+const {
+  NEXT_PUBLIC_API_HOST,
+  NEXT_PUBLIC_API_PORT,
+  NEXT_PUBLIC_API_SCHEME,
+  NEXT_PUBLIC_OAUTH_METHODS,
+} = WEB_ENVS;
 const SignIn = () => {
   const BASE_URL = `${NEXT_PUBLIC_API_SCHEME}://${NEXT_PUBLIC_API_HOST}:${NEXT_PUBLIC_API_PORT}`;
   const MODAL_TITLE = 'Sign in to ChatApp';
   const renderOauthButtons = [
     {
+      name: 'github',
       Icon: AiOutlineGithub,
       title: 'Sign in with Github',
       onClick: async () => {
@@ -19,13 +24,14 @@ const SignIn = () => {
       },
     },
     {
+      name: 'google',
       Icon: FcGoogle,
       title: 'Sign in with Google',
       onClick: () => {
         window.open(`${BASE_URL}/api/auth/google`, '_self');
       },
     },
-  ];
+  ].filter(({ name }) => NEXT_PUBLIC_OAUTH_METHODS.includes(name));
 
   return (
     <div className="bg-chatAppGray-100 w-full h-screen flex justify-center items-center">

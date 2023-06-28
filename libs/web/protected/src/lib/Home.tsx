@@ -28,7 +28,6 @@ function useInitApp() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const wsScheme = NEXT_PUBLIC_API_SCHEME === 'https' ? 'wss' : 'ws';
   const wsUrl = `${wsScheme}://${NEXT_PUBLIC_API_HOST}:${NEXT_PUBLIC_API_PORT}`;
-  console.log(wsUrl);
   useEffect(() => {
     setAccessToken(token);
     const socketInstance = io(wsUrl);
