@@ -17,10 +17,7 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
 
 <!-- STUFF TO DO -->
-<!-- REFACTOR sdk functions into try catch functions for increased readability -->
-<!-- refactor MessageList component into smaller components and functions -->
 <!-- ideas for new features -->
 <!-- add images -->
 <!-- add tagging -->
-<!-- add indicator if someone is typing -->
 <!-- add popup if error occurs -->

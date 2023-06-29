@@ -1,20 +1,52 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { USER_QUERY, sdk } from '@chat-app/web/shared';
 import { useCookie } from 'next-cookie';
-import { USER_ID } from '@chat-app/shared/common-constants';
+import {
+  ISendTyping,
+  TYPING_EVENT,
+  USER_ID,
+} from '@chat-app/shared/common-constants';
+import { Socket } from 'socket.io-client';
+
 type Props = {
-  id: string;
+  socket: Socket;
 };
-const Typing: FC<Props> = ({ id }) => {
-  const { data } = useQuery(USER_QUERY(id), () =>
-    sdk.user.userControllerFind(id).then((data) => data.data)
+const Typing: FC<Props> = ({ socket }) => {
+  const {
+    isTyping: { isTyping, userId: typingUserId },
+  } = useIsTyping(socket);
+  const { data } = useQuery(USER_QUERY(typingUserId), () =>
+    sdk.user.userControllerFind(userId).then((data) => data.data)
   );
   const cookie = useCookie();
   const userId = cookie.get(USER_ID) as string;
-  if (!data || userId === id) return <div></div>;
+  const isMe = userId === userId;
+  if (!data || isMe || !isTyping) return <div></div>;
   const { displayName } = data || {};
-  return <div>{displayName} is typing</div>;
+  console.log(displayName);
+  return (
+    <div className="text-white flex gap-2">
+      <p className="font-semibold">{displayName}</p> <p>is typing...</p>
+    </div>
+  );
 };
+
+function useIsTyping(socket: Socket) {
+  const [isTyping, setIsTyping] = React.useState<ISendTyping>({
+    isTyping: false,
+    userId: '',
+  });
+  useEffect(() => {
+    socket.on(TYPING_EVENT, (data) => {
+      setIsTyping(data);
+    });
+
+    return () => {
+      socket.off(TYPING_EVENT);
+    };
+  }, []);
+  return { isTyping };
+}
 
 export default Typing;

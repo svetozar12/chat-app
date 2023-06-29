@@ -6,6 +6,7 @@ import Navbar from './subcomponets/Navbar';
 import Link from 'next/link';
 import { useCookie } from 'next-cookie';
 import { WEB_ENVS, setAccessToken } from '@chat-app/web/shared';
+import Typing from './subcomponets/Typing';
 
 const { NEXT_PUBLIC_API_HOST, NEXT_PUBLIC_API_PORT, NEXT_PUBLIC_API_SCHEME } =
   WEB_ENVS;
@@ -18,6 +19,7 @@ const Home = () => {
       <Navbar />
       <Link href="/logout">LOGOUT</Link>
       <MessageList socket={socket} />
+      <Typing socket={socket} />
       <MessageForm socket={socket} />
     </div>
   );

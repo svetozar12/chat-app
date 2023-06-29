@@ -3,14 +3,9 @@ import Message from './Message';
 import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
 import { useQuery } from 'react-query';
 import { Socket } from 'socket.io-client';
-import { GetMessageListDto } from '@chat-app/api/sdk';
-import {
-  ISendTyping,
-  MESSAGE_EVENT,
-  TYPING_EVENT,
-} from '@chat-app/shared/common-constants';
+import { CreateMessageDto, GetMessageListDto } from '@chat-app/api/sdk';
+import { MESSAGE_EVENT } from '@chat-app/shared/common-constants';
 import { queryClient } from '@chat-app/web/root-app';
-import Typing from './Typing';
 
 interface IMessageListProps {
   socket: Socket;
@@ -20,11 +15,34 @@ export const INITIAL_PAGE = 1;
 export const LIMIT = 15;
 const MessageList: FC<IMessageListProps> = ({ socket }) => {
   const [page, setPage] = React.useState(INITIAL_PAGE);
-  const [isTyping, setIsTyping] = React.useState<ISendTyping>({
-    isTyping: false,
-    userId: '',
-  });
+
   const ref = React.useRef<HTMLDivElement>(null);
+  const { isFetching, messages, total } = useMessages(page, socket, setPage);
+  const { scrollHanler } = useScroll({ isFetching, messages, total }, ref, {
+    page,
+    setPage,
+  });
+  if (isFetching && messages.length < 1) return <p>Loading...</p>;
+  return (
+    <div
+      ref={ref}
+      onScroll={scrollHanler}
+      className="text-white h-4/6 overflow-auto"
+    >
+      {messages.map((message) => {
+        return (
+          <Message key={message?._id + message?.createdAt} message={message} />
+        );
+      })}
+    </div>
+  );
+};
+
+function useMessages(
+  page: number,
+  socket: Socket,
+  setPage: React.Dispatch<React.SetStateAction<number>>
+) {
   const { data, isFetching } = useQuery(
     MESSAGES_QUERY,
     () =>
@@ -42,6 +60,42 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
 
   const messages = data?.messages || [];
   const { total } = data?.pagination || { total: 0, limit: LIMIT, page: 1 };
+
+  useEffect(() => {
+    setPage(INITIAL_PAGE);
+
+    socket.on(MESSAGE_EVENT, (message) => {
+      queryClient.setQueryData(
+        MESSAGES_QUERY,
+        ({ messages: oldMessages, pagination }: GetMessageListDto) => {
+          const old = Array.isArray(oldMessages) ? oldMessages : [];
+          return { messages: [...old, ...message.messages], pagination };
+        }
+      );
+    });
+
+    return () => {
+      socket.off(MESSAGE_EVENT);
+    };
+  }, []);
+
+  return { messages, total, isFetching };
+}
+
+function useScroll(
+  messageState: {
+    isFetching: boolean;
+    messages: CreateMessageDto[];
+    total: number;
+  },
+  ref: React.RefObject<HTMLDivElement>,
+  pageState: {
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+  }
+) {
+  const { page, setPage } = pageState;
+  const { isFetching, messages, total } = messageState;
   const scrollHanler = async ({
     currentTarget: { scrollTop },
   }: React.UIEvent<HTMLElement>) => {
@@ -64,55 +118,13 @@ const MessageList: FC<IMessageListProps> = ({ socket }) => {
   };
 
   useEffect(() => {
-    socket.on(TYPING_EVENT, (data) => {
-      console.log(data);
-      setIsTyping((prev) => {
-        return {
-          ...prev,
-          [data.userId]: data.isTyping,
-        };
-      });
-    });
-    socket.on(MESSAGE_EVENT, (message) => {
-      queryClient.setQueryData(
-        MESSAGES_QUERY,
-        ({ messages: oldMessages, pagination }: GetMessageListDto) => {
-          const old = Array.isArray(oldMessages) ? oldMessages : [];
-          return { messages: [...old, ...message.messages], pagination };
-        }
-      );
-    });
-  }, []);
-
-  useEffect(() => {
-    setPage(INITIAL_PAGE);
-  }, []);
-
-  useEffect(() => {
     if (ref.current) {
       const parent = ref.current;
       parent?.scrollTo(0, parent.scrollHeight);
     }
   }, [messages]);
 
-  if (isFetching && messages.length < 1) return <p>Loading...</p>;
-  return (
-    <div
-      ref={ref}
-      onScroll={scrollHanler}
-      className="text-white h-4/6 overflow-auto"
-    >
-      {messages.map((message) => {
-        return (
-          <Message key={message?._id + message?.createdAt} message={message} />
-        );
-      })}
-      {Object.keys(isTyping).map((id) => {
-        return <>{isTyping[id as keyof ISendTyping] && <Typing id={id} />}</>;
-      })}
-      {JSON.stringify(isTyping, null, 2)}
-    </div>
-  );
-};
+  return { scrollHanler };
+}
 
 export default MessageList;
