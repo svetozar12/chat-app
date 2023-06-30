@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { CreateMessageDto } from '@chat-app/api/sdk';
 import { useCookie } from 'next-cookie';
-// import { BsFillEmojiDizzyFill } from 'react-icons/bs';
+import { BsFillEmojiDizzyFill } from 'react-icons/bs';
 import {
   ISendMessage,
   ISendTyping,
@@ -12,23 +12,25 @@ import {
 } from '@chat-app/shared/common-constants';
 import { Socket } from 'socket.io-client';
 import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
-// import dynamic from 'next/dynamic';
+import dynamic from 'next/dynamic';
 import { queryClient } from '@chat-app/web/root-app';
-// import { Theme } from 'emoji-picker-react';
+import { Theme } from 'emoji-picker-react';
 
-// const Picker = dynamic(
-//   () => {
-//     return import('emoji-picker-react');
-//   },
-//   { ssr: false }
-// );
+const Picker = dynamic(
+  () => {
+    return import('emoji-picker-react');
+  },
+  { ssr: false }
+);
 interface IMessageFormProps {
   socket: Socket;
 }
 
 const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
-  // const [isEmojiToggled, setIsEmojiToggled] = useState(false);
-  const { handleSubmit, getFieldProps } = useForm(socket);
+  const { handleSubmit, setValues, values } = useForm(socket);
+  const [isEmojiToggled, setIsEmojiToggled] = useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const { message } = values;
 
   return (
     <form
@@ -37,19 +39,30 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
       placeholder="Send a message..."
     >
       <input
+        ref={inputRef}
         className="w-full bg-chatAppGray-200 rounded-md text-white px-4"
-        {...getFieldProps('message')}
+        value={message}
+        onChange={(e) =>
+          setValues({
+            ...values,
+            message: e.target.value,
+            createdAt: new Date().toISOString(),
+          })
+        }
       />
-      {/* {isEmojiToggled && (
+      {isEmojiToggled && (
         <div className="absolute right-12 bottom-10">
           <Picker
-            {...getFieldProps('emoji')}
             theme={Theme.DARK}
-            onEmojiClick={(emoji) => console.log(emoji.emoji)}
+            onEmojiClick={(emoji) => {
+              setValues({ ...values, message: values.message + emoji.emoji });
+              setIsEmojiToggled(false);
+              inputRef.current?.focus();
+            }}
           />
         </div>
-      )} */}
-      {/* <div
+      )}
+      <div
         className="w-9 h-9 absolute right-12 text-2xl cursor-pointer flex justify-center items-center "
         onClick={() => setIsEmojiToggled((prev) => !prev)}
       >
@@ -58,7 +71,7 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
             isEmojiToggled ? 'text-yellow-300' : 'text-gray-400'
           } hover:text-yellow-300`}
         />
-      </div> */}
+      </div>
     </form>
   );
 };
@@ -68,27 +81,26 @@ export default MessageForm;
 function useForm(socket: Socket) {
   const MESSAGE_INITIAL_VALUE = '';
   const cookie = useCookie();
+  const FORM_INITIAL_VALUES = {
+    message: MESSAGE_INITIAL_VALUE,
+    userId: cookie.get(USER_ID) as string,
+    createdAt: new Date().toISOString(),
+  };
+  const [values, setValues] = useState<CreateMessageDto>(FORM_INITIAL_VALUES);
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    try {
+      socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
+      await sdk.message.messageControllerCreateMessage(values);
+    } catch (error) {
+      // if error occurs refetch queries
+      queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
+      throw new Error(error as string);
+    } finally {
+      setValues(FORM_INITIAL_VALUES);
+    }
+  }
 
-  const { values, handleSubmit, getFieldProps, resetForm } =
-    useFormik<CreateMessageDto>({
-      initialValues: {
-        message: MESSAGE_INITIAL_VALUE,
-        userId: cookie.get(USER_ID),
-        createdAt: new Date().toISOString(),
-      },
-      onSubmit: async () => {
-        try {
-          socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
-          await sdk.message.messageControllerCreateMessage(values);
-        } catch (error) {
-          // if error occurs refetch queries
-          queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY });
-          throw new Error(error as string);
-        } finally {
-          resetForm();
-        }
-      },
-    });
   useEffect(() => {
     values.message &&
       socket.emit(TYPING_EVENT, {
@@ -105,5 +117,11 @@ function useForm(socket: Socket) {
       clearTimeout(current);
     };
   }, [values]);
-  return { handleSubmit, getFieldProps };
+  return { handleSubmit, values, setValues };
+}
+
+function useTag() {
+  const cookie = useCookie();
+  const userId = cookie.get(USER_ID);
+  return userId;
 }

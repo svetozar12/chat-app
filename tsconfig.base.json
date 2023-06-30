@@ -27,7 +27,8 @@
       "@chat-app/web/login": ["libs/web/login/src/index.ts"],
       "@chat-app/web/protected": ["libs/web/protected/src/index.ts"],
       "@chat-app/web/root-app": ["libs/web/root-app/src/index.ts"],
-      "@chat-app/web/shared": ["libs/web/shared/src/index.ts"]
+      "@chat-app/web/shared": ["libs/web/shared/src/index.ts"],
+      "@chat-app/web/ui": ["libs/web/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -148,6 +148,19 @@ export interface PhotosDto {
      */
     'value': string;
 }
+/**
+ * 
+ * @export
+ * @interface QuerySearchDto
+ */
+export interface QuerySearchDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof QuerySearchDto
+     */
+    'text'?: string;
+}
 
 /**
  * AuthApi - axios parameter creator
@@ -569,6 +582,108 @@ export class MessageApi extends BaseAPI {
      */
     public messageControllerUpdateMessage(id: string, createMessageDto: CreateMessageDto, options?: AxiosRequestConfig) {
         return MessageApiFp(this.configuration).messageControllerUpdateMessage(id, createMessageDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SearchApi - axios parameter creator
+ * @export
+ */
+export const SearchApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} [text] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchControllerSearchUser: async (text?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/search/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (text !== undefined) {
+                localVarQueryParameter['text'] = text;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SearchApi - functional programming interface
+ * @export
+ */
+export const SearchApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SearchApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [text] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchControllerSearchUser(text?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QuerySearchDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchControllerSearchUser(text, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SearchApi - factory interface
+ * @export
+ */
+export const SearchApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SearchApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} [text] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchControllerSearchUser(text?: string, options?: any): AxiosPromise<QuerySearchDto> {
+            return localVarFp.searchControllerSearchUser(text, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SearchApi - object-oriented interface
+ * @export
+ * @class SearchApi
+ * @extends {BaseAPI}
+ */
+export class SearchApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} [text] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SearchApi
+     */
+    public searchControllerSearchUser(text?: string, options?: AxiosRequestConfig) {
+        return SearchApiFp(this.configuration).searchControllerSearchUser(text, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

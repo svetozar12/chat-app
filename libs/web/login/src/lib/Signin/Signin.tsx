@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'apps/web/components/Modal';
+import { Modal } from '@chat-app/web/ui';
 import { OauthButton } from './subcomponents/OauthButton';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
