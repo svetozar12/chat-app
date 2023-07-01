@@ -9,7 +9,7 @@ import {
   USER_ID,
 } from '@chat-app/shared/common-constants';
 import { Socket } from 'socket.io-client';
-import { MESSAGES_QUERY, debounce, sdk } from '@chat-app/web/shared';
+import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
 import { queryClient } from '@chat-app/web/root-app';
 import EmojiPickerInput from './subcomponents/EmojiPickerInput';
 import EmojiPickerIcon from './subcomponents/EmojiPickerIcon';
