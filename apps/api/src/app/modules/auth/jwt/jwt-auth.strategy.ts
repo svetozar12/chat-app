@@ -1,10 +1,9 @@
+import { JwtPayload } from '@chat-app/api/v1/auth';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-
-import { JwtPayload } from '@chat-app/api/shared';
-import { API_ENVS } from '@chat-app/api/env';
+import { API_ENVS } from '../../../utils/env';
 
 const { JWT_SECRET } = API_ENVS;
 @Injectable()

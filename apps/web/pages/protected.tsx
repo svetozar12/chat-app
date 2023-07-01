@@ -1,13 +1,14 @@
-import { sdk, setAccessToken, withAuthSync } from '@chat-app/web/utils';
-import Home from '../components/Home/Home';
-import { MESSAGES_QUERY, USER_QUERY } from '@chat-app/web/constants';
+import {
+  sdk,
+  setAccessToken,
+  withAuthSync,
+  MESSAGES_QUERY,
+  USER_QUERY,
+} from '@chat-app/web/shared';
 import { QueryClient, dehydrate } from 'react-query';
 import { useCookie } from 'next-cookie';
-import { TOKEN, USER_ID } from '@chat-app/common/constants';
-import {
-  INITIAL_PAGE,
-  LIMIT,
-} from '../components/Home/subcomponets/MessageList';
+import { TOKEN, USER_ID } from '@chat-app/shared/common-constants';
+import { Home, INITIAL_PAGE, LIMIT } from '@chat-app/web/protected';
 
 function ProtectedPage() {
   return <Home />;
@@ -20,14 +21,14 @@ export const getServerSideProps = withAuthSync(async (ctx) => {
   const userId = cookie.get(USER_ID) as string;
 
   setAccessToken(token);
-  await queryClient.prefetchQuery(MESSAGES_QUERY, () =>
+  const messages = queryClient.prefetchQuery(MESSAGES_QUERY, () =>
     sdk.message
       .messageControllerFindAll(INITIAL_PAGE, LIMIT)
       .then((data) => data.data)
       .catch(() => [])
   );
 
-  await queryClient.prefetchQuery(USER_QUERY(userId), () =>
+  const user = queryClient.prefetchQuery(USER_QUERY(userId), () =>
     sdk.user
       .userControllerFind(userId)
       .then((data) => data.data)
@@ -35,6 +36,7 @@ export const getServerSideProps = withAuthSync(async (ctx) => {
         return {};
       })
   );
+  await Promise.all([messages, user]);
 
   return {
     props: {

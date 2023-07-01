@@ -1,7 +1,6 @@
-import { isAlreadyAuth } from '@chat-app/web/utils';
-import SignIn from '../components/Signin/Signin';
+import { isAlreadyAuth } from '@chat-app/web/shared';
+import { SignIn } from '@chat-app/web/login';
 const SignInPage = () => {
-  console.log('SIGN IN');
   return <SignIn />;
 };
 

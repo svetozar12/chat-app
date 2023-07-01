@@ -1,7 +1,7 @@
+import { JwtPayload } from '@chat-app/api/v1/auth';
+import { IUser } from '@chat-app/api/v1/user';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
-import { JwtPayload, IUser } from '@chat-app/api/shared';
 
 @Injectable()
 export class JwtAuthService {

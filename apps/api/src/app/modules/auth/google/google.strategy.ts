@@ -1,9 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
-
 import { UsersService } from '../../user/user.service';
-import { API_ENVS } from '@chat-app/api/env';
+import { API_ENVS } from '../../../utils/env';
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } =
   API_ENVS;

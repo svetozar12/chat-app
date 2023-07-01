@@ -1,12 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMessageDto } from './dto/createMessage.dto';
-import { Message } from '@chat-app/api/db';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { PaginationQueryDto } from '../../common/dto/queryPagination.dto';
 import { formatPaginatedResponse } from '../../../utils';
+import { Message } from '../../utils/mongo';
 
 @Injectable()
 export class MessageService {

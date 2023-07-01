@@ -17,6 +17,9 @@ Run `npx nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
 
 <!-- STUFF TO DO -->
-<!-- AFTER ALL OF ABOVE TASKS ARE COMPLETED: deploy and test the app with some real users and fix the bugs if there are any -->
-<!-- REFACTOR sdk functions into try catch functions for increased readability -->
-<!-- refactor codebase -->
+<!-- ideas for new features -->
+<!-- add images -->
+<!-- add tagging -->
+<!-- Deploy new features -->
+<!-- Add chat rooms(only one on one) -->
+<!-- Add e2e tests -->

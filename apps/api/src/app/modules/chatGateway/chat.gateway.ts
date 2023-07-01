@@ -5,7 +5,12 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { ISendMessage, MESSAGE_EVENT } from '@chat-app/common/constants';
+import {
+  ISendMessage,
+  ISendTyping,
+  MESSAGE_EVENT,
+  TYPING_EVENT,
+} from '@chat-app/shared/common-constants';
 
 @WebSocketGateway({
   cors: {
@@ -26,5 +31,14 @@ export class ChatGateway {
     this.server.emit(MESSAGE_EVENT, {
       messages,
     });
+  }
+
+  @SubscribeMessage(TYPING_EVENT)
+  async typing(
+    @MessageBody()
+    { userId, isTyping }: ISendTyping
+  ): Promise<void> {
+    const typing = { userId, isTyping };
+    this.server.emit(TYPING_EVENT, typing);
   }
 }

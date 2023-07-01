@@ -1,10 +1,10 @@
+import { AuthProvider } from '@chat-app/api/v1/auth';
+import { IUser } from '@chat-app/api/v1/user';
 import { Injectable, NotFoundException } from '@nestjs/common';
-
-import { AuthProvider, IUser } from '@chat-app/api/shared';
-import { User } from '@chat-app/api/db';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Profile } from 'passport-github';
+import { User } from '../../utils/mongo';
 
 @Injectable()
 export class UsersService {

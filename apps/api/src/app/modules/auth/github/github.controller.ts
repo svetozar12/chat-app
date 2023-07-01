@@ -1,13 +1,12 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { serialize } from 'cookie';
-import { IUser } from '@chat-app/api/shared';
 import { JwtAuthService } from '../jwt/jwt-auth.service';
 import { GithubOauthGuard } from './github.guard';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../decorator/public.decorator';
-import { API_ENVS } from '@chat-app/api/env';
-import { TOKEN, USER_ID } from '@chat-app/common/constants';
+import { TOKEN, USER_ID } from '@chat-app/shared/common-constants';
+import { IUser } from '@chat-app/api/v1/user';
+import { API_ENVS } from '../../../utils/env';
 
 const { WEB_URL } = API_ENVS;
 @ApiTags('auth')

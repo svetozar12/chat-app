@@ -65,15 +65,6 @@
       "options": {
         "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]
       }
-    },
-    "docker-build": {
-      "dependsOn": ["build"],
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "docker build . -t sgospodinov02/chat-fe -f ./apps/web/Dockerfile"
-        ]
-      }
     }
   },
   "tags": []
