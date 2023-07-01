@@ -1,8 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useFormik } from 'formik';
 import { CreateMessageDto } from '@chat-app/api/sdk';
 import { useCookie } from 'next-cookie';
-import { BsFillEmojiDizzyFill } from 'react-icons/bs';
 import {
   ISendMessage,
   ISendTyping,
@@ -11,17 +9,10 @@ import {
   USER_ID,
 } from '@chat-app/shared/common-constants';
 import { Socket } from 'socket.io-client';
-import { MESSAGES_QUERY, sdk } from '@chat-app/web/shared';
-import dynamic from 'next/dynamic';
+import { MESSAGES_QUERY, debounce, sdk } from '@chat-app/web/shared';
 import { queryClient } from '@chat-app/web/root-app';
-import { Theme } from 'emoji-picker-react';
-
-const Picker = dynamic(
-  () => {
-    return import('emoji-picker-react');
-  },
-  { ssr: false }
-);
+import EmojiPickerInput from './subcomponents/EmojiPickerInput';
+import EmojiPickerIcon from './subcomponents/EmojiPickerIcon';
 interface IMessageFormProps {
   socket: Socket;
 }
@@ -50,28 +41,17 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
           })
         }
       />
-      {isEmojiToggled && (
-        <div className="absolute right-12 bottom-10">
-          <Picker
-            theme={Theme.DARK}
-            onEmojiClick={(emoji) => {
-              setValues({ ...values, message: values.message + emoji.emoji });
-              setIsEmojiToggled(false);
-              inputRef.current?.focus();
-            }}
-          />
-        </div>
-      )}
-      <div
-        className="w-9 h-9 absolute right-12 text-2xl cursor-pointer flex justify-center items-center "
-        onClick={() => setIsEmojiToggled((prev) => !prev)}
-      >
-        <BsFillEmojiDizzyFill
-          className={`w-7 h-7 ${
-            isEmojiToggled ? 'text-yellow-300' : 'text-gray-400'
-          } hover:text-yellow-300`}
-        />
-      </div>
+      <EmojiPickerInput
+        inputRef={inputRef}
+        isEmojiToggled={isEmojiToggled}
+        setIsEmojiToggled={setIsEmojiToggled}
+        setValues={setValues}
+        values={values}
+      />
+      <EmojiPickerIcon
+        isEmojiToggled={isEmojiToggled}
+        setIsEmojiToggled={setIsEmojiToggled}
+      />
     </form>
   );
 };
@@ -101,27 +81,21 @@ function useForm(socket: Socket) {
     }
   }
 
+  function emitTyping(isTyping: boolean) {
+    socket.emit(TYPING_EVENT, {
+      isTyping,
+      userId: cookie.get(USER_ID),
+    } as ISendTyping);
+  }
+
   useEffect(() => {
-    values.message &&
-      socket.emit(TYPING_EVENT, {
-        isTyping: true,
-        userId: cookie.get(USER_ID),
-      } as ISendTyping);
+    values.message && emitTyping(true);
     const current = setTimeout(() => {
-      socket.emit(TYPING_EVENT, {
-        isTyping: false,
-        userId: cookie.get(USER_ID),
-      } as ISendTyping);
+      emitTyping(false);
     }, 4000);
     return () => {
       clearTimeout(current);
     };
   }, [values]);
   return { handleSubmit, values, setValues };
-}
-
-function useTag() {
-  const cookie = useCookie();
-  const userId = cookie.get(USER_ID);
-  return userId;
 }

@@ -39,6 +39,7 @@ function useIsTyping(socket: Socket) {
   });
   useEffect(() => {
     socket.on(TYPING_EVENT, (data) => {
+      console.log(data, 'TYPING');
       setIsTyping(data);
     });
 

@@ -20,3 +20,6 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 <!-- ideas for new features -->
 <!-- add images -->
 <!-- add tagging -->
+<!-- Deploy new features -->
+<!-- Add chat rooms(only one on one) -->
+<!-- Add e2e tests -->
