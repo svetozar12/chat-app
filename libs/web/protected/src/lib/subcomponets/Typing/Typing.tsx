@@ -8,6 +8,7 @@ type Props = {
 };
 const Typing: FC<Props> = ({ socket }) => {
   const { usersTyping } = useIsTyping(socket);
+  console.log(usersTyping);
   return (
     <div className="text-white flex gap-2">
       {Object.keys(usersTyping).map((userId) => {
