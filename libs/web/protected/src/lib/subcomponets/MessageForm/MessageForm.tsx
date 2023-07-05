@@ -69,6 +69,7 @@ function useForm(socket: Socket) {
   const [values, setValues] = useState<CreateMessageDto>(FORM_INITIAL_VALUES);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    emitTyping(false);
     try {
       socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
       await sdk.message.messageControllerCreateMessage(values);
