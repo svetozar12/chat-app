@@ -3,6 +3,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import cookieParser from 'cookie-parser';
 import { API_ENVS } from './app/utils/env';
+import fs from 'fs';
+
 async function bootstrap() {
   const { PORT, API_PREFIX } = API_ENVS;
   const app = await NestFactory.create(AppModule);
@@ -17,7 +19,10 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(API_PREFIX, app, document);
-
+  fs.writeFileSync(
+    './libs/api/sdk/swagger-spec.json',
+    JSON.stringify(document)
+  );
   await app.listen(PORT);
 }
 
