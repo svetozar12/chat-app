@@ -731,6 +731,39 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -749,6 +782,15 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async userControllerFind(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateUserDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerFind(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CreateUserDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerFindAll(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -770,6 +812,14 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         userControllerFind(id: string, options?: any): AxiosPromise<CreateUserDto> {
             return localVarFp.userControllerFind(id, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerFindAll(options?: any): AxiosPromise<Array<CreateUserDto>> {
+            return localVarFp.userControllerFindAll(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -789,6 +839,16 @@ export class UserApi extends BaseAPI {
      */
     public userControllerFind(id: string, options?: AxiosRequestConfig) {
         return UserApiFp(this.configuration).userControllerFind(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public userControllerFindAll(options?: AxiosRequestConfig) {
+        return UserApiFp(this.configuration).userControllerFindAll(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

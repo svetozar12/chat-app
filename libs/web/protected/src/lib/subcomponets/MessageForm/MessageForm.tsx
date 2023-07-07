@@ -31,8 +31,9 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
     >
       <input
         ref={inputRef}
-        className="w-full bg-chatAppGray-200 rounded-md text-white px-4"
+        className="w-full bg-black bg-opacity-30 rounded-md text-white px-4"
         value={message}
+        onFocus={() => setIsEmojiToggled(false)}
         onChange={(e) =>
           setValues({
             ...values,
@@ -41,13 +42,15 @@ const MessageForm: FC<IMessageFormProps> = ({ socket }) => {
           })
         }
       />
-      <EmojiPickerInput
-        inputRef={inputRef}
-        isEmojiToggled={isEmojiToggled}
-        setIsEmojiToggled={setIsEmojiToggled}
-        setValues={setValues}
-        values={values}
-      />
+      <div className="absolute m-auto left-0 right-0">
+        <EmojiPickerInput
+          inputRef={inputRef}
+          isEmojiToggled={isEmojiToggled}
+          setIsEmojiToggled={setIsEmojiToggled}
+          setValues={setValues}
+          values={values}
+        />
+      </div>
       <EmojiPickerIcon
         isEmojiToggled={isEmojiToggled}
         setIsEmojiToggled={setIsEmojiToggled}

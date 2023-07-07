@@ -10,10 +10,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        ['gray-primary']: '#292F3F',
+        ['gray-primary-light']: '#373E4E',
+        ['gray-primary-dark']: '#272A35',
         chatAppGray: {
           100: '#242D34',
           200: '#2f3b45',
         },
+      },
+      fontFamily: {
+        roboto: ['Roboto', 'sans-serif'],
       },
     },
   },

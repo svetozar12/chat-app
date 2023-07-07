@@ -34,9 +34,9 @@ const SignIn = () => {
   ].filter(({ name }) => NEXT_PUBLIC_OAUTH_METHODS.includes(name));
 
   return (
-    <div className="bg-chatAppGray-100 w-full h-screen flex justify-center items-center">
+    <div className="bg-gray-primary w-full h-screen flex justify-center items-center">
       <Modal
-        className="bg-black min-w-[300px] lg:min-w-[500px]"
+        className="bg-black bg-opacity-30 min-w-[300px] lg:min-w-[500px]"
         isOpen={true}
         title={MODAL_TITLE}
       >
