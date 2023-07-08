@@ -17,8 +17,6 @@ yarn build
 
 Run `nx graph` to see a diagram of the dependencies of the projects.
 
-<!-- STUFF TO DO -->
 <!-- Add e2e tests -->
-<!-- Improve the readme -->
 <!-- Deploy new features -->
 <!-- Refactor bad code (end of the project) -->
