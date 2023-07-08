@@ -18,7 +18,8 @@ yarn build
 Run `nx graph` to see a diagram of the dependencies of the projects.
 
 <!-- STUFF TO DO -->
-<!-- Improve UI and UX -->
+<!-- fix emoji picker positioning on desktop layout -->
+<!-- Add status field to user model so we can create user list with online and offline users -->
 <!-- Add e2e tests -->
 <!-- Improve the readme -->
 <!-- Deploy new features(end of the project) -->

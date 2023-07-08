@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Status } from '../../../utils/mongo';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -15,6 +16,13 @@ export class CreateUserDto {
 
   @ApiProperty({ type: () => [PhotosDto] })
   photos: { value: string }[];
+
+  @ApiProperty({
+    enum: Status,
+    default: Status.OFFLINE,
+    required: false,
+  })
+  status?: Status;
 }
 
 class PhotosDto {

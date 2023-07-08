@@ -90,7 +90,21 @@ export interface CreateUserDto {
      * @memberof CreateUserDto
      */
     'photos': Array<PhotosDto>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserDto
+     */
+    'status'?: CreateUserDtoStatusEnum;
 }
+
+export const CreateUserDtoStatusEnum = {
+    Online: 'online',
+    Offline: 'offline'
+} as const;
+
+export type CreateUserDtoStatusEnum = typeof CreateUserDtoStatusEnum[keyof typeof CreateUserDtoStatusEnum];
+
 /**
  * 
  * @export
