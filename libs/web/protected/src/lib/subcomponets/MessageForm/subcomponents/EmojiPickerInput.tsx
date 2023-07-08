@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Theme } from 'emoji-picker-react';
 import dynamic from 'next/dynamic';
 import { CreateMessageDto } from '@chat-app/api/sdk';
+import { isMobile } from '@chat-app/web/shared';
 
 const Picker = dynamic(
   () => {
@@ -26,18 +27,34 @@ const EmojiPickerInput: FC<IEmojiPickerProps> = ({
 }) => {
   return (
     <>
-      {isEmojiToggled && (
-        <div className="absolute right-12 bottom-10">
-          <Picker
-            theme={Theme.DARK}
-            onEmojiClick={(emoji) => {
-              setValues({ ...values, message: values.message + emoji.emoji });
-              setIsEmojiToggled(false);
-              inputRef.current?.focus();
-            }}
-          />
-        </div>
-      )}
+      {isEmojiToggled &&
+        (isMobile() ? (
+          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-5">
+            <Picker
+              theme={Theme.DARK}
+              onEmojiClick={(emoji) => {
+                setValues({ ...values, message: values.message + emoji.emoji });
+                if (!isMobile()) {
+                  setIsEmojiToggled(false);
+                  inputRef.current?.focus();
+                }
+              }}
+            />
+          </div>
+        ) : (
+          <div className="absolute right-5 bottom-5">
+            <Picker
+              theme={Theme.DARK}
+              onEmojiClick={(emoji) => {
+                setValues({ ...values, message: values.message + emoji.emoji });
+                if (!isMobile()) {
+                  setIsEmojiToggled(false);
+                  inputRef.current?.focus();
+                }
+              }}
+            />
+          </div>
+        ))}
     </>
   );
 };

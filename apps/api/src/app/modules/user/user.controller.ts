@@ -28,4 +28,14 @@ export class UserController {
   find(@Param('id') id: string) {
     return this.userService.find(id);
   }
+
+  @Get()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: [CreateUserDto],
+    description: 'get all users',
+  })
+  findAll() {
+    return this.userService.findAll();
+  }
 }
