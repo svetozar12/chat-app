@@ -1,11 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { CreateMessageDto } from '@chat-app/api/sdk';
 import { useCookie } from 'next-cookie';
 import {
   ISendMessage,
-  ISendTyping,
   MESSAGE_EVENT,
-  TYPING_EVENT,
   USER_ID,
 } from '@chat-app/shared/common-constants';
 import { Socket } from 'socket.io-client';
@@ -72,7 +70,6 @@ function useForm(socket: Socket) {
   const [values, setValues] = useState<CreateMessageDto>(FORM_INITIAL_VALUES);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    emitTyping(false);
     try {
       socket.emit(MESSAGE_EVENT, { ...values } as ISendMessage);
       await sdk.message.messageControllerCreateMessage(values);
@@ -85,21 +82,5 @@ function useForm(socket: Socket) {
     }
   }
 
-  function emitTyping(isTyping: boolean) {
-    socket.emit(TYPING_EVENT, {
-      isTyping,
-      userId: cookie.get(USER_ID),
-    } as ISendTyping);
-  }
-
-  useEffect(() => {
-    values.message && emitTyping(true);
-    const current = setTimeout(() => {
-      emitTyping(false);
-    }, 4000);
-    return () => {
-      clearTimeout(current);
-    };
-  }, [values]);
   return { handleSubmit, values, setValues };
 }

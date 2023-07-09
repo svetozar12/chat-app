@@ -1,5 +1,7 @@
 # Chat App
 
+## This is an learning project which focuses on websockets ,oauth authentication, monorepo and deploying to production
+
 # Requirements
 
 - nodejs
@@ -12,11 +14,3 @@
 yarn install
 yarn build
 ```
-
-## Understand this workspace
-
-Run `nx graph` to see a diagram of the dependencies of the projects.
-
-<!-- Add e2e tests -->
-<!-- Deploy new features -->
-<!-- Refactor bad code (end of the project) -->

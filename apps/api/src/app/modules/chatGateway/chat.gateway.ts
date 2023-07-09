@@ -6,11 +6,8 @@ import {
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import {
-  ISendJoin,
   ISendMessage,
-  ISendTyping,
   MESSAGE_EVENT,
-  TYPING_EVENT,
   USER_STATUS_EVENT,
 } from '@chat-app/shared/common-constants';
 import { IUser } from '@chat-app/api/v1/user';
@@ -74,15 +71,6 @@ export class ChatGateway {
     this.server.emit(MESSAGE_EVENT, {
       messages,
     });
-  }
-
-  @SubscribeMessage(TYPING_EVENT)
-  async typing(
-    @MessageBody()
-    { userId, isTyping }: ISendTyping
-  ): Promise<void> {
-    const typing = { userId, isTyping };
-    this.server.emit(TYPING_EVENT, typing);
   }
 
   private async updateUserStatus(userId: string, status: string) {
