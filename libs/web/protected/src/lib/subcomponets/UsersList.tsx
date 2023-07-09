@@ -15,7 +15,6 @@ const UsersList: FC<IUsersListProps> = ({ usersStatus }) => {
   const { data: users } = useQuery(USERS_QUERY, () =>
     sdk.user.userControllerFindAll().then((data) => data.data)
   );
-  console.log(usersStatus);
   if (!users)
     return <div className="flex my-2 h-12 bg-gray-primary-dark w-3/12"></div>;
 
