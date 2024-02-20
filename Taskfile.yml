@@ -1,0 +1,38 @@
+version: "3"
+
+vars:
+  BIN_NAME: myserver
+  CMD_PATH: cmd/server
+
+tasks:
+  build:
+    desc: Build the Go application binary.
+    cmds:
+      - go build -o ./bin/{{.BIN_NAME}} ./{{.CMD_PATH}}
+
+  run:
+    desc: Run the Go application.
+    cmds:
+      - go run ./{{.CMD_PATH}}/main.go
+
+  test:
+    desc: Run all tests in the Go project.
+    cmds:
+      - go test ./...
+
+  clean:
+    desc: Clean up binaries.
+    cmds:
+      - rm -f ./bin/{{.BIN_NAME}}
+
+  docker-build:
+    desc: Build a Docker image for the application.
+    deps: [build]
+    cmds:
+      - docker build -t {{.BIN_NAME}} .
+
+  docker-run:
+    desc: Run the Docker container from the image.
+    deps: [docker-build]
+    cmds:
+      - docker run -d -p 3000:3000 --env-file .env {{.BIN_NAME}}
