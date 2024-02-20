@@ -5,12 +5,18 @@ vars:
   CMD_PATH: cmd/server
 
 tasks:
+  build-swagger:
+    cmds:
+      - swag init --parseDependency --parseInternal -g ./internal/api/api.go -o api
+
   build:
+    deps: [build-swagger]
     desc: Build the Go application binary.
     cmds:
       - go build -o ./bin/{{.BIN_NAME}} ./{{.CMD_PATH}}
 
   run:
+    deps: [build-swagger]
     desc: Run the Go application.
     cmds:
       - go run ./{{.CMD_PATH}}/main.go

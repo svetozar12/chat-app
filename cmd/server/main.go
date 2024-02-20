@@ -1,30 +1,31 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"log"
 
-	httpSwagger "github.com/swaggo/http-swagger"
-	_ "sgospodinov-chat-be.com/cmd/server/docs"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+
+	_ "sgospodinov-chat-be.com/api"
 	"sgospodinov-chat-be.com/config"
-	"sgospodinov-chat-be.com/internal/api/chat"
+	"sgospodinov-chat-be.com/internal/api"
 )
 
 func main() {
 	config.LoadEnv()
 	appConfig := config.GetConfig()
 	config.ConnectMongoDB(appConfig.MongoUrl)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Welcome to the Chat App Backend!")
-	})
-	http.Handle("/swagger/", httpSwagger.WrapHandler)
 
-	chat.RegisterChatRoute()
+	app := fiber.New()
 
-	fmt.Println("Server starting on port " + appConfig.Port)
-	fmt.Println("Swagger documentation running on /swagger")
-
-	if err := http.ListenAndServe(":"+appConfig.Port, nil); err != nil {
-		fmt.Printf("Error starting server: %s\n", err)
+	// Logger middleware for Fiber
+	app.Use(logger.New())
+	// Initialize routes
+	api.InitRoutes(app)
+	// Start server
+	log.Println("Server starting on port " + appConfig.Port)
+	log.Println("Swagger documentation running on /v1/swagger")
+	if err := app.Listen(":" + appConfig.Port); err != nil {
+		log.Fatalf("Error starting server: %s\n", err)
 	}
 }
