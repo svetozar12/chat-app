@@ -9,7 +9,6 @@ func RegisterChatRoute(app fiber.Router) {
 	chat := app.Group("/chat")
 
 	messages.RegisterMessagesRoute(chat)
-
 	chat.Get("/", getChatList)
 }
 

@@ -29,6 +29,18 @@ definitions:
         description: ID of the user who sent the message
         type: string
     type: object
+  models.User:
+    properties:
+      email:
+        description: User's email
+        type: string
+      id:
+        description: Unique identifier, e.g., OAuth provider's user ID
+        type: string
+      username:
+        description: User's name
+        type: string
+    type: object
   schemas.Pagination:
     properties:
       limit:
@@ -56,6 +68,16 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/models.Message'
+      pagination:
+        $ref: '#/definitions/schemas.Pagination'
+    required:
+    - data
+    - pagination
+    type: object
+  schemas.PaginationSchema-models_User:
+    properties:
+      data:
+        $ref: '#/definitions/models.User'
       pagination:
         $ref: '#/definitions/schemas.Pagination'
     required:
@@ -121,4 +143,27 @@ paths:
       summary: Get all messages
       tags:
       - messages
+  /v1/user:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - default: 1
+        description: page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_User'
+      summary: Get all users
+      tags:
+      - users
 swagger: "2.0"

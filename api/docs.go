@@ -93,6 +93,41 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/user": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.PaginationSchema-models_User"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -133,6 +168,23 @@ const docTemplate = `{
                 },
                 "userID": {
                     "description": "ID of the user who sent the message",
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "User's email",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier, e.g., OAuth provider's user ID",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "User's name",
                     "type": "string"
                 }
             }
@@ -180,6 +232,21 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/models.Message"
+                },
+                "pagination": {
+                    "$ref": "#/definitions/schemas.Pagination"
+                }
+            }
+        },
+        "schemas.PaginationSchema-models_User": {
+            "type": "object",
+            "required": [
+                "data",
+                "pagination"
+            ],
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.User"
                 },
                 "pagination": {
                     "$ref": "#/definitions/schemas.Pagination"
