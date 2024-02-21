@@ -14,7 +14,95 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:4000",
+    "host": "localhost:3000",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/v1/chat": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "field"
+                ],
+                "summary": "Get all chats",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.PaginationSchema-models_Chat"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Chat": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Unique identifier for the chat",
+                    "type": "string"
+                },
+                "members": {
+                    "description": "User IDs of chat members",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "schemas.Pagination": {
+            "type": "object",
+            "required": [
+                "limit",
+                "offSet",
+                "total"
+            ],
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "offSet": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schemas.PaginationSchema-models_Chat": {
+            "type": "object",
+            "required": [
+                "data",
+                "pagination"
+            ],
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Chat"
+                },
+                "pagination": {
+                    "$ref": "#/definitions/schemas.Pagination"
+                }
+            }
+        }
+    }
 }

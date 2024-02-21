@@ -2,12 +2,16 @@ version: "3"
 
 vars:
   BIN_NAME: myserver
-  CMD_PATH: cmd/server
+  CMD_PATH: .
 
 tasks:
-  build-swagger:
+  format-swagger:
     cmds:
-      - swag init --parseDependency --parseInternal -g ./internal/api/api.go -o api
+      - swag fmt
+  build-swagger:
+    deps: [format-swagger]
+    cmds:
+      - swag init --dir . --parseVendor --parseDependency --parseInternal -g ./internal/api/api.go -o api
 
   build:
     deps: [build-swagger]

@@ -1,5 +1,40 @@
 basePath: /
-host: localhost:4000
+definitions:
+  models.Chat:
+    properties:
+      id:
+        description: Unique identifier for the chat
+        type: string
+      members:
+        description: User IDs of chat members
+        items:
+          type: string
+        type: array
+    type: object
+  schemas.Pagination:
+    properties:
+      limit:
+        type: integer
+      offSet:
+        type: integer
+      total:
+        type: integer
+    required:
+    - limit
+    - offSet
+    - total
+    type: object
+  schemas.PaginationSchema-models_Chat:
+    properties:
+      data:
+        $ref: '#/definitions/models.Chat'
+      pagination:
+        $ref: '#/definitions/schemas.Pagination'
+    required:
+    - data
+    - pagination
+    type: object
+host: localhost:3000
 info:
   contact:
     email: fiber@swagger.io
@@ -11,5 +46,28 @@ info:
   termsOfService: http://swagger.io/terms/
   title: Fiber Example API
   version: "1.0"
-paths: {}
+paths:
+  /v1/chat:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - default: 1
+        description: page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_Chat'
+      summary: Get all chats
+      tags:
+      - field
 swagger: "2.0"
