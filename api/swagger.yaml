@@ -11,6 +11,24 @@ definitions:
           type: string
         type: array
     type: object
+  models.Message:
+    properties:
+      chatID:
+        description: ID of the chat this message belongs to
+        type: string
+      content:
+        description: Message content
+        type: string
+      id:
+        description: Unique identifier for the message
+        type: string
+      time:
+        description: Timestamp of when the message was sent
+        type: string
+      userID:
+        description: ID of the user who sent the message
+        type: string
+    type: object
   schemas.Pagination:
     properties:
       limit:
@@ -28,6 +46,16 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/models.Chat'
+      pagination:
+        $ref: '#/definitions/schemas.Pagination'
+    required:
+    - data
+    - pagination
+    type: object
+  schemas.PaginationSchema-models_Message:
+    properties:
+      data:
+        $ref: '#/definitions/models.Message'
       pagination:
         $ref: '#/definitions/schemas.Pagination'
     required:
@@ -69,5 +97,28 @@ paths:
             $ref: '#/definitions/schemas.PaginationSchema-models_Chat'
       summary: Get all chats
       tags:
-      - field
+      - chats
+  /v1/messages:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - default: 1
+        description: page
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: limit
+        in: query
+        name: limit
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_Message'
+      summary: Get all messages
+      tags:
+      - messages
 swagger: "2.0"

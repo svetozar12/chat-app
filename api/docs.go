@@ -30,7 +30,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "field"
+                    "chats"
                 ],
                 "summary": "Get all chats",
                 "parameters": [
@@ -58,6 +58,41 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/messages": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Get all messages",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.PaginationSchema-models_Message"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -74,6 +109,31 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "models.Message": {
+            "type": "object",
+            "properties": {
+                "chatID": {
+                    "description": "ID of the chat this message belongs to",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "Message content",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Unique identifier for the message",
+                    "type": "string"
+                },
+                "time": {
+                    "description": "Timestamp of when the message was sent",
+                    "type": "string"
+                },
+                "userID": {
+                    "description": "ID of the user who sent the message",
+                    "type": "string"
                 }
             }
         },
@@ -105,6 +165,21 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/models.Chat"
+                },
+                "pagination": {
+                    "$ref": "#/definitions/schemas.Pagination"
+                }
+            }
+        },
+        "schemas.PaginationSchema-models_Message": {
+            "type": "object",
+            "required": [
+                "data",
+                "pagination"
+            ],
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.Message"
                 },
                 "pagination": {
                     "$ref": "#/definitions/schemas.Pagination"

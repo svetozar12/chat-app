@@ -18,9 +18,6 @@ import (
 // @BasePath       /
 func InitRoutes(app *fiber.App) {
 	v1 := app.Group("/v1")
-	v1.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello from the api")
-	})
 	chat.RegisterChatRoute(v1)
 	v1.Get("/swagger/*", swagger.HandlerDefault)
 
