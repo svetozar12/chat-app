@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/swagger"
 	"sgospodinov-chat-be.com/internal/api/chat"
 	"sgospodinov-chat-be.com/internal/api/user"
+	"sgospodinov-chat-be.com/internal/api/ws"
 )
 
 // @title          Fiber Example API
@@ -21,6 +22,7 @@ func InitRoutes(app *fiber.App) {
 	v1 := app.Group("/v1")
 	v1.Get("/swagger/*", swagger.HandlerDefault)
 
+	ws.RegisterWsRoute(v1)
 	chat.RegisterChatRoute(v1)
 	user.RegisterUserRoute(v1)
 }

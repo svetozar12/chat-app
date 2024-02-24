@@ -166,4 +166,27 @@ paths:
       summary: Get all users
       tags:
       - users
+  /ws:
+    get:
+      consumes:
+      - application/json
+      description: Upgrade to WebSocket protocol for real-time chat communication
+      produces:
+      - application/json
+      responses:
+        "101":
+          description: Upgraded to WebSocket protocol
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "426":
+          description: Upgrade Required
+          schema:
+            type: string
+      summary: WebSocket Chat Endpoint
+      tags:
+      - WebSocket
 swagger: "2.0"
