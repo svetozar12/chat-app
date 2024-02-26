@@ -3,36 +3,42 @@ package config
 import (
 	"context"
 	"log"
-	"time"
+	"sync"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// MongoDBClient holds the MongoDB client
-var MongoDBClient *mongo.Client
+var (
+	mongoClient *mongo.Client
+	initOnce    sync.Once
+	readyCh     = make(chan struct{})
+)
 
-// ConnectMongoDB initializes the MongoDB client
-func ConnectMongoDB(mongoURI string) {
-	clientOptions := options.Client().ApplyURI(mongoURI)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+func InitializeMongoDB(uri string) {
+	initOnce.Do(func() {
+		log.Println("Initializing MongoDB connection...")
 
-	client, err := mongo.Connect(ctx, clientOptions)
-	if err != nil {
-		log.Fatalf("Failed to connect to MongoDB: %v", err)
-	}
+		clientOptions := options.Client().ApplyURI(uri)
+		var err error
+		mongoClient, err = mongo.Connect(context.Background(), clientOptions)
+		if err != nil {
+			log.Fatalf("Failed to create MongoDB client: %v", err)
+		}
 
-	// Ping the primary
-	if err := client.Ping(ctx, nil); err != nil {
-		log.Fatalf("Failed to ping MongoDB: %v", err)
-	}
+		log.Println("MongoDB client created, pinging MongoDB...")
 
-	log.Println("Connected to MongoDB")
-	MongoDBClient = client
+		err = mongoClient.Ping(context.Background(), nil)
+		if err != nil {
+			log.Fatalf("Failed to ping MongoDB: %v", err)
+		}
+
+		log.Println("Connected to MongoDB successfully.")
+		close(readyCh) // Signal that MongoDB is ready
+	})
 }
 
-// GetMongoDB returns a reference to the specified database
-func GetMongoDB(dbName string) *mongo.Database {
-	return MongoDBClient.Database(dbName)
+func GetMongoDB() *mongo.Client {
+	<-readyCh // Wait for MongoDB to be initialized
+	return mongoClient
 }

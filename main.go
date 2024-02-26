@@ -14,7 +14,7 @@ import (
 func main() {
 	config.LoadEnv()
 	appConfig := config.GetConfig()
-	config.ConnectMongoDB(appConfig.MongoUrl)
+	config.InitializeMongoDB(appConfig.MongoUrl)
 
 	app := fiber.New()
 

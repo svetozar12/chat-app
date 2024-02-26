@@ -8,9 +8,10 @@ import (
 )
 
 type AppConfig struct {
-	MongoUrl  string
-	Port      string
-	JWTSecret string
+	MongoUrl    string
+	MongoDBName string
+	Port        string
+	JWTSecret   string
 }
 
 // LoadEnv loads environment variables from the .env file

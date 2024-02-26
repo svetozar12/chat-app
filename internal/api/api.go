@@ -25,4 +25,8 @@ func InitRoutes(app *fiber.App) {
 	ws.RegisterWsRoute(v1)
 	chat.RegisterChatRoute(v1)
 	user.RegisterUserRoute(v1)
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Redirect("/v1/swagger/index.html")
+	})
 }
