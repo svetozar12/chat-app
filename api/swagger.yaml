@@ -209,6 +209,118 @@ paths:
       summary: Update chat room
       tags:
       - chats
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all users with pagination
+      parameters:
+      - default: 1
+        description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page for pagination
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_User'
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user
+      parameters:
+      - description: User Information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Create a user
+      tags:
+      - users
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user by its ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific user by its ID
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get users details
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing user details by its ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated User Information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Update user
+      tags:
+      - users
   /v1/messages:
     get:
       consumes:
@@ -232,29 +344,6 @@ paths:
       summary: Get all messages
       tags:
       - messages
-  /v1/user:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - default: 1
-        description: page
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: limit
-        in: query
-        name: limit
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/schemas.PaginationSchema-models_User'
-      summary: Get all users
-      tags:
-      - users
   /ws:
     get:
       consumes:

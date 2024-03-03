@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  BIN_NAME: myserver
+  BIN_NAME: main
   CMD_PATH: .
 
 tasks:
@@ -19,11 +19,16 @@ tasks:
     cmds:
       - go build -o ./bin/{{.BIN_NAME}} ./{{.CMD_PATH}}
 
-  run:
+  start:
     deps: [build-swagger]
-    desc: Run the Go application.
+    desc: Run the Go application in production mode.
     cmds:
       - go run ./{{.CMD_PATH}}/main.go
+
+  dev:
+    desc: Run the Go application in development mode.
+    cmds:
+      - air
 
   test:
     desc: Run all tests in the Go project.

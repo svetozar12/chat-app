@@ -5,12 +5,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"sgospodinov-chat-be.com/internal/api/chat/messages"
 	"sgospodinov-chat-be.com/internal/db/models"
-	"sgospodinov-chat-be.com/internal/db/repository"
+	repository "sgospodinov-chat-be.com/internal/db/repository/chat_repositroy"
 )
 
 func RegisterChatRoute(app fiber.Router) {
 	chat := app.Group("/chat")
-
 	messages.RegisterMessagesRoute(chat)
 	chat.Get("/", getChatList)
 	chat.Post("/", createChat)
