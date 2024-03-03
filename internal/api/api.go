@@ -3,9 +3,10 @@ package api
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
+	"github.com/gofiber/websocket/v2"
 	"sgospodinov-chat-be.com/internal/api/chat"
 	"sgospodinov-chat-be.com/internal/api/user"
-	"sgospodinov-chat-be.com/internal/api/ws"
+	"sgospodinov-chat-be.com/internal/ws"
 )
 
 // @title          Fiber Example API
@@ -20,9 +21,16 @@ import (
 // @BasePath       /
 func InitRoutes(app *fiber.App) {
 	v1 := app.Group("/v1")
+	v1.Use("/ws", func(c *fiber.Ctx) error {
+        if websocket.IsWebSocketUpgrade(c) { // Returns true if the client requested a WebSocket handshake
+            return c.Next()
+        }
+        return fiber.ErrUpgradeRequired
+    })
+
+    v1.Get("/ws", websocket.New(ws.WsHandler))
 	v1.Get("/swagger/*", swagger.HandlerDefault)
 
-	ws.RegisterWsRoute(v1)
 	chat.RegisterChatRoute(v1)
 	user.RegisterUserRoute(v1)
 

@@ -9,7 +9,6 @@ tasks:
     cmds:
       - swag fmt
   build-swagger:
-    deps: [format-swagger]
     cmds:
       - swag init --dir . --parseVendor --parseDependency --parseInternal -g ./internal/api/api.go -o api
 
