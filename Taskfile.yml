@@ -14,7 +14,7 @@ tasks:
       - swag init --dir . --parseVendor --parseDependency --parseInternal -g ./internal/api/api.go -o api
 
   build:
-    deps: [build-swagger]
+    deps: [build-swagger, clean]
     desc: Build the Go application binary.
     cmds:
       - go build -o ./bin/{{.BIN_NAME}} ./{{.CMD_PATH}}

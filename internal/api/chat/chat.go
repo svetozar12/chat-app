@@ -3,14 +3,14 @@ package chat
 import (
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"sgospodinov-chat-be.com/internal/api/chat/messages"
+	message "sgospodinov-chat-be.com/internal/api/chat/messages"
 	"sgospodinov-chat-be.com/internal/db/models"
 	repository "sgospodinov-chat-be.com/internal/db/repository/chat_repositroy"
 )
 
 func RegisterChatRoute(app fiber.Router) {
 	chat := app.Group("/chat")
-	messages.RegisterMessagesRoute(chat)
+	message.RegisterMessagesRoute(chat)
 	chat.Get("/", getChatList)
 	chat.Post("/", createChat)
 	chat.Get("/:id", getChat)

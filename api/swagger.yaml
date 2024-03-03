@@ -209,6 +209,118 @@ paths:
       summary: Update chat room
       tags:
       - chats
+  /message:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all messages with pagination
+      parameters:
+      - default: 1
+        description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page for pagination
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_Message'
+      summary: Get all messages
+      tags:
+      - messages
+    post:
+      consumes:
+      - application/json
+      description: Creates a new message room with the provided information
+      parameters:
+      - description: message Room Information
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Message'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Create message
+      tags:
+      - messages
+  /message/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a message room by its ID
+      parameters:
+      - description: message Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete message room
+      tags:
+      - messages
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific message by its ID
+      parameters:
+      - description: message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Get message details
+      tags:
+      - messages
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing message details by its ID
+      parameters:
+      - description: message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated message Information
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Message'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Update message
+      tags:
+      - messages
   /user:
     get:
       consumes:
@@ -321,29 +433,6 @@ paths:
       summary: Update user
       tags:
       - users
-  /v1/messages:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - default: 1
-        description: page
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: limit
-        in: query
-        name: limit
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/schemas.PaginationSchema-models_Message'
-      summary: Get all messages
-      tags:
-      - messages
   /ws:
     get:
       consumes:

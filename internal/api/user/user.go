@@ -3,7 +3,6 @@ package user
 import (
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"sgospodinov-chat-be.com/internal/api/chat/messages"
 	"sgospodinov-chat-be.com/internal/db/models"
 	repository "sgospodinov-chat-be.com/internal/db/repository/user_repository"
 )
@@ -11,7 +10,6 @@ import (
 func RegisterUserRoute(app fiber.Router) {
 	user := app.Group("/user")
 
-	messages.RegisterMessagesRoute(user)
 
 	user.Get("/", getUserList)
 	user.Post("/", createUser)
