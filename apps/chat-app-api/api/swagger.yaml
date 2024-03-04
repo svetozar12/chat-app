@@ -1,0 +1,436 @@
+basePath: /
+definitions:
+  models.Chat:
+    properties:
+      id:
+        description: Unique identifier for the chat
+        type: string
+      members:
+        description: User IDs of chat members
+        items:
+          type: string
+        type: array
+    type: object
+  models.Message:
+    properties:
+      chatID:
+        description: ID of the chat this message belongs to
+        type: string
+      content:
+        description: Message content
+        type: string
+      id:
+        description: Unique identifier for the message
+        type: string
+      time:
+        description: Timestamp of when the message was sent
+        type: string
+      userID:
+        description: ID of the user who sent the message
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        description: User's email
+        type: string
+      id:
+        description: Unique identifier, e.g., OAuth provider's user ID
+        type: string
+      username:
+        description: User's name
+        type: string
+    type: object
+  schemas.Pagination:
+    properties:
+      limit:
+        type: integer
+      offSet:
+        type: integer
+      total:
+        type: integer
+    required:
+    - limit
+    - offSet
+    - total
+    type: object
+  schemas.PaginationSchema-models_Chat:
+    properties:
+      data:
+        $ref: '#/definitions/models.Chat'
+      pagination:
+        $ref: '#/definitions/schemas.Pagination'
+    required:
+    - data
+    - pagination
+    type: object
+  schemas.PaginationSchema-models_Message:
+    properties:
+      data:
+        $ref: '#/definitions/models.Message'
+      pagination:
+        $ref: '#/definitions/schemas.Pagination'
+    required:
+    - data
+    - pagination
+    type: object
+  schemas.PaginationSchema-models_User:
+    properties:
+      data:
+        $ref: '#/definitions/models.User'
+      pagination:
+        $ref: '#/definitions/schemas.Pagination'
+    required:
+    - data
+    - pagination
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Example API
+  version: "1.0"
+paths:
+  /chat:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all chat rooms with pagination
+      parameters:
+      - default: 1
+        description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page for pagination
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_Chat'
+      summary: Get all chats
+      tags:
+      - chats
+    post:
+      consumes:
+      - application/json
+      description: Creates a new chat room with the provided information
+      parameters:
+      - description: Chat Room Information
+        in: body
+        name: chat
+        required: true
+        schema:
+          $ref: '#/definitions/models.Chat'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Chat'
+      summary: Create chat room
+      tags:
+      - chats
+  /chat/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a chat room by its ID
+      parameters:
+      - description: Chat Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete chat room
+      tags:
+      - chats
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific chat room by its ID
+      parameters:
+      - description: Chat Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Chat'
+      summary: Get chat room details
+      tags:
+      - chats
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing chat room's details by its ID
+      parameters:
+      - description: Chat Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated Chat Room Information
+        in: body
+        name: chat
+        required: true
+        schema:
+          $ref: '#/definitions/models.Chat'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Chat'
+      summary: Update chat room
+      tags:
+      - chats
+  /message:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all messages with pagination
+      parameters:
+      - default: 1
+        description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page for pagination
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_Message'
+      summary: Get all messages
+      tags:
+      - messages
+    post:
+      consumes:
+      - application/json
+      description: Creates a new message room with the provided information
+      parameters:
+      - description: message Room Information
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Message'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Create message
+      tags:
+      - messages
+  /message/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a message room by its ID
+      parameters:
+      - description: message Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete message room
+      tags:
+      - messages
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific message by its ID
+      parameters:
+      - description: message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Get message details
+      tags:
+      - messages
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing message details by its ID
+      parameters:
+      - description: message ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated message Information
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Message'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Update message
+      tags:
+      - messages
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all users with pagination
+      parameters:
+      - default: 1
+        description: Page number for pagination
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page for pagination
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PaginationSchema-models_User'
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user
+      parameters:
+      - description: User Information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Create a user
+      tags:
+      - users
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user by its ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Delete user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Retrieves details of a specific user by its ID
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get users details
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing user details by its ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated User Information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Update user
+      tags:
+      - users
+swagger: "2.0"

@@ -1,0 +1,52 @@
+{
+  "name": "chat-app-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/chat-app-api",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project chat-app-api --api",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/chat-app-api",
+        "command": "task build"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/chat-app-api",
+        "command": "task start"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/chat-app-api",
+        "command": "task dev"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/chat-app-api",
+        "command": "task test"
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/chat-app-api",
+        "command": "task docker-build"
+      }
+    },
+    "docker-run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/chat-app-api",
+        "command": "task docker-run"
+      }
+    }
+  }
+}
