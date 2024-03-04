@@ -1,0 +1,52 @@
+version: "3"
+
+vars:
+  BIN_NAME: main
+  CMD_PATH: .
+
+tasks:
+  format-swagger:
+    cmds:
+      - swag fmt
+  build-swagger:
+    cmds:
+      - swag init --dir . --parseVendor --parseDependency --parseInternal -g ./internal/api/api.go -o api
+
+  build:
+    deps: [build-swagger, clean]
+    desc: Build the Go application binary.
+    cmds:
+      - go build -o ./bin/{{.BIN_NAME}} ./{{.CMD_PATH}}
+
+  start:
+    deps: [build-swagger]
+    desc: Run the Go application in production mode.
+    cmds:
+      - go run ./{{.CMD_PATH}}/main.go
+
+  dev:
+    desc: Run the Go application in development mode.
+    cmds:
+      - air
+
+  test:
+    desc: Run all tests in the Go project.
+    cmds:
+      - go test ./...
+
+  clean:
+    desc: Clean up binaries.
+    cmds:
+      - rm -f ./bin/{{.BIN_NAME}}
+
+  docker-build:
+    desc: Build a Docker image for the application.
+    deps: [build]
+    cmds:
+      - docker build -t {{.BIN_NAME}} .
+
+  docker-run:
+    desc: Run the Docker container from the image.
+    deps: [docker-build]
+    cmds:
+      - docker run -d -p 3000:3000 --env-file .env {{.BIN_NAME}}
