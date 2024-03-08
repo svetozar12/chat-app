@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"fmt"
 	"log"
 
 	websocket "github.com/gofiber/websocket/v2"
@@ -17,7 +18,7 @@ func WsHandler(c *websocket.Conn) {
             break
         }
         log.Printf("Received: %s", message)
-
+        fmt.Println("Message type",messageType)
         // Echo the message back
         if err := c.WriteMessage(messageType, message); err != nil {
             log.Println("Error writing message:", err)

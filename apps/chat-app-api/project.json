@@ -20,7 +20,7 @@
         "command": "task start"
       }
     },
-    "serve": {
+    "dev": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",

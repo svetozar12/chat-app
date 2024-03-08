@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { ChatWebSocket } from '../utils/websocket';
 
 export function TestWs() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<string[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     // Create WebSocket connection.
-    const socket = new WebSocket("ws://localhost:8080/v1/ws");
+    const socket = ChatWebSocket.getInstance('ws://localhost:8080/v1/ws');
 
     // Connection opened
-    socket.addEventListener("open", function (event) {
-      socket.send("Hello Server!");
+    socket.socket.addEventListener('open', function (event) {
+      socket.send('Hello Server!');
     });
 
     // Listen for messages
-    socket.addEventListener("message", function (event) {
-      console.log("Message from server ", event.data);
+    socket.addEventListener('message', function (event) {
+      console.log('Message from server ', event.data);
       setMessages((prevMessages) => [...prevMessages, event.data]);
     });
 
@@ -30,7 +31,7 @@ export function TestWs() {
 
   const sendMessage = () => {
     if (ws) {
-      ws.send("Another message to the server!");
+      ws.send('Another message to the server!');
     }
   };
 
