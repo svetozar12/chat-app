@@ -1,38 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { ChatWebSocket } from '../utils/websocket';
+import { WebSocketWrapper } from '../utils/websocket';
 
 export function TestWs() {
   const [messages, setMessages] = useState<string[]>([]);
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [ws, setWs] = useState<WebSocketWrapper | null>(null);
 
   useEffect(() => {
     // Create WebSocket connection.
-    const socket = ChatWebSocket.getInstance('ws://localhost:8080/v1/ws');
-
-    // Connection opened
-    socket.socket.addEventListener('open', function (event) {
-      socket.send('Hello Server!');
+    const socket = WebSocketWrapper.getInstance('ws://127.0.0.1:3000/v1/ws');
+    socket.connect(
+      () => setWs(socket),
+      () => console.log('WebSocket closed')
+    );
+    socket.on('message', (e) => {
+      setMessages((prev) => [...prev, e.data]);
     });
-
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-      console.log('Message from server ', event.data);
-      setMessages((prevMessages) => [...prevMessages, event.data]);
-    });
-
-    // Set the WebSocket object in state
-    setWs(socket);
-
-    // Clean up on unmount
     return () => {
-      socket.close();
-    };`
+      ws?.disconnect();
+      setWs(null);
+    };
+    // Set the WebSocket object in state
   }, []); // Empty array ensures this effect runs only once upon mount
 
   const sendMessage = () => {
-    if (ws) {
-      ws.send('Another message to the server!');
-    }
+    ws && ws.sendMessage('Another message to the server!');
   };
 
   return (
