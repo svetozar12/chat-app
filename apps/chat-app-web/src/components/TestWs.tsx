@@ -26,7 +26,7 @@ export function TestWs() {
     // Clean up on unmount
     return () => {
       socket.close();
-    };
+    };`
   }, []); // Empty array ensures this effect runs only once upon mount
 
   const sendMessage = () => {
