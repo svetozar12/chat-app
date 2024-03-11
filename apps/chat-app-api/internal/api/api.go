@@ -22,13 +22,13 @@ import (
 func InitRoutes(app *fiber.App) {
 	v1 := app.Group("/v1")
 	v1.Use("/ws", func(c *fiber.Ctx) error {
-        if websocket.IsWebSocketUpgrade(c) { // Returns true if the client requested a WebSocket handshake
-            return c.Next()
-        }
-        return fiber.ErrUpgradeRequired
-    })
-
-    v1.Get("/ws", websocket.New(ws.WsHandler))
+		if websocket.IsWebSocketUpgrade(c) { // Returns true if the client requested a WebSocket handshake
+			return c.Next()
+		}
+		return fiber.ErrUpgradeRequired
+	})
+	go ws.HandleMessages()
+	v1.Get("/ws", websocket.New(ws.WsHandler))
 	v1.Get("/swagger/*", swagger.HandlerDefault)
 
 	chat.RegisterChatRoute(v1)

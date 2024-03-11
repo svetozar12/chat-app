@@ -1,43 +1,46 @@
 package ws
 
 import (
-	"fmt"
 	"log"
 
 	websocket "github.com/gofiber/websocket/v2"
 )
 
-var conns []*websocket.Conn
+var (
+	// Stores all active connections
+	clients = make(map[*websocket.Conn]bool)
+	// Broadcast channel to which all messages will be sent
+	broadcast = make(chan []byte)
+)
 
 func WsHandler(c *websocket.Conn) {
-	conns = append(conns, c)
-	fmt.Println(c)
-	defer removeConn(c)
+	// Register new client
+	clients[c] = true
+
 	for {
-		messageType, message, err := c.ReadMessage()
+		_, msg, err := c.ReadMessage()
 		if err != nil {
-			log.Println("Error reading message:", err)
+			log.Printf("error: %v", err)
+			delete(clients, c)
 			break
 		}
-		log.Printf("Received: %s", message)
-		// Echo the message back
-		for _, v := range conns {
-			if err := v.WriteMessage(messageType, message); err != nil {
-				log.Println("Error writing message:", err)
-				break
-
-			}
-
-		}
+		// Send the received message to the broadcast channel
+		broadcast <- msg
 	}
-
 }
 
-func removeConn(c *websocket.Conn) {
-	for i, conn := range conns {
-		if conn == c {
-			conns = append(conns[:i], conns[i+1:]...) // Remove the connection
-			break
+func HandleMessages() {
+	for {
+		// Grab the next message from the broadcast channel
+		msg := <-broadcast
+		// Send it out to every client that is currently connected
+		for client := range clients {
+			err := client.WriteMessage(websocket.TextMessage, msg)
+			if err != nil {
+				log.Printf("error: %v", err)
+				client.Close()
+				delete(clients, client)
+			}
 		}
 	}
 }

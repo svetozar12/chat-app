@@ -45,10 +45,9 @@ export class WebSocketWrapper {
   }
 
   // Send message method supporting different data types
-  public sendMessage(data: any): void {
+  public sendMessage(message: string): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      const parsedData = JSON.stringify(data);
-      this.socket.send(parsedData);
+      this.socket.send(message);
     } else {
       console.error('WebSocket is not connected or not ready.');
     }
