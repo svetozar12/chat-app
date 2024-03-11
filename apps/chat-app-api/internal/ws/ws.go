@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"fmt"
 	"log"
 
 	websocket "github.com/gofiber/websocket/v2"
@@ -10,7 +11,8 @@ var conns []*websocket.Conn
 
 func WsHandler(c *websocket.Conn) {
 	conns = append(conns, c)
-	// Handle your WebSocket connection here
+	fmt.Println(c)
+	defer removeConn(c)
 	for {
 		messageType, message, err := c.ReadMessage()
 		if err != nil {
@@ -26,6 +28,16 @@ func WsHandler(c *websocket.Conn) {
 
 			}
 
+		}
+	}
+
+}
+
+func removeConn(c *websocket.Conn) {
+	for i, conn := range conns {
+		if conn == c {
+			conns = append(conns[:i], conns[i+1:]...) // Remove the connection
+			break
 		}
 	}
 }

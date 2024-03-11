@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
+  define: {
+    'process.env': process.env,
+  },
   root: __dirname,
   cacheDir: '../../node_modules/.vite/apps/chat-app-web',
 

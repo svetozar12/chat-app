@@ -1,4 +1,4 @@
-import { TestWs } from '../components/TestWs';
+import { Chat } from '../components/Chat/Chat';
 import React from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ export function App() {
         </ul>
       </div>
       <Routes>
-        <Route path="/" element={<TestWs></TestWs>} />
+        <Route path="/" element={<Chat></Chat>} />
         <Route
           path="/page-2"
           element={
