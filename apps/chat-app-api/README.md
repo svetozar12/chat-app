@@ -12,7 +12,7 @@ This project is the backend for a real-time chat application built using Go. It 
 - Docker (for running services like databases)
 - Any Go-supported database (PostgreSQL recommended, for storing user and chat data)
   ```shell
-  $ go install github.com/swaggo/swag/cmd/swag@c1.8.6
+  $ go install github.com/swaggo/swag/cmd/swag@v1.8.6
   ```
 
 ### Running Locally
