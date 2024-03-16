@@ -577,16 +577,13 @@ const docTemplate = `{
         "models.User": {
             "type": "object",
             "properties": {
-                "email": {
-                    "description": "User's email",
-                    "type": "string"
-                },
                 "id": {
-                    "description": "Unique identifier, e.g., OAuth provider's user ID",
                     "type": "string"
                 },
-                "username": {
-                    "description": "User's name",
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }

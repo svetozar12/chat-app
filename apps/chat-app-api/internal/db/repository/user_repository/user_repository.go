@@ -28,6 +28,12 @@ func GetUserByID(ctx context.Context, id string) (*models.User, error) {
 	return &user, err
 }
 
+func GetUserByPhoneNumber(ctx context.Context, id string) (*models.User, error) {
+	var user models.User
+	err := getUsersCollection().FindOne(ctx, bson.M{"phoneNumber": id}).Decode(&user)
+	return &user, err
+}
+
 // GetUserList retrieves a list of users with pagination.
 func GetUserList(ctx context.Context, page int, pageSize int) ([]*models.User, int64, error) {
 	var users []*models.User

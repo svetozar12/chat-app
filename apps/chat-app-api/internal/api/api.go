@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/gofiber/websocket/v2"
+	"sgospodinov-chat-be.com/internal/api/auth"
 	"sgospodinov-chat-be.com/internal/api/chat"
 	"sgospodinov-chat-be.com/internal/api/user"
 	"sgospodinov-chat-be.com/internal/ws"
@@ -33,6 +34,7 @@ func InitRoutes(app *fiber.App) {
 
 	chat.RegisterChatRoute(v1)
 	user.RegisterUserRoute(v1)
+	auth.RegisterAuthRoute(v1)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Redirect("/v1/swagger/index.html")

@@ -14,7 +14,7 @@ func RegisterUserRoute(app fiber.Router) {
 	user.Get("/", getUserList)
 	user.Post("/", createUser)
 	user.Get("/:id", getUser)
-	user.Put("/:id", updateChat)
+	user.Put("/:id", updateuser)
 	user.Delete("/:id", deleteUser)
 }
 
@@ -33,7 +33,7 @@ func getUserList(c *fiber.Ctx) error {
 
 	users, total, err := repository.GetUserList(c.Context(), page, limit)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve chats"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve users"})
 	}
 
 	return c.JSON(fiber.Map{"data": users, "total": total})
@@ -50,11 +50,11 @@ func getUserList(c *fiber.Ctx) error {
 func createUser(c *fiber.Ctx) error {
 	var user models.User
 	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Cannot parse chat"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Cannot parse user"})
 	}
 
 	if err := repository.SaveUser(c.Context(), &user); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create chat"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create user"})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(user)
@@ -73,7 +73,7 @@ func getUser(c *fiber.Ctx) error {
 
 	user, err := repository.GetUserByID(c.Context(), id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Chat not found"})
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "user not found"})
 	}
 
 	return c.JSON(user)
@@ -88,7 +88,7 @@ func getUser(c *fiber.Ctx) error {
 // @Param       user body     models.User true "Updated User Information"
 // @Success     200  {object} models.User
 // @Router      /user/{id} [put]
-func updateChat(c *fiber.Ctx) error {
+func updateuser(c *fiber.Ctx) error {
 	// Extracting the user ID from the path parameter
 	id := c.Params("id")
 
@@ -106,10 +106,10 @@ func updateChat(c *fiber.Ctx) error {
 	updates.ID = objID.Hex() // Convert ObjectID to string if necessary
 	// Now, call the repository function with the correct arguments
 	if err := repository.UpdateUser(c.Context(), &updates); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update chat"})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update user"})
 	}
 
-	return c.JSON(fiber.Map{"message": "Chat updated successfully", "chat": updates})
+	return c.JSON(fiber.Map{"message": "user updated successfully", "user": updates})
 }
 
 // @Summary     Delete user
