@@ -31,11 +31,13 @@ definitions:
     type: object
   models.User:
     properties:
+      email:
+        type: string
       id:
         type: string
       name:
         type: string
-      phone:
+      picture:
         type: string
     type: object
   schemas.Pagination:
@@ -344,27 +346,6 @@ paths:
       summary: Get all users
       tags:
       - users
-    post:
-      consumes:
-      - application/json
-      description: Creates a new user
-      parameters:
-      - description: User Information
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/models.User'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/models.User'
-      summary: Create a user
-      tags:
-      - users
   /user/{id}:
     delete:
       consumes:
@@ -402,32 +383,6 @@ paths:
           schema:
             $ref: '#/definitions/models.User'
       summary: Get users details
-      tags:
-      - users
-    put:
-      consumes:
-      - application/json
-      description: Updates an existing user details by its ID
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Updated User Information
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/models.User'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-      summary: Update user
       tags:
       - users
 swagger: "2.0"

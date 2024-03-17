@@ -2,19 +2,15 @@ package user
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"sgospodinov-chat-be.com/internal/db/models"
+	"go.mongodb.org/mongo-driver/bson"
 	repository "sgospodinov-chat-be.com/internal/db/repository/user_repository"
 )
 
 func RegisterUserRoute(app fiber.Router) {
 	user := app.Group("/user")
 
-
 	user.Get("/", getUserList)
-	user.Post("/", createUser)
 	user.Get("/:id", getUser)
-	user.Put("/:id", updateuser)
 	user.Delete("/:id", deleteUser)
 }
 
@@ -39,27 +35,6 @@ func getUserList(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"data": users, "total": total})
 }
 
-// @Summary     Create a user
-// @Description Creates a new user
-// @Tags        users
-// @Accept      json
-// @Produce     json
-// @Param       user body     models.User true "User Information"
-// @Success     201  {object} models.User
-// @Router      /user [post]
-func createUser(c *fiber.Ctx) error {
-	var user models.User
-	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Cannot parse user"})
-	}
-
-	if err := repository.SaveUser(c.Context(), &user); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create user"})
-	}
-
-	return c.Status(fiber.StatusCreated).JSON(user)
-}
-
 // @Summary     Get users details
 // @Description Retrieves details of a specific user by its ID
 // @Tags        users
@@ -71,45 +46,12 @@ func createUser(c *fiber.Ctx) error {
 func getUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	user, err := repository.GetUserByID(c.Context(), id)
+	user, err := repository.GetUserByID(c.Context(), bson.M{"_id": id})
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "user not found"})
 	}
 
 	return c.JSON(user)
-}
-
-// @Summary     Update user
-// @Description Updates an existing user details by its ID
-// @Tags        users
-// @Accept      json
-// @Produce     json
-// @Param       id   path     string      true "User ID"
-// @Param       user body     models.User true "Updated User Information"
-// @Success     200  {object} models.User
-// @Router      /user/{id} [put]
-func updateuser(c *fiber.Ctx) error {
-	// Extracting the user ID from the path parameter
-	id := c.Params("id")
-
-	// Create an empty User object to hold the request body
-	var updates models.User
-	if err := c.BodyParser(&updates); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Cannot parse update data"})
-	}
-
-	objID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID format"})
-	}
-
-	updates.ID = objID.Hex() // Convert ObjectID to string if necessary
-	// Now, call the repository function with the correct arguments
-	if err := repository.UpdateUser(c.Context(), &updates); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update user"})
-	}
-
-	return c.JSON(fiber.Map{"message": "user updated successfully", "user": updates})
 }
 
 // @Summary     Delete user
