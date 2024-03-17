@@ -399,38 +399,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "Creates a new user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Create a user",
-                "parameters": [
-                    {
-                        "description": "User Information",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    }
-                }
             }
         },
         "/user/{id}": {
@@ -453,45 +421,6 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Updates an existing user details by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Update user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Updated User Information",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
                     }
                 ],
                 "responses": {
@@ -578,15 +507,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "description": "User's email",
                     "type": "string"
                 },
                 "id": {
-                    "description": "Unique identifier, e.g., OAuth provider's user ID",
                     "type": "string"
                 },
-                "username": {
-                    "description": "User's name",
+                "name": {
+                    "type": "string"
+                },
+                "picture": {
                     "type": "string"
                 }
             }

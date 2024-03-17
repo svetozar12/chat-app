@@ -22,9 +22,15 @@ func SaveUser(ctx context.Context, user *models.User) error {
 }
 
 // GetUserByID retrieves a user by its ID.
-func GetUserByID(ctx context.Context, id string) (*models.User, error) {
+func GetUserByID(ctx context.Context, data bson.M) (*models.User, error) {
 	var user models.User
-	err := getUsersCollection().FindOne(ctx, bson.M{"_id": id}).Decode(&user)
+	err := getUsersCollection().FindOne(ctx, data).Decode(&user)
+	return &user, err
+}
+
+func GetUserByPhoneNumber(ctx context.Context, id string) (*models.User, error) {
+	var user models.User
+	err := getUsersCollection().FindOne(ctx, bson.M{"phoneNumber": id}).Decode(&user)
 	return &user, err
 }
 

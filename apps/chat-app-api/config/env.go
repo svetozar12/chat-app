@@ -12,6 +12,9 @@ type AppConfig struct {
 	MongoDBName string
 	Port        string
 	JWTSecret   string
+	TwilioAccountSid string
+	TwilioAuthToken string
+	TwilioPhoneNumber string
 }
 
 // LoadEnv loads environment variables from the .env file
