@@ -3,7 +3,6 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -73,21 +72,11 @@ func RegisterAuthRoute(app fiber.Router) {
 }
 
 func GoogleOAuthMiddleware(c *fiber.Ctx) error {
-	token := c.Query("accessToken")
-
-	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token)
+	token := GetBearerToken(c)
+	_, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token)
 	if err != nil {
 		return c.SendString("User Data Fetch Failed")
 	}
-
-	userData, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return c.SendString("JSON Parsing Failed")
-	}
-
-	// Store user data or token in the context if needed for further processing
-	c.Locals("userData", string(userData))
-	c.Locals("accessToken", token)
 
 	return c.Next()
 }

@@ -3,12 +3,15 @@ package user
 import (
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
+	"sgospodinov-chat-be.com/internal/api/auth"
 	repository "sgospodinov-chat-be.com/internal/db/repository/user_repository"
 )
 
 func RegisterUserRoute(app fiber.Router) {
 	user := app.Group("/user")
-
+	// middlewares
+	user.Use(auth.GoogleOAuthMiddleware)
+	// routes
 	user.Get("/", getUserList)
 	user.Get("/:id", getUser)
 	user.Delete("/:id", deleteUser)
