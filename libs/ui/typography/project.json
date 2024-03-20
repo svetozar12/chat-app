@@ -1,0 +1,8 @@
+{
+  "name": "typography",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/typography/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}

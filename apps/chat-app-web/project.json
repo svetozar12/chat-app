@@ -29,6 +29,7 @@
       },
       "configurations": {
         "development": {
+          "buildLibsFromSource": true,
           "buildTarget": "chat-app-web:build:development",
           "hmr": true
         },

@@ -1,9 +1,12 @@
-/// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import path from 'path';
 
 export default defineConfig({
+  resolve: {
+    alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+  },
   define: {
     'process.env': process.env,
   },
@@ -20,12 +23,14 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [react(), nxViteTsPaths()],
-
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+  plugins: [
+    react(),
+    nxViteTsPaths({
+      baseUrl: './',
+      tsConfigPath: './tsconfig.base.json', // path to your base tsconfig
+      projectRoot: './', // root of your project
+    }),
+  ],
 
   build: {
     outDir: '../../dist/apps/chat-app-web',

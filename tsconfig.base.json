@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@chat-app/button": ["libs/ui/button/src/index.tsx"],
+      "@chat-app/typography": ["libs/ui/typography/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
