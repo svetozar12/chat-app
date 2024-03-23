@@ -26,6 +26,8 @@ func RegisterMessagesRoute(app fiber.Router) {
 // @Param       limit query    int false "Number of items per page for pagination" default(10)
 // @Success     200   {object} schemas.PaginationSchema[models.Message]
 // @Router      /message [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func getMessageList(c *fiber.Ctx) error {
 	page := c.QueryInt("page", 1)
 	limit := c.QueryInt("limit", 10)
@@ -46,6 +48,8 @@ func getMessageList(c *fiber.Ctx) error {
 // @Param       message body     models.Message true "message Room Information"
 // @Success     201     {object} models.Message
 // @Router      /message [post]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func createMessage(c *fiber.Ctx) error {
 	var message models.Message
 	if err := c.BodyParser(&message); err != nil {
@@ -67,6 +71,8 @@ func createMessage(c *fiber.Ctx) error {
 // @Param       id  path     string true "message ID"
 // @Success     200 {object} models.Message
 // @Router      /message/{id} [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func getMessage(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -87,6 +93,8 @@ func getMessage(c *fiber.Ctx) error {
 // @Param       message body     models.Message true "Updated message Information"
 // @Success     200     {object} models.Message
 // @Router      /message/{id} [put]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func updateMessage(c *fiber.Ctx) error {
 	// Extracting the message ID from the path parameter
 	id := c.Params("id")
@@ -119,6 +127,8 @@ func updateMessage(c *fiber.Ctx) error {
 // @Param       id path string true "message Room ID"
 // @Success     204
 // @Router      /message/{id} [delete]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func deleteMessage(c *fiber.Ctx) error {
 	id := c.Params("id")
 

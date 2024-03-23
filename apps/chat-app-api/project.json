@@ -6,59 +6,46 @@
   "tags": [],
   "// targets": "to see all targets run: nx show project chat-app-api --api",
   "targets": {
-    "format-swagger": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "swag fmt"
-      }
-    },
-    "build-swagger": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "swag init --dir . --parseVendor --parseDependency --parseInternal -g ./internal/api/api.go -o api"
-      }
-    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",
-        "command": "go build -o ./bin/{{.BIN_NAME}} ./{{.CMD_PATH}}"
-      },
-      "outputs": ["./bin/{{.BIN_NAME}}"]
+        "command": "task build"
+      }
     },
     "start": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",
-        "command": "go run ./{{.CMD_PATH}}/main.go"
+        "command": "task start"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",
-        "command": "go run ."
+        "command": "task dev"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",
-        "command": "go test ./..."
+        "command": "task test"
       }
     },
     "docker-build": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",
-        "command": "docker build -t {{.BIN_NAME}} ."
+        "command": "task docker-build"
       }
     },
     "docker-run": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/chat-app-api",
-        "command": "docker run -d -p 3000:3000 --env-file .env {{.BIN_NAME}}"
+        "command": "task docker-run"
       }
     }
   }

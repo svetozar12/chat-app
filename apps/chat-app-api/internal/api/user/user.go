@@ -25,7 +25,10 @@ func RegisterUserRoute(app fiber.Router) {
 // @Param       page  query    int false "Page number for pagination"              default(1)
 // @Param       limit query    int false "Number of items per page for pagination" default(10)
 // @Success     200   {object} schemas.PaginationSchema[models.User]
+// @Security    bearerAuth
 // @Router      /user [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func getUserList(c *fiber.Ctx) error {
 	page := c.QueryInt("page", 1)
 	limit := c.QueryInt("limit", 10)
@@ -46,6 +49,8 @@ func getUserList(c *fiber.Ctx) error {
 // @Param       id  path     string true "user ID"
 // @Success     200 {object} models.User
 // @Router      /user/{id} [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func getUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -65,6 +70,8 @@ func getUser(c *fiber.Ctx) error {
 // @Param       id path string true "User ID"
 // @Success     204
 // @Router      /user/{id} [delete]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func deleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 

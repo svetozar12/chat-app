@@ -18,8 +18,12 @@ import (
 // @contact.email  fiber@swagger.io
 // @license.name   Apache 2.0
 // @license.url    http://www.apache.org/licenses/LICENSE-2.0.html
-// @host           localhost:3000
-// @BasePath       /
+// @host           localhost:8080
+// @BasePath       /v1
+// @SecurityDefinitions api_key
+// @SecurityScheme bearerAuth
+// @SecurityScheme googleAuth
+
 func InitRoutes(app *fiber.App) {
 	v1 := app.Group("/v1")
 	v1.Use("/ws", func(c *fiber.Ctx) error {

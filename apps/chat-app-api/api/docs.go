@@ -24,9 +24,17 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/chat": {
+        "/auth/google/verify": {
             "get": {
-                "description": "Retrieves a list of all chat rooms with pagination",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    },
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "check with the 3rd party provider if your token is valid",
                 "consumes": [
                     "application/json"
                 ],
@@ -34,35 +42,35 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "chats"
+                    "auth"
                 ],
-                "summary": "Get all chats",
+                "summary": "Verify if token is valid",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "Page number for pagination",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Number of items per page for pagination",
-                        "name": "limit",
-                        "in": "query"
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemas.PaginationSchema-models_Chat"
+                            "$ref": "#/definitions/schemas.VerifyTokenSchema"
                         }
                     }
                 }
-            },
+            }
+        },
+        "/chat": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Creates a new chat room with the provided information",
                 "consumes": [
                     "application/json"
@@ -83,6 +91,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Chat"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -97,6 +112,11 @@ const docTemplate = `{
         },
         "/chat/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves details of a specific chat room by its ID",
                 "consumes": [
                     "application/json"
@@ -115,6 +135,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -127,6 +154,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing chat room's details by its ID",
                 "consumes": [
                     "application/json"
@@ -154,6 +186,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Chat"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -166,6 +205,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Deletes a chat room by its ID",
                 "consumes": [
                     "application/json"
@@ -184,6 +228,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -195,6 +246,11 @@ const docTemplate = `{
         },
         "/message": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of all messages with pagination",
                 "consumes": [
                     "application/json"
@@ -220,6 +276,13 @@ const docTemplate = `{
                         "description": "Number of items per page for pagination",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -232,6 +295,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Creates a new message room with the provided information",
                 "consumes": [
                     "application/json"
@@ -252,6 +320,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Message"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -266,6 +341,11 @@ const docTemplate = `{
         },
         "/message/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves details of a specific message by its ID",
                 "consumes": [
                     "application/json"
@@ -284,6 +364,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -296,6 +383,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing message details by its ID",
                 "consumes": [
                     "application/json"
@@ -323,6 +415,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Message"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -335,6 +434,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Deletes a message room by its ID",
                 "consumes": [
                     "application/json"
@@ -353,6 +457,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -364,6 +475,14 @@ const docTemplate = `{
         },
         "/user": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    },
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of all users with pagination",
                 "consumes": [
                     "application/json"
@@ -389,6 +508,13 @@ const docTemplate = `{
                         "description": "Number of items per page for pagination",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -403,6 +529,11 @@ const docTemplate = `{
         },
         "/user/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves details of a specific user by its ID",
                 "consumes": [
                     "application/json"
@@ -421,6 +552,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -433,6 +571,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Deletes a user by its ID",
                 "consumes": [
                     "application/json"
@@ -450,6 +593,13 @@ const docTemplate = `{
                         "description": "User ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -539,21 +689,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schemas.PaginationSchema-models_Chat": {
-            "type": "object",
-            "required": [
-                "data",
-                "pagination"
-            ],
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/models.Chat"
-                },
-                "pagination": {
-                    "$ref": "#/definitions/schemas.Pagination"
-                }
-            }
-        },
         "schemas.PaginationSchema-models_Message": {
             "type": "object",
             "required": [
@@ -583,6 +718,14 @@ const docTemplate = `{
                     "$ref": "#/definitions/schemas.Pagination"
                 }
             }
+        },
+        "schemas.VerifyTokenSchema": {
+            "type": "object",
+            "properties": {
+                "isAuth": {
+                    "type": "boolean"
+                }
+            }
         }
     }
 }`
@@ -590,8 +733,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
-	BasePath:         "/",
+	Host:             "localhost:8080",
+	BasePath:         "/v1",
 	Schemes:          []string{},
 	Title:            "Fiber Example API",
 	Description:      "This is a sample swagger for Fiber",

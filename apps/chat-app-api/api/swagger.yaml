@@ -1,4 +1,4 @@
-basePath: /
+basePath: /v1
 definitions:
   models.Chat:
     properties:
@@ -53,16 +53,6 @@ definitions:
     - offSet
     - total
     type: object
-  schemas.PaginationSchema-models_Chat:
-    properties:
-      data:
-        $ref: '#/definitions/models.Chat'
-      pagination:
-        $ref: '#/definitions/schemas.Pagination'
-    required:
-    - data
-    - pagination
-    type: object
   schemas.PaginationSchema-models_Message:
     properties:
       data:
@@ -83,7 +73,12 @@ definitions:
     - data
     - pagination
     type: object
-host: localhost:3000
+  schemas.VerifyTokenSchema:
+    properties:
+      isAuth:
+        type: boolean
+    type: object
+host: localhost:8080
 info:
   contact:
     email: fiber@swagger.io
@@ -96,32 +91,31 @@ info:
   title: Fiber Example API
   version: "1.0"
 paths:
-  /chat:
+  /auth/google/verify:
     get:
       consumes:
       - application/json
-      description: Retrieves a list of all chat rooms with pagination
+      description: check with the 3rd party provider if your token is valid
       parameters:
-      - default: 1
-        description: Page number for pagination
-        in: query
-        name: page
-        type: integer
-      - default: 10
-        description: Number of items per page for pagination
-        in: query
-        name: limit
-        type: integer
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schemas.PaginationSchema-models_Chat'
-      summary: Get all chats
+            $ref: '#/definitions/schemas.VerifyTokenSchema'
+      security:
+      - bearerAuth: []
+      - bearerAuth: []
+      summary: Verify if token is valid
       tags:
-      - chats
+      - auth
+  /chat:
     post:
       consumes:
       - application/json
@@ -133,6 +127,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Chat'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -140,6 +139,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/models.Chat'
+      security:
+      - bearerAuth: []
       summary: Create chat room
       tags:
       - chats
@@ -154,11 +155,18 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - bearerAuth: []
       summary: Delete chat room
       tags:
       - chats
@@ -172,6 +180,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -179,6 +192,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Chat'
+      security:
+      - bearerAuth: []
       summary: Get chat room details
       tags:
       - chats
@@ -198,6 +213,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Chat'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -205,6 +225,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Chat'
+      security:
+      - bearerAuth: []
       summary: Update chat room
       tags:
       - chats
@@ -224,6 +246,11 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -231,6 +258,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/schemas.PaginationSchema-models_Message'
+      security:
+      - bearerAuth: []
       summary: Get all messages
       tags:
       - messages
@@ -245,6 +274,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Message'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -252,6 +286,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/models.Message'
+      security:
+      - bearerAuth: []
       summary: Create message
       tags:
       - messages
@@ -266,11 +302,18 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - bearerAuth: []
       summary: Delete message room
       tags:
       - messages
@@ -284,6 +327,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -291,6 +339,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Message'
+      security:
+      - bearerAuth: []
       summary: Get message details
       tags:
       - messages
@@ -310,6 +360,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Message'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -317,6 +372,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Message'
+      security:
+      - bearerAuth: []
       summary: Update message
       tags:
       - messages
@@ -336,6 +393,11 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -343,6 +405,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/schemas.PaginationSchema-models_User'
+      security:
+      - bearerAuth: []
+      - bearerAuth: []
       summary: Get all users
       tags:
       - users
@@ -357,11 +422,18 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "204":
           description: No Content
+      security:
+      - bearerAuth: []
       summary: Delete user
       tags:
       - users
@@ -375,6 +447,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -382,6 +459,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.User'
+      security:
+      - bearerAuth: []
       summary: Get users details
       tags:
       - users

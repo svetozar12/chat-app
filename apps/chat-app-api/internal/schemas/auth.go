@@ -1,16 +1,5 @@
 package schemas
 
-type RegisterBody struct {
-    Name  string `json:"name"`
-    Phone string `json:"phone"`
+type VerifyTokenSchema struct {
+	IsAuth bool `json:"isAuth"`
 }
-
-type LoginSchema struct {
-    Phone string `json:"phone"`
-}
-
-type VerifyOTPSchema struct {
-    Phone string `json:"phone"`
-    Otp   string `json:"otp"`
-}
-

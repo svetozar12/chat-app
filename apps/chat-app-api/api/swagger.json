@@ -14,12 +14,20 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:3000",
-    "basePath": "/",
+    "host": "localhost:8080",
+    "basePath": "/v1",
     "paths": {
-        "/chat": {
+        "/auth/google/verify": {
             "get": {
-                "description": "Retrieves a list of all chat rooms with pagination",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    },
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "check with the 3rd party provider if your token is valid",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,35 +35,35 @@
                     "application/json"
                 ],
                 "tags": [
-                    "chats"
+                    "auth"
                 ],
-                "summary": "Get all chats",
+                "summary": "Verify if token is valid",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "Page number for pagination",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "default": 10,
-                        "description": "Number of items per page for pagination",
-                        "name": "limit",
-                        "in": "query"
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemas.PaginationSchema-models_Chat"
+                            "$ref": "#/definitions/schemas.VerifyTokenSchema"
                         }
                     }
                 }
-            },
+            }
+        },
+        "/chat": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Creates a new chat room with the provided information",
                 "consumes": [
                     "application/json"
@@ -76,6 +84,13 @@
                         "schema": {
                             "$ref": "#/definitions/models.Chat"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -90,6 +105,11 @@
         },
         "/chat/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves details of a specific chat room by its ID",
                 "consumes": [
                     "application/json"
@@ -108,6 +128,13 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -120,6 +147,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing chat room's details by its ID",
                 "consumes": [
                     "application/json"
@@ -147,6 +179,13 @@
                         "schema": {
                             "$ref": "#/definitions/models.Chat"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -159,6 +198,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Deletes a chat room by its ID",
                 "consumes": [
                     "application/json"
@@ -177,6 +221,13 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -188,6 +239,11 @@
         },
         "/message": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of all messages with pagination",
                 "consumes": [
                     "application/json"
@@ -213,6 +269,13 @@
                         "description": "Number of items per page for pagination",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -225,6 +288,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Creates a new message room with the provided information",
                 "consumes": [
                     "application/json"
@@ -245,6 +313,13 @@
                         "schema": {
                             "$ref": "#/definitions/models.Message"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -259,6 +334,11 @@
         },
         "/message/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves details of a specific message by its ID",
                 "consumes": [
                     "application/json"
@@ -277,6 +357,13 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -289,6 +376,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing message details by its ID",
                 "consumes": [
                     "application/json"
@@ -316,6 +408,13 @@
                         "schema": {
                             "$ref": "#/definitions/models.Message"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -328,6 +427,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Deletes a message room by its ID",
                 "consumes": [
                     "application/json"
@@ -346,6 +450,13 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -357,6 +468,14 @@
         },
         "/user": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    },
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of all users with pagination",
                 "consumes": [
                     "application/json"
@@ -382,6 +501,13 @@
                         "description": "Number of items per page for pagination",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -396,6 +522,11 @@
         },
         "/user/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Retrieves details of a specific user by its ID",
                 "consumes": [
                     "application/json"
@@ -414,6 +545,13 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -426,6 +564,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "description": "Deletes a user by its ID",
                 "consumes": [
                     "application/json"
@@ -443,6 +586,13 @@
                         "description": "User ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -532,21 +682,6 @@
                 }
             }
         },
-        "schemas.PaginationSchema-models_Chat": {
-            "type": "object",
-            "required": [
-                "data",
-                "pagination"
-            ],
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/models.Chat"
-                },
-                "pagination": {
-                    "$ref": "#/definitions/schemas.Pagination"
-                }
-            }
-        },
         "schemas.PaginationSchema-models_Message": {
             "type": "object",
             "required": [
@@ -574,6 +709,14 @@
                 },
                 "pagination": {
                     "$ref": "#/definitions/schemas.Pagination"
+                }
+            }
+        },
+        "schemas.VerifyTokenSchema": {
+            "type": "object",
+            "properties": {
+                "isAuth": {
+                    "type": "boolean"
                 }
             }
         }

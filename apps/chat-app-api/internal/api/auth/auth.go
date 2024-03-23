@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -11,6 +12,7 @@ import (
 	"golang.org/x/oauth2/google"
 	"sgospodinov-chat-be.com/internal/db/models"
 	repository "sgospodinov-chat-be.com/internal/db/repository/user_repository"
+	"sgospodinov-chat-be.com/internal/schemas"
 )
 
 type GoogleUser struct {
@@ -33,6 +35,14 @@ var (
 	}
 	oauthStateString = "random"
 )
+
+func RegisterAuthRoute(app fiber.Router) {
+	auth := app.Group("/auth")
+
+	auth.Get("/google/login", login)
+	auth.Get("/google/callback", callback)
+	auth.Get("/google/verify", GoogleOAuthMiddleware, verifyGoogleToken)
+}
 
 func login(c *fiber.Ctx) error {
 	url := googleOauthConfig.AuthCodeURL(oauthStateString)
@@ -57,25 +67,39 @@ func callback(c *fiber.Ctx) error {
 
 	user, _ := repository.GetUserByID(c.Context(), bson.M{"email": userData.Email})
 	fmt.Println(user)
+
 	if user.Email == "" {
 		repository.SaveUser(c.Context(), &models.User{Name: userData.Name, Email: userData.Email, Picture: userData.Picture})
 	}
 
-	return c.SendString("We good")
+	c.Cookie(&fiber.Cookie{
+		Name:  "token",
+		Value: token.AccessToken, Expires: <-time.After(36000),
+	})
+
+	return c.Redirect("http://localhost:4200")
 }
 
-func RegisterAuthRoute(app fiber.Router) {
-	auth := app.Group("/auth")
-
-	auth.Get("/google/login", login)
-	auth.Get("/google/callback", callback)
+// @Summary     Verify if token is valid
+// @Description check with the 3rd party provider if your token is valid
+// @Tags        auth
+// @Accept      json
+// @Produce     json
+// @Success     200   {object} schemas.VerifyTokenSchema
+// @Security    bearerAuth
+// @Router      /auth/google/verify [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
+func verifyGoogleToken(c *fiber.Ctx) error {
+	return c.JSON(schemas.VerifyTokenSchema{IsAuth: true})
 }
 
 func GoogleOAuthMiddleware(c *fiber.Ctx) error {
 	token := GetBearerToken(c)
-	_, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token)
+	err := verifyToken(token)
 	if err != nil {
-		return c.SendString("User Data Fetch Failed")
+		c.Status(http.StatusUnauthorized)
+		return c.JSON(schemas.VerifyTokenSchema{IsAuth: false})
 	}
 
 	return c.Next()

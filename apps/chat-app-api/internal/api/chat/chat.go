@@ -31,6 +31,9 @@ func RegisterChatRoute(app fiber.Router) {
 // @Param       limit query    int false "Number of items per page for pagination" default(10)
 // @Success     200   {object} schemas.PaginationSchema[models.Chat]
 // @Router      /chat [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
+
 func getChatList(c *fiber.Ctx) error {
 	page := c.QueryInt("page", 1)
 	limit := c.QueryInt("limit", 10)
@@ -51,6 +54,8 @@ func getChatList(c *fiber.Ctx) error {
 // @Param       chat body     models.Chat true "Chat Room Information"
 // @Success     201  {object} models.Chat
 // @Router      /chat [post]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func createChat(c *fiber.Ctx) error {
 	var chat models.Chat
 	if err := c.BodyParser(&chat); err != nil {
@@ -72,6 +77,8 @@ func createChat(c *fiber.Ctx) error {
 // @Param       id  path     string true "Chat Room ID"
 // @Success     200 {object} models.Chat
 // @Router      /chat/{id} [get]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func getChat(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -92,6 +99,8 @@ func getChat(c *fiber.Ctx) error {
 // @Param       chat body     models.Chat true "Updated Chat Room Information"
 // @Success     200  {object} models.Chat
 // @Router      /chat/{id} [put]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func updateChat(c *fiber.Ctx) error {
 	// Extracting the chat ID from the path parameter
 	id := c.Params("id")
@@ -124,6 +133,8 @@ func updateChat(c *fiber.Ctx) error {
 // @Param       id path string true "Chat Room ID"
 // @Success     204
 // @Router      /chat/{id} [delete]
+// @Security    bearerAuth
+// @Param       Authorization header string true "Bearer token"
 func deleteChat(c *fiber.Ctx) error {
 	id := c.Params("id")
 
