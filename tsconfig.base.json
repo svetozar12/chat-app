@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@chat-app/button": ["libs/ui/button/src/index.tsx"],
+      "@chat-app/sdk": ["libs/sdk/src/index.ts"],
       "@chat-app/typography": ["libs/ui/typography/src/index.ts"]
     }
   },
